@@ -29,5 +29,11 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
             get { return this.applicationSettings.BufferSize; }
             set { this.applicationSettings.BufferSize = value; }
         }
+
+        public bool AcceptUnsignedSslCertificate
+        {
+            get { return this.applicationSettings.AcceptUnsignedSslCertificate; }
+            set { throw new NotImplementedException(); }
+        }
     }
 }

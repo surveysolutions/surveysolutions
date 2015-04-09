@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="ApplicationName">Questionnaire Tester</string>
-  <string name="DesignerEndpoint">http://solutions.worldbank.org/api/v1</string>
+  <string name="DesignerEndpoint">http://192.168.88.196/designer/api/v1</string>
   <string name="HttpResponseTimeout">30</string>
   <string name="BufferSize">512</string>
+  <string name="AcceptUnsignedSslCertificate">true</string>
 </resources>

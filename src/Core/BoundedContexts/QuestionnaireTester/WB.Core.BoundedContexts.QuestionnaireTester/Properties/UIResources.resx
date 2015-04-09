@@ -147,8 +147,17 @@
   <data name="ConfirmationYesText" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>My questionnaires</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Public questionnaires</value>
+  </data>
   <data name="Dashboard_SearchText" xml:space="preserve">
     <value>Search (by name, author)</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Questionnaires</value>
   </data>
   <data name="EmptyQuestionnaireListBySearchText" xml:space="preserve">
     <value>Questionnaires not found by your request</value>

@@ -4,21 +4,24 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/loginToolbarBackground">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/loginToolbarText"
+            android:textColor="@color/colorToolbarText"
             android:fontFamily="sans-serif-medium"
             android:textSize="16dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="42dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_centerVertical="true"
             local:MvxBind="Text Localization('LoginTitleText')" />
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:focusable="false"

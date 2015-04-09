@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorToolbarText"
+            android:textSize="16dp"
+            android:layout_marginLeft="25dp"
+            android:layout_centerVertical="true"
+            local:MvxBind="Text Localization('Dashboard_ToolbarText')" />
+    </android.support.v7.widget.Toolbar>
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:focusable="false"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:indeterminateOnly="true"
+        local:MvxBind="Visible IsInProgress" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/myQuestionnairesLink"
+            android:textSize="16dp"
+            android:gravity="center_vertical"
+            local:MvxBind="Text Localization('Dashboard_MyQuestionnairesLinkText'); Click ShowMyQuestionnairesCommand" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/publicQuestionnairesLink"
+            android:textSize="16dp"
+            android:layout_marginLeft="25dp"
+            android:gravity="center_vertical"
+            local:MvxBind="Text Localization('Dashboard_PublicQuestionnairesLinkText'); Click ShowPublicQuestionnairesCommand" />
+    </LinearLayout>
+    <MvxListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingBottom="25dp"
+        android:orientation="vertical"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true"
+        android:scrollingCache="false"
+        android:animationCache="false"
+        local:MvxBind="ItemsSource MyQuestionnaires; ItemClick LoadQuestionnaireCommand; Visible If(IsPublicShowed, false, true)"
+        local:MvxItemTemplate="@layout/my_questionnaire_list_item" />
+    <MvxListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:orientation="vertical"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true"
+        android:scrollingCache="false"
+        android:animationCache="false"
+        local:MvxBind="ItemsSource PublicQuestionnaires; ItemClick LoadQuestionnaireCommand; Visible IsPublicShowed"
+        local:MvxItemTemplate="@layout/public_questionnaire_list_item" />
+</MvxLinearLayout>

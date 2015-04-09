@@ -203,6 +203,7 @@ namespace WB.UI.Headquarters.Injections
 
             this.RegisterViewFactories();
 
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();

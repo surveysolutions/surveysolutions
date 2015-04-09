@@ -135,7 +135,8 @@ namespace WB.UI.Capi.Injections
         public override void Load()
         {
             base.Load();
-            
+
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();

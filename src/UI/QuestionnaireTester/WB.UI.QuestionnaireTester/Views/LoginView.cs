@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(NoHistory = true, WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/Theme.Login.Light")]
+    [Activity(NoHistory = true, WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/Theme.Gray.Light")]
     public class LoginView : BaseActivityView<LoginViewModel>
     {
         protected override int ViewResourceId

@@ -30,5 +30,11 @@ namespace WB.UI.Headquarters.Views
             get { return 512; }
             set { throw new NotImplementedException(); }
         }
+
+        public bool AcceptUnsignedSslCertificate
+        {
+            get { return false; }
+            set { throw new NotImplementedException(); }
+        }
     }
 }

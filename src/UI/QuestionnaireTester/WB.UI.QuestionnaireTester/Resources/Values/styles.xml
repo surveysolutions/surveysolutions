@@ -5,9 +5,15 @@
     <item name="android:windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
+    <item name="android:fontFamily">sans-serif</item>
   </style>
-  
-  <style name="Theme.Login.Light" parent="Theme.Light.Base">
+
+  <style name="Theme.Gray.Light" parent="Theme.Light.Base">
+    <item name="colorPrimary">#FF666666</item>
+  </style>
+
+  <style name="Theme.Blue.Light" parent="Theme.Light.Base">
+    <item name="colorPrimary">@color/colorBlueThemePrimary</item>
   </style>
 
   <style name="Theme.Splash" parent="Theme.Light.Base">
@@ -15,6 +21,12 @@
 
   
   <color name="applicationBackground">#FFFAFAFA</color>
-  <color name="loginToolbarBackground">#FF666666</color>
-  <color name="loginToolbarText">#FFFFFFFF</color>
+  <color name="colorBlueThemePrimary">#FF2A81CB</color>
+
+  <color name="colorToolbarText">#FFFFFFFF</color>
+  
+  <color name="myQuestionnaireListItemLeftCorner">#FFE9E9E9</color>
+  <color name="myQuestionnairesLink">#FF6D6D6D</color>
+  <color name="publicQuestionnaireListItemLeftCorner">@color/colorBlueThemePrimary</color>
+  <color name="publicQuestionnairesLink">#FF4C8FD0</color>
 </resources>

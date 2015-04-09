@@ -15,6 +15,7 @@ using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
+using QuestionnaireListItem = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireListItem;
 using QuestionnaireVersion = WB.Core.SharedKernels.DataCollection.QuestionnaireVersion;
 
 namespace WB.UI.Designer.Api
