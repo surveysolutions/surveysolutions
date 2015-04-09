@@ -16,9 +16,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await Task.Delay(3000);
 
-            if (this.principal.CurrentIdentity.IsAuthenticated)
+            if (this.principal.CurrentUserIdentity.IsAuthenticated)
             {
-                //this.ShowViewModel<DashboardViewModel>();
+                this.ShowViewModel<DashboardViewModel>();
             }
             else
                 this.ShowViewModel<LoginViewModel>();

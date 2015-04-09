@@ -43,6 +43,7 @@ namespace WB.UI.QuestionnaireTester
                 {typeof (SplashViewModel), typeof (SplashView)},
                 {typeof (LoginViewModel), typeof (LoginView)},
                 {typeof (ChapterViewModel), typeof (ChapterView)},
+                {typeof (DashboardViewModel), typeof (DashboardView)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

@@ -31,6 +31,8 @@ namespace WB.UI.QuestionnaireTester
 			global::Cirrious.MvvmCross.Plugins.Network.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -638,29 +640,29 @@ namespace WB.UI.QuestionnaireTester
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f060034
-			public const int abc_background_cache_hint_selector_material_dark = 2131099700;
+			// aapt resource value: 0x7f060038
+			public const int abc_background_cache_hint_selector_material_dark = 2131099704;
 			
-			// aapt resource value: 0x7f060035
-			public const int abc_background_cache_hint_selector_material_light = 2131099701;
+			// aapt resource value: 0x7f060039
+			public const int abc_background_cache_hint_selector_material_light = 2131099705;
 			
 			// aapt resource value: 0x7f060000
 			public const int abc_input_method_navigation_guard = 2131099648;
 			
-			// aapt resource value: 0x7f060036
-			public const int abc_primary_text_disable_only_material_dark = 2131099702;
-			
-			// aapt resource value: 0x7f060037
-			public const int abc_primary_text_disable_only_material_light = 2131099703;
-			
-			// aapt resource value: 0x7f060038
-			public const int abc_primary_text_material_dark = 2131099704;
-			
-			// aapt resource value: 0x7f060039
-			public const int abc_primary_text_material_light = 2131099705;
-			
 			// aapt resource value: 0x7f06003a
-			public const int abc_search_url_text = 2131099706;
+			public const int abc_primary_text_disable_only_material_dark = 2131099706;
+			
+			// aapt resource value: 0x7f06003b
+			public const int abc_primary_text_disable_only_material_light = 2131099707;
+			
+			// aapt resource value: 0x7f06003c
+			public const int abc_primary_text_material_dark = 2131099708;
+			
+			// aapt resource value: 0x7f06003d
+			public const int abc_primary_text_material_light = 2131099709;
+			
+			// aapt resource value: 0x7f06003e
+			public const int abc_search_url_text = 2131099710;
 			
 			// aapt resource value: 0x7f060001
 			public const int abc_search_url_text_normal = 2131099649;
@@ -671,11 +673,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f060003
 			public const int abc_search_url_text_selected = 2131099651;
 			
-			// aapt resource value: 0x7f06003b
-			public const int abc_secondary_text_material_dark = 2131099707;
+			// aapt resource value: 0x7f06003f
+			public const int abc_secondary_text_material_dark = 2131099711;
 			
-			// aapt resource value: 0x7f06003c
-			public const int abc_secondary_text_material_light = 2131099708;
+			// aapt resource value: 0x7f060040
+			public const int abc_secondary_text_material_light = 2131099712;
 			
 			// aapt resource value: 0x7f060004
 			public const int accent_material_dark = 2131099652;
@@ -722,6 +724,12 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f060011
 			public const int button_material_light = 2131099665;
 			
+			// aapt resource value: 0x7f060032
+			public const int colorBlueThemePrimary = 2131099698;
+			
+			// aapt resource value: 0x7f060033
+			public const int colorToolbarText = 2131099699;
+			
 			// aapt resource value: 0x7f060012
 			public const int dim_foreground_disabled_material_dark = 2131099666;
 			
@@ -752,12 +760,6 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f06001b
 			public const int link_text_material_light = 2131099675;
 			
-			// aapt resource value: 0x7f060032
-			public const int loginToolbarBackground = 2131099698;
-			
-			// aapt resource value: 0x7f060033
-			public const int loginToolbarText = 2131099699;
-			
 			// aapt resource value: 0x7f06001c
 			public const int material_blue_grey_800 = 2131099676;
 			
@@ -772,6 +774,12 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f060020
 			public const int material_deep_teal_500 = 2131099680;
+			
+			// aapt resource value: 0x7f060034
+			public const int myQuestionnaireListItemLeftCorner = 2131099700;
+			
+			// aapt resource value: 0x7f060035
+			public const int myQuestionnairesLink = 2131099701;
 			
 			// aapt resource value: 0x7f060021
 			public const int primary_dark_material_dark = 2131099681;
@@ -796,6 +804,12 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f060028
 			public const int primary_text_disabled_material_light = 2131099688;
+			
+			// aapt resource value: 0x7f060036
+			public const int publicQuestionnaireListItemLeftCorner = 2131099702;
+			
+			// aapt resource value: 0x7f060037
+			public const int publicQuestionnairesLink = 2131099703;
 			
 			// aapt resource value: 0x7f060029
 			public const int ripple_material_dark = 2131099689;
@@ -1130,10 +1144,19 @@ namespace WB.UI.QuestionnaireTester
 			public const int abc_textfield_search_material = 2130837554;
 			
 			// aapt resource value: 0x7f020033
-			public const int icon = 2130837555;
+			public const int dashboard_refresh_icon = 2130837555;
 			
 			// aapt resource value: 0x7f020034
-			public const int loginLogo = 2130837556;
+			public const int dashboard_search_icon = 2130837556;
+			
+			// aapt resource value: 0x7f020035
+			public const int icon = 2130837557;
+			
+			// aapt resource value: 0x7f020036
+			public const int loginLogo = 2130837558;
+			
+			// aapt resource value: 0x7f020037
+			public const int questionnaire_list_item_border = 2130837559;
 			
 			static Drawable()
 			{
@@ -1150,9 +1173,6 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f080009
 			public const int MvxBindingTagUnique = 2131230729;
-			
-			// aapt resource value: 0x7f080040
-			public const int TheListView = 2131230784;
 			
 			// aapt resource value: 0x7f080032
 			public const int action_bar = 2131230770;
@@ -1207,6 +1227,21 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f080018
 			public const int collapseActionView = 2131230744;
+			
+			// aapt resource value: 0x7f080044
+			public const int dashboard_about = 2131230788;
+			
+			// aapt resource value: 0x7f080041
+			public const int dashboard_refresh = 2131230785;
+			
+			// aapt resource value: 0x7f080042
+			public const int dashboard_search = 2131230786;
+			
+			// aapt resource value: 0x7f080043
+			public const int dashboard_settings = 2131230787;
+			
+			// aapt resource value: 0x7f080045
+			public const int dashboard_signout = 2131230789;
 			
 			// aapt resource value: 0x7f080030
 			public const int decor_content_parent = 2131230768;
@@ -1331,6 +1366,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080028
 			public const int title = 2131230760;
 			
+			// aapt resource value: 0x7f080040
+			public const int toolbar = 2131230784;
+			
 			// aapt resource value: 0x7f080008
 			public const int up = 2131230728;
 			
@@ -1442,16 +1480,22 @@ namespace WB.UI.QuestionnaireTester
 			public const int abc_simple_dropdown_hint = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int chapter = 2130903063;
+			public const int dashboard = 2130903063;
 			
 			// aapt resource value: 0x7f030018
 			public const int login = 2130903064;
 			
 			// aapt resource value: 0x7f030019
-			public const int splash = 2130903065;
+			public const int my_questionnaire_list_item = 2130903065;
 			
 			// aapt resource value: 0x7f03001a
-			public const int support_simple_spinner_dropdown_item = 2130903066;
+			public const int public_questionnaire_list_item = 2130903066;
+			
+			// aapt resource value: 0x7f03001b
+			public const int splash = 2130903067;
+			
+			// aapt resource value: 0x7f03001c
+			public const int support_simple_spinner_dropdown_item = 2130903068;
 			
 			static Layout()
 			{
@@ -1463,8 +1507,27 @@ namespace WB.UI.QuestionnaireTester
 			}
 		}
 		
+		public partial class Menu
+		{
+			
+			// aapt resource value: 0x7f0c0000
+			public const int dashboard = 2131492864;
+			
+			static Menu()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Menu()
+			{
+			}
+		}
+		
 		public partial class String
 		{
+			
+			// aapt resource value: 0x7f0a0016
+			public const int AcceptUnsignedSslCertificate = 2131361814;
 			
 			// aapt resource value: 0x7f0a0011
 			public const int ApplicationName = 2131361809;
@@ -2082,17 +2145,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b00a6
 			public const int Theme_AppCompat_NoActionBar = 2131427494;
 			
-			// aapt resource value: 0x7f0b00ee
-			public const int Theme_Light = 2131427566;
+			// aapt resource value: 0x7f0b00ed
+			public const int Theme_Blue_Light = 2131427565;
+			
+			// aapt resource value: 0x7f0b00ec
+			public const int Theme_Gray_Light = 2131427564;
+			
+			// aapt resource value: 0x7f0b00ef
+			public const int Theme_Light = 2131427567;
 			
 			// aapt resource value: 0x7f0b00eb
 			public const int Theme_Light_Base = 2131427563;
 			
-			// aapt resource value: 0x7f0b00ec
-			public const int Theme_Login_Light = 2131427564;
-			
-			// aapt resource value: 0x7f0b00ed
-			public const int Theme_Splash = 2131427565;
+			// aapt resource value: 0x7f0b00ee
+			public const int Theme_Splash = 2131427566;
 			
 			// aapt resource value: 0x7f0b00a7
 			public const int ThemeOverlay_AppCompat = 2131427495;
