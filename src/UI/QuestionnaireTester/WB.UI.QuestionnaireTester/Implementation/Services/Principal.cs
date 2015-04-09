@@ -13,8 +13,8 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         private readonly IKeychain securityService;
         private readonly ISettings settingsService;
 
-        private Identity currentIdentity;
-        public IIdentity CurrentIdentity { get { return currentIdentity; } }
+        private UserIdentity currentUserIdentity;
+        public IUserIdentity CurrentUserIdentity { get { return currentUserIdentity; } }
 
         public Principal(IKeychain securityService, ISettings settingsService)
         {
@@ -28,7 +28,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         {
             var userName = this.settingsService.GetValue(UserNameParameterName, string.Empty);
             
-            this.currentIdentity = new Identity()
+            this.currentUserIdentity = new UserIdentity()
             {
                 IsAuthenticated = !string.IsNullOrEmpty(userName),
                 Name = userName,
@@ -44,19 +44,19 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
                 this.securityService.SetPassword(password, ServiceParameterName, usernName);
             }
 
-            this.currentIdentity.IsAuthenticated = true;
-            this.currentIdentity.Name = usernName;
-            this.currentIdentity.Password = password;
+            this.currentUserIdentity.IsAuthenticated = true;
+            this.currentUserIdentity.Name = usernName;
+            this.currentUserIdentity.Password = password;
         }
 
         public void SignOut()
         {
             this.settingsService.DeleteValue(UserNameParameterName);
-            this.securityService.DeleteAccount(ServiceParameterName, this.currentIdentity.Name);
+            this.securityService.DeleteAccount(ServiceParameterName, this.currentUserIdentity.Name);
 
-            this.currentIdentity.IsAuthenticated = false;
-            this.currentIdentity.Name = string.Empty;
-            this.currentIdentity.Password = string.Empty;
+            this.currentUserIdentity.IsAuthenticated = false;
+            this.currentUserIdentity.Name = string.Empty;
+            this.currentUserIdentity.Password = string.Empty;
         }
     }
 }
