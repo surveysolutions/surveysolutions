@@ -1,10 +1,17 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
+using Main.Core.Documents;
+using WB.Core.BoundedContexts.QuestionnaireTester.Model;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GroupViewModel : MvxViewModel
+    public class GroupReferanceViewModel : MvxViewModel
     {
+        public GroupReferanceViewModel(Guid questionId, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
+        {
+        }
+
+
         private string title;
         private Guid id;
 

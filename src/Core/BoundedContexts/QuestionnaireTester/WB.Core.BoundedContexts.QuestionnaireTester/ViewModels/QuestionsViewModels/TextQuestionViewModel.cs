@@ -3,20 +3,18 @@ using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.QuestionnaireTester.Model;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class TextQuestionViewModel : MvxViewModel
     {
-        public TextQuestionViewModel()
+        public TextQuestionViewModel(Guid questionId, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
         {
-        }    
-        
-        public TextQuestionViewModel(QuestionnaireDocument document, Guid questionId)
-        {
-            TextQuestion textQuestion = document.Find<TextQuestion>(questionId);
+            TextQuestion textQuestion = questionnaireDocument.Find<TextQuestion>(questionId);
 
             Title = textQuestion.QuestionText;
+            Answer = interviewModel.GetAnswerOnQuestion<string>(questionId);
         }
 
         private string title;
@@ -34,13 +32,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return answer; }
             set { answer = value; RaisePropertyChanged(() => Answer); }
         }
-//
-//        public ICommand TextChanged
-//        {
-//            get
-//            {
-//                return new MvxCommand(() => ());
-//            }
-//        }
+
     }
 }

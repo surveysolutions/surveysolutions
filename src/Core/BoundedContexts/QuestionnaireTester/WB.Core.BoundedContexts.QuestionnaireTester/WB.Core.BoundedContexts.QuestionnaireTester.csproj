@@ -58,7 +58,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ChapterViewModel.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\GroupReferanceViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
