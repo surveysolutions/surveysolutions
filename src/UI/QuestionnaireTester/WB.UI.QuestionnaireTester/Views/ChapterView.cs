@@ -1,10 +1,10 @@
 ﻿using Android.App;
-using Android.Content.PM;
+using Android.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(NoHistory = true, MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Label = "", Theme = "@style/Theme.Blue.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
     public class ChapterView : BaseActivityView<ChapterViewModel>
     {
         protected override int ViewResourceId

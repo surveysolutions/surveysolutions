@@ -1174,6 +1174,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080009
 			public const int MvxBindingTagUnique = 2131230729;
 			
+			// aapt resource value: 0x7f080040
+			public const int TheListView = 2131230784;
+			
 			// aapt resource value: 0x7f080032
 			public const int action_bar = 2131230770;
 			
@@ -1228,20 +1231,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080018
 			public const int collapseActionView = 2131230744;
 			
-			// aapt resource value: 0x7f080044
-			public const int dashboard_about = 2131230788;
-			
-			// aapt resource value: 0x7f080041
-			public const int dashboard_refresh = 2131230785;
+			// aapt resource value: 0x7f080045
+			public const int dashboard_about = 2131230789;
 			
 			// aapt resource value: 0x7f080042
-			public const int dashboard_search = 2131230786;
+			public const int dashboard_refresh = 2131230786;
 			
 			// aapt resource value: 0x7f080043
-			public const int dashboard_settings = 2131230787;
+			public const int dashboard_search = 2131230787;
 			
-			// aapt resource value: 0x7f080045
-			public const int dashboard_signout = 2131230789;
+			// aapt resource value: 0x7f080044
+			public const int dashboard_settings = 2131230788;
+			
+			// aapt resource value: 0x7f080046
+			public const int dashboard_signout = 2131230790;
 			
 			// aapt resource value: 0x7f080030
 			public const int decor_content_parent = 2131230768;
@@ -1366,8 +1369,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080028
 			public const int title = 2131230760;
 			
-			// aapt resource value: 0x7f080040
-			public const int toolbar = 2131230784;
+			// aapt resource value: 0x7f080041
+			public const int toolbar = 2131230785;
 			
 			// aapt resource value: 0x7f080008
 			public const int up = 2131230728;
@@ -1480,22 +1483,25 @@ namespace WB.UI.QuestionnaireTester
 			public const int abc_simple_dropdown_hint = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int dashboard = 2130903063;
+			public const int chapter = 2130903063;
 			
 			// aapt resource value: 0x7f030018
-			public const int login = 2130903064;
+			public const int dashboard = 2130903064;
 			
 			// aapt resource value: 0x7f030019
-			public const int my_questionnaire_list_item = 2130903065;
+			public const int login = 2130903065;
 			
 			// aapt resource value: 0x7f03001a
-			public const int public_questionnaire_list_item = 2130903066;
+			public const int my_questionnaire_list_item = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int splash = 2130903067;
+			public const int public_questionnaire_list_item = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int support_simple_spinner_dropdown_item = 2130903068;
+			public const int splash = 2130903068;
+			
+			// aapt resource value: 0x7f03001d
+			public const int support_simple_spinner_dropdown_item = 2130903069;
 			
 			static Layout()
 			{
