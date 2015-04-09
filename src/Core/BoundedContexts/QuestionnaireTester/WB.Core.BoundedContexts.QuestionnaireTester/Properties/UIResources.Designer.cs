@@ -368,6 +368,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Designer web application is not accessable at this moment. Check connection setting or try again later.
+        /// </summary>
+        public static string Login_Error_NotFound {
+            get {
+                return ResourceManager.GetString("Login_Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login.
         /// </summary>
         public static string LoginNameHint {
@@ -400,6 +409,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string Maintenance {
             get {
                 return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open questionnaire.
+        /// </summary>
+        public static string OpenQuestionnaire {
+            get {
+                return ResourceManager.GetString("OpenQuestionnaire", resourceCulture);
             }
         }
         

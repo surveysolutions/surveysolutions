@@ -166,6 +166,7 @@
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
     <Compile Include="Views\MvxActionBarActivity.cs" />
+    <Compile Include="Views\PrefilledQuestionsView.cs" />
     <Compile Include="Views\SplashView.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
     <AndroidResource Include="Resources\layout\my_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\chapter.axml" />
+    <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
@@ -214,13 +216,13 @@
       <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
       <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage.Mobile\WB.Core.Infrastructure.Storage.Mobile.csproj">
       <Project>{AC9D8028-37EA-44F6-92EC-05F20EF27253}</Project>
       <Name>WB.Core.Infrastructure.Storage.Mobile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

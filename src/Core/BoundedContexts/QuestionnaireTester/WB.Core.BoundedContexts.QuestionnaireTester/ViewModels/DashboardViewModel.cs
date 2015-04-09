@@ -11,12 +11,14 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class DashboardViewModel : BaseViewModel
     {
+        private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IRestService restService;
         private readonly IUserInteraction uiDialogs;
@@ -24,13 +26,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger, IUserInteraction uiDialogs,
-            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor)
+            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor /*,
+           ICommandService commandService*/)
             : base(logger)
         {
             this.principal = principal;
             this.restService = restService;
             this.uiDialogs = uiDialogs;
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
+           // this.commandService = commandService;
         }
 
         public async void Init()

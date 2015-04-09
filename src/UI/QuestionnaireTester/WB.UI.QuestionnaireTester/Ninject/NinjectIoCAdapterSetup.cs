@@ -1,9 +1,8 @@
 using Cirrious.CrossCore.IoC;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.QuestionnaireTester;
 using WB.Core.Infrastructure;
-
-
-using WB.Core.BoundedContexts.QuestionnaireTester;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
@@ -18,7 +17,38 @@ namespace WB.UI.QuestionnaireTester.Ninject
                 new ApplicationModule(),
                 new ServiceLocationModule(),
                 new PlainStorageInfrastructureModule(),
-                new MobileDataCollectionModule());
+                new MobileDataCollectionModule(),
+                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
+        }
+    }
+
+    public static class ModuleExtensions
+    {
+        public static NinjectModule AsNinject<TModule>(this TModule module)
+            where TModule : IModule
+        {
+            return new NinjectModuleAdapter<TModule>(module);
+        }
+    }
+
+    public class NinjectModuleAdapter<TModule> : NinjectModule, IIocRegistry
+        where TModule : IModule
+    {
+        private readonly TModule module;
+
+        public NinjectModuleAdapter(TModule module)
+        {
+            this.module = module;
+        }
+
+        public override void Load()
+        {
+            this.module.Load(this);
+        }
+
+        void IIocRegistry.Bind<TInterface, TImplementation>()
+        {
+            this.Kernel.Bind<TInterface>().To<TImplementation>();
         }
     }
 }
