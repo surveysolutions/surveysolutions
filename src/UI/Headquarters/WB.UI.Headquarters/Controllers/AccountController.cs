@@ -104,17 +104,8 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
             if (this.ModelState.IsValid)
             {
-                if (User.Identity.IsObserver())
-                {
-                    this.Error("You cannot perform any operation in observer mode.");
-                }
-                else
-                {
-                    this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
-                    this.Success(
-                        Strings
-                            .HQ_AccountController_AccountUpdatedSuccessfully);
-                }
+                if (this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model))
+                    this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
             }
 
             return this.View(model);
