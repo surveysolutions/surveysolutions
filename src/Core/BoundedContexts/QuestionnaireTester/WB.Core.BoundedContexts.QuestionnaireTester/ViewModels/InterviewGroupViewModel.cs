@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class ChapterViewModel : BaseViewModel
+    public class InterviewGroupViewModel : BaseViewModel
     {
         private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
 
-        public ChapterViewModel(IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory)
+        public InterviewGroupViewModel(IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory)
         {
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
         }
@@ -18,12 +19,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             Entities = interviewStateFullViewModelFactory.Load(interviewId, chapterId);
         }
 
-        private List<object> entities;
+        private List<MvxViewModel> entities;
 
-        public IEnumerable<object> Entities
+        public IEnumerable<MvxViewModel> Entities
         {
             get { return entities; }
-            set { entities = new List<object>(value); RaisePropertyChanged(() => Entities); }
+            set { entities = new List<MvxViewModel>(value); RaisePropertyChanged(() => Entities); }
         }
 
         public override void NavigateToPreviousViewModel()

@@ -19,12 +19,12 @@ using StaticTextViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewMode
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimentation
 {
-    internal class InterviewInterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
+    internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
         private readonly IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor;
         private readonly IPlainStorageAccessor<InterviewModel> plainStorageInterviewAccessor;
 
-        public InterviewInterviewStateFullViewModelFactory(
+        public InterviewStateFullViewModelFactory(
             IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor,
             IPlainStorageAccessor<InterviewModel> plainStorageInterviewAccessor)
         {
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
             { typeof(TextQuestion), (questionId, interview, questionnaire) => new TextQuestionViewModel(questionId, interview, questionnaire) },
         };
 
-        public IEnumerable<object> Load(string interviewId, string chapterId)
+        public IEnumerable<MvxViewModel> Load(string interviewId, string chapterId)
         {
             var interview = plainStorageInterviewAccessor.GetById(interviewId);
             var questionaryId = interview.QuestionaryId.FormatGuid();
@@ -51,11 +51,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
             if (chapterId != null && @group == null)
                 throw new KeyNotFoundException("Grup with id : {0} don't found".FormatString(chapterId));
 
-            List<object> entities = new List<object>();
+            List<MvxViewModel> entities = new List<MvxViewModel>();
 
             foreach (var child in @group.Children)
             {
                 var entityType = child.GetType();
+
+                if (!mapQuestions.ContainsKey(entityType))
+                    continue; // temporaly ignore inknown types
+
                 var mapQuestionFunc = mapQuestions[entityType];
                 var entityViewModel = mapQuestionFunc.Invoke(child.PublicKey, interview, questionnaire);
 
