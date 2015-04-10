@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -30,6 +33,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPlainStorageAccessor<Questionnaire> questionnairesStorage;
         private readonly IRestServiceSettings restServiceSettings;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private readonly IErrorProcessor errorProcessor;
+
 
         private Guid newInterviewId;
         private QuestionnaireListItem selectedQuestionnaire;
@@ -103,7 +108,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public PrefilledQuestionsViewModel(ILogger logger, IRestService restService,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, ICommandService commandService,
             IPrincipal principal, IUserInteraction uiDialogs, IPlainStorageAccessor<QuestionnaireListItem> questionnaireInfoAccessor,
-            IPlainStorageAccessor<Questionnaire> questionnairesStorage, IRestServiceSettings restServiceSettings)
+            IPlainStorageAccessor<Questionnaire> questionnairesStorage, IRestServiceSettings restServiceSettings, IErrorProcessor errorProcessor)
             : base(logger)
         {
             this.restService = restService;
@@ -114,6 +119,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.questionnaireInfoAccessor = questionnaireInfoAccessor;
             this.questionnairesStorage = questionnairesStorage;
             this.restServiceSettings = restServiceSettings;
+            this.errorProcessor = errorProcessor;
         }
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -122,7 +128,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             get
             {
                 return loadQuestionnaireCommand ?? (loadQuestionnaireCommand =
-                    new MvxCommand(async () => await this.LoadQuestionnaireAndCreateInterivew(), () => !this.IsInProgress));
+                    new MvxCommand(async () => await this.LoadQuestionnaireAndCreateInterview(), () => !this.IsInProgress));
             }
         }
 
@@ -132,7 +138,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             get
             {
                 return tryAgainToLoadQuestionnaireCommand ?? (tryAgainToLoadQuestionnaireCommand =
-                    new MvxCommand(async () => await this.LoadQuestionnaireAndCreateInterivew(), () => !this.IsInProgress));
+                    new MvxCommand(async () => await this.LoadQuestionnaireAndCreateInterview(), () => !this.IsInProgress));
             }
         }
 
@@ -149,7 +155,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.selectedQuestionnaire = this.questionnaireInfoAccessor.GetById(questionnaireId);
 
-            await this.LoadQuestionnaireAndCreateInterivew();
+            await this.LoadQuestionnaireAndCreateInterview();
         }
 
         private void OpenInterview()
@@ -157,7 +163,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.ShowViewModel<InterviewGroupViewModel>(this.newInterviewId);
         }
 
-        public Task LoadQuestionnaireAndCreateInterivew()
+        public Task LoadQuestionnaireAndCreateInterview()
         {
             return Task.Run(async () =>
             {
@@ -198,48 +204,46 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 {
                     this.HasErrors = true;
 
-                    switch (ex.StatusCode)
+                    var error = this.errorProcessor.GetInternalErrorAndLogException(ex, TesterHttpAction.QuestionnaireLoading);
+
+                    switch (error.Code)
                     {
-                        case HttpStatusCode.Unauthorized:
+                        case ErrorCode.UserWasNotAuthoredOnDesigner:
+                        case ErrorCode.AccountIsLockedOnDesigner:
                             this.SignOut();
                             break;
-                        case HttpStatusCode.Forbidden:
-                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
-                                this.restServiceSettings.Endpoint.GetDomainName(), this.selectedQuestionnaire.Id,
-                                this.selectedQuestionnaire.Title, this.selectedQuestionnaire.OwnerName);
-                            break;
-                        case HttpStatusCode.UpgradeRequired:
-                            this.ErrorMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
-                            break;
-                        case HttpStatusCode.PreconditionFailed:
-                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                this.restServiceSettings.Endpoint.GetDomainName(), this.selectedQuestionnaire.Id,
-                                this.selectedQuestionnaire.Title);
-                            break;
-                        case HttpStatusCode.NotFound:
-                            this.ErrorMessage = string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                                this.restServiceSettings.Endpoint.GetDomainName(), this.selectedQuestionnaire.Id,
-                                this.selectedQuestionnaire.Title);
-                            break;
-                        case HttpStatusCode.ServiceUnavailable:
-                            this.ErrorMessage = ex.Message.Contains("maintenance")
-                                ? UIResources.Maintenance
-                                : UIResources.ServiceUnavailable;
-                            this.IsServerUnavailable = true;
-                            break;
-                        case HttpStatusCode.RequestTimeout:
-                            this.ErrorMessage = UIResources.RequestTimeout;
-                            this.IsServerUnavailable = true;
-                            break;
-                        case HttpStatusCode.InternalServerError:
-                            this.Logger.Error("Internal server error when getting questionnaires.", ex);
-                            this.ErrorMessage = UIResources.InternalServerError;
-                            this.IsServerUnavailable = true;
-                            break;
-                        default:
-                            throw;
-                    }
 
+                        case ErrorCode.DesignerIsInMaintenanceMode:
+                        case ErrorCode.DesignerIsUnavailable:
+                        case ErrorCode.RequestTimeout:
+                        case ErrorCode.InternalServerError:
+                            this.ErrorMessage = error.Message;
+                            this.IsServerUnavailable = true;
+                            break;
+                            
+                        case ErrorCode.TesterUpgradeIsRequiredToOpenQuestionnaire:
+                            this.ErrorMessage = error.Message;
+                            break;
+
+                        case ErrorCode.QuestionnaireContainsErrorsAndCannotBeOpened:
+                        case ErrorCode.RequestedUrlWasNotFound:
+                            this.ErrorMessage = string.Format(error.Message,
+                                this.restServiceSettings.Endpoint.GetDomainName(), 
+                                this.selectedQuestionnaire.Id,
+                                this.selectedQuestionnaire.Title);
+                            break;
+
+                        case ErrorCode.RequestedUrlIsForbidden:
+                            this.ErrorMessage = string.Format(error.Message,
+                                this.restServiceSettings.Endpoint.GetDomainName(), 
+                                this.selectedQuestionnaire.Id,
+                                this.selectedQuestionnaire.Title, 
+                                this.selectedQuestionnaire.OwnerName);
+                            break;
+                       
+                        default: throw;
+                    }
+                   
                     if (questionnaireDocumentFromStorage != null && this.IsServerUnavailable)
                     {
                         if (this.tokenSource.IsCancellationRequested) return;
