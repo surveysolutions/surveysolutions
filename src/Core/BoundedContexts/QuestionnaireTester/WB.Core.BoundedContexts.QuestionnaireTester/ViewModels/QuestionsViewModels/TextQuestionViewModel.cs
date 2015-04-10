@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
@@ -13,7 +14,9 @@ using IPrincipal = WB.Core.GenericSubdomains.Utils.Services.IPrincipal;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class TextQuestionViewModel : MvxViewModel,
-        IEventBusEventHandler<TextQuestionAnswered>
+        IEventBusEventHandler<TextQuestionAnswered>,
+        IEventBusEventHandler<QuestionsEnabled>,
+        IEventBusEventHandler<QuestionsDisabled>
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
@@ -56,7 +59,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private string title;
-
         public string Title
         {
             get { return title; }
@@ -64,16 +66,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private string answer;
-
         public string Answer
         {
             get { return answer; }
             set { answer = value; RaisePropertyChanged(() => Answer); }
         }
 
+        private bool enabled;
+        public bool Enabled
+        {
+            get { return enabled; }
+            set { enabled = value; RaisePropertyChanged(() => Enabled); }
+        }
+
+        private IMvxCommand answerTextQuestionCommand;
         public IMvxCommand AnswerTextQuestionCommand
         {
-            get { return new MvxCommand(SendAnswerTextQuestionCommand); }
+            get { return answerTextQuestionCommand ?? (answerTextQuestionCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
         }
 
         private void SendAnswerTextQuestionCommand()
@@ -95,6 +104,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 return;
 
             Answer = @event.Answer;
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            if (@event.Questions.Any(i => i.Id != navObject.QuestionIdentity.Id
+                && i.RosterVector != navObject.QuestionIdentity.RosterVector))
+                return;
+
+            Enabled = true;
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            if (@event.Questions.Any(i => i.Id != navObject.QuestionIdentity.Id
+                && i.RosterVector != navObject.QuestionIdentity.RosterVector))
+                return;
+
+            Enabled = false;
         }
     }
 }
