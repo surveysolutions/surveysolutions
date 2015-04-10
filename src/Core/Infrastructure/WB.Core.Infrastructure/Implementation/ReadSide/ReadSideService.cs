@@ -55,8 +55,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadSideService(IStreamableEventStore eventStore, IEventDispatcher eventBus, ILogger logger,
-            IReadSideCleaner readSideCleaner, ITransactionManagerProviderManager transactionManagerProviderManager)
+        public ReadSideService(IStreamableEventStore eventStore, 
+            IEventDispatcher eventBus, 
+            ILogger logger,
+            IReadSideCleaner readSideCleaner, 
+            ITransactionManagerProviderManager transactionManagerProviderManager)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));

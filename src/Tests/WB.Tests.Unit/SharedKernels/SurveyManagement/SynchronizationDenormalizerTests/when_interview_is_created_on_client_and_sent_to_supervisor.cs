@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.Implementation.ReadSide;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormalizerTests
@@ -28,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             {
                 WasCreatedOnClient = true
             };
-            interviewSummary.CommentedStatusesHistory.Add(new InterviewCommentedStatus() { Status = InterviewStatus.Completed });
+            interviewSummary.Status = InterviewStatus.Completed;
 
             interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 

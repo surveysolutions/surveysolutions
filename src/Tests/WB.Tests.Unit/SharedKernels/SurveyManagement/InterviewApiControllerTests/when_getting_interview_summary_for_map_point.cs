@@ -22,9 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
                 ResponsibleName = interviewerName,
                 TeamLeadName = supervisorName
             };
-            interviewSummary.CommentedStatusesHistory.Add(
-                new InterviewCommentedStatus { Status = lastStatus, Date = lastStatusDateTime }
-            );
+            interviewSummary.Status = lastStatus;
+            interviewSummary.UpdateDate =  lastStatusDateTime;
 
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(interviewSummary);
 
@@ -48,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             viewModel.LastStatus.ShouldEqual(lastStatus.ToLocalizeString());
 
         It should_last_status_date_be_equal_to_lastStatusDate = () =>
-            viewModel.LastCompletedDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
+            viewModel.LastUpdatedDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;
