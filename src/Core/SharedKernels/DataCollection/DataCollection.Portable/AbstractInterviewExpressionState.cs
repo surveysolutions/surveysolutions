@@ -198,5 +198,10 @@ namespace WB.Core.SharedKernels.DataCollection
             string rosterTitle);
 
         public abstract IInterviewExpressionStateV2 CloneV2();
+
+        public override IInterviewExpressionState Clone()
+        {
+            return CloneV2();
+        }
     }
 }
