@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 try
                 {
-                    this.CommandService.Execute(
+                    this.ExecuteCommandWithoutObserverCheck(
                         new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
                                               password: passwordHasher.Hash(model.Password), 
                                               email: model.Email, isLockedBySupervisor: false,
