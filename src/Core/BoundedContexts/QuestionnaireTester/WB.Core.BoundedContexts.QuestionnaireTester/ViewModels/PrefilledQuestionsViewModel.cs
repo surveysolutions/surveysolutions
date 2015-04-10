@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void OpenInterview()
         {
-            this.ShowViewModel<ChapterViewModel>(this.newInterviewId);
+            this.ShowViewModel<InterviewGroupViewModel>(this.newInterviewId);
         }
 
         public Task LoadQuestionnaireAndCreateInterivew()
