@@ -1,3 +1,5 @@
+using System;
+
 namespace WB.Core.GenericSubdomains.Utils.Services
 {
     public interface IUserIdentity
@@ -5,5 +7,6 @@ namespace WB.Core.GenericSubdomains.Utils.Services
         bool IsAuthenticated { get; }
         string Name { get; }
         string Password { get; }
+        Guid UserId { get; }
     }
 }
