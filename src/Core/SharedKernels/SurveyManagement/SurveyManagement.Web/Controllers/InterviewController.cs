@@ -116,14 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [HttpPost]
         public ActionResult ConfirmRevalidation(RevalidateModel input)
         {
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-            }
-            else
-            {
-                this.CommandService.Execute(new ReevaluateSynchronizedInterview(input.InterviewId));
-            }
+            this.ExecuteCommandWithObserverCheck(new ReevaluateSynchronizedInterview(input.InterviewId));
 
             var newModel = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = input.InterviewId });
             return this.View("ConfirmRevalidation", newModel);
