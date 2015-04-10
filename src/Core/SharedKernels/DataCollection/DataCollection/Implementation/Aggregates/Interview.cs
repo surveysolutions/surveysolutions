@@ -403,7 +403,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //expressionProcessorStatePrototype could also be changed but it's an old code.
         }
 
-        internal virtual void Apply(RosterInstancesTitleChanged @event) { }
+        internal virtual void Apply(RosterInstancesTitleChanged @event)
         {
             foreach (var instance in @event.ChangedInstances)
             {
