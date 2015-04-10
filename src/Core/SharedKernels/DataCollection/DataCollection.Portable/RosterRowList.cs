@@ -46,5 +46,10 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         public T this[decimal code] { get { return internalDictionary[DecimalValueToString(code)]; } }
+
+        public T ByIndex(int index)
+        {
+            return internalDictionary.Values.FirstOrDefault(v => v.rowindex == index);
+        }
     }
 }
