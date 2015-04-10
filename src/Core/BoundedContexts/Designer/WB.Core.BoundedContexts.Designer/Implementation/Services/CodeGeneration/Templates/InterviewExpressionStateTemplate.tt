@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.CustomFunctions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionStateV2 
     {
         public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
@@ -215,6 +215,11 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         }
 
         public override IInterviewExpressionState Clone()
+        {
+            return CloneV2();
+        }
+
+		 public override IInterviewExpressionStateV2 CloneV2()
         {
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
