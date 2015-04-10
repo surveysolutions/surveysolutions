@@ -76,6 +76,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
+        IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId);
+
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
         
         bool IsQuestionMandatory(Guid questionId);
@@ -84,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
-        IEnumerable<string> GetFixedRosterTitles(Guid groupId);
+        IEnumerable<Tuple<decimal, string>> GetFixedRosterTitles(Guid groupId);
 
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 

@@ -41,7 +41,23 @@ namespace Main.Core.Entities.SubEntities
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
+        [Obsolete]
         public string[] RosterFixedTitles { get; set; }
+
+        private Tuple<decimal, string>[] fixedRosterTitles;
+        public Tuple<decimal, string>[] FixedRosterTitles {
+            get
+            {
+                if (fixedRosterTitles == null && RosterFixedTitles != null)
+                {
+                    fixedRosterTitles =
+                        RosterFixedTitles.Select((title, index) => new Tuple<decimal, string>(index, title)).ToArray();
+                }
+                return fixedRosterTitles;
+            }
+            set { fixedRosterTitles = value; }
+        }
+
 
         public Guid? RosterTitleQuestionId { get; set; }
 
@@ -140,7 +156,7 @@ namespace Main.Core.Entities.SubEntities
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,
-                RosterFixedTitles = this.RosterFixedTitles
+                FixedRosterTitles = this.FixedRosterTitles
             };
 
             foreach (var composite in this.Children)

@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         .Skip((input.Page - 1)*input.PageSize)
                         .Take(input.PageSize)
                         .ToList();
-                queryResult.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "me" : x.CreatorName);
+                queryResult.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "you" : x.CreatorName);
                 return queryResult;
 
             });

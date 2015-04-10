@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 RosterSizeNumericQuestionId = rosterType == RosterType.Numeric ? roster.RosterSizeQuestionId.FormatGuid() : null,
                 RosterSizeMultiQuestionId = rosterType == RosterType.Multi ? roster.RosterSizeQuestionId.FormatGuid() : null,
                 RosterTitleQuestionId = roster.RosterTitleQuestionId.FormatGuid(),
-                RosterFixedTitles = roster.RosterFixedTitles,
+                FixedRosterTitles = roster.FixedRosterTitles,
                 RosterTypeOptions = RosterTypeOptions,
 
                 NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire, parentRosterScopeIds),

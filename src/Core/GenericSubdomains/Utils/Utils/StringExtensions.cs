@@ -159,7 +159,7 @@ namespace WB.Core.GenericSubdomains.Utils
             return string.Format(source, args);
         }
 
-        public static bool IsValidHttpAddress(this string source)
+        public static bool IsValidWebAddress(this string source)
         {
             Uri parsedUrl;
             return Uri.TryCreate(source, UriKind.Absolute, out parsedUrl) && (parsedUrl.Scheme == "http" || parsedUrl.Scheme == "https");

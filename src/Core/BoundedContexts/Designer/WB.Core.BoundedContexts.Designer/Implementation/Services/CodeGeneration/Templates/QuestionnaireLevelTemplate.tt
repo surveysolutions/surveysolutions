@@ -46,7 +46,7 @@
             _conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
         <#}#>
 
-        }                                 
+        }         
 
         public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
@@ -109,12 +109,12 @@
                 
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public IEnumerable<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get 
             {
                 var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-                return rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
+				return new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
             }
         }
         <# }#>

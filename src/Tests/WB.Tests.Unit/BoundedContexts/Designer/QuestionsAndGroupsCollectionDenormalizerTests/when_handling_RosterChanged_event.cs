@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             GetGroup(g2Id).IsRoster.ShouldBeTrue();
 
         It should_return_2nd_group_with_roster_fixed_titles_set_in_rosterFixedTitles = () =>
-            GetGroup(g2Id).RosterFixedTitles.ShouldContainOnly(rosterFixedTitles);
+            GetGroup(g2Id).FixedRosterTitles.ShouldContainOnly(rosterFixedTitles);
 
         It should_return_2nd_group_with_roster_size_question_id_set_in_null = () =>
             GetGroup(g2Id).RosterSizeQuestionId.ShouldBeNull();
@@ -114,6 +114,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
         private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
-        private static string[] rosterFixedTitles = new []{"5","6","7"};
+        private static Tuple<decimal,string>[] rosterFixedTitles = new[] { new Tuple<decimal, string>(5, "5"), new Tuple<decimal, string>(6, "6"), new Tuple<decimal, string>(7, "7") };
     }
 }
