@@ -85,9 +85,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //answer on numeric question
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
 
-            interviewExpressionState = new Mock<IInterviewExpressionState>();
+            interviewExpressionState = new Mock<IInterviewExpressionStateV2>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
+            interviewExpressionState.Setup(x => x.CloneV2()).Returns(interviewExpressionState.Object);
 
             SetupInstanceToMockedServiceLocator(
                 Mock.Of<IInterviewExpressionStatePrototypeProvider>(
@@ -135,6 +136,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid multyOptionRosterSizeId;
         private static Guid numericQuestionInsideRoster;
         private static Guid rosterGroupId;
-        private static Mock<IInterviewExpressionState> interviewExpressionState;
+        private static Mock<IInterviewExpressionStateV2> interviewExpressionState;
     }
 }

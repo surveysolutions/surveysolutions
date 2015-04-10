@@ -54,7 +54,7 @@ using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionState 
+    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionStateV2 
     {
         public InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17() 
         {
@@ -238,6 +238,11 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         }
 
         public override IInterviewExpressionState Clone()
+        {
+            return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
+        }
+
+        public override IInterviewExpressionStateV2 CloneV2()
         {
             return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
         }

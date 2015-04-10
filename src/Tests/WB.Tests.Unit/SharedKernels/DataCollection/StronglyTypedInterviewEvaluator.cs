@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState 
+    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionStateV2 
     {
         public StronglyTypedInterviewEvaluator()
         {
@@ -295,9 +295,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
         public override IInterviewExpressionState Clone()
         {
-            return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
+            return CloneV2();
         }
 
+        public override IInterviewExpressionStateV2 CloneV2()
+        {
+            return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
+        }
 
         public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IExpressionExecutable
         {

@@ -1381,7 +1381,7 @@ namespace WB.Tests.Unit
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
                 new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
-                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>(), interviewerId?? Guid.NewGuid());
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
         }
 
         public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
