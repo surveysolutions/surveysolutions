@@ -9,18 +9,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
-        protected override internal void Apply(QuestionnaireDeleted e)
-        {
-        }
-
-        protected override internal void Apply(QuestionnaireDisabled e)
-        {
-        }
-
-        protected override void Apply(PlainQuestionnaireRegistered e)
-        {
-        }
-
         protected override internal void Apply(QuestionnaireAssemblyImported e)
         {
         }

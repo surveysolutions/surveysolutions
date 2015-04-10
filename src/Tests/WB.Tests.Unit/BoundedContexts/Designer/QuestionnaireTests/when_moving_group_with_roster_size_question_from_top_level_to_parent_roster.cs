@@ -21,9 +21,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterSizeQuestionId: null, rosterFixedTitles: new[] { "1", "2" }));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    FixedRosterTitles =  new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2") },
+                    RosterTitleQuestionId =null 
+                });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupToMoveId });
             questionnaire.Apply(new NumericQuestionAdded()
@@ -37,9 +40,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = parentRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, nestedRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.Question,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId){
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles =  null,
+                    RosterTitleQuestionId =null 
+                });
 
             eventContext = new EventContext();
         };

@@ -272,7 +272,6 @@
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
-    <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BootstrapSupport\ControlGroupExtensions.cs" />
@@ -348,6 +347,7 @@
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="WebServices\IPublicService.cs" />
     <Compile Include="WebServices\PublicService.cs" />
     <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
@@ -360,29 +360,62 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
-    <Content Include="Content\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\identity\favicon-designer-114x114.png" />
+    <Content Include="Content\identity\favicon-designer-120x120.png" />
+    <Content Include="Content\identity\favicon-designer-144x144.png" />
+    <Content Include="Content\identity\favicon-designer-152x152.png" />
+    <Content Include="Content\identity\favicon-designer-180x180.png" />
+    <Content Include="Content\identity\favicon-designer-192x192.png" />
+    <Content Include="Content\identity\favicon-designer-72x72.png" />
+    <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="PublicService.svc" />
+    <Content Include="Content\identity\favicon-designer.png" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
+    <Content Include="Scripts\editForm.js" />
+    <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.3.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\knockout-3.3.0.debug.js" />
+    <Content Include="Scripts\knockout-3.3.0.js" />
+    <Content Include="Scripts\lodash.underscore.js" />
+    <Content Include="Scripts\lodash.underscore.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css">
+      <DependentUpon>bootstrap-override.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.min.css">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.min.css">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\isOnScreen.js" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\grunt\bs-glyphicons-data-generator.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\matchOptionsPattern.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\optionsService.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css" />
@@ -393,69 +426,6 @@
     <Content Include="UpdatedDesigner\content\i\loupe.png" />
     <Content Include="UpdatedDesigner\content\i\wb-logo.png" />
     <Content Include="UpdatedDesigner\content\wb-options-window.css" />
-    <Content Include="Content\themes\base\images\animated-overlay.gif" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.menu.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
-    <Content Include="Content\themes\base\minified\images\animated-overlay.gif" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -469,28 +439,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Scripts\bootbox.js" />
-    <Content Include="Scripts\bootbox.min.js" />
-    <Content Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-2.1.0.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.js" />
-    <Content Include="Scripts\jquery-ui-1.10.2.js" />
-    <Content Include="Scripts\jquery-ui-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\knockout-3.1.0.debug.js" />
-    <Content Include="Scripts\knockout-3.1.0.js" />
-    <Content Include="Scripts\knockout-sortable.js" />
-    <Content Include="Scripts\knockout-sortable.min.js" />
-    <Content Include="Scripts\lodash.underscore.js" />
-    <Content Include="Scripts\lodash.underscore.min.js" />
-    <Content Include="Scripts\modernizr-2.7.2.js" />
-    <Content Include="Scripts\moment-with-langs.js" />
-    <Content Include="Scripts\moment-with-langs.min.js" />
-    <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\moment.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\filters\escapeFilter.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
@@ -695,10 +643,6 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.css" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.css.map" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\css\bootstrap.min.css" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\bootstrap.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\bootstrap.min.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\js\npm.js" />
@@ -856,8 +800,6 @@
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\README.md" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.js" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\dist\jquery.js" />
@@ -1116,12 +1058,8 @@
     <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
-    <Content Include="Content\jquery.pnotify.icons.css" />
     <Content Include="Content\pdf-title-page.css" />
     <Content Include="Content\pdf.css" />
-    <Content Include="Content\toastr.css" />
-    <Content Include="Content\toastr.min.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1147,36 +1085,15 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="Scripts\amplify-vsdoc.js" />
-    <Content Include="Scripts\amplify.js" />
-    <Content Include="Scripts\amplify.min.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\html5shiv.js" />
-    <Content Include="Scripts\infuser-amd.js" />
-    <Content Include="Scripts\infuser-amd.min.gz.js" />
-    <Content Include="Scripts\infuser-amd.min.js" />
-    <Content Include="Scripts\infuser.js" />
-    <Content Include="Scripts\infuser.min.gz.js" />
-    <Content Include="Scripts\infuser.min.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.min.js" />
-    <Content Include="Scripts\jquery.pnotify.js" />
-    <Content Include="Scripts\jquery.pnotify.min.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.map" />
-    <Content Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
-    <Content Include="Scripts\knockout.validation.debug.js" />
-    <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
     <Content Include="Scripts\lib\knockout.asyncCommand.js" />
@@ -1187,17 +1104,6 @@
     <Content Include="Scripts\lib\Placeholders.js" />
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
-    <Content Include="Scripts\require.js" />
-    <Content Include="Scripts\sammy-0.7.4.js" />
-    <Content Include="Scripts\sammy-0.7.4.min.js" />
-    <Content Include="Scripts\toastr.js" />
-    <Content Include="Scripts\toastr.min.js" />
-    <Content Include="Scripts\TrafficCop-amd.js" />
-    <Content Include="Scripts\TrafficCop-amd.min.gz.js" />
-    <Content Include="Scripts\TrafficCop-amd.min.js" />
-    <Content Include="Scripts\TrafficCop.js" />
-    <Content Include="Scripts\TrafficCop.min.gz.js" />
-    <Content Include="Scripts\TrafficCop.min.js" />
     <Content Include="UpdatedDesigner\content\i\arrow-left.png" />
     <Content Include="UpdatedDesigner\content\i\btn-dropdown-blue.png" />
     <Content Include="UpdatedDesigner\content\i\chapter-list-li-dots.png" />
@@ -1227,24 +1133,17 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
-    <Content Include="Views\Shared\Layout.Account.cshtml" />
+    <Content Include="Views\Account\Layout.Account.cshtml" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.less" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.less" />
     <Content Include="UpdatedDesigner\content\designer-start\custom-fonts.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.less" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.less" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\package.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\README.md" />
-    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\scrollTo.jquery.json" />
     <Content Include="UpdatedDesigner\content\designer-start\font-styles.less" />
     <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\jquery.isOnScreen\bower.json" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -1254,6 +1153,24 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-list.css.map">
       <DependentUpon>designer-list.css</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\_list_search_form.cshtml" />
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-override.css.map">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.css.map">
+      <DependentUpon>bootstrap-custom.css</DependentUpon>
+    </Content>
+    <Content Include="Views\Questionnaire\Create.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery-placeholder\jquery.placeholder.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="UpdatedDesigner\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Scripts\jquery-2.1.3.min.map" />
+    <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
+    <Content Include="Views\Error\Layout.Error.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1271,17 +1188,10 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
-    <Content Include="Views\Shared\Index.cshtml" />
-    <Content Include="Views\Shared\Delete.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
-    <Content Include="Views\Shared\_alerts.cshtml" />
-    <Content Include="Views\Shared\Layout.empty.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
     <Content Include="Views\Shared\_html5shiv.cshtml" />
-    <Content Include="Views\Shared\Create.cshtml" />
-    <Content Include="Views\Shared\Details.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Shared\Edit.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
@@ -1290,15 +1200,12 @@
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
-    <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
-    <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
-    <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
+    <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\SystemMailer\_Layout.cshtml" />
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
@@ -1338,7 +1245,7 @@
     <Content Include="UpdatedDesigner\content\dropdown.css.less" />
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
-    <Content Include="Views\Shared\Layout.admin.cshtml" />
+    <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />

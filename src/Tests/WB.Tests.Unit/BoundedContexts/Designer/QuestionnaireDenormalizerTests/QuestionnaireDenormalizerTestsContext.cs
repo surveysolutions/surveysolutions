@@ -241,11 +241,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, Tuple<decimal, string>[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             return
-                ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
-                    rosterTitleQuestionId));
+                ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId)
+                {
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = rosterSizeSource,
+                    FixedRosterTitles = rosterFixedTitles,
+                    RosterTitleQuestionId = rosterTitleQuestionId
+                });
         }
 
         protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(

@@ -190,8 +190,13 @@
                         </label>
                     }
                     break;
-                case QuestionType.Numeric:
                 case QuestionType.DateTime:
+                    if (!string.IsNullOrEmpty(Model.AnswerString))
+                    {
+                        <span data-bind="text: moment('@Model.AnswerString').format('M/D/YYYY')"></span>
+                    }
+                    break;
+                case QuestionType.Numeric:
                 case QuestionType.Text:
                 case QuestionType.QRBarcode:
                 @Model.AnswerString
@@ -210,9 +215,9 @@
                     break;
                 case QuestionType.TextList:
                     foreach (var option in Model.Options)
-                        {
-                            <div><span>@option.Label</span></div>
-                        }
+                    {
+                        <div><span>@option.Label</span></div>
+                    }
                     break;
                 case QuestionType.Multimedia:
                 <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.Answer})" width="100%" height="auto" />

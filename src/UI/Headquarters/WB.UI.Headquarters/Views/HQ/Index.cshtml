@@ -1,4 +1,6 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
@@ -34,12 +36,15 @@
 @section gridnavigation
 {
     <div class="btn-group">
-        <div class="form-inline">
-            <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
-                <i class="glyphicon glyphicon-import">
-                </i> @Dashboard.ImportTemplate
-            </a>
-        </div>
+        @if (!(User.Identity.IsObserver()))
+        {
+            <div class="form-inline">
+                <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
+                    <i class="glyphicon glyphicon-import">
+                    </i> @Dashboard.ImportTemplate
+                </a>
+            </div>
+        }
     </div>
 }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -7,5 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public Guid Id { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
+        public QuestionType Type { get; set; }
     }
 }

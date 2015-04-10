@@ -135,9 +135,15 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, string[] titles)
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, Tuple<decimal, string>[] titles)
             {
-                return new RosterChanged(Guid.NewGuid(), rosterId, null, rosterType, titles, null);
+                return new RosterChanged(Guid.NewGuid(), rosterId)
+                {
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = rosterType,
+                    FixedRosterTitles = titles,
+                    RosterTitleQuestionId = null
+                };
             }
 
             public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
@@ -1375,7 +1381,7 @@ namespace WB.Tests.Unit
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
                 new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
-                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>(), interviewerId?? Guid.NewGuid());
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
         }
 
         public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)

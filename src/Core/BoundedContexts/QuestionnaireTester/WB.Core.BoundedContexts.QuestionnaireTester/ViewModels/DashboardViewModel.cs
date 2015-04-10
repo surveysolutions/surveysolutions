@@ -2,20 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
+using Main.Core.Events.Questionnaire;
+
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -28,9 +31,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly IErrorProcessor errorProcessor;
+        private readonly IRestServiceSettings restServiceSettings;
 
-        public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger, IUserInteraction uiDialogs,
-            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, IErrorProcessor errorProcessor)
+
+        public DashboardViewModel(
+            IPrincipal principal, 
+            IRestService restService,
+            ILogger logger, 
+            IUserInteraction uiDialogs,
+            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
+            IErrorProcessor errorProcessor, 
+            IRestServiceSettings restServiceSettings)
             : base(logger)
         {
             this.principal = principal;
@@ -38,6 +49,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.uiDialogs = uiDialogs;
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
             this.errorProcessor = errorProcessor;
+            this.restServiceSettings = restServiceSettings;
         }
 
         public async void Init()
@@ -86,6 +98,50 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 isPublicShowed = value;
                 RaisePropertyChanged(() => IsPublicShowed);
+            }
+        }
+
+        private string progressIndicator;
+        public string ProgressIndicator
+        {
+            get { return progressIndicator; }
+            set
+            {
+                progressIndicator = value;
+                RaisePropertyChanged(() => ProgressIndicator);
+            }
+        }
+
+        private bool isServerUnavailable = false;
+        public bool IsServerUnavailable
+        {
+            get { return isServerUnavailable; }
+            set
+            {
+                isServerUnavailable = value;
+                RaisePropertyChanged(() => IsServerUnavailable);
+            }
+        }
+
+        private string errorMessage = string.Empty;
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set
+            {
+                errorMessage = value;
+                RaisePropertyChanged(() => ErrorMessage);
+            }
+        }
+
+        private bool hasErrors = false;
+        public bool HasErrors
+        {
+            get { return hasErrors; }
+            set
+            {
+                hasErrors = value;
+                RaisePropertyChanged(() => HasErrors);
             }
         }
 
@@ -151,7 +207,114 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.tokenSource.Cancel();
 
+            LoadQuestionnaireAndCreateInterview(questionnaire);
+
             this.ShowViewModel<PrefilledQuestionsViewModel>(new {questionnaireId = questionnaire.Id});
+        }
+
+        public async void LoadQuestionnaireAndCreateInterview(QuestionnaireListItem selectedQuestionnaire)
+        {
+            this.IsServerUnavailable = false;
+            this.HasErrors = false;
+            this.IsInProgress = true;
+
+            this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
+
+            try
+            {
+                this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
+
+                var questionnaireCommunicationPackage = this.GetQuestionnaireFromServer(
+                        selectedQuestionnaire,
+                        (downloadProgress) =>
+                        {
+                            this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
+                        }).Result;
+
+                this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
+
+                this.commandService.Execute(
+                    new ImportFromDesigner(
+                        this.principal.CurrentUserIdentity.UserId,
+                        questionnaireCommunicationPackage.Document,
+                        true,
+                        questionnaireCommunicationPackage.Assembly));
+            }
+            catch (RestException ex)
+            {
+                this.HasErrors = true;
+
+                var error = this.errorProcessor.GetInternalErrorAndLogException(
+                    ex,
+                    TesterHttpAction.QuestionnaireLoading);
+
+                switch (error.Code)
+                {
+                    case ErrorCode.UserWasNotAuthoredOnDesigner:
+                    case ErrorCode.AccountIsLockedOnDesigner:
+                        this.SignOut();
+                        break;
+
+                    case ErrorCode.DesignerIsInMaintenanceMode:
+                    case ErrorCode.DesignerIsUnavailable:
+                    case ErrorCode.RequestTimeout:
+                    case ErrorCode.InternalServerError:
+                        this.ErrorMessage = error.Message;
+                        this.IsServerUnavailable = true;
+                        break;
+
+                    case ErrorCode.TesterUpgradeIsRequiredToOpenQuestionnaire:
+                        this.ErrorMessage = error.Message;
+                        break;
+
+                    case ErrorCode.QuestionnaireContainsErrorsAndCannotBeOpened:
+                    case ErrorCode.RequestedUrlWasNotFound:
+                        this.ErrorMessage = string.Format(
+                            error.Message,
+                            this.restServiceSettings.Endpoint.GetDomainName(),
+                            selectedQuestionnaire.Id,
+                            selectedQuestionnaire.Title);
+                        break;
+
+                    case ErrorCode.RequestedUrlIsForbidden:
+                        this.ErrorMessage = string.Format(
+                            error.Message,
+                            this.restServiceSettings.Endpoint.GetDomainName(),
+                            selectedQuestionnaire.Id,
+                            selectedQuestionnaire.Title,
+                            selectedQuestionnaire.OwnerName);
+                        break;
+
+                    default:
+                        throw;
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+                // show here the message that loading questionnaire was canceled
+                // don't needed in the current implementation
+            }
+            catch (Exception exception)
+            {
+                
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
+        }
+
+        public async Task<Questionnaire> GetQuestionnaireFromServer(QuestionnaireListItem selectedQuestionnaire, Action<decimal> downloadProgress)
+        {
+            return await this.restService.GetWithProgressAsync<Questionnaire>(
+                url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
+                credentials:
+                    new RestCredentials()
+                    {
+                        Login = this.principal.CurrentUserIdentity.Name,
+                        Password = this.principal.CurrentUserIdentity.Password
+                    },
+                progressPercentage: downloadProgress, token: tokenSource.Token);
         }
 
         private Task BindQuestionnairesFromStorage()

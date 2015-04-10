@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterSizeSource = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { rosterFixedTitle1, rosterFixedTitle2 };
+            rosterFixedTitles = new[] { new Tuple<decimal, string>(1,rosterFixedTitle1), new Tuple<decimal, string>(2,rosterFixedTitle2) };
 
             questionnaireDocument = CreateQuestionnaireDocument(
                 CreateGroup(groupId: groupId, setup: group =>
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         It should_set_group_RosterFixedTitles_property_to_specified_value = () =>
              questionnaireDocument.GetGroup(groupId)
-                 .RosterFixedTitles.ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
+                 .FixedRosterTitles.Select(f=>f.Item2).ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
         It should_set_group_RosterTitleQuestionId_property_to_specified_value = () =>
             questionnaireDocument.GetGroup(groupId)
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static Guid groupId;
         private static Guid rosterSizeQuestionId;
         private static RosterSizeSourceType rosterSizeSource;
-        private static string[] rosterFixedTitles;
+        private static Tuple<decimal, string>[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "title1";
         private static string rosterFixedTitle2 = "title2";
         private static Guid rosterTitleQuestionId;

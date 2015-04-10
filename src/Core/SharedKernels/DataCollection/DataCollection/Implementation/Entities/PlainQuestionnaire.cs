@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
 
+        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -364,6 +365,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfUnderlyingQuestions[groupId];
         }
 
+        public IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingGroups.ContainsKey(groupId))
+                this.cacheOfUnderlyingGroups[groupId] = this.GetAllUnderlyingGroupsImpl(groupId);
+
+            return this.cacheOfUnderlyingGroups[groupId];
+        }
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
@@ -406,14 +415,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return numericQuestion.CountOfDecimalPlaces;
         }
 
-        public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
+        public IEnumerable<Tuple<decimal,string>> GetFixedRosterTitles(Guid groupId)
         {
             var group = this.GetGroup(groupId);
             if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
             {
-                return Enumerable.Empty<string>();
+                return Enumerable.Empty<Tuple<decimal, string>>();
             }
-            return group.RosterFixedTitles;
+            return group.FixedRosterTitles;
         }
 
         public bool DoesQuestionSpecifyRosterTitle(Guid questionId)
@@ -569,6 +578,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .GetGroupOrThrow(groupId)
                 .Find<IQuestion>(_ => true)
                 .Select(question => question.PublicKey)
+                .ToList();
+        }
+
+        private IEnumerable<Guid> GetAllUnderlyingGroupsImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Children
+                .Where(child => child is Group).Cast<Group>()
+                .Where(group => !group.IsRoster)
+                .Select(group => group.PublicKey)
                 .ToList();
         }
 
