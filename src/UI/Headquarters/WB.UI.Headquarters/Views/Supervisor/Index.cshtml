@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
@@ -7,13 +8,14 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-        var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
-        var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
+    var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
+    var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
+        var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
-            ko.applyBindings(model);
-            model.load();
-        });
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -27,20 +29,22 @@
 @section gridnavigation
 {
      <div class="btn-group">
-        <div class="form-inline">
-            <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new { area = string.Empty })">
-                <i class="glyphicon glyphicon-user"></i> Add supervisor
-            </a>
-
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: search">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+         <div class="form-inline">
+             @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+             {
+                 <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">
+                     <i class="glyphicon glyphicon-user"></i> Add supervisor
+                 </a>
+             }
+             <div class="input-group">
+                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                 <div class="input-group-btn">
+                     <button class="btn btn-default" type="button" data-bind="click: search">
+                         <i class="glyphicon glyphicon-search"></i>
+                     </button>
+                 </div>
+             </div>
+         </div>
     </div>
 
  
@@ -56,7 +60,7 @@
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
                 <th></th>
-                <th></th>
+                
             </tr>
         </thead>
         <tbody>
@@ -66,14 +70,28 @@
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>
                 <td>
-                    <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
-                        <i class="glyphicon glyphicon-user"></i> Interviewers
-                    </a>
-                </td>
-                <td>
-                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                        <i class="glyphicon glyphicon-edit"></i> Edit
-                    </a>
+                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                    {
+                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
+                            <i class="glyphicon glyphicon-user"></i> Interviewers
+                        </a>
+                    }
+               
+                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                    {
+                        <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
+                            <i class="glyphicon glyphicon-edit"></i> Edit
+                        </a>
+
+                    }
+                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString()))
+                    {
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
+                                <i class="glyphicon glyphicon-user"></i>
+                            </a>
+                        </div>
+                    }
                 </td>
             </tr>
             <!-- /ko -->

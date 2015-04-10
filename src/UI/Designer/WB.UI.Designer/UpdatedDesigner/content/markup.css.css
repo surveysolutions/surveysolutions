@@ -6963,6 +6963,9 @@ input#edit-group-title {
 .mono {
   font-family: monospace !important;
 }
+#main .question-editor .ace_hidden-cursors {
+  opacity: 0;
+}
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons label {
   font-weight: normal;

@@ -36,6 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
         /// </param>
         void SignIn(string userName, bool rememberMe);
 
+        void SignIn(string userName, bool rememberMe, string userData);
+
         /// <summary>
         /// The sign out.
         /// </summary>

@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -18,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
+        private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
@@ -48,8 +50,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();
+            
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
+                if (User.Identity.IsObserver())
+                {
+                    response.IsSuccess = false;
+                    response.DomainException = "You cannot perform any operation in observer mode.";
+                    return response;
+                }
+
                 try
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
@@ -60,19 +70,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
                 catch (OverflowException e)
                 {
-                    response.IsSuccess = true;
-                    response.DomainException = e.Message;
+                    this.Logger.Error(DefaultErrorMessage, e);
+                    response.IsSuccess = false;
+                    response.DomainException = DefaultErrorMessage;
                 }
                 catch (Exception e)
                 {
+                    response.IsSuccess = false;
+
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        this.Logger.Error("Unexpected error occurred", e);
+                        this.Logger.Error(DefaultErrorMessage, e);
+                        response.DomainException = DefaultErrorMessage;
                     }
                     else
                     {
-                        response.IsSuccess = true;
                         response.DomainException = domainEx.Message;
                     }
                 }

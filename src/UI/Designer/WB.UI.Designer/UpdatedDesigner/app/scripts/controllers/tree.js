@@ -26,54 +26,61 @@
             };
 
             $scope.highlightedId = null;
+            $scope.isSearchInFocus = false;
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
-            if (hotkeys.get('down') !== false) {
-                hotkeys.del('down');
+            var scrollDown = 'down';
+            var scrollUp = 'up';
+            var focusSearchField = 'ctrl+f';
+            var openTreeItemInEditor = 'enter';
+           
+            if (hotkeys.get(scrollDown) !== false) {
+                hotkeys.del(scrollDown);
             }
-            if (hotkeys.get('up') !== false) {
-                hotkeys.del('up');
-            }
-            if (hotkeys.get('ctrl+f') !== false) {
-                hotkeys.del('ctrl+f');
-            }
-            if (hotkeys.get('enter') !== false) {
-                hotkeys.del('enter');
-            }
-
-            hotkeys.add('down', 'Navigate to next sibling', function (event) {
+            hotkeys.add(scrollDown, 'Navigate to next sibling', function (event) {
                 event.preventDefault();
                 $scope.goToNextItem();
             });
 
-            hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+            if (hotkeys.get(scrollUp) !== false) {
+                hotkeys.del(scrollUp);
+            }
+            hotkeys.add(scrollUp, 'Navigate to previous sibling', function (event) {
                 event.preventDefault();
                 $scope.goToPrevItem();
             });
 
+            if (hotkeys.get(focusSearchField) !== false) {
+                hotkeys.del(focusSearchField);
+            }
             hotkeys.add({
-                combo: 'ctrl+f',
+                combo: focusSearchField,
                 description: 'Search for groups and questions in chapter',
                 callback: function (event) {
-                    $scope.showSearch();
                     event.preventDefault();
+                    $scope.showSearch();
                 }
             });
 
+            if (hotkeys.get(openTreeItemInEditor) !== false) {
+                hotkeys.del(openTreeItemInEditor);
+            }
             hotkeys.add({
-                combo: 'enter',
+                combo: openTreeItemInEditor,
                 allowIn: ['INPUT', 'SELECT'],
                 description: 'Open item in editor',
                 callback: function (event) {
                     event.preventDefault();
-                    if ($scope.filtersBoxMode == filtersBlockModes.default) {
+                    if ($scope.isSearchInFocus) {
+                        utilityService.focusout('focusSearch');
+                        $scope.isSearchInFocus = false;
+                    } else {
                         if (_.isNull($scope.highlightedId)) return;
                         $state.go('questionnaire.chapter.' + getItemType(getCurrentItem()), { chapterId: $state.params.chapterId, itemId: $scope.highlightedId });
-                    } else {
-                        utilityService.focusout('focusSearch');
+                        
                     }
                 }
             });
@@ -81,11 +88,13 @@
             $scope.showSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.search;
                 utilityService.focus('focusSearch');
+                $scope.isSearchInFocus = true;
             };
 
             $scope.hideSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.default;
                 $scope.search.searchText = '';
+                $scope.isSearchInFocus = false;
             };
 
             $scope.searchItem = function (item) {
@@ -109,6 +118,10 @@
 
             var upDownMove = function (updownStepValue) {
                 var currentItem = getCurrentItem();
+
+                if (_.isNull(currentItem)) {
+                    return;
+                }
 
                 if (_.isNull($scope.highlightedId)) {
                     highlightAndScroll(currentItem);
@@ -161,32 +174,13 @@
                 scope.toggle();
             };
 
-            var isElementVisible = function (item) {
-                var viewport = {
-                    top: $(".questionnaire-tree-holder > .scroller").offset().top,
-                    bottom: $(window).height()
-                };
-                var top = item.offset().top;
-                var bottom = top + item.outerHeight();
 
-                var isTopBorderVisible = top > viewport.top && top < viewport.bottom;
-                var isBottomBorderVisible = bottom > viewport.top && bottom < viewport.bottom;
-                var distanceToTopBorder = Math.abs(top - viewport.top);
-                var distanceToBottomBorder = Math.abs(bottom - viewport.bottom);
-
-                return {
-                    isVisible: isTopBorderVisible && isBottomBorderVisible,
-                    shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
-                    scrollPositionWhenScrollUp: viewport.top - $(".question-list").offset().top + distanceToBottomBorder
-                }
-            };
-
-            var scrollToElement = function (itemId, mode) {
-                mode = mode || scrollMode.makeVisible;
+            var scrollToElement = function (itemId, howToScroll) {
+                var mode = howToScroll || scrollMode.makeVisible;
                 if ($(itemId).length === 0) {
                     return;
                 }
-                var elementVisibility = isElementVisible($(itemId));
+                var elementVisibility = utilityService.isTreeItemVisible($(itemId));
                 if (elementVisibility.isVisible) {
                     return;
                 }
@@ -203,14 +197,19 @@
                     }
                 }
                 if (mode === scrollMode.toTop) {
-                    var scrollTop = Math.max($(itemId).offset().top - $(".question-list").offset().top - 10, 0);
+                    var scrollPositionInDivFromTop = getScrollPositionInDivFromTop(itemId);
                     $scope.$broadcast("scrollToPosition", {
                         target: ".question-list",
-                        scrollTop: scrollTop
+                        scrollTop: scrollPositionInDivFromTop
                     });
                 }
             };
-
+            var getScrollPositionInDivFromTop = function (itemId) {
+                var positionOfItemFromPageTop = $(itemId).offset().top;
+                var positionOfContainerFromPageTop = $(".question-list").offset().top;
+                var scrollOffset = 10;
+                return Math.max(positionOfItemFromPageTop - positionOfContainerFromPageTop - scrollOffset, 0);
+            }
             var getItemType = function (item) {
                 switch (item.itemType) {
                     case 'Question': return itemTypes.question;

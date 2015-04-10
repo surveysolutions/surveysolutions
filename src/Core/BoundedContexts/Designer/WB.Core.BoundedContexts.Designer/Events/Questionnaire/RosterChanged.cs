@@ -1,22 +1,37 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class RosterChanged : GroupEvent
     {
-        public RosterSizeSourceType RosterSizeSource { get; private set; }
-        public Guid? RosterSizeQuestionId { get; private set; }
-        public string[] RosterFixedTitles { get; private set; }
-        public Guid? RosterTitleQuestionId { get; private set; }
+        public RosterSizeSourceType RosterSizeSource { get; set; }
+        public Guid? RosterSizeQuestionId { get; set; }
 
-        public RosterChanged(Guid responsibleId, Guid groupId, Guid? rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        [Obsolete]
+        public string[] RosterFixedTitles { get; set; }
+
+        private Tuple<decimal, string>[] fixedRosterTitles;
+        public Tuple<decimal, string>[] FixedRosterTitles
+        {
+            get
+            {
+                if (fixedRosterTitles == null && RosterFixedTitles != null)
+                {
+                    fixedRosterTitles =
+                        RosterFixedTitles.Select((title, index) => new Tuple<decimal, string>(index, title)).ToArray();
+                }
+                return fixedRosterTitles;
+            }
+            set { fixedRosterTitles = value; }
+        }
+
+        public Guid? RosterTitleQuestionId { get; set; }
+
+        public RosterChanged(Guid responsibleId, Guid groupId)
             : base(responsibleId, groupId)
         {
-            this.RosterSizeQuestionId = rosterSizeQuestionId;
-            this.RosterSizeSource = rosterSizeSource;
-            this.RosterFixedTitles = rosterFixedTitles;
-            this.RosterTitleQuestionId = rosterTitleQuestionId;
         }
     }
 }

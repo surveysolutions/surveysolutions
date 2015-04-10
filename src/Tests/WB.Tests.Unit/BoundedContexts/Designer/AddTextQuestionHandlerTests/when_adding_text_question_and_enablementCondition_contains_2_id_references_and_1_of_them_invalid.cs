@@ -9,6 +9,7 @@ using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
 {
+    [Ignore("reference validation is turned off")]
     internal class when_adding_text_question_and_enablementCondition_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
         Establish context = () =>

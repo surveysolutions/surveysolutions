@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -78,9 +79,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
+            var detailsViewModel = interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, 
+                                                                                   currentGroupId: currentGroupId,
+                                                                                   filter: filter, 
+                                                                                   currentGroupRosterVector: this.ParseRosterVector(rosterVector));
             return
-                View(interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, currentGroupId: currentGroupId,
-                    filter: filter, currentGroupRosterVector: this.ParseRosterVector(rosterVector)));
+                View(detailsViewModel);
         }
 
         public ActionResult InterviewHistory(Guid id)
@@ -112,9 +116,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [HttpPost]
         public ActionResult ConfirmRevalidation(RevalidateModel input)
         {
-            this.CommandService.Execute(new ReevaluateSynchronizedInterview(input.InterviewId));
-            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = input.InterviewId });
-            return this.View("ConfirmRevalidation", model);
+            this.ExecuteCommandWithObserverCheck(new ReevaluateSynchronizedInterview(input.InterviewId));
+
+            var newModel = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = input.InterviewId });
+            return this.View("ConfirmRevalidation", newModel);
         }
     }
 }

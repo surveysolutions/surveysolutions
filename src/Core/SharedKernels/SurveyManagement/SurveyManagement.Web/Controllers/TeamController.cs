@@ -37,24 +37,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
         }
 
-        protected void CreateInterviewer(UserModel interviewer, Guid supervisorId)
+        protected bool CreateInterviewer(UserModel interviewer, Guid supervisorId)
         {
-            CreateUser(user: interviewer, role: UserRoles.Operator, supervisorId: supervisorId);
+           return CreateUser(user: interviewer, role: UserRoles.Operator, supervisorId: supervisorId);
         }
 
-        protected void CreateSupervisor(UserModel supervisorUser)
+        protected bool CreateSupervisor(UserModel supervisorUser)
         {
-            CreateUser(user: supervisorUser, role: UserRoles.Supervisor);
+           return CreateUser(user: supervisorUser, role: UserRoles.Supervisor);
         }
 
-        protected void CreateHeadquarters(UserModel headquartersUser)
+        protected bool CreateHeadquarters(UserModel headquartersUser)
         {
-            CreateUser(user: headquartersUser, role: UserRoles.Headquarter);
+            return CreateUser(user: headquartersUser, role: UserRoles.Headquarter);
         }
 
-        protected void UpdateAccount(UserView user, UserEditModel editModel)
+        protected bool CreateObserver(UserModel observerUser)
         {
-            this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
+            return CreateUser(user: observerUser, role: UserRoles.Observer);
+        }
+
+        protected bool UpdateAccount(UserView user, UserEditModel editModel)
+        {
+            return this.ExecuteCommandWithObserverCheck(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
                 roles: user.Roles.ToArray(),
                 isLockedBySupervisor: this.GlobalInfo.IsSurepvisor ? editModel.IsLocked : user.IsLockedBySupervisor,
                 isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
@@ -64,9 +69,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         : passwordHasher.Hash(editModel.Password), userId: this.GlobalInfo.GetCurrentUser().Id));
         }
 
-        private void CreateUser(UserModel user, UserRoles role, Guid? supervisorId = null)
+        private bool CreateUser(UserModel user, UserRoles role, Guid? supervisorId = null)
         {
-            this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: user.UserName,
+            return this.ExecuteCommandWithObserverCheck(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: user.UserName,
                 password: passwordHasher.Hash(user.Password), email: user.Email, isLockedBySupervisor: false,
                 isLockedByHQ: user.IsLocked, roles: new[] {role},
                 supervsor: supervisorId.HasValue ? this.GetUserById(supervisorId.Value).GetUseLight() : null));

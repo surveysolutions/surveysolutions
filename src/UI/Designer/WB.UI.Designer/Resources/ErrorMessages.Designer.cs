@@ -61,7 +61,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application update required.
+        ///   Looks up a localized string similar to Application update required..
         /// </summary>
         internal static string ApplicationUpdateRequired {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open the questionnaire. Your questionnaire &quot;{0}&quot; has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions.
+        ///   Looks up a localized string similar to Failed to open the questionnaire. Your questionnaire &quot;{0}&quot; has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions..
         /// </summary>
         internal static string ClientVersionLessThenDocument {
             get {
@@ -87,7 +87,7 @@ namespace WB.UI.Designer.Resources {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to You will receive a message shortly with instructions on how to complete registration. Please check the email account that you provided in the previous step..
+        ///   Looks up a localized string similar to A message was sent to your email account. Please follow instructions in the email to complete the registration..
         /// </summary>
         internal static string Look_for_an_email_in_your_inbox {
             get {
@@ -123,7 +123,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
+        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character..
         /// </summary>
         internal static string Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Either your current or new password is incorrect. Please reenter your current and new passwords..
+        ///   Looks up a localized string similar to Current/new password combination is invalid, please reenter..
         /// </summary>
         internal static string The_current_password_is_incorrect_or_the_new_password_is_invalid {
             get {
@@ -178,7 +178,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please try entering your user name and password again..
+        ///   Looks up a localized string similar to The user name or password provided is incorrect. Please, reenter..
         /// </summary>
         internal static string The_user_name_or_password_provided_is_incorrect {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unexpected error occurred. Please try acessing Designer again later.
+        ///   Looks up a localized string similar to An unexpected error occurred. Please try acessing Designer again later..
         /// </summary>
         internal static string Unexpected_error_occurred_Please_try_again_later {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name.
+        ///   Looks up a localized string similar to User {0} does not exist. Please enter a valid user name..
         /// </summary>
         internal static string User_does_not_exist {
             get {
@@ -219,6 +219,15 @@ namespace WB.UI.Designer.Resources {
         internal static string User_does_not_exist_Please_enter_a_valid_user_name {
             get {
                 return ResourceManager.GetString("User_does_not_exist_Please_enter_a_valid_user_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol..
+        /// </summary>
+        internal static string User_name_needs_to_be_between_3_and_15_characters {
+            get {
+                return ResourceManager.GetString("User_name_needs_to_be_between_3_and_15_characters", resourceCulture);
             }
         }
         
@@ -250,7 +259,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You did not type the verification word correctly. Please try again..
+        ///   Looks up a localized string similar to Verification word is incorrect. Please try again..
         /// </summary>
         internal static string You_did_not_type_the_verification_word_correctly {
             get {
@@ -259,7 +268,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Designer successfully verified your email.
+        ///   Looks up a localized string similar to Designer successfully verified your email..
         /// </summary>
         internal static string Your_email_is_verified {
             get {
@@ -268,7 +277,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have successfully changed your password.
+        ///   Looks up a localized string similar to You have successfully changed your password..
         /// </summary>
         internal static string Your_password_successfully_changed {
             get {

@@ -43,6 +43,10 @@
     <Compile Include="AnswerProgressIndicator.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="CustomFunctions\BaseFunctions.cs" />
+    <Compile Include="CustomFunctions\Extensions.cs" />
+    <Compile Include="CustomFunctions\LMS.cs" />
+    <Compile Include="CustomFunctions\ZScore.cs" />
     <Compile Include="DummyInterviewExpressionState.cs" />
     <Compile Include="EnablementChanges.cs" />
     <Compile Include="GeoLocation.cs" />
@@ -52,10 +56,12 @@
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
     <Compile Include="IExpressionExecutable.cs" />
+    <Compile Include="IRosterLevel.cs" />
     <Compile Include="ISyncProtocolVersionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireVersion.cs" />
     <Compile Include="QuestionnaireVersionProvider.cs" />
+    <Compile Include="RosterRowList.cs" />
     <Compile Include="SyncProtocolVersionProvider.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="ValidityChanges.cs" />

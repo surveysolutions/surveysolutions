@@ -1,11 +1,122 @@
-﻿ @{
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Utils
+
+@model IPagedList<AccountListViewItemModel>
+@{
     ViewBag.Title = "Registered users";
+    Layout = "~/Views/Shared/Layout.cshtml";
+    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 }
 
-@section Scripts
+<table id="user-table-header" class="table table-header">
+    <thead>
+        <tr>
+            @ShowTableHeaderCell("UserName", "Login", true)
+            @ShowTableHeaderCell("Email", "Email")
+            @ShowTableHeaderCell("CreationDate", "Created date")
+            @ShowTableHeaderCell("IsApproved", "APPROVED?")
+            @ShowTableHeaderCell("IsLockedOut", "LOCKED?")
+            <th>
+            </th>
+        </tr>
+    </thead>
+</table>
+<div id="table-content-holder">
+    <div class="scroller-container">
+        @if (Model.TotalCount == 0)
+        {
+            <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+        }
+        else
+        {
+            <table id="user-table-content" class="table table-content ">
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td class="search-value">
+                                @user.UserName
+                            </td>
+                            <td class="email">
+                                @FormatEmail(user.Email)
+                            </td>
+                            <td class="date">
+                                @user.CreationDate.FormatDate()
+                            </td>
+                            <td>
+                                @(user.IsApproved ? "Yes" : "No")
+                            </td>
+                            <td>
+                                @(user.IsLockedOut ? "Yes" : "No")
+                            </td>
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Action
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @{
+                        var routevalues = user.GetIdValue();
+
+                        <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                            <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                                        }
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
+        }
+    </div>
+</div>
+
+@functions
 {
-    @Scripts.Render("~/list")
-    
+    private string ActionWithOrderField(string sortField)
+    {
+        var sortOrder = (int?)ViewBag.SortOrder;
+        return Url.Action(
+            WB.UI.Designer.GlobalHelper.CurrentAction,
+            new
+            {
+                p = ViewBag.PageIndex,
+                sb = sortField,
+                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                f = ViewBag.Filter
+            });
+    }
 }
 
-@Html.Partial("~/Views/Shared/Index.cshtml")
+@helper  FormatEmail(string email)
+{
+    var emailParts = email.Split(new char[] { '@' }, 2);
+    <strong>@emailParts[0]</strong>@("@" + emailParts[1]);
+}
+
+@helper ShowTableHeaderCell(string field, string title, bool showSearch = false)
+{
+    var isTableSortedByThisField = ViewBag.SortBy == field;
+    <th class="@(isTableSortedByThisField ? "ordered" : "")">
+        <a href="@ActionWithOrderField(field)">
+            @title
+            @{
+                if (isTableSortedByThisField)
+                {
+                    <span class="glyphicon glyphicon-triangle-@(((int?)ViewBag.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                }
+            }
+        </a>
+        @if (showSearch)
+        {
+            @Html.Partial("_list_search_form")
+        }
+    </th>
+}

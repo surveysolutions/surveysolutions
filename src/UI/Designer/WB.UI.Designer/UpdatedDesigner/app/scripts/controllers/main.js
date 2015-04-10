@@ -14,16 +14,9 @@ angular.module('designerApp')
                 groupsCount: 0,
                 rostersCount: 0
             };
-
-            if (hotkeys.get('alt+x') === false) {
-                hotkeys.del('alt+x');
-            }
-            if (hotkeys.get('alt+e') === false) {
-                hotkeys.del('alt+e');
-            }
-            if (hotkeys.get('left') === false) {
-                hotkeys.del('left');
-            }
+            var focusTreePane = 'shift+alt+x';
+            var focusEditorPane = 'shift+alt+e';
+            var openChaptersPane = 'left';
 
             hotkeys.add({
                 combo: 'esc',
@@ -33,8 +26,11 @@ angular.module('designerApp')
                 }
             });
            
+            if (hotkeys.get(focusTreePane) === false) {
+                hotkeys.del(focusTreePane);
+            }
             hotkeys.add({
-                    combo: 'alt+x',
+                combo: focusTreePane,
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     description: 'Focus questionnaire tree',
                     callback: function(event) {
@@ -43,8 +39,11 @@ angular.module('designerApp')
                     }
                 });
            
+            if (hotkeys.get(focusEditorPane) === false) {
+                hotkeys.del(focusEditorPane);
+            }
             hotkeys.add({
-                    combo: 'alt+e',
+                combo: focusEditorPane,
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     description: 'Focus title field in editor',
                     callback: function (event) {
@@ -53,7 +52,10 @@ angular.module('designerApp')
                     }
                 });
           
-            hotkeys.add('left', 'Open chapters', function (event) {
+            if (hotkeys.get(openChaptersPane) === false) {
+                hotkeys.del(openChaptersPane);
+            }
+            hotkeys.add(openChaptersPane, 'Open chapters', function (event) {
                     event.preventDefault();
                     $scope.$broadcast("openChaptersList", "");
                 });

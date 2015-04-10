@@ -4,9 +4,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    /// <summary>
-    /// The questionnaire browse item.
-    /// </summary>
     public class QuestionnaireListViewItem : IView
     {
         public QuestionnaireListViewItem()
@@ -24,44 +21,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.IsPublic = isPublic;
         }
          
-        /// <summary>
-        /// Gets the creation date.
-        /// </summary>
         public DateTime CreationDate { get; set; }
 
-        /// <summary>
-        /// Gets the id.
-        /// </summary>
         public Guid PublicId { get; set; }
 
-        /// <summary>
-        /// Gets the last entry date.
-        /// </summary>
         public DateTime LastEntryDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
         public string Title { get;  set; }
 
-        /// <summary>
-        /// Gets the creator id.
-        /// </summary>
         public Guid? CreatedBy { get; set; }
 
-        /// <summary>
-        /// Gets or sets the creator name.
-        /// </summary>
         public string CreatorName { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is deleted.
-        /// </summary>
         public bool IsDeleted { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is public.
-        /// </summary>
         public bool IsPublic { get; set; }
 
         public List<Guid> SharedPersons { get; set; }

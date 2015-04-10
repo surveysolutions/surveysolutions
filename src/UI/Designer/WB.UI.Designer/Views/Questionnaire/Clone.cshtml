@@ -1,4 +1,37 @@
-﻿@Html.Partial("~/Views/Shared/Edit.cshtml")
+﻿@using WB.UI.Designer.BootstrapSupport
+@model WB.UI.Designer.Models.QuestionnaireCloneModel
+<div id="edit-form">
+    @if (TempData.ContainsKey(Alerts.SUCCESS))
+    {
+        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+    }
+    @using (Html.BeginForm())
+    {
+
+        @Html.AntiForgeryToken()
+        <h1>Clone Questionnaire</h1>
+        if (TempData.ContainsKey(Alerts.ERROR))
+        {
+            <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
+        }
+        <div class="form-group">
+            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = "Questionnaire Title" })
+            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
+        </div>
+        <div class="form-group">
+            @Html.CheckBoxFor(x => x.IsPublic, new { @id = "is-public-questionnaire", @class = "wb-checkbox" })
+            <label for="is-public-questionnaire">
+                <span></span>Is Public
+            </label><br/>
+        </div>
+        @Html.HiddenFor(x => x.Id)
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="Clone"/>
+            @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
+            @Html.ActionLink("Back to List", "Index", "Questionnaire", null, new { @class = "btn " })
+        </div>
+    }
+</div>
 
 @section Scripts {
     @Scripts.Render("~/editform")

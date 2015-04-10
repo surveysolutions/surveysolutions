@@ -2,6 +2,7 @@ using Ninject.Modules;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
@@ -24,6 +25,11 @@ namespace WB.UI.QuestionnaireTester.Ninject
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.localFileStoragePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
+
+            CommandRegistry
+                .Setup<StatefullQuestionnaire>()
+                .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner);
 
             CommandRegistry
                .Setup<StatefullInterview>()

@@ -3,9 +3,15 @@
         function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
+
+            var saveQuestion = 'ctrl+s';
+            
+            if (hotkeys.get(saveQuestion) === false) {
+                hotkeys.del(saveQuestion);
+            }
             hotkeys.bindTo($scope)
               .add({
-                  combo: 'ctrl+s',
+                  combo: saveQuestion,
                   description: 'Save changes',
                   allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                   callback: function (event) {
@@ -177,6 +183,7 @@
                     "id": utilityService.guid()
                 });
                 $scope.activeQuestion.optionsCount += 1;
+                $scope.questionForm.$setDirty();
             };
 
             $scope.editFilteredComboboxOptions = function () {
@@ -237,6 +244,7 @@
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
                 $scope.activeQuestion.optionsCount -= 1;
+                $scope.questionForm.$setDirty();
             };
 
             $scope.showOptionsInTextarea = function () {
@@ -297,6 +305,7 @@
                 if (itemId) {
                     $scope.activeQuestion.cascadeFromQuestionId = itemId;
                     $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
+                    $scope.questionForm.$setDirty();
                 }
             };
 

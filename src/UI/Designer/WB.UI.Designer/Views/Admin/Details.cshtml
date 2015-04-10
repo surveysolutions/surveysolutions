@@ -1,0 +1,96 @@
+﻿@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Utils
+@model WB.UI.Designer.Models.AccountViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+<div id="edit-form">
+    <h1>Account: @Model.UserName</h1>
+    <div class="form-group">
+        <b>Email:</b> @Model.Email
+    </div>
+    <div class="form-group">
+        @Html.CheckBoxFor(x => x.IsApproved, new { @id = "is-approved", @class = "wb-checkbox", @disabled = "disabled" })
+        <label for="is-approved">
+            <span></span>Is Approved
+        </label><br/>
+    </div>
+    <div class="form-group">
+        @Html.CheckBoxFor(x => x.IsLockedOut, new { @id = "is-locked", @class = "wb-checkbox", @disabled = "disabled" })
+        <label for="is-locked">
+            <span></span>Is Locked Out
+        </label><br/>
+    </div>
+    <h4>Questionnaires:</h4>
+        <table class="table table-content ">
+            <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Last modified
+                    </th>
+                    <th>
+                        Created date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var listViewModel in Model.Questionnaires)
+            {
+                <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
+                    <td class="search-value">
+                        @listViewModel.Title
+                    </td>
+                    <td class="date">
+                        @listViewModel.LastEntryDate.FormatDate()
+                    </td>
+                    <td class="date">
+                        @listViewModel.CreationDate.FormatDate()
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+</div>
+
+@helper ShowSortIcon(string field)
+{
+    var sortOrder = (int?)ViewBag.SortOrder;
+    if (ViewBag.SortBy == field)
+    {
+        if (!sortOrder.ToBool())
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+        }
+        else
+        {
+            <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+        }
+    }
+    else
+    {
+        <span class="glyphicon glyphicon-sort"></span>
+    }
+}
+
+@functions
+{
+    private string ActionWithOrderField(string sortField)
+    {
+        var sortOrder = (int?)ViewBag.SortOrder;
+        return Url.Action(
+            WB.UI.Designer.GlobalHelper.CurrentAction,
+            new
+            {
+                p = ViewBag.PageIndex,
+                sb = sortField,
+                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                f = ViewBag.Filter
+            });
+    }
+}

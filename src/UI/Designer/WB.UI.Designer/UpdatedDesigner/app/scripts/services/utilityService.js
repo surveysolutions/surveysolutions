@@ -95,6 +95,26 @@
                     return emptyStaticText;
                 };
 
+                utilityService.isTreeItemVisible = function (item) {
+                    var viewport = {
+                        top: $(".questionnaire-tree-holder > .scroller").offset().top,
+                        bottom: $(window).height()
+                    };
+                    var top = item.offset().top;
+                    var bottom = top + item.outerHeight();
+
+                    var isTopBorderVisible = top > viewport.top && top < viewport.bottom;
+                    var isBottomBorderVisible = bottom > viewport.top && bottom < viewport.bottom;
+                    var distanceToTopBorder = Math.abs(top - viewport.top);
+                    var distanceToBottomBorder = Math.abs(bottom - viewport.bottom);
+
+                    return {
+                        isVisible: isTopBorderVisible && isBottomBorderVisible,
+                        shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
+                        scrollPositionWhenScrollUp: viewport.top - $(".question-list").offset().top + distanceToBottomBorder
+                    }
+                };
+
                 return utilityService;
             }
         ]);

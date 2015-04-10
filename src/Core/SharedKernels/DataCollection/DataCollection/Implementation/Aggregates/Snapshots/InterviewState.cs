@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             HashSet<string> answeredQuestions,List<AnswerComment> answerComments,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, DistinctDecimalList> rosterGroupInstanceIds,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted,
-            IInterviewExpressionState expressionProcessorState, Guid interviewewerId)
+            IInterviewExpressionStateV2 expressionProcessorState, Guid interviewewerId)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
@@ -55,6 +55,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public bool WasCompleted { get; private set; }
         public bool WasHardDeleted { get; private set; }
         public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { get; set; }
-        public IInterviewExpressionState ExpressionProcessorState { get; set; }
+        public IInterviewExpressionStateV2 ExpressionProcessorState { get; set; }
     }
 }
