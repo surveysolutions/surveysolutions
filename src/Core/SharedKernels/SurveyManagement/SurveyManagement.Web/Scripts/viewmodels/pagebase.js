@@ -125,7 +125,8 @@
 
     self.SendCommand = function(command, onSuccess) {
         self.SendRequest(commandExecutionUrl, command, function(data) {
-            if (data.IsSuccess && !Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+            if (data.IsSuccess) {
+                if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
                   onSuccess(data);
             } else {
                 if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException != null) {
