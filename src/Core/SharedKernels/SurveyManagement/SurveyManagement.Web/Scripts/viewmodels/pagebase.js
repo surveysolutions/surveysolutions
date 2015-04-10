@@ -125,14 +125,14 @@
 
     self.SendCommand = function(command, onSuccess) {
         self.SendRequest(commandExecutionUrl, command, function(data) {
-            if (data.IsSuccess) {
+            if (data.IsSuccess && !Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                  onSuccess(data);
+            } else {
                 if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException != null) {
                     self.ShowError(data.DomainException);
-                } else if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                    onSuccess(data);
                 }
-            } else {
-                self.ShowError(input.settings.messages.unhandledExceptionMessage);
+                else
+                    self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
         });
     };
@@ -140,7 +140,7 @@
     self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
         self.SendRequest(commandExecutionUrl, commands, function(data) {
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
-                return !cmd.IsSuccess || (!Supervisor.Framework.Objects.isUndefined(cmd.DomainException) && cmd.DomainException != null);
+                return !cmd.IsSuccess;
             });
 
             if (failedCommands.length > 0) {
