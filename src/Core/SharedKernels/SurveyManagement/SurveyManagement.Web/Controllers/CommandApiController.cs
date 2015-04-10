@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
+        private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
@@ -49,12 +50,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();
-
+            
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
                 if (User.Identity.IsObserver())
                 {
-                    response.IsSuccess = true;
+                    response.IsSuccess = false;
                     response.DomainException = "You cannot perform any operation in observer mode.";
                     return response;
                 }
@@ -69,19 +70,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
                 catch (OverflowException e)
                 {
-                    response.IsSuccess = true;
-                    response.DomainException = e.Message;
+                    this.Logger.Error(DefaultErrorMessage, e);
+                    response.IsSuccess = false;
+                    response.DomainException = DefaultErrorMessage;
                 }
                 catch (Exception e)
                 {
+                    response.IsSuccess = false;
+
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        this.Logger.Error("Unexpected error occurred", e);
+                        this.Logger.Error(DefaultErrorMessage, e);
+                        response.DomainException = DefaultErrorMessage;
                     }
                     else
                     {
-                        response.IsSuccess = true;
                         response.DomainException = domainEx.Message;
                     }
                 }
