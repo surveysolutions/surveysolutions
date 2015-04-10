@@ -3,63 +3,55 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class ScreenViewModel
-    {
-        public Guid Id { get; set; }
-        public decimal[] RosterVector{ get; set; }
-
-        public Guid ParentId { get; set; }
-        public decimal[] ParentRosterVector { get; set; }
-
-        public string Title { get; set; }
-        public string RosterTitle { get; set; }
-        public bool IsRoster { get; set; }
-
-        public List<string> Breadcrumbs { get; set; }
-
-        public int CountOfQuestionsWithErrors { get; set; }
-        public int CountOfGroupsWithErrors { get; set; }
-        public int CountOfAnsweredQuestions { get; set; }
-        public int CountOfUnansweredQuestions { get; set; }
-
-        public List<IInterviewItemViewModel> Items { get; set; }
-    }
+//    public class ScreenViewModel
+//    {
+//        public Guid Id { get; set; }
+//        public decimal[] RosterVector{ get; set; }
+//
+//        public Guid ParentId { get; set; }
+//        public decimal[] ParentRosterVector { get; set; }
+//
+//        public string Title { get; set; }
+//        public string RosterTitle { get; set; }
+//        public bool IsRoster { get; set; }
+//
+//        public List<string> Breadcrumbs { get; set; }
+//
+//        public int CountOfQuestionsWithErrors { get; set; }
+//        public int CountOfGroupsWithErrors { get; set; }
+//        public int CountOfAnsweredQuestions { get; set; }
+//        public int CountOfUnansweredQuestions { get; set; }
+//
+//        public List<IInterviewItemViewModel> Items { get; set; }
+//    }
 
     public interface IInterviewItemViewModel
     {
         bool IsDisabled { get; set; }
     }
 
-    public class GroupReferenceViewModel : IInterviewItemViewModel
-    {
-        public Guid Id { get; set; }
-        public decimal[] RosterVector { get; set; }
-
-        public string Title { get; set; }
-        public bool IsComplete { get; set; }
-        public int CountOfAnsweredQuestions { get; set; }
-        public int CountOfCompletedGroups { get; set; }
-        public bool IsDisabled { get; set; }
-    }
-
-    public class RosterReferenceViewModel : GroupReferenceViewModel
-    {
-        public string RosterTitle { get; set; }
-    }
-
-    public class RostersReferenceViewModel : IInterviewItemViewModel
-    {
-        public bool IsDisabled { get; set; }
-        public List<RosterReferenceViewModel> RosterReferences { get; set; }
-    }
-
-    public class StaticTextViewModel : IInterviewItemViewModel
-    {
-        public bool IsDisabled { get; set; }
-        public Guid Id { get; set; }
-        public decimal[] RosterVector { get; set; }
-        public string Title { get; set; }
-    }
+//    public class GroupReferenceViewModel : IInterviewItemViewModel
+//    {
+//        public Guid Id { get; set; }
+//        public decimal[] RosterVector { get; set; }
+//
+//        public string Title { get; set; }
+//        public bool IsComplete { get; set; }
+//        public int CountOfAnsweredQuestions { get; set; }
+//        public int CountOfCompletedGroups { get; set; }
+//        public bool IsDisabled { get; set; }
+//    }
+//
+//    public class RosterReferenceViewModel : GroupReferenceViewModel
+//    {
+//        public string RosterTitle { get; set; }
+//    }
+//
+//    public class RostersReferenceViewModel : IInterviewItemViewModel
+//    {
+//        public bool IsDisabled { get; set; }
+//        public List<RosterReferenceViewModel> RosterReferences { get; set; }
+//    }
 
     public abstract class AbstractQuestionViewModel : IInterviewItemViewModel
     {

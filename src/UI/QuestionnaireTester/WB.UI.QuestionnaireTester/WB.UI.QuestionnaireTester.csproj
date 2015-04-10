@@ -202,6 +202,12 @@
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\interview_group.axml" />
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
+    <AndroidResource Include="Resources\layout\questions\text_question.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\questions\static_text.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

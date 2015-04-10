@@ -16,15 +16,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Init(string interviewId, string chapterId)
         {
-            Entities = interviewStateFullViewModelFactory.Load(interviewId, chapterId);
+            Items = interviewStateFullViewModelFactory.Load(interviewId, chapterId);
         }
 
-        private List<MvxViewModel> entities;
+        public Guid Id { get; set; }
+        public decimal[] RosterVector { get; set; }
 
-        public IEnumerable<MvxViewModel> Entities
+        public Guid ParentId { get; set; }
+        public decimal[] ParentRosterVector { get; set; }
+
+        public string Title { get; set; }
+        public string RosterTitle { get; set; }
+        public bool IsRoster { get; set; }
+
+        public List<string> Breadcrumbs { get; set; }
+
+        public int CountOfQuestionsWithErrors { get; set; }
+        public int CountOfGroupsWithErrors { get; set; }
+        public int CountOfAnsweredQuestions { get; set; }
+        public int CountOfUnansweredQuestions { get; set; }
+
+
+        private List<MvxViewModel> items;
+
+        public IEnumerable<MvxViewModel> Items
         {
-            get { return entities; }
-            set { entities = new List<MvxViewModel>(value); RaisePropertyChanged(() => Entities); }
+            get { return items; }
+            set { items = new List<MvxViewModel>(value); RaisePropertyChanged(() => Items); }
         }
 
         public override void NavigateToPreviousViewModel()

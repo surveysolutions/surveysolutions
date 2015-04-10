@@ -11,11 +11,15 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.Ninject;
 using WB.UI.QuestionnaireTester.Views;
 using Xamarin;
+
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -44,7 +48,12 @@ namespace WB.UI.QuestionnaireTester
                 {typeof (LoginViewModel), typeof (LoginView)},
                 {typeof (InterviewGroupViewModel), typeof (InterviewGroupView)},
                 {typeof (DashboardViewModel), typeof (DashboardView)},
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)}
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)},
+
+                // questions
+                {typeof (StaticTextViewModel), typeof (StaticText)},
+                {typeof (TextQuestionViewModel), typeof (TextQuestion)},
+                {typeof (GroupReferanceViewModel), typeof (Group)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
