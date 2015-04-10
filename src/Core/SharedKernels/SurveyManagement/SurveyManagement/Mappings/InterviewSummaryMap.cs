@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using Raven.Client.Linq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -9,7 +10,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public InterviewSummaryMap()
         {
-            this.Table("InterviewSummaries");
+            Table("InterviewSummaries");
+            DynamicUpdate(true);
             Id(x => x.SummaryId);
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
@@ -37,17 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 },
                 rel => rel.OneToMany());
 
-            Set(x => x.CommentedStatusesHistory,
-                collection =>
-                {
-                    collection.Key(key => key.Column("InterviewSummaryId"));
-                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    collection.Inverse(true);
-                    collection.Lazy(CollectionLazy.NoLazy);
-                    collection.Fetch(CollectionFetchMode.Subselect);
-                },
-                relation => relation.OneToMany());
-
             Set(x => x.QuestionOptions,
                collection =>
                {
@@ -72,25 +63,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
         }
     }
 
-    public class InterviewCommentedStatusMap : ClassMapping<InterviewCommentedStatus>
-    {
-        public InterviewCommentedStatusMap()
-        {
-            Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
-            Property(x => x.Comment);
-            Property(x => x.Date);
-            Property(x => x.Status);
-            Property(x => x.Responsible);
-            Property(x => x.ResponsibleId);
-        }
-    }
 
     public class QuestionAnswerMap : ClassMapping<QuestionAnswer>
     {
         public QuestionAnswerMap()
         {
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
-
             Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
             Property(x => x.Answer, col => col.Column("AnswerValue"));

@@ -152,8 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(InterviewSummary interviewSummary)
         {
-            return !interviewSummary.WasCreatedOnClient ||
-                interviewSummary.CommentedStatusesHistory.Any(s => s.Status == InterviewStatus.RejectedBySupervisor);
+            return !interviewSummary.WasCreatedOnClient || interviewSummary.WasRejectedBySupervisor;
         }
 
         public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp,

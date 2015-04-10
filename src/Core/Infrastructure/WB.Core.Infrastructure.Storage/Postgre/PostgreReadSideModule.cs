@@ -87,8 +87,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
                 db.Batcher<PostgresClientBatchingBatcherFactory>();
                 db.BatchSize = 128;
-                
             });
+            cfg.Cache(c => c.Provider<NHibernate.Caches.SysCache.SysCacheProvider>());
             cfg.Proxy(proxy => proxy.ProxyFactoryFactory<NHibernate.ByteCode.Castle.ProxyFactoryFactory>());
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);

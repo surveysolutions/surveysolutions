@@ -33,17 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary));
-        }
-
-        protected static InterviewSummary CreateInterviewSummary(InterviewStatus[] statuses)
-        {
-            var interviewSummary = new InterviewSummary();
-            foreach (var interviewStatus in statuses)
-            {
-                interviewSummary.CommentedStatusesHistory.Add(CreateInterviewCommentedStatus(interviewStatus));
-            }
-            return interviewSummary;
+                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
+                Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatusHistory>>());
         }
 
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)

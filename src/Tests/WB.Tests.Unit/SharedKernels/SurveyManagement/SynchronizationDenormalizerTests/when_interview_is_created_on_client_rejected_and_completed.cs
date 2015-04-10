@@ -36,9 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             {
                 WasCreatedOnClient = true
             };
-            interviewSummary.CommentedStatusesHistory.Add(
-                new InterviewCommentedStatus { Status = InterviewStatus.RejectedBySupervisor }
-                );
+            interviewSummary.Status =  InterviewStatus.RejectedBySupervisor;
 
             interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 
