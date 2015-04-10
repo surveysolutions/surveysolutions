@@ -143,6 +143,7 @@
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
+    <Compile Include="Implementation\Services\FileSystemAccessor.cs" />
     <Compile Include="Implementation\Services\NetworkService.cs" />
     <Compile Include="Implementation\Services\ApplicationSettings.cs" />
     <Compile Include="Implementation\Services\Principal.cs" />
@@ -151,7 +152,10 @@
     <Compile Include="Implementation\Views\UserIdentity.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\LoggerModule.cs" />
+    <Compile Include="Ninject\DataCollectionModule.cs" />
+    <Compile Include="Ninject\ModuleExtensions.cs" />
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
+    <Compile Include="Ninject\NinjectModuleAdapter.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Ninject\NetworkModule.cs" />
     <Compile Include="Ninject\SecurityModule.cs" />
@@ -237,6 +241,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{b73e686b-a06b-4fd5-9baf-b321a0d33dbd}</Project>

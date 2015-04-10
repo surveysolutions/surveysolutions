@@ -1,6 +1,5 @@
 using Ninject;
 using Ninject.Modules;
-using PCLStorage;
 using Sqo;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Mobile.Siaqodb;
@@ -9,11 +8,18 @@ namespace WB.UI.QuestionnaireTester.Ninject
 {
     public class PlainStorageInfrastructureModule : NinjectModule
     {
+        private readonly string pathToStorage;
+
+        public PlainStorageInfrastructureModule(string pathToStorage)
+        {
+            this.pathToStorage = pathToStorage;
+        }
+
         public override void Load()
         {
             this.ConfigurePlainStorage();
 
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(CreatePlainStorageFolder()));
+            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.pathToStorage));
             
             this.Bind(typeof (IPlainStorageAccessor<>)).To(typeof (SiaqodbPlainStorageAccessor<>));
             this.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(SiaqodbQueryablePlainStorageAccessor<>));
@@ -23,20 +29,6 @@ namespace WB.UI.QuestionnaireTester.Ninject
         {
             this.Bind<IDocumentSerializer>().To<SiaqodbPlainStorageSerializer>().InSingletonScope();
             SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
-        }
-
-        private string CreatePlainStorageFolder()
-        {
-            var pathToPlainStorage = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, "db");
-
-            var plainStorageFolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToPlainStorage).Result;
-
-            if (plainStorageFolderExistingStatus != ExistenceCheckResult.FolderExists)
-            {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToPlainStorage, CreationCollisionOption.FailIfExists).Wait();
-            }
-
-            return pathToPlainStorage;
         }
     }
 }

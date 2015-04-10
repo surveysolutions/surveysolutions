@@ -1,8 +1,7 @@
 using Cirrious.CrossCore.IoC;
-using Ninject.Modules;
-using WB.Core.BoundedContexts.QuestionnaireTester;
+using PCLStorage;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
@@ -11,44 +10,27 @@ namespace WB.UI.QuestionnaireTester.Ninject
         public static IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(
-                new SecurityModule(), 
-                new NetworkModule(), 
+                new SecurityModule(),
+                new NetworkModule(),
                 new LoggerModule(),
                 new ApplicationModule(),
                 new ServiceLocationModule(),
-                new PlainStorageInfrastructureModule(),
-                new MobileDataCollectionModule(),
+                new PlainStorageInfrastructureModule(CreatePlainStorageFolder()),
+                new DataCollectionModule(localFileStoragePath: FileSystem.Current.LocalStorage.Path, questionnaireAssembliesDirectoryName: "assemblies"),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
         }
-    }
 
-    public static class ModuleExtensions
-    {
-        public static NinjectModule AsNinject<TModule>(this TModule module)
-            where TModule : IModule
+        private static string CreatePlainStorageFolder()
         {
-            return new NinjectModuleAdapter<TModule>(module);
-        }
-    }
+            var pathToPlainStorage = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, "database");
 
-    public class NinjectModuleAdapter<TModule> : NinjectModule, IIocRegistry
-        where TModule : IModule
-    {
-        private readonly TModule module;
+            var plainStorageFolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToPlainStorage).Result;
+            if (plainStorageFolderExistingStatus != ExistenceCheckResult.FolderExists)
+            {
+                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToPlainStorage, CreationCollisionOption.FailIfExists).Wait();
+            }
 
-        public NinjectModuleAdapter(TModule module)
-        {
-            this.module = module;
-        }
-
-        public override void Load()
-        {
-            this.module.Load(this);
-        }
-
-        void IIocRegistry.Bind<TInterface, TImplementation>()
-        {
-            this.Kernel.Bind<TInterface>().To<TImplementation>();
+            return pathToPlainStorage;
         }
     }
 }

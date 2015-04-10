@@ -260,7 +260,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permissions to look this &lt;a href=&quot;{0}/Designer/app/open/{1}&quot;&gt;{2}&lt;/a&gt; questionnaire.  Most likely the author(&lt;font color=&quot;black&quot;&gt;&quot;{3}&quot;&lt;/font&gt;) of the questionnaire removed you from the list of shared persons by that questionnaire. You can contact to him via email: &lt;a href=&quot;mailto:{4}&quot;&gt;Contact to the owner of questionnaire&lt;/a&gt;.
+        ///   Looks up a localized string similar to You don&apos;t have permissions to look this &lt;a href=&quot;{0}/Designer/app/open/{1}&quot;&gt;{2}&lt;/a&gt; questionnaire.  Most likely the author(&lt;font color=&quot;black&quot;&gt;&quot;{3}&quot;&lt;/font&gt;) of the questionnaire removed you from the list of shared persons by that questionnaire.
         /// </summary>
         public static string ImportQuestionnaire_Error_Forbidden {
             get {

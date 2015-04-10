@@ -1,14 +1,30 @@
-﻿using Ninject.Modules;
+using Ninject.Modules;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewInfrastructure;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester
+namespace WB.UI.QuestionnaireTester.Ninject
 {
-    public class MobileDataCollectionModule: NinjectModule
+    public class DataCollectionModule: NinjectModule
     {
-        public MobileDataCollectionModule()
+        private readonly string localFileStoragePath;
+        private readonly string questionnaireAssembliesDirectoryName;
+
+        public DataCollectionModule(string localFileStoragePath, string questionnaireAssembliesDirectoryName)
         {
+            this.localFileStoragePath = localFileStoragePath;
+            this.questionnaireAssembliesDirectoryName = questionnaireAssembliesDirectoryName;
+        }
+
+        public override void Load()
+        {
+            this.Bind<IQuestionnaireAssemblyFileAccessor>()
+                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.localFileStoragePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
+            this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
+
             CommandRegistry
                .Setup<StatefullInterview>()
                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersTime, command.UserId))
@@ -27,9 +43,5 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
                .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.CommentTime, command.Comment))
                .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.CompleteTime));
         }
-
-        public override void Load()
-        {
-      }
     }
 }

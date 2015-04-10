@@ -1,7 +1,6 @@
-﻿using System;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+﻿using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewInfrastructure
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class StatefullInterview : Interview
     {
