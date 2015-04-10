@@ -8,6 +8,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Model
             get { return Guid.NewGuid(); }
         }
 
+        public Guid Id { get; set; }
+
 
         // TODO delete after implimentation, this is only dummy method
         public T GetAnswerOnQuestion<T>(Guid questionId)

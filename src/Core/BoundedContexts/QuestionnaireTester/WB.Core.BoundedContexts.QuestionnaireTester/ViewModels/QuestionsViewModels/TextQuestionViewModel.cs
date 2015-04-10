@@ -1,20 +1,58 @@
 ﻿using System;
-using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.Model;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using IPrincipal = WB.Core.GenericSubdomains.Utils.Services.IPrincipal;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class TextQuestionViewModel : MvxViewModel
+    public class TextQuestionViewModel : MvxViewModel,
+        IEventBusEventHandler<TextQuestionAnswered>
     {
-        public TextQuestionViewModel(Guid questionId, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
+        private readonly ICommandService commandService;
+        private readonly IPrincipal principal;
+        private NavObject navObject;
+
+        public class NavObject
         {
-            TextQuestion textQuestion = questionnaireDocument.Find<TextQuestion>(questionId);
+            public Identity QuestionIdentity { get; set; }
+            public InterviewModel InterviewModel { get; set; }
+            public QuestionnaireDocument QuestionnaireDocument { get; set; }
+        }
+
+        public TextQuestionViewModel(ICommandService commandService, IPrincipal principal)
+        {
+            this.commandService = commandService;
+            this.principal = principal;
+        }
+
+        public void Init(NavObject navObject)
+        {
+            if (navObject == null) 
+                throw new ArgumentNullException("navObject");
+
+            this.navObject = navObject;
+            TextQuestion textQuestion = navObject.QuestionnaireDocument.Find<TextQuestion>(navObject.QuestionIdentity.Id);
 
             Title = textQuestion.QuestionText;
-            Answer = interviewModel.GetAnswerOnQuestion<string>(questionId);
+            Answer = navObject.InterviewModel.GetAnswerOnQuestion<string>(navObject.QuestionIdentity.Id);
+        }
+
+
+        public void Init(Identity questionIdentity, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
+        {
+            Init(new NavObject()
+            {
+                QuestionIdentity = questionIdentity,
+                InterviewModel = interviewModel,
+                QuestionnaireDocument = questionnaireDocument
+            });
         }
 
         private string title;
@@ -33,5 +71,30 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { answer = value; RaisePropertyChanged(() => Answer); }
         }
 
+        public IMvxCommand AnswerTextQuestionCommand
+        {
+            get { return new MvxCommand(SendAnswerTextQuestionCommand); }
+        }
+
+        private void SendAnswerTextQuestionCommand()
+        {
+            commandService.Execute(new AnswerTextQuestionCommand(
+                interviewId: navObject.InterviewModel.Id,
+                userId: principal.CurrentUserIdentity.UserId,
+                questionId: navObject.QuestionIdentity.Id,
+                rosterVector: navObject.QuestionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow,
+                answer: Answer
+                ));
+        }
+
+        public void Handle(TextQuestionAnswered @event)
+        {
+            if (@event.QuestionId != navObject.QuestionIdentity.Id
+                && @event.PropagationVector != navObject.QuestionIdentity.RosterVector)
+                return;
+
+            Answer = @event.Answer;
+        }
     }
 }
