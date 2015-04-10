@@ -36,9 +36,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Services\ErrorProcessor.cs" />
+    <Compile Include="Services\ErrorCode.cs" />
+    <Compile Include="Services\IErrorProcessor.cs" />
     <Compile Include="InterviewModule.cs" />
     <Compile Include="Model\InterviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\TesterError.cs" />
+    <Compile Include="Services\TesterHttpAction.cs" />
     <Compile Include="ViewModelLoader\Implimentation\InterviewStateFullViewModelFactory.cs" />
     <Compile Include="ViewModelLoader\IInterviewStateFullViewModelFactory.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">

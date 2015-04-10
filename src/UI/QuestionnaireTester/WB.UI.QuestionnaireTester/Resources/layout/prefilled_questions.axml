@@ -43,7 +43,7 @@
             <Button
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                local:MvxBind="Click OpenQuestionnaireCommand; Text Localization('OpenQuestionnaire')" />
+                local:MvxBind="Click OpenInterviewCommand; Text Localization('OpenQuestionnaire')" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

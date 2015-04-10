@@ -7,7 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -24,15 +27,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IUserInteraction uiDialogs;
         private readonly IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private readonly IErrorProcessor errorProcessor;
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger, IUserInteraction uiDialogs,
-            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor)
+            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, IErrorProcessor errorProcessor)
             : base(logger)
         {
             this.principal = principal;
             this.restService = restService;
             this.uiDialogs = uiDialogs;
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
+            this.errorProcessor = errorProcessor;
         }
 
         public async void Init()
@@ -190,25 +195,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
             catch (RestException ex)
             {
-                switch (ex.StatusCode)
+                var error = this.errorProcessor.GetInternalErrorAndLogException(ex, TesterHttpAction.FetchingQuestionnairesList);
+
+                switch (error.Code)
                 {
-                    case HttpStatusCode.Unauthorized:
+                    case ErrorCode.UserWasNotAuthoredOnDesigner:
+                    case ErrorCode.AccountIsLockedOnDesigner:
                         this.SignOut();
                         break;
-                    case HttpStatusCode.ServiceUnavailable:
-                        this.uiDialogs.Alert(ex.Message.Contains("maintenance")
-                            ? UIResources.Maintenance
-                            : UIResources.ServiceUnavailable);
+                        
+                    case ErrorCode.DesignerIsInMaintenanceMode:
+                    case ErrorCode.DesignerIsUnavailable:
+                    case ErrorCode.RequestTimeout:
+                    case ErrorCode.InternalServerError:
+                    case ErrorCode.RequestedUrlWasNotFound:
+                        this.uiDialogs.Alert(error.Message);
                         break;
-                    case HttpStatusCode.RequestTimeout:
-                        this.uiDialogs.Alert(UIResources.RequestTimeout);
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        this.Logger.Error("Internal server error when getting questionnaires.", ex);
-                        this.uiDialogs.Alert(UIResources.InternalServerError);
-                        break;
-                    default:
-                        throw;
+
+                    default: throw;
                 }
             }
             finally

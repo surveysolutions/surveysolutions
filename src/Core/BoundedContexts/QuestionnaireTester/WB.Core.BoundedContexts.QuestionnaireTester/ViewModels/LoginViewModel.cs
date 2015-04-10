@@ -1,7 +1,10 @@
 ﻿using System.Net;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 
@@ -12,13 +15,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IRestService restService;
         private readonly IPrincipal principal;
         private readonly IUserInteraction uiDialogs;
+        private readonly IErrorProcessor errorProcessor;
+
 
         public LoginViewModel(IRestService restService, IPrincipal principal, ILogger logger,
-            IUserInteraction uiDialogs) : base(logger)
+            IUserInteraction uiDialogs, IErrorProcessor errorProcessor) : base(logger)
         {
             this.restService = restService;
             this.principal = principal;
             this.uiDialogs = uiDialogs;
+            this.errorProcessor = errorProcessor;
         }
 
         private bool isInProgress = false;
@@ -70,32 +76,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
             catch (RestException ex)
             {
+                var error = this.errorProcessor.GetInternalErrorAndLogException(ex, TesterHttpAction.Login);
 
-                switch (ex.StatusCode)
+                switch (error.Code)
                 {
-                    case HttpStatusCode.Unauthorized:
-                        this.uiDialogs.Alert(ex.Message.Contains("lock")
-                            ? UIResources.AccountIsLockedOnServer
-                            : UIResources.Unauthorized);
+                    case ErrorCode.UserWasNotAuthoredOnDesigner:
+                    case ErrorCode.AccountIsLockedOnDesigner:
+                    case ErrorCode.DesignerIsInMaintenanceMode:
+                    case ErrorCode.DesignerIsUnavailable:
+                    case ErrorCode.RequestTimeout:
+                    case ErrorCode.RequestedUrlWasNotFound:
+                    case ErrorCode.InternalServerError:
+                        this.uiDialogs.Alert(error.Message);
                         break;
-                    case HttpStatusCode.ServiceUnavailable:
-                        this.uiDialogs.Alert(ex.Message.Contains("maintenance")
-                            ? UIResources.Maintenance
-                            : UIResources.ServiceUnavailable);
-                        break;
-                    case HttpStatusCode.RequestTimeout:
-                        this.uiDialogs.Alert(UIResources.RequestTimeout);
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        this.Logger.Error("Internal server error when login.", ex);
-                        this.uiDialogs.Alert(UIResources.InternalServerError);
-                        break;
-                    case HttpStatusCode.NotFound:
-                        this.Logger.Error("Designer cannot be found.", ex);
-                        this.uiDialogs.Alert(UIResources.Login_Error_NotFound);
-                        break;
-                    default:
-                        throw;
+
+                    default: throw;
                 }
             }
             finally
