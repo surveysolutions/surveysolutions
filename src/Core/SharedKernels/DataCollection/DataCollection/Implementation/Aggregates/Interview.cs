@@ -36,8 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasHardDeleted;
         private InterviewStatus status;
 
-        private IInterviewExpressionState expressionProcessorStatePrototype = null;
-        private IInterviewExpressionState ExpressionProcessorStatePrototype
+        private IInterviewExpressionStateV2 expressionProcessorStatePrototype = null;
+        private IInterviewExpressionStateV2 ExpressionProcessorStatePrototype
         {
             get
             {
@@ -1335,7 +1335,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string answerFormattedAsRosterTitle = string.Join(", ", answeredLinkedQuestions.Select(q => GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, q, questionnaire)));
 
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            IInterviewExpressionStateV2 expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, selectedPropagationVectors);
 
@@ -1411,7 +1411,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CalculateInterviewChangesOnAnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector,
             DateTime answerTime, string pictureFileName, IQuestionnaire questionnaire)
         {
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            IInterviewExpressionStateV2 expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateMediaAnswer(questionId, rosterVector, pictureFileName);
 
@@ -1435,7 +1435,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string answerFormattedAsRosterTitle = GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, answeredLinkedQuestion, questionnaire);
 
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            IInterviewExpressionStateV2 expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedPropagationVector);
 
@@ -2295,7 +2295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
 
             //Update State
             expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
@@ -2367,7 +2367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(state,
                 questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
 
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
 
@@ -2453,7 +2453,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState, questionnaire, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
                 answers, changedAnswers);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
             expressionProcessorState.UpdateTextListAnswer(questionId, rosterVector, answers);
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
@@ -2499,7 +2499,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnAnswerTextQuestion(InterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
         {
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
 
@@ -2511,7 +2511,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
 
@@ -2524,7 +2524,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateNumericRealAnswer(questionId, rosterVector, (double)answer);
 
@@ -2553,7 +2553,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
                 cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
 
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
             answersToRemoveByCascading.ToList().ForEach(x => expressionProcessorState.UpdateSingleOptionAnswer(x.Id, x.RosterVector, (decimal?)null));
@@ -2569,7 +2569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state,
             Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
         {
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateQrBarcodeAnswer(questionId, rosterVector, answer);
 
@@ -2582,16 +2582,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
 
-            IInterviewExpressionState expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy, altitude);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(state, userId, questionId, rosterVector, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp), answerFormattedAsRosterTitle, AnswerChangeType.GeoLocation, answerTime, questionnaire, expressionProcessorState);
         }
 
-        private IInterviewExpressionState PrepareExpressionProcessorStateForCalculations()
+        private IInterviewExpressionStateV2 PrepareExpressionProcessorStateForCalculations()
         {
-            IInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            IInterviewExpressionStateV2 expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
 
@@ -2600,7 +2600,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(InterviewStateDependentOnAnswers state, Guid userId, Guid questionId, decimal[] rosterVector,
             object answer, string answerFormattedAsRosterTitle, AnswerChangeType answerChangeType, DateTime answerTime, IQuestionnaire questionnaire,
-            IInterviewExpressionState expressionProcessorState)
+            IInterviewExpressionStateV2 expressionProcessorState)
         {
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
@@ -3797,7 +3797,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<RosterCalculationData> rosterDatas,
             IQuestionnaire questionnaire)
         {
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
 
             foreach (var changes in interviewChanges.Changes)
             {

@@ -11,9 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
 
-        public abstract void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
-            string rosterTitle);
-
         public abstract void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
         public abstract void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer);
@@ -39,7 +36,6 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract Dictionary<Guid, Guid[]> GetParentsMap();
 
         public abstract IInterviewExpressionState Clone();
-
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
@@ -194,5 +190,13 @@ namespace WB.Core.SharedKernels.DataCollection
             }
             this.SiblingRosters[siblingsKey].Add(rosterStringKey);
         }
+    }
+
+    public abstract class AbstractInterviewExpressionStateV2 : AbstractInterviewExpressionState, IInterviewExpressionStateV2
+    {
+        public abstract void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            string rosterTitle);
+
+        public abstract IInterviewExpressionStateV2 CloneV2();
     }
 }
