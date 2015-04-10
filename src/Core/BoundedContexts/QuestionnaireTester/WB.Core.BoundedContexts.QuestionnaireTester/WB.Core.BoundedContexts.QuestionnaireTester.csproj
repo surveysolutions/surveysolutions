@@ -45,7 +45,7 @@
     </Compile>
     <Compile Include="Model\InterviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModelLoader\Implimentation\InterviewInterviewStateFullViewModelFactory.cs" />
+    <Compile Include="ViewModelLoader\Implimentation\InterviewStateFullViewModelFactory.cs" />
     <Compile Include="ViewModelLoader\IInterviewStateFullViewModelFactory.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -56,7 +56,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\ChapterViewModel.cs" />
+    <Compile Include="ViewModels\InterviewGroupViewModel.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupReferanceViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />

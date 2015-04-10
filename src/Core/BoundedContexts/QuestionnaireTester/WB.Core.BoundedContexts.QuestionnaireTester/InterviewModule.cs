@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
     {
         public override void Load()
         {
-            Bind<IInterviewStateFullViewModelFactory>().To<InterviewInterviewStateFullViewModelFactory>()
+            Bind<IInterviewStateFullViewModelFactory>().To<InterviewStateFullViewModelFactory>()
                 .WithConstructorArgument("plainStorageInterviewAccessor", _ => new InMemoryPlainStorageAccessor<InterviewModel>());
         }
     }

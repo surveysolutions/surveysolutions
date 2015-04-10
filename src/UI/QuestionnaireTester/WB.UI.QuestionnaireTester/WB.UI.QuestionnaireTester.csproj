@@ -162,7 +162,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="ValueConverters\LocalizationValueConverter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
-    <Compile Include="Views\ChapterView.cs" />
+    <Compile Include="Views\InterviewGroupView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
     <Compile Include="Views\MvxActionBarActivity.cs" />
@@ -200,7 +200,7 @@
     <AndroidResource Include="Resources\layout\dashboard.axml" />
     <AndroidResource Include="Resources\layout\my_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
-    <AndroidResource Include="Resources\layout\chapter.axml" />
+    <AndroidResource Include="Resources\layout\interview_group.axml" />
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
   </ItemGroup>
   <ItemGroup>

@@ -5,11 +5,11 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 namespace WB.UI.QuestionnaireTester.Views
 {
     [Activity(Label = "", Theme = "@style/Theme.Blue.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
-    public class ChapterView : BaseActivityView<ChapterViewModel>
+    public class InterviewGroupView : BaseActivityView<InterviewGroupViewModel>
     {
         protected override int ViewResourceId
         {
-            get { return Resource.Layout.chapter; }
+            get { return Resource.Layout.interview_group; }
         } 
     }
 }
