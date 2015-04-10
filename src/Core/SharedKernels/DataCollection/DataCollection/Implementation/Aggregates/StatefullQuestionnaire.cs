@@ -1,8 +1,7 @@
 ﻿using Main.Core.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class StatefullQuestionnaire : Questionnaire
     {

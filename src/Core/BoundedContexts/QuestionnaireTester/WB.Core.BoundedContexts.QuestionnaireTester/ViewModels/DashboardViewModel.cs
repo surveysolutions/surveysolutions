@@ -26,15 +26,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public DashboardViewModel(IPrincipal principal, IRestService restService, ILogger logger, IUserInteraction uiDialogs,
-            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor /*,
-           ICommandService commandService*/)
+            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor)
             : base(logger)
         {
             this.principal = principal;
             this.restService = restService;
             this.uiDialogs = uiDialogs;
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
-           // this.commandService = commandService;
         }
 
         public async void Init()
@@ -148,7 +146,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.tokenSource.Cancel();
 
-            this.ShowViewModel<PrefilledQuestionsViewModel>(questionnaire.Id);
+            this.ShowViewModel<PrefilledQuestionsViewModel>(new {questionnaireId = questionnaire.Id});
         }
 
         private Task BindQuestionnairesFromStorage()
