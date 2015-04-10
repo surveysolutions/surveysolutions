@@ -124,21 +124,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 SupervisorName = interviewSummaryView.TeamLeadName
             };
 
-            if (interviewSummaryView.CommentedStatusesHistory != null &&
-                interviewSummaryView.CommentedStatusesHistory.Any())
-            {
-                var lastStatus = interviewSummaryView.CommentedStatusesHistory.Last();
+            interviewSummaryForMapPointView.LastStatus = interviewSummaryView.Status.ToLocalizeString();
+            interviewSummaryForMapPointView.LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate);
 
-                interviewSummaryForMapPointView.LastStatus = lastStatus.Status.ToLocalizeString();
-
-                var lastCompletedStatus =
-                    interviewSummaryView.CommentedStatusesHistory.LastOrDefault(
-                        statusInfo => statusInfo.Status == InterviewStatus.Completed);
-
-                if (lastCompletedStatus != null)
-                    interviewSummaryForMapPointView.LastCompletedDate =
-                        AnswerUtils.AnswerToString(lastCompletedStatus.Date);
-            }
             return interviewSummaryForMapPointView;
         }
     }

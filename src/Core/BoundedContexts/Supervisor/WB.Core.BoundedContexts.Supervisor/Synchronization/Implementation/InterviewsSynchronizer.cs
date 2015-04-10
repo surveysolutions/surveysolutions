@@ -435,9 +435,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             InterviewSummary interviewSummary = this.GetInterviewSummary(interviewId);
 
-            InterviewCommentedStatus lastInterviewCommentedStatus = interviewSummary.CommentedStatusesHistory.LastOrDefault();
-            string lastComment = lastInterviewCommentedStatus != null ? lastInterviewCommentedStatus.Comment : string.Empty;
-
+            string lastComment = interviewSummary.LastStatusChangeComment ?? string.Empty;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web.Http;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -59,7 +60,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public ReadSideStatus GetReadSideStatus()
         {
-            return this.readSideAdministrationService.GetRebuildStatus();
+            ReadSideStatus readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
+            return readSideStatus;
         }
 
         [HttpPost]

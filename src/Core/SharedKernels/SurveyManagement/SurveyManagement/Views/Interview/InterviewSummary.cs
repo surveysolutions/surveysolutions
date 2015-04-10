@@ -5,7 +5,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -16,7 +15,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewSummary()
         {
             this.AnswersToFeaturedQuestions = new HashSet<QuestionAnswer>();
-            this.CommentedStatusesHistory = new HashSet<InterviewCommentedStatus>();
             this.QuestionOptions = new HashSet<QuestionOptions>();
         }
 
@@ -69,8 +67,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual string TeamLeadName { get; set; }
         public virtual UserRoles ResponsibleRole { get; set; }
         public virtual DateTime UpdateDate { get; set; }
+        public virtual string LastStatusChangeComment { get; set; }
+
+        public virtual bool WasRejectedBySupervisor { get; set; }
         public virtual ISet<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
-        public virtual ISet<InterviewCommentedStatus> CommentedStatusesHistory { get; protected set; }
         public virtual ISet<QuestionOptions> QuestionOptions { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
@@ -89,16 +89,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             this.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
         }
-    }
 
-    public class InterviewCommentedStatus
-    {
-        public virtual int Id { get; set; }
-        public virtual string Comment { get; set; }
-        public virtual DateTime Date { get; set; }
-        public virtual InterviewStatus Status { get; set; }
-        public virtual string Responsible { get; set; }
-        public virtual Guid ResponsibleId { get; set; }
+        protected bool Equals(InterviewSummary other)
+        {
+            return string.Equals(this.SummaryId, other.SummaryId);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((InterviewSummary)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.SummaryId != null ? this.SummaryId.GetHashCode() : 0);
+        }
     }
 
     public class QuestionAnswer

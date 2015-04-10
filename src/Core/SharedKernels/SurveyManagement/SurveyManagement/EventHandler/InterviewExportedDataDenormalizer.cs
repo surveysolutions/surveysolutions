@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -43,16 +44,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatusHistory> interviewHistoryReader;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter, 
-            IReadSideRepositoryWriter<UserDocument> userDocumentWriter, IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
+            IReadSideRepositoryWriter<UserDocument> userDocumentWriter, 
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
+            IQueryableReadSideRepositoryReader<InterviewStatusHistory> interviewHistoryReader)
         {
             this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
             this.users = userDocumentWriter;
             this.interviewSummaryStorage = interviewSummaryStorage;
+            this.interviewHistoryReader = interviewHistoryReader;
         }
 
         public override object[] Writers
@@ -222,7 +227,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            foreach (var interviewCommentedStatus in interviewSummary.CommentedStatusesHistory)
+            var interviewStatusHistory = this.interviewHistoryReader.Query(_ => _.FirstOrDefault(x => x.InterviewId == evnt.EventSourceId.FormatGuid()));
+            if (interviewStatusHistory == null)
+            {
+                throw new NullReferenceException(string.Format("Missing interview status changes history for interview {0}", evnt.EventSourceId));
+            }
+
+            foreach (var interviewCommentedStatus in interviewStatusHistory.StatusChangeHistory)
             {
                 var action = this.GetInterviewExportedAction(interviewCommentedStatus.Status);
                 if (!action.HasValue)

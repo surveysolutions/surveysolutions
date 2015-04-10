@@ -31,10 +31,63 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
 
             schemaUpdate.Execute(true, true);
+
+            using (var openStatelessSession = sessionFactory.OpenStatelessSession())
+            {
+                IDbConnection dbConnection = openStatelessSession.Connection;
+                var dbCommand = dbConnection.CreateCommand();
+
+                dbCommand.CommandText =
+                    @"CREATE OR REPLACE FUNCTION DisableAutovacuum()
+                    RETURNS VOID
+                    AS $$
+                    DECLARE
+                    my_row    RECORD;    
+                    BEGIN       
+                    FOR my_row IN 
+                        SELECT table_name
+                        FROM   information_schema.tables
+                        WHERE  table_schema = 'public'
+                    LOOP
+                    EXECUTE 'ALTER TABLE ' || my_row.table_name || ' SET (autovacuum_enabled = false, toast.autovacuum_enabled = false)';
+                    END LOOP;
+                    END;
+                    $$ LANGUAGE plpgsql;
+
+                    SELECT DisableAutovacuum();
+                    DROP FUNCTION DisableAutovacuum();";
+                dbCommand.ExecuteNonQuery();
+            }
         }
 
         public void CreateIndexesAfterRebuildReadSide()
         {
+            using (var openStatelessSession = sessionFactory.OpenStatelessSession())
+            {
+                IDbConnection dbConnection = openStatelessSession.Connection;
+                var dbCommand = dbConnection.CreateCommand();
+
+                dbCommand.CommandText =
+                    @"CREATE OR REPLACE FUNCTION EnableAutovacuum()
+                    RETURNS VOID
+                    AS $$
+                    DECLARE
+                    my_row    RECORD;    
+                    BEGIN       
+                    FOR my_row IN 
+                        SELECT table_name
+                        FROM   information_schema.tables
+                        WHERE  table_schema = 'public'
+                    LOOP
+                    EXECUTE 'ALTER TABLE ' || my_row.table_name || ' SET (autovacuum_enabled = true, toast.autovacuum_enabled = true)';
+                    END LOOP;
+                    END;
+                    $$ LANGUAGE plpgsql;
+
+                    SELECT EnableAutovacuum();
+                    DROP FUNCTION EnableAutovacuum();";
+                dbCommand.ExecuteNonQuery();
+            }
         }
     }
 }
