@@ -30,14 +30,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 
             Set(x => x.AnswersToFeaturedQuestions,
                 collection => {
-                    collection.Key(c => c.Column("InterviewSummaryId"));
+                    collection.Key(c => {
+                        c.Column("InterviewSummaryId");
+                        
+                    });
                     collection.Table("AnswersToFeaturedQuestions");
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
                     collection.Lazy(CollectionLazy.NoLazy);
+                    
                     collection.Fetch(CollectionFetchMode.Subselect);
                 },
-                rel => rel.OneToMany());
+                rel => { 
+                    rel.OneToMany();
+                    
+                });
 
             Set(x => x.QuestionOptions,
                collection =>
@@ -60,6 +67,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.QuestionId);
             Property(x => x.Text);
             Property(x => x.Value);
+            ManyToOne(x => x.InterviewSummary, mtm => {
+                mtm.Column("InterviewSummaryId");
+                mtm.Index("InterviewSummaries_QuestionOptions"); });
         }
     }
 
@@ -72,6 +82,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
             Property(x => x.Answer, col => col.Column("AnswerValue"));
+            ManyToOne(x => x.InterviewSummary, mtm => {
+                mtm.Column("InterviewSummaryId");
+                mtm.Index("InterviewSummaries_QuestionOptions"); });
         }
     }
 }

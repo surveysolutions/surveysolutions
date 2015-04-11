@@ -12,7 +12,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewStatusChangeHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewStatusHistory, IReadSideKeyValueStorage<InterviewStatusHistory>>,
+    public class StatusChangeHistoryDenormalizerFunctional :
+        AbstractFunctionalEventHandler<InterviewStatusHistory, IReadSideKeyValueStorage<InterviewStatusHistory>>,
         IUpdateHandler<InterviewStatusHistory, InterviewStatusChanged>,
         IUpdateHandler<InterviewStatusHistory, InterviewerAssigned>,
         IUpdateHandler<InterviewStatusHistory, InterviewCompleted>,
@@ -29,10 +30,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewStatusHistory, InterviewRestored>,
         IUpdateHandler<InterviewStatusHistory, InterviewCreated>
     {
-        private readonly IReadSideRepositoryReader<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public InterviewStatusChangeHistoryDenormalizer(IReadSideKeyValueStorage<InterviewStatusHistory> readSideStorage,
-            IReadSideRepositoryReader<UserDocument> users)
+        public StatusChangeHistoryDenormalizerFunctional(IReadSideKeyValueStorage<InterviewStatusHistory> readSideStorage,
+            IReadSideRepositoryWriter<UserDocument> users)
             : base(readSideStorage)
         {
             this.users = users;
@@ -71,7 +72,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRestarted> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.Restarted, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, null, evnt.Payload.UserId);
+            AddInterviewStatus(currentState, InterviewStatus.Restarted, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, null,
+                evnt.Payload.UserId);
             return currentState;
         }
 
@@ -83,31 +85,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewCompleted> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.Completed, evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, null, evnt.Payload.UserId);
+            AddInterviewStatus(currentState, InterviewStatus.Completed, evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, null,
+                evnt.Payload.UserId);
             return currentState;
         }
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRejected> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.RejectedBySupervisor, evnt.EventTimeStamp, evnt.Payload.Comment, evnt.Payload.UserId);
+            AddInterviewStatus(currentState, InterviewStatus.RejectedBySupervisor, evnt.EventTimeStamp, evnt.Payload.Comment,
+                evnt.Payload.UserId);
             return currentState;
         }
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewApproved> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.ApprovedBySupervisor, evnt.EventTimeStamp, evnt.Payload.Comment, evnt.Payload.UserId);
+            AddInterviewStatus(currentState, InterviewStatus.ApprovedBySupervisor, evnt.EventTimeStamp, evnt.Payload.Comment,
+                evnt.Payload.UserId);
             return currentState;
         }
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.RejectedByHeadquarters, evnt.EventTimeStamp, evnt.Payload.Comment, evnt.Payload.UserId);
+            AddInterviewStatus(currentState, InterviewStatus.RejectedByHeadquarters, evnt.EventTimeStamp, evnt.Payload.Comment,
+                evnt.Payload.UserId);
             return currentState;
         }
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.ApprovedByHeadquarters, evnt.EventTimeStamp, evnt.Payload.Comment, evnt.Payload.UserId);
+            AddInterviewStatus(currentState, InterviewStatus.ApprovedByHeadquarters, evnt.EventTimeStamp, evnt.Payload.Comment,
+                evnt.Payload.UserId);
             return currentState;
         }
 
@@ -142,14 +149,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return currentState;
         }
 
-        private void AddInterviewStatus(InterviewStatusHistory interviewHistory, InterviewStatus status, DateTime date, string comment, Guid responsibleId)
+        private void AddInterviewStatus(InterviewStatusHistory interviewHistory, InterviewStatus status, DateTime date, string comment,
+            Guid responsibleId)
         {
             interviewHistory.StatusChangeHistory.Add(new InterviewCommentedStatus
             {
                 Status = status,
                 Date = date,
                 Comment = comment,
-                Responsible = GetResponsibleIdName(responsibleId),  
+                Responsible = GetResponsibleIdName(responsibleId),
                 ResponsibleId = responsibleId
             });
         }
@@ -166,7 +174,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new []{ this.users }; }
+            get { return new[] { this.users }; }
         }
     }
 }
