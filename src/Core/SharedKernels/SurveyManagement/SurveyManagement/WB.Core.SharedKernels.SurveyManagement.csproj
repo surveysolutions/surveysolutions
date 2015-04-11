@@ -117,7 +117,7 @@
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewStatusChangeHistoryDenormalizer.cs" />
+    <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />

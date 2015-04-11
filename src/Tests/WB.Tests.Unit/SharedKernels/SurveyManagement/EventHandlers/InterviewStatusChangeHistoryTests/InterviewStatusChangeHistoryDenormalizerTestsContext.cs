@@ -6,9 +6,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
 {
     internal class InterviewStatusChangeHistoryDenormalizerTestsContext
     {
-        public static InterviewStatusChangeHistoryDenormalizer CreateDenormalizer()
+        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer()
         {
-            return new InterviewStatusChangeHistoryDenormalizer(null, null);
+            return new StatusChangeHistoryDenormalizerFunctional(null, null);
         }
     }
 }

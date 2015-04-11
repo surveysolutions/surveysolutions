@@ -15,21 +15,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
             viewModel = new InterviewStatusHistory("interviewId");
 
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").FormatGuid();
-            denormalizer = CreateDenormalizer();
+            denormalizerFunctional = CreateDenormalizer();
         };
 
         Because of = () =>
         {
-            viewModel = denormalizer.Update(viewModel,
+            viewModel = denormalizerFunctional.Update(viewModel,
                 Create.InterviewDeletedEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
-            viewModel = denormalizer.Update(viewModel,
+            viewModel = denormalizerFunctional.Update(viewModel,
                 Create.InterviewRestoredEvent(userId: responsibleId, origin: Constants.HeadquartersSynchronizationOrigin));
         };
 
         It should_not_add_sync_related_status_to_history = () => viewModel.StatusChangeHistory.ShouldBeEmpty();
 
         static InterviewStatusHistory viewModel;
-        static InterviewStatusChangeHistoryDenormalizer denormalizer;
+        static StatusChangeHistoryDenormalizerFunctional denormalizerFunctional;
         static string responsibleId;
     }
 }
