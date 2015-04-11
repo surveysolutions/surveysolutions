@@ -64,14 +64,13 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
             using (ISession session = sessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
-            using (IStatelessSession statelessSession = sessionFactory.OpenStatelessSession(session.Connection))
             {
                 foreach (var tuple in bulk)
                 {
                     TEntity entity = tuple.Item1;
                     string id = tuple.Item2;
 
-                    var storedEntity = statelessSession.Get<TEntity>(id);
+                    var storedEntity = session.Get<TEntity>(id);
 
                     if (storedEntity != null)
                     {
