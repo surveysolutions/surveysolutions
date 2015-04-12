@@ -11,9 +11,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Shared.Web.Membership;
-using QuestionnaireListItem = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList.QuestionnaireListItem;
+using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem;
 
 namespace WB.UI.Designer.Api
 {

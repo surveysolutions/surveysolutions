@@ -1,6 +1,6 @@
 using Main.Core.Documents;
 
-namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire
+namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
 {
     public class Questionnaire
     {

@@ -16,9 +16,11 @@ namespace WB.UI.QuestionnaireTester.Ninject
         {
             this.Bind<IFileSystemAccessor>().To<FileSystemAccessor>().InSingletonScope();
 
-            this.Bind<JsonUtilsSettings>().ToConstant(new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.None });
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>().InSingletonScope();
+
             this.Bind<ApplicationSettings>().ToSelf().InSingletonScope();
+            this.Bind<DesignerApiServiceAccessor>().ToSelf().InSingletonScope();
             this.Bind<IErrorProcessor>().To<ErrorProcessor>().InSingletonScope();
 
             var evenStore = new InMemoryEventStore();

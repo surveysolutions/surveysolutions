@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Services\DesignerApiServiceAccessor.cs" />
     <Compile Include="Implementation\Services\ErrorProcessor.cs" />
     <Compile Include="Services\ErrorCode.cs" />
     <Compile Include="Services\IErrorProcessor.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
-    <Compile Include="Views\Questionnaire.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
   </ItemGroup>
   <ItemGroup>

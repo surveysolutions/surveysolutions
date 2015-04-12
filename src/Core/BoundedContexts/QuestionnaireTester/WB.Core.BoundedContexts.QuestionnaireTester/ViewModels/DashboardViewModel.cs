@@ -9,7 +9,7 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 
 using Main.Core.Events.Questionnaire;
-
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly IErrorProcessor errorProcessor;
         private readonly IRestServiceSettings restServiceSettings;
+        private readonly DesignerApiServiceAccessor designerApiServiceAccessor;
 
 
         public DashboardViewModel(
@@ -41,7 +42,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IUserInteraction uiDialogs,
             IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
             IErrorProcessor errorProcessor, 
-            IRestServiceSettings restServiceSettings)
+            IRestServiceSettings restServiceSettings,
+            DesignerApiServiceAccessor designerApiServiceAccessor)
             : base(logger)
         {
             this.principal = principal;
@@ -50,6 +52,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
             this.errorProcessor = errorProcessor;
             this.restServiceSettings = restServiceSettings;
+            this.designerApiServiceAccessor = designerApiServiceAccessor;
         }
 
         public async void Init()
@@ -166,7 +169,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private IMvxCommand loadQuestionnaireCommand;
         public IMvxCommand LoadQuestionnaireCommand
         {
-            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(this.LoadQuestionnaire)); }
+            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire)=> await this.LoadQuestionnaire(questionnaire))); }
         }
 
         private IMvxCommand refreshQuestionnairesCommand;
@@ -203,14 +206,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.IsPublicShowed = false;
         }
 
-        private void LoadQuestionnaire(QuestionnaireListItem questionnaire)
-        {
-            this.tokenSource.Cancel();
-
-            this.LoadQuestionnaireAndAsembly(questionnaire);
-        }
-
-        public async void LoadQuestionnaireAndAsembly(QuestionnaireListItem selectedQuestionnaire)
+        private async Task LoadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
         {
             this.IsServerUnavailable = false;
             this.HasErrors = false;
@@ -222,23 +218,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
 
-                var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer(
-                        selectedQuestionnaire,
-                        (downloadProgress) =>
-                        {
-                            this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
-                        });
+                var questionnairePackage = await this.designerApiServiceAccessor.GetQuestionnaireAsync(
+                    questionnaireId: selectedQuestionnaire.Id,
+                    downloadProgress: (downloadProgress) =>
+                    {
+                        this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
+                    },
+                    token: tokenSource.Token);
 
                 this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                this.commandService.Execute(
-                    new ImportFromDesigner(
-                        this.principal.CurrentUserIdentity.UserId,
-                        questionnaireCommunicationPackage.Document,
-                        true,
-                        questionnaireCommunicationPackage.Assembly));
+                this.commandService.Execute(new ImportFromDesigner(
+                        createdBy: this.principal.CurrentUserIdentity.UserId,
+                        source: questionnairePackage.Document,
+                        allowCensusMode: true,
+                        supportingAssembly: questionnairePackage.Assembly));
 
-                this.ShowViewModel<PrefilledQuestionsViewModel>(new { questionnaireId = questionnaireCommunicationPackage.Document.PublicKey });
+                this.ShowViewModel<PrefilledQuestionsViewModel>(new { questionnaireId = selectedQuestionnaire.Id });
             }
             catch (RestException ex)
             {
@@ -288,33 +284,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     default:
                         throw;
                 }
+
+                this.uiDialogs.Alert(this.ErrorMessage);
             }
             catch (OperationCanceledException ex)
             {
                 // show here the message that loading questionnaire was canceled
                 // don't needed in the current implementation
             }
-            catch (Exception exception)
-            {
-                
-            }
             finally
             {
                 this.IsInProgress = false;
             }
-        }
-
-        public async Task<Questionnaire> GetQuestionnaireFromServer(QuestionnaireListItem selectedQuestionnaire, Action<decimal> downloadProgress)
-        {
-            return await this.restService.GetWithProgressAsync<Questionnaire>(
-                url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
-                credentials:
-                    new RestCredentials()
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
-                progressPercentage: downloadProgress, token: tokenSource.Token);
         }
 
         private Task BindQuestionnairesFromStorage()
@@ -335,22 +316,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             });
         }
 
-        public Task GetServerQuestionnaires()
+        public async Task GetServerQuestionnaires()
         {
-            return Task.Run(async () =>
-            {
-                this.IsInProgress = true;
+
+            this.IsInProgress = true;
             
             try
             {
                 this.ClearQuestionnaires();
 
-                const int pageSize = 20;
                 int pageIndex = 1;
-
-                foreach (var serverQuestionnaires in GetPagedQuestionnaires(pageIndex++, pageSize))
+                foreach (var batchOfServerQuestionnaires in this.designerApiServiceAccessor.GetPagedQuestionnaires(pageIndex++, 20, tokenSource.Token))
                 {
-                    var convertedQuestionnaires = serverQuestionnaires.Select(ConvertToLocalQuestionnaireListItem);
+                    var convertedQuestionnaires = (await batchOfServerQuestionnaires).Select(ConvertToLocalQuestionnaireListItem);
 
                     this.questionnairesStorageAccessor.Store(convertedQuestionnaires.Select(qli => new Tuple<QuestionnaireListItem, string>(qli, qli.Id)));
                     this.InvokeOnMainThread(() => this.AppendToQuestionnaires(convertedQuestionnaires));
@@ -382,21 +360,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 this.IsInProgress = false;
             }
-            });
-        }
-
-        private IEnumerable<IEnumerable<QuestionnaireListItem>> GetPagedQuestionnaires(int pageIndex, int pageSize)
-        {
-            yield return this.restService.GetAsync<IEnumerable<QuestionnaireListItem>>(
-                url: "questionnaires",
-                token: tokenSource.Token,
-                credentials:
-                    new RestCredentials()
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
-                queryString: new {pageIndex = pageIndex, pageSize = pageSize}).Result;
         }
 
         private void SignOut()
@@ -405,10 +368,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.ShowViewModel<LoginViewModel>();
         }
 
-        private QuestionnaireListItem ConvertToLocalQuestionnaireListItem(QuestionnaireListItem questionnaireListItem)
+        private QuestionnaireListItem ConvertToLocalQuestionnaireListItem(WB.Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem questionnaireListItem)
         {
-            questionnaireListItem.OwnerName = this.principal.CurrentUserIdentity.Name;
-            return questionnaireListItem;
+            return new QuestionnaireListItem()
+            {
+                Id = questionnaireListItem.Id,
+                Title = questionnaireListItem.Title,
+                LastEntryDate = questionnaireListItem.LastEntryDate,
+                IsPublic = questionnaireListItem.IsPublic,
+                OwnerName = this.principal.CurrentUserIdentity.Name
+            };
         }
 
         private void ClearQuestionnaires()

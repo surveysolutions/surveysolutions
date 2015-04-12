@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
+namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
 {
     public class QuestionnaireListItem
     {

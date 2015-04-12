@@ -41,6 +41,8 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Designer\Questionnaire.cs" />
+    <Compile Include="Api\Designer\QuestionnaireListItem.cs" />
     <Compile Include="Documents\AbstractQuestion.cs" />
     <Compile Include="Documents\Answer.cs" />
     <Compile Include="Documents\AnswerType.cs" />
