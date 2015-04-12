@@ -70,10 +70,6 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
                 throw new RestException(message: Resources.NoConnection, innerException: ex);
             }
-            catch (Exception ex) {
-                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
-                throw new RestException(message: Resources.NoConnection, innerException: ex);
-            }
         }
 
         private static void AcceptUnsignedSslCertificate()
