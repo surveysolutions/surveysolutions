@@ -207,12 +207,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.tokenSource.Cancel();
 
-            LoadQuestionnaireAndCreateInterview(questionnaire);
-
-            this.ShowViewModel<PrefilledQuestionsViewModel>(new {questionnaireId = questionnaire.Id});
+            this.LoadQuestionnaireAndAsembly(questionnaire);
         }
 
-        public async void LoadQuestionnaireAndCreateInterview(QuestionnaireListItem selectedQuestionnaire)
+        public async void LoadQuestionnaireAndAsembly(QuestionnaireListItem selectedQuestionnaire)
         {
             this.IsServerUnavailable = false;
             this.HasErrors = false;
@@ -224,12 +222,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 this.ProgressIndicator = UIResources.ImportQuestionnaire_VerifyOnServer;
 
-                var questionnaireCommunicationPackage = this.GetQuestionnaireFromServer(
+                var questionnaireCommunicationPackage = await this.GetQuestionnaireFromServer(
                         selectedQuestionnaire,
                         (downloadProgress) =>
                         {
                             this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
-                        }).Result;
+                        });
 
                 this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
@@ -239,6 +237,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         questionnaireCommunicationPackage.Document,
                         true,
                         questionnaireCommunicationPackage.Assembly));
+
+                this.ShowViewModel<PrefilledQuestionsViewModel>(new { questionnaireId = questionnaireCommunicationPackage.Document.PublicKey });
             }
             catch (RestException ex)
             {
