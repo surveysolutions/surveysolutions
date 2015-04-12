@@ -436,9 +436,6 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireViewInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListItem.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireList.cs" />
-    <Compile Include="Views\Questionnaire\Questionnaire.cs" />
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
       <SubType>Code</SubType>
     </Compile>
