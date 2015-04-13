@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.RostersInScope = rosterScope.Value;
             this.ParentTypeName = rosterScope.Value[0].ParentScope.GeneratedTypeName;
             this.ExecutorModel = executorModel;
+            this.Version = executorModel.Version;
         }
 
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
