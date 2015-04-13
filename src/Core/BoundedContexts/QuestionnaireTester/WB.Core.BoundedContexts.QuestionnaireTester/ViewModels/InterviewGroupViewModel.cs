@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -14,9 +15,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
         }
 
-        public void Init(string interviewId, string chapterId)
+        public void Init(Guid id, string chapterId)
         {
-            Items = interviewStateFullViewModelFactory.Load(interviewId, chapterId);
+            Items = interviewStateFullViewModelFactory.Load(id.FormatGuid(), chapterId);
         }
 
         public Guid Id { get; set; }

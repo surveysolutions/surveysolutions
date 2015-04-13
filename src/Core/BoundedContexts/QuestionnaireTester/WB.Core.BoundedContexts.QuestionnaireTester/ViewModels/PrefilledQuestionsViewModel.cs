@@ -1,19 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
-using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Documents;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -21,17 +11,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private readonly IUserInteraction uiDialogs;
 
-        private readonly IRestServiceSettings restServiceSettings;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private readonly IErrorProcessor errorProcessor;
 
+        private Guid interviewId;
 
-        private Guid newInterviewId;
+        private Guid questionnaireId;
+
         private QuestionnaireListItem selectedQuestionnaire;
 
-        private bool canCreateInterview = false;
+        private bool canCreateInterview = true;
         public bool CanCreateInterview
         {
             get { return canCreateInterview; }
@@ -100,18 +89,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public PrefilledQuestionsViewModel(
             ILogger logger, 
             ICommandService commandService,
-            IPrincipal principal, 
-            IUserInteraction uiDialogs, 
-            IPlainStorageAccessor<QuestionnaireListItem> questionnaireInfoAccessor, 
-            IRestServiceSettings restServiceSettings, 
-            IErrorProcessor errorProcessor)
+            IPrincipal principal)
             : base(logger)
         {
             this.commandService = commandService;
             this.principal = principal;
-            this.uiDialogs = uiDialogs;
-            this.restServiceSettings = restServiceSettings;
-            this.errorProcessor = errorProcessor;
         }
 
         private IMvxCommand openInterviewCommand;
@@ -123,54 +105,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        public void Init(string questionnaireId)
+        public void Init(Guid interviewId, Guid questionnaireId)
         {
-            //this.selectedQuestionnaire = this.questionnaireInfoAccessor.GetById(questionnaireId);
+            this.questionnaireId = questionnaireId;
+            this.interviewId = interviewId;
         }
 
         private void OpenInterview()
         {
-            this.ShowViewModel<InterviewGroupViewModel>(this.newInterviewId);
-        }
-
-        private Task CreateInterview(QuestionnaireDocument questionnaireDocument)
-        {
-            return Task.Run(() =>
-            {
-                this.IsServerUnavailable = false;
-                this.HasErrors = false;
-                this.IsInProgress = true;
-
-                this.ProgressIndicator = UIResources.ImportQuestionnaire_PrepareQuestionnaire;
-
-                if (tokenSource.IsCancellationRequested) return;
-                this.ExecuteImportFromDesignerForTesterCommand(questionnaireDocument);
-
-                this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
-
-                Guid interviewUserId = Guid.NewGuid();
-                this.newInterviewId = Guid.NewGuid();
-
-                if (tokenSource.IsCancellationRequested) return;
-                this.ExecuteCreateInterviewCommand(this.newInterviewId, interviewUserId, questionnaireDocument.PublicKey);
-
-                if (tokenSource.IsCancellationRequested) return;
-                this.InvokeOnMainThread(this.OpenInterview);
-
-                this.CanCreateInterview = true;
-                this.IsInProgress = false;
-
-            }, this.tokenSource.Token);
-        }
-
-        private void ExecuteCreateInterviewCommand(Guid interviewId, Guid interviewUserId, Guid questionnaireId)
-        {
-            this.commandService.Execute(new CreateInterviewForTestingCommand(interviewId, interviewUserId, questionnaireId, new Dictionary<Guid, object>(), DateTime.UtcNow));
-        }
-
-        private void ExecuteImportFromDesignerForTesterCommand(QuestionnaireDocument template)
-        {
-            this.commandService.Execute(new ImportFromDesignerForTester(template));
+            this.ShowViewModel<InterviewGroupViewModel>(new { id = this.interviewId });
         }
 
         public override void NavigateToPreviousViewModel()

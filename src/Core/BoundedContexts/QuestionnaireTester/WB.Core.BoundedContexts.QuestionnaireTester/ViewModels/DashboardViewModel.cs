@@ -2,16 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
-
-using Main.Core.Events.Questionnaire;
-
-using Microsoft.Practices.ServiceLocation;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
@@ -20,10 +14,9 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -238,7 +231,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         allowCensusMode: true,
                         supportingAssembly: questionnairePackage.Assembly));
 
-                this.ShowViewModel<PrefilledQuestionsViewModel>(new { questionnaireId = selectedQuestionnaire.Id });
+                this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
+
+                var interviewId = Guid.NewGuid();
+                var questionnaireId = questionnairePackage.Document.PublicKey;
+
+                this.commandService.Execute(new CreateInterviewOnClientCommand(interviewId, Guid.NewGuid(), questionnaireId, 1, DateTime.UtcNow, Guid.NewGuid()));
+            
+                this.ShowViewModel<PrefilledQuestionsViewModel>(new { interviewId = interviewId, questionnireId = questionnaireId });
             }
             catch (RestException ex)
             {
