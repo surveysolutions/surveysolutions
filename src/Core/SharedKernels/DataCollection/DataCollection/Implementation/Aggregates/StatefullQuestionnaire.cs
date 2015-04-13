@@ -1,9 +1,5 @@
-﻿using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
-
+﻿using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
-
-using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -16,16 +12,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public StatefullQuestionnaire() { }
-
-        public QuestionnaireDocument Questionnaire { get; private set; }
-
-        protected override internal void Apply(TemplateImported e)
+        
+        new protected internal void Apply(TemplateImported e)
         {
             QuestionnaireRepository.StoreQuestionnaire(e.Source.PublicKey, 1, e.Source);
-        }
-
-        protected override internal void Apply(QuestionnaireAssemblyImported e)
-        {
         }
     }
 }
