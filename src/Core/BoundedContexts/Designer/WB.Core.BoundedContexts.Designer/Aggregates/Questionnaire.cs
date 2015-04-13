@@ -3742,6 +3742,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private Tuple<decimal, string>[] GetRosterFixedTitlesOrThrow(Tuple<string, string>[] rosterFixedTitles)
         {
+            if (rosterFixedTitles == null)
+                return null;
+
+            if (rosterFixedTitles.Any(x => x == null))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.SelectorValueSpecialCharacters,
+                    "Invalid title list");
+            }
+
             if (rosterFixedTitles.Any(x => String.IsNullOrWhiteSpace(x.Item1)))
             {
                 throw new QuestionnaireException(
