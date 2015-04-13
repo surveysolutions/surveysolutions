@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CloneGroupTests
 
             rosterid = Guid.NewGuid();
             questionnaire = CreateQuestionnaireWithOneRosterGroup(rosterid, responsibleId);
-            questionnaire.UpdateGroup(rosterid, responsibleId, "title", rosterVariableName, null, null, null, true, RosterSizeSourceType.FixedTitles, new []{new Tuple<decimal, string>(1, "one"), new Tuple<decimal, string>(2, "two")}, null);
+            questionnaire.UpdateGroup(rosterid, responsibleId, "title", rosterVariableName, null, null, null, true, RosterSizeSourceType.FixedTitles, new []{new Tuple<string, string>("1", "one"), new Tuple<string, string>("2", "two")}, null);
 
             eventContext = new EventContext();
         };
