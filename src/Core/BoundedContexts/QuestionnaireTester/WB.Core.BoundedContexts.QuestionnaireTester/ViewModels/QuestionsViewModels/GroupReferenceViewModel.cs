@@ -1,12 +1,12 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.QuestionnaireTester.Model;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GroupReferanceViewModel : MvxViewModel
+    public class GroupReferenceViewModel : MvxViewModel
     {
         public class NavObject
         {
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Init(Identity questionIdentity, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
         {
-            Init(new NavObject()
+            Init(new NavObject 
             {
                 QuestionIdentity = questionIdentity,
                 InterviewModel = interviewModel,
@@ -41,12 +41,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get { return title; }
             set { title = value; RaisePropertyChanged(() => Title); }
-        }
-
-        private Guid Id
-        {
-            get { return id; }
-            set { id = value; RaisePropertyChanged(() => Id); }
         }
     }
 }
