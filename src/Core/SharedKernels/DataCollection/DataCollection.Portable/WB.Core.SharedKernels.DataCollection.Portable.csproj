@@ -42,10 +42,11 @@
     <Compile Include="AbstractInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
-    <Compile Include="CustomFunctions\BaseFunctions.cs" />
-    <Compile Include="CustomFunctions\Extensions.cs" />
-    <Compile Include="CustomFunctions\LMS.cs" />
-    <Compile Include="CustomFunctions\ZScore.cs" />
+    <Compile Include="V2\AbstractInterviewExpressionStateV2.cs" />
+    <Compile Include="V2\CustomFunctions\BaseFunctions.cs" />
+    <Compile Include="V2\CustomFunctions\Extensions.cs" />
+    <Compile Include="V2\CustomFunctions\LMS.cs" />
+    <Compile Include="V2\CustomFunctions\ZScore.cs" />
     <Compile Include="DummyInterviewExpressionState.cs" />
     <Compile Include="EnablementChanges.cs" />
     <Compile Include="GeoLocation.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="RosterRowList.cs" />
     <Compile Include="SyncProtocolVersionProvider.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="V2\IInterviewExpressionStateV2.cs" />
     <Compile Include="ValidityChanges.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
