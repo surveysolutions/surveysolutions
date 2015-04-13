@@ -9,6 +9,9 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 
 using Main.Core.Events.Questionnaire;
+
+using Microsoft.Practices.ServiceLocation;
+
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
@@ -17,8 +20,10 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -26,7 +31,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private readonly IRestService restService;
+
         private readonly IUserInteraction uiDialogs;
         private readonly IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -34,10 +39,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IRestServiceSettings restServiceSettings;
         private readonly DesignerApiServiceAccessor designerApiServiceAccessor;
 
-
         public DashboardViewModel(
-            IPrincipal principal, 
-            IRestService restService,
+            IPrincipal principal,
             ILogger logger, 
             IUserInteraction uiDialogs,
             IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
@@ -48,7 +51,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             : base(logger)
         {
             this.principal = principal;
-            this.restService = restService;
             this.uiDialogs = uiDialogs;
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
             this.errorProcessor = errorProcessor;

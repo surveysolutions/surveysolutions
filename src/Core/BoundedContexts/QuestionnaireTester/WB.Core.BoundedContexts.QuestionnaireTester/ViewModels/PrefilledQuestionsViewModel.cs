@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
-
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -26,7 +22,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IUserInteraction uiDialogs;
-        private readonly IPlainStorageAccessor<QuestionnaireListItem> questionnaireInfoAccessor;
 
         private readonly IRestServiceSettings restServiceSettings;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -115,7 +110,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.commandService = commandService;
             this.principal = principal;
             this.uiDialogs = uiDialogs;
-            this.questionnaireInfoAccessor = questionnaireInfoAccessor;
             this.restServiceSettings = restServiceSettings;
             this.errorProcessor = errorProcessor;
         }
