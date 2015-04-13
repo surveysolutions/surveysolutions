@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
@@ -92,7 +93,8 @@ namespace WB.UI.Designer.Api
             var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major,
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
-            if (templateInfo.Version > supportedClientVersion)
+
+            if (!QuestionnaireVersionProvider.IsClientVersionSupported(templateInfo.Version, supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
@@ -140,7 +142,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_compilation_failed, templateInfo.Title)
                 });
             }
 

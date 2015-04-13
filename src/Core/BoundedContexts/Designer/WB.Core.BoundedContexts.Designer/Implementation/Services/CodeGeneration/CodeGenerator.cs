@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string Generate(QuestionnaireDocument questionnaire)
         {
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, true, GetCodeVersion(QuestionnaireVersionProvider.GetCurrentEngineVersion()));
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, true, QuestionnaireVersionProvider.GetCodeVersion());
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             return template.TransformText();
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var generatedClasses = new Dictionary<string, string>();
 
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, false, GetCodeVersion(version));
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, false, QuestionnaireVersionProvider.GetCodeVersion(version));
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             generatedClasses.Add(new ExpressionLocation
@@ -291,11 +291,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
             return template;
-        }
-
-        private int GetCodeVersion(QuestionnaireVersion version)
-        {
-            return version.Major == 5 ? 1 : 2;
         }
 
         private void BuildStructures(QuestionnaireDocument questionnaireDoc,
