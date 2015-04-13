@@ -9,12 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+ <#if(QuestionnaireTemplateStructure.Version>1){#>
 using WB.Core.SharedKernels.DataCollection.CustomFunctions;
-
-
+ <#}#>
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionStateV2 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState<#=QuestionnaireTemplateStructure.VersionPrefix#> 
     {
         public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             {
                 return;
             }
-
+			 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             Guid[] rosterScopeIds = IdOf.parentScopeMap[rosterId];
             var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
@@ -73,6 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
+		 <#if(QuestionnaireTemplateStructure.Version>1){#>
 
 		 public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
@@ -90,7 +91,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             if (rosterLevel != null)
                 rosterLevel.SetRowName(rosterTitle);
         }
-
+		 <#}#>
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -214,16 +215,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return IdOf.parentScopeMap;
         }
 
-		public override IInterviewExpressionStateV2 CloneV2()
+		public override IInterviewExpressionState<#=QuestionnaireTemplateStructure.VersionPrefix#>  Clone<#=QuestionnaireTemplateStructure.VersionPrefix#> ()
         {
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
 
     }
-
-
         //generate QuestionnaireLevel
-        <#           
+        <#    
             QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
             this.Write(questionnairetemplate.TransformText());                           
          #>
