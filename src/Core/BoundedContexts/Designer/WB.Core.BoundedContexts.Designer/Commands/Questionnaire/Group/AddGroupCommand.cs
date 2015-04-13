@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     {
         public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition,
-            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Tuple<decimal,string>[] fixedRosterTitles, Guid? rosterTitleQuestionId,
+            Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Tuple<string, string>[] fixedRosterTitles, Guid? rosterTitleQuestionId,
             int? index = null)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
