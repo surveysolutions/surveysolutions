@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.QuestionnaireTester.Model;
+
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+
 using StaticTextViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels.StaticTextViewModel;
 
-
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimentation
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementation
 {
     internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
@@ -30,17 +33,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
 
         private readonly Dictionary<Type, Func<Identity, InterviewModel, QuestionnaireDocument, MvxViewModel>> mapQuestions = new Dictionary<Type, Func<Identity, InterviewModel, QuestionnaireDocument, MvxViewModel>>()
         {
-            { typeof(Group), (qIdentity, interview, questionnaire) => CreateViewModel<GroupReferanceViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
+            { typeof(Group), (qIdentity, interview, questionnaire) => CreateViewModel<GroupReferenceViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
             { typeof(StaticText), (qIdentity, interview, questionnaire) => CreateViewModel<StaticTextViewModel>(vm => vm.Init(qIdentity, questionnaire)) },
             { typeof(TextQuestion), (qIdentity, interview, questionnaire) => CreateViewModel<TextQuestionViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
         };
 
         public IEnumerable<MvxViewModel> Load(string interviewId, string chapterId)
         {
-            var interview = plainStorageInterviewAccessor.GetById(interviewId);
-            var questionaryId = interview.QuestionaryId.FormatGuid();
+            var interview = this.plainStorageInterviewAccessor.GetById(interviewId);
+            var questionaryId = interview.QuestionnaireId.FormatGuid();
 
-            var questionnaire = plainStorageQuestionnaireAccessor.GetById(questionaryId);
+            var questionnaire = this.plainStorageQuestionnaireAccessor.GetById(questionaryId);
             
             Guid chapterIdGuid = new Guid(chapterId);
             var @group = questionnaire.Find<IGroup>(chapterIdGuid);
@@ -53,10 +56,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimenta
             {
                 var entityType = child.GetType();
 
-                if (!mapQuestions.ContainsKey(entityType))
+                if (!this.mapQuestions.ContainsKey(entityType))
                     continue; // temporaly ignore unknown types
 
-                var mapQuestionFunc = mapQuestions[entityType];
+                var mapQuestionFunc = this.mapQuestions[entityType];
                 Identity identity = new Identity(child.PublicKey, new decimal[0]); // TODO SPuV: rosterVecror ????
                 var entityViewModel = mapQuestionFunc.Invoke(identity, interview, questionnaire);
 

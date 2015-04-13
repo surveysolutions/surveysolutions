@@ -1,9 +1,8 @@
-﻿using Ninject;
-using Ninject.Modules;
-using WB.Core.BoundedContexts.QuestionnaireTester.Model;
+﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implimentation;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementation;
 using WB.Core.Infrastructure.Implementation;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester
 {
