@@ -117,7 +117,8 @@ namespace WB.UI.Designer.Api
             try
             {
                 generationResult =
-                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source,
+                    this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
+                        questionnaireView.Source, supportedClientVersion,
                         out resultAssembly);
             }
             catch (Exception)
