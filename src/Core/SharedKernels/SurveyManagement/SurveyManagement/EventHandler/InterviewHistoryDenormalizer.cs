@@ -47,7 +47,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, PictureQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, AnswerCommented>,
         IUpdateHandler<InterviewHistoryView, InterviewDeleted>,
-        IUpdateHandler<InterviewHistoryView, InterviewHardDeleted>
+        IUpdateHandler<InterviewHistoryView, InterviewHardDeleted>,
+        IUpdateHandler<InterviewHistoryView, AnswersDeclaredInvalid>,
+        IUpdateHandler<InterviewHistoryView, AnswersDeclaredValid>,
+        IUpdateHandler<InterviewHistoryView, QuestionsDisabled>,
+        IUpdateHandler<InterviewHistoryView, QuestionsEnabled>,
+        IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
+        IUpdateHandler<InterviewHistoryView, GroupsEnabled>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
@@ -278,50 +284,64 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return null;
         }
 
-        private Dictionary<string, string> CreateAnswerParameters(Guid questionId, string answer, decimal[] propagationVector)
+        private Dictionary<string, string> CreateAnswerParameters(Guid questionId, string answer,
+            decimal[] propagationVector)
         {
-            var result = new Dictionary<string, string>()
-            {
-                { "questionId", questionId.FormatGuid() },
-                { "answer", answer }
-            };
-
-            if (propagationVector.Length > 0)
-            {
-                result.Add("roster", string.Join(",", propagationVector));
-            }
+            var result = CreateQuestionParameters(questionId, propagationVector);
+            result.Add("answer", answer);
             return result;
         }
 
-        private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, Guid userId,
-            DateTime timestamp, Dictionary<string, string> parameters, QuestionnaireDocument questionnaire)
+        private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, Guid? userId,
+            DateTime? timestamp, Dictionary<string, string> parameters, QuestionnaireDocument questionnaire)
         {
-            var user = this.GetUserDocument(userId);
-            var userName = this.GetUserName(user);
-            var userRole = this.GetUserRole(user);
-            if (action == InterviewHistoricalAction.AnswerSet || action == InterviewHistoricalAction.CommentSet)
+            string userName = string.Empty;
+            string userRole = string.Empty;
+            if (userId.HasValue)
+            {
+                var user = this.GetUserDocument(userId.Value);
+                userName = this.GetUserName(user);
+                userRole = this.GetUserRole(user);
+            }
+            if (action == InterviewHistoricalAction.AnswerSet 
+                || action == InterviewHistoricalAction.CommentSet
+                || action == InterviewHistoricalAction.QuestionDeclaredInvalid
+                || action == InterviewHistoricalAction.QuestionDeclaredValid
+                || action == InterviewHistoricalAction.QuestionEnabled
+                || action == InterviewHistoricalAction.QuestionDisabled)
             {
                 var newParameters = new Dictionary<string, string>();
-                var questionId = parameters["questionId"];
-                var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == Guid.Parse(questionId));
-                if (question != null)
+                if (parameters.ContainsKey("questionId"))
                 {
-                    newParameters["question"] = question.StataExportCaption;
-                    if (action == InterviewHistoricalAction.CommentSet)
+                    var questionId = parameters["questionId"];
+                    var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == Guid.Parse(questionId));
+                    if (question != null)
                     {
-                        newParameters["comment"] = parameters["comment"];
-                    }
-                    if (action == InterviewHistoricalAction.AnswerSet)
-                    {
-                        newParameters["answer"] = parameters["answer"];
-                    }
-                    if (parameters.ContainsKey("roster"))
-                    {
-                        newParameters["roster"] = parameters["roster"];
+                        newParameters["question"] = question.StataExportCaption;
+                        if (action == InterviewHistoricalAction.CommentSet)
+                        {
+                            newParameters["comment"] = parameters["comment"];
+                        }
+                        if (action == InterviewHistoricalAction.AnswerSet)
+                        {
+                            newParameters["answer"] = parameters["answer"];
+                        }
+                        if (parameters.ContainsKey("roster"))
+                        {
+                            newParameters["roster"] = parameters["roster"];
+                        }
                     }
                 }
                 return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp);
 
+            }
+            if (action == InterviewHistoricalAction.GroupDisabled || action == InterviewHistoricalAction.GroupEnabled)
+            {
+                var newParameters = new Dictionary<string, string>();
+                var groupId = parameters["groupId"];
+                newParameters["group"] = groupId;
+                newParameters["roster"] = parameters["roster"];
+                return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp);
             }
             if (action == InterviewHistoricalAction.InterviewerAssigned)
             {
@@ -362,7 +382,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return UnknownUserRole;
         }
 
-        private void AddHistoricalRecord(InterviewHistoryView view, InterviewHistoricalAction action, Guid userId, DateTime timestamp,
+        private void AddHistoricalRecord(InterviewHistoryView view, InterviewHistoricalAction action, Guid? userId, DateTime? timestamp,
             Dictionary<string, string> parameters = null)
         {
             if(view ==null)
@@ -388,6 +408,102 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (string.IsNullOrEmpty(comment))
                 return null;
             return new Dictionary<string, string> { { "comment", comment } };
+        }
+
+        private Dictionary<string, string> CreateQuestionParameters(Guid questionId, decimal[] propagationVector)
+        {
+            var result = new Dictionary<string, string>()
+            {
+                { "questionId", questionId.FormatGuid() }
+            };
+
+            if (propagationVector.Length > 0)
+            {
+                result.Add("roster", string.Join(",", propagationVector));
+            }
+            else
+            {
+                result.Add("roster", string.Empty);
+            }
+            return result;
+        }
+
+        private Dictionary<string, string> CreateGroupParameters(Guid groupId, decimal[] propagationVector)
+        {
+            var result = new Dictionary<string, string>()
+            {
+                { "groupId", groupId.FormatGuid() }
+            };
+
+            if (propagationVector.Length > 0)
+            {
+                result.Add("roster", string.Join(",", propagationVector));
+            }
+            else
+            {
+                result.Add("roster", string.Empty);
+            }
+            return result;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredInvalid> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, null,
+                CreateQuestionParameters(question.Id, question.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredValid> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredValid, null, null,
+                CreateQuestionParameters(question.Id, question.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsDisabled> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null, null,
+                CreateQuestionParameters(question.Id, question.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsEnabled> evnt)
+        {
+            foreach (var question in evnt.Payload.Questions)
+            {
+                AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null, null,
+                CreateQuestionParameters(question.Id, question.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsDisabled> evnt)
+        {
+            foreach (var group in evnt.Payload.Groups)
+            {
+                AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null, null,
+                CreateGroupParameters(group.Id, group.RosterVector));
+            }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsEnabled> evnt)
+        {
+            foreach (var group in evnt.Payload.Groups)
+            {
+                AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null, null,
+                CreateGroupParameters(group.Id, group.RosterVector));
+            }
+            return view;
         }
     }
 }

@@ -35,10 +35,4 @@ namespace WB.Core.SharedKernels.DataCollection
 
         IInterviewExpressionState Clone();
     }
-
-    public interface IInterviewExpressionStateV2 : IInterviewExpressionState
-    {
-        void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle);
-        IInterviewExpressionStateV2 CloneV2();
-    }
 } 
