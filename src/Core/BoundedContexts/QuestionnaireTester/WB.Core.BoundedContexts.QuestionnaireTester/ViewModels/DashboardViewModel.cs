@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
             IErrorProcessor errorProcessor, 
             IRestServiceSettings restServiceSettings,
-            DesignerApiServiceAccessor designerApiServiceAccessor)
+            DesignerApiServiceAccessor designerApiServiceAccessor, 
+            ICommandService commandService)
             : base(logger)
         {
             this.principal = principal;
@@ -53,6 +54,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.errorProcessor = errorProcessor;
             this.restServiceSettings = restServiceSettings;
             this.designerApiServiceAccessor = designerApiServiceAccessor;
+            this.commandService = commandService;
         }
 
         public async void Init()
