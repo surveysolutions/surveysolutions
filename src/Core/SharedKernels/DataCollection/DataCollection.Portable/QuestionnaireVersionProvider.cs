@@ -8,7 +8,23 @@
         
         public static QuestionnaireVersion GetCurrentEngineVersion()
         {
-            return version_5;
+            return version_6;
+        }
+
+        public static int GetCodeVersion(QuestionnaireVersion version = null)
+        {
+            return (version ?? GetCurrentEngineVersion()).Major == 5 ? 1 : 2;
+        }
+
+        public static bool IsClientVersionSupported(QuestionnaireVersion templateVersion,
+            QuestionnaireVersion clientVersion)
+        {
+            if (templateVersion > clientVersion)
+            {
+                if (clientVersion < version_5)
+                    return false;
+            }
+            return true;
         }
     }
 }
