@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
         }
 
-        public IQuestionnaireAssemblyFileAccessor QuestionnareAssemblyFileAccessor
+        public IQuestionnaireAssemblyFileAccessor QuestionnaireAssemblyFileAccessor
         {
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>(); }
         }
@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var newVersion = GetNextVersion();
 
-            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
+            this.QuestionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
 
             this.ApplyEvent(new TemplateImported
             {
@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //ignoring on interviewer but saving on supervisor
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly)) return;
             
-            QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
+            this.QuestionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
             this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
         }
 

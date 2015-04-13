@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Implementation\Services\DesignerApiServiceAccessor.cs" />
     <Compile Include="Implementation\Services\ErrorProcessor.cs" />
+    <Compile Include="Implementation\Services\TesterQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Services\ErrorCode.cs" />
     <Compile Include="Services\IErrorProcessor.cs" />
     <Compile Include="InterviewModule.cs" />
