@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
             this.Bind<PlainPostgresTransactionManager>()
                 .ToSelf()
-                .InRequestOrThreadScope();
+                .InIsolatedThreadScopeOrRequestScopeOrThreadScope();
 
             this.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
             this.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
