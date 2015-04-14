@@ -32,9 +32,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public StatusChangeHistoryDenormalizerFunctional(IReadSideKeyValueStorage<InterviewStatusHistory> readSideStorage,
+        public StatusChangeHistoryDenormalizerFunctional(IReadSideKeyValueStorage<InterviewStatusHistory> statuses,
             IReadSideRepositoryWriter<UserDocument> users)
-            : base(readSideStorage)
+            : base(statuses)
         {
             this.users = users;
         }

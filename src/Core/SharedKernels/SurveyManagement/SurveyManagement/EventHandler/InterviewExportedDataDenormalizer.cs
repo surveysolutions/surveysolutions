@@ -44,14 +44,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusHistory> interviewHistoryReader;
+        private readonly IReadSideKeyValueStorage<InterviewStatusHistory> interviewHistoryReader;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter, 
             IReadSideRepositoryWriter<UserDocument> userDocumentWriter, 
             IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
-            IQueryableReadSideRepositoryReader<InterviewStatusHistory> interviewHistoryReader)
+            IReadSideKeyValueStorage<InterviewStatusHistory> interviewHistoryReader)
         {
             this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { users, interviewSummaryStorage }; }
+            get { return new object[] { users, interviewSummaryStorage, interviewHistoryReader }; }
         }
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            var interviewStatusHistory = this.interviewHistoryReader.Query(_ => _.FirstOrDefault(x => x.InterviewId == evnt.EventSourceId.FormatGuid()));
+            var interviewStatusHistory = this.interviewHistoryReader.GetById(evnt.EventSourceId);
             if (interviewStatusHistory == null)
             {
                 throw new NullReferenceException(string.Format("Missing interview status changes history for interview {0}", evnt.EventSourceId));
