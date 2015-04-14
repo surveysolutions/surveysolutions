@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
     {
         private Establish context = () =>
         {
-            viewModel = new InterviewStatusHistory("interviewId");
+            viewModel = new InterviewStatusHistory();
 
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").FormatGuid();
             denormalizerFunctional = CreateDenormalizer();

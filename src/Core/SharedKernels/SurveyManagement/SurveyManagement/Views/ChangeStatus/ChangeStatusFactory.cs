@@ -9,16 +9,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
 {
     public class ChangeStatusFactory : IViewFactory<ChangeStatusInputModel, ChangeStatusView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusHistory> interviews;
+        private readonly IReadSideKeyValueStorage<InterviewStatusHistory> interviews;
 
-        public ChangeStatusFactory(IQueryableReadSideRepositoryReader<InterviewStatusHistory> interviews)
+        public ChangeStatusFactory(IReadSideKeyValueStorage<InterviewStatusHistory> interviews)
         {
             this.interviews = interviews;
         }
 
         public ChangeStatusView Load(ChangeStatusInputModel input)
         {
-            var interviewSummary = this.interviews.Query(_ => _.FirstOrDefault(x => x.InterviewId == input.InterviewId.FormatGuid()));
+            var interviewSummary = this.interviews.GetById(input.InterviewId);
             if (interviewSummary == null)
                 return null;
 

@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class StatusChangeHistoryDenormalizerFunctional :
+    internal class StatusChangeHistoryDenormalizerFunctional :
         AbstractFunctionalEventHandler<InterviewStatusHistory, IReadSideKeyValueStorage<InterviewStatusHistory>>,
         IUpdateHandler<InterviewStatusHistory, InterviewStatusChanged>,
         IUpdateHandler<InterviewStatusHistory, InterviewerAssigned>,
@@ -51,21 +51,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            var result = CreateStatusHistory(evnt.EventSourceId);
+            var result = CreateStatusHistory();
             AddInterviewStatus(result, InterviewStatus.Created, evnt.EventTimeStamp, null, evnt.Payload.UserId);
             return result;
         }
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewCreated> evnt)
         {
-            var result = CreateStatusHistory(evnt.EventSourceId);
+            var result = CreateStatusHistory();
             AddInterviewStatus(result, InterviewStatus.Created, evnt.EventTimeStamp, null, evnt.Payload.UserId);
             return result;
         }
 
         public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
-            var result = CreateStatusHistory(evnt.EventSourceId);
+            var result = CreateStatusHistory();
             AddInterviewStatus(result, InterviewStatus.Created, evnt.EventTimeStamp, null, evnt.Payload.UserId);
             return result;
         }
@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return currentState;
         }
 
-        private void AddInterviewStatus(InterviewStatusHistory interviewHistory, InterviewStatus status, DateTime date, string comment,
+        private InterviewStatusHistory AddInterviewStatus(InterviewStatusHistory interviewHistory, InterviewStatus status, DateTime date, string comment,
             Guid responsibleId)
         {
             interviewHistory.StatusChangeHistory.Add(new InterviewCommentedStatus
@@ -160,6 +160,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 Responsible = GetResponsibleIdName(responsibleId),
                 ResponsibleId = responsibleId
             });
+
+            return interviewHistory;
         }
 
         private string GetResponsibleIdName(Guid responsibleId)
@@ -167,9 +169,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return Monads.Maybe(() => this.users.GetById(responsibleId).UserName) ?? "Unknown";
         }
 
-        private InterviewStatusHistory CreateStatusHistory(Guid interviewId)
+        private InterviewStatusHistory CreateStatusHistory()
         {
-            return new InterviewStatusHistory(interviewId.FormatGuid());
+            return new InterviewStatusHistory();
         }
 
         public override object[] Readers
