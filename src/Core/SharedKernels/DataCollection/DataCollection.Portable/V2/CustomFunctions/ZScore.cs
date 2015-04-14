@@ -38,14 +38,35 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="measurement">BMI, kg/m2.</param>
         /// <returns>Z-score.</returns>
         /// 
+        /// @throws ArgumentNullException if any of the arguments is null.
         /// @throws ArgumentException if the @a measurement is less than or equal to zero. 
         /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [0, 60].
         /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Bmi
-        public static double Bmi(int ageMonths, bool isBoy, double measurement)
+        /// \note Do not confuse this function with Bmi, which computes the value of the body mass index.
+        public static double Bmifa(long? ageMonths, bool? isBoy, double? measurement)
         {
-            return LMS.GetScore(ageMonths, isBoy, measurement, _bmiBoys, _bmiGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, BmifaBoys, BmifaGirls);
+        }
+
+        /// <summary>
+        /// BMI-for-age: Birth to 5 years.
+        /// \note Series for 0-2 years and 2-5 years are combined.
+        /// </summary>
+        /// <param name="ageMonths">Age in months.</param>
+        /// <param name="isBoy">True for boys, false for girls.</param>
+        /// <param name="weight">Weight, kg</param>
+        /// <param name="height">Height, m</param>
+        /// <returns>Z-score.</returns>
+        /// 
+        /// @throws ArgumentNullException if any of the arguments is null.
+        /// @throws ArgumentException if any of the @a weight or @a height measurements is less than or equal to zero.
+        /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [0, 60].
+        /// 
+        /// \note Do not confuse this function with Bmi, which computes the value of the body mass index.
+        public static double Bmifa(long? ageMonths, bool? isBoy, double? weight, double? height)
+        {
+            var bmi = new BaseFunctions().Bmi(weight, height);
+            return Bmifa(ageMonths, isBoy, bmi);
         }
 
         /// <summary>
@@ -56,14 +77,12 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="measurement">Weight, kg.</param>
         /// <returns>Z-score.</returns>
         /// 
+        /// @throws ArgumentNullException if any of the arguments is null.
         /// @throws ArgumentException if the @a measurement is less than or equal to zero.
         /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [0, 60].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Wfa
-        public static double Wfa(int ageMonths, bool isBoy, double measurement)
+        public static double Wfa(long? ageMonths, bool? isBoy, double? measurement)
         {
-            return LMS.GetScore(ageMonths, isBoy, measurement, _wfaBoys, _wfaGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, WfaBoys, WfaGirls);
         }
 
         /// <summary>
@@ -75,15 +94,12 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="measurement">Length or height, cm.</param>
         /// <returns>Z-score</returns>
         /// 
-        /// @throws ArgumentException
-        /// If the @a measurement is less than or equal to zero, or if the 
-        /// @a ageMonths is out of range [0, 60].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Lhfa
-        public static double Lhfa(int ageMonths, bool isBoy, double measurement)
+        /// @throws ArgumentNullException if any of the arguments is null.
+        /// @throws ArgumentException if the @a measurement is less than or equal to zero
+        /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [0, 60].
+        public static double Lhfa(long? ageMonths, bool? isBoy, double? measurement)
         {
-            return LMS.GetScore(ageMonths, isBoy, measurement, _lhfaBoys, _lhfaGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, LhfaBoys, LhfaGirls);
         }
 
         /// <summary>
@@ -94,15 +110,12 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="measurement">Head circumference, cm.</param>
         /// <returns>Z-score.</returns>
         /// 
-        /// @throws ArgumentException
-        /// If the @a measurement is less than or equal to zero, or if the 
-        /// @a ageMonths is out of range [0, 60].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Hcfa
-        public static double Hcfa(int ageMonths, bool isBoy, double measurement)
+        /// @throws ArgumentNullException if any of the arguments is null.
+        /// @throws ArgumentException if the @a measurement is less than or equal to zero;
+        /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [0, 60].
+        public static double Hcfa(long? ageMonths, bool? isBoy, double? measurement)
         {
-            return LMS.GetScore(ageMonths, isBoy, measurement, _hcfaBoys, _hcfaGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, HcfaBoys, HcfaGirls);
         }
 
         /// <summary>
@@ -112,18 +125,16 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="isBoy">True for boys, false for girls.</param>
         /// <param name="measurement">Triceps skinfold, mm.</param>
         /// <returns>Z-score.</returns>
-        /// 
+        ///
+        /// @throws ArgumentNullException if any of the arguments is null. 
         /// @throws ArgumentException if the @a measurement is less than or equal to zero.
         /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [3, 60].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Tsfa
-        public static double Tsfa(int ageMonths, bool isBoy, double measurement)
+        public static double Tsfa(long? ageMonths, bool? isBoy, double? measurement)
         {
             if (ageMonths < 3)
-                throw new ArgumentException("Error. Age is out of range.");
+                throw new ArgumentOutOfRangeException("ageMonths", "Error. Age is out of range.");
 
-            return LMS.GetScore(ageMonths, isBoy, measurement, _tsfaBoys, _tsfaGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, TsfaBoys, TsfaGirls);
         }
 
         /// <summary>
@@ -134,17 +145,15 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="measurement">Arm circumference, cm.</param>
         /// <returns>Z-score.</returns>
         /// 
+        /// @throws ArgumentNullException if any of the arguments is null.
         /// @throws ArgumentException if the @a measurement is less than or equal to zero.
         /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [3, 60].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Acfa
-        public static double Acfa(int ageMonths, bool isBoy, double measurement)
+        public static double Acfa(long? ageMonths, bool? isBoy, double? measurement)
         {
             if (ageMonths < 3)
-                throw new ArgumentOutOfRangeException("Error. Age is out of range.", "ageMonths");
+                throw new ArgumentOutOfRangeException("ageMonths", "Error. Age is out of range.");
 
-            return LMS.GetScore(ageMonths, isBoy, measurement, _acfaBoys, _acfaGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, AcfaBoys, AcfaGirls);
         }
 
         /// <summary>
@@ -154,18 +163,16 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="isBoy">True for boys, false for girls.</param>
         /// <param name="measurement">Subscapular skinfold, mm.</param>
         /// <returns>Z-score.</returns>
-        /// 
+        ///
+        /// @throws ArgumentNullException if any of the arguments is null. 
         /// @throws ArgumentException if the @a measurement is less than or equal to zero.
         /// @throws ArgumentOutOfRangeException if the @a ageMonths is out of range [3, 60].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Ssfa
-        public static double Ssfa(int ageMonths, bool isBoy, double measurement)
+        public static double Ssfa(long? ageMonths, bool? isBoy, double? measurement)
         {
             if (ageMonths < 3)
-                throw new ArgumentException("Error. Age is out of range.", "ageMonths");
+                throw new ArgumentOutOfRangeException("ageMonths", "Error. Age is out of range.");
 
-            return LMS.GetScore(ageMonths, isBoy, measurement, _ssfaBoys, _ssfaGirls);
+            return LMS.GetScore(ageMonths, isBoy, measurement, SsfaBoys, SsfaGirls);
         }
 
         /// <summary>
@@ -179,24 +186,25 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="weight">Weight, kg.</param>
         /// <returns>Z-score.</returns>
         /// 
+        /// @throws ArgumentNullException if any of the arguments is null.
         /// @throws ArgumentException if the @a weight is less than or equal to zero.
         /// @throws ArgumentOutOfRangeException if the @a length is out of range [45.0, 110.0].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Wfl
-        public static double Wfl(double length, bool isBoy, double weight)
+        public static double Wfl(double? length, bool? isBoy, double? weight)
         {
             const double min = 45.0;
             const double max = 110.0;
+
+            if (length.HasValue == false)
+                throw new ArgumentNullException("length", "Error. Length may not be null.");
 
             if (weight <= 0)
                 throw new ArgumentException("Error. Weight must be positive.", "weight");
 
             if (length < min || length > max)
-                throw new ArgumentOutOfRangeException("Error. Length is out of range.", "length");
+                throw new ArgumentOutOfRangeException("length", "Error. Length is out of range.");
 
-            var index = (int) Math.Floor((length - min)*2);
-            return LMS.GetScore(index, isBoy, weight, _wflBoys, _wflGirls);
+            long index = (long)Math.Floor((double)((length - min) * 2.0));
+            return LMS.GetScore(index, isBoy, weight, WflBoys, WflGirls);
         }
 
         /// <summary>
@@ -210,25 +218,26 @@ http://www.who.int/childgrowth/publications/en/
         /// <param name="weight">Weight, kg.</param>
         /// <returns>Z-score.</returns>
         /// 
+        /// @throws ArgumentNullException if any of the arguments is null.
         /// @throws ArgumentException if the @a weight is less than or equal to zero.
         /// @throws ArgumentOutOfRangeException if the @a height is out of range [65.0, 120.0].
-        /// 
-        /// \b Example
-        /// \snippet Examples.cs Computing Wfh
-        public static double Wfh(double height, bool isBoy, double weight)
+        public static double Wfh(double? height, bool? isBoy, double? weight)
         {
             const double min = 65.0;
             const double max = 120.0;
+
+            if (height.HasValue == false)
+                throw new ArgumentNullException("height", "Error. Height may not be null.");
 
             if (weight <= 0)
                 throw new ArgumentException("Error. Weight must be positive.", "weight");
 
             if (height < min || height > max)
-                throw new ArgumentOutOfRangeException("Error. Height is out of range.", "height");
+                throw new ArgumentOutOfRangeException("height", "Error. Height is out of range.");
 
 
-            var index = (int) Math.Floor((height - min)*2);
-            return LMS.GetScore(index, isBoy, weight, _wfhBoys, _wfhGirls);
+            var index = (int)Math.Floor((double)((height - min) * 2.0));
+            return LMS.GetScore(index, isBoy, weight, WfhBoys, WfhGirls);
         }
 
         /** 
@@ -239,7 +248,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _bmiBoys
 
-        private static LMS[] _bmiBoys = new[]
+        private static readonly LMS[] BmifaBoys = new[]
         {
             new LMS(-0.30530, 13.40690, 0.09560),
             new LMS(0.27080, 14.94410, 0.09027),
@@ -308,7 +317,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _bmiGirls
 
-        private static LMS[] _bmiGirls = new[]
+        private static readonly LMS[] BmifaGirls = new[]
         {
             new LMS(-0.06310, 13.33630, 0.09272),
             new LMS(0.34480, 14.56790, 0.09556),
@@ -377,7 +386,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _hcfaBoys
 
-        private static LMS[] _hcfaBoys = new[]
+        private static readonly LMS[] HcfaBoys = new[]
         {
             new LMS(1.00000, 34.46180, 0.03686),
             new LMS(1.00000, 37.27590, 0.03133),
@@ -446,7 +455,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _hcfaGirls
 
-        private static LMS[] _hcfaGirls = new[]
+        private static readonly LMS[] HcfaGirls = new[]
         {
             new LMS(1.00000, 33.87870, 0.03496),
             new LMS(1.00000, 36.54630, 0.03210),
@@ -515,7 +524,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfaBoys
 
-        private static LMS[] _wfaBoys = new[]
+        private static readonly LMS[] WfaBoys = new[]
         {
             new LMS(0.34870, 3.34640, 0.14602),
             new LMS(0.22970, 4.47090, 0.13395),
@@ -584,7 +593,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfaGirls
 
-        private static LMS[] _wfaGirls = new[]
+        private static readonly LMS[] WfaGirls = new[]
         {
             new LMS(0.38090, 3.23220, 0.14171),
             new LMS(0.17140, 4.18730, 0.13724),
@@ -653,7 +662,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _lhfaBoys
 
-        private static LMS[] _lhfaBoys = new[]
+        private static readonly LMS[] LhfaBoys = new[]
         {
             new LMS(1.00000, 49.88420, 0.03795),
             new LMS(1.00000, 54.72440, 0.03557),
@@ -722,7 +731,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _lhfaGirls
 
-        private static LMS[] _lhfaGirls = new[]
+        private static readonly LMS[] LhfaGirls = new[]
         {
             new LMS(1.00000, 49.14770, 0.03790),
             new LMS(1.00000, 53.68720, 0.03640),
@@ -791,7 +800,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _tsfaBoys
 
-        private static LMS[] _tsfaBoys = new[]
+        private static readonly LMS[] TsfaBoys = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -860,7 +869,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _tsfaGirls
 
-        private static LMS[] _tsfaGirls = new[]
+        private static readonly LMS[] TsfaGirls = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -929,7 +938,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _acfaBoys
 
-        private static LMS[] _acfaBoys = new[]
+        private static readonly LMS[] AcfaBoys = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -998,7 +1007,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _acfaGirls
 
-        private static LMS[] _acfaGirls = new[]
+        private static readonly LMS[] AcfaGirls = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -1067,7 +1076,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _ssfaBoys
 
-        private static LMS[] _ssfaBoys = new[]
+        private static readonly LMS[] SsfaBoys = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -1136,7 +1145,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _ssfaGirls
 
-        private static LMS[] _ssfaGirls = new[]
+        private static readonly LMS[] SsfaGirls = new[]
         {
             new LMS(0.00000, 0.00000, 0.00000),
             new LMS(0.00000, 0.00000, 0.00000),
@@ -1205,7 +1214,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wflBoys
 
-        private static LMS[] _wflBoys = new[]
+        private static readonly LMS[] WflBoys = new[]
         {
             new LMS(-0.35210, 2.44100, 0.09182),
             new LMS(-0.35210, 2.52440, 0.09153),
@@ -1344,7 +1353,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wflGirls
 
-        private static LMS[] _wflGirls = new[]
+        private static readonly LMS[] WflGirls = new[]
         {
             new LMS(-0.38330, 2.46070, 0.09029),
             new LMS(-0.38330, 2.54570, 0.09033),
@@ -1483,7 +1492,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfhBoys
 
-        private static readonly LMS[] _wfhBoys = new[]
+        private static readonly LMS[] WfhBoys = new[]
         {
             new LMS(-0.35210, 7.43270, 0.08217),
             new LMS(-0.35210, 7.55040, 0.08214),
@@ -1602,7 +1611,7 @@ http://www.who.int/childgrowth/publications/en/
 
         #region _wfhGirls
 
-        private static  LMS[] _wfhGirls = new[]
+        private static readonly LMS[] WfhGirls = new[]
         {
             new LMS(-0.38330, 7.24020, 0.09113),
             new LMS(-0.38330, 7.35230, 0.09109),
