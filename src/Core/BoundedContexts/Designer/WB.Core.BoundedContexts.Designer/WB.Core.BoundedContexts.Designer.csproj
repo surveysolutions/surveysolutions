@@ -292,7 +292,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.Extended.cs" />
     <Compile Include="Services\IKeywordsProvider .cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
