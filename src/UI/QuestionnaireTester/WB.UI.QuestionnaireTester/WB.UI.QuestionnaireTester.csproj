@@ -165,6 +165,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="ValueConverters\LocalizationValueConverter.cs" />
+    <Compile Include="Views\Adapters\QuestionAdapter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
     <Compile Include="Views\InterviewGroupView.cs" />
     <Compile Include="Views\DashboardView.cs" />
@@ -206,10 +207,10 @@
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\interview_group.axml" />
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
-    <AndroidResource Include="Resources\layout\questions\text_question.axml">
+    <AndroidResource Include="Resources\layout\text_question.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\questions\static_text.axml">
+    <AndroidResource Include="Resources\layout\static_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -255,7 +256,9 @@
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\layout\questions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

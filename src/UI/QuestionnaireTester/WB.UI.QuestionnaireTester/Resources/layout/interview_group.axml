@@ -40,7 +40,7 @@
             <Mvx.MvxListView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/TheListView"
+                android:id="@+id/QuestionsListView"
                 local:MvxBind="ItemsSource Items" />
         </LinearLayout>
     </ScrollView>
