@@ -33,11 +33,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                     x => x.BuildFrom(data, Moq.It.IsAny<Guid>(), InterviewStatus.InterviewerAssigned, Moq.It.IsAny<string>()) == synchronizationDto);
             
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            var interviewSummary = new InterviewSummary()
+            var interviewSummary = new InterviewSummary
             {
-                WasCreatedOnClient = true
+                WasCreatedOnClient = true,
+                Status = InterviewStatus.RejectedBySupervisor,
+                WasRejectedBySupervisor = true
             };
-            interviewSummary.Status = InterviewStatus.RejectedBySupervisor;
 
             interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -19,23 +18,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual string InterviewId { get; set; }
 
         public virtual IList<InterviewCommentedStatus> StatusChangeHistory { get; protected set; }
-
-        protected bool Equals(InterviewStatusHistory other)
-        {
-            return string.Equals(this.InterviewId, other.InterviewId);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((InterviewStatusHistory)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return (this.InterviewId != null ? this.InterviewId.GetHashCode() : 0);
-        }
     }
 }

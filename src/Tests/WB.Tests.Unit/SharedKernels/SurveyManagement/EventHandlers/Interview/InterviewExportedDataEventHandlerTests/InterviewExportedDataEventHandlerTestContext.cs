@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatusHistory>>());
+                Mock.Of<IReadSideKeyValueStorage<InterviewStatusHistory>>(_ => _.GetById(It.IsAny<string>()) == new InterviewStatusHistory("id")));
         }
 
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)
