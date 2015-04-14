@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             (exception as QuestionnaireException).ErrorType.ShouldEqual(DomainExceptionType.TitleIsTooLarge);
 
         private static Questionnaire questionnaire;
-        private static string tooLongTitle = "A".PadRight(251,'A');
+        private static string tooLongTitle = "A".PadRight(501,'A');
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid parentGroupId;
