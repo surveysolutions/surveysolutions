@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
     {
         private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 400;
-        private const int MaxTitleLength = 250;
+        private const int MaxTitleLength = 500;
         private const int maxFilteredComboboxOptionsCount = 5000;
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
