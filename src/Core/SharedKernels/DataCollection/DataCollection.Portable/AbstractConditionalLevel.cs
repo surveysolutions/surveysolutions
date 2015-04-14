@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.SharedKernels.DataCollection.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 
 namespace WB.Core.SharedKernels.DataCollection
 {

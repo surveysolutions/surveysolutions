@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
+namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
 {
     public class BaseFunctions
     {

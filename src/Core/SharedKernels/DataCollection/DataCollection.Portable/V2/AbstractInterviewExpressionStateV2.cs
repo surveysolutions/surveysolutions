@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernels.DataCollection
+namespace WB.Core.SharedKernels.DataCollection.V2
 {
     public abstract class AbstractInterviewExpressionStateV2 : AbstractInterviewExpressionState, IInterviewExpressionStateV2
     {

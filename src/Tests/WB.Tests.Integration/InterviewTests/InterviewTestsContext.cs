@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.V2;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -215,16 +216,10 @@ namespace WB.Tests.Integration.InterviewTests
                 if (interviewExpressionStateType == null)
                     throw new Exception("Type InterviewExpressionState was not found");
 
-                var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
-
+                var interviewExpressionState = new InterviewExpressionStateVersionAdapter().AdaptToV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
                 if (interviewExpressionState == null)
                     throw new Exception("Error on IInterviewExpressionState generation");
-
-                var v2 = interviewExpressionState as IInterviewExpressionStateV2;
-                if (v2 != null)
-                    return v2;
-
-                return new InterviewExpressionStateAdapter(interviewExpressionState);
+                return interviewExpressionState;
             }
 
             throw new Exception("Error on IInterviewExpressionState generation");
