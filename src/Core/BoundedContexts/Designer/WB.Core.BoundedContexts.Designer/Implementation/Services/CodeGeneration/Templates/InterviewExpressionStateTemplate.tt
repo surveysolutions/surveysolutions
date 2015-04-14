@@ -9,13 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
- <#if(QuestionnaireTemplateStructure.Version>1){#>
-using WB.Core.SharedKernels.DataCollection.V2;
-using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
+
+ <#foreach (var namespaceToInclude in VersionParameters.Namespaces){#>
+	using <#=namespaceToInclude#>;
  <#}#>
+
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState<#=QuestionnaireTemplateStructure.VersionPrefix#> 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState<#=VersionParameters.VersionPrefix#> 
     {
         public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
@@ -74,7 +75,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
-		 <#if(QuestionnaireTemplateStructure.Version>1){#>
+		 <#if(VersionParameters.AreServiceVariablesPresent){#>
 
 		 public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
@@ -216,7 +217,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return IdOf.parentScopeMap;
         }
 
-		public override IInterviewExpressionState<#=QuestionnaireTemplateStructure.VersionPrefix#>  Clone<#=QuestionnaireTemplateStructure.VersionPrefix#> ()
+		public override IInterviewExpressionState<#=VersionParameters.VersionPrefix#>  Clone<#=VersionParameters.VersionPrefix#> ()
         {
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
@@ -224,14 +225,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
     }
         //generate QuestionnaireLevel
         <#    
-            QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+            QuestionnaireLevelTemplate questionnairetemplate = CreateQuestionnaireLevelTemplate();
             this.Write(questionnairetemplate.TransformText());                           
          #>
 
         //generating rosters
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
-                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
+                RosterScopeTemplate template = CreateRosterScopeTemplate(rosterGroup);
                 this.Write(template.TransformText());
                 
            }

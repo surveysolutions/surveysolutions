@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 new List<GroupTemplateModel>(), new List<QuestionTemplateModel>(), new List<RosterTemplateModel>(), new List<Guid>())
         {
             ExecutorModel = executorModel;
-            Version = executorModel.Version;
         }
 
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }

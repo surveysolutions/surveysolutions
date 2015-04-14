@@ -11,11 +11,6 @@
             return version_6;
         }
 
-        public static int GetCodeVersion(QuestionnaireVersion version = null)
-        {
-            return (version ?? GetCurrentEngineVersion()).Major == 5 ? 1 : 2;
-        }
-
         public static bool IsClientVersionSupported(QuestionnaireVersion templateVersion,
             QuestionnaireVersion clientVersion)
         {
