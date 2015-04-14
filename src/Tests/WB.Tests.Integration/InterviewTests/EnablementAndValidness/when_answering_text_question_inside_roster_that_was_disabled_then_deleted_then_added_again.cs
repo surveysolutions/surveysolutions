@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -8,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted : InterviewTestsContext
+    internal class when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -25,29 +24,36 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var idOfQuestionInRoster = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var rosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-                var multiOptionQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                var rosterSizeQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                var integerQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
-                        answers: new List<Answer>{ Create.Option(text:"Hello", value: "1"), Create.Option(text:"World", value: "2") }),
-                    Create.Roster(rosterId, 
-                        rosterSizeQuestionId: multiOptionQuestionId,
+                    Create.NumericIntegerQuestion(integerQuestionId, variable: "q0"),
+                    Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "q1"),
+                    Create.Roster(rosterId,
+                        rosterSizeQuestionId: rosterSizeQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
-                        enablementCondition: "!q1.Contains(2)",
+                        enablementCondition: "@rowcode != (decimal)q0",
                         children: new[]
                                   {
-                                      Create.Question(idOfQuestionInRoster, variable:"q2")
+                                      Create.Group(
+                                          enablementCondition: "@rowcode != 2",
+                                          children: new []
+                                                    {
+                                                        Create.Question(idOfQuestionInRoster, variable:"q2")
+                                                    })
+                                      
                                   })
                     );
 
-                var emptyVector = new decimal[] {};
+                var emptyVector = new decimal[] { };
                 var interview = SetupInterview(questionnaireDocument, new object[] { });
 
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 1 });
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 1, 2 });
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 2 });
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, emptyVector);
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 1 });
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 3);
+                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, Empty.RosterVector, DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, Empty.RosterVector, DateTime.Now, 8);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 3);
 
                 using (var eventContext = new EventContext())
                 {
