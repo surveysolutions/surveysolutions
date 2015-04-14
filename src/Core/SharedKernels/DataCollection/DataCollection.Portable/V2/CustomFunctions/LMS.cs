@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
+namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
 {
     internal class LMS
     {

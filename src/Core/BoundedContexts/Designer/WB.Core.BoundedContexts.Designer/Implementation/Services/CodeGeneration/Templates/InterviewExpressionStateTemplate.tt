@@ -10,7 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
  <#if(QuestionnaireTemplateStructure.Version>1){#>
-using WB.Core.SharedKernels.DataCollection.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
  <#}#>
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
