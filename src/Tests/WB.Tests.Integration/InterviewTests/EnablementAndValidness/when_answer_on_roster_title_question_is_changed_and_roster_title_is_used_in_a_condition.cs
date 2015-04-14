@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     interview.AnswerTextQuestion(userId, rosterQuestionId, new decimal[]{0}, DateTime.Now, "yes");
 
-                    return HasEvent<QuestionsEnabled>(eventContext.Events,
+                    return eventContext.AnyEvent<QuestionsEnabled>(
                         where =>
                             where.Questions.Count(
                                 instance =>
