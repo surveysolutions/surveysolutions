@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Nito.AsyncEx;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 
@@ -20,6 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPushContext headquartersPushContext;
         private bool isSynchronizationRunning;
         private static readonly object LockObject = new object();
+        private readonly ILogger logger;
 
         public Synchronizer(
             ILocalFeedStorage localUsersFeedStorage,
@@ -29,7 +31,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IQuestionnaireSynchronizer questionnaireSynchronizer,
             IPlainTransactionManager plainTransactionManager,
             HeadquartersPullContext headquartersPullContext,
-            HeadquartersPushContext headquartersPushContext)
+            HeadquartersPushContext headquartersPushContext,
+            ILogger logger)
         {
             if (localUsersFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
             if (feedReader == null) throw new ArgumentNullException("feedReader");
@@ -38,6 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
+            if (logger == null) throw new ArgumentNullException("logger");
 
             this.localUsersFeedStorage = localUsersFeedStorage;
             this.feedReader = feedReader;
@@ -47,6 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPushContext = headquartersPushContext;
             this.questionnaireSynchronizer = questionnaireSynchronizer;
             this.plainTransactionManager = plainTransactionManager;
+            this.logger = logger;
         }
 
         public void Pull()
@@ -93,6 +98,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             catch (ApplicationException e)
             {
                 this.headquartersPullContext.PushError(e.Message);
+            }
+            catch (Exception e)
+            {
+                const string UnexpectedErrorMessage = "Synchronization failed. Please contact Survey Solutions team (support@mysurvey.solutions).";
+
+                this.headquartersPullContext.PushError(UnexpectedErrorMessage);
+                this.logger.Error(UnexpectedErrorMessage, e);
+
+                throw;
             }
             finally
             {

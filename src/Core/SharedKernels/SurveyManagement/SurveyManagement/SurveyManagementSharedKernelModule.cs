@@ -88,6 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             //this.Bind<IUserViewFactory>().To<UserViewFactory>(); // binded automatically but should not
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
+            this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExportService>().To<SqlToTabDataExportService>();
             this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
