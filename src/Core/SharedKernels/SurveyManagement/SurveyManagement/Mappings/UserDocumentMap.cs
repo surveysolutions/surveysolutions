@@ -37,20 +37,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 m.Table("Roles");
                 m.Lazy(CollectionLazy.NoLazy);
             },
-             r => r.Element(e => e.Column("RoleId")));
+            r => r.Element(e =>
+            {
+                e.Column("RoleId");
+            }));
 
-            Set(x => x.DeviceChangingHistory, // TODO: This can be soted in hstore
-             bagMap =>
-             {
-                 bagMap.Table("DeviceInfos");
-                 bagMap.Key(key => key.Column("UserId"));
-                 bagMap.Lazy(CollectionLazy.NoLazy);
-             },
-             relation => relation.Component(element =>
-             {
-                 element.Property(x => x.Date);
-                 element.Property(x => x.DeviceId);
-             }));
+            Set(x => x.DeviceChangingHistory, bagMap => {
+                bagMap.Key(key => key.Column("UserId"));
+                bagMap.Lazy(CollectionLazy.NoLazy);
+            },
+            relation => relation.OneToMany());
+        }
+    }
+
+    public class DeviceInfoMap : ClassMapping<DeviceInfo>
+    {
+        public DeviceInfoMap()
+        {
+            Id(x => x.Id, Idmap => Idmap.Generator(Generators.HighLow));
+            Property(x => x.Date);
+            Property(x => x.DeviceId);
+            ManyToOne(x => x.User, mto =>
+            {
+                mto.Index("UserDocuments_DeviceInfos");
+            });
         }
     }
 }
