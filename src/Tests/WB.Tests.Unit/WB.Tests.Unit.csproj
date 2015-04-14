@@ -349,6 +349,7 @@
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\InterviewStatusChangeHistoryDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\when_interview_status_changed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />

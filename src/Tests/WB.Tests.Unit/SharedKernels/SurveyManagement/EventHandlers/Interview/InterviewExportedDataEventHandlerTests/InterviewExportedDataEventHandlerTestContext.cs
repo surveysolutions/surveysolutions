@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
@@ -14,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Moq.It;
@@ -34,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
-                Mock.Of<IReadSideKeyValueStorage<InterviewStatusHistory>>(_ => _.GetById(It.IsAny<string>()) == new InterviewStatusHistory("id")));
+                Mock.Of<IReadSideKeyValueStorage<InterviewStatusHistory>>(_ => _.GetById(It.IsAny<string>()) == new InterviewStatusHistory()));
         }
 
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)
