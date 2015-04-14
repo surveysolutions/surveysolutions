@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected Guid questionnaireId;
         private Guid interviewerId;
-        private long questionnaireVersion;
+
+        protected long questionnaireVersion;
         private bool wasCompleted;
         private bool wasHardDeleted;
         private InterviewStatus status;
@@ -3383,7 +3384,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        private static IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
+        protected static IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
             IQuestionnaire questionnaire = QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
 

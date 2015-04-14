@@ -1,227 +1,193 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System;
+using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class StatefullInterview : Interview
     {
-        private InterviewModel interview = null;
+        private InterviewModel interview;
         private static IPlainInterviewRepository<InterviewModel> InterviewRepository
         {
             get { return ServiceLocator.Current.GetInstance<IPlainInterviewRepository<InterviewModel>>(); }
         }
 
-        new internal void Apply(InterviewOnClientCreated @event)
+        internal new void Apply(InterviewOnClientCreated @event)
         {
             base.Apply(@event);
-            interview = new InterviewModel()
+            interview = new InterviewModel
             {
                 Id = EventSourceId,
                 QuestionnaireId = @event.QuestionnaireId,
                 QuestionnaireVersion = @event.QuestionnaireVersion
             };
+
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            questionnaire
+                .GetAllUnderlyingQuestions(this.questionnaireId)
+                .ForEach(questionId => 
+                    interview.QuestionIdToQuestionModelTypeMap.Add(questionId, GetQuestionModelType(questionnaire, questionId)));
+
             InterviewRepository.StoreInterview(interview, EventSourceId);
+        }
+
+        // should migrate to QuestionnaireModel
+        private static QuestionModelType GetQuestionModelType(IQuestionnaire questionnaire, Guid questionId)
+        {
+            var questionType = questionnaire.GetQuestionType(questionId);
+            switch (questionType)
+            {
+                case QuestionType.SingleOption:
+                    return questionnaire.IsQuestionLinked(questionId) 
+                        ? QuestionModelType.LinkedSingleOptionQuestionModel 
+                        : QuestionModelType.SingleOptionQuestionModel;
+
+                case QuestionType.MultyOption:
+                    return questionnaire.IsQuestionLinked(questionId)
+                       ? QuestionModelType.LinkedMultiOptionQuestionModel
+                       : QuestionModelType.MultiOptionQuestionModel;
+
+                case QuestionType.Numeric:
+                    return questionnaire.IsQuestionInteger(questionId)
+                       ? QuestionModelType.IntegerNumericQuestionModel
+                       : QuestionModelType.RealNumericQuestionModel;
+
+                case QuestionType.DateTime:
+                    return QuestionModelType.DateTimeQuestionModel;
+
+                case QuestionType.GpsCoordinates:
+                    return QuestionModelType.GpsCoordinatesQuestionModel;
+
+                case QuestionType.Text:
+                    return QuestionModelType.MaskedTextQuestionModel;
+
+                case QuestionType.TextList:
+                    return QuestionModelType.TextListQuestionModel;
+
+                case QuestionType.QRBarcode:
+                    return QuestionModelType.QrBarcodeQuestionModel;
+
+                case QuestionType.Multimedia:
+                    return QuestionModelType.MultimediaQuestionModel;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         #region Applying answers
 
-        new internal void Apply(TextQuestionAnswered @event)
+        internal new void Apply(TextQuestionAnswered @event)
         {
             base.Apply(@event);
-            
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id)) 
-                ? (MaskedTextQuestionViewModel)interview.Answers[id]
-                : new MaskedTextQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answer = @event.Answer;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<MaskedTextQuestionModel>(@event, x => x.Answer = @event.Answer);
         }
 
-        internal override void Apply(QRBarcodeQuestionAnswered @event)
+        internal new void Apply(QRBarcodeQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (QrBarcodeQuestionViewModel)interview.Answers[id]
-                : new QrBarcodeQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answer = @event.Answer;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<QrBarcodeQuestionModel>(@event, x => x.Answer = @event.Answer);
         }
 
-        internal override void Apply(PictureQuestionAnswered @event)
+        internal new void Apply(PictureQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (MultimediaQuestionViewModel)interview.Answers[id]
-                : new MultimediaQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.PictureFileName = @event.PictureFileName;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<MultimediaQuestionModel>(@event, x => x.PictureFileName = @event.PictureFileName);
         }
 
-        internal override void Apply(NumericRealQuestionAnswered @event)
+        internal new void Apply(NumericRealQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (RealNumericQuestionViewModel)interview.Answers[id]
-                : new RealNumericQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answer = @event.Answer;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<RealNumericQuestionModel>(@event, x => x.Answer = @event.Answer);
         }
 
-        internal override void Apply(NumericIntegerQuestionAnswered @event)
+        internal new void Apply(NumericIntegerQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (IntegerNumericQuestionViewModel)interview.Answers[id]
-                : new IntegerNumericQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answer = @event.Answer;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<IntegerNumericQuestionModel>(@event, x => x.Answer = @event.Answer);
         }
 
-        internal override void Apply(DateTimeQuestionAnswered @event)
+        internal new void Apply(DateTimeQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (DateTimeQuestionViewModel)interview.Answers[id]
-                : new DateTimeQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answer = @event.Answer;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<DateTimeQuestionModel>(@event, x => x.Answer = @event.Answer);
         }
 
-        internal override void Apply(SingleOptionQuestionAnswered @event)
+        internal new void Apply(SingleOptionQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (SingleOptionQuestionModel)interview.Answers[id]
-                : new SingleOptionQuestionModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answer = @event.SelectedValue;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<SingleOptionQuestionModel>(@event, x => x.Answer = @event.SelectedValue);
         }
 
-        internal override void Apply(MultipleOptionsQuestionAnswered @event)
+        internal new void Apply(MultipleOptionsQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (MultiOptionQuestionViewModel)interview.Answers[id]
-                : new MultiOptionQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Answers = @event.SelectedValues;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<MultiOptionQuestionModel>(@event, x => x.Answers = @event.SelectedValues);
         }
 
-        internal override void Apply(GeoLocationQuestionAnswered @event)
+        internal new void Apply(GeoLocationQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var question = (interview.Answers.ContainsKey(id))
-                ? (GpsCoordinatesQuestionViewModel)interview.Answers[id]
-                : new GpsCoordinatesQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            question.Latitude = @event.Latitude;
-            question.Longitude = @event.Longitude;
-            question.Accuracy = @event.Accuracy;
-            question.Altitude = @event.Altitude;
-
-            interview.Answers[id] = question;
+            UpdateAnswer<GpsCoordinatesQuestionModel>(@event,
+                x =>
+                {
+                    x.Latitude = @event.Latitude;
+                    x.Longitude = @event.Longitude;
+                    x.Accuracy = @event.Accuracy;
+                    x.Altitude = @event.Altitude;
+                });
         }
 
-        internal override void Apply(TextListQuestionAnswered @event)
+        internal new void Apply(TextListQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var textAnswer = (interview.Answers.ContainsKey(id))
-                ? (TextListQuestionViewModel)interview.Answers[id]
-                : new TextListQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            textAnswer.Answers = @event.Answers;
-
-            interview.Answers[id] = textAnswer;
+            UpdateAnswer<TextListQuestionModel>(@event, x => x.Answers = @event.Answers);
         }
 
-
-        internal override void Apply(SingleOptionLinkedQuestionAnswered @event)
+        internal new void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var textAnswer = (interview.Answers.ContainsKey(id))
-                ? (LinkedSingleOptionQuestionViewModel)interview.Answers[id]
-                : new LinkedSingleOptionQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            textAnswer.Answer = @event.SelectedPropagationVector;
-
-            interview.Answers[id] = textAnswer;
+            UpdateAnswer<LinkedSingleOptionQuestionModel>(@event, x => x.Answer = @event.SelectedPropagationVector);
         }
 
-        internal override void Apply(MultipleOptionsLinkedQuestionAnswered @event)
+        internal new void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
-            var id = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            var textAnswer = (interview.Answers.ContainsKey(id))
-                ? (LinkedMultiOptionQuestionViewModel)interview.Answers[id]
-                : new LinkedMultiOptionQuestionViewModel(@event.QuestionId, @event.PropagationVector);
-
-            textAnswer.Answers = @event.SelectedPropagationVectors;
-
-            interview.Answers[id] = textAnswer;
+            UpdateAnswer<LinkedMultiOptionQuestionModel>(@event, x => x.Answers = @event.SelectedPropagationVectors);
         }
-        
+       
         #endregion
 
-        internal override void Apply(AnswerCommented @event)
+        internal new void Apply(AnswerCommented @event)
         {
             base.Apply(@event);
+            this.UpdateState(@event.QuestionId, @event.PropagationVector, x => x.Comments.Add(@event.Comment));
         }
-
 
         #region Group and question status and validity
         internal override void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
+            @event.Questions.ForEach(x => interview.Answers.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)));
         }
 
         internal override void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
+            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState |= QuestionState.Valid));
         }
 
         internal override void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
+            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState &= ~QuestionState.Valid));
         }
 
         internal override void Apply(GroupsDisabled @event)
@@ -237,11 +203,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal override void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
+            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState &= ~QuestionState.Enabled));
         }
 
         internal override void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
+            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState |= QuestionState.Enabled));
         }
         
         #endregion
@@ -290,8 +258,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal override void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
-        } 
-
+        }
+        
         #endregion
+
+        private void UpdateAnswer<T>(QuestionActiveEvent @event, Action<T> update)
+           where T : AbstractInterviewQuestionModel, new()
+        {
+            var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            var question = (interview.Answers.ContainsKey(questionId))
+                ? (T)interview.Answers[questionId]
+                : new T { Id = @event.QuestionId, RosterVector = @event.PropagationVector };
+
+            update(question);
+
+            interview.Answers[questionId] = question;
+        }
+
+        private void UpdateState(Guid id, decimal[] rosterVector, Action<AbstractInterviewQuestionModel> update)
+        {
+            var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
+
+            AbstractInterviewQuestionModel question;
+            if (this.interview.Answers.ContainsKey(questionId))
+            {
+                question = this.interview.Answers[questionId];
+            }
+            else
+            {
+                var questionModelType = this.interview.QuestionIdToQuestionModelTypeMap[id];
+                var questionActivator = this.interview.QuestionModelTypeToModelActivatorMap[questionModelType];
+                question = questionActivator();
+                question.Id = id;
+                question.RosterVector = rosterVector;
+            }
+
+            update(question);
+
+            this.interview.Answers[questionId] = question;
+        }
     }
 }

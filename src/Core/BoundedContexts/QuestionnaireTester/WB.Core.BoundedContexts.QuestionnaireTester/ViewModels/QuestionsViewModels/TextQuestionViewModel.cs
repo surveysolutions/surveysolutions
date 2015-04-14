@@ -5,9 +5,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 using IPrincipal = WB.Core.GenericSubdomains.Utils.Services.IPrincipal;
@@ -43,15 +43,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.navObject = navObject;
             TextQuestion textQuestion = navObject.QuestionnaireDocument.Find<TextQuestion>(navObject.QuestionIdentity.Id);
+            var model = navObject.InterviewModel.GetTextQuestionModel(navObject.QuestionIdentity);
 
             Title = textQuestion.QuestionText;
-            Answer = navObject.InterviewModel.GetAnswerOnQuestion<string>(navObject.QuestionIdentity.Id);
+            Answer = model.Answer;
         }
 
 
         public void Init(Identity questionIdentity, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
         {
-            Init(new NavObject()
+            Init(new NavObject
             {
                 QuestionIdentity = questionIdentity,
                 InterviewModel = interviewModel,
