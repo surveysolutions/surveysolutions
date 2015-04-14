@@ -1177,7 +1177,8 @@ namespace WB.Tests.Unit
                 Mock.Of<IQuestionnaireSynchronizer>(),
                 Mock.Of<IPlainTransactionManager>(),
                 HeadquartersPullContext(),
-                HeadquartersPushContext());
+                HeadquartersPushContext(),
+                Mock.Of<ILogger>());
         }
 
         public static HQSyncController HQSyncController(
