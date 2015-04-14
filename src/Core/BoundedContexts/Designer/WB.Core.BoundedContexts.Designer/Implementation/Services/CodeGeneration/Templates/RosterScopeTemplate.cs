@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write(">\r\n\t");
             
             #line 8 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
- if(Model.Version>1){
+ if(VersionParameters.IsIRosterLevelInherited){
             
             #line default
             #line hidden
@@ -391,7 +391,7 @@ foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop())
             this.Write("\r\n      \r\n        ");
             
             #line 72 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
- if(Model.Version>1){
+ if(VersionParameters.AreServiceVariablesPresent){
             
             #line default
             #line hidden
@@ -412,110 +412,67 @@ foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop())
 			this.@rowname = rosterRowName;
         }
 
-		");
+		public RosterRowList<");
             
             #line 84 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
-        {
-            
-            #line default
-            #line hidden
-            this.Write("        public RosterRowList<");
-            
-            #line 86 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write("> ");
-            
-            #line 86 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
-            
-            #line default
-            #line hidden
-            this.Write(" { get { return this.@_parent.");
-            
-            #line 86 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
-            
-            #line default
-            #line hidden
-            this.Write("; } }                                        \r\n        ");
-            
-            #line 87 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-}
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t\tpublic RosterRowList<");
-            
-            #line 89 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("> @roster\r\n        {\r\n\t\t\tget { return @_parent.");
             
-            #line 91 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 86 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.RostersInScope[0].VariableName));
             
             #line default
             #line hidden
             this.Write("; }\r\n        }\r\n\t\t");
             
-            #line 93 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
- }else{
+            #line 88 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+ }
             
             #line default
             #line hidden
-            this.Write("\t\t\t");
+            this.Write("\r\n\t\t");
             
-            #line 94 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 90 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
-			{
+		{
             
             #line default
             #line hidden
-            this.Write("\t\t\t\tpublic IEnumerable<");
+            this.Write("\t\t\tpublic ");
             
-            #line 96 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.GeneratedTypeName));
+            #line 92 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.GetRosterType(parentRoster)));
             
             #line default
             #line hidden
-            this.Write("> ");
+            this.Write(" ");
             
-            #line 96 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 92 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
             
             #line default
             #line hidden
             this.Write(" { get { return this.@_parent.");
             
-            #line 96 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 92 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
             
             #line default
             #line hidden
-            this.Write("; } }                                        \r\n\t\t\t");
+            this.Write("; } }                                        \r\n\t\t");
             
-            #line 97 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 93 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
-            
-            #line default
-            #line hidden
-            this.Write("\t\t");
-            
-            #line 98 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
- }
             
             #line default
             #line hidden
             this.Write("\t\tpublic IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IEx" +
                     "pressionExecutable>> getInstances)\r\n        {\r\n            var level = new ");
             
-            #line 101 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 96 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
@@ -527,7 +484,7 @@ foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop())
 
              ");
             
-            #line 106 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 101 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var q in Model.Questions) 
              {
             
@@ -535,35 +492,35 @@ foreach (var q in Model.Questions)
             #line hidden
             this.Write("        \r\n                ");
             
-            #line 108 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 103 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(" = this.");
             
-            #line 108 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 103 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(",        \r\n             ");
             
-            #line 109 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 104 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
             
             #line default
             #line hidden
             this.Write("            };\r\n\r\n\t\t\t");
             
-            #line 112 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
- if(Model.Version>1){
+            #line 107 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+ if(VersionParameters.AreServiceVariablesPresent){
             
             #line default
             #line hidden
             this.Write("\t\t\t((IRosterLevel)level).SetRowName(this.@rowname);\r\n\t\t\t");
             
-            #line 114 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 109 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  } 
             
             #line default
@@ -585,7 +542,7 @@ foreach (var q in Model.Questions)
         
         ");
             
-            #line 130 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 125 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var question in Model.Questions) 
         {
             
@@ -593,63 +550,63 @@ foreach (var question in Model.Questions)
             #line hidden
             this.Write("            \r\n        private ");
             
-            #line 132 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 127 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 132 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 127 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(" = null;\r\n        private ConditionalState ");
             
-            #line 133 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 128 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 133 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 128 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(");\r\n        public ");
             
-            #line 134 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 129 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 134 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 129 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            get { return ");
             
-            #line 136 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 131 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(".State != State.Disabled ? this.");
             
-            #line 136 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 131 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
             
             #line default
             #line hidden
             this.Write(" : null; }\r\n            \r\n        }\r\n        ");
             
-            #line 139 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 134 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -657,28 +614,28 @@ if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.GenerateEmbeddedExpr
             #line hidden
             this.Write("      \r\n        private bool ");
             
-            #line 141 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 136 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedConditionsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 143 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 138 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n        }      \r\n        ");
             
-            #line 145 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 140 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 147 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 142 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Validations) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -686,28 +643,28 @@ if(!string.IsNullOrWhiteSpace(question.Validations) && Model.GenerateEmbeddedExp
             #line hidden
             this.Write("        \r\n        private bool ");
             
-            #line 149 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 144 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 151 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 146 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Validations));
             
             #line default
             #line hidden
             this.Write(";\r\n        }  \r\n        ");
             
-            #line 153 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 148 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 154 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 149 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(question.IsMandatory)
         {
             
@@ -715,35 +672,35 @@ if(question.IsMandatory)
             #line hidden
             this.Write("        \r\n        private bool ");
             
-            #line 156 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 151 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMandatoryMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return !this.IsAnswerEmpty(");
             
-            #line 158 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 153 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write(");\r\n        }\r\n        ");
             
-            #line 160 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 155 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 161 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 156 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        //groups\r\n        ");
             
-            #line 163 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 158 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @group in Model.Groups) 
         {
             
@@ -751,21 +708,21 @@ foreach (var @group in Model.Groups)
             #line hidden
             this.Write("        private ConditionalState ");
             
-            #line 165 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 160 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 165 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 160 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n        ");
             
-            #line 166 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 161 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -773,52 +730,50 @@ if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.GenerateEmbeddedExpres
             #line hidden
             this.Write("      \r\n        private bool ");
             
-            #line 168 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 163 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedConditionsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 170 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 165 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n        }      \r\n        ");
             
-            #line 172 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 167 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 173 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 168 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("        //rosters\r\n        ");
             
-            #line 175 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 170 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @roster in Model.Rosters) 
         {
-			if(Model.Version>1){
-		
             
             #line default
             #line hidden
-            this.Write("        public RosterRowList<");
+            this.Write("        public ");
             
-            #line 179 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
+            #line 172 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.GetRosterType(@roster)));
             
             #line default
             #line hidden
-            this.Write("> ");
+            this.Write(" ");
             
-            #line 179 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 172 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
             
             #line default
@@ -826,72 +781,28 @@ foreach (var @roster in Model.Rosters)
             this.Write("\r\n        {\r\n            get\r\n            {\r\n                var rosters = this.G" +
                     "etInstances(this.RosterKey, IdOf.");
             
-            #line 183 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 176 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedRosterScopeName));
             
             #line default
             #line hidden
-            this.Write(".Last());\r\n\t\t\t\treturn new RosterRowList<");
+            this.Write(".Last());\r\n\t\t\t\treturn ");
             
-            #line 184 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write(">(rosters);\r\n            }\r\n        }\r\n        ");
-            
-            #line 187 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
- }else{
+            #line 177 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.GetRosterInitialization(@roster)));
             
             #line default
             #line hidden
-            this.Write("\t\t    public IEnumerable<");
+            this.Write(";\r\n            }\r\n        }\r\n\t\t");
             
-            #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write("> ");
-            
-            #line 188 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n        {\r\n            get\r\n            {\r\n                var rosters = this.G" +
-                    "etInstances(this.RosterKey, IdOf.");
-            
-            #line 192 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedRosterScopeName));
-            
-            #line default
-            #line hidden
-            this.Write(".Last());\r\n                return rosters == null ? new List<");
-            
-            #line 193 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write(">() : rosters.Select(x => x as ");
-            
-            #line 193 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
-            
-            #line default
-            #line hidden
-            this.Write(").ToList();\r\n            }\r\n        }\r\n\t\t");
-            
-            #line 196 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 180 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 }
-		}
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 199 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 182 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 foreach (var @roster in Model.RostersInScope) 
         {
             
@@ -899,21 +810,21 @@ foreach (var @roster in Model.RostersInScope)
             #line hidden
             this.Write("        \r\n\r\n        private ConditionalState ");
             
-            #line 202 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 185 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 202 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 185 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n\r\n        ");
             
-            #line 204 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 187 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpressionMethods)
         {
             
@@ -921,28 +832,28 @@ if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpre
             #line hidden
             this.Write("      \r\n        private bool ");
             
-            #line 206 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 189 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedConditionsMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {\r\n            return ");
             
-            #line 208 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 191 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n        }      \r\n        ");
             
-            #line 210 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 193 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n        ");
             
-            #line 212 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 195 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
@@ -968,7 +879,7 @@ if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpre
         {
         ");
             
-            #line 232 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 215 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(Model.ParentScope != null)
         {
             
@@ -976,14 +887,14 @@ if(Model.ParentScope != null)
             #line hidden
             this.Write("            this.@_parent = parentLevel as ");
             
-            #line 234 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 217 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
             #line hidden
             this.Write(";\r\n        ");
             
-            #line 235 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            #line 218 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
  }
             
             #line default
