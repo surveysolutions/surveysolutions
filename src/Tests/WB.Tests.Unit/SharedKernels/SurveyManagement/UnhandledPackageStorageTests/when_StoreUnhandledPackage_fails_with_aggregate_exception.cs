@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTests
 {
-    internal class when_StoreUnhandledPackage_called_with_aggregate_exception : UnhandledPackageStorageTestContext
+    internal class when_StoreUnhandledPackage_fails_with_aggregate_exception : UnhandledPackageStorageTestContext
     {
         Establish context = () =>
         {
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
             brokenSyncPackagesStorage.StoreUnhandledPackage(unhandledPackageName, null, aggregateException);
 
         It should_unwrap_aggregate_exception = () =>
-            exceptionFileContent.ShouldEqual("aggregate exception message " + Environment.NewLine + "\tnull reference test " + Environment.NewLine + "\tnot supported ");
+            exceptionFileContent.ShouldEqual("aggregate exception message " + Environment.NewLine + "null reference test " + Environment.NewLine + "not supported ");
         
         private static BrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;

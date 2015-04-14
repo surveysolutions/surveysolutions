@@ -369,4 +369,7 @@
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
     <value>Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB.</value>
   </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>Fixed roster values must be unique.</value>
+  </data>
 </root>

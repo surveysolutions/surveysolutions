@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<QuestionTemplateModel> Questions { get; set; }
         public List<GroupTemplateModel> Groups { get; set; }
         public List<RosterTemplateModel> Rosters { get; set; }
-
+        public int Version { get; set; }
         public List<Guid> RosterScope { set; get; }
 
         public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()

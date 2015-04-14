@@ -4,7 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
-
+ 
     internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
     {
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
@@ -46,7 +46,7 @@
             _conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
         <#}#>
 
-        }                                 
+        }         
 
         public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
@@ -108,16 +108,27 @@
         <# }#>
                 
         <#foreach (var @roster in Model.Rosters) 
-        {#>
-        public IEnumerable<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        {
+		if(Model.Version>1){
+		#>
+        public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get 
+            {
+                var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
+				return new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
+            }
+        }
+        <# }else{#>
+		   public IEnumerable<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        {
+            get
             {
                 var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
                 return rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
             }
         }
-        <# }#>
+		<#    }}#>
         // groups condition states
         <#foreach (var @group in Model.Groups) 
         {#>

@@ -296,7 +296,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_by_fixed_values_and_fixed_titles_have_dublicates.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_has_value_dublicate.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Core\Synchronization\SyncManagerTestContext.cs" />
@@ -339,6 +341,7 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
+    <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
@@ -411,7 +414,7 @@
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_and_interviewId_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\QuestionnaireSynchronizationDenormalizerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_with_aggregate_exception.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_fails_with_aggregate_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\UserDenormalizerTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_second_time.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />

@@ -60,7 +60,7 @@
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
                 <th></th>
-                <th></th>
+                
             </tr>
         </thead>
         <tbody>
@@ -76,8 +76,7 @@
                             <i class="glyphicon glyphicon-user"></i> Interviewers
                         </a>
                     }
-                </td>
-                <td>
+               
                     @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                     {
                         <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">

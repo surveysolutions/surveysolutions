@@ -44,15 +44,16 @@ namespace WB.UI.Headquarters.Controllers
             if (this.ModelState.IsValid)
             {
                 UserView user = GetUserByName(model.UserName);
-                if (user == null)
-                {
-                    this.CreateObserver(model);
-                    this.Success("Observer user was successfully created");
-                    return this.RedirectToAction("Index");
-                }
-                else
+                if (user != null)
                 {
                     this.Error("User name already exists. Please enter a different user name.");
+                    return this.View(model);
+                }
+
+                if (this.CreateObserver(model))
+                {
+                    this.Success("Observer user was successfully created");
+                    return this.RedirectToAction("Index");
                 }
             }
 

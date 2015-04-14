@@ -72,11 +72,11 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            var expressionState = new Mock<IInterviewExpressionState>();
+            var expressionState = new Mock<IInterviewExpressionStateV2>();
 
             var emptyList = new List<Identity>();
 
-            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
+            expressionState.Setup(_ => _.CloneV2()).Returns(expressionState.Object);
             expressionState.Setup(_ => _.ProcessEnablementConditions()).Returns(new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
             
             return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
@@ -104,7 +104,7 @@ namespace WB.Tests.Integration.InterviewTests
                 .Returns(instance);
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionState precompiledState = null)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV2 precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -172,9 +172,9 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument, IInterviewExpressionState precompiledState = null)
+        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument, IInterviewExpressionStateV2 precompiledState = null)
         {
-            IInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            IInterviewExpressionStateV2 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -183,7 +183,7 @@ namespace WB.Tests.Integration.InterviewTests
                 .Returns(statePrototypeProvider);
         }
 
-        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
             var expressionProcessorGenerator =
                 new QuestionnireExpressionProcessorGenerator(
@@ -220,7 +220,11 @@ namespace WB.Tests.Integration.InterviewTests
                 if (interviewExpressionState == null)
                     throw new Exception("Error on IInterviewExpressionState generation");
 
-                return interviewExpressionState;
+                var v2 = interviewExpressionState as IInterviewExpressionStateV2;
+                if (v2 != null)
+                    return v2;
+
+                return new InterviewExpressionStateAdapter(interviewExpressionState);
             }
 
             throw new Exception("Error on IInterviewExpressionState generation");

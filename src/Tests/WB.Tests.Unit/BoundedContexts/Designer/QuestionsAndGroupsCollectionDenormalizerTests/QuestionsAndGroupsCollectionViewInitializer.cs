@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                         Title = "Roster 1.1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        RosterFixedTitles = new[] { "1", "2", "3" },
+                        FixedRosterTitles = new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2"), new Tuple<decimal, string>(3,"3") },
                         ParentGroupId = g2Id,
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { g3Id, q2Id }
