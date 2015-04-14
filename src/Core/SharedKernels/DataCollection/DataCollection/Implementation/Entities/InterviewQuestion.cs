@@ -5,9 +5,26 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public abstract class AbstractInterviewQuestion
+    public class InterviewRosterModel
     {
-        protected AbstractInterviewQuestion(Guid id, decimal[] rosterVector)
+        public Guid Id { get; set; }
+        public decimal[] ParentRosterVector { get; set; }
+        public decimal RowCode { get; set; }
+        public decimal[] RosterVector { get; set; }
+    }
+
+    public class InterviewGroupModel
+    {
+        public Guid Id { get; set; }
+        public decimal[] RosterVector { get; set; }
+    }
+
+    public abstract class AbstractInterviewQuestionModel
+    {
+        protected AbstractInterviewQuestionModel() { }
+
+        protected AbstractInterviewQuestionModel(Guid id, decimal[] rosterVector)
+            : this()
         {
             this.Id = id;
             this.RosterVector = rosterVector;
@@ -37,124 +54,136 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
     }
 
-    public class SingleOptionQuestionModel : AbstractInterviewQuestion
+    public class SingleOptionQuestionModel : AbstractInterviewQuestionModel
     {
         public decimal Answer { get; set; }
 
+        public SingleOptionQuestionModel() { }
         public SingleOptionQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class LinkedSingleOptionQuestionViewModel : AbstractInterviewQuestion
+    public class LinkedSingleOptionQuestionModel : AbstractInterviewQuestionModel
     {
         public decimal[] Answer { get; set; }
 
-        public LinkedSingleOptionQuestionViewModel(Guid id, decimal[] rosterVector)
+        public LinkedSingleOptionQuestionModel() { }
+        public LinkedSingleOptionQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class MultiOptionQuestionViewModel : AbstractInterviewQuestion
+    public class MultiOptionQuestionModel : AbstractInterviewQuestionModel
     {
         public decimal[] Answers { get; set; }
 
-        public MultiOptionQuestionViewModel(Guid id, decimal[] rosterVector)
+        public MultiOptionQuestionModel() { }
+        public MultiOptionQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class LinkedMultiOptionQuestionViewModel : AbstractInterviewQuestion
+    public class LinkedMultiOptionQuestionModel : AbstractInterviewQuestionModel
     {
         public decimal[][] Answers { get; set; }
 
-        public LinkedMultiOptionQuestionViewModel(Guid id, decimal[] rosterVector)
+        public LinkedMultiOptionQuestionModel() { }
+        public LinkedMultiOptionQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class IntegerNumericQuestionViewModel : AbstractInterviewQuestion
+    public class IntegerNumericQuestionModel : AbstractInterviewQuestionModel
     {
         public long Answer { get; set; }
 
-        public IntegerNumericQuestionViewModel(Guid id, decimal[] rosterVector)
+        public IntegerNumericQuestionModel() { }
+        public IntegerNumericQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class RealNumericQuestionViewModel : AbstractInterviewQuestion
+    public class RealNumericQuestionModel : AbstractInterviewQuestionModel
     {
         public decimal Answer { get; set; }
 
-        public RealNumericQuestionViewModel(Guid id, decimal[] rosterVector)
+        public RealNumericQuestionModel() { }
+        public RealNumericQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class MaskedTextQuestionViewModel : AbstractInterviewQuestion
+    public class MaskedTextQuestionModel : AbstractInterviewQuestionModel
     {
         public string Answer { get; set; }
 
-        public MaskedTextQuestionViewModel(Guid id, decimal[] rosterVector)
+        public MaskedTextQuestionModel() { }
+        public MaskedTextQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class TextListQuestionViewModel : AbstractInterviewQuestion
+    public class TextListQuestionModel : AbstractInterviewQuestionModel
     {
         public Tuple<decimal, string>[] Answers { get; set; }
 
-        public TextListQuestionViewModel(Guid id, decimal[] rosterVector)
+        public TextListQuestionModel() { }
+        public TextListQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class QrBarcodeQuestionViewModel : AbstractInterviewQuestion
+    public class QrBarcodeQuestionModel : AbstractInterviewQuestionModel
     {
         public string Answer { get; set; }
 
-        public QrBarcodeQuestionViewModel(Guid id, decimal[] rosterVector)
+        public QrBarcodeQuestionModel() { }
+        public QrBarcodeQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class MultimediaQuestionViewModel : AbstractInterviewQuestion
+    public class MultimediaQuestionModel : AbstractInterviewQuestionModel
     {
         public string PictureFileName { get; set; }
 
-        public MultimediaQuestionViewModel(Guid id, decimal[] rosterVector)
+        public MultimediaQuestionModel() { }
+        public MultimediaQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class DateTimeQuestionViewModel : AbstractInterviewQuestion
+    public class DateTimeQuestionModel : AbstractInterviewQuestionModel
     {
         public DateTime Answer { get; set; }
 
-        public DateTimeQuestionViewModel(Guid id, decimal[] rosterVector)
+        public DateTimeQuestionModel() { }
+        public DateTimeQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
     }
 
-    public class GpsCoordinatesQuestionViewModel : AbstractInterviewQuestion
+    public class GpsCoordinatesQuestionModel : AbstractInterviewQuestionModel
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Accuracy { get; set; }
         public double Altitude { get; set; }
 
-        public GpsCoordinatesQuestionViewModel(Guid id, decimal[] rosterVector)
+        public GpsCoordinatesQuestionModel() { }
+        public GpsCoordinatesQuestionModel(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }
