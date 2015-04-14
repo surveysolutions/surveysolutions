@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception = Catch.Exception(() =>
                 questionnaire.CloneGroupWithoutChildren(
                     groupId, responsibleId, "title", null, rosterSizeQuestionId, "description", null, chapterId,
-                    isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: new string[]{}, 
+                    isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: new Tuple<string, string>[]{}, 
                     rosterTitleQuestionId: null, sourceGroupId: sourceGroupId, targetIndex: 0));
 
         It should_not_fail = () =>

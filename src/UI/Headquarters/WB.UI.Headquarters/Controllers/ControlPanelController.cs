@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     try
                     {
-                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
+                        this.ExecuteCommandWithoutObserverCheck(new CreateUserCommand(publicKey: Guid.NewGuid(),
                             userName: model.UserName,
                             password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
@@ -173,7 +173,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 try
                 {
-                    this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
+                    this.ExecuteCommandWithoutObserverCheck(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,

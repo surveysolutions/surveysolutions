@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.CustomFunctions;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public abstract class AbstractConditionalLevel<T> where T : IExpressionExecutable
+    public abstract class AbstractConditionalLevel<T> : BaseFunctions where T : IExpressionExecutable
     {
         public decimal[] RosterVector { get; private set; }
         public Identity[] RosterKey { get; private set; }

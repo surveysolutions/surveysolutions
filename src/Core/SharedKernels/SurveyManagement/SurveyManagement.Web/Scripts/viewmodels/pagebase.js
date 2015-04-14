@@ -126,13 +126,14 @@
     self.SendCommand = function(command, onSuccess) {
         self.SendRequest(commandExecutionUrl, command, function(data) {
             if (data.IsSuccess) {
+                if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
+                  onSuccess(data);
+            } else {
                 if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException != null) {
                     self.ShowError(data.DomainException);
-                } else if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                    onSuccess(data);
                 }
-            } else {
-                self.ShowError(input.settings.messages.unhandledExceptionMessage);
+                else
+                    self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
         });
     };
@@ -145,7 +146,11 @@
 
             if (failedCommands.length > 0) {
                 var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function(failedCommand) {
-                    return failedCommand.DomainException;
+                    if (!Supervisor.Framework.Objects.isUndefined(failedCommand.DomainException) && failedCommand.DomainException != null)
+                        return failedCommand.DomainException;
+                    else {
+                        return input.settings.messages.unhandledExceptionMessage;
+                    }
                 });
                 self.ShowErrors(failedDomainExceptions);
             } else {

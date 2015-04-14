@@ -46,15 +46,16 @@ namespace WB.UI.Headquarters.Controllers
             if (this.ModelState.IsValid)
             {
                 UserView user = GetUserByName(model.UserName);
-                if (user == null)
-                {
-                    this.CreateHeadquarters(model);
-                    this.Success("Headquarters user was successfully created");
-                    return this.RedirectToAction("Index");
-                }
-                else
+                if (user != null)
                 {
                     this.Error("User name already exists. Please enter a different user name.");
+                    return this.View(model);   
+                }
+                
+                if (this.CreateHeadquarters(model))
+                {
+                    this.Success("Headquarters user was successfully created");
+                    return this.RedirectToAction("Index");
                 }
             }
 
@@ -103,24 +104,25 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     var user = this.GetUserById(model.Id);
-                    if (user != null)
+                    if (user == null)
                     {
-                        bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
+                        this.Error("Could not update user information because current user does not exist");
+                        return this.View(model);
+                    }
+                    
+                    bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
 
-                        if (!isAdmin)
+                    if (isAdmin)
+                        this.Error("Could not update user information because you don't have permission to perform this operation");
+                    else
+                    {
+                        if (this.UpdateAccount(user: user, editModel: model))
                         {
-                            this.UpdateAccount(user: user, editModel: model);
+
                             this.Success(string.Format("Information about <b>{0}</b> successfully updated",
                                 user.UserName));
                             return this.RedirectToAction("Index");
                         }
-
-                        this.Error(
-                            "Could not update user information because you don't have permission to perform this operation");
-                    }
-                    else
-                    {
-                        this.Error("Could not update user information because current user does not exist");
                     }
                 }
             }

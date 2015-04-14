@@ -96,11 +96,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
                 foreach (var interviewHistoricalRecordView in view.Records)
                 {
                     writer.WriteField(interviewHistoricalRecordView.Action);
-                    writer.WriteField(string.Join(",", interviewHistoricalRecordView.Parameters.Select(p => p.Key + ": " + p.Value)));
+                //    writer.WriteField(string.Join(",", interviewHistoricalRecordView.Parameters.Select(p => p.Key + ": " + p.Value)));
                     writer.WriteField(interviewHistoricalRecordView.OriginatorName);
                     writer.WriteField(interviewHistoricalRecordView.OriginatorRole);
-                    writer.WriteField(interviewHistoricalRecordView.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-                    writer.WriteField(interviewHistoricalRecordView.Timestamp.ToString("T", CultureInfo.InvariantCulture));
+                    if (interviewHistoricalRecordView.Timestamp.HasValue)
+                    {
+                        writer.WriteField(interviewHistoricalRecordView.Timestamp.Value.ToString("d",
+                            CultureInfo.InvariantCulture));
+                        writer.WriteField(interviewHistoricalRecordView.Timestamp.Value.ToString("T",
+                            CultureInfo.InvariantCulture));
+                    }
+                    else
+                    {
+                        writer.WriteField(string.Empty);
+                        writer.WriteField(string.Empty);
+                    }
+                    foreach (var value in interviewHistoricalRecordView.Parameters.Values)
+                    {
+                        writer.WriteField(value);
+                    }
                     writer.NextRecord();
                 }
             }

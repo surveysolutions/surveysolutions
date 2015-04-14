@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             sourceGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
-            rosterFixedTitles = new[] { "fixed title" };
+            rosterFixedTitles = new[] { new Tuple<string, string>("1","fixed title") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -60,6 +60,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid sourceGroupId;
         private static Guid rosterSizeQuestionId;
         private static Guid targetGroupId;
-        private static string[] rosterFixedTitles;
+        private static Tuple<string, string>[] rosterFixedTitles;
     }
 }

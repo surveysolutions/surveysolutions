@@ -83,6 +83,18 @@
                     $scope.editRosterForm.$setDirty();
                 };
 
+                $scope.removeFixedTitle = function (index) {
+                    $scope.activeRoster.fixedRosterTitles.splice(index, 1);
+                    $scope.editRosterForm.$setDirty();
+                };
+
+                $scope.addFixedTitle = function () {
+                    $scope.activeRoster.fixedRosterTitles.push({
+                        "item1": null,
+                        "item2": ''
+                    });
+                    $scope.editRosterForm.$setDirty();
+                };
 
                 $scope.updateRosterType = function (type) {
                     $scope.activeRoster.type = type;
@@ -99,7 +111,8 @@
 
                 $scope.saveRoster = function () {
                     if ($scope.editRosterForm.$valid) {
-                        commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function() {
+                  
+                        commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function () {
                             $scope.initialRoster = angular.copy($scope.activeRoster);
 
                             $rootScope.$emit('rosterUpdated', {

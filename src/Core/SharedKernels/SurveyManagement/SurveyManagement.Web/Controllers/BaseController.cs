@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -9,14 +10,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected readonly ICommandService CommandService;
+        private readonly ICommandService commandService;
         protected readonly IGlobalInfoProvider GlobalInfo;
 
         protected readonly ILogger Logger;
 
         protected BaseController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
         {
-            this.CommandService = commandService;
+            this.commandService = commandService;
             this.GlobalInfo = globalInfo;
             this.Logger = logger;
         }
@@ -51,6 +52,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 this.TempData.Add(key, message);
             }
+        }
+
+        public bool ExecuteCommandWithObserverCheck(ICommand command, string origin = null)
+        {
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return false;
+            }
+            
+            commandService.Execute(command, origin);
+            return true;
+            
+        }
+
+        public void ExecuteCommandWithoutObserverCheck(ICommand command, string origin = null)
+        {
+            commandService.Execute(command, origin);
         }
     }
 }

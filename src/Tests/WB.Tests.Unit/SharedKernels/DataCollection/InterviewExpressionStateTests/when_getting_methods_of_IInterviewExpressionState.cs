@@ -11,8 +11,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
         Establish context = () => { };
 
         Because of = () =>
-            methods = typeof(IInterviewExpressionState).GetMethods()
-                .Concat(typeof(IInterviewExpressionState)
+            methods = typeof(IInterviewExpressionStateV2).GetMethods()
+                .Concat(typeof(IInterviewExpressionStateV2)
                     .GetInterfaces()
                     .SelectMany(i => i.GetMethods()))
                 .Select(x => new MetodInfo
@@ -222,7 +222,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
                 ReturnType = typeof (void),
                 ParamsType =  new Type[0] 
             },
-            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] }
+            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] },
+            new MetodInfo { Name = "CloneV2", ReturnType = typeof (IInterviewExpressionStateV2), ParamsType = new Type[0] },
+            new MetodInfo
+            {
+                Name = "UpdateRosterTitle",
+                ReturnType = typeof (void),
+                ParamsType =  new Type[] { typeof (Guid), typeof (decimal[]), typeof (string) } 
+            }
         };
     }
 }

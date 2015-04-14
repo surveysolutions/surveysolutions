@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             GetGroup(g2Id).IsRoster.ShouldBeTrue();
 
         It should_return_2nd_group_with_roster_fixed_titles_set_in_nul = () =>
-            GetGroup(g2Id).RosterFixedTitles.ShouldBeNull();
+            GetGroup(g2Id).FixedRosterTitles.ShouldBeNull();
 
         It should_return_2nd_group_with_roster_scope_ids_contains_q2Id = () =>
             GetGroup(g2Id).RosterScopeIds.ShouldContainOnly(q2Id);

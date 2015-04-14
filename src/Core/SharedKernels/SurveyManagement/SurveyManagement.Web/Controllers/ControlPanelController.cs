@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             else
             {
-                this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                this.ExecuteCommandWithObserverCheck(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
                 return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));
             }
         }

@@ -95,6 +95,11 @@ namespace Main.Core.Documents
             get { return new string[0]; }
         }
 
+        public Tuple<decimal, string>[] FixedRosterTitles
+        {
+            get { return new Tuple<decimal, string>[0];}
+        }
+
         public Guid? RosterTitleQuestionId {
             get { return null; }
         }

@@ -13,6 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.Conditions
 {
+    [Ignore("reference validation is turned off")]
     internal class when_verifing_question_with_two_referenes_to_non_existing_other_questions : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>

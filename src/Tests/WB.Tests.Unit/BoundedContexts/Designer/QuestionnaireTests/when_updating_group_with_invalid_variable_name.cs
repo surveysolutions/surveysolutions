@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 condition: null,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterFixedTitles: new string[] { "1", "2" },
+                rosterFixedTitles: new [] { new Tuple<string, string>("1","1"), new Tuple<string, string>("2","2") },
                 rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>

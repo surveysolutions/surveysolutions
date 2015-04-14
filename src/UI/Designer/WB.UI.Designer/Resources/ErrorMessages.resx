@@ -189,4 +189,7 @@
   <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
     <value>User name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol.</value>
   </data>
+  <data name="Questionnaire_compilation_failed" xml:space="preserve">
+    <value>You questionnaire "{0}" contains new functionality which is not supported by your installation. Please update.</value>
+  </data>
 </root>

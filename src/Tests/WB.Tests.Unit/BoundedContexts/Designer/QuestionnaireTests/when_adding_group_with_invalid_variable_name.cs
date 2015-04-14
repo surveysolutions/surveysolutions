@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 parentGroupId: chapterId,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterFixedTitles: new string[] { "1", "2" }, rosterTitleQuestionId: null));
+                rosterFixedTitles: new Tuple<string, string>[] { new Tuple<string, string>("1","1"),new Tuple<string, string>("2","2") }, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

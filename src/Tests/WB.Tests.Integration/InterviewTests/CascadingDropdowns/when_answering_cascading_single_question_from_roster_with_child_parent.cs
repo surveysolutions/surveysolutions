@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         Create.Option(text: "parent option 2", value: "2")
                     }),
                     Create.Roster(topRosterId,
-                        variable: "roster",
+                        variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
