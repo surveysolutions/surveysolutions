@@ -26,7 +26,10 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             return GetEnumerator();
         }
-
+        /* In mono 0 and 0.0m is the same number, but they have different hashcodes. 
+         * This code is workaround for it. 
+         * Don't remove it.
+         */
         private string DecimalValueToString(decimal decimalValue)
         {
             if (decimalValue == 0)
