@@ -7,10 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     public class InterviewModel : IInterview
     {
-        public Guid QuestionnaireId
-        {
-            get { return Guid.NewGuid(); }
-        }
+        public Guid QuestionnaireId { get; set; }
+        public long QuestionnaireVersion { get; set; }
 
         public Guid Id { get; set; }
 
