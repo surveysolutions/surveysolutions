@@ -1125,7 +1125,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnaire, 
+            IEnumerable<Guid> groupIds, 
+            decimal[] rosterVector, 
+            IQuestionnaire questionnaire, 
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
             return groupIds.SelectMany(groupId =>
@@ -1149,10 +1151,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<decimal[]> groupRosterVectors = ExtendRosterVector(state,
                 rosterVector, groupRosterLevel, parentRosterGroupsStartingFromTop, getRosterInstanceIds);
 
-            foreach (decimal[] groupRosterVector in groupRosterVectors)
-            {
-                yield return new Identity(groupId, groupRosterVector);
-            }
+            return groupRosterVectors.Select(groupRosterVector => new Identity(groupId, groupRosterVector));
         }
 
         private IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
@@ -3558,15 +3557,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
-        private List<Identity> GetDisabledGroupsToEnableByDecreasedRosterSize(InterviewStateDependentOnAnswers state,
-            List<RosterIdentity> rosterIdentities, IQuestionnaire questionnaire)
+        private List<Identity> GetDisabledGroupsToEnableByDecreasedRosterSize(
+            InterviewStateDependentOnAnswers state,
+            List<RosterIdentity> rosterIdentities, 
+            IQuestionnaire questionnaire)
         {
             if (rosterIdentities.Count == 0)
                 return new List<Identity>();
 
             return rosterIdentities.SelectMany(rosterIdentity =>
                 {
-                    var rosterAsGroupIdentity = new Identity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector.Concat(new[] { rosterIdentity.RosterInstanceId }).ToArray());
+                    var rosterVector = rosterIdentity.OuterRosterVector.Concat(new[] { rosterIdentity.RosterInstanceId }).ToArray();
+
+                    var rosterAsGroupIdentity = new Identity(rosterIdentity.GroupId, rosterVector);
 
                     var underlyingChildGroupIds = questionnaire.GetAllUnderlyingChildGroups(rosterIdentity.GroupId).ToList();
 
@@ -3589,8 +3592,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }).ToList();
         }
 
-        private List<Identity> GetDisabledAnswersToEnableByDecreasedRosterSize(InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
+        private List<Identity> GetDisabledAnswersToEnableByDecreasedRosterSize(
+            InterviewStateDependentOnAnswers state,
+            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, 
+            decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire)
         {
              if (rosterInstanceIdsBeingRemoved.Count == 0)
