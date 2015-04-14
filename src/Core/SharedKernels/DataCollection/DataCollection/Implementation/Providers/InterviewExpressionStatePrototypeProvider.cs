@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 var compiledAssembly = fileSystemAccessor.LoadAssembly(assemblyFile);
 
                 TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
-                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)));
+                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)) && x.IsPublic);
 
                 if (interviewExpressionStateTypeInfo == null)
                     throw new Exception("Type implementing IInterviewExpressionState was not found");
