@@ -2,8 +2,6 @@
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Model;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
