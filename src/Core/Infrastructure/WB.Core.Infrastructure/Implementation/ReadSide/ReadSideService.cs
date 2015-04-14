@@ -32,7 +32,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private int skippedEventsCount = 0;
         private DateTime lastRebuildDate = DateTime.Now;
 
-        private const int MaxAllowedFailedEvents = 100;
+        private int maxAllowedFailedEvents = 100;
 
         private static readonly object RebuildAllViewsLockObject = new object();
         private static readonly object ErrorsLockObject = new object();
@@ -507,6 +507,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.totalEventsToRebuildCount = allEventsCount;
             this.skippedEventsCount = skipEventsCount;
             this.processedEventsCount = this.skippedEventsCount;
+            this.maxAllowedFailedEvents = Math.Max(100, (int) (allEventsCount*0.01));
 
             ThrowIfShouldStopViewsRebuilding();
 
@@ -546,7 +547,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 this.processedEventsCount++;
 
-                if (this.FailedEventsCount >= MaxAllowedFailedEvents)
+                if (this.FailedEventsCount >= maxAllowedFailedEvents)
                 {
                     var message = string.Format("Failed to rebuild read side. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
                     UpdateStatusMessage(message);
