@@ -23,7 +23,6 @@ using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [NoTransaction]
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
@@ -44,8 +43,6 @@ namespace WB.UI.Headquarters.Controllers
             this.dataExportRepositoryWriter = dataExportRepositoryWriter;
             this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
         }
-
-        #region reexport
 
         public ActionResult ReexportInterviews()
         {
@@ -88,13 +85,11 @@ namespace WB.UI.Headquarters.Controllers
                 .Select(x => x.InterviewId).ToList()).AsQueryable();
         }
 
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReexportStatus()
         {
             return lastReexportMessage;
         }
 
-        #endregion
         public ActionResult CreateHeadquarters()
         {
             return this.View(new UserModel());
@@ -157,7 +152,6 @@ namespace WB.UI.Headquarters.Controllers
             return false;
         }
 
-        
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());
