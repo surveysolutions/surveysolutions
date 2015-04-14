@@ -197,6 +197,9 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Versions\IVersionParameters.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Versions\V1Parameters.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Versions\V2Parameters.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
