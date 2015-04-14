@@ -8,6 +8,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
@@ -24,8 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
             answersTime = new DateTime(2013, 09, 01);
-            var fixedRosterTitles = new string[] { "Title 1", "Title 2", "Title 3" };
-            fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
+            var fixedRosterTitles = new [] { new Tuple<decimal,string>(0,"Title 1"), new Tuple<decimal,string>(1,"Title 2"), new Tuple<decimal,string>(2,"Title 3") };
+            fixedRosterId = Guid.Parse("a7b0d842-0355-4eab-a943-968c9c013d97");
 
             Guid mandatoryQuestionId = Guid.Parse("33330000FFFFFFFFFFFFFFFFFFFF5555"); 
 
@@ -42,7 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
-
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
+              CreateInterviewExpressionStateProviderStub());
             eventContext = new EventContext();
         };
 

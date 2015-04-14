@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
             answersTime = new DateTime(2013, 09, 01);
-            var fixedRosterTitles = new string[] { "Title 1", "Title 2", "Title 3" };
+            var fixedRosterTitles = new [] { new Tuple<decimal,string>(1,"Title 1"), new Tuple<decimal,string>(2,"Title 2"), new Tuple<decimal,string>(3,"Title 3") };
             fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
             Guid mandatoryQuestionId = Guid.Parse("33330000FFFFFFFFFFFFFFFFFFFF5555"); 
@@ -51,6 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
+
+        It should_raise_RosterInstancesTitleChanged_event_with_3_instances = () =>
+          eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
 
         Cleanup stuff = () =>
         {

@@ -54,7 +54,7 @@ using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionState 
+    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionStateV2 
     {
         public InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17() 
         {
@@ -242,6 +242,27 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
         }
 
+        public override IInterviewExpressionStateV2 CloneV2()
+        {
+            return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
+        }
+
+        public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            string rosterTitle)
+        {
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
+			var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+            var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
+            if (rosterLevel != null)
+                rosterLevel.SetRowName(rosterTitle);
+        }
+
     }
 
 
@@ -290,7 +311,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return level;
         }
 
-                    
         private double? @__a = null;
         private ConditionalState @__a_state = new ConditionalState(IdOf.@__a_id);
         public double? a

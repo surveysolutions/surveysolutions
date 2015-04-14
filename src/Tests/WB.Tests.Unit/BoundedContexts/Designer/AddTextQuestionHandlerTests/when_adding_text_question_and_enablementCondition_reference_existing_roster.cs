@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
             questionnaire.Apply(Create.Event.AddGroup(chapterId));
             questionnaire.Apply(Create.Event.AddGroup(rosterId, variableName: "roster", parentId: chapterId));
             questionnaire.Apply(Create.Event.GroupBecameRoster(rosterId));
-            questionnaire.Apply(Create.Event.RosterChanged(rosterId, rosterType: RosterSizeSourceType.FixedTitles, titles: new[] { "1", "2" }));
+            questionnaire.Apply(Create.Event.RosterChanged(rosterId, rosterType: RosterSizeSourceType.FixedTitles, titles: new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2") }));
             questionnaire.Apply(Create.Event.AddTextQuestion(rosterQuestionId, parentId: rosterId));
             questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "age"));
             questionnaire.Apply(Create.Event.AddTextQuestion(existingQuestionId, parentId: chapterId));

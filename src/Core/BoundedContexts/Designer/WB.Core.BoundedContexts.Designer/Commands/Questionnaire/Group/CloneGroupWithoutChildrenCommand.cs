@@ -10,10 +10,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
         public CloneGroupWithoutChildrenCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition,
             Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource,
-            string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            Tuple<string, string>[] fixedRosterTitles, Guid? rosterTitleQuestionId)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
-                rosterFixedTitles, rosterTitleQuestionId)
+                fixedRosterTitles, rosterTitleQuestionId)
         {
             this.ParentGroupId = parentGroupId;
             this.SourceGroupId = sourceGroupId;

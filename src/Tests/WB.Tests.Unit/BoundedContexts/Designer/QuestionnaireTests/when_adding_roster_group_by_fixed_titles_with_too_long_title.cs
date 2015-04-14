@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception = Catch.Exception(() =>
                 questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: tooLongTitle, variableName: null,
                     rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentGroupId,
-                    isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterFixedTitles: new[] { "roster fixed title 1", "roster fixd title 2" }, rosterTitleQuestionId: null));
+                    isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterFixedTitles: new[] {new Tuple<string, string>("1","roster fixed title 1"),new Tuple<string, string>("2", "roster fixed title 2") }, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             (exception as QuestionnaireException).ErrorType.ShouldEqual(DomainExceptionType.TitleIsTooLarge);
 
         private static Questionnaire questionnaire;
-        private static string tooLongTitle = "A".PadRight(251,'A');
+        private static string tooLongTitle = "A".PadRight(501,'A');
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid parentGroupId;

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             nestedRosterGroupId = Guid.Parse("22222222222222222222222222222222");
 
             int callOrder = 0;
-            interviewExpressionStateMock = new Mock<IInterviewExpressionState>();
+            interviewExpressionStateMock = new Mock<IInterviewExpressionStateV2>();
             interviewExpressionStateMock.Setup(
                 x => x.AddRoster(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<decimal>(), Moq.It.IsAny<int?>()))
                 .Callback<Guid, decimal[], decimal, int?>(
@@ -124,6 +124,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid nestedRosterGroupId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Dictionary<Guid, int> rosterAddIndex = new Dictionary<Guid, int>(); 
-        private static Mock<IInterviewExpressionState> interviewExpressionStateMock;
+        private static Mock<IInterviewExpressionStateV2> interviewExpressionStateMock;
     }
 }

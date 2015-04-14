@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Te
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string Generate(QuestionnaireDocument questionnaire)
         {
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, true);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, true, QuestionnaireVersionProvider.GetCodeVersion());
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             return template.TransformText();
@@ -34,10 +35,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire)
         {
+            return GenerateEvaluatorForVersion(questionnaire, QuestionnaireVersionProvider.GetCurrentEngineVersion());
+        }
+
+        public Dictionary<string, string> GenerateEvaluatorForVersion(QuestionnaireDocument questionnaire, QuestionnaireVersion version)
+        {
             var generatedClasses = new Dictionary<string, string>();
 
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, false);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, false, QuestionnaireVersionProvider.GetCodeVersion(version));
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             generatedClasses.Add(new ExpressionLocation
@@ -206,10 +212,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
         public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
-            QuestionnaireDocument questionnaire, bool generateExpressionMethods)
+            QuestionnaireDocument questionnaire, bool generateExpressionMethods, int version)
         {
             var template = new QuestionnaireExecutorTemplateModel();
             template.GenerateEmbeddedExpressionMethods = generateExpressionMethods;
+            template.Version = version;
             var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(template, generateExpressionMethods);
             string generatedClassName = string.Format("{0}_{1}", InterviewExpressionStatePrefix,
                 Guid.NewGuid().FormatGuid());
@@ -282,7 +289,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.ConditionsPlayOrder = listOfOrderedContitions.ToList();
             template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
-
             return template;
         }
 
@@ -296,7 +302,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             allQuestions = new List<QuestionTemplateModel>();
             allGroups = new List<GroupTemplateModel>();
             allRosters = new List<RosterTemplateModel>();
-
+            
             var rostersToProcess = new Queue<Tuple<IGroup, RosterScopeBaseModel>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, questionnaireLevelModel));
 

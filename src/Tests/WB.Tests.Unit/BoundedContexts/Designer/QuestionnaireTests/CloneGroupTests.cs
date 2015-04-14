@@ -75,6 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("reference validation is turned off")]
         public void CloneGroupWithoutChildren_When_Group_Have_Condition_With_Reference_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
         {
             // arrange
@@ -104,6 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         }
 
         [Test]
+        [Ignore("reference validation is turned off")]
         public void CloneGroupWithoutChildren_When_Group_Have_Condition_With_2_References_And_Second_Reference_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
         {
             // arrange
