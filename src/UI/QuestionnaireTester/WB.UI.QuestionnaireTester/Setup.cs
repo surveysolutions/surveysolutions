@@ -53,7 +53,7 @@ namespace WB.UI.QuestionnaireTester
                 // questions
                 {typeof (StaticTextViewModel), typeof (StaticText)},
                 {typeof (TextQuestionViewModel), typeof (TextQuestion)},
-                {typeof (GroupReferanceViewModel), typeof (Group)},
+                {typeof (GroupReferenceViewModel), typeof (Group)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

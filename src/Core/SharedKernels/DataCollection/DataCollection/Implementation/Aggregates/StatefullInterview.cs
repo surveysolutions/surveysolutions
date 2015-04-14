@@ -16,7 +16,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         new internal void Apply(InterviewOnClientCreated @event)
         {
             base.Apply(@event);
-            interview = new InterviewModel();
+            interview = new InterviewModel()
+            {
+                Id = EventSourceId,
+                QuestionnaireId = @event.QuestionnaireId,
+                QuestionnaireVersion = @event.QuestionnaireVersion
+            };
             InterviewRepository.StoreInterview(interview, EventSourceId);
         }
 

@@ -7,6 +7,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader
 {
     public interface IInterviewStateFullViewModelFactory
     {
-        IEnumerable<MvxViewModel> Load(string interviewId, string chapterId);
+        IEnumerable<MvxViewModel> Load(Guid interviewId, string chapterId);
     }
 }

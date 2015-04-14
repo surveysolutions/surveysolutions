@@ -4,6 +4,7 @@ using Android.OS;
 
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
+using WB.Core.BoundedContexts.QuestionnaireTester;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Files;
 
@@ -24,7 +25,8 @@ namespace WB.UI.QuestionnaireTester.Ninject
                 new PlainStorageInfrastructureModule(CreatePlainStorageFolder()),
                 new FileInfrastructureModule(),
                 new DataCollectionModule(questionnaireAssembliesDirectoryName: GetAssembliesStorageDirectory()),
-                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
+                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()),
+                new InterviewModule());
         }
 
         private static string GetAssembliesStorageDirectory()

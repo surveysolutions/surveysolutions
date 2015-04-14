@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;

@@ -1,33 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using StaticTextViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels.StaticTextViewModel;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementation
 {
     internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
-        private readonly IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor;
-        private readonly IPlainStorageAccessor<InterviewModel> plainStorageInterviewAccessor;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IPlainInterviewRepository<InterviewModel> plainStorageInterviewAccessor;
 
         public InterviewStateFullViewModelFactory(
-            IPlainStorageAccessor<QuestionnaireDocument> plainStorageQuestionnaireAccessor,
-            IPlainStorageAccessor<InterviewModel> plainStorageInterviewAccessor)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainInterviewRepository<InterviewModel> plainStorageInterviewAccessor)
         {
-            this.plainStorageQuestionnaireAccessor = plainStorageQuestionnaireAccessor;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
 
@@ -38,26 +37,36 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             { typeof(TextQuestion), (qIdentity, interview, questionnaire) => CreateViewModel<TextQuestionViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
         };
 
-        public IEnumerable<MvxViewModel> Load(string interviewId, string chapterId)
+        public IEnumerable<MvxViewModel> Load(Guid interviewId, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.GetById(interviewId);
-            var questionaryId = interview.QuestionnaireId.FormatGuid();
+            var interview = this.plainStorageInterviewAccessor.GetInterview(interviewId);
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            var questionnaire = this.plainStorageQuestionnaireAccessor.GetById(questionaryId);
-            
-            Guid chapterIdGuid = new Guid(chapterId);
-            var @group = questionnaire.Find<IGroup>(chapterIdGuid);
-            if (chapterId != null && @group == null)
-                throw new KeyNotFoundException("Grup with id : {0} don't found".FormatString(chapterId));
+            IComposite loyout;
+
+            if (chapterId.IsNullOrEmpty())
+            {
+                loyout = questionnaire.Children.First();
+            }
+            else
+            {
+                Guid chapterIdGuid = new Guid(chapterId);
+                loyout = questionnaire.Find<IGroup>(chapterIdGuid);
+                if (chapterId != null && loyout == null)
+                    throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterId));
+            }
 
             List<MvxViewModel> entities = new List<MvxViewModel>();
 
-            foreach (var child in @group.Children)
+            foreach (var child in loyout.Children)
             {
                 var entityType = child.GetType();
 
                 if (!this.mapQuestions.ContainsKey(entityType))
+                {
+                    entities.Add(new StaticTextViewModel() { Title = child.ToString() });
                     continue; // temporaly ignore unknown types
+                }
 
                 var mapQuestionFunc = this.mapQuestions[entityType];
                 Identity identity = new Identity(child.PublicKey, new decimal[0]); // TODO SPuV: rosterVecror ????

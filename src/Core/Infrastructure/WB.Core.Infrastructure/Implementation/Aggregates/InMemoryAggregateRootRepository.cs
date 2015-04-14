@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -41,7 +42,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
             CommittedEventStream eventStream = this.eventStore.ReadFrom(aggregateId, minVersion, long.MaxValue);
 
-            return this.repository.Load(aggregateType, snapshot, eventStream);
+            var root = this.repository.Load(aggregateType, snapshot, eventStream);
+            memoryCache.Add(aggregateType, new WeakReference<IAggregateRoot>(root));
+            return root;
         }
     }
 }
