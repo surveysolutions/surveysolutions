@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         };
 
         Because of = () =>
-            templateModel = generator.CreateQuestionnaireExecutorTemplateModel(questionnaire, true, 1);
+            templateModel = generator.CreateQuestionnaireExecutorTemplateModel(questionnaire, true);
 
         It should_generate_model_for_multimedia_question = () =>
             GetQuestion(multimediaId).ShouldNotBeNull();
