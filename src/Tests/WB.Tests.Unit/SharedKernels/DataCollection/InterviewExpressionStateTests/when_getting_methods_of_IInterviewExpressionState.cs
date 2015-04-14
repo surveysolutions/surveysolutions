@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests
 {
