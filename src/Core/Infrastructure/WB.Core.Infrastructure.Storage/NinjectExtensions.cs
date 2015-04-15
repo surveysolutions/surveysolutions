@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using Ninject;
 using Ninject.Activation;
@@ -8,34 +7,6 @@ using Ninject.Web.Common;
 
 namespace WB.Core.Infrastructure.Storage
 {
-    public static class IsolatedThreadExtensions
-    {
-        public static Thread AsIsolatedThread(this Thread thread)
-        {
-            return IsolatedThreadManager.IsIsolated(thread) ? thread : null;
-        }
-    }
-
-    public static class IsolatedThreadManager
-    {
-        private static readonly HashSet<int> IsolatedThreads = new HashSet<int>();
-
-        public static void MarkCurrentThreadAsIsolated()
-        {
-            IsolatedThreads.Add(Thread.CurrentThread.ManagedThreadId);
-        }
-
-        public static void ReleaseCurrentThreadFromIsolation()
-        {
-            IsolatedThreads.Remove(Thread.CurrentThread.ManagedThreadId);
-        }
-
-        public static bool IsIsolated(Thread thread)
-        {
-            return IsolatedThreads.Contains(thread.ManagedThreadId);
-        }
-    }
-
     internal static class NinjectExtensions
     {
         public static IBindingNamedWithOrOnSyntax<T> InIsolatedThreadScopeOrRequestScopeOrThreadScope<T>(this IBindingInSyntax<T> syntax)
