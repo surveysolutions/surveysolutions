@@ -7,10 +7,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -19,6 +16,8 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
@@ -27,24 +26,17 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
 using WB.Core.SharedKernels.SurveyManagement.QuartzIntegration;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
-using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.Synchronization;
-using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.EventHandler;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -188,45 +180,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
-
-
-            //this.Bind<IReadSideRepositoryWriter<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<UserDocument>>().To<PostgreReadSideRepository<UserDocument>>();
-
-            //this.Bind<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>()
-            //    .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>()
-            //    .To<PostgreReadSideRepository<QuestionnaireBrowseItem>>();
-
-            //this.Bind<IReadSideRepositoryWriter<InterviewSummary>>()
-            //    .To<PostgreReadSideRepository<InterviewSummary>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<InterviewSummary>>()
-            //    .To<PostgreReadSideRepository<InterviewSummary>>();
-
-            //this.Bind<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>()
-            //    .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>()
-            //    .To<PostgreReadSideRepository<InterviewSyncPackageMeta>>();
-
-            //this.Bind<IReadSideRepositoryWriter<UserSyncPackageMeta>>()
-            //    .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>()
-            //    .To<PostgreReadSideRepository<UserSyncPackageMeta>>();
-
-
-            //this.Bind<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>>()
-            //   .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
-            //    .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
-            //this.Bind<IReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>()
-            //   .To<PostgreReadSideRepository<QuestionnaireSyncPackageMeta>>();
-
-            //this.Bind<IReadSideRepositoryWriter<TabletDocument>>()
-            //    .To<PostgreReadSideRepository<TabletDocument>>();
-            //this.Bind<IQueryableReadSideRepositoryReader<TabletDocument>>()
-            //    .To<PostgreReadSideRepository<TabletDocument>>();
-            //this.Bind<IReadSideRepositoryReader<TabletDocument>>()
-            //   .To<PostgreReadSideRepository<TabletDocument>>();
         }
     }
 }
