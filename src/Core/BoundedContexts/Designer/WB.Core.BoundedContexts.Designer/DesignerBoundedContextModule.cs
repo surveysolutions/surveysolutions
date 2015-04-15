@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
-            this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+            this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>().InSingletonScope();
 
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
             this.Kernel.RegisterFactory<QuestionnaireViewFactory>();

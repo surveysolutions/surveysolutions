@@ -196,7 +196,7 @@ namespace WB.Tests.Integration.InterviewTests
                             DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
                                 "System.Collections.dll", "System.Linq.dll" }
                         }, new FileSystemIOAccessor()),
-                    new CodeGenerator());
+                    new CodeGenerator(new QuestionnaireVersionProvider()));
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
