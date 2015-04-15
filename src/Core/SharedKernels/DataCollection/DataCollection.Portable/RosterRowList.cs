@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -32,7 +33,8 @@ namespace WB.Core.SharedKernels.DataCollection
          */
         private string DecimalValueToString(decimal decimalValue)
         {
-            if (decimalValue == 0)
+            return decimalValue.ToString("F0", CultureInfo.InvariantCulture);
+        /*    if (decimalValue == 0)
             {
                 return "0";
             }
@@ -45,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
             decimalString = decimalString.TrimEnd('0');
             decimalString = decimalString.TrimEnd(',', '.');
-            return decimalString;
+            return decimalString;*/
         }
 
         public T this[decimal code] { get { return internalDictionary[DecimalValueToString(code)]; } }

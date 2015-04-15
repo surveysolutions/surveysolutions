@@ -3461,32 +3461,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return scopeIds.ToArray();
         }
 
-        private void ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
-            string expression)
-        {
-           /* IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
-
-            IGroup roster = this.GetRosterByrVariableName(identifier);
-
-            if (question == null && roster == null && !IsVariableNameNameSpace(identifier))
-                throw new QuestionnaireException(
-                    DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference, 
-                    string.Format(ExceptionMessages.QuestionOrRosterIdentifierIsMissing, identifier, expression));*/
-        }
-
-        private bool IsVariableNameNameSpace(string identifier)
-        {
-            var namespaces = typeof(IExpressionExecutable).Assembly.GetTypes().Select(t=>t.Name)
-                .Distinct();
-            return namespaces.Contains(identifier);
-        }
-
-        private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
-        {
-            Guid parsedId;
-            return !Guid.TryParse(identifier, out parsedId) ? this.GetQuestionByStataCaption(identifier) : this.GetQuestion(parsedId);
-        }
-
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
