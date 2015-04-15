@@ -1,100 +1,19 @@
-using System;
-using System.Globalization;
-using System.Threading;
+using System.Collections.ObjectModel;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Views;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class PrefilledQuestionsViewModel : BaseViewModel
     {
-        private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
+        private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
+        private string interviewId;
 
-        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
-
-        private Guid interviewId;
-
-        private Guid questionnaireId;
-
-        private QuestionnaireListItem selectedQuestionnaire;
-
-        private bool canCreateInterview = true;
-        public bool CanCreateInterview
-        {
-            get { return canCreateInterview; }
-            set
-            {
-                canCreateInterview = value;
-                RaisePropertyChanged(() => CanCreateInterview);
-            }
-        }
-
-        private bool isInProgress = false;
-        public bool IsInProgress
-        {
-            get { return isInProgress; }
-            set
-            {
-                isInProgress = value;
-                RaisePropertyChanged(() => IsInProgress);
-            }
-        }
-
-        private bool hasErrors = false;
-        public bool HasErrors
-        {
-            get { return hasErrors; }
-            set
-            {
-                hasErrors = value;
-                RaisePropertyChanged(() => HasErrors);
-            }
-        }
-
-        private bool isServerUnavailable = false;
-        public bool IsServerUnavailable
-        {
-            get { return isServerUnavailable; }
-            set
-            {
-                isServerUnavailable = value;
-                RaisePropertyChanged(() => IsServerUnavailable);
-            }
-        }
-
-        private string errorMessage = string.Empty;
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set
-            {
-                errorMessage = value;
-                RaisePropertyChanged(() => ErrorMessage);
-            }
-        }
-
-        private string progressIndicator;
-        public string ProgressIndicator
-        {
-            get { return progressIndicator; }
-            set
-            {
-                progressIndicator = value;
-                RaisePropertyChanged(() => ProgressIndicator);
-            }
-        }
-
-        public PrefilledQuestionsViewModel(
-            ILogger logger, 
-            ICommandService commandService,
-            IPrincipal principal)
+        public PrefilledQuestionsViewModel(ILogger logger, IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory)
             : base(logger)
         {
-            this.commandService = commandService;
-            this.principal = principal;
+            this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
         }
 
         private IMvxCommand openInterviewCommand;
@@ -102,14 +21,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return openInterviewCommand ?? (openInterviewCommand = new MvxCommand(this.OpenInterview, () => this.CanCreateInterview));
+                return openInterviewCommand ?? (openInterviewCommand = new MvxCommand(this.OpenInterview));
             }
         }
 
-        public void Init(Guid interviewId, Guid questionnaireId)
+        private ObservableCollection<MvxViewModel> prefilledQuestions = new ObservableCollection<MvxViewModel>();
+        public ObservableCollection<MvxViewModel> PrefilledQuestions
         {
-            this.questionnaireId = questionnaireId;
+            get { return prefilledQuestions; }
+            set
+            {
+                prefilledQuestions = value;
+                RaisePropertyChanged(() => PrefilledQuestions);
+            }
+        }
+
+        public async void Init(string interviewId)
+        {
             this.interviewId = interviewId;
+            this.PrefilledQuestions = await this.interviewStateFullViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);
         }
 
         private void OpenInterview()
@@ -119,7 +49,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.tokenSource.Cancel();
             this.ShowViewModel<DashboardViewModel>();
         }
     }

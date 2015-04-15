@@ -2,8 +2,10 @@ using Android.App;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.UI.QuestionnaireTester.Views.Adapters;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
@@ -20,6 +22,9 @@ namespace WB.UI.QuestionnaireTester.Views
             base.OnCreate(bundle);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+
+            var list = FindViewById<MvxListView>(Resource.Id.PrefilledQuestionsListView);
+            list.Adapter = new QuestionAdapter(this, (IMvxAndroidBindingContext)BindingContext);
         }
     }
 }

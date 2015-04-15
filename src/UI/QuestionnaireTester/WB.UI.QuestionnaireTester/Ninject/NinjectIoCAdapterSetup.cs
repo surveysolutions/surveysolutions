@@ -1,19 +1,12 @@
-using System.IO;
-
-using Android.OS;
-
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
 using WB.Core.BoundedContexts.QuestionnaireTester;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Files;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
     public class NinjectIoCAdapterSetup
     {
-        private const string AssembliesStoreName = "QuestionnaireAssemblies";
-
         public static IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(
@@ -22,33 +15,23 @@ namespace WB.UI.QuestionnaireTester.Ninject
                 new LoggerModule(),
                 new ApplicationModule(),
                 new ServiceLocationModule(),
-                new PlainStorageInfrastructureModule(CreatePlainStorageFolder()),
-                new FileInfrastructureModule(),
-                new DataCollectionModule(questionnaireAssembliesDirectoryName: GetAssembliesStorageDirectory()),
+                new PlainStorageInfrastructureModule(GetPathToSubfolderInLocalDirectory("database")),
+                new DataCollectionModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries")),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()),
                 new InterviewModule());
         }
 
-        private static string GetAssembliesStorageDirectory()
+        private static string GetPathToSubfolderInLocalDirectory(string subFolderName)
         {
-            var assembliesStorageDirectory = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
-                ? Environment.ExternalStorageDirectory.AbsolutePath
-                : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var pathToSubfolderInLocalDirectory = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, subFolderName);
 
-            return Path.Combine(assembliesStorageDirectory, AssembliesStoreName);
-        }
-
-        private static string CreatePlainStorageFolder()
-        {
-            var pathToPlainStorage = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, "database");
-
-            var plainStorageFolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToPlainStorage).Result;
-            if (plainStorageFolderExistingStatus != ExistenceCheckResult.FolderExists)
+            var subfolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
+            if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
             {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToPlainStorage, CreationCollisionOption.FailIfExists).Wait();
+                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory, CreationCollisionOption.FailIfExists).Wait();
             }
 
-            return pathToPlainStorage;
+            return pathToSubfolderInLocalDirectory;
         }
     }
 }

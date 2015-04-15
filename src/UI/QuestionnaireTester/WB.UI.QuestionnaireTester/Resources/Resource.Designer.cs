@@ -33,8 +33,6 @@ namespace WB.UI.QuestionnaireTester
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
-			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
-			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -1176,6 +1174,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080009
 			public const int MvxBindingTagUnique = 2131230729;
 			
+			// aapt resource value: 0x7f080042
+			public const int PrefilledQuestionsListView = 2131230786;
+			
 			// aapt resource value: 0x7f080041
 			public const int QuestionsListView = 2131230785;
 			
@@ -1233,20 +1234,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080018
 			public const int collapseActionView = 2131230744;
 			
-			// aapt resource value: 0x7f080045
-			public const int dashboard_about = 2131230789;
-			
-			// aapt resource value: 0x7f080042
-			public const int dashboard_refresh = 2131230786;
+			// aapt resource value: 0x7f080046
+			public const int dashboard_about = 2131230790;
 			
 			// aapt resource value: 0x7f080043
-			public const int dashboard_search = 2131230787;
+			public const int dashboard_refresh = 2131230787;
 			
 			// aapt resource value: 0x7f080044
-			public const int dashboard_settings = 2131230788;
+			public const int dashboard_search = 2131230788;
 			
-			// aapt resource value: 0x7f080046
-			public const int dashboard_signout = 2131230790;
+			// aapt resource value: 0x7f080045
+			public const int dashboard_settings = 2131230789;
+			
+			// aapt resource value: 0x7f080047
+			public const int dashboard_signout = 2131230791;
 			
 			// aapt resource value: 0x7f080030
 			public const int decor_content_parent = 2131230768;

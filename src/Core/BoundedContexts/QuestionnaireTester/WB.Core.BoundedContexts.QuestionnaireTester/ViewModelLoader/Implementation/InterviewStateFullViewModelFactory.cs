@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
@@ -82,6 +85,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             T viewModel = Mvx.Create<T>();
             intializer.Invoke(viewModel);
             return viewModel;
+        }
+
+        public IEnumerable<MvxViewModel> Load(string interviewId, string chapterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId)
+        {
+            return
+                new Task<ObservableCollection<MvxViewModel>>(() => new ObservableCollection<MvxViewModel>());
         }
     }
 }

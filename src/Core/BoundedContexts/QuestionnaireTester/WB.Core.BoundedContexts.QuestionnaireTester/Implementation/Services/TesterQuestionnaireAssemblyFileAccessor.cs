@@ -15,12 +15,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         public TesterQuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-
-            if (!fileSystemAccessor.IsDirectoryExists(assemblyStorageDirectory))
-            {
-                fileSystemAccessor.CreateDirectory(assemblyStorageDirectory);
-            }
-
             this.assemblyStorageDirectory = assemblyStorageDirectory;
         }
 
