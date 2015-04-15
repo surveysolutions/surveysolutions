@@ -2865,6 +2865,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         FixedRosterId = fixedRosterId,
                         TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
+                        .Select(title => new
+                            {
+                                Title = title.Title,
+                                RosterInstanceId = title.Value
+                            }).ToDictionary(x => x.RosterInstanceId, x => x.Title)
                     }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
             return rosterTitlesGroupedByRosterId;
         }
@@ -3413,7 +3418,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!rosterSizeQuestionId.HasValue)
                 return questionnaire.GetFixedRosterTitles(rosterId)
-                    .ToDictionary(x => x.Key, x => new Tuple<string, int?>(x.Value, null));
+                    .ToDictionary(x => x.Value, x => new Tuple<string, int?>(x.Title, null));
 
             var rosterSizeQuestionIdentity = new Identity(rosterSizeQuestionId.Value,
                 outerRosterVector.Take(questionnaire.GetRosterLevelForQuestion(rosterSizeQuestionId.Value)).ToArray());

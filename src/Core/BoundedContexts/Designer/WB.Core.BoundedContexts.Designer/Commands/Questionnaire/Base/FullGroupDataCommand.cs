@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
@@ -8,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, Tuple<string, string>[] fixedRosterTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId)
             : base(questionnaireId, groupId, responsibleId)
         {
             this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.FixedRosterTitles = fixedRosterTitles == null
                 ? null
                 : fixedRosterTitles
-                    .Select(x => new Tuple<string, string>(x.Item1,CommandUtils.SanitizeHtml(x.Item2, removeAllTags: true)))
+                    .Select(x => new FixedRosterTitleItem(x.Value, CommandUtils.SanitizeHtml(x.Title, removeAllTags: true)))
                     .ToArray();
             this.RosterTitleQuestionId = rosterTitleQuestionId;
         }
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public bool IsRoster { get; private set; }
         public Guid? RosterSizeQuestionId { get; private set; }
         public RosterSizeSourceType RosterSizeSource { get; private set; }
-        public Tuple<string, string>[] FixedRosterTitles { get; private set; }
+        public FixedRosterTitleItem[] FixedRosterTitles { get; private set; }
         public Guid? RosterTitleQuestionId { get; private set; }
 
         public string Description { get; private set; }

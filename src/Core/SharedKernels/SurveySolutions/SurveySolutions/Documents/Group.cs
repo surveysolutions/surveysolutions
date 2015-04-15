@@ -17,7 +17,7 @@ namespace Main.Core.Entities.SubEntities
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
-            this.FixedRosterTitles = new Dictionary<decimal, string>();
+            this.FixedRosterTitles = new FixedRosterTitle[0];
         }
 
         public Group(string text)
@@ -47,17 +47,18 @@ namespace Main.Core.Entities.SubEntities
         {
             set
             {
-                FixedRosterTitles = new Dictionary<decimal, string>();
-
-                if(value != null || value.Any())
-                    for (int i = 0; i < value.Length; i++)
-                    {
-                        FixedRosterTitles[i] = value[i];
-                    }
+                if (value != null && value.Any())
+                {
+                    FixedRosterTitles = value.Select((t, i) => new FixedRosterTitle(i, t)).ToArray();
+                }
+                else
+                {
+                    FixedRosterTitles = new FixedRosterTitle[0];
+                }
             } 
         }
 
-        public Dictionary<decimal, string> FixedRosterTitles {get; set; }
+        public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
         public Guid? RosterTitleQuestionId { get; set; }
 

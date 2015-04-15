@@ -7,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -111,7 +112,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string rosterTitle = "roster title";
         private static string textQuestionTitle = "text question title";
         private static int targetIndex = 0;
-        private static Dictionary<decimal, string> rosterFixedTitles = new Dictionary<decimal, string>{ { 1, "title 1" }, { 2, "title 2" } };
+
+        private static FixedRosterTitle[] rosterFixedTitles = new[]{new FixedRosterTitle(1, "title 1"), new FixedRosterTitle(2, "title 2")};
+            
         private static EventContext eventContext;
     }
 }

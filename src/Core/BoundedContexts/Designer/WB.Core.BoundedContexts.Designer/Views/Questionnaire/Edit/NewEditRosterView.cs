@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string RosterSizeNumericQuestionId { get; set; }
         public string RosterSizeMultiQuestionId { get; set; }
         public string RosterTitleQuestionId { get; set; }
-        public Tuple<decimal,string>[] FixedRosterTitles { get; set; }
+        public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
         public QuestionnaireInfoFactory.SelectOption[] RosterTypeOptions { get; set; }
 
