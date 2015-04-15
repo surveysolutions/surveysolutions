@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.V2
 {
@@ -7,11 +8,9 @@ namespace WB.Core.SharedKernels.DataCollection.V2
         public abstract void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle);
 
-        public abstract IInterviewExpressionStateV2 CloneV2();
-
-        public override IInterviewExpressionState Clone()
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
-            return CloneV2();
+            return Clone() as IInterviewExpressionStateV2;
         }
     }
 }

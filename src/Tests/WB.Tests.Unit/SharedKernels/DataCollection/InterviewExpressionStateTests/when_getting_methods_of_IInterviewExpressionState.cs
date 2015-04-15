@@ -224,7 +224,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
                 ParamsType =  new Type[0] 
             },
             new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] },
-            new MetodInfo { Name = "CloneV2", ReturnType = typeof (IInterviewExpressionStateV2), ParamsType = new Type[0] },
+            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionStateV2), ParamsType = new Type[0] },
             new MetodInfo
             {
                 Name = "UpdateRosterTitle",

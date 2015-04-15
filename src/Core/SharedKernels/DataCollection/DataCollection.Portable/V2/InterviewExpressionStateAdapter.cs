@@ -133,13 +133,13 @@ namespace WB.Core.SharedKernels.DataCollection.V2
             return adaptee.Clone(); 
         }
 
-        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
-        {
-        }
-
-        public IInterviewExpressionStateV2 CloneV2()
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
             return new InterviewExpressionStateAdapter(adaptee);
+        }
+
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
+        {
         }
     }
 }

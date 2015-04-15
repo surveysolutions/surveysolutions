@@ -89,7 +89,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interviewExpressionState = new Mock<IInterviewExpressionStateV2>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
-            interviewExpressionState.Setup(x => x.CloneV2()).Returns(interviewExpressionState.Object);
 
             SetupInstanceToMockedServiceLocator(
                 Mock.Of<IInterviewExpressionStatePrototypeProvider>(

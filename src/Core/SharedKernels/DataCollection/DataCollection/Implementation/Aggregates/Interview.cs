@@ -2295,7 +2295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             //Update State
             expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
@@ -2367,7 +2367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(state,
                 questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
 
@@ -2453,7 +2453,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState, questionnaire, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
                 answers, changedAnswers);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateTextListAnswer(questionId, rosterVector, answers);
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
@@ -2591,7 +2591,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IInterviewExpressionStateV2 PrepareExpressionProcessorStateForCalculations()
         {
-            IInterviewExpressionStateV2 expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
+            IInterviewExpressionStateV2 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
 
@@ -3792,7 +3792,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<RosterCalculationData> rosterDatas,
             IQuestionnaire questionnaire)
         {
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.CloneV2();
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             foreach (var changes in interviewChanges.Changes)
             {
