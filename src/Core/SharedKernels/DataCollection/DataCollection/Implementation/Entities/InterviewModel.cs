@@ -5,30 +5,14 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public enum QuestionModelType
-    {
-        SingleOptionQuestionModel,
-        LinkedSingleOptionQuestionModel,
-        MultiOptionQuestionModel,
-        LinkedMultiOptionQuestionModel,
-        IntegerNumericQuestionModel,
-        RealNumericQuestionModel,
-        MaskedTextQuestionModel,
-        TextListQuestionModel,
-        QrBarcodeQuestionModel,
-        MultimediaQuestionModel,
-        DateTimeQuestionModel,
-        GpsCoordinatesQuestionModel,
-    }
-
     public class InterviewModel : IInterview
     {
         public InterviewModel()
         {
             Answers = new Dictionary<string, AbstractInterviewQuestionModel>();
-            Rosters = new Dictionary<string, InterviewRosterModel>();
-            Groups = new Dictionary<string, InterviewGroupModel>();
+            this.GroupsAndRosters = new Dictionary<string, InterviewGroupModel>();
             QuestionIdToQuestionModelTypeMap = new Dictionary<Guid, QuestionModelType>();
+            IsInProgress = true;
         }
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
@@ -36,25 +20,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid Id { get; set; }
 
         public Dictionary<string, AbstractInterviewQuestionModel> Answers { get; set; }
-        public Dictionary<string, InterviewRosterModel> Rosters { get; set; }
-        public Dictionary<string, InterviewGroupModel> Groups { get; set; }
+        public Dictionary<string, InterviewGroupModel> GroupsAndRosters { get; set; }
 
         public Dictionary<Guid, QuestionModelType> QuestionIdToQuestionModelTypeMap { get; set; }
 
+        public bool HasErrors { get; set; }
+        public bool IsInProgress { get; set; }
+
         public Dictionary<QuestionModelType, Func<AbstractInterviewQuestionModel>> QuestionModelTypeToModelActivatorMap = new Dictionary<QuestionModelType, Func<AbstractInterviewQuestionModel>>
                 {
-                    { QuestionModelType.SingleOptionQuestionModel, () => new SingleOptionQuestionModel()},
-                    { QuestionModelType.LinkedSingleOptionQuestionModel, () => new LinkedSingleOptionQuestionModel()},
-                    { QuestionModelType.MultiOptionQuestionModel, () => new MultiOptionQuestionModel()},
-                    { QuestionModelType.LinkedMultiOptionQuestionModel, () => new LinkedMultiOptionQuestionModel()},
-                    { QuestionModelType.IntegerNumericQuestionModel, () => new IntegerNumericQuestionModel()},
-                    { QuestionModelType.RealNumericQuestionModel, () => new RealNumericQuestionModel()},
-                    { QuestionModelType.MaskedTextQuestionModel, () => new MaskedTextQuestionModel()},
-                    { QuestionModelType.TextListQuestionModel, () => new TextListQuestionModel()},
-                    { QuestionModelType.QrBarcodeQuestionModel, () => new QrBarcodeQuestionModel()},
-                    { QuestionModelType.MultimediaQuestionModel, () => new MultimediaQuestionModel()},
-                    { QuestionModelType.DateTimeQuestionModel, () => new DateTimeQuestionModel()},
-                    { QuestionModelType.GpsCoordinatesQuestionModel, () => new GpsCoordinatesQuestionModel()}
+                    { QuestionModelType.SingleOption, () => new SingleOptionQuestionModel()},
+                    { QuestionModelType.LinkedSingleOption, () => new LinkedSingleOptionQuestionModel()},
+                    { QuestionModelType.MultiOption, () => new MultiOptionQuestionModel()},
+                    { QuestionModelType.LinkedMultiOption, () => new LinkedMultiOptionQuestionModel()},
+                    { QuestionModelType.IntegerNumeric, () => new IntegerNumericQuestionModel()},
+                    { QuestionModelType.RealNumeric, () => new RealNumericQuestionModel()},
+                    { QuestionModelType.MaskedText, () => new MaskedTextQuestionModel()},
+                    { QuestionModelType.TextList, () => new TextListQuestionModel()},
+                    { QuestionModelType.QrBarcode, () => new QrBarcodeQuestionModel()},
+                    { QuestionModelType.Multimedia, () => new MultimediaQuestionModel()},
+                    { QuestionModelType.DateTime, () => new DateTimeQuestionModel()},
+                    { QuestionModelType.GpsCoordinates, () => new GpsCoordinatesQuestionModel()}
                 };
 
         public MaskedTextQuestionModel GetTextQuestionModel(Identity identity)

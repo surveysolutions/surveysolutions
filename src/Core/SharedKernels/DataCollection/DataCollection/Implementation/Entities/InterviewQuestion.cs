@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public class InterviewRosterModel
-    {
-        public Guid Id { get; set; }
-        public decimal[] ParentRosterVector { get; set; }
-        public decimal RowCode { get; set; }
-        public decimal[] RosterVector { get; set; }
-    }
-
     public class InterviewGroupModel
     {
         public Guid Id { get; set; }
         public decimal[] RosterVector { get; set; }
+        public bool IsDisabled { get; set; }
+    }
+
+    public class InterviewRosterModel : InterviewGroupModel
+    {
+        public decimal[] ParentRosterVector { get; set; }
+        public decimal RowCode { get; set; }
+        public string Title { get; set; }
     }
 
     public abstract class AbstractInterviewQuestionModel
