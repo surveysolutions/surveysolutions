@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
 
         It should_return_roster_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
-            result.FixedRosterTitles.ShouldEqual(GetGroup(rosterId).FixedRosterTitles);
+            result.FixedRosterTitles.ToDictionary(x => x.Item1, x => x.Item2).ShouldEqual(GetGroup(rosterId).FixedRosterTitles);
 
         It should_return_roster_with_RosterSizeMultiQuestionId_be_null = () =>
             result.RosterSizeMultiQuestionId.ShouldBeNull();
