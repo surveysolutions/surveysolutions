@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+            this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>().InSingletonScope();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 

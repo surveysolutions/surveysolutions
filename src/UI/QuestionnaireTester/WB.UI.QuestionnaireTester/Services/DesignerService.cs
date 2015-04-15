@@ -12,10 +12,12 @@ namespace WB.UI.QuestionnaireTester.Services
     public class DesignerService
     {
         private readonly IRestService restService;
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
 
-        public DesignerService(IRestService restService)
+        public DesignerService(IRestService restService, IQuestionnaireVersionProvider questionnaireVersionProvider)
         {
             this.restService = restService;
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
         }
 
         public async Task<bool> Login(string userName, string password, CancellationToken cancellationToken)
@@ -41,7 +43,7 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
+            var supportedVersion = questionnaireVersionProvider.GetCurrentEngineVersion();
 
             return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                 url: "questionnaire",
