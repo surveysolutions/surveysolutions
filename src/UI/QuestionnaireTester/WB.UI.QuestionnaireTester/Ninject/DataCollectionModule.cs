@@ -1,6 +1,7 @@
 using Ninject.Modules;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -20,7 +21,8 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
         public override void Load()
         {
-           
+            this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
                 .To<TesterQuestionnaireAssemblyFileAccessor>().InSingletonScope()
                 .WithConstructorArgument("assemblyStorageDirectory", this.pathToQuestionnaireAssemblies);

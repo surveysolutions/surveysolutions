@@ -227,6 +227,10 @@
       <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
       <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj">
+      <Project>{8CEACD5D-AB0E-4104-8BCE-DDD7900887E0}</Project>
+      <Name>WB.Core.Infrastructure.Files.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage.Mobile\WB.Core.Infrastructure.Storage.Mobile.csproj">
       <Project>{AC9D8028-37EA-44F6-92EC-05F20EF27253}</Project>
       <Name>WB.Core.Infrastructure.Storage.Mobile</Name>

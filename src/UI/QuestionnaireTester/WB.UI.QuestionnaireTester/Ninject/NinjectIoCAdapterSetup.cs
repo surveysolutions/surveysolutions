@@ -2,6 +2,7 @@ using Cirrious.CrossCore.IoC;
 using PCLStorage;
 using WB.Core.BoundedContexts.QuestionnaireTester;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Files;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
@@ -15,6 +16,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
                 new LoggerModule(),
                 new ApplicationModule(),
                 new ServiceLocationModule(),
+                new FileInfrastructureModule(),
                 new PlainStorageInfrastructureModule(GetPathToSubfolderInLocalDirectory("database")),
                 new DataCollectionModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries")),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()),
