@@ -707,6 +707,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IGroup group = this.GetGroup(groupId);
 
+            if (group == null && groupId == innerDocument.PublicKey) group = this.innerDocument;
+
             if (group == null)
                 throw new QuestionnaireException(customExceptionMessage ?? string.Format("Group with id '{0}' is not found.", groupId));
 
