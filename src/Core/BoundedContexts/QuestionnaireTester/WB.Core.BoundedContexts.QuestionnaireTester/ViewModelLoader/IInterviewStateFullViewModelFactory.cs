@@ -1,12 +1,14 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader
 {
     public interface IInterviewStateFullViewModelFactory
     {
-        IEnumerable<MvxViewModel> Load(Guid interviewId, string chapterId);
+        IEnumerable<MvxViewModel> Load(string interviewId, string chapterId);
+        Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId);
     }
 }

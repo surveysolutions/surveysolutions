@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
         }
 
-        public void Init(Guid id, string chapterId)
+        public void Init(string id, string chapterId)
         {
             Items = interviewStateFullViewModelFactory.Load(id, chapterId);
         }
