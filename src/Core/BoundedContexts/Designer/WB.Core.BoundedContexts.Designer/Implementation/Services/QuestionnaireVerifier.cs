@@ -1173,13 +1173,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return null;
         }
 
-        private static bool IsVariableNameNameSpace(string identifier)
-        {
-            var namespaces = typeof(IExpressionExecutable).Assembly.GetTypes().Select(t => t.Name)
-                .Distinct();
-            return namespaces.Contains(identifier);
-        }
-
         private static QuestionnaireVerificationError GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
             IComposite itemWithExpression, string identifier, QuestionnaireDocument questionnaire)
         {
