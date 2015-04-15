@@ -136,6 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
+            this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();
 
             this.Kernel.Load(new QuartzNinjectModule());
 
