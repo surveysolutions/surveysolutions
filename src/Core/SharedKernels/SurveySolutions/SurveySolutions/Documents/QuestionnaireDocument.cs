@@ -92,9 +92,9 @@ namespace Main.Core.Documents
             set {}
         }
 
-        public Dictionary<decimal, string> FixedRosterTitles
+        public FixedRosterTitle[] FixedRosterTitles
         {
-            get { return new Dictionary<decimal, string>(); }
+            get { return new FixedRosterTitle[0]; }
         }
 
         public Guid? RosterTitleQuestionId {

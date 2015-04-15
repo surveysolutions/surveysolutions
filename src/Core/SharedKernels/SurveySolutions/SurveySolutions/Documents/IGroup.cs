@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using Main.Core.Entities.Composite;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -20,8 +20,8 @@ namespace Main.Core.Entities.SubEntities
 
         [Obsolete]
         string[] RosterFixedTitles { set; }
-        
-        Dictionary<decimal, string> FixedRosterTitles { get; }
+
+        FixedRosterTitle[] FixedRosterTitles { get; }
 
         Guid? RosterTitleQuestionId { get; }
     }
