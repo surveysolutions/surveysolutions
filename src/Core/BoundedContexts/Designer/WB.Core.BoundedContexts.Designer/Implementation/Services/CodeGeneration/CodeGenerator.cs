@@ -20,8 +20,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class CodeGenerator : ICodeGenerator
     {
-        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        public CodeGenerator(IQuestionnaireVersionProvider questionnaireVersionProvider)
+        {
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
+        }
 
+        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
@@ -31,14 +36,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
                 CreateQuestionnaireExecutorTemplateModel(questionnaire, true);
-            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure, GetCodeVersion(QuestionnaireVersionProvider.GetCurrentEngineVersion()));
+            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure, GetCodeVersion(questionnaireVersionProvider.GetCurrentEngineVersion()));
 
             return template.TransformText();
         }
 
         public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire)
         {
-            return GenerateEvaluatorForVersion(questionnaire, QuestionnaireVersionProvider.GetCurrentEngineVersion());
+            return GenerateEvaluatorForVersion(questionnaire, questionnaireVersionProvider.GetCurrentEngineVersion());
         }
 
         public Dictionary<string, string> GenerateEvaluatorForVersion(QuestionnaireDocument questionnaire, QuestionnaireVersion version)
