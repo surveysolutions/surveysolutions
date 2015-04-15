@@ -14,7 +14,7 @@ namespace WB.UI.QuestionnaireTester.Views
     {
         protected override int ViewResourceId
         {
-            get { return Resource.Layout.interview_group; }
+            get { return Resource.Layout.interview; }
         }
 
         protected override void OnCreate(Bundle bundle)

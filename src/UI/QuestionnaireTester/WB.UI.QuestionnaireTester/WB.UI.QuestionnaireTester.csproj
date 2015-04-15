@@ -141,6 +141,7 @@
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
+    <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="Implementation\Services\FileSystemAccessor.cs" />
@@ -205,14 +206,23 @@
     <AndroidResource Include="Resources\layout\dashboard.axml" />
     <AndroidResource Include="Resources\layout\my_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
-    <AndroidResource Include="Resources\layout\interview_group.axml" />
+    <AndroidResource Include="Resources\layout\interview.axml" />
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
-    <AndroidResource Include="Resources\layout\text_question.axml">
+    <AndroidResource Include="Resources\layout\interview_text_question.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\static_text.axml">
+    <AndroidResource Include="Resources\layout\interview_static_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_date_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_decimal_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_image_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_integer_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_multi_choice_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_multi_choice_question_item_template.axml" />
+    <AndroidResource Include="Resources\layout\interview_single_choice_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_single_choice_question_item_template.axml" />
+    <AndroidResource Include="Resources\layout\interview_group_reference.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

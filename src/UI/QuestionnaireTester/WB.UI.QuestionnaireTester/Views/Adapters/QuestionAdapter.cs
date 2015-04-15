@@ -18,9 +18,15 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
 
         private static readonly Dictionary<Type, int> QuestionTemplates = new Dictionary<Type, int>()
         {
-            {typeof (StaticTextViewModel), Resource.Layout.static_text},
-            {typeof (TextQuestionViewModel), Resource.Layout.text_question},
-
+            {typeof (StaticTextViewModel), Resource.Layout.interview_static_text },
+            {typeof (TextQuestionViewModel), Resource.Layout.interview_text_question },
+            {typeof (GroupReferenceViewModel), Resource.Layout.interview_group_reference },
+            {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_date_question },
+            {typeof (RealNumericQuestionViewModel), Resource.Layout.interview_decimal_question },
+            {typeof (MultimediaQuestionViewModel), Resource.Layout.interview_image_question },
+            {typeof (IntegerNumericQuestionViewModel), Resource.Layout.interview_integer_question },
+            {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_multi_choice_question },
+            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_single_choice_question },
         };
 
         public override int GetItemViewType(int position)
