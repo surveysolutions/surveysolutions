@@ -193,10 +193,7 @@ namespace WB.UI.Supervisor.App_Start
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>();
 
-            kernel.BindFilter<TransactionFilter>(FilterScope.First, 0);
-            kernel.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller);
-            kernel.BindFilter<PlainTransactionFilter>(FilterScope.First, 0);
-            kernel.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller);
+            
 
             return kernel;
         }
