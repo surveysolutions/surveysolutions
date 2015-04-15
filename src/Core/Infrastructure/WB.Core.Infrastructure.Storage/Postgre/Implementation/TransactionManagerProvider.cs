@@ -7,15 +7,20 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class TransactionManagerProvider : ISessionProvider, ITransactionManagerProviderManager
     {
-        private readonly Func<CqrsPostgresTransactionManager> transactionManagerFactory;
-        private readonly RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager;
+        private readonly Func<ICqrsPostgresTransactionManager> transactionManagerFactory;
+        private readonly ICqrsPostgresTransactionManager rebuildReadSideTransactionManager;
         private ICqrsPostgresTransactionManager pinnedTransactionManager;
 
-        public TransactionManagerProvider(Func<CqrsPostgresTransactionManager> transactionManagerFactory,
+        public TransactionManagerProvider(
+            Func<CqrsPostgresTransactionManager> transactionManagerFactory,
             RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager)
+            : this((Func<ICqrsPostgresTransactionManager>)transactionManagerFactory, (ICqrsPostgresTransactionManager)rebuildReadSideCqrsTransactionManager) { }
+
+        internal TransactionManagerProvider(Func<ICqrsPostgresTransactionManager> transactionManagerFactory,
+            ICqrsPostgresTransactionManager rebuildReadSideTransactionManager)
         {
             this.transactionManagerFactory = transactionManagerFactory;
-            this.rebuildReadSideCqrsTransactionManager = rebuildReadSideCqrsTransactionManager;
+            this.rebuildReadSideTransactionManager = rebuildReadSideTransactionManager;
         }
 
         public ITransactionManager GetTransactionManager()
@@ -30,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void PinRebuildReadSideTransactionManager()
         {
-            this.pinnedTransactionManager = this.rebuildReadSideCqrsTransactionManager;
+            this.pinnedTransactionManager = this.rebuildReadSideTransactionManager;
         }
 
         public void UnpinTransactionManager()
