@@ -6,6 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -19,7 +20,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             sourceGroupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { new Tuple<string, string>("1",rosterFixedTitle1), new Tuple<string, string>("2",rosterFixedTitle2) };
+            rosterFixedTitles = new[] { new FixedRosterTitleItem("1", rosterFixedTitle1), 
+                new FixedRosterTitleItem("2", rosterFixedTitle2) };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -75,10 +77,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldNotBeEmpty();
 
         It should_raise_RosterChanged_event_with_RosterFixedTitles_that_first_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Values.First().ShouldEqual(rosterFixedTitle1);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles[0].Title.ShouldEqual(rosterFixedTitle1);
 
         It should_raise_RosterChanged_event_with_RosterFixedTitles_that_second_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Values.Last().ShouldEqual(rosterFixedTitle2);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles[1].Title.ShouldEqual(rosterFixedTitle2);
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
@@ -93,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid parentGroupId;
         private static Guid sourceGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<string, string>[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "roster fixed title 1";
         private static string rosterFixedTitle2 = "roster fixd title 2";
     }

@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
@@ -126,7 +127,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "Roster 1.1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new Dictionary<decimal, string>() { {1,"1"}, {2,"2"}, {3,"3"} },
+                        FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
                         ParentGroupId = g2Id,
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { g3Id, q2Id }
@@ -268,7 +269,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "Roster",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new Dictionary<decimal, string>() { {1,"1"}, {2,"2"}, {3,"3"} },
+                        FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new Guid[] { g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
@@ -340,7 +341,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
                 RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                FixedRosterTitles = new Dictionary<decimal, string>() { {1, "1"}, {2, "2"}, {3, "3"} },
+                FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") },
                 ParentGroupId = g2Id,
                 ParentGroupsIds = new Guid[] { g2Id, g1Id },
                 RosterScopeIds = new Guid[] { g3Id, q1Id }
