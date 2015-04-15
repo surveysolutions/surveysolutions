@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     group.RosterSizeQuestionId = Guid.NewGuid();
                     group.RosterTitleQuestionId = Guid.NewGuid();
                     group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
-                    group.FixedRosterTitles = new Tuple<decimal, string>[] { new Tuple<decimal, string>(1, "fixed roster title")  };
+                    group.FixedRosterTitles = new Dictionary<decimal, string> {  {1, "fixed roster title"} };
                 }));
 
             @event = CreateGroupStoppedBeingARosterEvent(groupId: groupId);
@@ -54,9 +55,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             questionnaireDocument.GetGroup(groupId)
                 .RosterTitleQuestionId.ShouldBeNull();
 
-        It should_set_group_RosterFixedTitles_property_to_null = () =>
+        It should_set_group_RosterFixedTitles_property_to_empty = () =>
             questionnaireDocument.GetGroup(groupId)
-                .FixedRosterTitles.ShouldBeNull();
+                .FixedRosterTitles.Count.ShouldEqual(0);
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<GroupStoppedBeingARoster> @event;

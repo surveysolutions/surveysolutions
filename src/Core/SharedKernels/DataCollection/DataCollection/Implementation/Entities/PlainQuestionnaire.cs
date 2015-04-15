@@ -415,12 +415,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return numericQuestion.CountOfDecimalPlaces;
         }
 
-        public IEnumerable<Tuple<decimal,string>> GetFixedRosterTitles(Guid groupId)
+        public Dictionary<decimal,string> GetFixedRosterTitles(Guid groupId)
         {
             var group = this.GetGroup(groupId);
             if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
             {
-                return Enumerable.Empty<Tuple<decimal, string>>();
+                return new Dictionary<decimal, string>();
             }
             return group.FixedRosterTitles;
         }

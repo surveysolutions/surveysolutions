@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "Roster 1.1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2"), new Tuple<decimal, string>(3,"3") },
+                        FixedRosterTitles = new Dictionary<decimal, string>() { {1,"1"}, {2,"2"}, {3,"3"} },
                         ParentGroupId = g2Id,
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { g3Id, q2Id }
@@ -268,7 +268,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "Roster",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2"), new Tuple<decimal, string>(3,"3") },
+                        FixedRosterTitles = new Dictionary<decimal, string>() { {1,"1"}, {2,"2"}, {3,"3"} },
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new Guid[] { g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
@@ -340,7 +340,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
                 RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                FixedRosterTitles = new[] { new Tuple<decimal, string>(1, "1"), new Tuple<decimal, string>(2, "2"), new Tuple<decimal, string>(3, "3") },
+                FixedRosterTitles = new Dictionary<decimal, string>() { {1, "1"}, {2, "2"}, {3, "3"} },
                 ParentGroupId = g2Id,
                 ParentGroupsIds = new Guid[] { g2Id, g1Id },
                 RosterScopeIds = new Guid[] { g3Id, q1Id }

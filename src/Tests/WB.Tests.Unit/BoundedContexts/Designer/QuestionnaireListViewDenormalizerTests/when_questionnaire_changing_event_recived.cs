@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
                 {
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles = new Tuple<decimal, string>[0],
+                    FixedRosterTitles = new Dictionary<decimal, string>(),
                     RosterTitleQuestionId = null
                 },
                 new GroupStoppedBeingARoster(Guid.NewGuid(), Guid.NewGuid()),

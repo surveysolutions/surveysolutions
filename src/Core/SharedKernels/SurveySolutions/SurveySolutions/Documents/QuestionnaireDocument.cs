@@ -89,12 +89,12 @@ namespace Main.Core.Documents
         }
 
         public string[] RosterFixedTitles {
-            get { return new string[0]; }
+            set {}
         }
 
-        public Tuple<decimal, string>[] FixedRosterTitles
+        public Dictionary<decimal, string> FixedRosterTitles
         {
-            get { return new Tuple<decimal, string>[0];}
+            get { return new Dictionary<decimal, string>(); }
         }
 
         public Guid? RosterTitleQuestionId {

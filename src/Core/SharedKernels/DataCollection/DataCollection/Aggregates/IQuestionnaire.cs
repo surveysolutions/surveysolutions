@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
-        IEnumerable<Tuple<decimal, string>> GetFixedRosterTitles(Guid groupId);
+        Dictionary<decimal, string> GetFixedRosterTitles(Guid groupId);
 
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 

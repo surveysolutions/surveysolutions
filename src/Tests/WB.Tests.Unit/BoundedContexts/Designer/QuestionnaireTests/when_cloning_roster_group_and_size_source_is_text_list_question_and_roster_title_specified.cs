@@ -38,6 +38,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
+        It should_throw_exception_with_message = () =>
+            new[] {"list", "cannot", "have", "roster", "title"}.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+       
+
         It should_throw_exception_with_message_containing__list__ = () =>
             exception.Message.ToLower().ShouldContain("list");
 

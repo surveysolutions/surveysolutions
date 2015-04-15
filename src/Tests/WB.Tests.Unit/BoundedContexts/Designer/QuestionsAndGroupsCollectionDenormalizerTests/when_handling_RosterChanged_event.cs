@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -114,6 +115,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
         private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
-        private static Tuple<decimal,string>[] rosterFixedTitles = new[] { new Tuple<decimal, string>(5, "5"), new Tuple<decimal, string>(6, "6"), new Tuple<decimal, string>(7, "7") };
+        private static Dictionary<decimal, string> rosterFixedTitles = new Dictionary<decimal, string> { {5, "5"}, {6, "6"}, {7, "7"} };
     }
 }
