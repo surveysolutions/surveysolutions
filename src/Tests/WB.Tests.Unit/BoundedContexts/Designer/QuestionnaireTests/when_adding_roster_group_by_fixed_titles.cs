@@ -68,9 +68,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_raise_RosterChanged_event_with_not_nullable_RosterFixedTitles = () =>
             eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldNotBeNull();
 
+        It should_raise_RosterChanged_event_with_not_empty_RosterFixedTitles = () =>
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Count.ShouldNotEqual(0);
+
         It should_raise_RosterChanged_event_with_RosterFixedTitles_specified = () =>
             eventContext.GetSingleEvent<RosterChanged>()
-                .FixedRosterTitles.Select(f=>f.Item2).ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
+                .FixedRosterTitles.Values.ShouldContainOnly(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
@@ -83,6 +86,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static RosterSizeSourceType rosterSizeSourceType;
         private static Tuple<string, string>[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "roster fixed title 1";
-        private static string rosterFixedTitle2 = "roster fixd title 2";
+        private static string rosterFixedTitle2 = "roster fixed title 2";
     }
 }

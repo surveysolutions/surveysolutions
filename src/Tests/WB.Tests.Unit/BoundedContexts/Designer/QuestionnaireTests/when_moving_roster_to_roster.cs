@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -21,8 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new RosterChanged(responsibleId, roster1Id){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles =  new[] { new Tuple<decimal, string>(1,"test") },
-                    RosterTitleQuestionId =null 
+                    FixedRosterTitles =  new Dictionary<decimal, string> {{ 1, "test" }},
+                    RosterTitleQuestionId = null 
                 });
             
             questionnaire.Apply(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = chapterId });

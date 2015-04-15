@@ -933,7 +933,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Group command handlers
 
-        public void AddGroupAndMoveIfNeeded(Guid groupId, Guid responsibleId, string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, Tuple<string, string>[] rosterFixedTitles, Guid? rosterTitleQuestionId, int? index = null)
+        public void AddGroupAndMoveIfNeeded(Guid groupId, 
+            Guid responsibleId, 
+            string title, 
+            string variableName, 
+            Guid? rosterSizeQuestionId, 
+            string description, 
+            string condition, 
+            Guid? parentGroupId, 
+            bool isRoster, 
+            RosterSizeSourceType rosterSizeSource, 
+            Tuple<string, string>[] rosterFixedTitles, 
+            Guid? rosterTitleQuestionId, 
+            int? index = null)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2986,7 +2998,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource,
             Guid? rosterSizeQuestionId,
-            Tuple<decimal, string>[] rosterFixedTitles, Guid? rosterTitleQuestionId, Func<Guid[]> rosterDepthFunc)
+            Dictionary<decimal, string> rosterFixedTitles, Guid? rosterTitleQuestionId, Func<Guid[]> rosterDepthFunc)
         {
             if (!isRoster) return;
 
@@ -3003,28 +3015,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfRosterByFixedTitlesIsIncorrect(Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
-            Tuple<decimal, string>[] rosterFixedTitles)
+            Dictionary<decimal, string> rosterFixedTitles)
         {
-            if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
+            if (rosterFixedTitles == null || rosterFixedTitles.Count == 0)
             {
                 throw new QuestionnaireException("List of fixed roster titles should not be empty");
             }
             
-            if (rosterFixedTitles.Length > 250)
+            if (rosterFixedTitles.Count > 250)
             {
                 throw new QuestionnaireException("Number of fixed roster titles could not be more than 250");
             }
 
-            if (rosterFixedTitles.Any(title=>string.IsNullOrWhiteSpace(title.Item2)))
+            if (rosterFixedTitles.Any(item => string.IsNullOrWhiteSpace(item.Value)))
             {
                 throw new QuestionnaireException("Fixed roster titles could not have empty titles");
             }
-
-            if (rosterFixedTitles.Select(x => x.Item1).Distinct().Count() != rosterFixedTitles.Length)
-            {
-                throw new QuestionnaireException("Fixed roster values must be unique");
-            }
-
+            
             if (rosterSizeQuestionId.HasValue)
             {
                 throw new QuestionnaireException("Roster by fixed titles could not have roster source question");
@@ -3037,7 +3044,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
-            Tuple<decimal, string>[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
+            Dictionary<decimal, string> rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
         {
             if (!rosterSizeQuestionId.HasValue)
                 throw new QuestionnaireException("Roster source question is empty");
@@ -3740,10 +3747,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 || !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
 
-        private Tuple<decimal, string>[] GetRosterFixedTitlesOrThrow(Tuple<string, string>[] rosterFixedTitles)
+        private Dictionary<decimal, string> GetRosterFixedTitlesOrThrow(Tuple<string, string>[] rosterFixedTitles)
         {
             if (rosterFixedTitles == null)
-                return null;
+                return new Dictionary<decimal, string>();
 
             if (rosterFixedTitles.Any(x => x == null))
             {
@@ -3765,7 +3772,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.SelectorValueSpecialCharacters,
                     "Fixed roster value should have only number characters");
             }
-            return rosterFixedTitles.Select(x => new Tuple<decimal, string>(decimal.Parse(x.Item1), x.Item2)).ToArray();
+
+            if (rosterFixedTitles.Select(x => x.Item1).Distinct().Count() != rosterFixedTitles.Length)
+            {
+                throw new QuestionnaireException("Fixed roster values must be unique");
+            }
+
+            return rosterFixedTitles.ToDictionary(x => decimal.Parse(x.Item1), x => x.Item2);
         }
 
         #endregion
@@ -4000,7 +4013,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public IEnumerable<object> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
             Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, 
-            RosterSizeSourceType rosterSizeSource, Tuple<decimal,string>[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, Dictionary<decimal,string> rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             yield return
                 new GroupCloned

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -69,10 +70,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldNotBeEmpty();
 
         It should_raise_RosterChanged_event_with_RosterFixedTitles_that_first_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles[0].Item2.ShouldEqual(rosterFixedTitle1);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Values.First().ShouldEqual(rosterFixedTitle1);
 
         It should_raise_RosterChanged_event_with_RosterFixedTitles_that_second_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles[1].Item2.ShouldEqual(rosterFixedTitle2);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Values.Last().ShouldEqual(rosterFixedTitle2);
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();

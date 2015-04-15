@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities
@@ -18,9 +19,9 @@ namespace Main.Core.Entities.SubEntities
         RosterSizeSourceType RosterSizeSource { get; }
 
         [Obsolete]
-        string[] RosterFixedTitles { get; }
+        string[] RosterFixedTitles { set; }
         
-        Tuple<decimal, string>[] FixedRosterTitles { get; }
+        Dictionary<decimal, string> FixedRosterTitles { get; }
 
         Guid? RosterTitleQuestionId { get; }
     }

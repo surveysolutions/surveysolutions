@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var fixedRosterGroup = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = "answer";
             preloadedDataDto = new PreloadedDataDto("id", new [] { new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object> { { prefilledQuestionId, prefilledQuestionAnswer } }), });
             answersTime = new DateTime(2013, 09, 01);
@@ -34,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Text
                 && _.HasQuestion(prefilledQuestionId) == true
-                && _.GetFixedRosterGroups(null)==new Guid[]{Guid.NewGuid()});
+                && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
+                && _.GetFixedRosterTitles(fixedRosterGroup) == new Dictionary<decimal, string>());
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId,1) == questionaire);
