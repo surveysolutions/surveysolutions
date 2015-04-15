@@ -75,9 +75,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
             methods.Get("ProcessEnablementConditions").ShouldMatchMethodInfo(interfaceMethods.Get("ProcessEnablementConditions"));
         It should_match_method_signature_for_SaveAllCurrentStatesAsPrevious = () =>
             methods.Get("SaveAllCurrentStatesAsPrevious").ShouldMatchMethodInfo(interfaceMethods.Get("SaveAllCurrentStatesAsPrevious"));
-        
-        It should_match_method_signature_for_Clone = () =>
-            methods.Get("Clone").ShouldMatchMethodInfo(interfaceMethods.Get("Clone"));
+
+        It should_contain_2_Clone_methods = () =>
+            methods.Count(m => m.Name == "Clone").ShouldEqual(2);
 
         private static List<MetodInfo> methods;
 
