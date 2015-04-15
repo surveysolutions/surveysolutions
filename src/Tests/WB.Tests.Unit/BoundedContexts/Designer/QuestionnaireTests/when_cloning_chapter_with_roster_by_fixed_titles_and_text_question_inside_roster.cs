@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -110,7 +111,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string rosterTitle = "roster title";
         private static string textQuestionTitle = "text question title";
         private static int targetIndex = 0;
-        private static Tuple<decimal, string>[] rosterFixedTitles = { new Tuple<decimal, string>(1,"title 1"), new Tuple<decimal, string>(2,"title 2") };
+        private static Dictionary<decimal, string> rosterFixedTitles = new Dictionary<decimal, string>{ { 1, "title 1" }, { 2, "title 2" } };
         private static EventContext eventContext;
     }
 }

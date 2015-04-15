@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         [JsonConverter(typeof(StringEnumConverter))]
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
-        public Tuple<decimal, string>[] FixedRosterTitles { get; set; }
+        public Dictionary<decimal, string> FixedRosterTitles { get; set; }
         public Guid? RosterTitleQuestionId { get; set; }
 
         public string Description { get; set; }

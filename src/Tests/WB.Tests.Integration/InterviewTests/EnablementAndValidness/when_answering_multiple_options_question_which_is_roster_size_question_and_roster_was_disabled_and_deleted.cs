@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-
 using AppDomainToolkit;
-
 using Machine.Specifications;
-
 using Main.Core.Entities.SubEntities;
-
 using Ncqrs.Spec;
-
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -46,27 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     );
 
                 var emptyVector = new decimal[] {};
-                var interview = SetupInterview(questionnaireDocument, new object[]
-                    {
-                        // This is unsupportable mess and I don't like idea to write test this way!
-
-                        //Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, selectedValues: new []{ 1m }),
-                        //Create.Event.RosterInstancesAdded(Create.AddedRosterInstance(rosterId, null, 1)),
-                        //Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, selectedValues: new []{ 1m, 2m }),
-                        //Create.Event.RosterInstancesAdded(Create.AddedRosterInstance(rosterId, null, 2m)),
-                        //Create.Event.GroupsDisabled(Create.Identity(rosterId, new [] {1m}), Create.Identity(rosterId,  new [] {2m})),
-                        //Create.Event.QuestionsDisabled(Create.Identity(idOfQuestionInRoster, new [] {1m}), Create.Identity(idOfQuestionInRoster,  new [] {2m})),
-                        //Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, selectedValues: new []{ 2m }),
-                        //Create.Event.RosterInstancesRemoved(Create.RosterInstance(rosterId, null, 1)),
-                        //Create.Event.GroupsEnabled(Create.Identity(rosterId, new [] {1m})),
-                        //Create.Event.QuestionsEnabled(Create.Identity(idOfQuestionInRoster, new [] {1m})),
-                        //Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, selectedValues: emptyVector),
-                        //Create.Event.RosterInstancesRemoved(Create.RosterInstance(rosterId, null, 2)),
-                        //Create.Event.GroupsEnabled(Create.Identity(rosterId, new [] {2m})),
-                        //Create.Event.QuestionsEnabled(Create.Identity(idOfQuestionInRoster, new [] {2m})),
-                        //Create.Event.MultipleOptionsQuestionAnswered(multiOptionQuestionId, selectedValues: new []{ 1m }),
-                        //Create.Event.RosterInstancesAdded(Create.AddedRosterInstance(rosterId, emptyVector, 1))
-                    });
+                var interview = SetupInterview(questionnaireDocument, new object[] { });
 
                 interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 1 });
                 interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 1, 2 });

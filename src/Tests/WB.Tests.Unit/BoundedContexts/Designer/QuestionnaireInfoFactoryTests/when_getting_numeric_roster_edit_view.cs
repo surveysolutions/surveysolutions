@@ -30,9 +30,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 
         It should_return_roster_with_ItemId_equals_groupId = () =>
             result.ItemId.ShouldEqual(rosterId.FormatGuid());
-        
-        It should_return_roster_with_RosterFixedTitles_equals_to_null = () =>
-            result.FixedRosterTitles.ShouldBeNull();
+
+        It should_return_roster_with_RosterFixedTitles_count_equals_to_0 = () =>
+            result.FixedRosterTitles.Length.ShouldEqual(0);
 
         It should_return_roster_with_RosterSizeMultiQuestionId_equals_g3_RosterSizeQuestionId = () =>
             result.RosterSizeMultiQuestionId.ShouldEqual(q2Id.FormatGuid());

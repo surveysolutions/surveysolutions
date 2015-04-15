@@ -16,7 +16,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { new Tuple<decimal, string>(1,"fixed title 1"),new Tuple<decimal, string>(2, " "), new Tuple<decimal, string>(3,"fixed title 3") };
+            rosterFixedTitles = new[] { new Tuple<string, string>("1","fixed title 1"), new Tuple<string, string>("2", " "), 
+                new Tuple<string, string>("3","fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -38,22 +39,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-
-        It should_throw_exception_with_message_containting__not__ = () =>
-            exception.Message.ToLower().ShouldContain("not");
-
-        It should_throw_exception_with_message_containting__empty__ = () =>
-            exception.Message.ToLower().ShouldContain("empty");
-
-        It should_throw_exception_with_message_containting__title__ = () =>
-            exception.Message.ToLower().ShouldContain("title");
-
+        It should_throw_exception_with_message = () =>
+            new[] { "not", "empty", "title" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+        
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<decimal, string>[] rosterFixedTitles;
+        private static Tuple<string, string>[] rosterFixedTitles;
         private static Exception exception;
     }
 }

@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             group.IsRoster = false;
             group.RosterSizeQuestionId = null;
-            group.FixedRosterTitles = null;
+            group.FixedRosterTitles.Clear();
             group.RosterTitleQuestionId = null;
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
