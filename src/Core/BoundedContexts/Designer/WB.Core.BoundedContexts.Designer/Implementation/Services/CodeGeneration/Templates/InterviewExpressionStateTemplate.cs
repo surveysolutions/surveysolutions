@@ -220,21 +220,8 @@ if(VersionParameters.AreServiceVariablesPresent){
                     "el == null) return;\r\n\r\n            targetLevel.UpdateLinkedMultiOptionAnswer(que" +
                     "stionId, answer);\r\n        }\r\n        \r\n        public override Dictionary<Guid," +
                     " Guid[]> GetParentsMap()\r\n        {\r\n            return IdOf.parentScopeMap;\r\n  " +
-                    "      }\r\n\r\n\t\tpublic override IInterviewExpressionState");
-            
-            #line 220 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.VersionPrefix));
-            
-            #line default
-            #line hidden
-            this.Write("  Clone");
-            
-            #line 220 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.VersionPrefix));
-            
-            #line default
-            #line hidden
-            this.Write(" ()\r\n        {\r\n            return new ");
+                    "      }\r\n\r\n\t\tpublic override IInterviewExpressionState Clone ()\r\n        {\r\n    " +
+                    "        return new ");
             
             #line 222 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));

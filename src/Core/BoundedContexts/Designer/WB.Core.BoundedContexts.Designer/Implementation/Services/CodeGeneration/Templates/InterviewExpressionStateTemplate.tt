@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return IdOf.parentScopeMap;
         }
 
-		public override IInterviewExpressionState<#=VersionParameters.VersionPrefix#>  Clone<#=VersionParameters.VersionPrefix#> ()
+		public override IInterviewExpressionState Clone ()
         {
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
