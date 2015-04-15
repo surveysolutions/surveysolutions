@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n    internal partial class ");
+            this.Write(" \r\n    internal partial class ");
             
             #line 8 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
@@ -498,14 +498,14 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write("        public RosterRowList<");
+            this.Write("        public ");
             
             #line 112 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.GetRosterType(@roster)));
             
             #line default
             #line hidden
-            this.Write("> ");
+            this.Write(" ");
             
             #line 112 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
@@ -520,14 +520,14 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write(".Last());\r\n\t\t\t\treturn new RosterRowList<");
+            this.Write(".Last());\r\n\t\t\t\treturn ");
             
             #line 117 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.GetRosterInitialization(@roster)));
             
             #line default
             #line hidden
-            this.Write(">(rosters);\r\n            }\r\n        }\r\n        ");
+            this.Write(";\r\n            }\r\n        }\r\n        ");
             
             #line 120 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
  }

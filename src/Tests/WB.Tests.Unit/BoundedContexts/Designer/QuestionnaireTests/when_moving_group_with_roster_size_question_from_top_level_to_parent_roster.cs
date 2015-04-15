@@ -24,8 +24,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles =  new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2") },
-                    RosterTitleQuestionId =null 
+                    FixedRosterTitles =  new Dictionary<decimal, string> { {1, "1"}, {2, "2"} },
+                    RosterTitleQuestionId = null 
                 });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupToMoveId });

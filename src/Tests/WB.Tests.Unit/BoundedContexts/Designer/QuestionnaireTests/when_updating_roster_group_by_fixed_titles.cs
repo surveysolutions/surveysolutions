@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] {new Tuple<decimal, string>(1, rosterFixedTitle1),new Tuple<decimal, string>(2, rosterFixedTitle2) };
+            rosterFixedTitles = new[] {new Tuple<string, string>("1", rosterFixedTitle1),new Tuple<string, string>("2", rosterFixedTitle2) };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -69,10 +70,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldNotBeEmpty();
 
         It should_raise_RosterChanged_event_with_RosterFixedTitles_that_first_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles[0].Item2.ShouldEqual(rosterFixedTitle1);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Values.First().ShouldEqual(rosterFixedTitle1);
 
         It should_raise_RosterChanged_event_with_RosterFixedTitles_that_second_element_is_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles[1].Item2.ShouldEqual(rosterFixedTitle2);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Values.Last().ShouldEqual(rosterFixedTitle2);
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
@@ -82,7 +83,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid responsibleId;
         private static Guid groupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<decimal, string>[] rosterFixedTitles;
+        private static Tuple<string, string>[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "roster fixed title 1";
         private static string rosterFixedTitle2 = "roster fixd title 2";
     }

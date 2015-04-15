@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     {
         public UpdateGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, Tuple<decimal, string>[] fixedRosterTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, Tuple<string, string>[] fixedRosterTitles, Guid? rosterTitleQuestionId)
             : base(
                 questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
                 fixedRosterTitles, rosterTitleQuestionId) {}

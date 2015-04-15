@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
@@ -9,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public bool GenerateEmbeddedExpressionMethods { get; set; }
 
         public Guid Id { set; get; }
-
         public List<QuestionTemplateModel> AllQuestions { set; get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
         public List<RosterTemplateModel> AllRosters { set; get; }

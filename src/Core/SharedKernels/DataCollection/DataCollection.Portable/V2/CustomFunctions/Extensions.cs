@@ -1,7 +1,15 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
+namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
 {
+
+    /// <summary>
+    /// Functions in this group extend the functionality of the 
+    /// question types and are usually applicable to 
+    /// corresponding questions directly.
+    ///  
+    /// Typical use is: question.Function(arguments)>0, etc.
+    /// </summary>
     public static class Extensions
     {
         /// @name  Numeric functions
@@ -102,6 +110,23 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
             return false;
         }
 
+        /// <summary>
+        /// Checks if the value of the variable is mentioned among the specified values
+        /// </summary>
+        /// <param name="value">Value to be searched for</param>
+        /// <param name="valuesList">List of values for search</param>
+        /// <returns>True if the value is mentioned among the values in the list, false otherwise.</returns>
+        public static bool InList(this string value, params string[] valuesList)
+        {
+            if (valuesList.Length == 0)
+                return false;
+
+            for (var i = 0; i < valuesList.Length; i++)
+                if (valuesList[i] == value) return true;
+
+            return false;
+        }
+
         #endregion
 
         /// @}
@@ -168,24 +193,6 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
                 if (multichoice.ContainsAny(valuesList[i]) == false) return false;
 
             return true;
-        }
-
-        /// <summary>
-        /// For a single choice question checks that the selection is mentioned in the specified list of values.
-        /// </summary>
-        /// <param name="singlechoice">Single choice variable</param>
-        /// <param name="valuesList">List of the options</param>
-        /// <returns>True if the selection of the single choice question is among the specified options.</returns>
-        /// 
-        /// For example educ.IsAnyOf(4,5,6)=True if educ==4 or educ==5 or educ==6 and is false otherwise
-        public static bool IsAnyOf(this decimal? singlechoice, params decimal[] valuesList)
-        {
-            if (singlechoice.HasValue == false) return false;
-
-            for (var i = 0; i < valuesList.Length; i++)
-                if (valuesList[i] == singlechoice.Value) return true;
-
-            return false;
         }
 
         /// <summary>
@@ -324,6 +331,34 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         }
 
         /// <summary>
+        /// Checks whether the string represents an integer number
+        /// </summary>
+        /// <param name="s">string to be checked</param>
+        /// <returns>True if the string represents an integer number, false otherwise.</returns>
+        /// 
+        /// Negative values are permitted and considered valid numbers.
+        public static bool IsIntegerNumber(this string s)
+        {
+            long number;
+            return long.TryParse(s, out number);
+        }
+
+
+        /// <summary>
+        /// Checks whether the string represents a number
+        /// </summary>
+        /// <param name="s">string to be checked</param>
+        /// <returns>True if the string represents a number, false otherwise.</returns>
+        /// 
+        /// Negative values and decimal fractions are considered valid numbers.
+        public static bool IsNumber(this string s)
+        {
+            double number;
+            return double.TryParse(s, out number);
+        }
+
+
+        /// <summary>
         /// Confirms the string consists entirely of latin letters A..Z and a..z
         /// </summary>
         /// <param name="s">string to be checked</param>
@@ -417,6 +452,22 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// @{
         #region Location functions
 
+        /// <summary>Confirms the point is within the defined coordinate bounds.</summary>
+        /// 
+        /// <param name="point">Point to verify</param>
+        /// <param name="north">North-most latitude</param>
+        /// <param name="west">West-most longitude</param>
+        /// <param name="south">South-most latitude</param>
+        /// <param name="east">East-most longitude</param>
+        public static bool InRectangle(this GeoLocation point, double north, double west, double south, double east)
+        {
+            if (point.Latitude > north) return false;
+            if (point.Longitude < west) return false;
+            if (point.Latitude < south) return false;
+            if (point.Longitude > east) return false;
+            return true;
+        }
+
         /// <summary>
         /// Converts an angle to a radian.
         /// </summary>
@@ -432,7 +483,7 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// </summary>
         /// <param name="point1">First point</param>
         /// <param name="point2">Second point</param>
-        /// <returns>Distance in km between the two points approximated using the haversine formula.</returns>
+        /// <returns>Distance in meters between the two points approximated using the haversine formula.</returns>
         public static double GpsDistance(this GeoLocation point1, GeoLocation point2)
         {
             // Source: http://rosettacode.org/wiki/Haversine_formula#C.23
@@ -448,6 +499,80 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
             return r * 2 * Math.Asin(Math.Sqrt(a));
         }
 
+        /// <summary>
+        /// Computes the distance from geolocation to a point determined by its coordinates using the Haversine formula.
+        /// </summary>
+        /// <param name="point1">Geolocation point</param>
+        /// <param name="latitude">Latitude of the second point</param>
+        /// <param name="longitude">Longitude of the second point</param>
+        /// <returns>Distance in meters between the two points approximated using the haversine formula.</returns>
+        public static double GpsDistance(this GeoLocation point1, double latitude, double longitude)
+        {
+            var point2 = new GeoLocation(latitude, longitude, 0, 0);
+            return point1.GpsDistance(point2);
+        }
+
+        /// <summary>
+        /// Computes the distance between two points using the Haversine formula.
+        /// </summary>
+        /// <param name="point1">First point</param>
+        /// <param name="point2">Second point</param>
+        /// <returns>Distance in kilometers between the two points approximated using the haversine formula.</returns>
+        public static double GpsDistanceKm(this GeoLocation point1, GeoLocation point2)
+        {
+            return point1.GpsDistance(point2) / 1000;
+        }
+
+        /// <summary>
+        /// Computes the distance from geolocation to a point determined by its coordinates using the Haversine formula.
+        /// </summary>
+        /// <param name="point1">Geolocation point</param>
+        /// <param name="latitude">Latitude of the second point</param>
+        /// <param name="longitude">Longitude of the second point</param>
+        /// <returns>Distance in kilometers between the two points approximated using the haversine formula.</returns>
+        public static double GpsDistanceKm(this GeoLocation point1, double latitude, double longitude)
+        {
+            var point2 = new GeoLocation(latitude, longitude, 0, 0);
+            return point1.GpsDistanceKm(point2);
+        }
+
         #endregion
+
+        /// @}
+
+        /// <summary>
+        /// Number of full years to a date from an earlier date
+        /// </summary>
+        /// <param name="date1">Date</param>
+        /// <param name="date2">Earlier date</param>
+        /// <returns>Number of complete years.</returns>
+        /// 
+        /// The second date is required to be earlier than or same as the first one.
+        /// The function returns special value -9998 is returned if the second date is 
+        /// later than the first one; and special value -9999 is returned if any of the 
+        /// two dates are missing.
+        public static int FullYearsSince(this DateTime? date1, DateTime? date2)
+        {
+            return new BaseFunctions().FullYearsBetween(date2, date1);
+        }
+
+        /// <summary>
+        /// Verifies that a date belongs to a closed dates interval.
+        /// </summary>
+        /// <param name="date">Date to verify.</param>
+        /// <param name="low">Lower bound of the date interval.</param>
+        /// <param name="high">Upper bound of the date interval.</param>
+        /// <returns>true if the date belongs the dates interval, false otherwise</returns>
+        /// 
+        /// Note that the function returns false also in case when any of the bounds is null.
+        /// Note that the function returns false also in case when lower bound is higher than upper bound.
+        public static bool InRange(this DateTime? date, DateTime? low, DateTime? high)
+        {
+            if (!date.HasValue) return false;
+            if (!low.HasValue) return false;
+            if (!high.HasValue) return false;
+
+            return (date <= high && date >= low);
+        }
     }
 }

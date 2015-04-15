@@ -192,4 +192,7 @@
   <data name="Maintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
   </data>
+  <data name="Questionnaire_compilation_failed" xml:space="preserve">
+    <value>You questionnaire "{0}" contains new functionality which is not supported by your installation. Please update.</value>
+  </data>
 </root>

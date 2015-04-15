@@ -78,7 +78,7 @@
       match="/configuration/appSettings/add[@key='DesignerAddress']/@value" />
   </parameter>
    <parameter name="Allow supervisor access"
-      description="Hybrid mode with embedded supervison functionality"
+      description="Hybrid mode with embedded supervisor functionality"
       defaultValue="true">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
@@ -108,5 +108,20 @@
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
       match="/configuration/system.web/authentication/forms/@requireSSL" />
+   </parameter>
+   
+   <parameter name="Path to store app data"
+      defaultValue="~/App_Data">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='DataStorePath']/@value" />
+   </parameter>
+   <parameter name="Enable Interview History for export"
+      defaultValue="false">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Export.EnableInterviewHistory']/@value" />
    </parameter>
 </parameters>

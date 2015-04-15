@@ -309,7 +309,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             foreach (IGroup fixedRosterGroup in fixedRosterGroups)
             {
-                collectedMaxValues.Add(fixedRosterGroup.PublicKey, fixedRosterGroup.FixedRosterTitles.Length);
+                collectedMaxValues.Add(fixedRosterGroup.PublicKey, fixedRosterGroup.FixedRosterTitles.Count);
             }
 
             return collectedMaxValues;
@@ -366,8 +366,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelVector].RosterIdToRosterTitleQuestionIdMap.Keys);
         }
 
-
-
         private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel, IGroup @group,
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
@@ -375,7 +373,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             if (@group.RosterSizeSource == RosterSizeSourceType.FixedTitles && headerStructureForLevel.LevelLabels == null)
             {
                 headerStructureForLevel.LevelLabels =
-                    @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Item1.ToString(), Title = title.Item2 })
+                    @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Key.ToString(CultureInfo.InvariantCulture), Title = title.Value })
                         .ToArray();
             }
 

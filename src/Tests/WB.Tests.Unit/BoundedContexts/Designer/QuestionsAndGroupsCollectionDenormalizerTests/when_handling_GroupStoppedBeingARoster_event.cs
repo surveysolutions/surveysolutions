@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             GetGroup(g2Id).IsRoster.ShouldBeFalse();
 
         It should_return_2nd_group_with_roster_fixed_titles_set_in_null = () =>
-            GetGroup(g2Id).FixedRosterTitles.ShouldBeNull();
+            GetGroup(g2Id).FixedRosterTitles.Count.ShouldEqual(0);
 
         It should_return_2nd_group_with_roster_size_question_id_set_in_null = () =>
             GetGroup(g2Id).RosterSizeQuestionId.ShouldBeNull();

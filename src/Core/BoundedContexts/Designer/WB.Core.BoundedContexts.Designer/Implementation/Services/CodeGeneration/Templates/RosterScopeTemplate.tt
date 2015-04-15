@@ -3,8 +3,12 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="System.Text.RegularExpressions" #>
-    internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>,IRosterLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
+<#@ import namespace="System.Text.RegularExpressions" #> 
+    internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>
+	<# if(VersionParameters.IsIRosterLevelInherited){#>
+	, IRosterLevel<<#=this.Model.GeneratedTypeName#>> 
+	<#}#>
+	, IExpressionExecutable
     {    
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
             Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -64,16 +68,14 @@
         public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
 
-        <#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
-        {#>
-        public RosterRowList<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
-        <#}#>
-          
+      
+        <# if(VersionParameters.AreServiceVariablesPresent){#>
 		public decimal @rowcode { get { return RosterVector.Last(); } }
 
         public int @rowindex { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }    
 
         public string @rowname { get; private set; }
+
 		void IRosterLevel.SetRowName(string rosterRowName)
         {
 			this.@rowname = rosterRowName;
@@ -83,7 +85,12 @@
         {
 			get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>; }
         }
+		<# }#>
 
+		<#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
+		{#>
+			public <#=VersionParameters.GetRosterType(parentRoster)#> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
+		<#}#>
 		public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
             var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies)
@@ -96,7 +103,11 @@
                 <#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,        
              <#}#>
             };
+
+			<# if(VersionParameters.AreServiceVariablesPresent){#>
 			((IRosterLevel)level).SetRowName(this.@rowname);
+			<# } #>
+
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
             StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
 
@@ -158,15 +169,15 @@
         //rosters
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        public <#=VersionParameters.GetRosterType(@roster)#> <#=@roster.VariableName#>
         {
             get
             {
                 var rosters = this.GetInstances(this.RosterKey, IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-				return new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
+				return <#=VersionParameters.GetRosterInitialization(@roster)#>;
             }
         }
-        <# }#>
+		<#}#>
 
         <#foreach (var @roster in Model.RostersInScope) 
         {#>        

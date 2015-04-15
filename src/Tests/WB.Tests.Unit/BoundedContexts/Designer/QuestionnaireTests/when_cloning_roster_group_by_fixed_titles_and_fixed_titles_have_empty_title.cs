@@ -17,7 +17,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             newGroupId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { new Tuple<decimal, string>(1,"fixed title 1"),new Tuple<decimal, string>(2,  " "),new Tuple<decimal, string>(3, "fixed title 3") };
+            rosterFixedTitles = new[] { new Tuple<string, string>("1","fixed title 1"), 
+                                        new Tuple<string, string>("2",  " "),
+                                        new Tuple<string, string>("3", "fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -41,6 +43,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
+        It should_throw_exception_with_message = () =>
+            new[] { "not", "empty", "title"}.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+       
 
         It should_throw_exception_with_message_containting__not__ = () =>
             exception.Message.ToLower().ShouldContain("not");
@@ -57,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid newGroupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<decimal, string>[] rosterFixedTitles;
+        private static Tuple<string, string>[] rosterFixedTitles;
         private static Exception exception;
     }
 }

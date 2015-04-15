@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 
@@ -10,28 +11,31 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public Guid? RosterSizeQuestionId { get; set; }
 
         [Obsolete]
-        public string[] RosterFixedTitles { get; set; }
-
-        private Tuple<decimal, string>[] fixedRosterTitles;
-        public Tuple<decimal, string>[] FixedRosterTitles
+        public string[] RosterFixedTitles
         {
-            get
+            set
             {
-                if (fixedRosterTitles == null && RosterFixedTitles != null)
+                FixedRosterTitles = new Dictionary<decimal, string>();
+
+                if (value != null && value.Any())
                 {
-                    fixedRosterTitles =
-                        RosterFixedTitles.Select((title, index) => new Tuple<decimal, string>(index, title)).ToArray();
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        FixedRosterTitles[i] = value[i];
+                    }
                 }
-                return fixedRosterTitles;
             }
-            set { fixedRosterTitles = value; }
+
         }
+
+        public Dictionary<decimal, string> FixedRosterTitles{get; set;}
 
         public Guid? RosterTitleQuestionId { get; set; }
 
         public RosterChanged(Guid responsibleId, Guid groupId)
             : base(responsibleId, groupId)
         {
+            FixedRosterTitles = new Dictionary<decimal, string>();
         }
     }
 }

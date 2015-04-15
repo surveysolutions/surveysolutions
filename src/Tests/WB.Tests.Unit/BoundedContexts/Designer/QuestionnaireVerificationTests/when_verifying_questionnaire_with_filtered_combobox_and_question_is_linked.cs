@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     new Group()
                     {
                         IsRoster = true,
-                        VariableName = "roster",
+                        VariableName = "varRoster",
                         RosterSizeSource = RosterSizeSourceType.FixedTitles,
                         RosterFixedTitles = new [] {"fixed title"},
                         Children = new List<IComposite>()

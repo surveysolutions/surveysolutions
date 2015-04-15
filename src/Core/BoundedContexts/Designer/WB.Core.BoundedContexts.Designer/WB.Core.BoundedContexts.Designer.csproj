@@ -196,7 +196,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Versions\IVersionParameters.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Versions\V1Parameters.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Versions\V2Parameters.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
@@ -261,7 +264,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.Extended.cs" />
     <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GroupTemplateModel.cs" />
@@ -287,13 +290,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
       <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.Extended.cs" />
     <Compile Include="Services\IKeywordsProvider .cs" />
     <Compile Include="Services\IQuestionnaireExportService.cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
