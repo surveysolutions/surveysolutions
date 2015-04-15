@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            int i = 0;
-            rosterFixedTitles = Enumerable.Repeat(new Tuple<string, string> (i++.ToString(), i.ToString()), 251).ToArray();
+            rosterFixedTitles = Enumerable.Range(1, 251).Select(i => new Tuple<string, string>(i++.ToString(), i.ToString())).ToArray();
+
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -40,18 +40,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-
-        It should_throw_exception_with_message_containting__fixed__ = () =>
-            exception.Message.ToLower().ShouldContain("fixed");
-
-        It should_throw_exception_with_message_containting__titles__ = () =>
-            exception.Message.ToLower().ShouldContain("titles");
-
-        It should_throw_exception_with_message_containting__more__ = () =>
-            exception.Message.ToLower().ShouldContain("more");
-
-        It should_throw_exception_with_message_containting__250__ = () =>
-            exception.Message.ToLower().ShouldContain("250");
+        It should_throw_exception_with_message = () =>
+            new[] { "titles", "more", "250" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+        
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;

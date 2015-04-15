@@ -136,7 +136,7 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, Tuple<decimal, string>[] titles)
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, Dictionary<decimal, string> titles)
             {
                 return new RosterChanged(Guid.NewGuid(), rosterId)
                 {

@@ -424,7 +424,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 group.RosterSizeSource = RosterSizeSourceType.Question;
                 group.RosterSizeQuestionId = null;
                 group.RosterTitleQuestionId = null;
-                group.FixedRosterTitles = null;
+                group.FixedRosterTitles.Clear();
             });
 
             this.UpdateQuestionnaire(@event, document);

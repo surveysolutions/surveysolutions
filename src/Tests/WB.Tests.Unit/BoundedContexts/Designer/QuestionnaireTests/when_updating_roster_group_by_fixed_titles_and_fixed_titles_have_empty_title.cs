@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
             rosterFixedTitles = new[] { new Tuple<string,string>("1","fixed title 1"), 
                 new Tuple<string,string>("2"," "), 
-                new Tuple<string,string>("2","fixed title 3") };
+                new Tuple<string,string>("3","fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });

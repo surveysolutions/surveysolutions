@@ -533,7 +533,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
         {
-            return IsRosterByQuestion(group) && group.FixedRosterTitles != null && group.FixedRosterTitles.Any();
+            return IsRosterByQuestion(group) && group.FixedRosterTitles.Any();
         }
 
         private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion(IGroup group)
@@ -586,10 +586,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             if (group.FixedRosterTitles == null)
                 return false;
-            if (group.FixedRosterTitles.Length == 0)
+            if (group.FixedRosterTitles.Count == 0)
                 return false;
 
-            return group.FixedRosterTitles.Any(title=>string.IsNullOrWhiteSpace(title.Item2));
+            return group.FixedRosterTitles.Any(title => string.IsNullOrWhiteSpace(title.Value));
         }
 
         private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues(IGroup group)
@@ -598,9 +598,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             if (group.FixedRosterTitles == null)
                 return false;
-            if (group.FixedRosterTitles.Length == 0)
+            if (group.FixedRosterTitles.Count == 0)
                 return false;
-            return group.FixedRosterTitles.Select(x => x.Item1).Distinct().Count() != group.FixedRosterTitles.Length;
+            return group.FixedRosterTitles.Keys.Distinct().Count() != group.FixedRosterTitles.Count; //no sense
         }
 
         private static bool RosterFixedTitlesHaveMoreThanAllowedItems(IGroup group)
@@ -608,7 +608,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.FixedRosterTitles.Length > 40;
+            return group.FixedRosterTitles.Count > 40;
         }
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)

@@ -53,10 +53,17 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             ((UpdateGroupCommand)result).FixedRosterTitles.Count().ShouldEqual(2);
 
         It should_return_sanizited_first_fixed_title = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[1].Item2.ShouldEqual("hi, Hello!");
+            ((UpdateGroupCommand)result).FixedRosterTitles[0].Item2.ShouldEqual("привет, Мир!");
 
         It should_return_sanizited_second_fixed_title = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[0].Item2.ShouldEqual("привет, Мир!");
+            ((UpdateGroupCommand)result).FixedRosterTitles[1].Item2.ShouldEqual("hi, Hello!");
+        
+        It should_return_first_fixed_roster_title_value_1_0 = () =>
+            ((UpdateGroupCommand)result).FixedRosterTitles[0].Item1.ShouldEqual("1");
+
+        It should_return_second_fixed_roster_title_value_2_0 = () =>
+            ((UpdateGroupCommand)result).FixedRosterTitles[1].Item1.ShouldEqual("2");
+
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

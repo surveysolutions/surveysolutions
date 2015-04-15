@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            var rosterFixedTitles = new[] {new Tuple<decimal, string>(1, "1"), new Tuple<decimal, string>(2, "2")};
+            var rosterFixedTitles = new Dictionary<decimal, string>() {{1, "1"}, {2, "2"}};
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
