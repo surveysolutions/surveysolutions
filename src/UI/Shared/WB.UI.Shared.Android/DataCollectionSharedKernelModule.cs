@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -63,6 +64,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.basePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
+            this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
             CommandRegistry
