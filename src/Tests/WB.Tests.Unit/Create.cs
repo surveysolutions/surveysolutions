@@ -16,6 +16,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
+using NHibernate;
 using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -39,6 +40,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -1427,6 +1429,18 @@ namespace WB.Tests.Unit
             return new ImportFromDesigner(responsibleId, new QuestionnaireDocument(), false, base64StringOfAssembly);
         }
 
+        public static TransactionManagerProvider TransactionManagerProvider(
+            Func<ICqrsPostgresTransactionManager> transactionManagerFactory = null,
+            ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
+        {
+            return new TransactionManagerProvider(
+                transactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
+                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>());
+        }
 
+        public static RebuildReadSideCqrsPostgresTransactionManager RebuildReadSideCqrsPostgresTransactionManager()
+        {
+            return new RebuildReadSideCqrsPostgresTransactionManager(Mock.Of<ISessionFactory>());
+        }
     }
 }
