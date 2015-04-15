@@ -46,30 +46,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
 
-        It should_throw_exception_with_message_containting__title__ = () =>
-            exception.Message.ToLower().ShouldContain("title");
-
-        It should_throw_exception_with_message_containting__question__ = () =>
-            exception.Message.ToLower().ShouldContain("question");
-
-        It should_throw_exception_with_message_containting__only__ = () =>
-            exception.Message.ToLower().ShouldContain("only");
-
-        It should_throw_exception_with_message_containting__inside__ = () =>
-            exception.Message.ToLower().ShouldContain("inside");
-
-        It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
-
-        It should_throw_exception_with_message_containting__where__ = () =>
-            exception.Message.ToLower().ShouldContain("where");
-
-        It should_throw_exception_with_message_containting__size__ = () =>
-            exception.Message.ToLower().ShouldContain("source");
-
+        It should_throw_exception_with_message = () =>
+            new[] { "roster", "title", "question", "only", "inside", "group", "where", "source" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+       
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;

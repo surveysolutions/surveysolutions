@@ -13,6 +13,12 @@
         RejectedBySupervisor,
         RejectedByHeadquarter,
         Deleted,
-        Restored
+        Restored,
+        QuestionEnabled,
+        QuestionDisabled,
+        GroupEnabled,
+        GroupDisabled,
+        QuestionDeclaredValid,
+        QuestionDeclaredInvalid,
     }
 }

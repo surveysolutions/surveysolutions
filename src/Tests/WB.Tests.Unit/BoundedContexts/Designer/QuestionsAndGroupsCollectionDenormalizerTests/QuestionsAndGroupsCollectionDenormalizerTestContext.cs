@@ -131,7 +131,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid? rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, Tuple<decimal,string>[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid? rosterSizeQuestionId, 
+            RosterSizeSourceType rosterSizeSource, Dictionary<decimal,string> rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             return
                 ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId){

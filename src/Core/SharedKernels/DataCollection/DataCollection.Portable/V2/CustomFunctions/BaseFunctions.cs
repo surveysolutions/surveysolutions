@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Text;
 
-namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
+namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
 {
+
+    /// <summary>
+    /// Utility functions for common checks.
+    /// </summary>
     public class BaseFunctions
     {
         /// @name  Date and time management functions
@@ -16,7 +20,13 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// <param name="month">Month number (1..12)</param>
         /// <param name="year">Year</param>
         /// <returns>Century month code value</returns>
-        public long CmCode(long? month, long? year)
+        /// 
+        /// See details and an example here: http://demographicestimation.iussp.org/content/dhs-century-month-codes
+        /// 
+        /// An error code -1 is returned in case of invalid values 
+        /// of inputs, such as undefined or negative values of year 
+        /// or month.
+        public long CenturyMonthCode(long? month, long? year)
         {
             const long baseYear = 1900;
             // not sure how other calendars will be handled?? e.g. Afghanistan, Thailand, etc.
@@ -24,27 +34,27 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
             if (!month.HasValue) return -1;
             if (month.Value < 1 || month.Value > 12) return -1;
             if (year.Value < baseYear) return -1;
-            return (year.Value - baseYear)*12 + month.Value;
+            return (year.Value - baseYear) * 12 + month.Value;
         }
 
-        public long CmCode(double? month, double? year)
+        public long CenturyMonthCode(double? month, double? year)
         {
             if (!year.HasValue) return -1;
             if (!month.HasValue) return -1;
-            long? m = (long) Math.Floor((double) month);
-            long? y = (long) Math.Floor((double) year);
+            long? m = (long)Math.Floor((double)month);
+            long? y = (long)Math.Floor((double)year);
             if (m != month) return -1;
             if (y != year) return -1;
-            return CmCode(m, y);
+            return CenturyMonthCode(m, y);
         }
 
-        public long CmCode(decimal? month, decimal? year)
+        public long CenturyMonthCode(decimal? month, decimal? year)
         {
             if (!year.HasValue) return -1;
             if (!month.HasValue) return -1;
-            long? m = (long) Math.Floor((double) month);
-            long? y = (long) Math.Floor((double) year);
-            return CmCode(m, y);
+            long? m = (long)Math.Floor((double)month);
+            long? y = (long)Math.Floor((double)year);
+            return CenturyMonthCode(m, y);
         }
 
         /// <summary>
@@ -56,8 +66,8 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// <returns>True if the three parameters define a valid date. False otherwise.</returns>
         public bool IsDate(decimal? year, decimal? month, decimal? day)
         {
-            return IsDate(year.HasValue ? (double) year : (double?) null,
-                month.HasValue ? (double) month : (double?) null, day.HasValue ? (double) day : (double?) null);
+            return IsDate(year.HasValue ? (double)year : (double?)null,
+                month.HasValue ? (double)month : (double?)null, day.HasValue ? (double)day : (double?)null);
         }
 
         /// <summary>
@@ -79,7 +89,7 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
 
             try
             {
-                new DateTime((int) year.Value, (int) month.Value, (int) day.Value);
+                new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
             }
             catch
             {
@@ -112,6 +122,8 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         /// </summary>
         /// <param name="stringVar">String variable.</param>
         /// <returns>True if the specified variable contains valid time in 'military format' without time zone, false otherwise.</returns>
+        /// 
+        /// See also: IsMilitaryTime()
         public bool IsMilitaryTimeZ(string stringVar)
         {
             // 0600R, 2315Z
@@ -125,11 +137,16 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
         }
 
         /// <summary>
-        /// Number of full years between dates
+        /// Number of full years between a date and a later date
         /// </summary>
         /// <param name="date1">Earlier date</param>
         /// <param name="date2">Later date</param>
-        /// <returns>Number of complete years between the two dates.</returns>
+        /// <returns>Number of complete years.</returns>
+        /// 
+        /// The second date is required to be later than or same as the first one.
+        /// The function returns special value -9998 is returned if the second date is 
+        /// prior to the first one; and special value -9999 is returned if any of the 
+        /// two dates are missing.
         public int FullYearsBetween(DateTime? date1, DateTime? date2)
         {
             if (date1.HasValue == false) return -9999;
@@ -142,6 +159,9 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
             var yearsAdj = (d1Bis - date2.Value).TotalMilliseconds > 0 ? 1 : 0;
             return yearsDif - yearsAdj;
         }
+
+
+
 
         #endregion
 
@@ -200,7 +220,7 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
                 {1, 2, 3, 4, 5, 6}
             };
 
-            return kishTable[(int) tableNumber - 1, h - 1]; // matrix indexed from 0
+            return kishTable[(int)tableNumber - 1, h - 1]; // matrix indexed from 0
         }
 
         /// <summary>
@@ -284,6 +304,20 @@ namespace WB.Core.SharedKernels.DataCollection.CustomFunctions
                 sb.Append(s);
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Computes the body mass index (BMI) from person's weight and height.
+        /// </summary>
+        /// <param name="weight">Person's weight in kg.</param>
+        /// <param name="height">Person's height in m.</param>
+        /// <returns>computed value of BMI, or null if any argument is null.</returns>
+        /// 
+        /// For details see: 
+        /// http://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/
+        public double? Bmi(double? weight, double? height)
+        {
+            return weight / (height * height);
         }
     }
 }

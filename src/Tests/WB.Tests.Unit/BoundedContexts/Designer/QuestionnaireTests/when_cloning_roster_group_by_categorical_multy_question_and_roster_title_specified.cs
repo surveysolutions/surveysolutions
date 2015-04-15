@@ -37,6 +37,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
+        It should_throw_exception_with_message = () =>
+            new[] { "categorical", "cannot", "have", "roster", "title", "question"}.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+       
 
         It should_throw_exception_with_message_containting__categorical__ = () =>
             exception.Message.ToLower().ShouldContain("categorical");

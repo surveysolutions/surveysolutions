@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { new Tuple<decimal, string>(1,rosterFixedTitle1),new Tuple<decimal, string>(2, rosterFixedTitle2) };
+            rosterFixedTitles = new[] { new Tuple<string, string>("1",rosterFixedTitle1),new Tuple<string, string>("2", rosterFixedTitle2) };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -68,9 +68,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_raise_RosterChanged_event_with_not_nullable_RosterFixedTitles = () =>
             eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldNotBeNull();
 
+        It should_raise_RosterChanged_event_with_not_empty_RosterFixedTitles = () =>
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Count.ShouldNotEqual(0);
+
         It should_raise_RosterChanged_event_with_RosterFixedTitles_specified = () =>
             eventContext.GetSingleEvent<RosterChanged>()
-                .FixedRosterTitles.Select(f=>f.Item2).ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
+                .FixedRosterTitles.Values.ShouldContainOnly(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
@@ -81,8 +84,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid groupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<decimal, string>[] rosterFixedTitles;
+        private static Tuple<string, string>[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "roster fixed title 1";
-        private static string rosterFixedTitle2 = "roster fixd title 2";
+        private static string rosterFixedTitle2 = "roster fixed title 2";
     }
 }

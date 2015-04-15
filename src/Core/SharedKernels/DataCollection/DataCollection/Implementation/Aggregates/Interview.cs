@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -1123,14 +1124,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnaire, 
+            IEnumerable<Guid> groupIds, 
+            decimal[] rosterVector, 
+            IQuestionnaire questionnaire, 
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
             return groupIds.SelectMany(groupId =>
-                Get1InstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state, groupId, rosterVector, questionnaire, getRosterInstanceIds));
+                GetInstancesByGroupIdWithSameAndDeeperRosterLevelOrThrow(state, groupId, rosterVector, questionnaire, getRosterInstanceIds));
         }
 
-        private IEnumerable<Identity> Get1InstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
+        private IEnumerable<Identity> GetInstancesByGroupIdWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
             Guid groupId, decimal[] rosterVector, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
@@ -1147,10 +1150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<decimal[]> groupRosterVectors = ExtendRosterVector(state,
                 rosterVector, groupRosterLevel, parentRosterGroupsStartingFromTop, getRosterInstanceIds);
 
-            foreach (decimal[] groupRosterVector in groupRosterVectors)
-            {
-                yield return new Identity(groupId, groupRosterVector);
-            }
+            return groupRosterVectors.Select(groupRosterVector => new Identity(groupId, groupRosterVector));
         }
 
         private IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
@@ -2863,12 +2863,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         FixedRosterId = fixedRosterId,
                         TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
-                            .Select(title => new
-                            {
-                                Title = title.Item2,
-                                RosterInstanceId = title.Item1
-                            })
-                            .ToDictionary(x => x.RosterInstanceId, x => x.Title)
                     }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
             return rosterTitlesGroupedByRosterId;
         }
@@ -3417,12 +3411,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!rosterSizeQuestionId.HasValue)
                 return questionnaire.GetFixedRosterTitles(rosterId)
-                    .Select(title => new
-                    {
-                        Title = title.Item2,
-                        RosterInstanceId = title.Item1
-                    })
-                    .ToDictionary(x => x.RosterInstanceId, x => new Tuple<string, int?>(x.Title, null));
+                    .ToDictionary(x => x.Key, x => new Tuple<string, int?>(x.Value, null));
 
             var rosterSizeQuestionIdentity = new Identity(rosterSizeQuestionId.Value,
                 outerRosterVector.Take(questionnaire.GetRosterLevelForQuestion(rosterSizeQuestionId.Value)).ToArray());
@@ -3556,15 +3545,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
-        private List<Identity> GetDisabledGroupsToEnableByDecreasedRosterSize(InterviewStateDependentOnAnswers state,
-            List<RosterIdentity> rosterIdentities, IQuestionnaire questionnaire)
+        private List<Identity> GetDisabledGroupsToEnableByDecreasedRosterSize(
+            InterviewStateDependentOnAnswers state,
+            List<RosterIdentity> rosterIdentities, 
+            IQuestionnaire questionnaire)
         {
             if (rosterIdentities.Count == 0)
                 return new List<Identity>();
 
             return rosterIdentities.SelectMany(rosterIdentity =>
                 {
-                    var rosterAsGroupIdentity = new Identity(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector.Concat(new[] { rosterIdentity.RosterInstanceId }).ToArray());
+                    var rosterVector = rosterIdentity.OuterRosterVector.Concat(new[] { rosterIdentity.RosterInstanceId }).ToArray();
+
+                    var rosterAsGroupIdentity = new Identity(rosterIdentity.GroupId, rosterVector);
 
                     var underlyingChildGroupIds = questionnaire.GetAllUnderlyingChildGroups(rosterIdentity.GroupId).ToList();
 
@@ -3587,8 +3580,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }).ToList();
         }
 
-        private List<Identity> GetDisabledAnswersToEnableByDecreasedRosterSize(InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
+        private List<Identity> GetDisabledAnswersToEnableByDecreasedRosterSize(
+            InterviewStateDependentOnAnswers state,
+            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, 
+            decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire)
         {
              if (rosterInstanceIdsBeingRemoved.Count == 0)

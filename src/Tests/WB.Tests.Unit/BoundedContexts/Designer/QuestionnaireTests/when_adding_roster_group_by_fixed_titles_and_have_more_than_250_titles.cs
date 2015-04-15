@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -16,7 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new Tuple<decimal, string>[251];
+            rosterFixedTitles = Enumerable.Range(1, 251).Select(i => new Tuple<string, string>(i++.ToString(), i.ToString())).ToArray();
+
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -38,25 +40,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-
-        It should_throw_exception_with_message_containting__fixed__ = () =>
-            exception.Message.ToLower().ShouldContain("fixed");
-
-        It should_throw_exception_with_message_containting__titles__ = () =>
-            exception.Message.ToLower().ShouldContain("titles");
-
-        It should_throw_exception_with_message_containting__more__ = () =>
-            exception.Message.ToLower().ShouldContain("more");
-
-        It should_throw_exception_with_message_containting__250__ = () =>
-            exception.Message.ToLower().ShouldContain("250");
+        It should_throw_exception_with_message = () =>
+            new[] { "titles", "more", "250" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+        
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<decimal, string>[] rosterFixedTitles;
+        private static Tuple<string, string>[] rosterFixedTitles;
         private static Exception exception;
     }
 }

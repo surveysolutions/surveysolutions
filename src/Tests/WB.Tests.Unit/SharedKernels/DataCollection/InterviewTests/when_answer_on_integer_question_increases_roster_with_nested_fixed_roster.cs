@@ -41,14 +41,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         && _.GetRosterLevelForGroup(rosterGroupId) == 1
                                                         //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
-                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new Tuple<decimal,string>(1,"t1")}
+                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new Dictionary<decimal, string> { {1,"t1"}}
                                                         && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { rosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
 
                                                         && _.GetNestedRostersOfGroupById(rosterGroupId) == new[] { fixedRosterGroupId}
                                                         && _.GetFixedRosterGroups(rosterGroupId) == new [] { fixedRosterGroupId }
                                                         && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
-                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new Tuple<decimal,string>(0,title1), new Tuple<decimal,string>(1,title2) }
+                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new Dictionary<decimal,string> { {0,title1}, {1,title2} }
                                                         );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

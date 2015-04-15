@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 IsRoster = true,
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 RosterFixedTitles = new[] { "1", "2" },
-                VariableName = "roster",
+                VariableName = "varRoster",
                 Children = new List<IComposite>
                 {
                     new TextQuestion()

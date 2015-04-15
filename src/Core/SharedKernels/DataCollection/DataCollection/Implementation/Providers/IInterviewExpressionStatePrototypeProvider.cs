@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
