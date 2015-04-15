@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using Ninject.Infrastructure.Language;
+﻿using System.Web.Mvc;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
@@ -16,35 +14,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!ShouldDisableTransaction(filterContext))
-            {
-                transactionManager.BeginTransaction();
-            }
+            transactionManager.BeginTransaction();
         }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            if (!ShouldDisableTransaction(filterContext))
+            if (filterContext.Exception != null)
             {
-                if (filterContext.Exception != null)
-                {
-                    transactionManager.RollbackTransaction();
-                }
-                else
-                {
-                    transactionManager.CommitTransaction();
-                }
+                transactionManager.RollbackTransaction();
             }
-        }
-
-        private static bool ShouldDisableTransaction(ActionExecutingContext actionContext)
-        {
-            return actionContext.ActionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute), inherit: true).Any();
-        }
-
-        private static bool ShouldDisableTransaction(ResultExecutedContext resultContext)
-        {
-            return resultContext.Controller.GetType().HasAttribute<NoTransactionAttribute>();
+            else
+            {
+                transactionManager.CommitTransaction();
+            }
         }
     }
 }
