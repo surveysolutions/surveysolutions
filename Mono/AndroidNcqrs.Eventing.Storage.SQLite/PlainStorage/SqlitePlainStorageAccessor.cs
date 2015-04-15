@@ -6,7 +6,8 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
 {
-    public class SqlitePlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>
+    public class SqlitePlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>,
+        IPlainKeyValueStorage<TEntity> 
         where TEntity : class
     {
         private readonly SqlitePlainStore documentStore;
@@ -95,6 +96,21 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
         private static string ToSqliteId(object id)
         {
             return string.Format("{0}${1}", EntityName, id);
+        }
+
+        public TEntity GetById(string id)
+        {
+            return this.GetById((object)id);
+        }
+
+        public void Remove(string id)
+        {
+            this.Remove((object)id);
+        }
+
+        public void Store(TEntity view, string id)
+        {
+            this.Store(view, (object)id);
         }
     }
 }
