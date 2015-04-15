@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
 {
-    public class SynchronozationProcessor
+    public class SynchronizationProcessor
     {
         private readonly ILogger logger;
         private readonly ISynchronizationService synchronizationService;
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
             }
         }
 
-        public SynchronozationProcessor(
+        public SynchronizationProcessor(
             IDeviceChangingVerifier deviceChangingVerifier,
             ISyncAuthenticator authentificator, 
             ICapiDataSynchronizationService dataProcessor,

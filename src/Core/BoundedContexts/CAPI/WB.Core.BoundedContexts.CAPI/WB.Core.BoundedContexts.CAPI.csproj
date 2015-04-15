@@ -94,7 +94,7 @@
     <Compile Include="Implementation\Synchronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Implementation\Synchronization\SynchronizationEventArgs.cs" />
     <Compile Include="Implementation\Synchronization\SynchronizationEventArgsWithPercent.cs" />
-    <Compile Include="Implementation\Synchronization\SynchronozationProcessor.cs" />
+    <Compile Include="Implementation\Synchronization\SynchronizationProcessor.cs" />
     <Compile Include="LinqUtils.cs" />
     <Compile Include="ModelUtils\QuestionUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

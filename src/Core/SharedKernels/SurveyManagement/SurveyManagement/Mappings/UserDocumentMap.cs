@@ -42,9 +42,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 e.Column("RoleId");
             }));
 
-            Set(x => x.DeviceChangingHistory, bagMap => {
-                bagMap.Key(key => key.Column("UserId"));
-                bagMap.Lazy(CollectionLazy.NoLazy);
+            Set(x => x.DeviceChangingHistory, set => {
+                set.Key(key => key.Column("UserId"));
+                set.Lazy(CollectionLazy.NoLazy);
+                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
             },
             relation => relation.OneToMany());
         }
