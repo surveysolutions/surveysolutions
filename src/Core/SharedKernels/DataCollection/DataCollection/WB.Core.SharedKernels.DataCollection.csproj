@@ -237,6 +237,7 @@
     <Compile Include="Implementation\Entities\InterviewModel.cs" />
     <Compile Include="Implementation\Entities\InterviewQuestion.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
+    <Compile Include="Implementation\Entities\QuestionModelType.cs" />
     <Compile Include="Implementation\EnumerableExtensions.cs">
       <SubType>Code</SubType>
     </Compile>

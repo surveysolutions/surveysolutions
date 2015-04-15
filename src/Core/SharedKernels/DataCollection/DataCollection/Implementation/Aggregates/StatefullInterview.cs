@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -46,36 +48,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 case QuestionType.SingleOption:
                     return questionnaire.IsQuestionLinked(questionId) 
-                        ? QuestionModelType.LinkedSingleOptionQuestionModel 
-                        : QuestionModelType.SingleOptionQuestionModel;
+                        ? QuestionModelType.LinkedSingleOption 
+                        : QuestionModelType.SingleOption;
 
                 case QuestionType.MultyOption:
                     return questionnaire.IsQuestionLinked(questionId)
-                       ? QuestionModelType.LinkedMultiOptionQuestionModel
-                       : QuestionModelType.MultiOptionQuestionModel;
+                       ? QuestionModelType.LinkedMultiOption
+                       : QuestionModelType.MultiOption;
 
                 case QuestionType.Numeric:
                     return questionnaire.IsQuestionInteger(questionId)
-                       ? QuestionModelType.IntegerNumericQuestionModel
-                       : QuestionModelType.RealNumericQuestionModel;
+                       ? QuestionModelType.IntegerNumeric
+                       : QuestionModelType.RealNumeric;
 
                 case QuestionType.DateTime:
-                    return QuestionModelType.DateTimeQuestionModel;
+                    return QuestionModelType.DateTime;
 
                 case QuestionType.GpsCoordinates:
-                    return QuestionModelType.GpsCoordinatesQuestionModel;
+                    return QuestionModelType.GpsCoordinates;
 
                 case QuestionType.Text:
-                    return QuestionModelType.MaskedTextQuestionModel;
+                    return QuestionModelType.MaskedText;
 
                 case QuestionType.TextList:
-                    return QuestionModelType.TextListQuestionModel;
+                    return QuestionModelType.TextList;
 
                 case QuestionType.QRBarcode:
-                    return QuestionModelType.QrBarcodeQuestionModel;
+                    return QuestionModelType.QrBarcode;
 
                 case QuestionType.Multimedia:
-                    return QuestionModelType.MultimediaQuestionModel;
+                    return QuestionModelType.Multimedia;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -168,7 +170,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal new void Apply(AnswerCommented @event)
         {
             base.Apply(@event);
-            this.UpdateState(@event.QuestionId, @event.PropagationVector, x => x.Comments.Add(@event.Comment));
+            this.UpdateAnswerState(@event.QuestionId, @event.PropagationVector, x => x.Comments.Add(@event.Comment));
         }
 
         #region Group and question status and validity
@@ -181,35 +183,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal override void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState |= QuestionState.Valid));
+            @event.Questions.ForEach(x => this.UpdateAnswerState(x.Id, x.RosterVector, q => q.QuestionState |= QuestionState.Valid));
         }
 
         internal override void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState &= ~QuestionState.Valid));
+            @event.Questions.ForEach(x => this.UpdateAnswerState(x.Id, x.RosterVector, q => q.QuestionState &= ~QuestionState.Valid));
         }
 
         internal override void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
+            @event.Groups.ForEach(x => this.UpdateGroupState(x.Id, x.RosterVector, q => q.IsDisabled = true));
         }
 
         internal override void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
+            @event.Groups.ForEach(x => this.UpdateGroupState(x.Id, x.RosterVector, q => q.IsDisabled = false));
         }
 
         internal override void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState &= ~QuestionState.Enabled));
+            @event.Questions.ForEach(x => this.UpdateAnswerState(x.Id, x.RosterVector, q => q.QuestionState &= ~QuestionState.Enabled));
         }
 
         internal override void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => this.UpdateState(x.Id, x.RosterVector, q => q.QuestionState |= QuestionState.Enabled));
+            @event.Questions.ForEach(x => this.UpdateAnswerState(x.Id, x.RosterVector, q => q.QuestionState |= QuestionState.Enabled));
         }
         
         #endregion
@@ -219,45 +223,63 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal override void Apply(RosterInstancesTitleChanged @event)
         {
             base.Apply(@event);
+            foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
+            {
+                var rosterId = ConversionHelper.ConvertIdAndRosterVectorToString(changedRosterInstanceTitle.RosterInstance.GroupId, GetFullRosterVector(changedRosterInstanceTitle.RosterInstance));
+                var roster = (InterviewRosterModel)interview.GroupsAndRosters[rosterId];
+                roster.Title = changedRosterInstanceTitle.Title;
+            }
         }
 
         internal override void Apply(RosterInstancesAdded @event)
         {
             base.Apply(@event);
+
+            foreach (var rosterInstance in @event.Instances)
+            {
+                var rosterId = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
+                interview.GroupsAndRosters[rosterId] = new InterviewRosterModel
+                                             {
+                                                 Id = rosterInstance.GroupId,
+                                                 RosterVector = GetFullRosterVector(rosterInstance),
+                                                 ParentRosterVector = rosterInstance.OuterRosterVector,
+                                                 RowCode = rosterInstance.RosterInstanceId
+                                             };
+            }
         }
 
         internal override void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
+            @event.Instances.ForEach(x => interview.GroupsAndRosters.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.GroupId, GetFullRosterVector(x))));
         }
 
         #endregion
 
         #region Interview status and validity
         
-        internal override void Apply(InterviewStatusChanged @event)
-        {
-            base.Apply(@event);
-        }
-
         internal override void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
+            interview.IsInProgress = false;
         }
 
         internal override void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
+            interview.IsInProgress = true;
         }
 
         internal override void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
+            interview.HasErrors = false;
         }
 
         internal override void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
+            interview.HasErrors = true;
         }
         
         #endregion
@@ -276,7 +298,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             interview.Answers[questionId] = question;
         }
 
-        private void UpdateState(Guid id, decimal[] rosterVector, Action<AbstractInterviewQuestionModel> update)
+        private void UpdateGroupState(Guid id, decimal[] rosterVector, Action<InterviewGroupModel> update)
+        {
+            var groupId = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
+
+            InterviewGroupModel groupOrRoster;
+            if (this.interview.GroupsAndRosters.ContainsKey(groupId))
+            {
+                groupOrRoster = this.interview.GroupsAndRosters[groupId];
+            }
+            else
+            {
+                // rosters cannot be created here
+                groupOrRoster = new InterviewGroupModel { Id = id, RosterVector = rosterVector };
+            }
+
+            update(groupOrRoster);
+
+            this.interview.GroupsAndRosters[groupId] = groupOrRoster;
+        }
+
+        private void UpdateAnswerState(Guid id, decimal[] rosterVector, Action<AbstractInterviewQuestionModel> update)
         {
             var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
@@ -297,6 +339,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             update(question);
 
             this.interview.Answers[questionId] = question;
+        }
+
+        private decimal[] GetFullRosterVector(RosterInstance instance)
+        {
+            return instance.OuterRosterVector.Concat(new[] { instance.RosterInstanceId }).ToArray();
         }
     }
 }
