@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public RosterChanged(Guid responsibleId, Guid groupId)
             : base(responsibleId, groupId)
         {
+            FixedRosterTitles = new Dictionary<decimal, string>();
         }
     }
 }
