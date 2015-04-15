@@ -9,11 +9,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using StaticTextViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels.StaticTextViewModel;
+
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementation
 {
