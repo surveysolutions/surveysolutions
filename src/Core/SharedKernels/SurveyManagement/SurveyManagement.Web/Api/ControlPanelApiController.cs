@@ -58,6 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
 
+        [NoTransaction]
         public ReadSideStatus GetReadSideStatus()
         {
             ReadSideStatus readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
