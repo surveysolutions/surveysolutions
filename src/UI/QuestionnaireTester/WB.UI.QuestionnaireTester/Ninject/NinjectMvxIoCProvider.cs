@@ -84,7 +84,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
         public T IoCConstruct<T>() where T : class
         {
-            return (T)IoCConstruct(typeof(T));
+            return kernel.Get<T>();
         }
 
         public void RegisterSingleton(Type tInterface, Func<object> theConstructor)
