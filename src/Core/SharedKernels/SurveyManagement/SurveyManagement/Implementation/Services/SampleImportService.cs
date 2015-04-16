@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
-using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;

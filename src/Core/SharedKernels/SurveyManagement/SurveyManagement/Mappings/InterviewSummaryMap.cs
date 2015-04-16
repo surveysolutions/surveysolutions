@@ -1,7 +1,5 @@
-﻿using NHibernate;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using Raven.Client.Linq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
