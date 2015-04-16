@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     "m.Text.RegularExpressions;\r\n\r\n ");
             
             #line 13 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-foreach (var namespaceToInclude in VersionParameters.Namespaces){
+foreach (var namespaceToInclude in QuestionnaireTemplateStructure.Namespaces){
             
             #line default
             #line hidden
@@ -62,7 +62,7 @@ foreach (var namespaceToInclude in VersionParameters.Namespaces){
             this.Write(" : AbstractInterviewExpressionState");
             
             #line 19 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(VersionParameters.VersionPrefix));
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.VersionPrefix));
             
             #line default
             #line hidden
@@ -126,7 +126,7 @@ foreach (var namespaceToInclude in VersionParameters.Namespaces){
                     "\t\t ");
             
             #line 78 "C:\Work\WBCAPI-git-default\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-if(VersionParameters.AreServiceVariablesPresent){
+if(QuestionnaireTemplateStructure.ShouldGenerateUpdateRosterTitleMethods){
             
             #line default
             #line hidden

@@ -1,17 +1,15 @@
 ﻿using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Versions;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates
 {
     public partial class QuestionnaireLevelTemplate
     {
-        public QuestionnaireLevelTemplate(QuestionnaireLevelTemplateModel model, IVersionParameters versionParameters)
+        public QuestionnaireLevelTemplate(
+            QuestionnaireLevelTemplateModel model)
         {
-            this.Model = model;
-            this.VersionParameters = versionParameters;
+            Model = model;
         }
 
-        protected QuestionnaireLevelTemplateModel Model { get; private set; }
-        protected IVersionParameters VersionParameters { get; private set; }
+        public QuestionnaireLevelTemplateModel Model { get; private set; }
     }
 }

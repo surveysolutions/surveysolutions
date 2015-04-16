@@ -10,13 +10,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
- <#foreach (var namespaceToInclude in VersionParameters.Namespaces){#>
+ <#foreach (var namespaceToInclude in QuestionnaireTemplateStructure.Namespaces){#>
 	using <#=namespaceToInclude#>;
  <#}#>
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState<#=VersionParameters.VersionPrefix#> 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState<#=QuestionnaireTemplateStructure.VersionPrefix#> 
     {
         public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
-		 <#if(VersionParameters.AreServiceVariablesPresent){#>
+		 <#if(QuestionnaireTemplateStructure.ShouldGenerateUpdateRosterTitleMethods){#>
 
 		 public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
