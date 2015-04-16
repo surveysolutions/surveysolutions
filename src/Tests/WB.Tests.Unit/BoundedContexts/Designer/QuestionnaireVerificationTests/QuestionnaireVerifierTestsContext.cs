@@ -268,7 +268,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         {
             var questionnaireVersionProvider = new EngineVersionService();
             return
-                new QuestionnireExpressionProcessorGenerator(
+                new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
                         new DefaultDynamicCompillerSettings()
                         {

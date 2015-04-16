@@ -19,9 +19,9 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class CodeGenerator : ICodeGenerator
+    internal class CodeGenerator : ICodeGenerator
     {
-        public CodeGenerator(IEngineVersionService engineVersionService)
+        internal CodeGenerator(IEngineVersionService engineVersionService)
         {
             this.engineVersionService = engineVersionService;
         }
