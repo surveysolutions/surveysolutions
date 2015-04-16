@@ -2,6 +2,7 @@
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -43,11 +44,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 throw new ArgumentNullException("navObject");
 
             this.navObject = navObject;
-            TextQuestion textQuestion = navObject.QuestionnaireDocument.Find<TextQuestion>(navObject.QuestionIdentity.Id);
+            var parent = navObject.QuestionnaireDocument.GetParentById(navObject.QuestionIdentity.Id);
+            TextQuestion textQuestion = parent.Find<TextQuestion>(navObject.QuestionIdentity.Id);
             var model = navObject.InterviewModel.GetTextQuestionModel(navObject.QuestionIdentity);
 
             Title = textQuestion.QuestionText;
-            Answer = model.Answer;
+
+            if (model != null)
+            {
+                Answer = model.Answer;
+            }
         }
 
 
