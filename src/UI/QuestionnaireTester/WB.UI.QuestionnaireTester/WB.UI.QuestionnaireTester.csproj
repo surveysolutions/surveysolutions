@@ -197,6 +197,9 @@
     <AndroidResource Include="Resources\menu\dashboard.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
     <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
+    <AndroidResource Include="Resources\values\colors.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

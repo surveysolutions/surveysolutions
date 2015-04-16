@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader
 {
     public interface IInterviewStateFullViewModelFactory
     {
-        Task<IEnumerable<MvxViewModel>> LoadAsync(string interviewId, string chapterId);
+        Task<List<MvxViewModel>> LoadAsync(string interviewId, string chapterId);
         Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId);
     }
 }

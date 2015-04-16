@@ -39,10 +39,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             { typeof(TextQuestion), (qIdentity, interview, questionnaire) => CreateViewModel<TextQuestionViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
         };
 
-        public Task<IEnumerable<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
+        public Task<List<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
+        {
+            return Task.Run(()=> GenerateViewModels(interviewId, chapterId));
+        }
+
+        private List<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
         {
             var interview = this.plainStorageInterviewAccessor.GetInterview(Guid.Parse(interviewId));
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
+                interview.QuestionnaireVersion);
 
             IComposite loyout;
 
@@ -66,7 +72,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
 
                 if (!this.mapQuestions.ContainsKey(entityType))
                 {
-                    entities.Add(new StaticTextViewModel() { Title = child.ToString() });
+                    entities.Add(new StaticTextViewModel() {Title = child.ToString()});
                     continue; // temporaly ignore unknown types
                 }
 
@@ -76,8 +82,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
 
                 entities.Add(entityViewModel);
             }
-
-            return new Task<IEnumerable<MvxViewModel>>(() => entities);
+            return entities;
         }
 
         private static T CreateViewModel<T>(Action<T> intializer) where T : class
