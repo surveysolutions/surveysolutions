@@ -490,12 +490,24 @@ namespace WB.Tests.Unit
                 settings ?? Mock.Of<IHeadquartersSettings>());
         }
 
-        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, long? questionnaireVersion = null)
+        public static InterviewSummary InterviewSummary() // needed since overload cannot be used in lambda expression
+        {
+            return new InterviewSummary();
+        }
+
+        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, 
+            long? questionnaireVersion = null,
+            InterviewStatus? status = null,
+            Guid? responsibleId = null,
+            Guid? teamLeadId = null)
         {
             return new InterviewSummary()
             {
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                Status = status.GetValueOrDefault(),
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                TeamLeadId = teamLeadId.GetValueOrDefault()
             };
         }
 
@@ -1162,11 +1174,6 @@ namespace WB.Tests.Unit
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 payload ?? "some payload");
-        }
-
-        public static InterviewSummary InterviewSummary()
-        {
-            return new InterviewSummary();
         }
 
         public static Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)

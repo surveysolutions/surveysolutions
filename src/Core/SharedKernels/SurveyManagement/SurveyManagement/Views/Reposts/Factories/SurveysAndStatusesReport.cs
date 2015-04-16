@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class SurveysAndStatusesReport : ISurveysAndStatusesReport
+    internal class SurveysAndStatusesReport : ISurveysAndStatusesReport
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
 
@@ -37,7 +37,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
                 foreach (var questionnaireWithVersion in totalCount.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion}).Distinct())
                 {
-                    Func<CounterObject, bool> findQuestionnaire = x => x.QuestionnaireId == questionnaireWithVersion.QuestionnaireId && x.QuestionnaireVersion == questionnaireWithVersion.QuestionnaireVersion;
+                    Func<CounterObject, bool> findQuestionnaire = x => x.QuestionnaireId == questionnaireWithVersion.QuestionnaireId && 
+                                                                       x.QuestionnaireVersion == questionnaireWithVersion.QuestionnaireVersion;
                     statistics.Add(new StatisticsLineGroupedByUserAndTemplate
                     {
                         QuestionnaireId = questionnaireWithVersion.QuestionnaireId,
