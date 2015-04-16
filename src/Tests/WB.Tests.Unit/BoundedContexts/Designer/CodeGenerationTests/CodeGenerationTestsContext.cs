@@ -14,6 +14,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 {
@@ -221,6 +223,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             };
         }
 
+        public static EngineVersion CreateQuestionnaireVersion()
+        {
+            return new EngineVersionService().GetCurrentEngineVersion();
+        }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
         {
@@ -495,7 +501,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
+                questionnaireDocument, new EngineVersion(6, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -525,6 +532,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
+            var questionnaireVersionProvider = new EngineVersionService();
             return
                 new QuestionnireExpressionProcessorGenerator(
                     new RoslynCompiler(
@@ -535,7 +543,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                             DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
                                 "System.Collections.dll", "System.Linq.dll" }
                         }, new FileSystemIOAccessor()),
-                    new CodeGenerator(new QuestionnaireVersionProvider()));
+                    new CodeGenerator(questionnaireVersionProvider), questionnaireVersionProvider);
         }
     }
 }

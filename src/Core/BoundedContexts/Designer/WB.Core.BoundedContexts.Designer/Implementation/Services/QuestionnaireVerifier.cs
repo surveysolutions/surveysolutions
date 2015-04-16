@@ -10,12 +10,11 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using Newtonsoft.Json;
 using System.Text;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -91,19 +90,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IEngineVersionService engineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IEngineVersionService engineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.engineVersionService = engineVersionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -253,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
-            return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out resultAssembly);
+            return this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,engineVersionService.GetCurrentEngineVersion(), out resultAssembly);
         }
 
         private static bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)

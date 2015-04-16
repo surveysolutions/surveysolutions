@@ -1,22 +1,23 @@
 ﻿using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
 {
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class GetHashCode_when_called_two_times_for_two_identical_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1,2,3);
 
-            identicalQuestionnaireVersion = CreateQuestionnaireVersion(1,2,3);
+            _identicalEngineVersion = CreateQuestionnaireVersion(1,2,3);
         };
 
         Because of = () =>
         {
             firstResult = version.GetHashCode();
-            secondResult = identicalQuestionnaireVersion.GetHashCode();
+            secondResult = _identicalEngineVersion.GetHashCode();
         };
 
         It should_same_results_for_both_calls = () =>
@@ -24,11 +25,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
 
         private static int firstResult;
         private static int secondResult;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion identicalQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _identicalEngineVersion;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class Equals_when_called_with_null : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -43,10 +44,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class Equals_when_called_with_object_of_another_type : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -61,56 +62,56 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class Equals_when_called_with_identical_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1,2,3);
 
-            identicalQuestionnaireVersion = CreateQuestionnaireVersion(1,2,3);
+            _identicalEngineVersion = CreateQuestionnaireVersion(1,2,3);
         };
 
         Because of = () =>
-            result = version.Equals(identicalQuestionnaireVersion);
+            result = version.Equals(_identicalEngineVersion);
 
         It should_return_true = () =>
             result.ShouldBeTrue();
 
         private static bool result;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion identicalQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _identicalEngineVersion;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class Equals_when_called_with_different_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1,2,3);
 
-            differentQuestionnaireVersion = CreateQuestionnaireVersion(3,4,5);
+            _differentEngineVersion = CreateQuestionnaireVersion(3,4,5);
         };
 
         Because of = () =>
-            result = version.Equals(differentQuestionnaireVersion);
+            result = version.Equals(_differentEngineVersion);
 
         It should_return_false = () =>
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion differentQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _differentEngineVersion;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class EqualityOperator_when_called_with_two_nulls : QuestionnaireVersionTestsContext
     {
         Because of = () =>
-            result = null as QuestionnaireVersion == null as QuestionnaireVersion;
+            result = null as EngineVersion == null as EngineVersion;
 
         It should_return_true = () =>
             result.ShouldBeTrue();
@@ -118,7 +119,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
         private static bool result;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class EqualityOperator_when_called_with_null_and_not_null : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -133,10 +134,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class EqualityOperator_when_called_with_not_null_and_null : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -151,10 +152,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class EqualityOperator_when_called_with_same_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -173,56 +174,56 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeTrue();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class EqualityOperator_when_called_with_two_identical_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1,2,3);
 
-            identicalQuestionnaireVersion = CreateQuestionnaireVersion(1,2,3);
+            _identicalEngineVersion = CreateQuestionnaireVersion(1,2,3);
         };
 
         Because of = () =>
-            result = version == identicalQuestionnaireVersion;
+            result = version == _identicalEngineVersion;
 
         It should_return_true = () =>
             result.ShouldBeTrue();
 
         private static bool result;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion identicalQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _identicalEngineVersion;
     }
 
-    [Subject(typeof (QuestionnaireVersion))]
+    [Subject(typeof (EngineVersion))]
     public class EqualityOperator_when_called_with_two_different_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1,2,3);
 
-            differentQuestionnaireVersion = CreateQuestionnaireVersion(3,4,5);
+            _differentEngineVersion = CreateQuestionnaireVersion(3,4,5);
         };
 
         Because of = () =>
-            result = version == differentQuestionnaireVersion;
+            result = version == _differentEngineVersion;
 
         It should_return_false = () =>
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion differentQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _differentEngineVersion;
     }
 
-    [Subject(typeof(QuestionnaireVersion))]
+    [Subject(typeof(EngineVersion))]
     public class NotEqualOperator_when_called_with_two_nulls : QuestionnaireVersionTestsContext
     {
         Because of = () =>
-            result = null as QuestionnaireVersion != null as QuestionnaireVersion;
+            result = null as EngineVersion != null as EngineVersion;
 
         It should_return_false = () =>
             result.ShouldBeFalse();
@@ -230,7 +231,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
         private static bool result;
     }
 
-    [Subject(typeof(QuestionnaireVersion))]
+    [Subject(typeof(EngineVersion))]
     public class NotEqualOperator_when_called_with_null_and_not_null : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -245,10 +246,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeTrue();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof(QuestionnaireVersion))]
+    [Subject(typeof(EngineVersion))]
     public class NotEqualOperator_when_called_with_not_null_and_null : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -263,10 +264,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeTrue();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof(QuestionnaireVersion))]
+    [Subject(typeof(EngineVersion))]
     public class NotEqualOperator_when_called_with_same_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
@@ -285,48 +286,48 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
     }
 
-    [Subject(typeof(QuestionnaireVersion))]
+    [Subject(typeof(EngineVersion))]
     public class NotEqualOperator_when_called_with_two_identical_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1, 2, 3);
 
-            identicalQuestionnaireVersion = CreateQuestionnaireVersion(1, 2, 3);
+            _identicalEngineVersion = CreateQuestionnaireVersion(1, 2, 3);
         };
 
         Because of = () =>
-            result = version != identicalQuestionnaireVersion;
+            result = version != _identicalEngineVersion;
 
         It should_return_false = () =>
             result.ShouldBeFalse();
 
         private static bool result;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion identicalQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _identicalEngineVersion;
     }
 
-    [Subject(typeof(QuestionnaireVersion))]
+    [Subject(typeof(EngineVersion))]
     public class NotEqualOperator_when_called_with_two_different_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
             version = CreateQuestionnaireVersion(1, 2, 3);
 
-            differentQuestionnaireVersion = CreateQuestionnaireVersion(3, 4, 5);
+            _differentEngineVersion = CreateQuestionnaireVersion(3, 4, 5);
         };
 
         Because of = () =>
-            result = version != differentQuestionnaireVersion;
+            result = version != _differentEngineVersion;
 
         It should_return_true = () =>
             result.ShouldBeTrue();
 
         private static bool result;
-        private static QuestionnaireVersion version;
-        private static QuestionnaireVersion differentQuestionnaireVersion;
+        private static EngineVersion version;
+        private static EngineVersion _differentEngineVersion;
     }
 }

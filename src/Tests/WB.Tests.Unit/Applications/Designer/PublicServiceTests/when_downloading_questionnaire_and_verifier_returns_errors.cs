@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
@@ -19,23 +20,18 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new QuestionnaireVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new EngineVersion(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
             request = CreateDownloadQuestionnaireRequest(questionnaireId, supportedQuestionnaireVersion);
-
-            var templateInfo = CreateTemplateInfo(supportedQuestionnaireVersion);
-
-            var exportService = new Mock<IQuestionnaireExportService>();
-            exportService.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(templateInfo);
 
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
 
             var questionnaireVerifier = new Mock<IQuestionnaireVerifier>();
             questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationError>() { new QuestionnaireVerificationError("test", "t1", new QuestionnaireVerificationReference[0]) });
 
-            service = CreatePublicService(exportService: exportService.Object, questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory);
+            service = CreatePublicService( questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory);
         };
 
         Because of = () => 

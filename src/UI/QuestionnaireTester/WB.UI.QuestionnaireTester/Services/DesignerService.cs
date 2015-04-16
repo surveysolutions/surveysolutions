@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.QuestionnaireTester.Authentication;
 
 namespace WB.UI.QuestionnaireTester.Services
@@ -12,12 +13,12 @@ namespace WB.UI.QuestionnaireTester.Services
     public class DesignerService
     {
         private readonly IRestService restService;
-        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
+        private readonly IEngineVersionService engineVersionService;
 
-        public DesignerService(IRestService restService, IQuestionnaireVersionProvider questionnaireVersionProvider)
+        public DesignerService(IRestService restService, IEngineVersionService engineVersionService)
         {
             this.restService = restService;
-            this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.engineVersionService = engineVersionService;
         }
 
         public async Task<bool> Login(string userName, string password, CancellationToken cancellationToken)
@@ -43,7 +44,7 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            var supportedVersion = questionnaireVersionProvider.GetCurrentEngineVersion();
+            var supportedVersion = engineVersionService.GetCurrentEngineVersion();
 
             return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                 url: "questionnaire",
