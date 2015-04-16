@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
-                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out generationResult))
+                _ => _.GenerateProcessorStateAssemblyForVersion(Moq.It.IsAny<QuestionnaireDocument>(),Moq.It.IsAny<EngineVersion>(), out generationResult))
                 .Returns(new GenerationResult() {Success = true, Diagnostics = new List<GenerationDiagnostic>()});
 
             var substitutionServiceInstance = new SubstitutionService();
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
-                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object);
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, new EngineVersionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
@@ -265,6 +266,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
+            var questionnaireVersionProvider = new EngineVersionService();
             return
                 new QuestionnireExpressionProcessorGenerator(
                     new RoslynCompiler(
@@ -275,7 +277,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                             DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
                                 "System.Collections.dll", "System.Linq.dll" }
                         }, new FileSystemIOAccessor()),
-                    new CodeGenerator(new QuestionnaireVersionProvider()));
+                    new CodeGenerator(questionnaireVersionProvider), questionnaireVersionProvider);
         }
     }
 }

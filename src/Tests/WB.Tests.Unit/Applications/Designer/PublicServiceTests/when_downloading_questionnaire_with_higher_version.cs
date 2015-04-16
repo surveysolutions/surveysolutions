@@ -7,6 +7,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
@@ -17,18 +18,14 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new QuestionnaireVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new EngineVersion(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
             request = CreateDownloadQuestionnaireRequest(questionnaireId, supportedQuestionnaireVersion);
 
-            var templateInfo = CreateTemplateInfo(version);
-
-            exportService = Mock.Of<IQuestionnaireExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
-            
-            var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
-            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory);
+            var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId, "aaaa");
+            service = CreatePublicService(questionnaireViewFactory: questionnaireViewFactory, engineVersion: version);
         };
 
         Because of = () => 
@@ -40,9 +37,8 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         It should_throw_exception_that_contains_such_words = () =>
             (exception as FaultException).Message.ShouldEqual(errorMessage);
 
-        private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
+        private static EngineVersion version = new EngineVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
-        private static IQuestionnaireExportService exportService;
         private static IPublicService service;
         private static Exception exception;
         private static string errorMessage = "Failed to import questionnaire. Your questionnaire \"aaaa.tmpl\" has 1.0.0 version. Headquarters application supports only up to version 0.0.1.";

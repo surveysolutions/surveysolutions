@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireWithRosterAndNamedTextQuestions(namesToCheck);
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaireDocument,CreateQuestionnaireVersion(), out resultAssembly);
                 
                 return new InvokeResults
                 {
