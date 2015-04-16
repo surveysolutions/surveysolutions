@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class TeamsAndStatusesReport : ITeamsAndStatusesReport
+    internal class TeamsAndStatusesReport : ITeamsAndStatusesReport
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
 
