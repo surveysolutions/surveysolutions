@@ -70,11 +70,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open the questionnaire. Your questionnaire &quot;{0}&quot; has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions..
+        ///   Looks up a localized string similar to Failed to open the questionnaire. Your version is {0}. Please update..
         /// </summary>
-        internal static string ClientVersionLessThenDocument {
+        internal static string ClientVersionIsNotSupported {
             get {
-                return ResourceManager.GetString("ClientVersionLessThenDocument", resourceCulture);
+                return ResourceManager.GetString("ClientVersionIsNotSupported", resourceCulture);
             }
         }
         

@@ -283,7 +283,7 @@
     <Compile Include="Services\ICodeGenerator.cs" />
     <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\QuestionnireExpressionProcessorGenerator.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
       <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>

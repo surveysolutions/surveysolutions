@@ -534,7 +534,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         {
             var questionnaireVersionProvider = new EngineVersionService();
             return
-                new QuestionnireExpressionProcessorGenerator(
+                new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
                         new DefaultDynamicCompillerSettings()
                         {

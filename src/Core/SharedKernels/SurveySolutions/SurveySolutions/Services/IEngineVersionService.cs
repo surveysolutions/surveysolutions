@@ -4,6 +4,6 @@ namespace WB.Core.SharedKernels.SurveySolutions.Services
     {
         EngineVersion GetCurrentEngineVersion();
 
-        bool IsClientVersionSupported(EngineVersion engineVersion, EngineVersion clientVersion);
+        bool IsClientEngineVersionSupported(EngineVersion clientVersion);
     }
 }
