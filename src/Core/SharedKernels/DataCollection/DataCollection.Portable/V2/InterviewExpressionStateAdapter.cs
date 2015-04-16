@@ -5,137 +5,137 @@ namespace WB.Core.SharedKernels.DataCollection.V2
 {
     internal class InterviewExpressionStateAdapter : IInterviewExpressionStateV2
     {
-        private readonly IInterviewExpressionState adaptee;
+        private readonly IInterviewExpressionState interviewExpressionState;
 
-        public InterviewExpressionStateAdapter(IInterviewExpressionState adaptee)
+        public InterviewExpressionStateAdapter(IInterviewExpressionState interviewExpressionState)
         {
-            this.adaptee = adaptee;
+            this.interviewExpressionState = interviewExpressionState;
         }
 
         public void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
         {
-            adaptee.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
         {
-            adaptee.UpdateNumericRealAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateNumericRealAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
         {
-            adaptee.UpdateDateAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateDateAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
-            adaptee.UpdateMediaAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateMediaAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
-            adaptee.UpdateTextAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateTextAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
-            adaptee.UpdateQrBarcodeAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateQrBarcodeAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
         {
-            adaptee.UpdateSingleOptionAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateSingleOptionAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
         {
-            adaptee.UpdateMultiOptionAnswer(questionId, rosterVector, answer);
+            interviewExpressionState.UpdateMultiOptionAnswer(questionId, rosterVector, answer);
         }
 
         public void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude,
             double accuracy, double altitude)
         {
-            adaptee.UpdateGeoLocationAnswer(questionId, propagationVector, latitude, longitude, accuracy, altitude);
+            interviewExpressionState.UpdateGeoLocationAnswer(questionId, propagationVector, latitude, longitude, accuracy, altitude);
         }
 
         public void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers)
         {
-            adaptee.UpdateTextListAnswer(questionId, propagationVector, answers); 
+            interviewExpressionState.UpdateTextListAnswer(questionId, propagationVector, answers); 
         }
 
         public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector)
         {
-            adaptee.UpdateLinkedSingleOptionAnswer(questionId, propagationVector, selectedPropagationVector); 
+            interviewExpressionState.UpdateLinkedSingleOptionAnswer(questionId, propagationVector, selectedPropagationVector); 
         }
 
         public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors)
         {
-            adaptee.UpdateLinkedMultiOptionAnswer(questionId, propagationVector, selectedPropagationVectors); 
+            interviewExpressionState.UpdateLinkedMultiOptionAnswer(questionId, propagationVector, selectedPropagationVectors); 
         }
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
-            adaptee.DeclareAnswersInvalid(invalidQuestions); 
+            interviewExpressionState.DeclareAnswersInvalid(invalidQuestions); 
         }
 
         public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
         {
-            adaptee.DeclareAnswersValid(validQuestions); 
+            interviewExpressionState.DeclareAnswersValid(validQuestions); 
         }
 
         public void DisableGroups(IEnumerable<Identity> groupsToDisable)
         {
-            adaptee.DisableGroups(groupsToDisable); 
+            interviewExpressionState.DisableGroups(groupsToDisable); 
         }
 
         public void EnableGroups(IEnumerable<Identity> groupsToEnable)
         {
-            adaptee.EnableGroups(groupsToEnable); 
+            interviewExpressionState.EnableGroups(groupsToEnable); 
         }
 
         public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
         {
-            adaptee.DisableQuestions(questionsToDisable); 
+            interviewExpressionState.DisableQuestions(questionsToDisable); 
         }
 
         public void EnableQuestions(IEnumerable<Identity> questionsToEnable)
         {
-            adaptee.EnableQuestions(questionsToEnable); 
+            interviewExpressionState.EnableQuestions(questionsToEnable); 
         }
 
         public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
-            adaptee.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex); 
+            interviewExpressionState.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex); 
         }
 
         public void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId)
         {
-            adaptee.RemoveRoster(rosterId, rosterVector, rosterInstanceId); 
+            interviewExpressionState.RemoveRoster(rosterId, rosterVector, rosterInstanceId); 
         }
 
         public ValidityChanges ProcessValidationExpressions()
         {
-            return adaptee.ProcessValidationExpressions(); 
+            return interviewExpressionState.ProcessValidationExpressions(); 
         }
 
         public EnablementChanges ProcessEnablementConditions()
         {
-            return adaptee.ProcessEnablementConditions(); 
+            return interviewExpressionState.ProcessEnablementConditions(); 
         }
 
         public void SaveAllCurrentStatesAsPrevious()
         {
-            adaptee.SaveAllCurrentStatesAsPrevious(); 
+            interviewExpressionState.SaveAllCurrentStatesAsPrevious(); 
         }
 
         public IInterviewExpressionState Clone()
         {
-            return adaptee.Clone(); 
+            return interviewExpressionState.Clone(); 
         }
 
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
-            return new InterviewExpressionStateAdapter(adaptee);
+            return new InterviewExpressionStateAdapter(interviewExpressionState);
         }
 
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
