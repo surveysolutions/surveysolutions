@@ -8,6 +8,8 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
@@ -17,32 +19,33 @@ namespace WB.UI.Designer.WebServices
 {
     public class PublicService : IPublicService
     {
-        private readonly IQuestionnaireExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-
+        private readonly IEngineVersionService engineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-
+        private readonly IJsonUtils jsonUtils;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         public PublicService(
-            IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
-            IExpressionProcessorGenerator expressionProcessorGenerator)
+            IExpressionProcessorGenerator expressionProcessorGenerator, 
+            IEngineVersionService engineVersionService, 
+            IJsonUtils jsonUtils)
         {
-            this.exportService = exportService;
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.engineVersionService = engineVersionService;
+            this.jsonUtils = jsonUtils;
         }
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
@@ -54,23 +57,16 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
+            var currentEngineVersion = this.engineVersionService.GetCurrentEngineVersion();
 
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
-            {
-                var message = String.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId);
+            var templateTitle = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName());
 
-                throw new FaultException(message, new FaultCode("TemplateProcessingError"));
-            }
-
-            var templateTitle = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName());
-
-            if (templateInfo.Version > request.SupportedQuestionnaireVersion)
+            if (currentEngineVersion > request.SupportedEngineVersion)
             {
                 var message = String.Format(ErrorMessages.NotSupportedQuestionnaireVersion,
                         templateTitle,
-                        templateInfo.Version,
-                        request.SupportedQuestionnaireVersion);
+                        currentEngineVersion,
+                        request.SupportedEngineVersion);
 
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
@@ -80,7 +76,7 @@ namespace WB.UI.Designer.WebServices
             if (questoinnaireErrors.Any())
             {
                 var message = String.Format(ErrorMessages.Questionnaire_verification_failed,
-                        templateInfo.Title);
+                        questionnaireView.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
@@ -89,7 +85,10 @@ namespace WB.UI.Designer.WebServices
             string resultAssembly;
             try
             {
-                generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                generationResult =
+                    this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
+                        questionnaireView.Source, engineVersionService.GetCurrentEngineVersion(),
+                        out resultAssembly);
             }
             catch (Exception)
             {
@@ -103,12 +102,12 @@ namespace WB.UI.Designer.WebServices
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                var message = String.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title);
+                var message = String.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
 
-            Stream stream = this.zipUtils.Compress(templateInfo.Source);
+            Stream stream = this.zipUtils.Compress(jsonUtils.Serialize(questionnaireView.Source));
 
             return new RemoteFileInfo
             {

@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IExpressionProcessorGenerator
     {
-        GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire,
-            out string generatedAssembly);
-
-        GenerationResult GenerateProcessorStateAssemblyForVersion(QuestionnaireDocument questionnaire, QuestionnaireVersion version,
+        GenerationResult GenerateProcessorStateAssemblyForVersion(QuestionnaireDocument questionnaire, EngineVersion version,
           out string generatedAssembly);
 
         Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire);

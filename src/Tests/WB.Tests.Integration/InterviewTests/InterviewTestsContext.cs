@@ -21,6 +21,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -186,6 +188,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
+            var questionnaireVersionProvider =new EngineVersionService();
             var expressionProcessorGenerator =
                 new QuestionnireExpressionProcessorGenerator(
                     new RoslynCompiler(
@@ -196,10 +199,10 @@ namespace WB.Tests.Integration.InterviewTests
                             DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
                                 "System.Collections.dll", "System.Linq.dll" }
                         }, new FileSystemIOAccessor()),
-                    new CodeGenerator(new QuestionnaireVersionProvider()));
+                    new CodeGenerator(questionnaireVersionProvider), questionnaireVersionProvider);
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaireDocument,questionnaireVersionProvider.GetCurrentEngineVersion(), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 

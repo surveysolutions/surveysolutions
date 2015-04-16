@@ -234,7 +234,6 @@
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_and_processor_generator_failed.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_and_verifier_returns_errors.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_that_absent.cs" />
-    <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_and_template_info_is_null.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_with_higher_version.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\PublicServiceTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
@@ -662,8 +661,6 @@
     <Compile Include="BoundedContexts\Designer\InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="BoundedContexts\Designer\InterviewCompilerTests\when_generating_assembly_as_string_with_deep_stack.cs" />
     <Compile Include="BoundedContexts\Designer\InterviewCompilerTests\when_generating_assembly_as_string_with_error.cs" />
-    <Compile Include="BoundedContexts\Designer\JsonExportServiceTests\JsonExportServiceTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\JsonExportServiceTests\when_getting_template_info.cs" />
     <Compile Include="BoundedContexts\Designer\MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="BoundedContexts\Designer\MembershipProviderTests\when_updating_user_with_email_that_used_by_another_user_with_membership_provider.cs" />
@@ -1083,8 +1080,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_without_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionerTests\QuestionnaireVersionerTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionerTests\when_getting_version_for_questionnaire_without_specific_elements.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_parsing_questionnaire_version.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />

@@ -14,19 +14,20 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Ve
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     public class CodeGenerator : ICodeGenerator
     {
-        public CodeGenerator(IQuestionnaireVersionProvider questionnaireVersionProvider)
+        public CodeGenerator(IEngineVersionService engineVersionService)
         {
-            this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.engineVersionService = engineVersionService;
         }
 
         private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
-        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
+        private readonly IEngineVersionService engineVersionService;
         private IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
@@ -36,17 +37,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
                 CreateQuestionnaireExecutorTemplateModel(questionnaire, true);
-            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure, GetCodeVersion(questionnaireVersionProvider.GetCurrentEngineVersion()));
+            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure, GetCodeVersion(engineVersionService.GetCurrentEngineVersion()));
 
             return template.TransformText();
         }
 
-        public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire)
-        {
-            return GenerateEvaluatorForVersion(questionnaire, questionnaireVersionProvider.GetCurrentEngineVersion());
-        }
-
-        public Dictionary<string, string> GenerateEvaluatorForVersion(QuestionnaireDocument questionnaire, QuestionnaireVersion version)
+        public Dictionary<string, string> GenerateEvaluatorForVersion(QuestionnaireDocument questionnaire, EngineVersion version)
         {
             var generatedClasses = new Dictionary<string, string>();
 
@@ -68,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return generatedClasses;
         }
 
-        private IVersionParameters GetCodeVersion(QuestionnaireVersion version)
+        private IVersionParameters GetCodeVersion(EngineVersion version)
         {
             if (version.Major < 5)
                 throw new VersionNotFoundException(string.Format("version '{0}' is not found", version));

@@ -1,6 +1,7 @@
 ﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
 {
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
         It should_set_Major_property_to_1 = () =>
             result.ShouldEqual("1.2.5");
 
-        private static QuestionnaireVersion version;
+        private static EngineVersion version;
         private static string result;
     }
 }

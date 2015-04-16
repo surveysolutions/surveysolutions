@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -65,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
-            this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>().InSingletonScope();
+            this.Bind<IEngineVersionService>().To<EngineVersionService>().InSingletonScope();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 

@@ -11,9 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -29,26 +30,29 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly ILogger logger;
         private readonly IStringCompressor zipUtils;
+        private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
-        private readonly IQuestionnaireExportService exportService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IEngineVersionService engineVersionService;
 
         public AdminController(
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
-            ILogger logger, 
-            IStringCompressor zipUtils, 
-            ICommandService commandService, 
-            IQuestionnaireExportService exportService, 
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
+            ILogger logger,
+            IStringCompressor zipUtils,
+            ICommandService commandService,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IEngineVersionService engineVersionService, 
+            IJsonUtils jsonUtils)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
             this.logger = logger;
             this.zipUtils = zipUtils;
             this.commandService = commandService;
-            this.exportService = exportService;
             this.questionnaireViewFactory = questionnaireViewFactory;
+            this.engineVersionService = engineVersionService;
+            this.jsonUtils = jsonUtils;
         }
 
         [HttpGet]
@@ -87,16 +91,9 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireView == null)
                 return null;
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
-
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            return new FileStreamResult(this.zipUtils.Compress(jsonUtils.Serialize(questionnaireView.Source)), "application/octet-stream")
             {
-                return null;
-            }
-
-            return new FileStreamResult(this.zipUtils.Compress(templateInfo.Source), "application/octet-stream")
-            {
-                FileDownloadName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName())
+                FileDownloadName = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName())
             };
         }
 

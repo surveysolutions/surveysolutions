@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Membership;
@@ -15,46 +17,39 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 {
     internal class PublicServiceTestContext
     {
-        protected static PublicService CreatePublicService(IQuestionnaireExportService exportService = null,
+        protected static PublicService CreatePublicService(
             IStringCompressor zipUtils = null,
             IMembershipUserService userHelper = null,
             IQuestionnaireListViewFactory viewFactory = null,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
-            IExpressionProcessorGenerator expressionProcessorGenerator = null)
+            IExpressionProcessorGenerator expressionProcessorGenerator = null,
+            EngineVersion engineVersion=null)
         {
-            return new PublicService(exportService ?? Mock.Of<IQuestionnaireExportService>(),
+            return new PublicService(
                 zipUtils ?? Mock.Of<IStringCompressor>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
                 viewFactory ?? Mock.Of<IQuestionnaireListViewFactory>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
-                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
-        }
-
-        protected static TemplateInfo CreateTemplateInfo(QuestionnaireVersion version)
-        {
-            return new TemplateInfo
-            {
-                Version = version,
-                Source = "aaaa",
-                Title = "aaaa"
-            };
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
+                Mock.Of<IEngineVersionService>(_ => _.GetCurrentEngineVersion() == engineVersion),
+                Mock.Of<IJsonUtils>());
         }
 
         protected static DownloadQuestionnaireRequest CreateDownloadQuestionnaireRequest(Guid questionnaireId,
-            QuestionnaireVersion supportedQuestionnaireVersion)
+            EngineVersion supportedEngineVersion)
         {
             return new DownloadQuestionnaireRequest
             {
-                SupportedQuestionnaireVersion = supportedQuestionnaireVersion,
+                SupportedEngineVersion = supportedEngineVersion,
                 QuestionnaireId = questionnaireId
             };
         }
 
-        protected static IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> CreateQuestionnaireViewFactory(Guid id)
+        protected static IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> CreateQuestionnaireViewFactory(Guid id, string title = "title")
         {
-            var questionnaire = new QuestionnaireDocument();
+            var questionnaire = new QuestionnaireDocument() { Title = title };
             var questionnaireView = new QuestionnaireView(questionnaire);
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
 
