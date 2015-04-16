@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -7,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
@@ -114,6 +116,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
         private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
-        private static Tuple<decimal,string>[] rosterFixedTitles = new[] { new Tuple<decimal, string>(5, "5"), new Tuple<decimal, string>(6, "6"), new Tuple<decimal, string>(7, "7") };
+        private static FixedRosterTitle[] rosterFixedTitles = new[] { new FixedRosterTitle(5, "5"), new FixedRosterTitle(6, "6"), new FixedRosterTitle(7, "7") };
     }
 }

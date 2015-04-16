@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -21,8 +20,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new RosterChanged(responsibleId, roster1Id){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles =  new[] { new Tuple<decimal, string>(1,"test") },
-                    RosterTitleQuestionId =null 
+                    FixedRosterTitles = new[] { new FixedRosterTitle(1, "test") },
+                    RosterTitleQuestionId = null 
                 });
             
             questionnaire.Apply(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = chapterId });

@@ -90,8 +90,8 @@
 
                 $scope.addFixedTitle = function () {
                     $scope.activeRoster.fixedRosterTitles.push({
-                        "item1": null,
-                        "item2": ''
+                        "value": null,
+                        "title": ''
                     });
                     $scope.editRosterForm.$setDirty();
                 };

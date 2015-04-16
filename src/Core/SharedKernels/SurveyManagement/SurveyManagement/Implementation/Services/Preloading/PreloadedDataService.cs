@@ -86,8 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 return
                     questionnaireDocument.FirstOrDefault<IGroup>(g => g.PublicKey == levelScopeVector.Last())
-                        .FixedRosterTitles.Select(t => t.Item1)
-                        .ToArray();
+                        .FixedRosterTitles.Select(x => x.Value).ToArray();
             }
 
             var rosterSizeQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -8,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Versions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -17,8 +19,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class CodeGenerator : ICodeGenerator
     {
-        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        public CodeGenerator(IQuestionnaireVersionProvider questionnaireVersionProvider)
+        {
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
+        }
 
+        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
@@ -27,15 +34,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string Generate(QuestionnaireDocument questionnaire)
         {
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, true, QuestionnaireVersionProvider.GetCodeVersion());
-            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, true);
+            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure, GetCodeVersion(questionnaireVersionProvider.GetCurrentEngineVersion()));
 
             return template.TransformText();
         }
 
         public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire)
         {
-            return GenerateEvaluatorForVersion(questionnaire, QuestionnaireVersionProvider.GetCurrentEngineVersion());
+            return GenerateEvaluatorForVersion(questionnaire, questionnaireVersionProvider.GetCurrentEngineVersion());
         }
 
         public Dictionary<string, string> GenerateEvaluatorForVersion(QuestionnaireDocument questionnaire, QuestionnaireVersion version)
@@ -43,8 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var generatedClasses = new Dictionary<string, string>();
 
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, false, QuestionnaireVersionProvider.GetCodeVersion(version));
-            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, false);
+            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure, GetCodeVersion(version));
 
             generatedClasses.Add(new ExpressionLocation
             {
@@ -58,6 +65,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
 
             return generatedClasses;
+        }
+
+        private IVersionParameters GetCodeVersion(QuestionnaireVersion version)
+        {
+            if (version.Major < 5)
+                throw new VersionNotFoundException(string.Format("version '{0}' is not found", version));
+            if (version.Major == 5)
+                return new V1Parameters();
+            return new V2Parameters();
         }
 
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
@@ -212,11 +228,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
         public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
-            QuestionnaireDocument questionnaire, bool generateExpressionMethods, int version)
+            QuestionnaireDocument questionnaire, bool generateExpressionMethods)
         {
             var template = new QuestionnaireExecutorTemplateModel();
             template.GenerateEmbeddedExpressionMethods = generateExpressionMethods;
-            template.Version = version;
             var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(template, generateExpressionMethods);
             string generatedClassName = string.Format("{0}_{1}", InterviewExpressionStatePrefix,
                 Guid.NewGuid().FormatGuid());

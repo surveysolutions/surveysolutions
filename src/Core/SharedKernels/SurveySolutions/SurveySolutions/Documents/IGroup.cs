@@ -1,5 +1,6 @@
 using System;
 using Main.Core.Entities.Composite;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -18,9 +19,9 @@ namespace Main.Core.Entities.SubEntities
         RosterSizeSourceType RosterSizeSource { get; }
 
         [Obsolete]
-        string[] RosterFixedTitles { get; }
-        
-        Tuple<decimal, string>[] FixedRosterTitles { get; }
+        string[] RosterFixedTitles { set; }
+
+        FixedRosterTitle[] FixedRosterTitles { get; }
 
         Guid? RosterTitleQuestionId { get; }
     }

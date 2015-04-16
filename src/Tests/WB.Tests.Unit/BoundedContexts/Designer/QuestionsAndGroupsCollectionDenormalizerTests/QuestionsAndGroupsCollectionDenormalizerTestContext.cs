@@ -13,7 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
@@ -131,14 +131,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid? rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, Tuple<decimal,string>[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid? rosterSizeQuestionId, 
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             return
                 ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = rosterSizeSource,
                     FixedRosterTitles =  rosterFixedTitles,
-                    RosterTitleQuestionId =rosterTitleQuestionId 
+                    RosterTitleQuestionId = rosterTitleQuestionId 
                 });
         }
 

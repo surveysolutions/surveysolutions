@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             groupId = "22222222-2222-2222-2222-222222222222";
             propagationKind = "AutoPropagated";
             rosterFixedTitles =
-                @"[{""Item1"":1.0,""Item2"":""привет, <style>Мир!</script>""},{""Item1"":2.0,""Item2"":""<span>hi, <b><i>Hello!</b></span>""}]";
+                @"[{""value"":1.0,""title"":""привет, <style>Мир!</script>""},{""value"":2.0,""title"":""<span>hi, <b><i>Hello!</b></span>""}]";
 
             command = string.Format(@"{{
                 ""questionnaireId"": ""{0}"",
@@ -53,10 +53,17 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             ((UpdateGroupCommand)result).FixedRosterTitles.Count().ShouldEqual(2);
 
         It should_return_sanizited_first_fixed_title = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[1].Item2.ShouldEqual("hi, Hello!");
+            ((UpdateGroupCommand)result).FixedRosterTitles[0].Title.ShouldEqual("привет, Мир!");
 
         It should_return_sanizited_second_fixed_title = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[0].Item2.ShouldEqual("привет, Мир!");
+            ((UpdateGroupCommand)result).FixedRosterTitles[1].Title.ShouldEqual("hi, Hello!");
+        
+        It should_return_first_fixed_roster_title_value_1_0 = () =>
+            ((UpdateGroupCommand)result).FixedRosterTitles[0].Value.ShouldEqual("1");
+
+        It should_return_second_fixed_roster_title_value_2_0 = () =>
+            ((UpdateGroupCommand)result).FixedRosterTitles[1].Value.ShouldEqual("2");
+
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

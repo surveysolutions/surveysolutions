@@ -42,6 +42,9 @@
     <Compile Include="AbstractInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="IInterviewExpressionStateVersionAdapter.cs" />
+    <Compile Include="InterviewExpressionStateVersionAdapter.cs" />
+    <Compile Include="IQuestionnaireVersionProvider.cs" />
     <Compile Include="V2\AbstractInterviewExpressionStateV2.cs" />
     <Compile Include="V2\CustomFunctions\BaseFunctions.cs" />
     <Compile Include="V2\CustomFunctions\Extensions.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="SyncProtocolVersionProvider.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="V2\IInterviewExpressionStateV2.cs" />
+    <Compile Include="V2\InterviewExpressionStateAdapter.cs" />
     <Compile Include="ValidityChanges.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

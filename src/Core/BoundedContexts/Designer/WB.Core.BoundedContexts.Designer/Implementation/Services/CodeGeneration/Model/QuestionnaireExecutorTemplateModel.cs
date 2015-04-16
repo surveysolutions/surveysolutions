@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public bool GenerateEmbeddedExpressionMethods { get; set; }
 
         public Guid Id { set; get; }
-        public int Version { get; set; }
         public List<QuestionTemplateModel> AllQuestions { set; get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
         public List<RosterTemplateModel> AllRosters { set; get; }
@@ -55,16 +54,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             return itemsSorted;
-        }
-
-        public string VersionPrefix
-        {
-            get
-            {
-                if (Version == 1)
-                    return string.Empty;
-                return string.Format("V{0}", Version);
-            }
         }
     }
 }

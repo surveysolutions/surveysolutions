@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
@@ -10,28 +12,29 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public Guid? RosterSizeQuestionId { get; set; }
 
         [Obsolete]
-        public string[] RosterFixedTitles { get; set; }
-
-        private Tuple<decimal, string>[] fixedRosterTitles;
-        public Tuple<decimal, string>[] FixedRosterTitles
+        public string[] RosterFixedTitles
         {
-            get
+            set
             {
-                if (fixedRosterTitles == null && RosterFixedTitles != null)
+                if (value != null && value.Any())
                 {
-                    fixedRosterTitles =
-                        RosterFixedTitles.Select((title, index) => new Tuple<decimal, string>(index, title)).ToArray();
+                    FixedRosterTitles = value.Select((t, i) => new FixedRosterTitle(i, t)).ToArray();
                 }
-                return fixedRosterTitles;
+                else
+                {
+                    FixedRosterTitles = new FixedRosterTitle[0];
+                }
             }
-            set { fixedRosterTitles = value; }
         }
+
+        public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
         public Guid? RosterTitleQuestionId { get; set; }
 
         public RosterChanged(Guid responsibleId, Guid groupId)
             : base(responsibleId, groupId)
         {
+            FixedRosterTitles = new FixedRosterTitle[0];
         }
     }
 }
