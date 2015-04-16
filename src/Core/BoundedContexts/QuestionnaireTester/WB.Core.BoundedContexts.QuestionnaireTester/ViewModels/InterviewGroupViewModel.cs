@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils;
@@ -15,9 +16,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
         }
 
-        public void Init(string id, string chapterId)
+        public async void Init(string id, string chapterId)
         {
-            Items = interviewStateFullViewModelFactory.Load(id, chapterId);
+            var viewModels = await interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
+            Items = new ObservableCollection<MvxViewModel>(viewModels);
         }
 
         public Guid Id { get; set; }
@@ -38,12 +40,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public int CountOfUnansweredQuestions { get; set; }
 
 
-        private List<MvxViewModel> items;
+        private ObservableCollection<MvxViewModel> items;
 
-        public IEnumerable<MvxViewModel> Items
+        public ObservableCollection<MvxViewModel> Items
         {
             get { return items; }
-            set { items = new List<MvxViewModel>(value); RaisePropertyChanged(() => Items); }
+            set { items = value; RaisePropertyChanged(() => Items); }
         }
 
         public override void NavigateToPreviousViewModel()

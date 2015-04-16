@@ -39,9 +39,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             { typeof(TextQuestion), (qIdentity, interview, questionnaire) => CreateViewModel<TextQuestionViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
         };
 
-        public IEnumerable<MvxViewModel> Load(Guid interviewId, string chapterId)
+        public Task<IEnumerable<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.GetInterview(interviewId);
+            var interview = this.plainStorageInterviewAccessor.GetInterview(Guid.Parse(interviewId));
             var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             IComposite loyout;
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
                 entities.Add(entityViewModel);
             }
 
-            return entities;
+            return new Task<IEnumerable<MvxViewModel>>(() => entities);
         }
 
         private static T CreateViewModel<T>(Action<T> intializer) where T : class
@@ -85,11 +85,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             T viewModel = Mvx.Create<T>();
             intializer.Invoke(viewModel);
             return viewModel;
-        }
-
-        public IEnumerable<MvxViewModel> Load(string interviewId, string chapterId)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId)
