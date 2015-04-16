@@ -38,19 +38,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
                 foreach (var responsibleId in totalCount.Select(x => x.ResponsibleId).Distinct())
                 {
-                    Func<CounterObject, bool> findQuestionnaire =  x => x.ResponsibleId == responsibleId;
+                    Func<CounterObject, bool> findByResponsible =  x => x.ResponsibleId == responsibleId;
                     statistics.Add(new StatisticsLineGroupedByUserAndTemplate
                     {
                         ResponsibleId = responsibleId,
-                        ResponsibleName = Monads.Maybe(() => totalCount.SingleOrDefault(findQuestionnaire).ResponsibleName),
-                        SupervisorAssignedCount = Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        InterviewerAssignedCount = Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        CompletedCount = Monads.Maybe(() => completedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        ApprovedBySupervisorCount = Monads.Maybe(() => approvedBySupervisorCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        RejectedBySupervisorCount = Monads.Maybe(() => rejectedBySupervisorCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        ApprovedByHeadquartersCount = Monads.Maybe(() => approvedByHeadquartersCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        RejectedByHeadquartersCount = Monads.Maybe(() => rejectedByHeadquartersCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        TotalCount = Monads.Maybe(() => totalCount.SingleOrDefault(findQuestionnaire).InterviewsCount)
+                        ResponsibleName = Monads.Maybe(() => totalCount.SingleOrDefault(findByResponsible).ResponsibleName),
+                        SupervisorAssignedCount = Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        InterviewerAssignedCount = Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        CompletedCount = Monads.Maybe(() => completedCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        ApprovedBySupervisorCount = Monads.Maybe(() => approvedBySupervisorCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        RejectedBySupervisorCount = Monads.Maybe(() => rejectedBySupervisorCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        ApprovedByHeadquartersCount = Monads.Maybe(() => approvedByHeadquartersCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        RejectedByHeadquartersCount = Monads.Maybe(() => rejectedByHeadquartersCount.SingleOrDefault(findByResponsible).InterviewsCount),
+                        TotalCount = Monads.Maybe(() => totalCount.SingleOrDefault(findByResponsible).InterviewsCount)
                     });
                 }
 

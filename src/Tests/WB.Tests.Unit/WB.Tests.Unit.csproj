@@ -407,6 +407,11 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_content_cant_be_opened.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_sync_package_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_sync_package_is_present_but_command_executed_with_exception.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\TeamsAndStatusesReportContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_empty_data_base.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_GetListOfUnhandledPackagesForInterview_and_interview_directory_is_present_and_not_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_missing.cs" />
