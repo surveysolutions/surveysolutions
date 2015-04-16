@@ -190,7 +190,7 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var questionnaireVersionProvider =new EngineVersionService();
             var expressionProcessorGenerator =
-                new QuestionnireExpressionProcessorGenerator(
+                new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
                         new DefaultDynamicCompillerSettings()
                         {

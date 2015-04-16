@@ -82,19 +82,16 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var currentEngineVersion = this.engineVersionService.GetCurrentEngineVersion();
-
             var supportedClientVersion = new EngineVersion(request.SupportedVersion.Major,
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
 
-            if (!engineVersionService.IsClientVersionSupported(currentEngineVersion, supportedClientVersion))
+            if (!engineVersionService.IsClientEngineVersionSupported(supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
                     ReasonPhrase =
-                        string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion,
-                            currentEngineVersion)
+                        string.Format(ErrorMessages.ClientVersionIsNotSupported, supportedClientVersion)
                 });
             }
 
