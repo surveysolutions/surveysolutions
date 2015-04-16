@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using Raven.Client.Linq;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;

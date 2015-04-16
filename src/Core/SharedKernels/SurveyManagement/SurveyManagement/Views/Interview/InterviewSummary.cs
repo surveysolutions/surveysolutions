@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
                 this.AnswersToFeaturedQuestions.Add(result);
 
-                if (featuredQuestion.QuestionType.In(this.questionTypesWithOptions) && featuredQuestion.Answers != null)
+                if (this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType) && featuredQuestion.Answers != null)
                 {
                     var options = featuredQuestion.Answers.Select(option => 
                         new QuestionOptions
