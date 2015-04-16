@@ -124,7 +124,7 @@
     <value>Questionnaire with id={0} cannot be found. Please check the list of available questionnaires, or contact the colleague who shared the questionnaire link with you.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Your questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+    <value>Your questionnaire has errors. Please verify the questionnaire on Designer.</value>
   </data>
   <data name="User_Not_authorized" xml:space="preserve">
     <value>User is not authorized. Please check your login and password.</value>
