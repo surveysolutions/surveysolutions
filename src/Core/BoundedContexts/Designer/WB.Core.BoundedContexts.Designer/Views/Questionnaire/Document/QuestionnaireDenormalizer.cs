@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
@@ -424,7 +425,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 group.RosterSizeSource = RosterSizeSourceType.Question;
                 group.RosterSizeQuestionId = null;
                 group.RosterTitleQuestionId = null;
-                group.FixedRosterTitles = null;
+                group.FixedRosterTitles = new FixedRosterTitle[0];
             });
 
             this.UpdateQuestionnaire(@event, document);

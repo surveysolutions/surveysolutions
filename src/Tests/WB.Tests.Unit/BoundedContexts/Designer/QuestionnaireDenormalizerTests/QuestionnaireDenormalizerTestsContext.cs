@@ -18,7 +18,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -241,7 +241,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, RosterSizeSourceType rosterSizeSource, Tuple<decimal, string>[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, 
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             return
                 ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId)

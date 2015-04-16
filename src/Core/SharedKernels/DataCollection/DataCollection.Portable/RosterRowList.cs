@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -26,23 +27,13 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             return GetEnumerator();
         }
-
+        /* In mono 0 and 0.0m is the same number, but they have different hashcodes. 
+         * This code is workaround for it. 
+         * Don't remove it.
+         */
         private string DecimalValueToString(decimal decimalValue)
         {
-            if (decimalValue == 0)
-            {
-                return "0";
-            }
-            var possibleSeparators = new string[] { ",", "." };
-
-            var decimalString = decimalValue.ToString();
-
-            if (!possibleSeparators.Any(separator => decimalString.Contains(separator)))
-                return decimalString;
-
-            decimalString = decimalString.TrimEnd('0');
-            decimalString = decimalString.TrimEnd(',', '.');
-            return decimalString;
+            return decimalValue.ToString("F0", CultureInfo.InvariantCulture);
         }
 
         public T this[decimal code] { get { return internalDictionary[DecimalValueToString(code)]; } }

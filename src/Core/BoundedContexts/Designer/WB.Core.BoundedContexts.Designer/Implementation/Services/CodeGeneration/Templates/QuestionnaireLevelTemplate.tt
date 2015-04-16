@@ -108,27 +108,16 @@
         <# }#>
                 
         <#foreach (var @roster in Model.Rosters) 
-        {
-		if(Model.Version>1){
-		#>
-        public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        {#>
+        public <#=VersionParameters.GetRosterType(@roster)#> <#=@roster.VariableName#>
         {
             get 
             {
                 var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-				return new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
+				return <#=VersionParameters.GetRosterInitialization(@roster)#>;
             }
         }
-        <# }else{#>
-		   public IEnumerable<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
-        {
-            get
-            {
-                var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-                return rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
-            }
-        }
-		<#    }}#>
+        <# }#>
         // groups condition states
         <#foreach (var @group in Model.Groups) 
         {#>

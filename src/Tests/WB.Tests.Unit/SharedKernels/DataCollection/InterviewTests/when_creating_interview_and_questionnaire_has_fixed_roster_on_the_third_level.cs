@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
             answersTime = new DateTime(2013, 09, 01);
-            var fixedRosterTitles = new [] { new Tuple<decimal,string>(1,"Title 1"), new Tuple<decimal,string>(2,"Title 2"), new Tuple<decimal,string>(3,"Title 3") };
+            var fixedRosterTitles = new[] { new FixedRosterTitle(1, "Title 1"), new FixedRosterTitle(2, "Title 2"), new FixedRosterTitle(3, "Title 3") };
             fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
             Guid mandatoryQuestionId = Guid.Parse("33330000FFFFFFFFFFFFFFFFFFFF5555"); 

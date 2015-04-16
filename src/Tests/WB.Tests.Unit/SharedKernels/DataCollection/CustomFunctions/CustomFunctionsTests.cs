@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {
@@ -24,6 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             _mc123 = new decimal[] { 1, 2, 3 };
             _mc3 = new decimal[] { 3 };
         }
+
+        #region Tests
 
         [Test]
         public void Test_InRange()
@@ -52,6 +51,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
+        public void Test_InRangeDate()
+        {
+            DateTime? date1 = new DateTime(2001, 1, 1);
+            DateTime? date2 = new DateTime(2002, 2, 2);
+            DateTime? date3 = new DateTime(2003, 3, 3);
+
+            Assert.IsTrue(date2.InRange(date1, date3));
+            Assert.IsFalse(date1.InRange(date2, date3));
+            Assert.IsFalse(date3.InRange(date1, date2));
+
+            DateTime? date0 = null;
+            Assert.IsFalse(date0.InRange(date1, date3));
+            Assert.IsFalse(date2.InRange(null, date3));
+            Assert.IsFalse(date2.InRange(date1, null));
+
+        }
+
+
+        [Test]
         public void Test_InList()
         {
             long? d = 2;
@@ -60,6 +78,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.IsFalse(Extensions.InList(0, 1, 2, 3, 4));
             Assert.IsFalse(Extensions.InList(null, 1, 2, 3, 4));
             Assert.IsTrue(Extensions.InList(null, 1, 2, 3, 4, null));
+        }
+
+        [Test]
+        public void Test_InListStr()
+        {
+            string name = "Washington";
+            Assert.IsTrue(name.InList("Jackson", "Washington", "Bush"));
+            Assert.IsFalse(name.InList("Jackson", "Clinton", "Bush"));
+            Assert.IsFalse(String.Empty.InList("Jackson", "Clinton", "Bush"));
+            Assert.IsFalse(name.InList());
         }
 
         [Test]
@@ -153,18 +181,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             decimal[] empty = null;
             Assert.IsFalse(empty.ContainsAll(1));
+
+            decimal[] empty2 = new decimal[0];
+            Assert.IsFalse(empty2.ContainsAll(1));
         }
 
-        [Test]
-        public void Test_IsAnyOf()
-        {
-            decimal? educ = 4;
-            Assert.IsTrue(educ.IsAnyOf(2, 3, 4));
-            Assert.IsFalse(educ.IsAnyOf(5, 6, 7));
-
-            decimal? empty = null;
-            Assert.IsFalse(empty.IsAnyOf(2));
-        }
 
         [Test]
         public void Test_IsNoneOf()
@@ -215,43 +236,46 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal[] empty = null;
             Assert.AreEqual(0, empty.CountValues(1, 2, 3));
 
+            decimal[] empty2 = new decimal[0];
+            Assert.AreEqual(0, empty2.CountValues(2, 3, 4));
+
         }
 
         [Test]
-        public void Test_CmCode()
+        public void Test_CenturyMonthCode()
         {
-            Assert.AreEqual(11, new BaseFunctions().CmCode(11, 1900));
-            Assert.AreEqual(1383, new BaseFunctions().CmCode(3, 2015));
+            Assert.AreEqual(11, new BaseFunctions().CenturyMonthCode(11, 1900));
+            Assert.AreEqual(1383, new BaseFunctions().CenturyMonthCode(3, 2015));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(11, null));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(null, 2015));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(null, null));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(11, null));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, 2015));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(13, 2015));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(0, 2015));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(6, 1812));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(13, 2015));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(0, 2015));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6, 1812));
         }
 
         [Test]
-        public void Test_CmCodeDouble()
+        public void Test_CenturyMonthCodeDouble()
         {
-            Assert.AreEqual(11, new BaseFunctions().CmCode(11.0, 1900.0));
-            Assert.AreEqual(1383, new BaseFunctions().CmCode(3.0, 2015.0));
+            Assert.AreEqual(11, new BaseFunctions().CenturyMonthCode(11.0, 1900.0));
+            Assert.AreEqual(1383, new BaseFunctions().CenturyMonthCode(3.0, 2015.0));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(11.0, null));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(null, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(null, null));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(11.0, null));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, 2015.0));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(13.0, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(0.0, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(6.0, 1812.0));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(13.0, 2015.0));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(0.0, 2015.0));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6.0, 1812.0));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(2.2, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(6.0, 1812.3));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(2.2, 2015.0));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6.0, 1812.3));
         }
 
         [Test]
-        public void Test_CmCodeDecimal()
+        public void Test_CenturyMonthCodeDecimal()
         {
             decimal yr2015 = 2015;
             decimal yr1900 = 1900;
@@ -259,16 +283,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             decimal m11 = 11;
 
-            Assert.AreEqual(11, new BaseFunctions().CmCode(m11, yr1900));
-            Assert.AreEqual(1383, new BaseFunctions().CmCode(3, yr2015));
+            Assert.AreEqual(11, new BaseFunctions().CenturyMonthCode(m11, yr1900));
+            Assert.AreEqual(1383, new BaseFunctions().CenturyMonthCode(3, yr2015));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(m11, null));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(null, yr2015));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(null, null));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(m11, null));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, yr2015));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(13, yr2015));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(0, yr2015));
-            Assert.AreEqual(-1, new BaseFunctions().CmCode(6, yr1812));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(13, yr2015));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(0, yr2015));
+            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6, yr1812));
         }
 
         [Test]
@@ -304,7 +328,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
-        public void Test_IsMilTime()
+        public void Test_IsMilitaryTime()
         {
             Assert.IsTrue(new BaseFunctions().IsMilitaryTime("0600"));
             Assert.IsTrue(new BaseFunctions().IsMilitaryTime("2323"));
@@ -321,7 +345,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
-        public void Test_IsMilTimeZ()
+        public void Test_IsMilitaryTimeZ()
         {
             Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("0600Z"));
             Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("2323J"));
@@ -353,6 +377,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.AreEqual(-9999, new BaseFunctions().FullYearsBetween(d4, null));
             Assert.AreEqual(-9999, new BaseFunctions().FullYearsBetween(null, d4));
             Assert.AreEqual(-9999, new BaseFunctions().FullYearsBetween(null, null));
+        }
+
+        [Test]
+        public void Test_FullYearsSince()
+        {
+            DateTime? d1 = new DateTime(2000, 1, 1);
+            DateTime? d2 = new DateTime(1990, 1, 1);
+
+            Assert.AreEqual(10, d1.FullYearsSince(d2));
         }
 
         [Test]
@@ -503,6 +536,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
 
         [Test]
+        public void Test_IsIntegerNumber()
+        {
+            Assert.AreEqual(true, "12".IsIntegerNumber());
+            Assert.AreEqual(true, "-120".IsIntegerNumber());
+            Assert.AreEqual(false, "12.5".IsIntegerNumber());
+            Assert.AreEqual(false, "abc".IsIntegerNumber());
+            Assert.AreEqual(false, "".IsIntegerNumber());
+        }
+
+        [Test]
+        public void Test_IsNumber()
+        {
+            Assert.AreEqual(true, "3.1415".IsNumber());
+            Assert.AreEqual(true, "-3.1415".IsNumber());
+            Assert.AreEqual(false, "3.14.15".IsNumber());
+            Assert.AreEqual(false, "3FA2".IsNumber());
+            Assert.AreEqual(false, "".IsNumber());
+        }
+
+        [Test]
         public void Test_IsAlphaLatin()
         {
             Assert.IsTrue("".IsAlphaLatin());
@@ -513,7 +566,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
-        public void Test_IsAlphaLatinOrDelim()
+        public void Test_IsAlphaLatinOrDelimiter()
         {
             Assert.IsTrue("".IsAlphaLatinOrDelimiter());
             Assert.IsTrue("ABC".IsAlphaLatinOrDelimiter());
@@ -538,11 +591,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_GpsDistance()
         {
-            var p1 = new GeoLocation(38.9047, -77.0164,0,0);
-            var p2 = new GeoLocation(39.9500, -75.1667,0,0);
+            var p1 = new GeoLocation(38.9047, -77.0164, 15, 15);
+            var p2 = new GeoLocation(39.9500, -75.1667, 15, 15);
 
             var d = Extensions.GpsDistance(p1, p2);
-            Assert.IsTrue(Math.Abs(196800 - d) < 100);
+            Assert.IsTrue(Math.Abs(196800 - d) < 100);   // meters
 
             p1.Latitude = 36.12;
             p1.Longitude = -86.67;
@@ -552,13 +605,68 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.IsTrue(Math.Abs(2887259.95060711 - p1.GpsDistance(p2)) < 0.001);
         }
 
+        [Test]
+        public void Test_GpsDistanceCoord()
+        {
+            var p1 = new GeoLocation(38.9047, -77.0164, 15, 15);
+            var d = Extensions.GpsDistance(p1, 39.9500, -75.1667);
+            Assert.IsTrue(Math.Abs(196800 - d) < 100); // meters
+        }
+
+
+        [Test]
+        public void Test_GpsDistanceKm()
+        {
+            var p1 = new GeoLocation(38.9047, -77.0164, 15, 15);
+            var p2 = new GeoLocation(39.9500, -75.1667, 15, 15);
+
+            var d = Extensions.GpsDistanceKm(p1, p2);
+            Assert.IsTrue(Math.Abs(196.8 - d) < 0.1);   // kilometers
+
+            p1.Latitude = 36.12;
+            p1.Longitude = -86.67;
+            p2.Latitude = 33.94;
+            p2.Longitude = -118.4;
+
+            Assert.IsTrue(Math.Abs(2887.25995060711 - p1.GpsDistanceKm(p2)) < 1);
+        }
+
+        [Test]
+        public void Test_GpsDistanceCoordKm()
+        {
+            var p1 = new GeoLocation(38.9047, -77.0164, 15, 15);
+            var d = Extensions.GpsDistanceKm(p1, 39.9500, -75.1667);
+            Assert.IsTrue(Math.Abs(196.8 - d) < 0.1); // kilometers
+        }
+
+        [Test]
+        public void Test_InRectangle()
+        {
+            var point = new GeoLocation(20, 20, 0, 0);
+            Assert.IsTrue(point.InRectangle(30, 0, 10, 40));   // Ok
+            Assert.IsFalse(point.InRectangle(15, 0, 10, 40));  // point too far North
+            Assert.IsFalse(point.InRectangle(30, 25, 10, 40));  // point too far West
+            Assert.IsFalse(point.InRectangle(30, 0, 25, 40));  // point too far South
+            Assert.IsFalse(point.InRectangle(30, 0, 10, 15));  // point too far East
+        }
+
+
+        [Test]
+        public void Test_Bmi()
+        {
+            Assert.AreEqual(24.98, (double)new BaseFunctions().Bmi(68, 1.65), 0.05);
+        }
+
+        #endregion
+
+        #region ZSCORES TESTS
 
         [Test]
         public void Test_Zscores()
         {
             var delta = 0.1;
 
-            Assert.AreEqual(2, ZScore.Bmi(20, false, 18.7), delta);
+            Assert.AreEqual(2, ZScore.Bmifa(20, false, 18.7), delta);
             Assert.AreEqual(2, ZScore.Hcfa(20, false, 49.4), delta);
             Assert.AreEqual(2, ZScore.Lhfa(20, false, 88.7), delta);
             Assert.AreEqual(2, ZScore.Wfa(20, false, 13.7), delta);
@@ -570,5 +678,158 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.AreEqual(2, ZScore.Wfh(85, true, 13.8), delta);
 
         }
+
+        [Test]
+        public void Test_Bmia2()
+        {
+            var ht = 1.00;
+            var wt = 12.8;
+            Assert.AreEqual(-2, ZScore.Bmifa(50, false, wt, ht), 0.02);
+
+            wt = 17.7;
+            ht = 1.00;
+            Assert.AreEqual(1, ZScore.Bmifa(16, true, wt, ht), 0.02);
+        }
+
+
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestForNullsInSex()
+        {
+            ZScore.Ssfa(12, null, 0);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestForNullsInLen()
+        {
+            ZScore.Wfl(null, true, 0);
+        }
+
+
+        #region WFH
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test_ZscoresWfh_When_height_is_null()
+        {
+            ZScore.Wfh(null, true, 10);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Test_ZscoresWfh()
+        {
+            ZScore.Wfh(0, true, -10);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Test_ZscoresWfh2()
+        {
+            ZScore.Wfh(49, true, 14);
+        }
+
+        #endregion
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Test_ZscoresTsfa2()
+        {
+            ZScore.Tsfa(-3, true, 14);
+        }
+
+        #region WFL
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Test_ZscoresWfl2()
+        {
+            ZScore.Wfl(-3, true, 14);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Test_ZscoresWfl3()
+        {
+            ZScore.Wfl(3, true, -14);
+        }
+
+        #endregion
+
+        #region SSFA
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestSsfaForNullsInAge()
+        {
+            ZScore.Ssfa(null, true, 0);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestSsfaForNullsInSex()
+        {
+            ZScore.Ssfa(20, null, 0);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestSsfaForRangeMonths()
+        {
+            ZScore.Ssfa(-3, true, 14);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Test_ZscoresSsfa4()
+        {
+            ZScore.Ssfa(5, true, -10);
+        }
+        #endregion
+
+        #region ACFA
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Test_ZscoresAcfa2()
+        {
+            ZScore.Acfa(-3, true, 14);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Test_ZscoresAcfa3()
+        {
+            ZScore.Acfa(1, true, 14); // still out of range
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Test_ZscoresAcfa4()
+        {
+            ZScore.Acfa(5, true, -10);
+        }
+
+        #endregion
+
+        #region HCFA
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Test_ZscoresHcfa2()
+        {
+            ZScore.Hcfa(-3, false, 48);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Test_ZscoresHcfa3()
+        {
+            ZScore.Hcfa(3, true, -48);
+        }
+
+        #endregion
+
+        #endregion
+
     }
 }

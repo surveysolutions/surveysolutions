@@ -63,8 +63,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<RosterChanged>()
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 
-        It should_raise_RosterChanged_event_with_RosterFixedTitles_equal_to_null = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles.ShouldBeNull();
+        It should_raise_RosterChanged_event_with_FixedRosterTitles_count_should_equal_0 = () =>
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Length.ShouldEqual(0);
 
         It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();

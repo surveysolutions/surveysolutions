@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         public ImportController(IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, ILogger logger)
+            IQuestionnaireHelper questionnaireHelper, ILogger logger, IQuestionnaireVersionProvider questionnaireVersionProvider)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -52,6 +52,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
         }
 
         [HttpGet]
@@ -94,7 +95,7 @@ namespace WB.UI.Designer.Api
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
 
-            if (!QuestionnaireVersionProvider.IsClientVersionSupported(templateInfo.Version, supportedClientVersion))
+            if (!questionnaireVersionProvider.IsClientVersionSupported(templateInfo.Version, supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {

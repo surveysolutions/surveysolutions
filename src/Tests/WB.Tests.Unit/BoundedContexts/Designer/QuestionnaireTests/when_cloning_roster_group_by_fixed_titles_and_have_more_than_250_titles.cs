@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -18,9 +19,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             newGroupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            int i = 0;
-            rosterFixedTitles = Enumerable.Repeat(new Tuple<string, string> (i++.ToString(), i.ToString()), 251).ToArray();
 
+            rosterFixedTitles = Enumerable.Range(1, 251).Select(i => new FixedRosterTitleItem(i++.ToString(), i.ToString())).ToArray();
+            
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewQuestionAdded()
@@ -63,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid newGroupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<string, string>[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
         private static Exception exception;
     }
 }

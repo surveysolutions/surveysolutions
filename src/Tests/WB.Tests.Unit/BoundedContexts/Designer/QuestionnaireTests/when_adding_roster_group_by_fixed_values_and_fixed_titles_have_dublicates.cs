@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -17,9 +18,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { new Tuple<string, string>("1", "fixed title 1"), 
-                                        new Tuple<string, string>("1", "dublicate"), 
-                                        new Tuple<string, string>("3", "fixed title 3") };
+            rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "fixed title 1"), 
+                                        new FixedRosterTitleItem("1", "duplicate"), 
+                                        new FixedRosterTitleItem("3", "fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -40,23 +41,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
-
-
-        It should_throw_exception_with_message_containting__must__ = () =>
-            exception.Message.ToLower().ShouldContain("must");
-
-        It should_throw_exception_with_message_containting__unique__ = () =>
-            exception.Message.ToLower().ShouldContain("unique");
-
-        It should_throw_exception_with_message_containting__value__ = () =>
-            exception.Message.ToLower().ShouldContain("value");
-
+        
+        It should_throw_exception_with_message = () =>
+            new[] { "must", "unique", "value" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+        
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<string, string>[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
         private static Exception exception;
     }
 }

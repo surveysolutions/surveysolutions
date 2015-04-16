@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
         Cleanup stuff = () =>
         {
             appDomainContext.Dispose();
-            appDomainContext = null;
+            appDomainContext = null; 
         };
 
         static AppDomainContext appDomainContext;

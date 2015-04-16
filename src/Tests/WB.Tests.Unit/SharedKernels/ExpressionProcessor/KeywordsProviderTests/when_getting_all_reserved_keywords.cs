@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
                 .Union(StataVariableRestrictions)
                 .Union(SpssReservedKeywords)
                 .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
+                .Union(SurveySolutionsServiceVariablesKeywords)
                 .ToArray();
 
         };
@@ -55,6 +56,10 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
         };
 
+        private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
+        {
+            "rowcode","rowname","rowindex","roster","Id"
+        };
         private static string[] reservedKeywords;
 
         private static IEnumerable<string> result;

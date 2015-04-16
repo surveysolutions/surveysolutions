@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.V2;
 
 // ReSharper disable InconsistentNaming
 
@@ -294,11 +295,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         public override IInterviewExpressionState Clone()
-        {
-            return CloneV2();
-        }
-
-        public override IInterviewExpressionStateV2 CloneV2()
         {
             return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
         }
