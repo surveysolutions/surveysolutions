@@ -1,11 +1,14 @@
 using System;
 using System.Linq;
+using System.Web.UI.WebControls;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -39,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
 
         It should_return_roster_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
-            result.FixedRosterTitles.ShouldEqual(GetGroup(rosterId).FixedRosterTitles);
+            result.FixedRosterTitles.ShouldContainOnly(GetGroup(rosterId).FixedRosterTitles);
 
         It should_return_roster_with_RosterSizeMultiQuestionId_be_null = () =>
             result.RosterSizeMultiQuestionId.ShouldBeNull();

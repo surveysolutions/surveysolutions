@@ -533,7 +533,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
         {
-            return IsRosterByQuestion(group) && group.FixedRosterTitles != null && group.FixedRosterTitles.Any();
+            return IsRosterByQuestion(group) && group.FixedRosterTitles.Any();
         }
 
         private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion(IGroup group)
@@ -589,7 +589,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (group.FixedRosterTitles.Length == 0)
                 return false;
 
-            return group.FixedRosterTitles.Any(title=>string.IsNullOrWhiteSpace(title.Item2));
+            return group.FixedRosterTitles.Any(title => string.IsNullOrWhiteSpace(title.Title));
         }
 
         private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues(IGroup group)
@@ -600,7 +600,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             if (group.FixedRosterTitles.Length == 0)
                 return false;
-            return group.FixedRosterTitles.Select(x => x.Item1).Distinct().Count() != group.FixedRosterTitles.Length;
+            return group.FixedRosterTitles.Select(x => x.Value).Distinct().Count() != group.FixedRosterTitles.Length;
         }
 
         private static bool RosterFixedTitlesHaveMoreThanAllowedItems(IGroup group)
@@ -1171,13 +1171,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return null;
-        }
-
-        private static bool IsVariableNameNameSpace(string identifier)
-        {
-            var namespaces = typeof(IExpressionExecutable).Assembly.GetTypes().Select(t => t.Name)
-                .Distinct();
-            return namespaces.Contains(identifier);
         }
 
         private static QuestionnaireVerificationError GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(

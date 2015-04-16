@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using WB.Core.SharedKernels.DataCollection.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {

@@ -4,6 +4,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionerTests
 {
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionerTests
     {
         protected static QuestionnaireVersioner CreateQuestionnaireVersioner()
         {
-            return new QuestionnaireVersioner();
+            return new QuestionnaireVersioner(new QuestionnaireVersionProvider());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument()

@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using WB.UI.Headquarters.Code
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
@@ -84,7 +85,7 @@
                         </a>
 
                     }
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString()))
+                    @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
                     {
                         <div class="btn-group pull-right">
                             <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">

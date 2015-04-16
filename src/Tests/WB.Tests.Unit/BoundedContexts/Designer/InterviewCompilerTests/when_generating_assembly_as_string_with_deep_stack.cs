@@ -50,7 +50,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-
+using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
@@ -238,11 +238,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         }
 
         public override IInterviewExpressionState Clone()
-        {
-            return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
-        }
-
-        public override IInterviewExpressionStateV2 CloneV2()
         {
             return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
         }

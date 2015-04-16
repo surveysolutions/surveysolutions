@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
@@ -415,12 +416,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return numericQuestion.CountOfDecimalPlaces;
         }
 
-        public IEnumerable<Tuple<decimal,string>> GetFixedRosterTitles(Guid groupId)
+        public FixedRosterTitle[] GetFixedRosterTitles(Guid groupId)
         {
             var group = this.GetGroup(groupId);
             if (group == null || !group.IsRoster || group.RosterSizeSource != RosterSizeSourceType.FixedTitles)
             {
-                return Enumerable.Empty<Tuple<decimal, string>>();
+                return new FixedRosterTitle[0];
             }
             return group.FixedRosterTitles;
         }

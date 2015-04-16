@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
 {
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                         Title = "Roster 1.1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new[] { new Tuple<decimal, string>(1,"1"), new Tuple<decimal, string>(2,"2"), new Tuple<decimal, string>(3,"3") },
+                        FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") },
                         ParentGroupId = g2Id,
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { g3Id, q2Id }

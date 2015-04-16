@@ -52,6 +52,7 @@ using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -60,6 +61,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Supervisor.Controllers;
 using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
@@ -130,7 +132,7 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, Tuple<decimal, string>[] titles)
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
             {
                 return new RosterChanged(Guid.NewGuid(), rosterId)
                 {

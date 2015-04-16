@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -86,7 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
-        IEnumerable<Tuple<decimal, string>> GetFixedRosterTitles(Guid groupId);
+        FixedRosterTitle[] GetFixedRosterTitles(Guid groupId);
 
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
