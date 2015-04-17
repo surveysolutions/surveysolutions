@@ -31,7 +31,8 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var questionnaireVerifier = new Mock<IQuestionnaireVerifier>();
             questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationError>() { new QuestionnaireVerificationError("test", "t1", new QuestionnaireVerificationReference[0]) });
 
-            service = CreatePublicService( questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory);
+            service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object,
+                questionnaireViewFactory: questionnaireViewFactory, isClientVersionSupported: true);
         };
 
         Because of = () => 

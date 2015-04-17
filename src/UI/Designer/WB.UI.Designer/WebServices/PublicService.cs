@@ -57,16 +57,10 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            var currentEngineVersion = this.questionnaireVersionService.GetLatestSupportedVersion();
-
-            var templateTitle = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName());
-
-            if (currentEngineVersion > request.SupportedExpressionsEngineVersion)
+            if (!questionnaireVersionService.IsClientVersionSupported(request.SupportedQuestionnaireVersion))
             {
-                var message = String.Format(ErrorMessages.NotSupportedQuestionnaireVersion,
-                        templateTitle,
-                        currentEngineVersion,
-                        request.SupportedExpressionsEngineVersion);
+                var message =
+                    string.Format(ErrorMessages.ClientVersionIsNotSupported, request.SupportedQuestionnaireVersion);
 
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
@@ -87,7 +81,7 @@ namespace WB.UI.Designer.WebServices
             {
                 generationResult =
                     this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                        questionnaireView.Source, questionnaireVersionService.GetLatestSupportedVersion(),
+                        questionnaireView.Source, request.SupportedQuestionnaireVersion,
                         out resultAssembly);
             }
             catch (Exception)

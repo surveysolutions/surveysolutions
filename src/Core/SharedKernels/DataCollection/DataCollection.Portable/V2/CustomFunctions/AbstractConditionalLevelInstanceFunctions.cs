@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
     /// <summary>
     /// Utility functions for common checks.
     /// </summary>
-    public class BaseFunctions
+    public class AbstractConditionalLevelInstanceFunctions
     {
         /// @name  Date and time management functions
         /// @{

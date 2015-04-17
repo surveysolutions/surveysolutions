@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                        Moq.It.IsAny<Version>(), out assembly))
                 .Throws(new Exception());
 
-            service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object);
+            service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object, isClientVersionSupported:true);
         };
 
         Because of = () => 
