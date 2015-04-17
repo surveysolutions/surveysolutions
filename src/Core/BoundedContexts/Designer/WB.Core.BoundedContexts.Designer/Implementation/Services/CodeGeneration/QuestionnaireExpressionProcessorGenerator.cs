@@ -28,10 +28,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
 
-            EmitResult assemblyGenerationResult = this.codeCompiler.GenerateAssemblyAsString(questionnaire.PublicKey, generatedEvaluator, new string[] { },
+            EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(questionnaire.PublicKey, generatedEvaluator, new string[] { },
                 out generatedAssembly);
 
-            return new GenerationResult(assemblyGenerationResult.Success, assemblyGenerationResult.Diagnostics);
+            return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
         }
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
