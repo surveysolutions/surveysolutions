@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatusesReportTests
 {
     internal class when_two_responsibles_and_each_status_has_one_interview : HeadquartersTeamsAndStatusesReportContext
     {
