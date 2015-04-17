@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
-            Version expressionsEngineVersion = null)
+            bool? isClientVersionSupported=null)
         {
             return new PublicService(
                 zipUtils ?? Mock.Of<IStringCompressor>(),
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
-                Mock.Of<IQuestionnaireVersionService>(_ => _.GetLatestSupportedVersion() == expressionsEngineVersion),
+                Mock.Of<IQuestionnaireVersionService>(_ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == (isClientVersionSupported??false)),
                 Mock.Of<IJsonUtils>());
         }
 
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         {
             return new DownloadQuestionnaireRequest
             {
-                SupportedExpressionsEngineVersion = supportedExpressionsEngineVersion,
+                SupportedQuestionnaireVersion = supportedExpressionsEngineVersion,
                 QuestionnaireId = questionnaireId
             };
         }

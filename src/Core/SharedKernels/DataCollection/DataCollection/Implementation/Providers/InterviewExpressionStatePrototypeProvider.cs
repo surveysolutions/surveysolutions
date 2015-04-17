@@ -54,7 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
                 {
-                    return interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+                    var initialExpressionState =
+                        Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
+
+                    IInterviewExpressionStateV2 upgradedExpressionState =
+                        interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
+
+                    return upgradedExpressionState;
                 }
                 catch (Exception e)
                 {

@@ -44,7 +44,7 @@
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="IInterviewExpressionStateUpgrader.cs" />
     <Compile Include="InterviewExpressionStateUpgrader.cs" />
-    <Compile Include="V2\CustomFunctions\BaseFunctions.cs" />
+    <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
     <Compile Include="V2\CustomFunctions\Extensions.cs" />
     <Compile Include="V2\CustomFunctions\LMS.cs" />
     <Compile Include="V2\CustomFunctions\ZScore.cs" />
