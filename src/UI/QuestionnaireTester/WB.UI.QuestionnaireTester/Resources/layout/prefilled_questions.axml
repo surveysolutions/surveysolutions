@@ -12,32 +12,41 @@
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorToolbarText"
-            android:fontFamily="sans-serif-medium"
-            android:textSize="16dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_centerVertical="true"
-            local:MvxBind="Text Localization('PrefilledQuestionsSubTitle')" />
+            style="@style/InterviewToolbarTitle"
+            local:MvxBind="Text Localization('PrefilledQuestions_ToolbarTitle')" />
     </android.support.v7.widget.Toolbar>
-    <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                local:MvxBind="Click OpenInterviewCommand; Text Localization('OpenQuestionnaire')" />
-    <MvxListView
-        android:id="@+id/PrefilledQuestionsListView"
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp"
-        android:orientation="vertical"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:smoothScrollbar="true"
-        android:scrollingCache="false"
-        android:animationCache="false"
-        local:MvxBind="ItemsSource PrefilledQuestions" />
-  
+        android:fillViewport="true">
+        <MvxRelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <MvxRelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_PQ_QuestionnaireTitleHoler"
+                android:id="@+id/prefilledQuestions_questionnaireTitle_holder">
+                <TextView
+                    style="@style/PrefilledQuestions_QuestionnaireTitle"
+                    local:MvxBind="Text QuestionnaireTitle" />
+            </MvxRelativeLayout>
+            <MvxListView
+                style="@style/PrefilledQuestions_List"
+                android:id="@+id/PrefilledQuestionsListView"
+                android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
+                local:MvxBind="ItemsSource PrefilledQuestions" />
+            <MvxRelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_PQ_StartButtonHoler"
+                android:layout_alignParentBottom="true">
+                <Button
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_Interview_LeftSide"
+                    android:layout_marginRight="@dimen/margin_Interview_RightSide"
+                    android:layout_centerVertical="true"
+                    local:MvxBind="Click StartInterviewCommand; Text Localization('PrefilledQuestions_StartInterview')" />
+            </MvxRelativeLayout>
+        </MvxRelativeLayout>
+    </ScrollView>
 </MvxLinearLayout>

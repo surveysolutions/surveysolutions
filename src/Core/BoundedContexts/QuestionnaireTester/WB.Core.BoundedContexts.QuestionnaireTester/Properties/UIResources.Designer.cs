@@ -413,15 +413,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open questionnaire.
-        /// </summary>
-        public static string OpenQuestionnaire {
-            get {
-                return ResourceManager.GetString("OpenQuestionnaire", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Android version:.
         /// </summary>
         public static string OSVersionText {
@@ -449,11 +440,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to prefilled questions.
+        ///   Looks up a localized string similar to START.
         /// </summary>
-        public static string PrefilledQuestionsSubTitle {
+        public static string PrefilledQuestions_StartInterview {
             get {
-                return ResourceManager.GetString("PrefilledQuestionsSubTitle", resourceCulture);
+                return ResourceManager.GetString("PrefilledQuestions_StartInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey initial information.
+        /// </summary>
+        public static string PrefilledQuestions_ToolbarTitle {
+            get {
+                return ResourceManager.GetString("PrefilledQuestions_ToolbarTitle", resourceCulture);
             }
         }
         

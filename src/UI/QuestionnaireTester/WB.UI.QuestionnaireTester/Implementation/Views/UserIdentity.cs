@@ -8,10 +8,6 @@ namespace WB.UI.QuestionnaireTester.Implementation.Views
         public bool IsAuthenticated { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
-
-        public Guid UserId
-        {
-            get { return Guid.Empty; }
-        }
+        public Guid UserId { get; set; }
     }
 }

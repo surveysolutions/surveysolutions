@@ -234,9 +234,6 @@
   <data name="Maintenance" xml:space="preserve">
     <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
   </data>
-  <data name="OpenQuestionnaire" xml:space="preserve">
-    <value>Открыть опросник</value>
-  </data>
   <data name="OSVersionText" xml:space="preserve">
     <value>Версия адроида:</value>
   </data>
@@ -245,9 +242,6 @@
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Пароль</value>
-  </data>
-  <data name="PrefilledQuestionsSubTitle" xml:space="preserve">
-    <value>предзаполненные вопросы</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
     <value>Время ожидания ответа от сервера дизвйнера Survey Solutions истекло. Пожалуйста, проверьте Ваше интернет соединение</value>
@@ -290,5 +284,11 @@
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Сервер с приложением Designer не отвечает. Проверьте адрес подключения к серверу или повторите попытку позже</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>НАЧАТЬ</value>
+  </data>
+  <data name="PrefilledQuestions_ToolbarTitle" xml:space="preserve">
+    <value>Начальная информация по обследованию</value>
   </data>
 </root>

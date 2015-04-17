@@ -19,6 +19,41 @@
   <style name="Theme.Splash" parent="Theme.Light.Base">
   </style>
 
+  <style name="InterviewToolbarTitle" parent="ToolbarTitle">
+    <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
+    <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
+  </style>
+
+  <style name="ToolbarTitle" parent="Theme.Light.Base">
+    <item name="android:textColor">@color/colorToolbarText</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textSize">18dp</item>
+    <item name="android:layout_centerVertical">true</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">25dp</item>
+    <item name="android:layout_marginRight">25dp</item>
+  </style>
+
+  <style name="PrefilledQuestions_List" parent="Theme.Light.Base">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:smoothScrollbar">true</item>
+    <item name="android:scrollingCache">false</item>
+    <item name="android:animationCache">false</item>
+  </style>
+
+  <style name="PrefilledQuestions_QuestionnaireTitle" parent="Theme.Light.Base">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">sans-serif-thin</item>
+    <item name="android:textSize">36dp</item>
+    <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
+    <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
+    <item name="android:layout_centerVertical">true</item>
+  </style>
+
   
   <color name="applicationBackground">#FFFAFAFA</color>
   <color name="colorBlueThemePrimary">#FF2A81CB</color>
@@ -29,4 +64,12 @@
   <color name="myQuestionnairesLink">#FF6D6D6D</color>
   <color name="publicQuestionnaireListItemLeftCorner">@color/colorBlueThemePrimary</color>
   <color name="publicQuestionnairesLink">#FF4C8FD0</color>
+
+
+  <dimen name="margin_Interview_LeftSide">72dp</dimen>
+  <dimen name="margin_Interview_RightSide">72dp</dimen>
+
+  <dimen name="height_PQ_QuestionnaireTitleHoler">240dp</dimen>
+  <dimen name="height_PQ_StartButtonHoler">110dp</dimen>
+  
 </resources>

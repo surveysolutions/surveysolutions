@@ -12,12 +12,7 @@
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorToolbarText"
-            android:textSize="16dp"
-            android:layout_marginLeft="25dp"
-            android:layout_centerVertical="true"
+            style="@style/ToolbarTitle"
             local:MvxBind="Text Localization('Dashboard_ToolbarText')" />
     </android.support.v7.widget.Toolbar>
     <ProgressBar

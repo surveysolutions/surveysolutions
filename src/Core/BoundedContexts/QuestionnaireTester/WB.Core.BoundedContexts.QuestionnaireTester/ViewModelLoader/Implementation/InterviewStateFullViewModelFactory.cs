@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
@@ -22,11 +21,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
     internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainInterviewRepository<InterviewModel> plainStorageInterviewAccessor;
+        private readonly IPlainInterviewRepository plainStorageInterviewAccessor;
 
         public InterviewStateFullViewModelFactory(
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IPlainInterviewRepository<InterviewModel> plainStorageInterviewAccessor)
+            IPlainInterviewRepository plainStorageInterviewAccessor)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
@@ -46,7 +45,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
 
         private List<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.GetInterview(Guid.Parse(interviewId));
+            var interview = this.plainStorageInterviewAccessor.GetInterview(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
 

@@ -28,17 +28,15 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.pathToStorage));
             
-            this.Bind(typeof (IPlainStorageAccessor<>)).To(typeof (SiaqodbPlainStorageAccessor<>));
-            this.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(SiaqodbQueryablePlainStorageAccessor<>));
+            this.Bind(typeof (IPlainStorageAccessor<>)).To(typeof (SiaqodbPlainStorageAccessor<>)).InSingletonScope();
+            this.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(SiaqodbQueryablePlainStorageAccessor<>)).InSingletonScope();
 
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
-            this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
-            var inMemoryPlainStorageQuestionnaireAccessor = new InMemoryPlainStorageAccessor<QuestionnaireDocument>();
-            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(inMemoryPlainStorageQuestionnaireAccessor);
+            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().To<InMemoryPlainStorageAccessor<QuestionnaireDocument>>().InSingletonScope();
+            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>().InSingletonScope();
+            this.Bind<IQuestionnaireRepository>().ToConstant<IQuestionnaireRepository>(this.Kernel.Get<IPlainQuestionnaireRepository>());
 
-            this.Bind<IPlainInterviewRepository<InterviewModel>>().To<PlainInterviewRepository<InterviewModel>>();
-            var inMemoryPlainStorageInterviewAccessor = new InMemoryPlainStorageAccessor<InterviewModel>();
-            this.Bind<IPlainStorageAccessor<InterviewModel>>().ToConstant(inMemoryPlainStorageInterviewAccessor);
+            this.Bind<IPlainInterviewRepository>().To<PlainInterviewRepository>().InSingletonScope();
+            this.Bind<IPlainStorageAccessor<InterviewModel>>().To<InMemoryPlainStorageAccessor<InterviewModel>>().InSingletonScope();
         }
 
         private void ConfigurePlainStorage()

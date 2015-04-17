@@ -1,5 +1,7 @@
-﻿using Cheesebaron.MvxPlugins.Settings.Interfaces;
+﻿using System;
+using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using IHS.MvvmCross.Plugins.Keychain;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.QuestionnaireTester.Implementation.Views;
 
@@ -31,6 +33,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
             this.currentUserIdentity = new UserIdentity()
             {
                 IsAuthenticated = !string.IsNullOrEmpty(userName),
+                UserId = Guid.NewGuid(),
                 Name = userName,
                 Password = this.securityService.GetPassword(ServiceParameterName, userName)
             };
