@@ -68,7 +68,7 @@ namespace WB.UI.Designer.Api
             var questionnaire = GetQuestionnaire(id).Source;
             string assembly;
             var generated = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,
-                engineVersionService.GetCurrentEngineVersion(), out assembly);
+                engineVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

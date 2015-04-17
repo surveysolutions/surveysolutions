@@ -14,14 +14,14 @@ namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
         /// </summary>
         private readonly EngineVersion version_6 = new EngineVersion(6, 0, 0);
         
-        public EngineVersion GetCurrentEngineVersion()
+        public EngineVersion GetLatestSupportedVersion()
         {
             return version_6;
         }
 
         public bool IsClientEngineVersionSupported(EngineVersion clientVersion)
         {
-            var engineVersion = GetCurrentEngineVersion();
+            var engineVersion = GetLatestSupportedVersion();
             if (engineVersion > clientVersion)
             {
                 if (clientVersion < version_5)

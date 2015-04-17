@@ -57,7 +57,7 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            var currentEngineVersion = this.engineVersionService.GetCurrentEngineVersion();
+            var currentEngineVersion = this.engineVersionService.GetLatestSupportedVersion();
 
             var templateTitle = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName());
 
@@ -87,7 +87,7 @@ namespace WB.UI.Designer.WebServices
             {
                 generationResult =
                     this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
-                        questionnaireView.Source, engineVersionService.GetCurrentEngineVersion(),
+                        questionnaireView.Source, engineVersionService.GetLatestSupportedVersion(),
                         out resultAssembly);
             }
             catch (Exception)

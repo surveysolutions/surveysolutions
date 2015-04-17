@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string Generate(QuestionnaireDocument questionnaire)
         {
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, CreateCodeGenerationSettingsBasedOnEngineVersion(engineVersionService.GetCurrentEngineVersion()),true);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, CreateCodeGenerationSettingsBasedOnEngineVersion(engineVersionService.GetLatestSupportedVersion()),true);
 
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
