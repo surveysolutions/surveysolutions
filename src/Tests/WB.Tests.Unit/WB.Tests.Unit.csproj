@@ -407,7 +407,7 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_content_cant_be_opened.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_sync_package_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_sync_package_is_present_but_command_executed_with_exception.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\TeamsAndStatusesReportContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\HeadquartersTeamsAndStatusesReportContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />

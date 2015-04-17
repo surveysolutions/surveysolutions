@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTests
 {
-    internal class when_empty_data_base : TeamsAndStatusesReportContext
+    internal class when_empty_data_base : HeadquartersTeamsAndStatusesReportContext
     {
         Establish context = () =>
         {
@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTes
 
         private It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
 
-        private static TeamsAndStatusesReport reportFactory;
+        private static HeadquartersTeamsAndStatusesReport reportFactory;
         private static TeamsAndStatusesReportView report;
     }
 }

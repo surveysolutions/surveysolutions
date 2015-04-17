@@ -21,7 +21,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
     {
-        private readonly ITeamsAndStatusesReport teamsAndStatusesReport;
+        private readonly IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport;
+        private readonly ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport;
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
@@ -38,7 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IGlobalInfoProvider provider,
             ILogger logger,
             ISurveysAndStatusesReport surveysAndStatusesReport,
-            ITeamsAndStatusesReport teamsAndStatusesReport,
+            IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
+            ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IViewFactory<MapReportInputModel, MapReportView> mapReport, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
@@ -46,7 +48,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
-            this.teamsAndStatusesReport = teamsAndStatusesReport;
+            this.headquartersTeamsAndStatusesReport = headquartersTeamsAndStatusesReport;
+            this.supervisorTeamsAndStatusesReport = supervisorTeamsAndStatusesReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.mapReport = mapReport;
             this.questionInforFactory = questionInforFactory;
@@ -58,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var input = new TeamsAndStatusesInputModel
             {
-                ViewerId = this.GlobalInfo.GetCurrentUser().Id
+                ViewerId = this.GlobalInfo.GetCurrentUser().Id,
             };
 
 
@@ -78,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 }
             }
 
-            var result = this.teamsAndStatusesReport.Load(input);
+            var result = this.supervisorTeamsAndStatusesReport.Load(input);
             return result;
         }
 
@@ -153,7 +156,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 }
             }
 
-            return this.teamsAndStatusesReport.Load(input);
+            return this.headquartersTeamsAndStatusesReport.Load(input);
         }
 
         [HttpPost]

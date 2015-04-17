@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTests
 {
-    internal class when_report_requested_by_viewer : TeamsAndStatusesReportContext
+    internal class when_report_requested_by_viewer : HeadquartersTeamsAndStatusesReportContext
     {
         Establish context = () =>
         {
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTes
 
         It should_count_number_of_interviews_for_teamlead = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
-        static TeamsAndStatusesReport reportFactory;
+        static HeadquartersTeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid viewerId;
     }

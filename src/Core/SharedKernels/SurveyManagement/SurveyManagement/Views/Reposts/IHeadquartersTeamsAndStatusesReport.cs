@@ -3,8 +3,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
 {
-    public interface ISurveysAndStatusesReport
+    public interface IHeadquartersTeamsAndStatusesReport
     {
-        SurveysAndStatusesReportView Load(SurveysAndStatusesReportInputModel input);
+        TeamsAndStatusesReportView Load(TeamsAndStatusesInputModel input);
     }
 }
