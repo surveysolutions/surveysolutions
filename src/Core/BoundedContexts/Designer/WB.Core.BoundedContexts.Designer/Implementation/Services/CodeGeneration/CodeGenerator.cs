@@ -78,24 +78,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             if (version.Major == 5)
                 return new CodeGenerationSettings(
-                    versionPrefix: string.Empty, 
+                    additionInterfaces: new string[0], 
                     namespaces: new string[0],
-                    areRowSpecificVariablesPresent: false, 
-                    isIRosterLevelInherited: false,
-                    shouldGenerateUpdateRosterTitleMethods: false, 
+                    areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable");
 
-            var v2Prefix = "V2";
             return new CodeGenerationSettings(
-                versionPrefix: v2Prefix, 
+                additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
                 namespaces: new[]
                     {
-                        string.Format("WB.Core.SharedKernels.DataCollection.{0}", v2Prefix),
-                        string.Format("WB.Core.SharedKernels.DataCollection.{0}.CustomFunctions", v2Prefix)
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
                     },
-                areRowSpecificVariablesPresent: true, 
-                isIRosterLevelInherited: true,
-                shouldGenerateUpdateRosterTitleMethods: true, 
+                areRosterServiceVariablesPresent: true,
                 rosterType: "RosterRowList");
         }
 
@@ -255,14 +250,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var template = new QuestionnaireExecutorTemplateModel();
             template.GenerateEmbeddedExpressionMethods = generateExpressionMethods;
-            template.VersionPrefix = codeGenerationSettings.VersionPrefix;
+            template.AdditionInterfaces = codeGenerationSettings.AdditionInterfaces;
             template.Namespaces = codeGenerationSettings.Namespaces;
-            template.ShouldGenerateUpdateRosterTitleMethods =
-                codeGenerationSettings.ShouldGenerateUpdateRosterTitleMethods;
+            template.ShouldGenerateUpdateRosterTitleMethods = codeGenerationSettings.AreRosterServiceVariablesPresent;
 
-            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(template,
-                codeGenerationSettings.AreRowSpecificVariablesPresent, codeGenerationSettings.IsIRosterLevelInherited,
-                codeGenerationSettings.RosterType);
+            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(
+                executorModel: template,
+                areRowSpecificVariablesPresent: codeGenerationSettings.AreRosterServiceVariablesPresent,
+                isIRosterLevelInherited: codeGenerationSettings.AreRosterServiceVariablesPresent,
+                rosterType: codeGenerationSettings.RosterType);
 
             string generatedClassName = string.Format("{0}_{1}", InterviewExpressionStatePrefix,
                 Guid.NewGuid().FormatGuid());

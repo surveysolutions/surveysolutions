@@ -47,11 +47,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
 
         Because of = () =>
             templateModel = generator.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
-                    versionPrefix: string.Empty,
+                    additionInterfaces: new string[0],
                     namespaces: new string[0],
-                    areRowSpecificVariablesPresent: false,
-                    isIRosterLevelInherited: false,
-                    shouldGenerateUpdateRosterTitleMethods: false,
+                    areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable"), true);
 
         It should_generate_model_for_multimedia_question = () =>
