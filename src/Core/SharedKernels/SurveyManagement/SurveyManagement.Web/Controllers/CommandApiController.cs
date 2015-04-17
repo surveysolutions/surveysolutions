@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
-using Ncqrs.Commanding;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public JsonBundleCommandResponse ExecuteCommands(JsonBundleCommandRequest request)
         {
             var response = new JsonBundleCommandResponse();
@@ -39,27 +40,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             foreach (var command in request.Commands)
             {
-                response.CommandStatuses.Add(
-                    this.Execute(new JsonCommandRequest() {Type = request.Type, Command = command}));
+                response.CommandStatuses.Add(this.Execute(new JsonCommandRequest() {Type = request.Type, Command = command}));
             }
 
             return response;
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();
             
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
-                if (User.Identity.IsObserver())
-                {
-                    response.IsSuccess = false;
-                    response.DomainException = "You cannot perform any operation in observer mode.";
-                    return response;
-                }
-
                 try
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);

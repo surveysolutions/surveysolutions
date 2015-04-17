@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -37,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
+        [InvalidateModelStateForObserver]
         public ActionResult Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Observers;
@@ -50,11 +52,14 @@ namespace WB.UI.Headquarters.Controllers
                     return this.View(model);
                 }
 
-                if (this.CreateObserver(model))
-                {
-                    this.Success("Observer user was successfully created");
-                    return this.RedirectToAction("Index");
-                }
+                this.CreateObserver(model);
+                
+                this.Success("Observer user was successfully created");
+                return this.RedirectToAction("Index");
+            }
+            else
+            {
+                CheckModelStateForObserverForbiddenError();
             }
 
             return this.View(model);
