@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.basePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-            this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+            this.Bind<IInterviewExpressionStateFactory>().To<InterviewExpressionStateFactory>().InSingletonScope();
             this.Bind<IEngineVersionService>().To<EngineVersionService>().InSingletonScope();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();

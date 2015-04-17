@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
     {
         protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
-            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, ServiceLocator.Current.GetInstance<IFileSystemAccessor>(), new InterviewExpressionStateVersionAdapter());
+            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, ServiceLocator.Current.GetInstance<IFileSystemAccessor>(), new InterviewExpressionStateFactory());
         }
 
         protected static Mock<IQuestionnaireAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
