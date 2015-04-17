@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -39,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
+        [InvalidateModelStateForObserver]
         public ActionResult Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -51,12 +53,15 @@ namespace WB.UI.Headquarters.Controllers
                     this.Error("User name already exists. Please enter a different user name.");
                     return this.View(model);   
                 }
+
+                this.CreateHeadquarters(model);
                 
-                if (this.CreateHeadquarters(model))
-                {
-                    this.Success("Headquarters user was successfully created");
-                    return this.RedirectToAction("Index");
-                }
+                this.Success("Headquarters user was successfully created");
+                return this.RedirectToAction("Index");
+            }
+            else
+            {
+                CheckModelStateForObserverForbiddenError();
             }
 
             return this.View(model);
@@ -91,40 +96,37 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
+        [InvalidateModelStateForObserver]
         public ActionResult Edit(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
 
             if (this.ModelState.IsValid)
             {
-                if (User.Identity.IsObserver())
+                var user = this.GetUserById(model.Id);
+                if (user == null)
                 {
-                    this.Error("You cannot perform any operation in observer mode.");
+                    this.Error("Could not update user information because current user does not exist");
+                    return this.View(model);
                 }
+
+                bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
+
+                if (isAdmin)
+                    this.Error("Could not update user information because you don't have permission to perform this operation");
                 else
                 {
-                    var user = this.GetUserById(model.Id);
-                    if (user == null)
-                    {
-                        this.Error("Could not update user information because current user does not exist");
-                        return this.View(model);
-                    }
-                    
-                    bool isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
+                    this.UpdateAccount(user: user, editModel: model);
 
-                    if (isAdmin)
-                        this.Error("Could not update user information because you don't have permission to perform this operation");
-                    else
-                    {
-                        if (this.UpdateAccount(user: user, editModel: model))
-                        {
-
-                            this.Success(string.Format("Information about <b>{0}</b> successfully updated",
-                                user.UserName));
-                            return this.RedirectToAction("Index");
-                        }
-                    }
+                    this.Success(string.Format("Information about <b>{0}</b> successfully updated",
+                            user.UserName));
+                    return this.RedirectToAction("Index");
                 }
+
+            }
+            else
+            {
+                CheckModelStateForObserverForbiddenError();
             }
 
             return this.View(model);

@@ -134,7 +134,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
+        ///   Looks up a localized string similar to Your questionnaire has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
