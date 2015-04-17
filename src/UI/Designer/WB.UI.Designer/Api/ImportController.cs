@@ -39,7 +39,9 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, ILogger logger, IQuestionnaireVersionService questionnaireVersionService, IJsonUtils jsonUtils)
+            IQuestionnaireHelper questionnaireHelper, 
+            IQuestionnaireVersionService questionnaireVersionService, 
+            IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
