@@ -41,16 +41,14 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Create(UserModel model)
         {
 
             if (!this.ModelState.IsValid)
             {
-                CheckModelStateForObserverForbiddenError();
                 return this.View(model);
             }
-
             
             UserView user = GetUserByName(model.UserName);
             if (user != null)
@@ -92,12 +90,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Edit(UserEditModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                CheckModelStateForObserverForbiddenError();
                 return this.View(model);
             }
             
