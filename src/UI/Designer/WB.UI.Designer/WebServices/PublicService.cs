@@ -22,7 +22,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IEngineVersionService engineVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IJsonUtils jsonUtils;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
-            IEngineVersionService engineVersionService, 
+            IExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.engineVersionService = engineVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -57,16 +57,16 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            var currentEngineVersion = this.engineVersionService.GetLatestSupportedVersion();
+            var currentEngineVersion = this.expressionsEngineVersionService.GetLatestSupportedVersion();
 
             var templateTitle = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName());
 
-            if (currentEngineVersion > request.SupportedEngineVersion)
+            if (currentEngineVersion > request.SupportedExpressionsEngineVersion)
             {
                 var message = String.Format(ErrorMessages.NotSupportedQuestionnaireVersion,
                         templateTitle,
                         currentEngineVersion,
-                        request.SupportedEngineVersion);
+                        request.SupportedExpressionsEngineVersion);
 
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
@@ -87,7 +87,7 @@ namespace WB.UI.Designer.WebServices
             {
                 generationResult =
                     this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
-                        questionnaireView.Source, engineVersionService.GetLatestSupportedVersion(),
+                        questionnaireView.Source, expressionsEngineVersionService.GetLatestSupportedVersion(),
                         out resultAssembly);
             }
             catch (Exception)

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
-namespace WB.Core.SharedKernels.SurveySolutions
+namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
     [DataContract]
-    public sealed class EngineVersion : IComparable<EngineVersion>
+    public sealed class ExpressionsEngineVersion : IComparable<ExpressionsEngineVersion>
     {
         [DataMember]
         public int Major { get; set; }
@@ -15,18 +15,18 @@ namespace WB.Core.SharedKernels.SurveySolutions
         [DataMember]
         public int Patch { get; set; }
 
-        public EngineVersion(int major, int minor, int patch)
+        public ExpressionsEngineVersion(int major, int minor, int patch)
         {
             this.Major = major;
             this.Minor = minor;
             this.Patch = patch;
         }
 
-        public static bool TryParse(string input, out EngineVersion result)
+        public static bool TryParse(string input, out ExpressionsEngineVersion result)
         {
             int major, minor, patch;
 
-            result = new EngineVersion(0,0,0);
+            result = new ExpressionsEngineVersion(0,0,0);
 
             String[] parsedComponents = input.Split('.');
 
@@ -51,12 +51,12 @@ namespace WB.Core.SharedKernels.SurveySolutions
                 return false;
             }
 
-            result = new EngineVersion(major, minor, patch);
+            result = new ExpressionsEngineVersion(major, minor, patch);
 
             return true;
         }
 
-        public bool Equals(EngineVersion other)
+        public bool Equals(ExpressionsEngineVersion other)
         {
             if (other == null)
                 return false;
@@ -83,25 +83,25 @@ namespace WB.Core.SharedKernels.SurveySolutions
         }
 
 
-        public int CompareTo(EngineVersion engineVersion)
+        public int CompareTo(ExpressionsEngineVersion expressionsEngineVersion)
         {
-            if (engineVersion == null)
+            if (expressionsEngineVersion == null)
                 return 1;
 
-            if (this.Major != engineVersion.Major)
-                if (this.Major > engineVersion.Major)
+            if (this.Major != expressionsEngineVersion.Major)
+                if (this.Major > expressionsEngineVersion.Major)
                     return 1;
                 else
                     return -1;
 
-            if (this.Minor != engineVersion.Minor)
-                if (this.Minor > engineVersion.Minor)
+            if (this.Minor != expressionsEngineVersion.Minor)
+                if (this.Minor > expressionsEngineVersion.Minor)
                     return 1;
                 else
                     return -1;
 
-            if (this.Patch != engineVersion.Patch)
-                if (this.Patch > engineVersion.Patch)
+            if (this.Patch != expressionsEngineVersion.Patch)
+                if (this.Patch > expressionsEngineVersion.Patch)
                     return 1;
                 else
                     return -1;
@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.SurveySolutions
 
         public override bool Equals(object obj)
         {
-            EngineVersion other = obj as EngineVersion;
+            ExpressionsEngineVersion other = obj as ExpressionsEngineVersion;
             if (other == null)
                 return false;
 
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveySolutions
                    this.Patch == other.Patch;
         }
 
-        public static bool operator ==(EngineVersion left, EngineVersion right)
+        public static bool operator ==(ExpressionsEngineVersion left, ExpressionsEngineVersion right)
         {
             if (ReferenceEquals(left, null))
             {
@@ -130,12 +130,12 @@ namespace WB.Core.SharedKernels.SurveySolutions
             return left.Equals(right);
         }
 
-        public static bool operator !=(EngineVersion left, EngineVersion right)
+        public static bool operator !=(ExpressionsEngineVersion left, ExpressionsEngineVersion right)
         {
             return !(left == right);
         }
 
-        public static bool operator <(EngineVersion left, EngineVersion right)
+        public static bool operator <(ExpressionsEngineVersion left, ExpressionsEngineVersion right)
         {
             if ((object)left == null)
                 throw new ArgumentNullException("left");
@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveySolutions
             return left.CompareTo(right) < 0;
         }
 
-        public static bool operator <=(EngineVersion left, EngineVersion right)
+        public static bool operator <=(ExpressionsEngineVersion left, ExpressionsEngineVersion right)
         {
             if ((object)left == null)
                 throw new ArgumentNullException("left");
@@ -152,12 +152,12 @@ namespace WB.Core.SharedKernels.SurveySolutions
         }
 
 
-        public static bool operator >(EngineVersion left, EngineVersion right)
+        public static bool operator >(ExpressionsEngineVersion left, ExpressionsEngineVersion right)
         {
             return right < left;
         }
 
-        public static bool operator >=(EngineVersion left, EngineVersion right)
+        public static bool operator >=(ExpressionsEngineVersion left, ExpressionsEngineVersion right)
         {
             return right <= left;
         }

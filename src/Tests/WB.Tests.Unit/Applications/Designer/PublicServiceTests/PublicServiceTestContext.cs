@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
-            EngineVersion engineVersion=null)
+            ExpressionsEngineVersion expressionsEngineVersion=null)
         {
             return new PublicService(
                 zipUtils ?? Mock.Of<IStringCompressor>(),
@@ -33,16 +34,16 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
-                Mock.Of<IEngineVersionService>(_ => _.GetLatestSupportedVersion() == engineVersion),
+                Mock.Of<IExpressionsEngineVersionService>(_ => _.GetLatestSupportedVersion() == expressionsEngineVersion),
                 Mock.Of<IJsonUtils>());
         }
 
         protected static DownloadQuestionnaireRequest CreateDownloadQuestionnaireRequest(Guid questionnaireId,
-            EngineVersion supportedEngineVersion)
+            ExpressionsEngineVersion supportedExpressionsEngineVersion)
         {
             return new DownloadQuestionnaireRequest
             {
-                SupportedEngineVersion = supportedEngineVersion,
+                SupportedExpressionsEngineVersion = supportedExpressionsEngineVersion,
                 QuestionnaireId = questionnaireId
             };
         }

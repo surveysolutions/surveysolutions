@@ -1,4 +1,6 @@
 ﻿using Ninject.Modules;
+using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -66,8 +68,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
-            this.Bind<IEngineVersionService>().To<EngineVersionService>().InSingletonScope();
 
+            this.Bind<ICapiExpressionsEngineVersionService>().To<CapiExpressionsEngineVersionService>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
             CommandRegistry

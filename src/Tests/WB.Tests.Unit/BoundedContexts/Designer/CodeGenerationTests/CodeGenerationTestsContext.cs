@@ -9,9 +9,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -223,9 +225,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             };
         }
 
-        public static EngineVersion CreateQuestionnaireVersion()
+        public static ExpressionsEngineVersion CreateQuestionnaireVersion()
         {
-            return new EngineVersionService().GetLatestSupportedVersion();
+            return new ExpressionsEngineVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
@@ -502,7 +504,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
-                questionnaireDocument, new EngineVersion(6, 0, 0), out resultAssembly);
+                questionnaireDocument, new ExpressionsEngineVersion(6, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -532,7 +534,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
-            var questionnaireVersionProvider = new EngineVersionService();
+            var questionnaireVersionProvider = new ExpressionsEngineVersionService();
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(

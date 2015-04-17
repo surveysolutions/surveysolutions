@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -12,15 +13,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
             versionAsString = version.ToString();
         };
 
-        Because of = () => EngineVersion.TryParse(versionAsString, out result);
+        Because of = () => ExpressionsEngineVersion.TryParse(versionAsString, out result);
 
         It should_return_version = () =>
             result.ShouldEqual(version);
 
-        private static EngineVersion version;
+        private static ExpressionsEngineVersion version;
         private static string versionAsString;
 
-        private static EngineVersion result;
+        private static ExpressionsEngineVersion result;
 
     }
 }

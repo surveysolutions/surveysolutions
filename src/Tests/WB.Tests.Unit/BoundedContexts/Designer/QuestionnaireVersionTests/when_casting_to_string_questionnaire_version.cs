@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
         It should_set_Major_property_to_1 = () =>
             result.ShouldEqual("1.2.5");
 
-        private static EngineVersion version;
+        private static ExpressionsEngineVersion version;
         private static string result;
     }
 }

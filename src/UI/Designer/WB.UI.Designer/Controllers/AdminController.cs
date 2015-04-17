@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -33,7 +34,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IEngineVersionService engineVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -42,7 +43,7 @@ namespace WB.UI.Designer.Controllers
             IStringCompressor zipUtils,
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IEngineVersionService engineVersionService, 
+            IExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils)
             : base(userHelper)
         {
@@ -51,7 +52,7 @@ namespace WB.UI.Designer.Controllers
             this.zipUtils = zipUtils;
             this.commandService = commandService;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.engineVersionService = engineVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
         }
 

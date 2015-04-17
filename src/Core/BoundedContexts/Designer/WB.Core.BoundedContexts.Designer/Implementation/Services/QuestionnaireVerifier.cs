@@ -90,21 +90,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IEngineVersionService engineVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IEngineVersionService engineVersionService)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.engineVersionService = engineVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
-            return this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,engineVersionService.GetLatestSupportedVersion(), out resultAssembly);
+            return this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,expressionsEngineVersionService.GetLatestSupportedVersion(), out resultAssembly);
         }
 
         private static bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)

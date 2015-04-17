@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new EngineVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new ExpressionsEngineVersion(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             expressionProcessorGenerator.Setup(
                 x =>
                     x.GenerateProcessorStateAssemblyForVersion(Moq.It.IsAny<QuestionnaireDocument>(),
-                       Moq.It.IsAny<EngineVersion>(), out assembly))
+                       Moq.It.IsAny<ExpressionsEngineVersion>(), out assembly))
                 .Throws(new Exception());
 
             service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object);
