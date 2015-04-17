@@ -1,25 +1,26 @@
-﻿using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public class EngineVersionService : IEngineVersionService
+    internal class ExpressionsEngineVersionService : IExpressionsEngineVersionService
     {
         /// <summary>
         /// New Era of c# conditions
         /// </summary>
-        private readonly EngineVersion version_5 = new EngineVersion(5, 0, 0);
+        private readonly ExpressionsEngineVersion version_5 = new ExpressionsEngineVersion(5, 0, 0);
         /// <summary>
         /// New service variables which could be used in C# conditions - @rowname, @rowindex, @rowcode, @roster
         /// Custom functions from ZScore( anthropocentric ) and general shortcuts like - InRange, InList ect.
         /// </summary>
-        private readonly EngineVersion version_6 = new EngineVersion(6, 0, 0);
+        private readonly ExpressionsEngineVersion version_6 = new ExpressionsEngineVersion(6, 0, 0);
         
-        public EngineVersion GetLatestSupportedVersion()
+        public ExpressionsEngineVersion GetLatestSupportedVersion()
         {
             return version_6;
         }
 
-        public bool IsClientEngineVersionSupported(EngineVersion clientVersion)
+        public bool IsClientVersionSupported(ExpressionsEngineVersion clientVersion)
         {
             var engineVersion = GetLatestSupportedVersion();
             if (engineVersion > clientVersion)
