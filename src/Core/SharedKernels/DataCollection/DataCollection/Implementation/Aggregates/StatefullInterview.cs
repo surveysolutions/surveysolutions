@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -17,9 +18,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     internal class StatefullInterview : Interview
     {
         private InterviewModel interview;
-        private static IPlainInterviewRepository InterviewRepository
+        private static IPlainRepository<InterviewModel> InterviewRepository
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainInterviewRepository>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainRepository<InterviewModel>>(); }
+        }
+
+        private static IPlainRepository<QuestionnaireModel> QuestionnaireModelRepository
+        {
+            get { return ServiceLocator.Current.GetInstance<IPlainRepository<QuestionnaireModel>>(); }
         }
 
         internal new void Apply(InterviewOnClientCreated @event)
@@ -32,57 +38,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 QuestionnaireVersion = @event.QuestionnaireVersion
             };
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            questionnaire
-                .GetAllUnderlyingQuestions(this.questionnaireId)
-                .ForEach(questionId => 
-                    interview.QuestionIdToQuestionModelTypeMap.Add(questionId, GetQuestionModelType(questionnaire, questionId)));
-
-            InterviewRepository.StoreInterview(interview, EventSourceId.FormatGuid());
-        }
-
-        // should migrate to QuestionnaireModel
-        private static QuestionModelType GetQuestionModelType(IQuestionnaire questionnaire, Guid questionId)
-        {
-            var questionType = questionnaire.GetQuestionType(questionId);
-            switch (questionType)
-            {
-                case QuestionType.SingleOption:
-                    return questionnaire.IsQuestionLinked(questionId) 
-                        ? QuestionModelType.LinkedSingleOption 
-                        : QuestionModelType.SingleOption;
-
-                case QuestionType.MultyOption:
-                    return questionnaire.IsQuestionLinked(questionId)
-                       ? QuestionModelType.LinkedMultiOption
-                       : QuestionModelType.MultiOption;
-
-                case QuestionType.Numeric:
-                    return questionnaire.IsQuestionInteger(questionId)
-                       ? QuestionModelType.IntegerNumeric
-                       : QuestionModelType.RealNumeric;
-
-                case QuestionType.DateTime:
-                    return QuestionModelType.DateTime;
-
-                case QuestionType.GpsCoordinates:
-                    return QuestionModelType.GpsCoordinates;
-
-                case QuestionType.Text:
-                    return QuestionModelType.MaskedText;
-
-                case QuestionType.TextList:
-                    return QuestionModelType.TextList;
-
-                case QuestionType.QRBarcode:
-                    return QuestionModelType.QrBarcode;
-
-                case QuestionType.Multimedia:
-                    return QuestionModelType.Multimedia;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            var questionnaire = QuestionnaireModelRepository.Get(questionnaireId.FormatGuid());
+            interview.QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.Type);
+                
+            InterviewRepository.Store(interview, EventSourceId.FormatGuid());
         }
 
         #region Applying answers
@@ -90,55 +49,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal new void Apply(TextQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<MaskedTextQuestionModel>(@event, x => x.Answer = @event.Answer);
+            UpdateAnswer<MaskedTextAnswerModel>(@event, x => x.Answer = @event.Answer);
         }
 
         internal new void Apply(QRBarcodeQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<QrBarcodeQuestionModel>(@event, x => x.Answer = @event.Answer);
+            UpdateAnswer<QrBarcodeAnswerModel>(@event, x => x.Answer = @event.Answer);
         }
 
         internal new void Apply(PictureQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<MultimediaQuestionModel>(@event, x => x.PictureFileName = @event.PictureFileName);
+            UpdateAnswer<MultimediaAnswerModel>(@event, x => x.PictureFileName = @event.PictureFileName);
         }
 
         internal new void Apply(NumericRealQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<RealNumericQuestionModel>(@event, x => x.Answer = @event.Answer);
+            UpdateAnswer<RealNumericAnswerModel>(@event, x => x.Answer = @event.Answer);
         }
 
         internal new void Apply(NumericIntegerQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<IntegerNumericQuestionModel>(@event, x => x.Answer = @event.Answer);
+            UpdateAnswer<IntegerNumericAnswerModel>(@event, x => x.Answer = @event.Answer);
         }
 
         internal new void Apply(DateTimeQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<DateTimeQuestionModel>(@event, x => x.Answer = @event.Answer);
+            UpdateAnswer<DateTimeAnswerModel>(@event, x => x.Answer = @event.Answer);
         }
 
         internal new void Apply(SingleOptionQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<SingleOptionQuestionModel>(@event, x => x.Answer = @event.SelectedValue);
+            UpdateAnswer<SingleOptionAnswerModel>(@event, x => x.Answer = @event.SelectedValue);
         }
 
         internal new void Apply(MultipleOptionsQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<MultiOptionQuestionModel>(@event, x => x.Answers = @event.SelectedValues);
+            UpdateAnswer<MultiOptionAnswerModel>(@event, x => x.Answers = @event.SelectedValues);
         }
 
         internal new void Apply(GeoLocationQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<GpsCoordinatesQuestionModel>(@event,
+            UpdateAnswer<GpsCoordinatesAnswerModel>(@event,
                 x =>
                 {
                     x.Latitude = @event.Latitude;
@@ -151,19 +110,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal new void Apply(TextListQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<TextListQuestionModel>(@event, x => x.Answers = @event.Answers);
+            UpdateAnswer<TextListAnswerModel>(@event, x => x.Answers = @event.Answers);
         }
 
         internal new void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<LinkedSingleOptionQuestionModel>(@event, x => x.Answer = @event.SelectedPropagationVector);
+            UpdateAnswer<LinkedSingleOptionAnswerModel>(@event, x => x.Answer = @event.SelectedPropagationVector);
         }
 
         internal new void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
-            UpdateAnswer<LinkedMultiOptionQuestionModel>(@event, x => x.Answers = @event.SelectedPropagationVectors);
+            UpdateAnswer<LinkedMultiOptionAnswerModel>(@event, x => x.Answers = @event.SelectedPropagationVectors);
         }
        
         #endregion
@@ -286,7 +245,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         private void UpdateAnswer<T>(QuestionActiveEvent @event, Action<T> update)
-           where T : AbstractInterviewQuestionModel, new()
+           where T : AbstractInterviewAnswerModel, new()
         {
             var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -319,27 +278,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interview.GroupsAndRosters[groupId] = groupOrRoster;
         }
 
-        private void UpdateAnswerState(Guid id, decimal[] rosterVector, Action<AbstractInterviewQuestionModel> update)
+        private void UpdateAnswerState(Guid id, decimal[] rosterVector, Action<AbstractInterviewAnswerModel> update)
         {
             var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
-            AbstractInterviewQuestionModel question;
+            AbstractInterviewAnswerModel answer;
             if (this.interview.Answers.ContainsKey(questionId))
             {
-                question = this.interview.Answers[questionId];
+                answer = this.interview.Answers[questionId];
             }
             else
             {
                 var questionModelType = this.interview.QuestionIdToQuestionModelTypeMap[id];
                 var questionActivator = this.interview.QuestionModelTypeToModelActivatorMap[questionModelType];
-                question = questionActivator();
-                question.Id = id;
-                question.RosterVector = rosterVector;
+                answer = questionActivator();
+                answer.Id = id;
+                answer.RosterVector = rosterVector;
             }
 
-            update(question);
+            update(answer);
 
-            this.interview.Answers[questionId] = question;
+            this.interview.Answers[questionId] = answer;
         }
 
         private decimal[] GetFullRosterVector(RosterInstance instance)

@@ -238,6 +238,7 @@
     <Compile Include="Implementation\Entities\InterviewQuestion.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionModelType.cs" />
+    <Compile Include="Implementation\Entities\QuestionnaireModel.cs" />
     <Compile Include="Implementation\EnumerableExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -248,7 +249,7 @@
     <Compile Include="Implementation\Repositories\DomainQuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
-    <Compile Include="Implementation\Repositories\PlainInterviewRepository.cs" />
+    <Compile Include="Implementation\Repositories\PlainRepository.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepository.cs" />
     <Compile Include="MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="MaskFormatter\IMaskedFormatter.cs" />
@@ -257,7 +258,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IInterviewSynchronizationFileStorage.cs" />
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
-    <Compile Include="Repositories\IPlainInterviewRepository.cs" />
+    <Compile Include="Repositories\IPlainRepository.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
