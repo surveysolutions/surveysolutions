@@ -55,8 +55,9 @@ namespace Main.Core.Entities.SubEntities
                 {
                     FixedRosterTitles = new FixedRosterTitle[0];
                 }
-            } 
-        }
+            }
+            get { return FixedRosterTitles.Select(x => x.Title).ToArray(); }
+        } 
 
         public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
