@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -9,14 +9,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
-        private readonly ICommandService commandService;
+        protected readonly ICommandService CommandService;
         protected readonly IGlobalInfoProvider GlobalInfo;
 
         protected readonly ILogger Logger;
 
         protected BaseController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
         {
-            this.commandService = commandService;
+            this.CommandService = commandService;
             this.GlobalInfo = globalInfo;
             this.Logger = logger;
         }
@@ -41,6 +41,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.WriteToTempData(Alerts.SUCCESS, message);
         }
 
+        public void CheckModelStateForObserverForbiddenError()
+        {
+            var error = ModelState["ObserverForbiddenError"];
+            if(error != null && error.Errors.Any())
+                this.Error(error.Errors.First().ErrorMessage);
+        }
+
         private void WriteToTempData(string key, string message)
         {
             if (this.TempData.ContainsKey(key))
@@ -53,22 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
         }
 
-        public bool ExecuteCommandWithObserverCheck(ICommand command, string origin = null)
-        {
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return false;
-            }
-            
-            commandService.Execute(command, origin);
-            return true;
-            
-        }
 
-        public void ExecuteCommandWithoutObserverCheck(ICommand command, string origin = null)
-        {
-            commandService.Execute(command, origin);
-        }
+        
     }
 }
