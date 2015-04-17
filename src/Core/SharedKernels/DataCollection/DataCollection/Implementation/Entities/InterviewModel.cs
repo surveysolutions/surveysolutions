@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
     {
         public InterviewModel()
         {
-            Answers = new Dictionary<string, AbstractInterviewQuestionModel>();
+            Answers = new Dictionary<string, AbstractInterviewAnswerModel>();
             this.GroupsAndRosters = new Dictionary<string, InterviewGroupModel>();
             QuestionIdToQuestionModelTypeMap = new Dictionary<Guid, QuestionModelType>();
             IsInProgress = true;
@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid Id { get; set; }
 
-        public Dictionary<string, AbstractInterviewQuestionModel> Answers { get; set; }
+        public Dictionary<string, AbstractInterviewAnswerModel> Answers { get; set; }
         public Dictionary<string, InterviewGroupModel> GroupsAndRosters { get; set; }
 
         public Dictionary<Guid, QuestionModelType> QuestionIdToQuestionModelTypeMap { get; set; }
@@ -27,28 +27,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasErrors { get; set; }
         public bool IsInProgress { get; set; }
 
-        public Dictionary<QuestionModelType, Func<AbstractInterviewQuestionModel>> QuestionModelTypeToModelActivatorMap = new Dictionary<QuestionModelType, Func<AbstractInterviewQuestionModel>>
+        public Dictionary<QuestionModelType, Func<AbstractInterviewAnswerModel>> QuestionModelTypeToModelActivatorMap = new Dictionary<QuestionModelType, Func<AbstractInterviewAnswerModel>>
                 {
-                    { QuestionModelType.SingleOption, () => new SingleOptionQuestionModel()},
-                    { QuestionModelType.LinkedSingleOption, () => new LinkedSingleOptionQuestionModel()},
-                    { QuestionModelType.MultiOption, () => new MultiOptionQuestionModel()},
-                    { QuestionModelType.LinkedMultiOption, () => new LinkedMultiOptionQuestionModel()},
-                    { QuestionModelType.IntegerNumeric, () => new IntegerNumericQuestionModel()},
-                    { QuestionModelType.RealNumeric, () => new RealNumericQuestionModel()},
-                    { QuestionModelType.MaskedText, () => new MaskedTextQuestionModel()},
-                    { QuestionModelType.TextList, () => new TextListQuestionModel()},
-                    { QuestionModelType.QrBarcode, () => new QrBarcodeQuestionModel()},
-                    { QuestionModelType.Multimedia, () => new MultimediaQuestionModel()},
-                    { QuestionModelType.DateTime, () => new DateTimeQuestionModel()},
-                    { QuestionModelType.GpsCoordinates, () => new GpsCoordinatesQuestionModel()}
+                    { QuestionModelType.SingleOption, () => new SingleOptionAnswerModel()},
+                    { QuestionModelType.LinkedSingleOption, () => new LinkedSingleOptionAnswerModel()},
+                    { QuestionModelType.MultiOption, () => new MultiOptionAnswerModel()},
+                    { QuestionModelType.LinkedMultiOption, () => new LinkedMultiOptionAnswerModel()},
+                    { QuestionModelType.IntegerNumeric, () => new IntegerNumericAnswerModel()},
+                    { QuestionModelType.RealNumeric, () => new RealNumericAnswerModel()},
+                    { QuestionModelType.MaskedText, () => new MaskedTextAnswerModel()},
+                    { QuestionModelType.TextList, () => new TextListAnswerModel()},
+                    { QuestionModelType.QrBarcode, () => new QrBarcodeAnswerModel()},
+                    { QuestionModelType.Multimedia, () => new MultimediaAnswerModel()},
+                    { QuestionModelType.DateTime, () => new DateTimeAnswerModel()},
+                    { QuestionModelType.GpsCoordinates, () => new GpsCoordinatesAnswerModel()}
                 };
 
-        public MaskedTextQuestionModel GetTextQuestionModel(Identity identity)
+        public MaskedTextAnswerModel GetTextQuestionModel(Identity identity)
         {
-            return GetQuestionModel<MaskedTextQuestionModel>(identity);
+            return GetQuestionModel<MaskedTextAnswerModel>(identity);
         }
 
-        private T GetQuestionModel<T>(Identity identity) where T : AbstractInterviewQuestionModel
+        private T GetQuestionModel<T>(Identity identity) where T : AbstractInterviewAnswerModel
         {
             var questionId = ConversionHelper.ConvertIdentityToString(identity);
             if (!Answers.ContainsKey(questionId)) return null;
