@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
     {
         protected static CodeGenerator CreateCodeGenerator()
         {
-            return new CodeGenerator(new ExpressionsEngineVersionService());
+            return new CodeGenerator(new QuestionnaireVersionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

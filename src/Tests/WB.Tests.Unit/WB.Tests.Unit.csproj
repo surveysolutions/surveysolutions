@@ -1080,13 +1080,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_without_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_parsing_questionnaire_version.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_questionnaire_versions.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_greater_than_operator.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_less_than_operator.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_equating_questionaire_versions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\QuestionsAndGroupsCollectionDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\QuestionsAndGroupsCollectionViewInitializer.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_GroupCloned_event.cs" />

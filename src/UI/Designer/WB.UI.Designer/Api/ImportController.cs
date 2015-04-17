@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
         private readonly IJsonUtils jsonUtils;
         public ImportController(
             IStringCompressor zipUtils,
@@ -43,7 +43,7 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, ILogger logger, IExpressionsEngineVersionService expressionsEngineVersionService, IJsonUtils jsonUtils)
+            IQuestionnaireHelper questionnaireHelper, ILogger logger, IQuestionnaireVersionService questionnaireVersionService, IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
@@ -53,7 +53,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.questionnaireVersionService = questionnaireVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -83,11 +83,11 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var supportedClientVersion = new ExpressionsEngineVersion(request.SupportedVersion.Major,
+            var supportedClientVersion = new Version(request.SupportedVersion.Major,
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
 
-            if (!expressionsEngineVersionService.IsClientVersionSupported(supportedClientVersion))
+            if (!questionnaireVersionService.IsClientVersionSupported(supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
@@ -111,7 +111,7 @@ namespace WB.UI.Designer.Api
             try
             {
                 generationResult =
-                    this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
+                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                         questionnaireView.Source, supportedClientVersion,
                         out resultAssembly);
             }

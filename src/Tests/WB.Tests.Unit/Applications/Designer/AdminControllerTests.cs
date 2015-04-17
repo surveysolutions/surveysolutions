@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.Applications.Designer
                 zipUtils ?? ZipUtilsMock.Object,
                 commandService ?? CommandServiceMock.Object,
                 questionnaireViewFactory ?? questionnaireViewFactoryMock.Object,
-                Mock.Of<IExpressionsEngineVersionService>(),
+                Mock.Of<IQuestionnaireVersionService>(),
                 Mock.Of<IJsonUtils>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""));
         }
 

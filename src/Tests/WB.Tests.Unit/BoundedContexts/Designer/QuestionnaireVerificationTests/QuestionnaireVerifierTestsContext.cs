@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
-                _ => _.GenerateProcessorStateAssemblyForVersion(Moq.It.IsAny<QuestionnaireDocument>(),Moq.It.IsAny<ExpressionsEngineVersion>(), out generationResult))
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult))
                 .Returns(new GenerationResult() {Success = true, Diagnostics = new List<GenerationDiagnostic>()});
 
             var substitutionServiceInstance = new SubstitutionService();
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
-                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, new ExpressionsEngineVersionService());
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, new QuestionnaireVersionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
@@ -267,7 +267,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
-            var questionnaireVersionProvider = new ExpressionsEngineVersionService();
+            var questionnaireVersionProvider = new QuestionnaireVersionService();
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(

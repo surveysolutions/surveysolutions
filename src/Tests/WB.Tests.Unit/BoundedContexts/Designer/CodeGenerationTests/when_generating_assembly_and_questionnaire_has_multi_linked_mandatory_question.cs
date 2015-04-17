@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireWithCategoricalMultiLinkedMandatoryQuestion();
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaireDocument, CreateQuestionnaireVersion(),out resultAssembly);
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, CreateQuestionnaireVersion(),out resultAssembly);
 
                 return new InvokeResults
                 {

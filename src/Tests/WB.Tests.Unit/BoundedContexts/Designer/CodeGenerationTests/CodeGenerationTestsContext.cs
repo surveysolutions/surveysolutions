@@ -225,9 +225,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             };
         }
 
-        public static ExpressionsEngineVersion CreateQuestionnaireVersion()
+        public static Version CreateQuestionnaireVersion()
         {
-            return new ExpressionsEngineVersionService().GetLatestSupportedVersion();
+            return new QuestionnaireVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
@@ -503,8 +503,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
-                questionnaireDocument, new ExpressionsEngineVersion(6, 0, 0), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                questionnaireDocument, new Version(6, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -534,7 +534,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
-            var questionnaireVersionProvider = new ExpressionsEngineVersionService();
+            var questionnaireVersionProvider = new QuestionnaireVersionService();
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
