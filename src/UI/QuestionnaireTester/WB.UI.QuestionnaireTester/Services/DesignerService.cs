@@ -44,7 +44,7 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            var supportedVersion = engineVersionService.GetCurrentEngineVersion();
+            var supportedVersion = engineVersionService.GetLatestSupportedVersion();
 
             return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                 url: "questionnaire",

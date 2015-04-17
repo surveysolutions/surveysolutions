@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
-                Mock.Of<IEngineVersionService>(_ => _.GetCurrentEngineVersion() == engineVersion),
+                Mock.Of<IEngineVersionService>(_ => _.GetLatestSupportedVersion() == engineVersion),
                 Mock.Of<IJsonUtils>());
         }
 

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.V2
 {
-    internal class InterviewExpressionStateV1AdaptedToV2 : IInterviewExpressionStateV2
+    internal class InterviewExpressionStateV1ToV2Adapter : IInterviewExpressionStateV2
     {
         private readonly IInterviewExpressionState interviewExpressionState;
 
-        public InterviewExpressionStateV1AdaptedToV2(IInterviewExpressionState interviewExpressionState)
+        public InterviewExpressionStateV1ToV2Adapter(IInterviewExpressionState interviewExpressionState)
         {
             this.interviewExpressionState = interviewExpressionState;
         }
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2
 
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
-            return new InterviewExpressionStateV1AdaptedToV2(interviewExpressionState.Clone());
+            return new InterviewExpressionStateV1ToV2Adapter(interviewExpressionState.Clone());
         }
 
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
