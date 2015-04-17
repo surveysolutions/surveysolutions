@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
-            this.Bind<IExpressionsEngineVersionService>().To<ExpressionsEngineVersionService>().InSingletonScope();
+            this.Bind<IQuestionnaireVersionService>().To<QuestionnaireVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
 
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();

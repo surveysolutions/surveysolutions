@@ -189,7 +189,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireVersionProvider =new ExpressionsEngineVersionService();
+            var questionnaireVersionProvider =new QuestionnaireVersionService();
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
@@ -203,7 +203,7 @@ namespace WB.Tests.Integration.InterviewTests
                     new CodeGenerator(questionnaireVersionProvider), questionnaireVersionProvider);
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
