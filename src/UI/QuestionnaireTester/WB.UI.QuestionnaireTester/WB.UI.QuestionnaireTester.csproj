@@ -315,10 +315,12 @@
     <AndroidResource Include="Resources\layout\interview_decimal_question.axml" />
     <AndroidResource Include="Resources\layout\interview_image_question.axml" />
     <AndroidResource Include="Resources\layout\interview_integer_question.axml" />
-    <AndroidResource Include="Resources\layout\interview_multi_choice_question.axml" />
-    <AndroidResource Include="Resources\layout\interview_multi_choice_question_item_template.axml" />
-    <AndroidResource Include="Resources\layout\interview_single_choice_question.axml" />
-    <AndroidResource Include="Resources\layout\interview_single_choice_question_item_template.axml" />
+    <AndroidResource Include="Resources\layout\interview_multi_option_question.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_multi_option_question_item_template.axml" />
+    <AndroidResource Include="Resources\layout\interview_single_option_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_single_option_question_item_template.axml" />
     <AndroidResource Include="Resources\layout\interview_group_reference.axml" />
   </ItemGroup>
   <ItemGroup>
@@ -363,9 +365,7 @@
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\layout\questions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

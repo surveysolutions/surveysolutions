@@ -25,8 +25,8 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (RealNumericQuestionViewModel), Resource.Layout.interview_decimal_question },
             {typeof (MultimediaQuestionViewModel), Resource.Layout.interview_image_question },
             {typeof (IntegerNumericQuestionViewModel), Resource.Layout.interview_integer_question },
-            {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_multi_choice_question },
-            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_single_choice_question },
+            {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_multi_option_question },
+            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_single_option_question },
         };
 
         public override int GetItemViewType(int position)

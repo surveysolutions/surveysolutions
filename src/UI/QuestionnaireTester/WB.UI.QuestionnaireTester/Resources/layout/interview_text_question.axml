@@ -11,5 +11,5 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        local:MvxBind="Text Answer; TextChange AnswerTextQuestionCommand" />
+        local:MvxBind="Text Answer; FocusChange FocusChangeCommand; AfterTextChanged AfterTextChangedCommand;" />
 </MvxLinearLayout>

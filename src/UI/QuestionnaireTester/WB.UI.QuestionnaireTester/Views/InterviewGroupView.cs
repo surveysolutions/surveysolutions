@@ -4,6 +4,7 @@ using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using Android.OS;
+using Android.Widget;
 using WB.UI.QuestionnaireTester.Views.Adapters;
 
 

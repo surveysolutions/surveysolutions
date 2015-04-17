@@ -1606,16 +1606,16 @@ namespace WB.UI.QuestionnaireTester
 			public const int interview_integer_question = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int interview_multi_choice_question = 2130903070;
+			public const int interview_multi_option_question = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int interview_multi_choice_question_item_template = 2130903071;
+			public const int interview_multi_option_question_item_template = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int interview_single_choice_question = 2130903072;
+			public const int interview_single_option_question = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int interview_single_choice_question_item_template = 2130903073;
+			public const int interview_single_option_question_item_template = 2130903073;
 			
 			// aapt resource value: 0x7f030022
 			public const int interview_static_text = 2130903074;
