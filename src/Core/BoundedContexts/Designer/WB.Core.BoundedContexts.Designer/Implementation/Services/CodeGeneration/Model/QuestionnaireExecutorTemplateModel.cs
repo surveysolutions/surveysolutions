@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, List<Guid>> StructuralDependencies { set; get; }
         public List<Guid> ConditionsPlayOrder { get; set; }
 
-        public string VersionPrefix { get; set; }
+        public string[] AdditionInterfaces { get; set; }
         public string[] Namespaces { get; set; }
         public bool ShouldGenerateUpdateRosterTitleMethods { get; set; }
 

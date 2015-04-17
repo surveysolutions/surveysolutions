@@ -16,7 +16,11 @@ using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState<#=QuestionnaireTemplateStructure.VersionPrefix#> 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState
+	 <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+	 , <#=additionInterface#>
+	<#}#>
+	
     {
         public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
@@ -77,7 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         }
 		 <#if(QuestionnaireTemplateStructure.ShouldGenerateUpdateRosterTitleMethods){#>
 
-		 public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+		 public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -222,6 +226,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
 
+	    <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+	    <#=additionInterface#> <#=additionInterface#>.Clone()
+        {
+            return Clone () as <#=additionInterface#>;
+        }
+		<#}#>
     }
         //generate QuestionnaireLevel
         <#    
