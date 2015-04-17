@@ -54,7 +54,7 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionStateV2 
+    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
     {
         public InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17() 
         {
@@ -242,7 +242,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
         }
 
-        public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
+        {
+            return Clone() as IInterviewExpressionStateV2;
+        }
+
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))

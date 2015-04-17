@@ -9,30 +9,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     internal class CodeGenerationSettings
     {
         public CodeGenerationSettings(
-            string versionPrefix, 
+            string[] additionInterfaces, 
             string[] namespaces, 
-            bool areRowSpecificVariablesPresent, 
-            bool isIRosterLevelInherited, 
-            bool shouldGenerateUpdateRosterTitleMethods,
-            string rosterType)
+            bool areRosterServiceVariablesPresent, string rosterType)
         {
-            VersionPrefix = versionPrefix;
+            AdditionInterfaces = additionInterfaces;
             Namespaces = namespaces;
-            AreRowSpecificVariablesPresent = areRowSpecificVariablesPresent;
-            IsIRosterLevelInherited = isIRosterLevelInherited;
+            AreRosterServiceVariablesPresent = areRosterServiceVariablesPresent;
             RosterType = rosterType;
-            ShouldGenerateUpdateRosterTitleMethods = shouldGenerateUpdateRosterTitleMethods;
         }
 
-        public string VersionPrefix { get; private set; }
+        public string[] AdditionInterfaces { get; private set; }
 
         public string[] Namespaces { get; private set; }
 
-        public bool AreRowSpecificVariablesPresent { get; private set; }
-
-        public bool IsIRosterLevelInherited { get; private set; }
-
-        public bool ShouldGenerateUpdateRosterTitleMethods { get; private set; }
+        public bool AreRosterServiceVariablesPresent { get; private set; }
 
         public string RosterType { get; private set; }
     }
