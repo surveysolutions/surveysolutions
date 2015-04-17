@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTests
 {
-    internal class when_report_is_requested_by_template_with_version : TeamsAndStatusesReportContext
+    internal class when_report_is_requested_by_template_with_version : HeadquartersTeamsAndStatusesReportContext
     {
         Establish context = () =>
         {
@@ -33,11 +33,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTes
             reportFactory = CreateTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel{TemplateId = questionnaireId, TemplateVersion = version});
+        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel
+        {
+            TemplateId = questionnaireId, 
+            TemplateVersion = version,
+        });
 
         It should_count_statuses_by_questionnaire = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
-        static TeamsAndStatusesReport reportFactory;
+        static HeadquartersTeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid questionnaireId;
         static int version;

@@ -11,27 +11,27 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTests
 {
-    internal class when_two_responsibles_and_each_status_has_one_interview : TeamsAndStatusesReportContext
+    internal class when_two_responsibles_and_each_status_has_one_interview : HeadquartersTeamsAndStatusesReportContext
     {
         Establish context = () =>
         {
-            Guid firstResponsible = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            Guid secondResponsible = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid firstTeamLeadId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid secondTeamLeadId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.InterviewSummary(responsibleId: firstResponsible, questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters),
-
-                Create.InterviewSummary(responsibleId: secondResponsible, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: secondResponsible, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: secondResponsible, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.SupervisorAssigned),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.InterviewerAssigned),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedBySupervisor),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.RejectedBySupervisor),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.ApprovedByHeadquarters),
+                Create.InterviewSummary(teamLeadId: firstTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.RejectedByHeadquarters),
+               
+                Create.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(teamLeadId: secondTeamLeadId, questionnaireId: questionnaireId, status: InterviewStatus.Completed),
             };
 
             var repository = new TestInMemoryWriter<InterviewSummary>();
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTes
             reportFactory = CreateTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel());
+        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel { });
 
         It should_return_row_per_responsible = () => report.TotalCount.ShouldEqual(2);
 
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamsAndStatusesReportTes
 
         It should_count_3_interviews_for_second_responsible = () => report.Items.Second().CompletedCount.ShouldEqual(3);
 
-        static TeamsAndStatusesReport reportFactory;
+        static HeadquartersTeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
     }
 }
