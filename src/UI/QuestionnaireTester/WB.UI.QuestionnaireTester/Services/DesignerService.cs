@@ -1,10 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.QuestionnaireTester.Authentication;
 
 namespace WB.UI.QuestionnaireTester.Services
@@ -12,10 +14,12 @@ namespace WB.UI.QuestionnaireTester.Services
     public class DesignerService
     {
         private readonly IRestService restService;
+        private readonly ICapiExpressionsEngineVersionService capiExpressionsEngineVersionService;
 
-        public DesignerService(IRestService restService)
+        public DesignerService(IRestService restService, ICapiExpressionsEngineVersionService capiExpressionsEngineVersionService)
         {
             this.restService = restService;
+            this.capiExpressionsEngineVersionService = capiExpressionsEngineVersionService;
         }
 
         public async Task<bool> Login(string userName, string password, CancellationToken cancellationToken)
@@ -41,7 +45,7 @@ namespace WB.UI.QuestionnaireTester.Services
 
         public Task<QuestionnaireCommunicationPackage> GetTemplateForCurrentUser(UserInfo remoteUser, Guid id, CancellationToken cancellationToken)
         {
-            var supportedVersion = QuestionnaireVersionProvider.GetCurrentEngineVersion();
+            var supportedVersion = capiExpressionsEngineVersionService.GetExpressionsEngineSupportedVersion();
 
             return this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                 url: "questionnaire",
@@ -49,12 +53,7 @@ namespace WB.UI.QuestionnaireTester.Services
                 request: new DownloadQuestionnaireRequest()
                 {
                     QuestionnaireId = id,
-                    SupportedVersion = new QuestionnnaireVersion()
-                    {
-                        Major = supportedVersion.Major,
-                        Minor = supportedVersion.Minor,
-                        Patch = supportedVersion.Patch
-                    }
+                    SupportedVersion = supportedVersion
                 });
         }
     }

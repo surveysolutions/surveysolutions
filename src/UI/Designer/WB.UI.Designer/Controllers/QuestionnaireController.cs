@@ -159,7 +159,8 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Public(int? p, string sb, int? so, string f)
         {
-            return this.View(this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
+            var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f);
+            return this.View(questionnairePublicListViewModels);
         }
 
         #region [Edit options]

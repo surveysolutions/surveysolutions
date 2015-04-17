@@ -143,10 +143,18 @@
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Code\Security\CustomIdentity.cs" />
+    <Compile Include="Code\Security\CustomPrincipal.cs" />
+    <Compile Include="Code\Security\IdentityExtentions.cs" />
+    <Compile Include="Code\Security\PrincipalReplacer.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
+    <Compile Include="Filters\ReplacePrincipal.cs" />
+    <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
+    <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
@@ -443,6 +451,7 @@
     <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

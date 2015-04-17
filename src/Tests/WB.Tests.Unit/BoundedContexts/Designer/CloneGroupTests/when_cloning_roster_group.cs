@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CloneGroupTests
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CloneGroupTests
 
             rosterid = Guid.NewGuid();
             questionnaire = CreateQuestionnaireWithOneRosterGroup(rosterid, responsibleId);
-            questionnaire.UpdateGroup(rosterid, responsibleId, "title", rosterVariableName, null, null, null, true, RosterSizeSourceType.FixedTitles, new []{"one", "two"}, null);
+            questionnaire.UpdateGroup(rosterid, responsibleId, "title", rosterVariableName, null, null, null, true, RosterSizeSourceType.FixedTitles, new[] { new FixedRosterTitleItem("1", "one"), new FixedRosterTitleItem("2", "two") }, null);
 
             eventContext = new EventContext();
         };

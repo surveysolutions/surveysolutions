@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "qr_barcode_question";
         private static bool isMandatory = true;
-        private static string tooLongTitle = "A".PadRight(251, 'A');
+        private static string tooLongTitle = "A".PadRight(501, 'A');
         private static string instructions = "intructions";
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;

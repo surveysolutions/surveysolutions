@@ -9,6 +9,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -21,9 +22,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterSizeQuestionId: null, rosterFixedTitles: new[] { "1", "2" }));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") },
+                    RosterTitleQuestionId = null 
+                });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupToMoveId });
             questionnaire.Apply(new NumericQuestionAdded()
@@ -37,9 +41,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = parentRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, nestedRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.Question,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId){
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles =  null,
+                    RosterTitleQuestionId =null 
+                });
 
             eventContext = new EventContext();
         };

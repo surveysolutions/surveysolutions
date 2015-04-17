@@ -15,14 +15,12 @@ using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
-using QuestionnaireVersion = WB.Core.SharedKernels.DataCollection.QuestionnaireVersion;
 
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
     public class ImportController : ApiController
     {
-        private readonly IQuestionnaireExportService exportService;
         private readonly IStringCompressor zipUtils;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
@@ -31,8 +29,9 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-
-        public ImportController(IQuestionnaireExportService exportService,
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IJsonUtils jsonUtils;
+        public ImportController(
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
@@ -40,9 +39,8 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, ILogger logger)
+            IQuestionnaireHelper questionnaireHelper, ILogger logger, IQuestionnaireVersionService questionnaireVersionService, IJsonUtils jsonUtils)
         {
-            this.exportService = exportService;
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
@@ -51,6 +49,8 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
+            this.questionnaireVersionService = questionnaireVersionService;
+            this.jsonUtils = jsonUtils;
         }
 
         [HttpGet]
@@ -79,26 +79,16 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
-
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
-                });
-            }
-
-            var supportedClientVersion = new QuestionnaireVersion(request.SupportedVersion.Major,
+            var supportedClientVersion = new Version(request.SupportedVersion.Major,
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
-            if (templateInfo.Version > supportedClientVersion)
+
+            if (!questionnaireVersionService.IsClientVersionSupported(supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
                     ReasonPhrase =
-                        string.Format(ErrorMessages.ClientVersionLessThenDocument, supportedClientVersion,
-                            templateInfo.Version)
+                        string.Format(ErrorMessages.ClientVersionIsNotSupported, supportedClientVersion)
                 });
             }
 
@@ -108,7 +98,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = ErrorMessages.Questionnaire_verification_failed
                 });
             }
 
@@ -117,7 +107,8 @@ namespace WB.UI.Designer.Api
             try
             {
                 generationResult =
-                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source,
+                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                        questionnaireView.Source, supportedClientVersion,
                         out resultAssembly);
             }
             catch (Exception)
@@ -139,13 +130,13 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed, templateInfo.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
 
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(templateInfo.Source),
+                Questionnaire = this.zipUtils.CompressString(jsonUtils.Serialize(questionnaireView.Source)),
                 QuestionnaireAssembly = resultAssembly
             };
         }

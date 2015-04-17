@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         {
             return new IncomingSyncPackagesQueue(fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
                 new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
-                    IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, ""), Mock.Of<ILogger>(), jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
+                    IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), Mock.Of<ILogger>(), jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>());
 
         }

@@ -234,7 +234,6 @@
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_and_processor_generator_failed.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_and_verifier_returns_errors.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_that_absent.cs" />
-    <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_and_template_info_is_null.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_with_higher_version.cs" />
     <Compile Include="Applications\Designer\PublicServiceTests\PublicServiceTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
@@ -295,7 +294,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_by_fixed_values_and_fixed_titles_have_dublicates.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Core\Synchronization\SyncManagerTestContext.cs" />
@@ -339,6 +340,8 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
+    <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
@@ -362,6 +365,8 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\TeamUsersAndQuestionnairesFactoryTests\when_unlocked_interviewers_and_active_templates_should_be_returned.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_is_locked.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_was_locked_first_time_but_become_available_second_time.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />
@@ -409,6 +414,7 @@
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_called_and_interviewId_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\InterviewSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\QuestionnaireSynchronizationDenormalizerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_StoreUnhandledPackage_fails_with_aggregate_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\UserDenormalizerTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserDenormalizerTests\when_user_linked_to_device_for_the_second_time.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
@@ -655,8 +661,6 @@
     <Compile Include="BoundedContexts\Designer\InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="BoundedContexts\Designer\InterviewCompilerTests\when_generating_assembly_as_string_with_deep_stack.cs" />
     <Compile Include="BoundedContexts\Designer\InterviewCompilerTests\when_generating_assembly_as_string_with_error.cs" />
-    <Compile Include="BoundedContexts\Designer\JsonExportServiceTests\JsonExportServiceTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\JsonExportServiceTests\when_getting_template_info.cs" />
     <Compile Include="BoundedContexts\Designer\MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="BoundedContexts\Designer\MembershipProviderTests\when_updating_user_with_email_that_used_by_another_user_with_membership_provider.cs" />
@@ -1076,15 +1080,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_without_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionerTests\QuestionnaireVersionerTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionerTests\when_getting_version_for_questionnaire_without_specific_elements.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_parsing_questionnaire_version.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_questionnaire_versions.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_greater_than_operator.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_less_than_operator.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_equating_questionaire_versions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\QuestionsAndGroupsCollectionDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\QuestionsAndGroupsCollectionViewInitializer.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_GroupCloned_event.cs" />
@@ -1458,7 +1453,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ_when_interview_is_Restored_from_snapshot.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_autopropagatable_question_which_triggers_group_propagation_with_mandatory_question_inside_disabled_group.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_geolocation_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7.cs" />

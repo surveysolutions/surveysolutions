@@ -23,6 +23,9 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -30,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
     {
         private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 400;
-        private const int MaxTitleLength = 250;
+        private const int MaxTitleLength = 500;
         private const int maxFilteredComboboxOptionsCount = 5000;
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
@@ -127,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 group.RosterSizeQuestionId = e.RosterSizeQuestionId;
                 group.RosterSizeSource = e.RosterSizeSource;
-                group.RosterFixedTitles = e.RosterFixedTitles;
+                group.FixedRosterTitles = e.FixedRosterTitles;
                 group.RosterTitleQuestionId = e.RosterTitleQuestionId;
             });
         }
@@ -932,7 +935,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Group command handlers
 
-        public void AddGroupAndMoveIfNeeded(Guid groupId, Guid responsibleId, string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId, int? index = null)
+        public void AddGroupAndMoveIfNeeded(Guid groupId, 
+            Guid responsibleId, 
+            string title, 
+            string variableName, 
+            Guid? rosterSizeQuestionId, 
+            string description, 
+            string condition, 
+            Guid? parentGroupId, 
+            bool isRoster, 
+            RosterSizeSourceType rosterSizeSource,
+            FixedRosterTitleItem[] rosterFixedTitles, 
+            Guid? rosterTitleQuestionId, 
+            int? index = null)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -943,10 +958,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
 
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
+            var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(parentGroupId));
 
             if (parentGroupId.HasValue)
@@ -969,8 +984,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
-                    rosterTitleQuestionId));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId)
+                {
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = rosterSizeSource,
+                    FixedRosterTitles = fixedTitles,
+                    RosterTitleQuestionId = rosterTitleQuestionId
+                });
             }
             else
             {
@@ -992,25 +1012,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition,
             Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource,
-            string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
+            var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, 
                 isRoster: isRoster,
                 rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, 
-                rosterFixedTitles: rosterFixedTitles,
+                rosterFixedTitles: fixedTitles,
                 rosterTitleQuestionId: 
                 rosterTitleQuestionId, 
                 rosterDepthFunc: () => this.GetQuestionnaireItemDepthAsVector(parentGroupId));
 
-            var events = this.CreateCloneGroupWithoutChildrenEvents(groupId, responsibleId, title, variableName, rosterSizeQuestionId, description, condition, parentGroupId, sourceGroupId, targetIndex, isRoster, rosterSizeSource, rosterFixedTitles, rosterTitleQuestionId);
+            var events = this.CreateCloneGroupWithoutChildrenEvents(groupId, responsibleId, title, variableName, rosterSizeQuestionId, description, 
+                condition, parentGroupId, sourceGroupId, targetIndex, isRoster, rosterSizeSource, fixedTitles, rosterTitleQuestionId);
 
             events.ForEach(this.ApplyEvent);
         }
@@ -1064,7 +1085,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId,
                 rosterTitleQuestionId: null,
-                rosterFixedTitles: sourceGroup.RosterFixedTitles,
+                rosterFixedTitles: sourceGroup.FixedRosterTitles,
                 variableName: sourceGroup.VariableName));
 
             foreach (var questionnaireItem in sourceGroup.Children)
@@ -1264,7 +1285,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1278,10 +1299,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
 
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
+            var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: rosterFixedTitles,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(groupId));
 
             var group = this.GetGroupById(groupId);
@@ -1313,8 +1334,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isRoster)
             {
                 this.ApplyEvent(new GroupBecameARoster(responsibleId, groupId));
-                this.ApplyEvent(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles,
-                    rosterTitleQuestionId));
+                this.ApplyEvent(new RosterChanged(responsibleId, groupId)
+                    {
+                        RosterSizeQuestionId = rosterSizeQuestionId,
+                        RosterSizeSource = rosterSizeSource,
+                        FixedRosterTitles = fixedTitles,
+                        RosterTitleQuestionId = rosterTitleQuestionId
+                    });
             }
             else
             {
@@ -1384,9 +1410,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: sourceGroup.IsRoster,
                 rosterSizeSource: sourceGroup.RosterSizeSource,
-                rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.RosterFixedTitles,
+                rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.FixedRosterTitles,
                 rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
                 rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey));
+
             this.ApplyEvent(new QuestionnaireItemMoved
             {
                 PublicKey = groupId,
@@ -1603,7 +1630,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                 responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1643,7 +1669,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1683,7 +1708,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                 responsibleId);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1728,7 +1752,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1799,7 +1822,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
             this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationExpression, enablementCondition);
             this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
 
             this.ApplyEvent(new QuestionChanged
@@ -1918,7 +1940,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             this.ApplyEvent(new NumericQuestionChanged
             {
@@ -1956,8 +1977,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, responsibleId);
-
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
 
             ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
@@ -2016,7 +2035,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
                 variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
 
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
             this.ApplyEvent(new QRBarcodeQuestionUpdated()
             {
                 QuestionId = questionId,
@@ -2173,7 +2191,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName);
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
             var parentGroup = parentGroupId.HasValue
                 ? this.GetGroupById(parentGroupId.Value)
@@ -2185,13 +2202,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
             }
-        }
-
-        private void ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(string condition,
-            string validationExpression, string variableName)
-        {
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(validationExpression, variableName);
-            this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, string.Empty);
         }
 
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, 
@@ -2490,20 +2500,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
                     keyword + " is a keyword. Variable name shouldn't match with keywords");
-            }
-        }
-
-        private void ThrowIfExpressionContainsNotExistingQuestionReference(string expression, string variableName)
-        {
-            if (!IsExpressionDefined(expression))
-                return;
-
-            IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(expression)
-                .Except(new [] { variableName });
-
-            foreach (var identifier in identifiersUsedInExpression)
-            {
-                this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, expression);
             }
         }
 
@@ -3003,8 +2999,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource,
-            Guid? rosterSizeQuestionId,
-            string[] rosterFixedTitles, Guid? rosterTitleQuestionId, Func<Guid[]> rosterDepthFunc)
+            Guid? rosterSizeQuestionId, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Func<Guid[]> rosterDepthFunc)
         {
             if (!isRoster) return;
 
@@ -3021,23 +3016,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfRosterByFixedTitlesIsIncorrect(Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
-            string[] rosterFixedTitles)
+            FixedRosterTitle[] rosterFixedTitles)
         {
             if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
             {
-                throw new QuestionnaireException("List of fixed roster titles could not be empty");
+                throw new QuestionnaireException("List of fixed roster titles should not be empty");
             }
-
+            
             if (rosterFixedTitles.Length > 250)
             {
                 throw new QuestionnaireException("Number of fixed roster titles could not be more than 250");
             }
 
-            if (rosterFixedTitles.Any(string.IsNullOrWhiteSpace))
+            if (rosterFixedTitles.Any(item => string.IsNullOrWhiteSpace(item.Title)))
             {
                 throw new QuestionnaireException("Fixed roster titles could not have empty titles");
             }
-
+            
             if (rosterSizeQuestionId.HasValue)
             {
                 throw new QuestionnaireException("Roster by fixed titles could not have roster source question");
@@ -3050,7 +3045,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
-            string[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
+            FixedRosterTitle[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
         {
             if (!rosterSizeQuestionId.HasValue)
                 throw new QuestionnaireException("Roster source question is empty");
@@ -3467,25 +3462,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return scopeIds.ToArray();
         }
 
-        private void ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier,
-            string expression)
-        {
-            IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
-
-            IGroup roster = this.GetRosterByrVariableName(identifier);
-
-            if (question == null && roster == null)
-                throw new QuestionnaireException(
-                    DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference, 
-                    string.Format(ExceptionMessages.QuestionOrRosterIdentifierIsMissing, identifier, expression));
-        }
-
-        private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
-        {
-            Guid parsedId;
-            return !Guid.TryParse(identifier, out parsedId) ? this.GetQuestionByStataCaption(identifier) : this.GetQuestion(parsedId);
-        }
-
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
@@ -3746,6 +3722,40 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 || !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
 
+        private FixedRosterTitle[] GetRosterFixedTitlesOrThrow(FixedRosterTitleItem[] rosterFixedTitles)
+        {
+            if (rosterFixedTitles == null)
+                return new FixedRosterTitle[0];
+
+            if (rosterFixedTitles.Any(x => x == null))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.SelectorValueSpecialCharacters,
+                    "Invalid title list");
+            }
+
+            if (rosterFixedTitles.Any(x => String.IsNullOrWhiteSpace(x.Value)))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.SelectorValueSpecialCharacters,
+                    "Fixed roster value is required");
+            }
+
+            if (rosterFixedTitles.Any(x => !x.Value.IsDecimal()))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.SelectorValueSpecialCharacters,
+                    "Fixed roster value should have only number characters");
+            }
+
+            if (rosterFixedTitles.Select(x => x.Value).Distinct().Count() != rosterFixedTitles.Length)
+            {
+                throw new QuestionnaireException("Fixed roster values must be unique");
+            }
+
+            return rosterFixedTitles.Select(item => new FixedRosterTitle(decimal.Parse(item.Value), item.Title)).ToArray();                
+                
+        }
 
         #endregion
 
@@ -3977,7 +3987,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 };
         }
 
-        public IEnumerable<object> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+        public IEnumerable<object> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
+            Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             yield return
                 new GroupCloned
@@ -3996,7 +4008,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isRoster)
             {
                 yield return new GroupBecameARoster(responsibleId, groupId);
-                yield return new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, rosterSizeSource, rosterFixedTitles, rosterTitleQuestionId);
+                yield return new RosterChanged(responsibleId, groupId)
+                {
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = rosterSizeSource,
+                    FixedRosterTitles = rosterFixedTitles,
+                    RosterTitleQuestionId = rosterTitleQuestionId
+                };
             }
             else
             {

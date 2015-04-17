@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,6 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var fixedRosterGroup = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = 2;
             preloadedDataDto = new PreloadedDataDto("id",
                 new[]
@@ -35,7 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Numeric
                     && _.HasQuestion(prefilledQuestionId) == true
-                    && _.GetFixedRosterGroups(null) == new Guid[] { Guid.NewGuid() });
+                    && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
+                    && _.GetFixedRosterTitles(fixedRosterGroup) == new FixedRosterTitle[0]);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
