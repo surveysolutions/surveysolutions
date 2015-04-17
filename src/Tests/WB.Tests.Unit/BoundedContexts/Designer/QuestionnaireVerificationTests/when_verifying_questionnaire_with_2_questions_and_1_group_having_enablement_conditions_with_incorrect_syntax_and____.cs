@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            resultErrors = verifier.Verify(questionnaire).ToArray();
 
         It should_return_3_errors = () =>
             resultErrors.Count().ShouldEqual(3);
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == correctGroupId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static QuestionnaireVerificationError[] resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid firstIncorrectQuestionId;

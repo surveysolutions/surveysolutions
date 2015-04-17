@@ -5,6 +5,8 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -32,23 +34,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult Create(InterviewerModel model)
         {
             if (this.ModelState.IsValid)
             {
                 UserView user = this.GetUserByName(model.UserName);
-                if (user == null)
-                {
-                    this.CreateInterviewer(model, model.SupervisorId);
-                    this.Success("Interviewer was successfully created");
-                    return this.Back(model.SupervisorId);
-                }
-                else
+
+                if (user != null)
                 {
                     this.Error("User name already exists. Please enter a different user name.");
+                    return this.View(model);
                 }
-            }
 
+                this.CreateInterviewer(model, model.SupervisorId);
+                this.Success("Interviewer was successfully created");
+                return this.Back(model.SupervisorId);
+            }
+            
             return this.View(model);
         }
 
@@ -78,23 +81,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult Edit(UserEditModel model)
         {
             if (this.ModelState.IsValid)
             {
                 var user = this.GetUserById(model.Id);
-                if (user != null)
-                {
-                    this.UpdateAccount(user: user, editModel: model);
-                    this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                    return this.Back(user.Supervisor.Id);
-                }
-                else
+                if (user == null)
                 {
                     this.Error("Could not update user information because current user does not exist");
                 }
-            }
 
+                this.UpdateAccount(user: user, editModel: model);
+                
+                this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+                return this.Back(user.Supervisor.Id);
+            }
+           
             return this.View(model);
         }
 

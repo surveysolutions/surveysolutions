@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public Dictionary<string, List<string>> SiblingRosters = new Dictionary<string, List<string>>();
 
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
+
         public abstract void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
         public abstract void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer);
@@ -35,7 +36,6 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract Dictionary<Guid, Guid[]> GetParentsMap();
 
         public abstract IInterviewExpressionState Clone();
-
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {

@@ -5,6 +5,7 @@ using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 condition: null,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterFixedTitles: new string[] { "1", "2" },
+                rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") },
                 rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>

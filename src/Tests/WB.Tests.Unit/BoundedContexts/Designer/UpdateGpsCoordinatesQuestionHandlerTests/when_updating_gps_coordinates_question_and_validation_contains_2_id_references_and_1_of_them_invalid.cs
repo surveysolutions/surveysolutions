@@ -9,6 +9,7 @@ using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHandlerTests
 {
+    [Ignore("reference validation is turned off")]
     internal class when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid : QuestionnaireTestsContext
     {
         Establish context = () =>

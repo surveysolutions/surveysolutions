@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -6,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -22,9 +24,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 ParentGroupPublicKey = chapterId
             });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId,
-                rosterSizeQuestionId: null, rosterTitleQuestionId: null,
-                rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterFixedTitles: rosterFixedTitles));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId)
+            {
+                RosterSizeQuestionId = null,
+                RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                FixedRosterTitles = rosterFixedTitles,
+                RosterTitleQuestionId = null
+            });
             questionnaire.Apply(new NewQuestionAdded()
             {
                 PublicKey = textQuestionId,
@@ -81,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<RosterChanged>().RosterSizeSource.ShouldEqual(RosterSizeSourceType.FixedTitles);
 
         It should_RosterChanged_event_roster_fixed_title_be_equal_to_rosterFixedTitles = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterFixedTitles.ShouldEqual(rosterFixedTitles);
+            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldEqual(rosterFixedTitles);
 
         It should_raise_QuestionCloned_event = () =>
             eventContext.ShouldContainEvent<QuestionCloned>();
@@ -106,7 +112,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string rosterTitle = "roster title";
         private static string textQuestionTitle = "text question title";
         private static int targetIndex = 0;
-        private static string[] rosterFixedTitles = {"title 1", "title 2"};
+
+        private static FixedRosterTitle[] rosterFixedTitles = new[]{new FixedRosterTitle(1, "title 1"), new FixedRosterTitle(2, "title 2")};
+            
         private static EventContext eventContext;
     }
 }

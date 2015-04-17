@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
@@ -45,6 +46,7 @@ namespace WB.UI.Supervisor
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new ReplacePrincipal());
             filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
@@ -53,6 +55,7 @@ namespace WB.UI.Supervisor
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)
         {
+            filters.Add(new ReplacePrincipalWebApi());
             filters.Add(new ElmahHandledErrorLoggerFilter());
         }
 
