@@ -198,7 +198,7 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\ExpressionsEngineVersionService.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireVersionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
@@ -280,7 +280,7 @@
     <Compile Include="Services\ExpressionLocationType.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
-    <Compile Include="Services\IExpressionsEngineVersionService.cs" />
+    <Compile Include="Services\IQuestionnaireVersionService.cs" />
     <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionProcessorGenerator.cs" />
@@ -313,7 +313,6 @@
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
-    <Compile Include="ValueObjects\ExpressionsEngineVersion.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new ExpressionsEngineVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new Version(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 

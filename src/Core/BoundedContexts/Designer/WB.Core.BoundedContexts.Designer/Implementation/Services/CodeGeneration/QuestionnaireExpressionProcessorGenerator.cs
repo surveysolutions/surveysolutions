@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -13,19 +14,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly IDynamicCompiler codeCompiler;
         private readonly ICodeGenerator codeGenerator;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
 
-        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
+        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IQuestionnaireVersionService questionnaireVersionService)
         {
             this.codeCompiler =  codeCompiler;
             this.codeGenerator = codeGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.questionnaireVersionService = questionnaireVersionService;
         }
 
-        public GenerationResult GenerateProcessorStateAssemblyForVersion(QuestionnaireDocument questionnaire,
-            ExpressionsEngineVersion version, out string generatedAssembly)
+        public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire,
+            Version targetVersion, out string generatedAssembly)
         {
-            var generatedEvaluator = this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, version);
+            var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
 
             EmitResult assemblyGenerationResult = this.codeCompiler.GenerateAssemblyAsString(questionnaire.PublicKey, generatedEvaluator, new string[] { },
                 out generatedAssembly);
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
         {
-            return this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, expressionsEngineVersionService.GetLatestSupportedVersion());
+            return this.codeGenerator.GenerateEvaluator(questionnaire, questionnaireVersionService.GetLatestSupportedVersion());
         }
 
         public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)

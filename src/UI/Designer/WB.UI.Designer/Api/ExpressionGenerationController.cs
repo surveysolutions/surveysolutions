@@ -24,14 +24,14 @@ namespace WB.UI.Designer.Api
         private IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IExpressionsEngineVersionService expressionsEngineVersionService)
+        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IQuestionnaireVersionService questionnaireVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.questionnaireVersionService = questionnaireVersionService;
         }
 
         [HttpGet]
@@ -67,8 +67,8 @@ namespace WB.UI.Designer.Api
             
             var questionnaire = GetQuestionnaire(id).Source;
             string assembly;
-            var generated = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,
-                expressionsEngineVersionService.GetLatestSupportedVersion(), out assembly);
+            var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
+                questionnaireVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

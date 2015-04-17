@@ -22,7 +22,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IJsonUtils jsonUtils;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
-            IExpressionsEngineVersionService expressionsEngineVersionService, 
+            IQuestionnaireVersionService questionnaireVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.questionnaireVersionService = questionnaireVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            var currentEngineVersion = this.expressionsEngineVersionService.GetLatestSupportedVersion();
+            var currentEngineVersion = this.questionnaireVersionService.GetLatestSupportedVersion();
 
             var templateTitle = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName());
 
@@ -86,8 +86,8 @@ namespace WB.UI.Designer.WebServices
             try
             {
                 generationResult =
-                    this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(
-                        questionnaireView.Source, expressionsEngineVersionService.GetLatestSupportedVersion(),
+                    this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                        questionnaireView.Source, questionnaireVersionService.GetLatestSupportedVersion(),
                         out resultAssembly);
             }
             catch (Exception)

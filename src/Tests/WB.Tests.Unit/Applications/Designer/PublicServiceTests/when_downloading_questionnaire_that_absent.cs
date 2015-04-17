@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new ExpressionsEngineVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new Version(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         It should_throw_exception_that_contains_such_words = () =>
             (new[] { "questionnaire", "cannot be found" }).Each(x => (exception as FaultException).Message.ToLower().ShouldContain(x));
 
-        private static ExpressionsEngineVersion version = new ExpressionsEngineVersion(1,0,0);
+        private static Version version = new Version(1, 0, 0);
         private static DownloadQuestionnaireRequest request;
         private static IPublicService service;
         private static Exception exception;
