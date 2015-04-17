@@ -151,7 +151,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Filters\InvalidateModelStateForObserverAttribute.cs" />
+    <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />

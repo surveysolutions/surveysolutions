@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Observers;
@@ -57,11 +57,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.Success("Observer user was successfully created");
                 return this.RedirectToAction("Index");
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+           
             return this.View(model);
         }
 

@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -59,11 +59,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.Success("Headquarters user was successfully created");
                 return this.RedirectToAction("Index");
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+            
             return this.View(model);
         }
 
@@ -96,7 +92,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Edit(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -124,11 +120,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+            
             return this.View(model);
         }
     }

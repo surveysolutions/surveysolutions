@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Create(InterviewerModel model)
         {
             if (this.ModelState.IsValid)
@@ -51,11 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.Success("Interviewer was successfully created");
                 return this.Back(model.SupervisorId);
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+            
             return this.View(model);
         }
 
@@ -85,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Edit(UserEditModel model)
         {
             if (this.ModelState.IsValid)
@@ -101,11 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
                 return this.Back(user.Supervisor.Id);
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+           
             return this.View(model);
         }
 

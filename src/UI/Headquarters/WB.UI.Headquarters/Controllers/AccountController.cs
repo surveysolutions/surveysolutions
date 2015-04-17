@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult Manage(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
@@ -110,11 +110,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
                 this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+            
             return this.View(model);
         }
 
