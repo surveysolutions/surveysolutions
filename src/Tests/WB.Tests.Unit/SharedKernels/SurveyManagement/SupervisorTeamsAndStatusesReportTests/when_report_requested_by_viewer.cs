@@ -9,9 +9,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatusesReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatusesReportTests
 {
-    internal class when_report_requested_by_viewer : HeadquartersTeamsAndStatusesReportContext
+    internal class when_report_requested_by_viewer : SupervisorTeamsAndStatusesReportContext
     {
         Establish context = () =>
         {
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
 
         It should_count_number_of_interviews_for_teamlead = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
-        static HeadquartersTeamsAndStatusesReport reportFactory;
+        static SupervisorTeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid viewerId;
     }

@@ -381,6 +381,11 @@
     <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_user_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_the_same_questionnaire_simultaneously.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_not_existing_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\SupervisorTeamsAndStatusesReportContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_empty_data_base.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\SurveysAndStatusesReportTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_interview_exists_in_each_status.cs" />
