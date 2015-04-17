@@ -115,18 +115,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
-        [InvalidateModelStateForObserver]
+        [ObserverNotAllowed]
         public ActionResult ConfirmRevalidation(RevalidateModel input)
         {
             if (this.ModelState.IsValid)
             {
                 this.CommandService.Execute(new ReevaluateSynchronizedInterview(input.InterviewId));
             }
-            else
-            {
-                CheckModelStateForObserverForbiddenError();
-            }
-
+            
             var newModel =
                 this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel
                 {

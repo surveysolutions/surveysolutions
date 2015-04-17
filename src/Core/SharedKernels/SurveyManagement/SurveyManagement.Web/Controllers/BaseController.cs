@@ -41,13 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.WriteToTempData(Alerts.SUCCESS, message);
         }
 
-        public void CheckModelStateForObserverForbiddenError()
-        {
-            var error = ModelState["ObserverForbiddenError"];
-            if(error != null && error.Errors.Any())
-                this.Error(error.Errors.First().ErrorMessage);
-        }
-
+        
         private void WriteToTempData(string key, string message)
         {
             if (this.TempData.ContainsKey(key))
