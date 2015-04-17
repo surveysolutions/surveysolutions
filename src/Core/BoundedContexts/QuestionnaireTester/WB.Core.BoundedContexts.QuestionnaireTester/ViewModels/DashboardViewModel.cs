@@ -234,11 +234,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
                 var interviewId = Guid.NewGuid();
-                var questionnaireId = questionnairePackage.Document.PublicKey;
 
-                this.commandService.Execute(new CreateInterviewOnClientCommand(interviewId, Guid.NewGuid(), questionnaireId, 1, DateTime.UtcNow, Guid.NewGuid()));
+                this.commandService.Execute(new CreateInterviewOnClientCommand(
+                    interviewId: interviewId,
+                    userId: this.principal.CurrentUserIdentity.UserId,
+                    questionnaireId: questionnairePackage.Document.PublicKey, 
+                    questionnaireVersion: 1, 
+                    answersTime: DateTime.UtcNow,
+                    supervisorId: Guid.NewGuid()));
             
-                this.ShowViewModel<PrefilledQuestionsViewModel>(new { interviewId = interviewId, questionnireId = questionnaireId });
+                this.ShowViewModel<PrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
             catch (RestException ex)
             {

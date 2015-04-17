@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -16,9 +17,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     internal class StatefullInterview : Interview
     {
         private InterviewModel interview;
-        private static IPlainInterviewRepository<InterviewModel> InterviewRepository
+        private static IPlainInterviewRepository InterviewRepository
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainInterviewRepository<InterviewModel>>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainInterviewRepository>(); }
         }
 
         internal new void Apply(InterviewOnClientCreated @event)
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ForEach(questionId => 
                     interview.QuestionIdToQuestionModelTypeMap.Add(questionId, GetQuestionModelType(questionnaire, questionId)));
 
-            InterviewRepository.StoreInterview(interview, EventSourceId);
+            InterviewRepository.StoreInterview(interview, EventSourceId.FormatGuid());
         }
 
         // should migrate to QuestionnaireModel

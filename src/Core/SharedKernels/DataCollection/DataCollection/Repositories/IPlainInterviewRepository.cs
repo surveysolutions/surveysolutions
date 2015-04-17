@@ -1,16 +1,11 @@
-﻿using System;
-
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
-    public interface IPlainInterviewRepository<T>
-        where T : IInterview
+    public interface IPlainInterviewRepository
     {
-        T GetInterview(Guid id);
-
-        void StoreInterview(T interview, Guid id);
-
-        void DeleteInterview(Guid id);
+        InterviewModel GetInterview(string interviewId);
+        void StoreInterview(InterviewModel interview, string interviewId);
+        void DeleteInterview(string interviewId);
     }
 }

@@ -231,8 +231,8 @@
   <data name="Maintenance" xml:space="preserve">
     <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
   </data>
-  <data name="OpenQuestionnaire" xml:space="preserve">
-    <value>Open questionnaire</value>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>START</value>
   </data>
   <data name="OSVersionText" xml:space="preserve">
     <value>Android version:</value>
@@ -243,8 +243,8 @@
   <data name="PasswordHint" xml:space="preserve">
     <value>Password</value>
   </data>
-  <data name="PrefilledQuestionsSubTitle" xml:space="preserve">
-    <value>prefilled questions</value>
+  <data name="PrefilledQuestions_ToolbarTitle" xml:space="preserve">
+    <value>Survey initial information</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
     <value>Timeout when connecting to the survey solutions designer website. Check your internet connection</value>
