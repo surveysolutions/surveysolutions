@@ -328,8 +328,10 @@
     <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
-    <Compile Include="Views\Reposts\Factories\TeamsAndStatusesReport.cs" />
-    <Compile Include="Views\Reposts\ITeamsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquartersTeamsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\IHeadquartersTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\ISurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\MapReport.cs" />

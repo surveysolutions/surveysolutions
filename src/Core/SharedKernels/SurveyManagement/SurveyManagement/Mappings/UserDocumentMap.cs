@@ -61,6 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             ManyToOne(x => x.User, mto =>
             {
                 mto.Index("UserDocuments_DeviceInfos");
+                mto.Cascade(Cascade.None);
             });
         }
     }

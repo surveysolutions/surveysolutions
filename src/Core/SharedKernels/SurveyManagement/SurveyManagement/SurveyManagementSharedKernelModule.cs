@@ -35,6 +35,8 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.EventHandler;
 
@@ -95,6 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
+            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
+            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
+            this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
 
             var applicationVersionSettings = new ApplicationVersionSettings
             {

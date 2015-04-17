@@ -507,7 +507,9 @@ namespace WB.Tests.Unit
                 QuestionnaireVersion = questionnaireVersion ?? 1,
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
-                TeamLeadId = teamLeadId.GetValueOrDefault()
+                ResponsibleName = responsibleId.FormatGuid(),
+                TeamLeadId = teamLeadId.GetValueOrDefault(),
+                TeamLeadName = teamLeadId.FormatGuid()
             };
         }
 
