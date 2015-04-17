@@ -21,11 +21,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
     internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainInterviewRepository plainStorageInterviewAccessor;
+        private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
         public InterviewStateFullViewModelFactory(
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IPlainInterviewRepository plainStorageInterviewAccessor)
+            IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
 
         private ObservableCollection<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.GetInterview(interviewId);
+            var interview = this.plainStorageInterviewAccessor.Get(interviewId.FormatGuid());
             var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
                 interview.QuestionnaireVersion);
 
