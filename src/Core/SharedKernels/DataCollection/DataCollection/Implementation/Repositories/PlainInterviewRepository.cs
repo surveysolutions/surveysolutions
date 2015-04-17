@@ -1,34 +1,31 @@
-using System;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class PlainInterviewRepository<T> : IPlainInterviewRepository<T>
-        where T : class, IInterview
+    internal class PlainInterviewRepository : IPlainInterviewRepository
     {
-        private readonly IPlainStorageAccessor<T> repository;
+        private readonly IPlainStorageAccessor<InterviewModel> repository;
 
-        public PlainInterviewRepository(IPlainStorageAccessor<T> repository)
+        public PlainInterviewRepository(IPlainStorageAccessor<InterviewModel> repository)
         {
             this.repository = repository;
         }
 
-        public T GetInterview(Guid id)
+        public InterviewModel GetInterview(string interviewId)
         {
-            return this.repository.GetById(id.FormatGuid());
+            return this.repository.GetById(interviewId);
         }
 
-        public void StoreInterview(T interview, Guid id)
+        public void StoreInterview(InterviewModel interview, string interviewId)
         {
-            this.repository.Store(interview, id.FormatGuid());
+            this.repository.Store(interview, interviewId);
         }
 
-        public void DeleteInterview(Guid id)
+        public void DeleteInterview(string interviewId)
         {
-            this.repository.Remove(id.FormatGuid());
+            this.repository.Remove(interviewId);
         }
     }
 }
