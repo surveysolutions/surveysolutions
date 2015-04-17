@@ -2,5 +2,15 @@
 <resources>
   <color name="red">#ffff0000</color>
   <color name="white">#ffffff</color>
+
+  <color name="applicationBackground">#FFFAFAFA</color>
+  <color name="colorBlueThemePrimary">#FF2A81CB</color>
+
+  <color name="colorToolbarText">#FFFFFFFF</color>
+
+  <color name="myQuestionnaireListItemLeftCorner">#FFE9E9E9</color>
+  <color name="myQuestionnairesLink">#FF6D6D6D</color>
+  <color name="publicQuestionnaireListItemLeftCorner">@color/colorBlueThemePrimary</color>
+  <color name="publicQuestionnairesLink">#FF4C8FD0</color>
   
 </resources>

@@ -33,8 +33,6 @@ namespace WB.UI.QuestionnaireTester
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
-			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
-			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -1178,6 +1176,84 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f020037
 			public const int questionnaire_list_item_border = 2130837559;
 			
+			// aapt resource value: 0x7f020038
+			public const int theme_blue_light_btn_check_holo_light = 2130837560;
+			
+			// aapt resource value: 0x7f020039
+			public const int theme_blue_light_btn_check_off_disabled_focused_holo_light = 2130837561;
+			
+			// aapt resource value: 0x7f02003a
+			public const int theme_blue_light_btn_check_off_disabled_holo_light = 2130837562;
+			
+			// aapt resource value: 0x7f02003b
+			public const int theme_blue_light_btn_check_off_focused_holo_light = 2130837563;
+			
+			// aapt resource value: 0x7f02003c
+			public const int theme_blue_light_btn_check_off_holo_light = 2130837564;
+			
+			// aapt resource value: 0x7f02003d
+			public const int theme_blue_light_btn_check_off_pressed_holo_light = 2130837565;
+			
+			// aapt resource value: 0x7f02003e
+			public const int theme_blue_light_btn_check_on_disabled_focused_holo_light = 2130837566;
+			
+			// aapt resource value: 0x7f02003f
+			public const int theme_blue_light_btn_check_on_disabled_holo_light = 2130837567;
+			
+			// aapt resource value: 0x7f020040
+			public const int theme_blue_light_btn_check_on_focused_holo_light = 2130837568;
+			
+			// aapt resource value: 0x7f020041
+			public const int theme_blue_light_btn_check_on_holo_light = 2130837569;
+			
+			// aapt resource value: 0x7f020042
+			public const int theme_blue_light_btn_check_on_pressed_holo_light = 2130837570;
+			
+			// aapt resource value: 0x7f020043
+			public const int theme_blue_light_btn_default_disabled_focused_holo_light = 2130837571;
+			
+			// aapt resource value: 0x7f020044
+			public const int theme_blue_light_btn_default_disabled_holo_light = 2130837572;
+			
+			// aapt resource value: 0x7f020045
+			public const int theme_blue_light_btn_default_focused_holo_light = 2130837573;
+			
+			// aapt resource value: 0x7f020046
+			public const int theme_blue_light_btn_default_holo_light = 2130837574;
+			
+			// aapt resource value: 0x7f020047
+			public const int theme_blue_light_btn_default_normal_holo_light = 2130837575;
+			
+			// aapt resource value: 0x7f020048
+			public const int theme_blue_light_btn_default_pressed_holo_light = 2130837576;
+			
+			// aapt resource value: 0x7f020049
+			public const int theme_blue_light_edit_text_holo_light = 2130837577;
+			
+			// aapt resource value: 0x7f02004a
+			public const int theme_blue_light_fastscroll_thumb_default_holo = 2130837578;
+			
+			// aapt resource value: 0x7f02004b
+			public const int theme_blue_light_fastscroll_thumb_holo = 2130837579;
+			
+			// aapt resource value: 0x7f02004c
+			public const int theme_blue_light_fastscroll_thumb_pressed_holo = 2130837580;
+			
+			// aapt resource value: 0x7f02004d
+			public const int theme_blue_light_textfield_activated_holo_light = 2130837581;
+			
+			// aapt resource value: 0x7f02004e
+			public const int theme_blue_light_textfield_default_holo_light = 2130837582;
+			
+			// aapt resource value: 0x7f02004f
+			public const int theme_blue_light_textfield_disabled_focused_holo_light = 2130837583;
+			
+			// aapt resource value: 0x7f020050
+			public const int theme_blue_light_textfield_disabled_holo_light = 2130837584;
+			
+			// aapt resource value: 0x7f020051
+			public const int theme_blue_light_textfield_focused_holo_light = 2130837585;
+			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -2003,8 +2079,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0060
 			public const int Base_Widget_AppCompat_Toolbar_Button_Navigation = 2131427424;
 			
+			// aapt resource value: 0x7f0b00f1
+			public const int ButtonTheme_Blue_Light = 2131427569;
+			
+			// aapt resource value: 0x7f0b00f0
+			public const int CheckBoxTheme_Blue_Light = 2131427568;
+			
 			// aapt resource value: 0x7f0b00ef
-			public const int InterviewToolbarTitle = 2131427567;
+			public const int EditTextTheme_Blue_Light = 2131427567;
+			
+			// aapt resource value: 0x7f0b00f2
+			public const int ImageButtonTheme_Blue_Light = 2131427570;
+			
+			// aapt resource value: 0x7f0b00eb
+			public const int InterviewToolbarTitle = 2131427563;
 			
 			// aapt resource value: 0x7f0b0061
 			public const int Platform_AppCompat = 2131427425;
@@ -2018,11 +2106,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0064
 			public const int Platform_AppCompat_Light_Dialog = 2131427428;
 			
-			// aapt resource value: 0x7f0b00f1
-			public const int PrefilledQuestions_List = 2131427569;
+			// aapt resource value: 0x7f0b00ed
+			public const int PrefilledQuestions_List = 2131427565;
 			
-			// aapt resource value: 0x7f0b00f2
-			public const int PrefilledQuestions_QuestionnaireTitle = 2131427570;
+			// aapt resource value: 0x7f0b00ee
+			public const int PrefilledQuestions_QuestionnaireTitle = 2131427566;
 			
 			// aapt resource value: 0x7f0b0065
 			public const int RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = 2131427429;
@@ -2222,20 +2310,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b00a6
 			public const int Theme_AppCompat_NoActionBar = 2131427494;
 			
-			// aapt resource value: 0x7f0b00ed
-			public const int Theme_Blue_Light = 2131427565;
+			// aapt resource value: 0x7f0b00f6
+			public const int Theme_Blue_Light = 2131427574;
 			
-			// aapt resource value: 0x7f0b00ec
-			public const int Theme_Gray_Light = 2131427564;
+			// aapt resource value: 0x7f0b00f5
+			public const int Theme_Gray_Light = 2131427573;
 			
 			// aapt resource value: 0x7f0b00f3
 			public const int Theme_Light = 2131427571;
 			
-			// aapt resource value: 0x7f0b00eb
-			public const int Theme_Light_Base = 2131427563;
+			// aapt resource value: 0x7f0b00f4
+			public const int Theme_Light_Base = 2131427572;
 			
-			// aapt resource value: 0x7f0b00ee
-			public const int Theme_Splash = 2131427566;
+			// aapt resource value: 0x7f0b00f7
+			public const int Theme_Splash = 2131427575;
 			
 			// aapt resource value: 0x7f0b00a7
 			public const int ThemeOverlay_AppCompat = 2131427495;
@@ -2252,8 +2340,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b00ab
 			public const int ThemeOverlay_AppCompat_Light = 2131427499;
 			
-			// aapt resource value: 0x7f0b00f0
-			public const int ToolbarTitle = 2131427568;
+			// aapt resource value: 0x7f0b00ec
+			public const int ToolbarTitle = 2131427564;
 			
 			// aapt resource value: 0x7f0b00ac
 			public const int Widget_AppCompat_ActionBar = 2131427500;
