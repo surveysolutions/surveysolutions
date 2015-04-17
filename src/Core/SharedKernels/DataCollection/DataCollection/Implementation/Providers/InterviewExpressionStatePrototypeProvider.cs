@@ -19,13 +19,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IInterviewExpressionStateVersionAdapter interviewExpressionStateVersionAdapter;
+        private readonly IInterviewExpressionStateFactory interviewExpressionStateFactory;
 
-        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor, IInterviewExpressionStateVersionAdapter interviewExpressionStateVersionAdapter)
+        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor, IInterviewExpressionStateFactory interviewExpressionStateFactory)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.interviewExpressionStateVersionAdapter = interviewExpressionStateVersionAdapter;
+            this.interviewExpressionStateFactory = interviewExpressionStateFactory;
         }
 
         public IInterviewExpressionStateV2 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
                 {
-                    return interviewExpressionStateVersionAdapter.AdaptToV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+                    return interviewExpressionStateFactory.GetInterviewExpressionStateOfV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
                 }
                 catch (Exception e)
                 {

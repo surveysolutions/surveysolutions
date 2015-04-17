@@ -219,7 +219,7 @@ namespace WB.Tests.Integration.InterviewTests
                 if (interviewExpressionStateType == null)
                     throw new Exception("Type InterviewExpressionState was not found");
 
-                var interviewExpressionState = new InterviewExpressionStateVersionAdapter().AdaptToV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+                var interviewExpressionState = new InterviewExpressionStateFactory().GetInterviewExpressionStateOfV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
                 if (interviewExpressionState == null)
                     throw new Exception("Error on IInterviewExpressionState generation");
                 return interviewExpressionState;
