@@ -101,7 +101,7 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.Questionnaire_verification_failed)
+                    ReasonPhrase = ErrorMessages.Questionnaire_verification_failed
                 });
             }
 
