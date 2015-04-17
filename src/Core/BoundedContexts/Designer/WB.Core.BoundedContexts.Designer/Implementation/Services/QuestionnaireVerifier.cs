@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
-            return this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,engineVersionService.GetCurrentEngineVersion(), out resultAssembly);
+            return this.expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaire,engineVersionService.GetLatestSupportedVersion(), out resultAssembly);
         }
 
         private static bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)

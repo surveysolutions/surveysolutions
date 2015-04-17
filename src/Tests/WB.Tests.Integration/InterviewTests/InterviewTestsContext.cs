@@ -202,7 +202,7 @@ namespace WB.Tests.Integration.InterviewTests
                     new CodeGenerator(questionnaireVersionProvider), questionnaireVersionProvider);
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaireDocument,questionnaireVersionProvider.GetCurrentEngineVersion(), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssemblyForVersion(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -219,7 +219,7 @@ namespace WB.Tests.Integration.InterviewTests
                 if (interviewExpressionStateType == null)
                     throw new Exception("Type InterviewExpressionState was not found");
 
-                var interviewExpressionState = new InterviewExpressionStateFactory().GetInterviewExpressionStateOfV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+                var interviewExpressionState = new InterviewExpressionStateUpgrader().UpgradeToLatestVersionIfNeeded(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
                 if (interviewExpressionState == null)
                     throw new Exception("Error on IInterviewExpressionState generation");
                 return interviewExpressionState;

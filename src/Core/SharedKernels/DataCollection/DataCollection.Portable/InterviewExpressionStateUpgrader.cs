@@ -6,15 +6,15 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public class InterviewExpressionStateFactory : IInterviewExpressionStateFactory
+    public class InterviewExpressionStateUpgrader : IInterviewExpressionStateUpgrader
     {
-        public IInterviewExpressionStateV2 GetInterviewExpressionStateOfV2(IInterviewExpressionState state)
+        public IInterviewExpressionStateV2 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state)
         {
             var v2 = state as IInterviewExpressionStateV2;
             if (v2 != null)
                 return v2;
 
-            return new InterviewExpressionStateV1AdaptedToV2(state);
+            return new InterviewExpressionStateV1ToV2Adapter(state);
         }
     }
 }

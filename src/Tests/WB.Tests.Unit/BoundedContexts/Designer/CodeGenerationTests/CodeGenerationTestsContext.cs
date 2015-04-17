@@ -225,7 +225,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static EngineVersion CreateQuestionnaireVersion()
         {
-            return new EngineVersionService().GetCurrentEngineVersion();
+            return new EngineVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)

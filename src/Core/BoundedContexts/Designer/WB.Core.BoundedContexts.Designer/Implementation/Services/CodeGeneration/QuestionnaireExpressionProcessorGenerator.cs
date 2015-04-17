@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
         {
-            return this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, engineVersionService.GetCurrentEngineVersion());
+            return this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, engineVersionService.GetLatestSupportedVersion());
         }
 
         public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)
