@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
         {
             return a > staskDepthToAdd ?
-                compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly) :
+                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly) :
                 IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(a + 1);
         }
 
