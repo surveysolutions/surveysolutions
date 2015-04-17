@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
         public Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId)
         {
             return
-                new Task<ObservableCollection<MvxViewModel>>(() => new ObservableCollection<MvxViewModel>());
+                new Task<ObservableCollection<MvxViewModel>>(() => new ObservableCollection<MvxViewModel>(new []{ new TextQuestionViewModel(null, null), }));
         }
     }
 }
