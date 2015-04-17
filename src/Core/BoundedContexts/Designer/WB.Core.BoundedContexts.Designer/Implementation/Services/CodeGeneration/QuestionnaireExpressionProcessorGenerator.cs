@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -12,17 +13,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly IDynamicCompiler codeCompiler;
         private readonly ICodeGenerator codeGenerator;
-        private readonly IEngineVersionService engineVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
-        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IEngineVersionService engineVersionService)
+        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.codeCompiler =  codeCompiler;
             this.codeGenerator = codeGenerator;
-            this.engineVersionService = engineVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         public GenerationResult GenerateProcessorStateAssemblyForVersion(QuestionnaireDocument questionnaire,
-            EngineVersion version, out string generatedAssembly)
+            ExpressionsEngineVersion version, out string generatedAssembly)
         {
             var generatedEvaluator = this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, version);
 
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
         {
-            return this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, engineVersionService.GetLatestSupportedVersion());
+            return this.codeGenerator.GenerateEvaluatorForVersion(questionnaire, expressionsEngineVersionService.GetLatestSupportedVersion());
         }
 
         public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)

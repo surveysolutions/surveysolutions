@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.UI.Designer.WebServices.Questionnaire
@@ -14,6 +15,6 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         public Guid QuestionnaireId { get; set; }
 
         [MessageHeader]
-        public EngineVersion SupportedEngineVersion { get; set; }
+        public ExpressionsEngineVersion SupportedExpressionsEngineVersion { get; set; }
     }
 }

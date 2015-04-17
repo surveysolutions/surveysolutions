@@ -5,6 +5,7 @@ using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -18,14 +19,14 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new EngineVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new ExpressionsEngineVersion(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
             request = CreateDownloadQuestionnaireRequest(questionnaireId, supportedQuestionnaireVersion);
 
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId, "aaaa");
-            service = CreatePublicService(questionnaireViewFactory: questionnaireViewFactory, engineVersion: version);
+            service = CreatePublicService(questionnaireViewFactory: questionnaireViewFactory, expressionsEngineVersion: version);
         };
 
         Because of = () => 
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         It should_throw_exception_that_contains_such_words = () =>
             (exception as FaultException).Message.ShouldEqual(errorMessage);
 
-        private static EngineVersion version = new EngineVersion(1,0,0);
+        private static ExpressionsEngineVersion version = new ExpressionsEngineVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
         private static IPublicService service;
         private static Exception exception;
