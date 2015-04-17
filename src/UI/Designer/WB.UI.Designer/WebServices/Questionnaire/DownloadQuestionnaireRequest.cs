@@ -13,6 +13,6 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         public Guid QuestionnaireId { get; set; }
 
         [MessageHeader]
-        public Version SupportedExpressionsEngineVersion { get; set; }
+        public Version SupportedQuestionnaireVersion{ get; set; }
     }
-}
+} 

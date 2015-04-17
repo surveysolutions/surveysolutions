@@ -76,8 +76,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
         It should_match_method_signature_for_SaveAllCurrentStatesAsPrevious = () =>
             methods.Get("SaveAllCurrentStatesAsPrevious").ShouldMatchMethodInfo(interfaceMethods.Get("SaveAllCurrentStatesAsPrevious"));
 
-        It should_contain_2_Clone_methods = () =>
-            methods.Count(m => m.Name == "Clone").ShouldEqual(2);
+        It should_match_method_signature_for_Clone_of_first_version = () =>
+            methods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionState)).ShouldMatchMethodInfo(interfaceMethods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionState)));
+        It should_match_method_signature_for_Clone_of_second_version = () =>
+           methods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionStateV2)).ShouldMatchMethodInfo(interfaceMethods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionStateV2)));
 
         private static List<MetodInfo> methods;
 

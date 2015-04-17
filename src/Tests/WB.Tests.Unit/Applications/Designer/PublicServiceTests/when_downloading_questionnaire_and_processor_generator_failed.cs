@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             expressionProcessorGenerator.Setup(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out assembly))
                 .Returns(new GenerationResult() { Success = false });
 
-            service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object);
+            service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object, isClientVersionSupported: true);
         };
 
         Because of = () => 
