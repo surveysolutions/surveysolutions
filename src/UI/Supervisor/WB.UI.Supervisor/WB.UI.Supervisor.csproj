@@ -351,6 +351,15 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\identity\favicon-supervisor-114x114.png" />
+    <Content Include="Content\identity\favicon-supervisor-120x120.png" />
+    <Content Include="Content\identity\favicon-supervisor-144x144.png" />
+    <Content Include="Content\identity\favicon-supervisor-152x152.png" />
+    <Content Include="Content\identity\favicon-supervisor-180x180.png" />
+    <Content Include="Content\identity\favicon-supervisor-192x192.png" />
+    <Content Include="Content\identity\favicon-supervisor-72x72.png" />
+    <Content Include="Content\identity\favicon-supervisor-76x76.png" />
+    <Content Include="Content\identity\favicon-supervisor.png" />
     <Content Include="Content\images\glyphicons.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

@@ -89,7 +89,12 @@ namespace Main.Core.Documents
         }
 
         public string[] RosterFixedTitles {
-            get { return new string[0]; }
+            set {}
+        }
+
+        public FixedRosterTitle[] FixedRosterTitles
+        {
+            get { return new FixedRosterTitle[0]; }
         }
 
         public Guid? RosterTitleQuestionId {

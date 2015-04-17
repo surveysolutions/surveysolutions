@@ -1,6 +1,6 @@
 ﻿@model WB.UI.Designer.Models.MakeAdminViewModel
 @{
-    this.Layout = "~/Views/Shared/Layout.admin.cshtml";
+    this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
     this.ViewBag.Title = "Control Panel: Make the user an administrator";
 }
 
@@ -9,7 +9,6 @@
         Make the user an administrator
     </h3>
 </div>
-@Html.Partial("_alerts")
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

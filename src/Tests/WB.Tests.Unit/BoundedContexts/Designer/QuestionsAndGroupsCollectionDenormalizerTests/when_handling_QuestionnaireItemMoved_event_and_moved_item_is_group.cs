@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         It should_return_2nd_group_with_is_roster_set_in_true = () =>
             GetGroup(g2Id).IsRoster.ShouldBeTrue();
 
-        It should_return_2nd_group_with_roster_fixed_titles_set_in_nul = () =>
-            GetGroup(g2Id).RosterFixedTitles.ShouldBeNull();
+        It should_return_2nd_group_with_roster_fixed_titles_count_set_in_0 = () =>
+            GetGroup(g2Id).FixedRosterTitles.Length.ShouldEqual(0);
 
         It should_return_2nd_group_with_roster_scope_ids_contains_q2Id = () =>
             GetGroup(g2Id).RosterScopeIds.ShouldContainOnly(q2Id);

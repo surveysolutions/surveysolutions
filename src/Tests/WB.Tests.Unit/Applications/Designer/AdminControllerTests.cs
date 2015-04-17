@@ -12,11 +12,12 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Membership;
-using TemplateInfo = WB.Core.BoundedContexts.Designer.Services.TemplateInfo;
 
 namespace WB.Tests.Unit.Applications.Designer
 {
@@ -28,7 +29,6 @@ namespace WB.Tests.Unit.Applications.Designer
         {
             this.CommandServiceMock=new Mock<ICommandService>();
             this.ZipUtilsMock = new Mock<IStringCompressor>();
-            this.ExportServiceMock = new Mock<IQuestionnaireExportService>();
             this.UserHelperMock = new Mock<IMembershipUserService>();
             this.questionnaireViewFactoryMock =  new Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>();
             
@@ -88,20 +88,17 @@ namespace WB.Tests.Unit.Applications.Designer
             // arrange
             AdminController controller = this.CreateAdminController();
             Guid templateId = Guid.NewGuid();
-            TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
 
-            var doc = new QuestionnaireDocument();
+            var doc = new QuestionnaireDocument() {Title = "test"};
             var view = new QuestionnaireView(doc);
             this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
 
-            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(dataForZip);
-            this.ZipUtilsMock.Setup(x => x.Compress(dataForZip.Source)).Returns(new MemoryStream());
+            this.ZipUtilsMock.Setup(x => x.Compress(Moq.It.IsAny<string>())).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
-            this.ExportServiceMock.Verify(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()), Times.Once());
-            this.ZipUtilsMock.Verify(x => x.Compress(dataForZip.Source), Times.Once());
+            this.ZipUtilsMock.Verify(x => x.Compress(Moq.It.IsAny<string>()), Times.Once());
         }
 
         [Test]
@@ -112,13 +109,8 @@ namespace WB.Tests.Unit.Applications.Designer
             // arrange
             
             Guid templateId = Guid.NewGuid();
-            var template = new TemplateInfo() { Source = data };
 
-            var doc = new QuestionnaireDocument();
-            var view = new QuestionnaireView(doc);
-            this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
-
-            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(template);
+            this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns<QuestionnaireView>(null);
 
             AdminController target = this.CreateAdminController();
 
@@ -134,21 +126,20 @@ namespace WB.Tests.Unit.Applications.Designer
             ILogger logger = null,
             IStringCompressor zipUtils = null,
             ICommandService commandService = null,
-            IQuestionnaireExportService exportService = null,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null)
         {
             return new AdminController(userHelper ?? UserHelperMock.Object,
-            questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
-            logger ?? Mock.Of<ILogger>(),
-            zipUtils ?? ZipUtilsMock.Object,
-            commandService ?? CommandServiceMock.Object,
-            exportService ?? ExportServiceMock.Object,
-            questionnaireViewFactory ?? questionnaireViewFactoryMock.Object);
+                questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
+                logger ?? Mock.Of<ILogger>(),
+                zipUtils ?? ZipUtilsMock.Object,
+                commandService ?? CommandServiceMock.Object,
+                questionnaireViewFactory ?? questionnaireViewFactoryMock.Object,
+                Mock.Of<IQuestionnaireVersionService>(),
+                Mock.Of<IJsonUtils>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""));
         }
 
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IStringCompressor> ZipUtilsMock;
-        protected Mock<IQuestionnaireExportService> ExportServiceMock;
         protected Mock<IMembershipUserService> UserHelperMock;
         protected Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>> questionnaireViewFactoryMock;
     }

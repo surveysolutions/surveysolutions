@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -18,7 +19,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             newGroupId = Guid.Parse("2BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeQuestionId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new[] { "fixed title 1", "fixed title 2", "fixed title 3" };
+            rosterFixedTitles = new[] { new FixedRosterTitleItem("1","fixed title 1"), 
+                new FixedRosterTitleItem("2","fixed title 2"), 
+                new FixedRosterTitleItem("3","fixed title 3") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -62,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid newGroupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static string[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
         private static Guid rosterSizeQuestionId;
         private static Exception exception;
     }

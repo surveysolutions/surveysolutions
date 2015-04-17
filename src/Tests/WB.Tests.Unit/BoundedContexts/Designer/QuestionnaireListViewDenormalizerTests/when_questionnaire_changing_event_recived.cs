@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -37,8 +38,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
                 new GroupDeleted(),
                 new GroupUpdated(),
                 new GroupBecameARoster(Guid.NewGuid(), Guid.NewGuid()),
-                new RosterChanged(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), RosterSizeSourceType.FixedTitles,
-                    new string[0], null),
+                new RosterChanged(Guid.NewGuid(), Guid.NewGuid())
+                {
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    FixedRosterTitles = new FixedRosterTitle[0],
+                    RosterTitleQuestionId = null
+                },
                 new GroupStoppedBeingARoster(Guid.NewGuid(), Guid.NewGuid()),
                 new TextListQuestionAdded(),
                 new TextListQuestionCloned(),

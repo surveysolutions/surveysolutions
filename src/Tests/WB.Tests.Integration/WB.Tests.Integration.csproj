@@ -151,7 +151,10 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_single_question_that_is_in_roster_and_triggers_nested_group.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_revalidating_interview_with_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_answer_is_empty_set.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_numeric_roster_size_question_which_propagate_roster_with_mandatory_question.cs" />

@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observers.
+        /// </summary>
+        internal static string Observers {
+            get {
+                return ResourceManager.GetString("Observers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaires.
         /// </summary>
         internal static string Questionnaires {

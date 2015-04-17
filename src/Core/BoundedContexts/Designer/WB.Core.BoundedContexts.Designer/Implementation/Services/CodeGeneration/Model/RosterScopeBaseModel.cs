@@ -6,11 +6,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public abstract class RosterScopeBaseModel
     {
-        protected RosterScopeBaseModel(bool generateEmbeddedExpressionMethods, RosterScopeBaseModel parentScope, 
-            string generatedRosterScopeName, string generatedTypeName, List<GroupTemplateModel> groups, 
-            List<QuestionTemplateModel> questions, List<RosterTemplateModel> rosters, List<Guid> rosterScope)
+        protected RosterScopeBaseModel(
+            RosterScopeBaseModel parentScope, 
+            string generatedRosterScopeName, 
+            string generatedTypeName, 
+            List<GroupTemplateModel> groups, 
+            List<QuestionTemplateModel> questions, 
+            List<RosterTemplateModel> rosters, 
+            List<Guid> rosterScope, 
+            bool areRowSpecificVariablesPresent, 
+            bool isIRosterLevelInherited, 
+            string rosterType)
         {
-            GenerateEmbeddedExpressionMethods = generateEmbeddedExpressionMethods;
             ParentScope = parentScope;
             GeneratedRosterScopeName = generatedRosterScopeName;
             GeneratedTypeName = generatedTypeName;
@@ -18,19 +25,34 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Questions = questions;
             Rosters = rosters;
             RosterScope = rosterScope;
+            AreRowSpecificVariablesPresent = areRowSpecificVariablesPresent;
+            IsIRosterLevelInherited = isIRosterLevelInherited;
+            RosterType = rosterType;
         }
 
-        protected RosterScopeBaseModel(){}
+        protected RosterScopeBaseModel()
+        {
+        }
 
-        public bool GenerateEmbeddedExpressionMethods { get; set; }
         public RosterScopeBaseModel ParentScope { set; get; }
+
         public string GeneratedRosterScopeName { get; set; }
+
         public string GeneratedTypeName { set; get; }
+
         public List<QuestionTemplateModel> Questions { get; set; }
+
         public List<GroupTemplateModel> Groups { get; set; }
+
         public List<RosterTemplateModel> Rosters { get; set; }
 
         public List<Guid> RosterScope { set; get; }
+
+        public bool AreRowSpecificVariablesPresent { get;private set; }
+
+        public bool IsIRosterLevelInherited { get; private set; }
+
+        public string RosterType { get; private set; }
 
         public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()
         {

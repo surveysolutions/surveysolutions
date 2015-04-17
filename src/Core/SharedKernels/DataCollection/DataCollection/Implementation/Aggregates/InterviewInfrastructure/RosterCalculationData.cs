@@ -12,12 +12,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesToRemove: new List<RosterIdentity>(),
                 rosterInstancesToChange: new List<RosterIdentity>(),
                 answersToRemoveByDecreasedRosterSize: new List<Identity>(),
+                disabledAnswersToEnableByDecreasedRosterSize: new List<Identity>(),
+                disabledGroupsToEnableByDecreasedRosterSize: new List<Identity>(),
                 rosterInstantiatesFromNestedLevels: new List<RosterCalculationData>()) { }
 
         public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd, List<RosterIdentity> rosterInstancesToRemove,
             List<RosterIdentity> rosterInstancesToChange,
             List<Identity> answersToRemoveByDecreasedRosterSize,
-          
+            List<Identity> disabledAnswersToEnableByDecreasedRosterSize,
+            List<Identity> disabledGroupsToEnableByDecreasedRosterSize,
             Dictionary<decimal, string> titlesForRosterInstancesToAdd,
             List<RosterCalculationData> rosterInstantiatesFromNestedLevels)
         {
@@ -25,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.RosterInstancesToRemove = rosterInstancesToRemove;
             this.RosterInstancesToChange = rosterInstancesToChange;
             this.AnswersToRemoveByDecreasedRosterSize = answersToRemoveByDecreasedRosterSize;
+            this.DisabledAnswersToEnableByDecreasedRosterSize = disabledAnswersToEnableByDecreasedRosterSize;
+            this.DisabledGroupsToEnableByDecreasedRosterSize = disabledGroupsToEnableByDecreasedRosterSize;
             this.TitlesForRosterInstancesToAdd = titlesForRosterInstancesToAdd;
             this.RosterInstantiatesFromNestedLevels = rosterInstantiatesFromNestedLevels;
         }
@@ -34,6 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public List<RosterIdentity> RosterInstancesToRemove { get; private set; }
         public List<RosterIdentity> RosterInstancesToChange { get; private set; }
         public List<Identity> AnswersToRemoveByDecreasedRosterSize { get; private set; }
+        public List<Identity> DisabledAnswersToEnableByDecreasedRosterSize { get; private set; }
+        public List<Identity> DisabledGroupsToEnableByDecreasedRosterSize { get; private set; }
         public List<RosterCalculationData> RosterInstantiatesFromNestedLevels { get; private set; }
     }
 }

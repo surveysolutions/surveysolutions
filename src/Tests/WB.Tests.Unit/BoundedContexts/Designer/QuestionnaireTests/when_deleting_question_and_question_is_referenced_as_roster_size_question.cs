@@ -28,8 +28,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId, rosterId, rosterSizeQuestionId, RosterSizeSourceType.Question,
-                rosterFixedTitles: null, rosterTitleQuestionId: null));
+            questionnaire.Apply(new RosterChanged(responsibleId, rosterId)
+                {
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles = null,
+                    RosterTitleQuestionId = null
+                });
         };
 
         Because of = () =>

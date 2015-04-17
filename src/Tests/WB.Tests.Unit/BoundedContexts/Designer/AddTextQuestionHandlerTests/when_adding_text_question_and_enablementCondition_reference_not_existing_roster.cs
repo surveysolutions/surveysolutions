@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
 {
+    [Ignore("reference validation is turned off")]
     internal class when_adding_text_question_and_enablementCondition_reference_not_existing_roster : QuestionnaireTestsContext
     {
         Establish context = () =>
@@ -15,7 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
             questionnaire.Apply(Create.Event.AddGroup(chapterId));
             questionnaire.Apply(Create.Event.AddGroup(rosterId, parentId: chapterId, variableName: "roster"));
             questionnaire.Apply(Create.Event.GroupBecameRoster(rosterId));
-            questionnaire.Apply(Create.Event.RosterChanged(rosterId,  rosterType: RosterSizeSourceType.FixedTitles, titles: new[] { "1", "2" }));
+            questionnaire.Apply(Create.Event.RosterChanged(rosterId,  rosterType: RosterSizeSourceType.FixedTitles,
+                titles: new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") }));
             questionnaire.Apply(Create.Event.AddTextQuestion(rosterQuestionId, parentId: rosterId));
             questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "age"));
             questionnaire.Apply(Create.Event.AddTextQuestion(existingQuestionId, parentId: chapterId));

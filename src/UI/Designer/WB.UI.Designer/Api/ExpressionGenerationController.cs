@@ -12,6 +12,8 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
@@ -22,12 +24,14 @@ namespace WB.UI.Designer.Api
         private IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
+        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IQuestionnaireVersionService questionnaireVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
+            this.questionnaireVersionService = questionnaireVersionService;
         }
 
         [HttpGet]
@@ -63,7 +67,8 @@ namespace WB.UI.Designer.Api
             
             var questionnaire = GetQuestionnaire(id).Source;
             string assembly;
-            var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out assembly);
+            var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
+                questionnaireVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using CsQuery.ExtensionMethods;
+using CsQuery.Utility;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,15 +12,23 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class CodeGenerator : ICodeGenerator
+    internal class CodeGenerator : ICodeGenerator
     {
-        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        public CodeGenerator(IQuestionnaireVersionService questionnaireVersionService)
+        {
+            this.questionnaireVersionService = questionnaireVersionService;
+        }
 
+        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        private readonly IQuestionnaireVersionService questionnaireVersionService;
         private IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
@@ -26,19 +36,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string Generate(QuestionnaireDocument questionnaire)
         {
+            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(questionnaireVersionService.GetLatestSupportedVersion());
+
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, true);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, true);
+
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             return template.TransformText();
         }
 
-        public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire)
+        public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire, Version targetVersion)
         {
             var generatedClasses = new Dictionary<string, string>();
 
+            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
+
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, false);
+                CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, false);
+
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             generatedClasses.Add(new ExpressionLocation
@@ -53,6 +69,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
 
             return generatedClasses;
+        }
+
+        private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
+        {
+            if (version.Major < 5)
+                throw new VersionNotFoundException(string.Format("version '{0}' is not found", version));
+
+            if (version.Major == 5)
+                return new CodeGenerationSettings(
+                    additionInterfaces: new string[0], 
+                    namespaces: new string[0],
+                    areRosterServiceVariablesPresent: false,
+                    rosterType: "IEnumerable");
+
+            return new CodeGenerationSettings(
+                additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
+                namespaces: new[]
+                    {
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
+                    },
+                areRosterServiceVariablesPresent: true,
+                rosterType: "RosterRowList");
         }
 
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
@@ -207,11 +246,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
         public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
-            QuestionnaireDocument questionnaire, bool generateExpressionMethods)
+            QuestionnaireDocument questionnaire, CodeGenerationSettings codeGenerationSettings, bool generateExpressionMethods)
         {
             var template = new QuestionnaireExecutorTemplateModel();
             template.GenerateEmbeddedExpressionMethods = generateExpressionMethods;
-            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(template, generateExpressionMethods);
+            template.AdditionInterfaces = codeGenerationSettings.AdditionInterfaces;
+            template.Namespaces = codeGenerationSettings.Namespaces;
+            template.ShouldGenerateUpdateRosterTitleMethods = codeGenerationSettings.AreRosterServiceVariablesPresent;
+
+            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(
+                executorModel: template,
+                areRowSpecificVariablesPresent: codeGenerationSettings.AreRosterServiceVariablesPresent,
+                isIRosterLevelInherited: codeGenerationSettings.AreRosterServiceVariablesPresent,
+                rosterType: codeGenerationSettings.RosterType);
+
             string generatedClassName = string.Format("{0}_{1}", InterviewExpressionStatePrefix,
                 Guid.NewGuid().FormatGuid());
 
@@ -283,7 +331,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.ConditionsPlayOrder = listOfOrderedContitions.ToList();
             template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
-
             return template;
         }
 
@@ -297,7 +344,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             allQuestions = new List<QuestionTemplateModel>();
             allGroups = new List<GroupTemplateModel>();
             allRosters = new List<RosterTemplateModel>();
-
+            
             var rostersToProcess = new Queue<Tuple<IGroup, RosterScopeBaseModel>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, questionnaireLevelModel));
 
