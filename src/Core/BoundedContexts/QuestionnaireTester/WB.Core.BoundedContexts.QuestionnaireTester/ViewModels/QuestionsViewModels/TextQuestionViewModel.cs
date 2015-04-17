@@ -88,14 +88,48 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { enabled = value; RaisePropertyChanged(() => Enabled); }
         }
 
-        private IMvxCommand answerTextQuestionCommand;
-        public IMvxCommand AnswerTextQuestionCommand
+        private bool isTextChanged = false;
+        private IMvxCommand afterTextChangedCommand;
+        public IMvxCommand AfterTextChangedCommand
         {
-            get { return answerTextQuestionCommand ?? (answerTextQuestionCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
+            get { return afterTextChangedCommand ?? (afterTextChangedCommand = new MvxCommand(MarkTextChangedAndTrySendAnswerTextQuestionCommand)); }
         }
 
-        private void SendAnswerTextQuestionCommand()
+        private bool isFocusChange = false;
+        private IMvxCommand focusChangeCommand;
+        public IMvxCommand FocusChangeCommand
         {
+            get { return focusChangeCommand ?? (focusChangeCommand = new MvxCommand(MarkFocusChangedAndTrySendAnswerTextQuestionCommand)); }
+        }
+
+/*        private IMvxCommand answerTextQuestionCommand;
+        public IMvxCommand AnswerTextQuestionCommand
+        {
+            get { return answerTextQuestionCommand ?? (answerTextQuestionCommand = new MvxCommand(SendAnswerTextQuestionCommandAfterEndEditing)); }
+        }*/
+
+        private void MarkTextChangedAndTrySendAnswerTextQuestionCommand()
+        {
+            isTextChanged = true;
+            if (isFocusChange)
+                TrySendAnswerTextQuestionCommand();
+        }
+
+        private void MarkFocusChangedAndTrySendAnswerTextQuestionCommand()
+        {
+            isFocusChange = true;
+            if (isTextChanged)
+                TrySendAnswerTextQuestionCommand();
+        }
+
+        private void TrySendAnswerTextQuestionCommand()
+        {
+            if (!isFocusChange || !isTextChanged)
+                return;
+
+            isFocusChange = false;
+            isTextChanged = false;
+
             commandService.Execute(new AnswerTextQuestionCommand(
                 interviewId: navObject.InterviewModel.Id,
                 userId: principal.CurrentUserIdentity.UserId,
