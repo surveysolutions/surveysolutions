@@ -1,33 +1,15 @@
 ﻿using System;
-using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GroupReferenceViewModel : MvxViewModel
+    public class GroupReferenceViewModel : BaseInterviewItemViewModel
     {
-        public class NavObject
+        public override void Init(Identity identity, InterviewModel interviewModel, QuestionnaireModel questionnaireModel)
         {
-            public Identity QuestionIdentity { get; set; }
-            public InterviewModel InterviewModel { get; set; }
-            public QuestionnaireDocument QuestionnaireDocument { get; set; }
-        }
-
-        public void Init(NavObject navObject)
-        {
-        }
-
-        public void Init(Identity questionIdentity, InterviewModel interviewModel, QuestionnaireDocument questionnaireDocument)
-        {
-            Init(new NavObject 
-            {
-                QuestionIdentity = questionIdentity,
-                InterviewModel = interviewModel,
-                QuestionnaireDocument = questionnaireDocument
-            });
+           
         }
 
         public bool IsComplete { get; set; }

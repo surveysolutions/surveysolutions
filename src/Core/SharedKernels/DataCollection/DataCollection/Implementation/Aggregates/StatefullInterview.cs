@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -186,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
             {
                 var rosterId = ConversionHelper.ConvertIdAndRosterVectorToString(changedRosterInstanceTitle.RosterInstance.GroupId, GetFullRosterVector(changedRosterInstanceTitle.RosterInstance));
-                var roster = (InterviewRosterModel)interview.GroupsAndRosters[rosterId];
+                var roster = (InterviewRosterModel)interview.Groups[rosterId];
                 roster.Title = changedRosterInstanceTitle.Title;
             }
         }
@@ -198,20 +199,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var rosterInstance in @event.Instances)
             {
                 var rosterId = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
-                interview.GroupsAndRosters[rosterId] = new InterviewRosterModel
+                var rosterParentId = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
+
+                interview.Groups[rosterId] = new InterviewRosterModel
                                              {
                                                  Id = rosterInstance.GroupId,
                                                  RosterVector = GetFullRosterVector(rosterInstance),
                                                  ParentRosterVector = rosterInstance.OuterRosterVector,
                                                  RowCode = rosterInstance.RosterInstanceId
                                              };
+                if (!interview.RosterInstancesIds.ContainsKey(rosterParentId))
+                    interview.RosterInstancesIds.Add(rosterParentId, new List<string>());
+
+                interview.RosterInstancesIds[rosterParentId].Add(rosterId);
             }
         }
 
         internal override void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
-            @event.Instances.ForEach(x => interview.GroupsAndRosters.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.GroupId, GetFullRosterVector(x))));
+            foreach (var rosterInstance in @event.Instances)
+            {
+                var rosterId = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, this.GetFullRosterVector(rosterInstance));
+                var rosterParentId = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
+
+                interview.Groups.Remove(rosterId);
+                interview.RosterInstancesIds[rosterParentId].Remove(rosterId);
+            }
         }
 
         #endregion
@@ -263,9 +277,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var groupId = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
             InterviewGroupModel groupOrRoster;
-            if (this.interview.GroupsAndRosters.ContainsKey(groupId))
+            if (this.interview.Groups.ContainsKey(groupId))
             {
-                groupOrRoster = this.interview.GroupsAndRosters[groupId];
+                groupOrRoster = this.interview.Groups[groupId];
             }
             else
             {
@@ -275,7 +289,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             update(groupOrRoster);
 
-            this.interview.GroupsAndRosters[groupId] = groupOrRoster;
+            this.interview.Groups[groupId] = groupOrRoster;
         }
 
         private void UpdateAnswerState(Guid id, decimal[] rosterVector, Action<AbstractInterviewAnswerModel> update)

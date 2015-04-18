@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -9,14 +11,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class PrefilledQuestionsViewModel : BaseViewModel
     {
         private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainInterviewRepository plainStorageInterviewAccessor;
+        private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
+        private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
         private string interviewId;
 
         public PrefilledQuestionsViewModel(ILogger logger,
             IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IPlainInterviewRepository plainStorageInterviewAccessor)
+            IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
+            IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
             : base(logger)
         {
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
@@ -50,8 +52,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.interviewId = interviewId;
 
-            var interview = this.plainStorageInterviewAccessor.GetInterview(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var interview = this.plainStorageInterviewAccessor.Get(interviewId);
+            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = await this.interviewStateFullViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);

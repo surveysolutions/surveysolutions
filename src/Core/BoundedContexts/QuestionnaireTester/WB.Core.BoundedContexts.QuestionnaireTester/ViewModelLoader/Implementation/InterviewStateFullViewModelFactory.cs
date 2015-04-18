@@ -5,38 +5,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementation
 {
     internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
     {
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
         public InterviewStateFullViewModelFactory(
-            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
             IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
-
-        private readonly Dictionary<Type, Func<Identity, InterviewModel, QuestionnaireDocument, MvxViewModel>> mapQuestions = new Dictionary<Type, Func<Identity, InterviewModel, QuestionnaireDocument, MvxViewModel>>()
-        {
-            { typeof(Group), (qIdentity, interview, questionnaire) => CreateViewModel<GroupReferenceViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
-            { typeof(StaticText), (qIdentity, interview, questionnaire) => CreateViewModel<StaticTextViewModel>(vm => vm.Init(qIdentity, questionnaire)) },
-            { typeof(TextQuestion), (qIdentity, interview, questionnaire) => CreateViewModel<TextQuestionViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
-        };
 
         public Task<ObservableCollection<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
         {
@@ -45,56 +33,134 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
 
         private ObservableCollection<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.Get(interviewId.FormatGuid());
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
-                interview.QuestionnaireVersion);
+            var interview = this.plainStorageInterviewAccessor.Get(interviewId);
+            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
 
-            IComposite loyout;
+            var chapterIdGuid = string.IsNullOrEmpty(chapterId) 
+                ? questionnaire.GroupsWithoutNestedChildren.Keys.First()
+                : Guid.Parse(chapterId);
 
-            if (chapterId.IsNullOrEmpty())
-            {
-                loyout = questionnaire.Children.First();
-            }
-            else
-            {
-                Guid chapterIdGuid = new Guid(chapterId);
-                loyout = questionnaire.Find<IGroup>(chapterIdGuid);
-                if (chapterId != null && loyout == null)
+            
+            if (chapterId != null && questionnaire.GroupsWithoutNestedChildren.ContainsKey(chapterIdGuid))
                     throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterId));
-            }
+
+            var layout = questionnaire.GroupsWithoutNestedChildren[chapterIdGuid];
 
             ObservableCollection<MvxViewModel> entities = new ObservableCollection<MvxViewModel>();
 
-            foreach (var child in loyout.Children)
-            {
-                var entityType = child.GetType();
+            var rosterVector = new decimal[0];
 
-                if (!this.mapQuestions.ContainsKey(entityType))
+            foreach (var itemPlaceholder in layout.Placeholders)
+            {
+                if (itemPlaceholder is RosterPlaceholderModel)
                 {
-                    entities.Add(new StaticTextViewModel() {Title = child.ToString()});
-                    continue; // temporaly ignore unknown types
+                    var rosterModel = itemPlaceholder as RosterPlaceholderModel;
+
+                    var identity = new Identity(rosterModel.Id, rosterVector);
+                    var questionViewModel = Mvx.Create<RosterReferenceViewModel>();
+                    questionViewModel.Init(identity, interview, questionnaire);
+                    entities.Add(questionViewModel);
                 }
 
-                var mapQuestionFunc = this.mapQuestions[entityType];
-                Identity identity = new Identity(child.PublicKey, new decimal[0]); // TODO SPuV: rosterVecror ????
-                var entityViewModel = mapQuestionFunc.Invoke(identity, interview, questionnaire);
+                if (itemPlaceholder is GroupPlaceholderModel)
+                {
+                    var groupModel = itemPlaceholder as GroupPlaceholderModel;
+                    var questionViewModel = CreateGroupReferenceViewModel(groupModel.Id, rosterVector, interview, questionnaire);
+                    entities.Add(questionViewModel);
+                }
 
-                entities.Add(entityViewModel);
+                if (itemPlaceholder is QuestionPlaceholderModel)
+                {
+                    var questionPlaceholder = itemPlaceholder as QuestionPlaceholderModel;
+                    var questionViewModel = CreateQuestionViewModel(questionPlaceholder.Id, rosterVector, interview, questionnaire);
+                    entities.Add(questionViewModel);
+                }
+
+                if (itemPlaceholder is StaticTextModel)
+                {
+                    entities.Add(new StaticTextViewModel { Title = itemPlaceholder.Title });
+                }
             }
             return entities;
         }
 
-        private static T CreateViewModel<T>(Action<T> intializer) where T : class
+        private static GroupReferenceViewModel CreateGroupReferenceViewModel(
+            Guid groupId,
+            decimal[] rosterVector,
+            InterviewModel interview,
+            QuestionnaireModel questionnaire)
         {
-            T viewModel = Mvx.Create<T>();
-            intializer.Invoke(viewModel);
-            return viewModel;
+            var identity = new Identity(groupId, rosterVector);
+            
+            var questionViewModel = Mvx.Create<GroupReferenceViewModel>();
+            questionViewModel.Init(identity, interview, questionnaire);
+            return questionViewModel;
+        }
+
+        private static BaseInterviewItemViewModel CreateQuestionViewModel(
+            Guid questionId,
+            decimal[] rosterVector,
+            InterviewModel interview,
+            QuestionnaireModel questionnaire)
+        {
+            var identity = new Identity(questionId, rosterVector);
+
+            var questionModel = questionnaire.Questions[questionId];
+
+            BaseInterviewItemViewModel questionViewModel;
+
+            switch (questionModel.Type)
+            {
+                case QuestionModelType.SingleOption:
+                    questionViewModel = Mvx.Create<SingleOptionQuestionViewModel>();
+                    break;
+                case QuestionModelType.LinkedSingleOption:
+                    questionViewModel = Mvx.Create<LinkedSingleOptionQuestionViewModel>();
+                    break;
+                case QuestionModelType.MultiOption:
+                    questionViewModel = Mvx.Create<MultiOptionQuestionViewModel>();
+                    break;
+                case QuestionModelType.LinkedMultiOption:
+                    questionViewModel = Mvx.Create<LinkedMultiOptionQuestionViewModel>();
+                    break;
+                case QuestionModelType.IntegerNumeric:
+                    questionViewModel = Mvx.Create<IntegerNumericQuestionViewModel>();
+                    break;
+                case QuestionModelType.RealNumeric:
+                    questionViewModel = Mvx.Create<RealNumericQuestionViewModel>();
+                    break;
+                case QuestionModelType.MaskedText:
+                    questionViewModel = Mvx.Create<MaskedTextQuestionViewModel>();
+                    break;
+                case QuestionModelType.TextList:
+                    questionViewModel = Mvx.Create<TextListQuestionViewModel>();
+                    break;
+                case QuestionModelType.QrBarcode:
+                    questionViewModel = Mvx.Create<QrBarcodeQuestionViewModel>();
+                    break;
+                case QuestionModelType.Multimedia:
+                    questionViewModel = Mvx.Create<MultimediaQuestionViewModel>();
+                    break;
+                case QuestionModelType.DateTime:
+                    questionViewModel = Mvx.Create<DateTimeQuestionViewModel>();
+                    break;
+                case QuestionModelType.GpsCoordinates:
+                    questionViewModel = Mvx.Create<GpsCoordinatesQuestionViewModel>();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+           
+            questionViewModel.Init(identity, interview, questionnaire);
+            return questionViewModel;
         }
 
         public Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId)
         {
-            return
-                new Task<ObservableCollection<MvxViewModel>>(() => new ObservableCollection<MvxViewModel>(new []{ new TextQuestionViewModel(null, null), }));
+            return new Task<ObservableCollection<MvxViewModel>>(() =>
+                    {
+                        return new ObservableCollection<MvxViewModel>(new[] { new MaskedTextQuestionViewModel(null, null), });
+                    });
         }
     }
 }

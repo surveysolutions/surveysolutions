@@ -53,14 +53,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
         }
 
-        private List<GroupModelPlaceholder> BuildParentsList(Group group)
+        private List<GroupPlaceholderModel> BuildParentsList(Group group)
         {
-            var parents = new List<GroupModelPlaceholder>();
+            var parents = new List<GroupPlaceholderModel>();
 
             var parent = group.GetParent() as Group;
             while (parent != null && parent.PublicKey != EventSourceId )
             {
-                var parentPlaceholder = parent.IsRoster ? new RosterModelPlaceholder() : new GroupModelPlaceholder();
+                var parentPlaceholder = parent.IsRoster ? new RosterPlaceholderModel() : new GroupPlaceholderModel();
                 parentPlaceholder.Id = parent.PublicKey;
                 parentPlaceholder.Title = parent.Title;
                 parents.Add(parentPlaceholder);
@@ -82,26 +82,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var question = child as AbstractQuestion;
                 if (question != null)
                 {
-                    var questionModelPlaceholder = new QuestionModelPlaceholder { Id = question.PublicKey, Title = question.QuestionText };
+                    if (question.QuestionScope != QuestionScope.Interviewer)
+                        continue;
+
+                    var questionModelPlaceholder = new QuestionPlaceholderModel { Id = question.PublicKey, Title = question.QuestionText };
                     groupModel.Placeholders.Add(questionModelPlaceholder);
+                    continue;
                 }
+
                 var text = child as StaticText;
                 if (text != null)
                 {
                     var staticTextModel = new StaticTextModel { Id = text.PublicKey, Title = text.Text };
                     groupModel.Placeholders.Add(staticTextModel);
+                    continue;
                 }
+
                 var subGroup = child as Group;
                 if (subGroup != null)
                 {
                     if (subGroup.IsRoster)
                     {
-                        var rosterModelPlaceholder = new RosterModelPlaceholder { Id = subGroup.PublicKey, Title = subGroup.Title };
+                        var rosterModelPlaceholder = new RosterPlaceholderModel { Id = subGroup.PublicKey, Title = subGroup.Title };
                         groupModel.Placeholders.Add(rosterModelPlaceholder);
                     }
                     else
                     {
-                        var groupModelPlaceholder = new GroupModelPlaceholder { Id = subGroup.PublicKey, Title = subGroup.Title };
+                        var groupModelPlaceholder = new GroupPlaceholderModel { Id = subGroup.PublicKey, Title = subGroup.Title };
                         groupModel.Placeholders.Add(groupModelPlaceholder);
                     }
                 }

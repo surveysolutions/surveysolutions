@@ -1,4 +1,59 @@
-﻿namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+﻿using System;
+
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GpsCoordinatesQuestionViewModel : AbstractQuestionViewModel { }
+    public class GpsCoordinatesQuestionViewModel : BaseInterviewItemViewModel
+    {
+        private readonly ICommandService commandService;
+        private readonly IPrincipal principal;
+        private Identity identity;
+        private InterviewModel interviewModel;
+        private QuestionnaireModel questionnaireModel;
+
+        public GpsCoordinatesQuestionViewModel(ICommandService commandService, IPrincipal principal)
+        {
+            this.commandService = commandService;
+            this.principal = principal;
+        }
+
+        public override void Init(Identity identity, InterviewModel interviewModel, QuestionnaireModel questionnaireModel)
+        {
+            if (identity == null) throw new ArgumentNullException("identity");
+            if (interviewModel == null) throw new ArgumentNullException("interviewModel");
+            if (questionnaireModel == null) throw new ArgumentNullException("questionnaireModel");
+
+            this.identity = identity;
+            this.interviewModel = interviewModel;
+            this.questionnaireModel = questionnaireModel;
+
+            MaskedTextQuestionModel questionModel = (MaskedTextQuestionModel)this.questionnaireModel.Questions[this.identity.Id];
+            var answerModel = this.interviewModel.GetGpsCoordinatesAnswerModel(this.identity);
+
+            Title = questionModel.Title;
+
+            if (answerModel != null)
+            {
+              
+            }
+        }
+
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            set { title = value; RaisePropertyChanged(() => Title); }
+        }
+
+        private string answer;
+        public string Answer
+        {
+            get { return answer; }
+            set { answer = value; RaisePropertyChanged(() => Answer); }
+        }
+    }
 }

@@ -1,36 +1,31 @@
 ﻿using System;
-using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
-
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class StaticTextViewModel : MvxViewModel
+    public class StaticTextViewModel : BaseInterviewItemViewModel
     {
-        public class NavObject
-        {
-            public Identity QuestionIdentity { get; set; }
-            public QuestionnaireDocument QuestionnaireDocument { get; set; }
-        }
+        private Identity identity;
+        private InterviewModel interviewModel;
+        private QuestionnaireModel questionnaireModel;
 
         public StaticTextViewModel() { }
 
-        public void Init(NavObject navObject)
+        public override void Init(Identity questionIdentity, InterviewModel interview, QuestionnaireModel questionnaireDocument)
         {
-            var staticText = navObject.QuestionnaireDocument.Find<IStaticText>(navObject.QuestionIdentity.Id);
+            if (identity == null) throw new ArgumentNullException("identity");
+            if (interviewModel == null) throw new ArgumentNullException("interviewModel");
+            if (questionnaireModel == null) throw new ArgumentNullException("questionnaireModel");
 
-            Title = staticText.Text;
-        }
+            this.identity = identity;
+            this.interviewModel = interviewModel;
+            this.questionnaireModel = questionnaireModel;
 
-        public void Init(Identity questionIdentity, QuestionnaireDocument questionnaireDocument)
-        {
-            Init(new NavObject()
-            {
-                QuestionIdentity = questionIdentity,
-                QuestionnaireDocument = questionnaireDocument
-            });
+            var staticText = this.questionnaireModel.Texts[this.identity.Id];
+
+            Title = staticText.Title;
+          
         }
 
         public bool IsDisabled { get; set; }
