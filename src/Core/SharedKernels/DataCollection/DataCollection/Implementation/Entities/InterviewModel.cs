@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public InterviewModel()
         {
             Answers = new Dictionary<string, AbstractInterviewAnswerModel>();
-            this.GroupsAndRosters = new Dictionary<string, InterviewGroupModel>();
+            this.Groups = new Dictionary<string, InterviewGroupModel>();
             QuestionIdToQuestionModelTypeMap = new Dictionary<Guid, QuestionModelType>();
             IsInProgress = true;
         }
@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid Id { get; set; }
 
         public Dictionary<string, AbstractInterviewAnswerModel> Answers { get; set; }
-        public Dictionary<string, InterviewGroupModel> GroupsAndRosters { get; set; }
+        public Dictionary<string, InterviewGroupModel> Groups { get; set; }
+        public Dictionary<string, List<string>> RosterInstancesIds { get; set; }
 
         public Dictionary<Guid, QuestionModelType> QuestionIdToQuestionModelTypeMap { get; set; }
 
@@ -43,9 +44,64 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     { QuestionModelType.GpsCoordinates, () => new GpsCoordinatesAnswerModel()}
                 };
 
-        public MaskedTextAnswerModel GetTextQuestionModel(Identity identity)
+        public GpsCoordinatesAnswerModel GetGpsCoordinatesAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<GpsCoordinatesAnswerModel>(identity);
+        }
+
+        public DateTimeAnswerModel GetDateTimeAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<DateTimeAnswerModel>(identity);
+        }
+
+        public MultimediaAnswerModel GetMultimediaAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<MultimediaAnswerModel>(identity);
+        }
+
+        public QrBarcodeAnswerModel GetQrBarcodeAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<QrBarcodeAnswerModel>(identity);
+        }
+
+        public TextListAnswerModel GetTextListAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<TextListAnswerModel>(identity);
+        }
+
+        public LinkedSingleOptionAnswerModel GetLinkedSingleOptionAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<LinkedSingleOptionAnswerModel>(identity);
+        }
+
+        public MultiOptionAnswerModel GetMultiOptionAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<MultiOptionAnswerModel>(identity);
+        }
+
+        public LinkedMultiOptionAnswerModel GetLinkedMultiOptionAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<LinkedMultiOptionAnswerModel>(identity);
+        }
+
+        public IntegerNumericAnswerModel GetIntegerNumericAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<IntegerNumericAnswerModel>(identity);
+        }
+
+        public RealNumericAnswerModel GetRealNumericAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<RealNumericAnswerModel>(identity);
+        }
+
+        public MaskedTextAnswerModel GetTextAnswerModel(Identity identity)
         {
             return GetQuestionModel<MaskedTextAnswerModel>(identity);
+        }
+
+        public SingleOptionAnswerModel GetSingleAnswerModel(Identity identity)
+        {
+            return GetQuestionModel<SingleOptionAnswerModel>(identity);
         }
 
         private T GetQuestionModel<T>(Identity identity) where T : AbstractInterviewAnswerModel
@@ -54,5 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!Answers.ContainsKey(questionId)) return null;
             return (T)Answers[questionId];
         }
+
+       
     }
 }

@@ -9,17 +9,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         string Title { get; set; }
     }
 
-    public class GroupModelPlaceholder : IQuestionnaireItemPlaceholder
+    public class GroupPlaceholderModel : IQuestionnaireItemPlaceholder
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
     }
 
-    public class RosterModelPlaceholder : GroupModelPlaceholder
+    public class RosterPlaceholderModel : GroupPlaceholderModel
     {
     }
 
-    public class QuestionModelPlaceholder : IQuestionnaireItemPlaceholder
+    public class QuestionPlaceholderModel : IQuestionnaireItemPlaceholder
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -169,6 +169,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Dictionary<Guid, GroupModel> GroupsWithoutNestedChildren { get; set; }
 
-        public Dictionary<Guid, List<GroupModelPlaceholder>> GroupParents { get; set; }
+        public Dictionary<Guid, List<GroupPlaceholderModel>> GroupParents { get; set; }
+
+        public Dictionary<Guid, StaticTextModel> Texts { get; set; }
     }
 }
