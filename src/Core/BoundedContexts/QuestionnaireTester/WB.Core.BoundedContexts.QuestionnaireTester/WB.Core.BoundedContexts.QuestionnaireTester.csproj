@@ -65,7 +65,6 @@
     <Compile Include="ViewModels\QuestionsViewModels\IntegerNumericQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\LinkedMultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\LinkedSingleOptionQuestionViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\MaskedTextQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultimediaQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\OrderedMultiOptionQuestionViewModel.cs" />
@@ -78,7 +77,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextListQuestionViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\MaskedTextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />

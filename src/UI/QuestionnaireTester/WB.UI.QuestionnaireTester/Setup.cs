@@ -52,7 +52,7 @@ namespace WB.UI.QuestionnaireTester
 
                 // questions
                 {typeof (StaticTextViewModel), typeof (StaticText)},
-                {typeof (TextQuestionViewModel), typeof (TextQuestion)},
+                {typeof (MaskedTextQuestionViewModel), typeof (TextQuestion)},
                 {typeof (GroupReferenceViewModel), typeof (Group)},
             };
 
