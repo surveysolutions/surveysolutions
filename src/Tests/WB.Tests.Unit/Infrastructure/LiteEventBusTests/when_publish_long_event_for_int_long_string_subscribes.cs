@@ -1,21 +1,20 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
+namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class subscribe_all_method_must_register_all_event_handlers_for_class : EventBusTestsContext
+    internal class when_publish_long_event_for_int_long_string_subscribes : LiteEventBusTestsContext
     {
         Establish context = () =>
         {
             longValue = 10;
             aggregateRoot = CreateDummyAggregateRoot(longValue);
-            
-            var eventRegistry = CreateEventRegistry();
-            eventBus = CreateEventBus(eventRegistry);
+
+            var eventRegistry = Create.LiteEventRegistry();
+            eventBus = Create.LiteEventBus(eventRegistry);
 
             handlersClass = CreateDummyClassWithEventHandlers();
             eventRegistry.Subscribe(handlersClass);
@@ -37,6 +36,6 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
         private static ILiteEventBus eventBus;
         private static long longValue;
         private static IAggregateRoot aggregateRoot;
-        private static DumyEventHandlers handlersClass;
+        private static DumyLiteEventHandlers handlersClass;
     }
 }

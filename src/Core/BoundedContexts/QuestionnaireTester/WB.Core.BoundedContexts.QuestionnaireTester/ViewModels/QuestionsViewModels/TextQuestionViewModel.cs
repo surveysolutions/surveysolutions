@@ -17,9 +17,9 @@ using WB.Core.SharedKernels.DataCollection;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class TextQuestionViewModel : MvxViewModel,
-        IEventBusEventHandler<TextQuestionAnswered>,
-        IEventBusEventHandler<QuestionsEnabled>,
-        IEventBusEventHandler<QuestionsDisabled>
+        ILiteEventBusEventHandler<TextQuestionAnswered>,
+        ILiteEventBusEventHandler<QuestionsEnabled>,
+        ILiteEventBusEventHandler<QuestionsDisabled>
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;

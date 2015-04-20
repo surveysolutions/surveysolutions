@@ -1,25 +1,24 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
+namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class handlers_does_not_catch_other_event_types : EventBusTestsContext
+    internal class when_publish_long_event_for_long_and_int_subscribers : LiteEventBusTestsContext
     {
         Establish context = () =>
         {
             longValue = 10;
             aggregateRoot = CreateDummyAggregateRoot(longValue);
-            var eventRegistry = CreateEventRegistry();
-            eventBus = CreateEventBus(eventRegistry);
+            var eventRegistry = Create.LiteEventRegistry();
+            eventBus = Create.LiteEventBus(eventRegistry);
 
-            sub1Mock = Mock.Of<IEventBusEventHandler<int>>();
+            sub1Mock = Mock.Of<ILiteEventBusEventHandler<int>>();
             eventRegistry.Subscribe(sub1Mock);
 
-            sub2Mock = Mock.Of<IEventBusEventHandler<long>>();
+            sub2Mock = Mock.Of<ILiteEventBusEventHandler<long>>();
             eventRegistry.Subscribe(sub2Mock);
         };
 
@@ -36,7 +35,7 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
         private static ILiteEventBus eventBus;
         private static long longValue;
         private static IAggregateRoot aggregateRoot;
-        private static IEventBusEventHandler<int> sub1Mock;
-        private static IEventBusEventHandler<long> sub2Mock;
+        private static ILiteEventBusEventHandler<int> sub1Mock;
+        private static ILiteEventBusEventHandler<long> sub2Mock;
     }
 }

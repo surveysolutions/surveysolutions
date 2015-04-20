@@ -1,27 +1,25 @@
 using Machine.Specifications;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
+namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class publish_does_catch_by_multi_subscribers : EventBusTestsContext
+    internal class when_publish_event_for_2_event_subscribers_on_this_event : LiteEventBusTestsContext
     {
         Establish context = () =>
         {
             dummyEvent = CreateDummyEvent();
             aggregateRoot = CreateDummyAggregateRoot(dummyEvent, new object());
 
-            var eventRegistry = CreateEventRegistry();
-            eventBus = CreateEventBus(eventRegistry);
+            var eventRegistry = Create.LiteEventRegistry();
+            eventBus = Create.LiteEventBus(eventRegistry);
 
-            sub1Mock = Mock.Of<IEventBusEventHandler<DummyEvent>>();
+            sub1Mock = Mock.Of<ILiteEventBusEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(sub1Mock);
 
-            sub2Mock = Mock.Of<IEventBusEventHandler<DummyEvent>>();
+            sub2Mock = Mock.Of<ILiteEventBusEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(sub2Mock);
         };
 
@@ -38,7 +36,7 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
         private static ILiteEventBus eventBus;
         private static DummyEvent dummyEvent;
         private static IAggregateRoot aggregateRoot;
-        private static IEventBusEventHandler<DummyEvent> sub1Mock;
-        private static IEventBusEventHandler<DummyEvent> sub2Mock;
+        private static ILiteEventBusEventHandler<DummyEvent> sub1Mock;
+        private static ILiteEventBusEventHandler<DummyEvent> sub2Mock;
     }
 }
