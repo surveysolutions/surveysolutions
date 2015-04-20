@@ -227,7 +227,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static Version CreateQuestionnaireVersion()
         {
-            return new QuestionnaireVersionService().GetLatestSupportedVersion();
+            return new ExpressionsEngineVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
@@ -534,7 +534,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
-            var questionnaireVersionProvider = new QuestionnaireVersionService();
+            var questionnaireVersionProvider = new ExpressionsEngineVersionService();
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(

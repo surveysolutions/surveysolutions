@@ -22,13 +22,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class CodeGenerator : ICodeGenerator
     {
-        public CodeGenerator(IQuestionnaireVersionService questionnaireVersionService)
+        public CodeGenerator(IExpressionsEngineVersionService expressionsEngineVersionService)
         {
-            this.questionnaireVersionService = questionnaireVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
-        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
         private IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string Generate(QuestionnaireDocument questionnaire)
         {
-            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(questionnaireVersionService.GetLatestSupportedVersion());
+            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(expressionsEngineVersionService.GetLatestSupportedVersion());
 
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
                 CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, true);

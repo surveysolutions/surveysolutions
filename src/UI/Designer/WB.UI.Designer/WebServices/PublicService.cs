@@ -22,7 +22,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IJsonUtils jsonUtils;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
-            IQuestionnaireVersionService questionnaireVersionService, 
+            IExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.questionnaireVersionService = questionnaireVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            if (!questionnaireVersionService.IsClientVersionSupported(request.SupportedQuestionnaireVersion))
+            if (!expressionsEngineVersionService.IsClientVersionSupported(request.SupportedQuestionnaireVersion))
             {
                 var message =
                     string.Format(ErrorMessages.ClientVersionIsNotSupported, request.SupportedQuestionnaireVersion);

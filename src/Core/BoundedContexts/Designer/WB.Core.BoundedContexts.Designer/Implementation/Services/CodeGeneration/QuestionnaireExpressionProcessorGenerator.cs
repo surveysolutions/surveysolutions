@@ -14,13 +14,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly IDynamicCompiler codeCompiler;
         private readonly ICodeGenerator codeGenerator;
-        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
-        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IQuestionnaireVersionService questionnaireVersionService)
+        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.codeCompiler =  codeCompiler;
             this.codeGenerator = codeGenerator;
-            this.questionnaireVersionService = questionnaireVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire,
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
         {
-            return this.codeGenerator.GenerateEvaluator(questionnaire, questionnaireVersionService.GetLatestSupportedVersion());
+            return this.codeGenerator.GenerateEvaluator(questionnaire, expressionsEngineVersionService.GetLatestSupportedVersion());
         }
 
         public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)
