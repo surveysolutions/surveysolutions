@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace WB.Core.Infrastructure.EventBus.Lite
 {
-    public interface IEventRegistry
+    public interface ILiteEventRegistry
     {
-        void Subscribe(IEventBusEventHandler handler);
+        void Subscribe(ILiteEventBusEventHandler handler);
 
-        void Unsubscribe(IEventBusEventHandler obj);
+        void Unsubscribe(ILiteEventBusEventHandler handler);
 
         IEnumerable<Action<object>> GetHandlers(object @event);
     }

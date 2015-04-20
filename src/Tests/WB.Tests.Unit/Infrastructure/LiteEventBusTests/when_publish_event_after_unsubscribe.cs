@@ -1,23 +1,22 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
+namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class class_must_not_have_handle_events_after_unsubscribe : EventBusTestsContext
+    internal class when_publish_event_after_unsubscribe : LiteEventBusTestsContext
     {
         Establish context = () =>
         {
-            eventRegistry = CreateEventRegistry();
-            eventBus = CreateEventBus(eventRegistry);
+            liteEventRegistry = Create.LiteEventRegistry();
+            eventBus = Create.LiteEventBus(liteEventRegistry);
             aggregateRoot = CreateDummyAggregateRoot((int)10, (long)10, "10");
 
             subMock = CreateDummyClassWithEventHandlers();
-            eventRegistry.Subscribe(subMock);
-            eventRegistry.Unsubscribe(subMock);
+            liteEventRegistry.Subscribe(subMock);
+            liteEventRegistry.Unsubscribe(subMock);
         };
 
         Because of = () =>
@@ -33,8 +32,8 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
             Mock.Get(subMock).Verify(s => s.Handle(Moq.It.IsAny<string>()), Times.Never);
 
         private static ILiteEventBus eventBus;
-        private static IEventRegistry eventRegistry;
+        private static ILiteEventRegistry liteEventRegistry;
         private static IAggregateRoot aggregateRoot;
-        private static DumyEventHandlers subMock;
+        private static DumyLiteEventHandlers subMock;
     }
 }

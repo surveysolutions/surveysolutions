@@ -9,11 +9,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventBus : ILiteEventBus
     {
-        private readonly IEventRegistry eventRegistry;
+        private readonly ILiteEventRegistry liteEventRegistry;
 
-        public LiteEventBus(IEventRegistry eventRegistry)
+        public LiteEventBus(ILiteEventRegistry liteEventRegistry)
         {
-            this.eventRegistry = eventRegistry;
+            this.liteEventRegistry = liteEventRegistry;
         }
 
         public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
@@ -34,7 +34,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
         {
             foreach (var uncommittedChange in uncommittedChanges)
             {
-                var handlers = this.eventRegistry.GetHandlers(uncommittedChange.Payload);
+                var handlers = this.liteEventRegistry.GetHandlers(uncommittedChange.Payload);
 
                 var exceptions = new List<Exception>();
 
@@ -51,9 +51,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 }
 
                 if (exceptions.Count > 0)
-                    throw new AggregateException(
-                       string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", exceptions.Count, uncommittedChange.EventIdentifier, uncommittedChange.EventSourceId, uncommittedChange.EventSequence),
-                       exceptions);
+                {
+                    var message = string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", 
+                        exceptions.Count, uncommittedChange.EventIdentifier, uncommittedChange.EventSourceId, uncommittedChange.EventSequence);
+                    throw new AggregateException(message, exceptions);
+                }
             }
         }
     }

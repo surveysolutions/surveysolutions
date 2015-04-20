@@ -1,19 +1,18 @@
 using System;
 using System.Linq;
+using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 
-namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
+namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    public class EventBusTestsContext
+    [Subject(typeof(LiteEventBus))]
+    public class LiteEventBusTestsContext
     {
-        public class DumyEventHandlers : IEventBusEventHandler<int>, IEventBusEventHandler<long>, IEventBusEventHandler<string>
+        public class DumyLiteEventHandlers : ILiteEventBusEventHandler<int>, ILiteEventBusEventHandler<long>, ILiteEventBusEventHandler<string>
         {
             public virtual void Handle(int @event) { }
 
@@ -46,20 +45,9 @@ namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
             return new UncommittedEvent(Guid.Empty, Guid.Empty, 0, 0, DateTime.Now, @event);
         }
 
-        public static DumyEventHandlers CreateDummyClassWithEventHandlers() 
+        public static DumyLiteEventHandlers CreateDummyClassWithEventHandlers() 
         {
-            return Mock.Of<DumyEventHandlers>();
+            return Mock.Of<DumyLiteEventHandlers>();
         }  
-        
-        public static IEventRegistry CreateEventRegistry()
-        {
-            return new EventRegistry();
-        }
-
-        public static ILiteEventBus CreateEventBus(IEventRegistry eventRegistry = null)
-        {
-            var eventReg = eventRegistry ?? Mock.Of<IEventRegistry>();
-            return new LiteEventBus(eventReg);
-        }
     }
 }

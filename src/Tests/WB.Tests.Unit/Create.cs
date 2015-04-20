@@ -38,6 +38,8 @@ using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.ReadSide;
@@ -1417,5 +1419,15 @@ namespace WB.Tests.Unit
         }
 
 
+        public static ILiteEventRegistry LiteEventRegistry()
+        {
+            return new LiteEventRegistry();
+        }
+
+        public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null)
+        {
+            var eventReg = liteEventRegistry ?? Mock.Of<ILiteEventRegistry>();
+            return new LiteEventBus(eventReg);
+        }
     }
 }
