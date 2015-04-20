@@ -103,12 +103,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
                     {
-                        var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                        {
-                            ExpressionString = questionTemplateModel.Conditions,
-                            GeneratedClassName = groupedRosters.Key,
-                            GeneratedMethodName = questionTemplateModel.GeneratedConditionsMethodName
-                        });
+                        var expressionMethodModel = new ExpressionMethodModel(
+                            groupedRosters.Key,
+                            questionTemplateModel.GeneratedConditionsMethodName,
+                            questionnaireTemplateStructure.Namespaces, questionTemplateModel.Conditions);
+
+                        var methodTemplate =
+                            new ExpressionMethodTemplate(expressionMethodModel);
 
                         generatedClasses.Add(
                             new ExpressionLocation
@@ -121,12 +122,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
                     {
-                        var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                        {
-                            ExpressionString = questionTemplateModel.Validations,
-                            GeneratedClassName = groupedRosters.Key,
-                            GeneratedMethodName = questionTemplateModel.GeneratedValidationsMethodName
-                        });
+                        var expressionMethodModel = new ExpressionMethodModel(
+                          groupedRosters.Key,
+                          questionTemplateModel.GeneratedValidationsMethodName,
+                          questionnaireTemplateStructure.Namespaces, questionTemplateModel.Validations);
+
+                        var methodTemplate =
+                            new ExpressionMethodTemplate(expressionMethodModel);
 
                         generatedClasses.Add(new ExpressionLocation
                         {
@@ -141,12 +143,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
                     {
-                        var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                        {
-                            ExpressionString = groupTemplateModel.Conditions,
-                            GeneratedClassName = groupedRosters.Key,
-                            GeneratedMethodName = groupTemplateModel.GeneratedConditionsMethodName
-                        });
+                        var expressionMethodModel = new ExpressionMethodModel(
+                            groupedRosters.Key,
+                            groupTemplateModel.GeneratedConditionsMethodName,
+                            questionnaireTemplateStructure.Namespaces, groupTemplateModel.Conditions);
+
+                        var methodTemplate =
+                            new ExpressionMethodTemplate(expressionMethodModel);
 
                         generatedClasses.Add(
                             new ExpressionLocation
@@ -162,12 +165,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     if (!string.IsNullOrWhiteSpace(rosterTemplateModel.Conditions))
                     {
-                        var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                        {
-                            ExpressionString = rosterTemplateModel.Conditions,
-                            GeneratedClassName = groupedRosters.Key,
-                            GeneratedMethodName = rosterTemplateModel.GeneratedConditionsMethodName
-                        });
+                        var expressionMethodModel = new ExpressionMethodModel(
+                          groupedRosters.Key,
+                          rosterTemplateModel.GeneratedConditionsMethodName,
+                          questionnaireTemplateStructure.Namespaces, rosterTemplateModel.Conditions);
+
+                        var methodTemplate =
+                            new ExpressionMethodTemplate(expressionMethodModel);
 
                         generatedClasses.Add(
                             new ExpressionLocation
@@ -188,12 +192,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
                 {
-                    var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                    {
-                        ExpressionString = questionTemplateModel.Conditions,
-                        GeneratedClassName = questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        GeneratedMethodName = questionTemplateModel.GeneratedConditionsMethodName
-                    });
+                    var expressionMethodModel = new ExpressionMethodModel(
+                         questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
+                         questionTemplateModel.GeneratedConditionsMethodName,
+                         questionnaireTemplateStructure.Namespaces, questionTemplateModel.Conditions);
+
+                    var methodTemplate =
+                        new ExpressionMethodTemplate(expressionMethodModel);
 
                     generatedClasses.Add(
                         new ExpressionLocation
@@ -206,12 +211,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
                 {
-                    var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                    {
-                        ExpressionString = questionTemplateModel.Validations,
-                        GeneratedClassName = questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        GeneratedMethodName = questionTemplateModel.GeneratedValidationsMethodName
-                    });
+                    var expressionMethodModel = new ExpressionMethodModel(
+                        questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
+                        questionTemplateModel.GeneratedValidationsMethodName,
+                        questionnaireTemplateStructure.Namespaces, questionTemplateModel.Validations);
+
+                    var methodTemplate =
+                        new ExpressionMethodTemplate(expressionMethodModel);
 
                     generatedClasses.Add(
                         new ExpressionLocation
@@ -227,12 +233,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
                 {
-                    var methodTemplate = new ExpressionMethodTemplate(new ExpressionMethodModel
-                    {
-                        ExpressionString = groupTemplateModel.Conditions,
-                        GeneratedClassName = questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        GeneratedMethodName = groupTemplateModel.GeneratedConditionsMethodName
-                    });
+                    var expressionMethodModel = new ExpressionMethodModel(
+                        questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
+                        groupTemplateModel.GeneratedConditionsMethodName,
+                        questionnaireTemplateStructure.Namespaces, groupTemplateModel.Conditions);
+
+                    var methodTemplate =
+                        new ExpressionMethodTemplate(expressionMethodModel);
 
                     generatedClasses.Add(
                         new ExpressionLocation
