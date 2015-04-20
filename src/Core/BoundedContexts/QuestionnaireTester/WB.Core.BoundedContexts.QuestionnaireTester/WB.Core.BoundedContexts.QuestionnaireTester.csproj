@@ -55,6 +55,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewGroupViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\CascadingSingleOptionQuestionViewModel.cs" />

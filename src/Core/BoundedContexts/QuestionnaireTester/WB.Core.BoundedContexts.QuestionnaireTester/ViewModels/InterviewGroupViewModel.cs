@@ -4,22 +4,75 @@ using System.Collections.ObjectModel;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class InterviewGroupViewModel : BaseViewModel
     {
+        private readonly IPrincipal principal;
         private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
 
-        public InterviewGroupViewModel(IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory)
+        public InterviewGroupViewModel(IPrincipal principal, IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory)
         {
+            this.principal = principal;
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
         }
 
         public async void Init(string id, string chapterId)
         {
-            var viewModels = await interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
-            Items = new ObservableCollection<MvxViewModel>(viewModels);
+            this.CurrentGroupName = "Current group name";
+            this.Items = await interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
+        }
+
+        private IMvxCommand navigateToDashboardCommand;
+        public IMvxCommand NavigateToDashboardCommand
+        {
+            get
+            {
+                return navigateToDashboardCommand ?? (navigateToDashboardCommand = new MvxCommand(() => this.ShowViewModel<DashboardViewModel>()));
+            }
+        }
+
+        private IMvxCommand navigateToHelpCommand;
+        public IMvxCommand NavigateToHelpCommand
+        {
+            get
+            {
+                return navigateToHelpCommand ?? (navigateToHelpCommand = new MvxCommand(() => this.ShowViewModel<HelpViewModel>()));
+            }
+        }
+
+        private IMvxCommand changeLanguageCommand;
+        public IMvxCommand ChangeLanguageCommand
+        {
+            get
+            {
+                return changeLanguageCommand ?? (changeLanguageCommand = new MvxCommand(this.ChangeLanguage));
+            }
+        }
+
+        private IMvxCommand signOutCommand;
+        public IMvxCommand SignOutCommand
+        {
+            get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }
+        }
+
+        private IMvxCommand showSettingsCommand;
+        public IMvxCommand ShowSettingsCommand
+        {
+            get { return showSettingsCommand ?? (showSettingsCommand = new MvxCommand(() => this.ShowViewModel<SettingsViewModel>())); }
+        }
+
+        private void SignOut()
+        {
+            this.principal.SignOut();
+            this.ShowViewModel<LoginViewModel>();
+        }
+
+        private void ChangeLanguage()
+        {
+            throw new NotImplementedException();
         }
 
         public Guid Id { get; set; }
@@ -39,9 +92,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public int CountOfAnsweredQuestions { get; set; }
         public int CountOfUnansweredQuestions { get; set; }
 
+        public string CurrentGroupName { get; set; }
+
 
         private ObservableCollection<MvxViewModel> items;
-
         public ObservableCollection<MvxViewModel> Items
         {
             get { return items; }
