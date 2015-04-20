@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
@@ -49,8 +51,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, CreateQuestionModel);
             questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, CreateGroupModelWithoutNestedChildren);
             questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, BuildParentsList);
+            questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
 
             QuestionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
+        }
+
+        public GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup)
+        {
+            var childrenHierarchy = currentGroup.Children.OfType<Group>()
+                .Select(this.BuildGroupsHierarchy)
+                .ToList();
+
+            return new GroupsHierarchyModel
+                   {
+                       Id = currentGroup.PublicKey,
+                       Title = currentGroup.Title,
+                       IsRoster = currentGroup.IsRoster,
+                       Children = childrenHierarchy
+                   };
         }
 
         private List<GroupPlaceholderModel> BuildParentsList(Group group)
@@ -82,7 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var question = child as AbstractQuestion;
                 if (question != null)
                 {
-                    if (question.QuestionScope != QuestionScope.Interviewer)
+                    if (question.QuestionScope != QuestionScope.Interviewer || question.Featured)
                         continue;
 
                     var questionModelPlaceholder = new QuestionPlaceholderModel { Id = question.PublicKey, Title = question.QuestionText };
