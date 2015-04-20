@@ -7,6 +7,7 @@ using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
@@ -17,11 +18,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPrincipal principal;
         private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainInterviewRepository plainStorageInterviewAccessor;
+        private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
         public InterviewGroupViewModel(IPrincipal principal, IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory,
              IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IPlainInterviewRepository plainStorageInterviewAccessor)
+            IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
         {
             this.principal = principal;
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
@@ -31,13 +32,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async void Init(string id, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.GetInterview(id);
+            var interview = this.plainStorageInterviewAccessor.Get(id);
             var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             this.CurrentGroupName = string.IsNullOrEmpty(chapterId)? ((IGroup)questionnaire.Children[0]).Title : questionnaire.Find<IGroup>(Guid.Parse(chapterId)).Title;
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire.GetFeaturedQuestions()
-                .Select(_ => new PrefilledQuestion() {Question = _.QuestionText})
+                .Select(_ => new PrefilledQuestion {Question = _.QuestionText})
                 .ToList();
             this.Items = await interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
         }

@@ -13,9 +13,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class MaskedTextQuestionViewModel : BaseInterviewItemViewModel,
-        IEventBusEventHandler<TextQuestionAnswered>,
-        IEventBusEventHandler<QuestionsEnabled>,
-        IEventBusEventHandler<QuestionsDisabled>
+        ILiteEventBusEventHandler<TextQuestionAnswered>,
+        ILiteEventBusEventHandler<QuestionsEnabled>,
+        ILiteEventBusEventHandler<QuestionsDisabled>
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
