@@ -115,8 +115,17 @@
             if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
                 onSuccess(data);
             }
-        }).fail(function() {
-            self.ShowError(input.settings.messages.unhandledExceptionMessage);
+        }).fail(function (jqXhr, textStatus, errorThrown) {
+            if (jqXhr.status === 403) {
+                if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                    self.ShowError(input.settings.messages.forbiddenMessage);
+                }
+                else {
+                    self.ShowError(jqXhr.responseText);
+                }
+            } else {
+                self.ShowError(input.settings.messages.unhandledExceptionMessage);
+            }
         }).always(function() {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);

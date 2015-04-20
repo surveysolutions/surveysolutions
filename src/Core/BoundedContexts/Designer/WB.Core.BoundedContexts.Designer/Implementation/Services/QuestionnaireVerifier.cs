@@ -10,12 +10,11 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using Newtonsoft.Json;
 using System.Text;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -91,19 +90,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -253,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             string resultAssembly;
 
-            return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out resultAssembly);
+            return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,expressionsEngineVersionService.GetLatestSupportedVersion(), out resultAssembly);
         }
 
         private static bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)
@@ -586,10 +587,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             if (group.FixedRosterTitles == null)
                 return false;
-            if (group.FixedRosterTitles.Count == 0)
+            if (group.FixedRosterTitles.Length == 0)
                 return false;
 
-            return group.FixedRosterTitles.Any(title => string.IsNullOrWhiteSpace(title.Value));
+            return group.FixedRosterTitles.Any(title => string.IsNullOrWhiteSpace(title.Title));
         }
 
         private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues(IGroup group)
@@ -598,9 +599,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             if (group.FixedRosterTitles == null)
                 return false;
-            if (group.FixedRosterTitles.Count == 0)
+            if (group.FixedRosterTitles.Length == 0)
                 return false;
-            return group.FixedRosterTitles.Keys.Distinct().Count() != group.FixedRosterTitles.Count; //no sense
+            return group.FixedRosterTitles.Select(x => x.Value).Distinct().Count() != group.FixedRosterTitles.Length;
         }
 
         private static bool RosterFixedTitlesHaveMoreThanAllowedItems(IGroup group)
@@ -608,7 +609,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.FixedRosterTitles.Count > 40;
+            return group.FixedRosterTitles.Length > 40;
         }
 
         private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)

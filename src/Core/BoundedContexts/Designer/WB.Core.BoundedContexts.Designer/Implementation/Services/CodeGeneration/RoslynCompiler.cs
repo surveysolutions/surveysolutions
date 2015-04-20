@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.fileSystemAccessor = fileSystemAccessor;
         }
         
-        public EmitResult GenerateAssemblyAsString(Guid templateId, Dictionary<string, string> generatedClasses,
+        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(Guid templateId, Dictionary<string, string> generatedClasses,
             string[] referencedPortableAssemblies,
             out string generatedAssembly)
         {

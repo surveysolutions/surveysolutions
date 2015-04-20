@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         };
 
         Because of = () =>
-            emitResult = compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly);
+            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly);
 
 
         It should_result_succeded = () =>

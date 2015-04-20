@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
@@ -18,16 +19,11 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
     {
         Establish context = () =>
         {
-            var supportedQuestionnaireVersion = new QuestionnaireVersion(0, 0, 1);
+            var supportedQuestionnaireVersion = new Version(0, 0, 1);
 
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
             request = CreateDownloadQuestionnaireRequest(questionnaireId, supportedQuestionnaireVersion);
-
-            var templateInfo = CreateTemplateInfo(supportedQuestionnaireVersion);
-
-            var exportService = new Mock<IQuestionnaireExportService>();
-            exportService.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(templateInfo);
 
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
 
@@ -36,10 +32,13 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
             var expressionProcessorGenerator = new Mock<IExpressionProcessorGenerator>();
             string assembly;
-            expressionProcessorGenerator.Setup(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out assembly))
+            expressionProcessorGenerator.Setup(
+                x =>
+                    x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(),
+                       Moq.It.IsAny<Version>(), out assembly))
                 .Throws(new Exception());
 
-            service = CreatePublicService(exportService: exportService.Object, questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object);
+            service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object, questionnaireViewFactory: questionnaireViewFactory, expressionProcessorGenerator: expressionProcessorGenerator.Object, isClientVersionSupported:true);
         };
 
         Because of = () => 

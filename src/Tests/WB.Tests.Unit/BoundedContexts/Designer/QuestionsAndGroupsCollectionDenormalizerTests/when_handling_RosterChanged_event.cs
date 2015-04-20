@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
@@ -115,6 +116,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
         private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
-        private static Dictionary<decimal, string> rosterFixedTitles = new Dictionary<decimal, string> { {5, "5"}, {6, "6"}, {7, "7"} };
+        private static FixedRosterTitle[] rosterFixedTitles = new[] { new FixedRosterTitle(5, "5"), new FixedRosterTitle(6, "6"), new FixedRosterTitle(7, "7") };
     }
 }

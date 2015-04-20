@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Text
                 && _.HasQuestion(prefilledQuestionId) == true
                 && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
-                && _.GetFixedRosterTitles(fixedRosterGroup) == new Dictionary<decimal, string>());
+                && _.GetFixedRosterTitles(fixedRosterGroup) == new FixedRosterTitle[0]);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId,1) == questionaire);

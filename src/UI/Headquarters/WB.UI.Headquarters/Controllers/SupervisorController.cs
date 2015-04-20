@@ -7,8 +7,8 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Code;
@@ -41,25 +41,28 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowed]
         public ActionResult Create(UserModel model)
         {
-            if (this.ModelState.IsValid)
+
+            if (!this.ModelState.IsValid)
             {
-                UserView user = GetUserByName(model.UserName);
-                if (user != null)
-                {
-                    this.Error("User name already exists. Please enter a different user name.");
-                    return this.View(model);
-                }
-
-                if (this.CreateSupervisor(model))
-                {
-                    this.Success("Supervisor was successfully created");
-                    return this.RedirectToAction("Index");
-                }
+                return this.View(model);
             }
+            
+            UserView user = GetUserByName(model.UserName);
+            if (user != null)
+            {
+                this.Error("User name already exists. Please enter a different user name.");
+                return this.View(model);
+            }
+            
+            this.CreateSupervisor(model);
+               
+            this.Success("Supervisor was successfully created");
+            return this.RedirectToAction("Index");
+            
 
-            return this.View(model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
@@ -87,10 +90,13 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowed]
         public ActionResult Edit(UserEditModel model)
         {
-            if (!this.ModelState.IsValid) 
+            if (!this.ModelState.IsValid)
+            {
                 return this.View(model);
+            }
             
             var user = this.GetUserById(model.Id);
             if (user == null)
@@ -107,13 +113,10 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
-            if (this.UpdateAccount(user: user, editModel: model))
-            {
-                this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                return this.RedirectToAction("Index");
-            }
+            this.UpdateAccount(user: user, editModel: model);
             
-            return this.View(model);
+            this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
+            return this.RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]

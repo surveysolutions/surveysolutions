@@ -34,20 +34,6 @@ namespace WB.Core.SharedKernels.DataCollection
         private string DecimalValueToString(decimal decimalValue)
         {
             return decimalValue.ToString("F0", CultureInfo.InvariantCulture);
-        /*    if (decimalValue == 0)
-            {
-                return "0";
-            }
-            var possibleSeparators = new string[] { ",", "." };
-
-            var decimalString = decimalValue.ToString();
-
-            if (!possibleSeparators.Any(separator => decimalString.Contains(separator)))
-                return decimalString;
-
-            decimalString = decimalString.TrimEnd('0');
-            decimalString = decimalString.TrimEnd(',', '.');
-            return decimalString;*/
         }
 
         public T this[decimal code] { get { return internalDictionary[DecimalValueToString(code)]; } }

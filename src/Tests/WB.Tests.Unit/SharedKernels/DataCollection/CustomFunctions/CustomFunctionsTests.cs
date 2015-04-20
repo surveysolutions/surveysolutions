@@ -213,11 +213,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? q8 = null;
 
 
-            Assert.AreEqual(1, new BaseFunctions().CountValue(1, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(4, new BaseFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(2, new BaseFunctions().CountValue(3, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(0, new BaseFunctions().CountValue(4, q1, q2, q3, q4, q5, q6, q7));
-            Assert.AreEqual(4, new BaseFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7, q8));
+            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().CountValue(1, q1, q2, q3, q4, q5, q6, q7));
+            Assert.AreEqual(4, new AbstractConditionalLevelInstanceFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7));
+            Assert.AreEqual(2, new AbstractConditionalLevelInstanceFunctions().CountValue(3, q1, q2, q3, q4, q5, q6, q7));
+            Assert.AreEqual(0, new AbstractConditionalLevelInstanceFunctions().CountValue(4, q1, q2, q3, q4, q5, q6, q7));
+            Assert.AreEqual(4, new AbstractConditionalLevelInstanceFunctions().CountValue(2, q1, q2, q3, q4, q5, q6, q7, q8));
         }
 
         [Test]
@@ -244,34 +244,34 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_CenturyMonthCode()
         {
-            Assert.AreEqual(11, new BaseFunctions().CenturyMonthCode(11, 1900));
-            Assert.AreEqual(1383, new BaseFunctions().CenturyMonthCode(3, 2015));
+            Assert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11, 1900));
+            Assert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3, 2015));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(11, null));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, 2015));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, null));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11, null));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, 2015));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(13, 2015));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(0, 2015));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6, 1812));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13, 2015));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0, 2015));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6, 1812));
         }
 
         [Test]
         public void Test_CenturyMonthCodeDouble()
         {
-            Assert.AreEqual(11, new BaseFunctions().CenturyMonthCode(11.0, 1900.0));
-            Assert.AreEqual(1383, new BaseFunctions().CenturyMonthCode(3.0, 2015.0));
+            Assert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11.0, 1900.0));
+            Assert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3.0, 2015.0));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(11.0, null));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, null));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(11.0, null));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, 2015.0));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(13.0, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(0.0, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6.0, 1812.0));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13.0, 2015.0));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0.0, 2015.0));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6.0, 1812.0));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(2.2, 2015.0));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6.0, 1812.3));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(2.2, 2015.0));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6.0, 1812.3));
         }
 
         [Test]
@@ -283,82 +283,82 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             decimal m11 = 11;
 
-            Assert.AreEqual(11, new BaseFunctions().CenturyMonthCode(m11, yr1900));
-            Assert.AreEqual(1383, new BaseFunctions().CenturyMonthCode(3, yr2015));
+            Assert.AreEqual(11, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(m11, yr1900));
+            Assert.AreEqual(1383, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(3, yr2015));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(m11, null));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, yr2015));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(null, null));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(m11, null));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, yr2015));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(null, null));
 
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(13, yr2015));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(0, yr2015));
-            Assert.AreEqual(-1, new BaseFunctions().CenturyMonthCode(6, yr1812));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(13, yr2015));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(0, yr2015));
+            Assert.AreEqual(-1, new AbstractConditionalLevelInstanceFunctions().CenturyMonthCode(6, yr1812));
         }
 
         [Test]
         public void Test_IsDate()
         {
-            Assert.IsTrue(new BaseFunctions().IsDate((decimal)2010, 12, 31));
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010, 2, 31));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, 31));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 2, 31));
 
-            Assert.IsFalse(new BaseFunctions().IsDate(null, (decimal)12, 31));
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010, null, 31));
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010, 12, null));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(null, (decimal)12, 31));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, null, 31));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, null));
 
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010, 12, null));
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010.2, 12, 10));
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010, (decimal)12.2, 10));
-            Assert.IsFalse(new BaseFunctions().IsDate((decimal)2010, 12, (decimal)10.2));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, null));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010.2, 12, 10));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, (decimal)12.2, 10));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate((decimal)2010, 12, (decimal)10.2));
         }
 
         [Test]
         public void Test_IsDateDouble()
         {
-            Assert.IsTrue(new BaseFunctions().IsDate(2010.0, 12, 31));
-            Assert.IsFalse(new BaseFunctions().IsDate(2010.0, 2, 31));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, 31));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 2, 31));
 
-            Assert.IsFalse(new BaseFunctions().IsDate(null, 12, 31.0));
-            Assert.IsFalse(new BaseFunctions().IsDate(2010.0, null, 31));
-            Assert.IsFalse(new BaseFunctions().IsDate(2010.0, 12, null));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(null, 12, 31.0));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, null, 31));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, null));
 
-            Assert.IsFalse(new BaseFunctions().IsDate(2010.0, 12, null));
-            Assert.IsFalse(new BaseFunctions().IsDate(2010.2, 12, 10));
-            Assert.IsFalse(new BaseFunctions().IsDate(2010, 12.2, 10));
-            Assert.IsFalse(new BaseFunctions().IsDate(2010, 12, 10.2));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.0, 12, null));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010.2, 12, 10));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010, 12.2, 10));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsDate(2010, 12, 10.2));
         }
 
         [Test]
         public void Test_IsMilitaryTime()
         {
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("0600"));
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("2323"));
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("0600"));
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTime("2323"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0600"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2323"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0600"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2323"));
 
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime(""));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("0090"));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("2500"));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("2525"));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("545")); // leading zeroes are required
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("5:45")); // delimiters are not allowed
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTime("15.3")); // only digits are allowed
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime(""));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("0090"));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2500"));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("2525"));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("545")); // leading zeroes are required
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("5:45")); // delimiters are not allowed
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTime("15.3")); // only digits are allowed
         }
 
         [Test]
         public void Test_IsMilitaryTimeZ()
         {
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("0600Z"));
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("2323J"));
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("0600Z"));
-            Assert.IsTrue(new BaseFunctions().IsMilitaryTimeZ("2323J"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0600Z"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2323J"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0600Z"));
+            Assert.IsTrue(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2323J"));
 
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ(""));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("0090A"));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("2500Z"));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("2525B"));
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("0630q")); // small letters not allowed, capital letters are required
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("0630")); // time zone is required
-            Assert.IsFalse(new BaseFunctions().IsMilitaryTimeZ("545A")); // leading zeroes are required
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ(""));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0090A"));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2500Z"));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("2525B"));
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0630q")); // small letters not allowed, capital letters are required
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("0630")); // time zone is required
+            Assert.IsFalse(new AbstractConditionalLevelInstanceFunctions().IsMilitaryTimeZ("545A")); // leading zeroes are required
         }
 
         [Test]
@@ -369,14 +369,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             DateTime? d3 = new DateTime(2014, 02, 20);
             DateTime? d4 = new DateTime(2015, 12, 31);
 
-            Assert.AreEqual(13, new BaseFunctions().FullYearsBetween(d1, d2));
-            Assert.AreEqual(1, new BaseFunctions().FullYearsBetween(d3, d2));
-            Assert.AreEqual(0, new BaseFunctions().FullYearsBetween(d2, d4));
+            Assert.AreEqual(13, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d1, d2));
+            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d3, d2));
+            Assert.AreEqual(0, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d2, d4));
 
-            Assert.AreEqual(-9998, new BaseFunctions().FullYearsBetween(d4, d2));
-            Assert.AreEqual(-9999, new BaseFunctions().FullYearsBetween(d4, null));
-            Assert.AreEqual(-9999, new BaseFunctions().FullYearsBetween(null, d4));
-            Assert.AreEqual(-9999, new BaseFunctions().FullYearsBetween(null, null));
+            Assert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d4, d2));
+            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(d4, null));
+            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(null, d4));
+            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(null, null));
         }
 
         [Test]
@@ -391,34 +391,34 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_SelectKish1949()
         {
-            Assert.AreEqual(5, new BaseFunctions().SelectKish1949(8, 5));
-            Assert.AreEqual(1, new BaseFunctions().SelectKish1949(8, 1));
-            Assert.AreEqual(2, new BaseFunctions().SelectKish1949(3, 20));
+            Assert.AreEqual(5, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 5));
+            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 1));
+            Assert.AreEqual(2, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(3, 20));
 
-            Assert.AreEqual(-9999, new BaseFunctions().SelectKish1949(8, null)); // undefined household size
-            Assert.AreEqual(-9998, new BaseFunctions().SelectKish1949(10, 3)); // invalid table number
-            Assert.AreEqual(-9997, new BaseFunctions().SelectKish1949(8, 0));
+            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, null)); // undefined household size
+            Assert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(10, 3)); // invalid table number
+            Assert.AreEqual(-9997, new AbstractConditionalLevelInstanceFunctions().SelectKish1949(8, 0));
         }
 
         [Test]
         public void Test_SelectKishIlo()
         {
-            Assert.AreEqual(1, new BaseFunctions().SelectKishIlo(121, 8));
-            Assert.AreEqual(1, new BaseFunctions().SelectKishIlo(1210, 8));
-            Assert.AreEqual(5, new BaseFunctions().SelectKishIlo(555, 5));
-            Assert.AreEqual(1, new BaseFunctions().SelectKishIlo(121, 12));
-            Assert.AreEqual(-9997, new BaseFunctions().SelectKishIlo(121, 0));
-            Assert.AreEqual(-9998, new BaseFunctions().SelectKishIlo(0, 1));
-            Assert.AreEqual(-9999, new BaseFunctions().SelectKishIlo(121, null));
+            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 8));
+            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(1210, 8));
+            Assert.AreEqual(5, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(555, 5));
+            Assert.AreEqual(1, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 12));
+            Assert.AreEqual(-9997, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, 0));
+            Assert.AreEqual(-9998, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(0, 1));
+            Assert.AreEqual(-9999, new AbstractConditionalLevelInstanceFunctions().SelectKishIlo(121, null));
         }
 
         [Test]
         public void Test_Concat()
         {
-            Assert.AreEqual("George Washington", new BaseFunctions().Concat("George", " ", "Washington"));
-            Assert.AreEqual("Washington", new BaseFunctions().Concat("Washington"));
-            Assert.AreEqual("", new BaseFunctions().Concat(null));
-            Assert.AreEqual("George", new BaseFunctions().Concat("", "George", "", null));
+            Assert.AreEqual("George Washington", new AbstractConditionalLevelInstanceFunctions().Concat("George", " ", "Washington"));
+            Assert.AreEqual("Washington", new AbstractConditionalLevelInstanceFunctions().Concat("Washington"));
+            Assert.AreEqual("", new AbstractConditionalLevelInstanceFunctions().Concat(null));
+            Assert.AreEqual("George", new AbstractConditionalLevelInstanceFunctions().Concat("", "George", "", null));
         }
 
         [Test]
@@ -654,7 +654,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_Bmi()
         {
-            Assert.AreEqual(24.98, (double)new BaseFunctions().Bmi(68, 1.65), 0.05);
+            Assert.AreEqual(24.98, (double)new AbstractConditionalLevelInstanceFunctions().Bmi(68, 1.65), 0.05);
         }
 
         #endregion

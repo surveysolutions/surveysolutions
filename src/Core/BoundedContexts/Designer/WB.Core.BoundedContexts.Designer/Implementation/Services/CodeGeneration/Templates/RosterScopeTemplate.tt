@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #> 
     internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>
-	<# if(VersionParameters.IsIRosterLevelInherited){#>
+	<# if(Model.IsIRosterLevelInherited){#>
 	, IRosterLevel<<#=this.Model.GeneratedTypeName#>> 
 	<#}#>
 	, IExpressionExecutable
@@ -69,7 +69,7 @@
         <#}#>
 
       
-        <# if(VersionParameters.AreServiceVariablesPresent){#>
+        <# if(Model.AreRowSpecificVariablesPresent){#>
 		public decimal @rowcode { get { return RosterVector.Last(); } }
 
         public int @rowindex { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }    
@@ -89,7 +89,7 @@
 
 		<#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
 		{#>
-			public <#=VersionParameters.GetRosterType(parentRoster)#> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
+			public <#=Model.RosterType#><<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
 		<#}#>
 		public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
@@ -104,7 +104,7 @@
              <#}#>
             };
 
-			<# if(VersionParameters.AreServiceVariablesPresent){#>
+			<# if(Model.AreRowSpecificVariablesPresent){#>
 			((IRosterLevel)level).SetRowName(this.@rowname);
 			<# } #>
 
@@ -131,7 +131,7 @@
             get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
             
         }
-        <#if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.GenerateEmbeddedExpressionMethods)
+        <#if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
         {#>      
         private bool <#=question.GeneratedConditionsMethodName#>()
         {
@@ -139,7 +139,7 @@
         }      
         <# }#>
 
-        <#if(!string.IsNullOrWhiteSpace(question.Validations) && Model.GenerateEmbeddedExpressionMethods)
+        <#if(!string.IsNullOrWhiteSpace(question.Validations) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
         {#>        
         private bool <#=question.GeneratedValidationsMethodName#>()
         {
@@ -158,7 +158,7 @@
         <#foreach (var @group in Model.Groups) 
         {#>
         private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
-        <#if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.GenerateEmbeddedExpressionMethods)
+        <#if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
         {#>      
         private bool <#=@group.GeneratedConditionsMethodName#>()
         {
@@ -169,12 +169,16 @@
         //rosters
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public <#=VersionParameters.GetRosterType(@roster)#> <#=@roster.VariableName#>
+        public <#=Model.RosterType#><<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get
             {
                 var rosters = this.GetInstances(this.RosterKey, IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-				return <#=VersionParameters.GetRosterInitialization(@roster)#>;
+				<#if(Model.RosterType=="IEnumerable"){#>
+					return  rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
+				<#}else{#>
+				return  new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
+				<#}#>
             }
         }
 		<#}#>
@@ -184,7 +188,7 @@
 
         private ConditionalState <#= @roster.GeneratedStateName#> = new ConditionalState(IdOf.<#=@roster.GeneratedIdName#>, ItemType.Group);
 
-        <#if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.GenerateEmbeddedExpressionMethods)
+        <#if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
         {#>      
         private bool <#=@roster.GeneratedConditionsMethodName#>()
         {

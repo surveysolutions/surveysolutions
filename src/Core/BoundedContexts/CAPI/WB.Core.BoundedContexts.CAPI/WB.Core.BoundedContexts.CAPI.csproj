@@ -89,6 +89,7 @@
     <Compile Include="Implementation\Authorization\SyncCredentials.cs" />
     <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
+    <Compile Include="Implementation\Services\CapiExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\SyncPackageRestoreService.cs" />
     <Compile Include="Implementation\Synchronization\SynchronizationCanceledEventArgs.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ICapiCleanUpService.cs" />
     <Compile Include="Services\ICapiDataSynchronizationService.cs" />
+    <Compile Include="Services\ICapiExpressionsEngineVersionService.cs" />
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
     <Compile Include="Services\IDataCollectionAuthentication.cs" />
     <Compile Include="Services\IDeviceChangingVerifier.cs" />

@@ -19,13 +19,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IInterviewExpressionStateVersionAdapter interviewExpressionStateVersionAdapter;
+        private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
-        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor, IInterviewExpressionStateVersionAdapter interviewExpressionStateVersionAdapter)
+        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor, IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.interviewExpressionStateVersionAdapter = interviewExpressionStateVersionAdapter;
+            this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
         public IInterviewExpressionStateV2 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
@@ -54,7 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
                 {
-                    return interviewExpressionStateVersionAdapter.AdaptToV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+                    var initialExpressionState =
+                        Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
+
+                    IInterviewExpressionStateV2 upgradedExpressionState =
+                        interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
+
+                    return upgradedExpressionState;
                 }
                 catch (Exception e)
                 {

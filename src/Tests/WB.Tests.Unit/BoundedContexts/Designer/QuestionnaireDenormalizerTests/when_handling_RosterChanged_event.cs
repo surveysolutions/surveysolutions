@@ -9,6 +9,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterSizeSource = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = new Dictionary<decimal, string> { {1,rosterFixedTitle1}, {2, rosterFixedTitle2} };
+            rosterFixedTitles = new[]{ new FixedRosterTitle(1, rosterFixedTitle1), new FixedRosterTitle(2, rosterFixedTitle2) };
 
             questionnaireDocument = CreateQuestionnaireDocument(
                 CreateGroup(groupId: groupId, setup: group =>
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         It should_set_group_RosterFixedTitles_property_to_specified_value = () =>
              questionnaireDocument.GetGroup(groupId)
-                 .FixedRosterTitles.Select(f=>f.Value).ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
+                 .FixedRosterTitles.Select(f=>f.Title).ShouldEqual(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
         It should_set_group_RosterTitleQuestionId_property_to_specified_value = () =>
             questionnaireDocument.GetGroup(groupId)
@@ -67,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static Guid groupId;
         private static Guid rosterSizeQuestionId;
         private static RosterSizeSourceType rosterSizeSource;
-        private static Dictionary<decimal, string> rosterFixedTitles;
+        private static FixedRosterTitle[] rosterFixedTitles;
         private static string rosterFixedTitle1 = "title1";
         private static string rosterFixedTitle2 = "title2";
         private static Guid rosterTitleQuestionId;
