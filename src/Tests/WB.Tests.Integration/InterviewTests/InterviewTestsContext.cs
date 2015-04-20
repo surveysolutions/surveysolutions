@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
@@ -21,6 +22,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -77,7 +80,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var emptyList = new List<Identity>();
 
-            expressionState.Setup(_ => _.CloneV2()).Returns(expressionState.Object);
+            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
             expressionState.Setup(_ => _.ProcessEnablementConditions()).Returns(new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
             
             return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
@@ -186,8 +189,9 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
+            var questionnaireVersionProvider =new ExpressionsEngineVersionService();
             var expressionProcessorGenerator =
-                new QuestionnireExpressionProcessorGenerator(
+                new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
                         new DefaultDynamicCompillerSettings()
                         {
@@ -196,10 +200,10 @@ namespace WB.Tests.Integration.InterviewTests
                             DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
                                 "System.Collections.dll", "System.Linq.dll" }
                         }, new FileSystemIOAccessor()),
-                    new CodeGenerator());
+                    new CodeGenerator(questionnaireVersionProvider), questionnaireVersionProvider);
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -216,7 +220,7 @@ namespace WB.Tests.Integration.InterviewTests
                 if (interviewExpressionStateType == null)
                     throw new Exception("Type InterviewExpressionState was not found");
 
-                var interviewExpressionState = new InterviewExpressionStateVersionAdapter().AdaptToV2(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+                var interviewExpressionState = new InterviewExpressionStateUpgrader().UpgradeToLatestVersionIfNeeded(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
                 if (interviewExpressionState == null)
                     throw new Exception("Error on IInterviewExpressionState generation");
                 return interviewExpressionState;

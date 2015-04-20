@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
-            rosterFixedTitles = Enumerable.Range(1, 251).Select(i => new Tuple<string, string>(i++.ToString(), i.ToString())).ToArray();
+            rosterFixedTitles = Enumerable.Range(1, 251).Select(i => new FixedRosterTitleItem(i++.ToString(), i.ToString())).ToArray();
 
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid groupId;
         private static Guid parentGroupId;
         private static RosterSizeSourceType rosterSizeSourceType;
-        private static Tuple<string, string>[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
         private static Exception exception;
     }
 }

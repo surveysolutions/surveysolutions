@@ -22,9 +22,8 @@ namespace WB.UI.Designer.Code
             this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
             this.Bind<ISystemMailer>().To<SystemMailer>();
             this.Bind<IDynamicCompiler>().To<RoslynCompiler>();
-            this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
-            this.Bind<IExpressionProcessorGenerator>().To<QuestionnireExpressionProcessorGenerator>();
+            this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();

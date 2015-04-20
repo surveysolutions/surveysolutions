@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     group.RosterSizeQuestionId = Guid.NewGuid();
                     group.RosterTitleQuestionId = Guid.NewGuid();
                     group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
-                    group.FixedRosterTitles = new Dictionary<decimal, string> {  {1, "fixed roster title"} };
+                    group.FixedRosterTitles = new[] { new FixedRosterTitle(1, "fixed roster title") };
                 }));
 
             @event = CreateGroupStoppedBeingARosterEvent(groupId: groupId);
@@ -57,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         It should_set_group_RosterFixedTitles_property_to_empty = () =>
             questionnaireDocument.GetGroup(groupId)
-                .FixedRosterTitles.Count.ShouldEqual(0);
+                .FixedRosterTitles.Length.ShouldEqual(0);
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<GroupStoppedBeingARoster> @event;

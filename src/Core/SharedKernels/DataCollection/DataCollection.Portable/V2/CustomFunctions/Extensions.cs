@@ -553,7 +553,7 @@ namespace WB.Core.SharedKernels.DataCollection.V2.CustomFunctions
         /// two dates are missing.
         public static int FullYearsSince(this DateTime? date1, DateTime? date2)
         {
-            return new BaseFunctions().FullYearsBetween(date2, date1);
+            return new AbstractConditionalLevelInstanceFunctions().FullYearsBetween(date2, date1);
         }
 
         /// <summary>

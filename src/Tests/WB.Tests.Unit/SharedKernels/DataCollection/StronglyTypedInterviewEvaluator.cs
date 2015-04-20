@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionStateV2 
+    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
     {
         public StronglyTypedInterviewEvaluator()
         {
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
-        public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -296,10 +296,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
         public override IInterviewExpressionState Clone()
         {
-            return CloneV2();
+            return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
         }
 
-        public override IInterviewExpressionStateV2 CloneV2()
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
             return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
         }

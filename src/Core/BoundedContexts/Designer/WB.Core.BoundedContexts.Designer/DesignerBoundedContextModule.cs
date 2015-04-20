@@ -22,7 +22,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
@@ -40,12 +40,9 @@ namespace WB.Core.BoundedContexts.Designer
         }
         public override void Load()
         {
-            this.Bind<IQuestionnaireExportService>().To<QuestionnaireExportService>().InSingletonScope();
 
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
-            this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
-            this.Bind<IQuestionnaireVersioner>().To<QuestionnaireVersioner>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
@@ -66,7 +63,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
-            this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+            this.Bind<IExpressionsEngineVersionService>().To<ExpressionsEngineVersionService>().InSingletonScope();
+            this.Bind<ICodeGenerator>().To<CodeGenerator>();
 
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
             this.Kernel.RegisterFactory<QuestionnaireViewFactory>();

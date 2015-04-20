@@ -66,6 +66,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Api;
 using WB.UI.Supervisor.Controllers;
@@ -138,7 +139,7 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, Dictionary<decimal, string> titles)
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
             {
                 return new RosterChanged(Guid.NewGuid(), rosterId)
                 {

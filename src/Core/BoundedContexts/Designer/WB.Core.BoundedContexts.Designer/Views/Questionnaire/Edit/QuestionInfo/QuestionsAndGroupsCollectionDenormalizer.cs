@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
@@ -323,7 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             group.IsRoster = false;
             group.RosterSizeQuestionId = null;
-            group.FixedRosterTitles.Clear();
+            group.FixedRosterTitles = new FixedRosterTitle[0];
             group.RosterTitleQuestionId = null;
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);

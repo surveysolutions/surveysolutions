@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
@@ -12,13 +13,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public Guid? RosterSizeQuestionId { get; set; }
         public bool IsRoster { get; set; }
         public RosterSizeSourceType RosterSizeSourceType { get; set; }
-        public Dictionary<decimal, string> FixedRosterTitles { get; set; }
+        public FixedRosterTitle[] FixedRosterTitles { get; set; }
         public Guid? RosterTitleQuestionId { get; set; }
         public string VariableName { get; set; }
 
         public GroupAndRosterDetailsView()
         {
-            FixedRosterTitles = new Dictionary<decimal, string>();
+            FixedRosterTitles = new FixedRosterTitle[0];
         }
     }
 }

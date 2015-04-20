@@ -65,7 +65,7 @@ http://www.who.int/childgrowth/publications/en/
         /// \note Do not confuse this function with Bmi, which computes the value of the body mass index.
         public static double Bmifa(long? ageMonths, bool? isBoy, double? weight, double? height)
         {
-            var bmi = new BaseFunctions().Bmi(weight, height);
+            var bmi = new AbstractConditionalLevelInstanceFunctions().Bmi(weight, height);
             return Bmifa(ageMonths, isBoy, bmi);
         }
 

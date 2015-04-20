@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ClientVersionLessThenDocument" xml:space="preserve">
-    <value>Failed to open the questionnaire. Your questionnaire "{0}" has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions.</value>
+  <data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>Failed to open the questionnaire. Your version is {0}. Please update.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
     <value>Questionnaire with id={0} cannot be found. Please check the list of available questionnaires, or contact the colleague who shared the questionnaire link with you.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Your questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+    <value>Your questionnaire has errors. Please verify the questionnaire on Designer.</value>
   </data>
   <data name="User_Not_authorized" xml:space="preserve">
     <value>User is not authorized. Please check your login and password.</value>
@@ -192,7 +192,8 @@
   <data name="Maintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
   </data>
-  <data name="Questionnaire_compilation_failed" xml:space="preserve">
+  <data name="YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+
     <value>You questionnaire "{0}" contains new functionality which is not supported by your installation. Please update.</value>
   </data>
 </root>

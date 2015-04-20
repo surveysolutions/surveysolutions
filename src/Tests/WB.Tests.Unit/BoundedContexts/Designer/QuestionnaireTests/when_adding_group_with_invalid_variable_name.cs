@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 parentGroupId: chapterId,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterFixedTitles: new Tuple<string, string>[] { new Tuple<string, string>("1","1"),new Tuple<string, string>("2","2") }, rosterTitleQuestionId: null));
+                rosterFixedTitles: new [] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") }, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

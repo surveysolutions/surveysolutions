@@ -6,8 +6,8 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public interface IInterviewExpressionStateVersionAdapter
+    public interface IInterviewExpressionStateUpgrader
     {
-        IInterviewExpressionStateV2 AdaptToV2(IInterviewExpressionState state);
+        IInterviewExpressionStateV2 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state);
     }
 }

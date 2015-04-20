@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
@@ -47,6 +44,7 @@
     <Compile Include="Documents\Answer.cs" />
     <Compile Include="Documents\AnswerType.cs" />
     <Compile Include="Documents\CompositeException.cs" />
+    <Compile Include="Documents\FixedRosterTitle.cs" />
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />
     <Compile Include="Documents\IComposite.cs" />
