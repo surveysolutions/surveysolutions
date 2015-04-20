@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
@@ -15,27 +16,25 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         {
             set
             {
-                FixedRosterTitles = new Dictionary<decimal, string>();
-
                 if (value != null && value.Any())
                 {
-                    for (int i = 0; i < value.Length; i++)
-                    {
-                        FixedRosterTitles[i] = value[i];
-                    }
+                    FixedRosterTitles = value.Select((t, i) => new FixedRosterTitle(i, t)).ToArray();
+                }
+                else
+                {
+                    FixedRosterTitles = new FixedRosterTitle[0];
                 }
             }
-
         }
 
-        public Dictionary<decimal, string> FixedRosterTitles{get; set;}
+        public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
         public Guid? RosterTitleQuestionId { get; set; }
 
         public RosterChanged(Guid responsibleId, Guid groupId)
             : base(responsibleId, groupId)
         {
-            FixedRosterTitles = new Dictionary<decimal, string>();
+            FixedRosterTitles = new FixedRosterTitle[0];
         }
     }
 }

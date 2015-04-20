@@ -9,6 +9,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles =  new Dictionary<decimal, string> { {1, "1"}, {2, "2"} },
+                    FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") },
                     RosterTitleQuestionId = null 
                 });
 

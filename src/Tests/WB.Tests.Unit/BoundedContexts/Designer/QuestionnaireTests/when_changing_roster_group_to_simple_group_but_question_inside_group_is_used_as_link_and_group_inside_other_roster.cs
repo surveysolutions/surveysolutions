@@ -9,6 +9,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            var rosterFixedTitles = new Dictionary<decimal, string>() {{1, "1"}, {2, "2"}};
+            var rosterFixedTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") };
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });

@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -99,15 +100,17 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult Manage(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+
             if (this.ModelState.IsValid)
             {
-                if (this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model))
-                    this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+                this.UpdateAccount(user: GetUserById(GlobalInfo.GetCurrentUser().Id), editModel: model);
+                this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
             }
-
+            
             return this.View(model);
         }
 

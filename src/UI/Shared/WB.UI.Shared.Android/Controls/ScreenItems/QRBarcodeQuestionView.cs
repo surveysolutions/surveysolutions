@@ -70,20 +70,23 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void customizeScanner()
         {
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_39, "litvin.roma@gmail.com", "C93A74ABF3B014829C71BFB6DA0BC4FBCFCF52319211743311C75CE629A2A1D5");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_93, "litvin.roma@gmail.com", "5E7B8E0993565F6CBD272035F8ADE949B4386F531517ADC857CF2E22092C867C");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_25, "litvin.roma@gmail.com", "CBA4FA24D1A7BC8F9DEE920439A8165720C66968FB20180C19AF50906C7BC6FB");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_128, "litvin.roma@gmail.com", "0104680BFA0B26D155529E81A400D4B402B7D953685AF0F368AC924177F6DB44");
+            BarcodeConfig.MWB_setDirection(BarcodeConfig.MWB_SCANDIRECTION_HORIZONTAL);
+            
+            //old codes not covered by new license
             BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_AZTEC, "litvin.roma@gmail.com", "7FC6AA87757EAFEE193B7D71C0A19C826ADFEDD0F64383D2F84D30157AC45688");
-            //BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_EANUPC, "litvin.roma@gmail.com", "key");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_QR, "litvin.roma@gmail.com", "8A4F3E2F6DF1580E74317C9B16338703E7748CBCCE2F118B7573A3BF437F2591");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_PDF, "litvin.roma@gmail.com", "2A0DF2A1BA4C30B4691A91E8CA753E1A8D329D56490EEA33A6BEBD06F0058BF9");
             BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_RSS, "litvin.roma@gmail.com", "1F8366229BF68ADE7B9CA60C7668A100E786366FFC6482914E6F7205E6B85CCD");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_CODABAR, "litvin.roma@gmail.com", "1F8E4B902E76705AAB1F8370A6C254E46C1D210E032E15AA6A9A945B3630198A");
             BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_DM, "litvin.roma@gmail.com", "44360CC6838D0CB30206815D24BF39B2AC272E3A803059E13663344A6301EBEF");
             BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_DOTCODE, "litvin.roma@gmail.com", "507654A980BE306DFFEB93975CFA6617C1FD0FAAEFE5CEFA4EDC15B7CF4DF7C0");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_11, "litvin.roma@gmail.com", "A149CEE60D470E291546422E4A1A823654A706EDF82CD47599B479F0A34CD18B");
-            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_MSI, "litvin.roma@gmail.com", "E469FCA82AF1E6FAA3E24E4280DC0C21AD2E810072D5DE145E60297161076071");
+
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_QR, "WorldBank.QR.Android.UDL", "CBF549CA0E87FD8993F5868F8671CBD5894B5FC0AD3D42B66B3024F566ACC2BF");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_39, "WorldBank.C39.Android.UDL", "4BCECACD2C29819DBF9D6E9A736F13DD1EAAB6D7EA3C8BBC06801983C43D4249");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_93, "WorldBank.C93.Android.UDL", "0A7ADF070F4BD27822B8C19160B1BCA4CC6315104262D129536888DFE010838C");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_CODABAR, "WorldBank.CB.Android.UDL", "116402D44088A35DD228B350F0927C6057A503EA9B7D76DE210E872999B91372");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_25, "WorldBank.C25.Android.UDL", "25BAE398B9C1CD328F5D8AEA6F66910A9907CE7CAB0C6EC2FD51A44ABEC84751");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_128, "WorldBank.C128.Android.UDL", "17C7B32367D6364D87EED3B602BDD69DDCFE7F60E8BCE9DDC806BE22B4CCF2A5");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_PDF, "WorldBank.PDF.Android.UDL", "5530EEF1E9EA21110F826ED1403D5A2EA10EFD0BCA1B437AA19C2307004DFB7A");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_11, "WorldBank.C11.Android.UDL", "ACB00DE022A76521A0E92204C73230BE0B36344328905E387818D5419B61A046");
+            BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_MSI, "WorldBank.MSI.Android.UDL", "5E8FD2CF399B5C80A966182DEA98B8847D8ECBB262D22D2DF63E88EBBF4FCDA6");
         }
     }
 };

@@ -70,11 +70,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to open the questionnaire. Your questionnaire &quot;{0}&quot; has {2} version. Designer supports only up to version {1}. Please contact support@mysurvey.solutions..
+        ///   Looks up a localized string similar to Failed to open the questionnaire. Your version is {0}. Please update..
         /// </summary>
-        internal static string ClientVersionLessThenDocument {
+        internal static string ClientVersionIsNotSupported {
             get {
-                return ResourceManager.GetString("ClientVersionLessThenDocument", resourceCulture);
+                return ResourceManager.GetString("ClientVersionIsNotSupported", resourceCulture);
             }
         }
 
@@ -133,16 +133,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You questionnaire &quot;{0}&quot; contains new functionality which is not supported by your installation. Please update..
-        /// </summary>
-        internal static string Questionnaire_compilation_failed {
-            get {
-                return ResourceManager.GetString("Questionnaire_compilation_failed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
+        ///   Looks up a localized string similar to Your questionnaire has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
@@ -273,6 +264,16 @@ namespace WB.UI.Designer.Resources {
         internal static string You_did_not_type_the_verification_word_correctly {
             get {
                 return ResourceManager.GetString("You_did_not_type_the_verification_word_correctly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You questionnaire &quot;{0}&quot; contains new functionality which is not supported by your installation. Please update..
+        /// </summary>
+        internal static string YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate {
+            get {
+                return ResourceManager.GetString("YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationP" +
+                        "leaseUpdate", resourceCulture);
             }
         }
         

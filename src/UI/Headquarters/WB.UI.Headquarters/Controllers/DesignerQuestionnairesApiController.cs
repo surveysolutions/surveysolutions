@@ -101,9 +101,9 @@ namespace WB.UI.Headquarters.Controllers
                         QuestionnaireId = request.Questionnaire.Id,
                         SupportedVersion = new QuestionnaireVersion()
                         {
-                            Major = supportedVersion.SupportedQuestionnaireVersionMajor,
-                            Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
-                            Patch = supportedVersion.SupportedQuestionnaireVersionPatch
+                            Major = supportedVersion.Major,
+                            Minor = supportedVersion.Minor,
+                            Patch = supportedVersion.Build
                         }
                     });
 

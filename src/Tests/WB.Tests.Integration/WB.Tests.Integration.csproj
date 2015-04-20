@@ -225,6 +225,7 @@
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_redo_statuses.cs" />
     <Compile Include="SurveyManagement\RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
     <Compile Include="Synchronization\RavenIndexes\InterviewSyncPackagesGroupedByRootTests\when_applying_index_to_3_misc_InterviewSyncPackageMeta.cs" />
+    <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +286,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>

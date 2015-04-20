@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
         {
             return a > staskDepthToAdd ?
-                compiler.GenerateAssemblyAsString(id, generatedClasses, new string[0], out resultAssembly) :
+                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly) :
                 IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(a + 1);
         }
 
@@ -54,7 +54,7 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionStateV2 
+    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
     {
         public InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17() 
         {
@@ -242,12 +242,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
         }
 
-        public override IInterviewExpressionStateV2 CloneV2()
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
-            return new InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17(this.InterviewScopes, this.SiblingRosters);
+            return Clone() as IInterviewExpressionStateV2;
         }
 
-        public override void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
