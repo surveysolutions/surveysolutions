@@ -1,18 +1,17 @@
 using System;
 using Machine.Specifications;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
-namespace WB.Tests.Unit.Infrastructure.EventBusMobileTests
+namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class publishing_without_subscribers : EventBusTestsContext
+    internal class when_publish_event_without_subscribers : LiteEventBusTestsContext
     {
         Establish context = () =>
         {
             aggregateRoot = CreateDummyAggregateRoot();
 
-            eventBus = CreateEventBus();
+            eventBus = Create.LiteEventBus();
         };
 
         private Because of = () =>
