@@ -41,9 +41,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
-        private readonly int supportedQuestionnaireVersionMajor;
-        private readonly int supportedQuestionnaireVersionMinor;
-        private readonly int supportedQuestionnaireVersionPatch;
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
@@ -53,17 +50,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly InterviewHistorySettings interviewHistorySettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
-            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor,
-            int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
             InterviewHistorySettings interviewHistorySettings,
             bool isSupervisorFunctionsEnabled)
         {
             this.currentFolderPath = currentFolderPath;
-            this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
-            this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
-            this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
