@@ -24,7 +24,7 @@ namespace WB.UI.QuestionnaireTester.Views
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
             var list = FindViewById<MvxListView>(Resource.Id.questionnaireEntitiesList);
-            list.Adapter = new QuestionAdapter(this, (IMvxAndroidBindingContext)BindingContext);
+            list.Adapter = new QuestionAdapter(this, (IMvxAndroidBindingContext) BindingContext);
         }
     }
 }

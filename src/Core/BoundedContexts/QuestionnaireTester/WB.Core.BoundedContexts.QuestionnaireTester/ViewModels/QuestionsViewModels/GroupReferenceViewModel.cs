@@ -2,7 +2,6 @@
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class GroupReferenceViewModel : BaseInterviewItemViewModel

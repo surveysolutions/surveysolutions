@@ -9,6 +9,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         string Title { get; set; }
     }
 
+    public class GroupsHierarchyModel
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public bool IsRoster { get; set; }
+        public List<GroupsHierarchyModel> Children { get; set; }
+    }
+
     public class GroupPlaceholderModel : IQuestionnaireItemPlaceholder
     {
         public Guid Id { get; set; }
@@ -172,5 +180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Dictionary<Guid, List<GroupPlaceholderModel>> GroupParents { get; set; }
 
         public Dictionary<Guid, StaticTextModel> Texts { get; set; }
+
+        public List<GroupsHierarchyModel> GroupsHierarchy { get; set; }
     }
 }
