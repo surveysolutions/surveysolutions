@@ -18,7 +18,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre
     public class PostgresPlainStorageModule : Ninject.Modules.NinjectModule
     {
         internal const string SessionFactoryName = "PlainSessionFactory";
-        internal const string SessionProviderName = "PlainSessinProvider";
         private readonly PostgresPlainStorageSettings settings;
 
         public PostgresPlainStorageModule(PostgresPlainStorageSettings settings)
@@ -29,6 +28,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         public override void Load()
         {
+            DatabaseManagement.CreateDatabase(settings.ConnectionString);
+
             this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory())
                                         .InSingletonScope()
                                         .Named(SessionFactoryName);
