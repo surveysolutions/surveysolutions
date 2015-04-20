@@ -1,10 +1,13 @@
 ﻿using Android.App;
+using Android.Content.Res;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using Android.OS;
-using Android.Widget;
+using Android.Support.V4.Widget;
+using Android.Support.V7.App;
+using Android.Support.V7.Widget;
 using WB.UI.QuestionnaireTester.Views.Adapters;
 
 
@@ -13,6 +16,8 @@ namespace WB.UI.QuestionnaireTester.Views
     [Activity(Label = "", Theme = "@style/Theme.Blue.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
     public class InterviewGroupView : BaseActivityView<InterviewGroupViewModel>
     {
+        private ActionBarDrawerToggle drawerToggle;
+
         protected override int ViewResourceId
         {
             get { return Resource.Layout.interview; }
@@ -22,8 +27,66 @@ namespace WB.UI.QuestionnaireTester.Views
         {
             base.OnCreate(bundle);
 
-            var list = FindViewById<MvxListView>(Resource.Id.QuestionsListView);
-            list.Adapter = new QuestionAdapter(this, (IMvxAndroidBindingContext)BindingContext);
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            var drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            var listOfInterviewQuestionsAndGroups = FindViewById<MvxListView>(Resource.Id.questionnaireEntitiesList);
+
+            this.SetSupportActionBar(toolbar);
+            this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            this.SupportActionBar.SetHomeButtonEnabled(true);
+
+            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
+
+            drawerLayout.SetDrawerListener(this.drawerToggle);
+            listOfInterviewQuestionsAndGroups.Adapter = new QuestionAdapter(this, (IMvxAndroidBindingContext) BindingContext);
+        }
+
+
+        protected override void OnPostCreate(Bundle savedInstanceState)
+        {
+            base.OnPostCreate(savedInstanceState);
+            this.drawerToggle.SyncState();
+        }
+
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            this.drawerToggle.OnConfigurationChanged(newConfig);
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.interview, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (this.drawerToggle.OnOptionsItemSelected(item))
+            {
+                return true;
+            }
+
+            switch (item.ItemId)
+            {
+                case Resource.Id.interview_dashboard:
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
+                    break;
+                case Resource.Id.interview_help:
+                    this.ViewModel.NavigateToHelpCommand.Execute();
+                    break;
+                case Resource.Id.interview_language:
+                    this.ViewModel.ChangeLanguageCommand.Execute();
+                    break;
+                case Resource.Id.interview_settings:
+                    this.ViewModel.ShowSettingsCommand.Execute();
+                    break;
+                case Resource.Id.interview_signout:
+                    this.ViewModel.SignOutCommand.Execute();
+                    break;
+
+            }
+            return base.OnOptionsItemSelected(item);
         }
     }
 }

@@ -38,12 +38,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             { typeof(TextQuestion), (qIdentity, interview, questionnaire) => CreateViewModel<TextQuestionViewModel>(vm => vm.Init(qIdentity, interview, questionnaire)) },
         };
 
-        public Task<List<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
+        public Task<ObservableCollection<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
         {
             return Task.Run(()=> GenerateViewModels(interviewId, chapterId));
         }
 
-        private List<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
+        private ObservableCollection<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
         {
             var interview = this.plainStorageInterviewAccessor.GetInterview(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId,
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
                     throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterId));
             }
 
-            List<MvxViewModel> entities = new List<MvxViewModel>();
+            ObservableCollection<MvxViewModel> entities = new ObservableCollection<MvxViewModel>();
 
             foreach (var child in loyout.Children)
             {

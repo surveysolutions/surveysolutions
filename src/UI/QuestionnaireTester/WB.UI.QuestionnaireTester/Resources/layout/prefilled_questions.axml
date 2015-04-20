@@ -32,7 +32,7 @@
             </MvxRelativeLayout>
             <MvxListView
                 style="@style/PrefilledQuestions_List"
-                android:id="@+id/PrefilledQuestionsListView"
+                android:id="@+id/questionnaireEntitiesList"
                 android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
                 local:MvxBind="ItemsSource PrefilledQuestions" />
             <MvxRelativeLayout

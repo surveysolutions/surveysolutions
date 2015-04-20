@@ -17,6 +17,15 @@
     <item name="android:layout_marginRight">25dp</item>
   </style>
 
+  <style name="Interview_List" parent="Theme.Light.Base">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:smoothScrollbar">true</item>
+    <item name="android:scrollingCache">false</item>
+    <item name="android:animationCache">false</item>
+  </style>
+
   <style name="PrefilledQuestions_List" parent="Theme.Light.Base">
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">fill_parent</item>
@@ -34,6 +43,14 @@
     <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
     <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
     <item name="android:layout_centerVertical">true</item>
+  </style>
+
+  <style name="Interview_LeftSidePanel" parent="Theme.Light.Base">
+    <item name="android:layout_width">520dp</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_gravity">left|start</item>
+    <item name="android:fitsSystemWindows">true</item>
+    <item name="android:background">#FFFFFFFF</item>
   </style>
 
   <style name="EditTextTheme_Blue_Light" parent="android:Widget.EditText">
@@ -54,6 +71,11 @@
 
   <style name="ImageButtonTheme_Blue_Light" parent="android:Widget.ImageButton">
     <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
+  </style>
+
+  <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+    <item name="spinBars">true</item>
+    <item name="color">@android:color/white</item>
   </style>
   
 </resources>

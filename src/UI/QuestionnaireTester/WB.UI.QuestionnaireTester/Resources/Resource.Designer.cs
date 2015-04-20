@@ -33,6 +33,8 @@ namespace WB.UI.QuestionnaireTester
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -1270,12 +1272,6 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080009
 			public const int MvxBindingTagUnique = 2131230729;
 			
-			// aapt resource value: 0x7f080043
-			public const int PrefilledQuestionsListView = 2131230787;
-			
-			// aapt resource value: 0x7f080041
-			public const int QuestionsListView = 2131230785;
-			
 			// aapt resource value: 0x7f080032
 			public const int action_bar = 2131230770;
 			
@@ -1357,6 +1353,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f08000d
 			public const int disableHome = 2131230733;
 			
+			// aapt resource value: 0x7f080041
+			public const int drawer_layout = 2131230785;
+			
 			// aapt resource value: 0x7f08001d
 			public const int dropdown = 2131230749;
 			
@@ -1387,6 +1386,21 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080024
 			public const int image = 2131230756;
 			
+			// aapt resource value: 0x7f080049
+			public const int interview_dashboard = 2131230793;
+			
+			// aapt resource value: 0x7f08004a
+			public const int interview_help = 2131230794;
+			
+			// aapt resource value: 0x7f08004b
+			public const int interview_language = 2131230795;
+			
+			// aapt resource value: 0x7f08004c
+			public const int interview_settings = 2131230796;
+			
+			// aapt resource value: 0x7f08004d
+			public const int interview_signout = 2131230797;
+			
 			// aapt resource value: 0x7f08000a
 			public const int listMode = 2131230730;
 			
@@ -1405,14 +1419,17 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f08000b
 			public const int normal = 2131230731;
 			
-			// aapt resource value: 0x7f080042
-			public const int prefilledQuestions_questionnaireTitle_holder = 2131230786;
+			// aapt resource value: 0x7f080043
+			public const int prefilledQuestions_questionnaireTitle_holder = 2131230787;
 			
 			// aapt resource value: 0x7f080005
 			public const int progress_circular = 2131230725;
 			
 			// aapt resource value: 0x7f080006
 			public const int progress_horizontal = 2131230726;
+			
+			// aapt resource value: 0x7f080042
+			public const int questionnaireEntitiesList = 2131230786;
 			
 			// aapt resource value: 0x7f08002c
 			public const int radio = 2131230764;
@@ -1656,6 +1673,9 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f0c0000
 			public const int dashboard = 2131492864;
+			
+			// aapt resource value: 0x7f0c0001
+			public const int interview = 2131492865;
 			
 			static Menu()
 			{
@@ -2079,20 +2099,29 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0060
 			public const int Base_Widget_AppCompat_Toolbar_Button_Navigation = 2131427424;
 			
-			// aapt resource value: 0x7f0b00f1
-			public const int ButtonTheme_Blue_Light = 2131427569;
-			
-			// aapt resource value: 0x7f0b00f0
-			public const int CheckBoxTheme_Blue_Light = 2131427568;
-			
-			// aapt resource value: 0x7f0b00ef
-			public const int EditTextTheme_Blue_Light = 2131427567;
+			// aapt resource value: 0x7f0b00f3
+			public const int ButtonTheme_Blue_Light = 2131427571;
 			
 			// aapt resource value: 0x7f0b00f2
-			public const int ImageButtonTheme_Blue_Light = 2131427570;
+			public const int CheckBoxTheme_Blue_Light = 2131427570;
+			
+			// aapt resource value: 0x7f0b00f5
+			public const int DrawerArrowStyle = 2131427573;
+			
+			// aapt resource value: 0x7f0b00f1
+			public const int EditTextTheme_Blue_Light = 2131427569;
+			
+			// aapt resource value: 0x7f0b00f4
+			public const int ImageButtonTheme_Blue_Light = 2131427572;
 			
 			// aapt resource value: 0x7f0b00eb
 			public const int InterviewToolbarTitle = 2131427563;
+			
+			// aapt resource value: 0x7f0b00f0
+			public const int Interview_LeftSidePanel = 2131427568;
+			
+			// aapt resource value: 0x7f0b00ed
+			public const int Interview_List = 2131427565;
 			
 			// aapt resource value: 0x7f0b0061
 			public const int Platform_AppCompat = 2131427425;
@@ -2106,11 +2135,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0064
 			public const int Platform_AppCompat_Light_Dialog = 2131427428;
 			
-			// aapt resource value: 0x7f0b00ed
-			public const int PrefilledQuestions_List = 2131427565;
-			
 			// aapt resource value: 0x7f0b00ee
-			public const int PrefilledQuestions_QuestionnaireTitle = 2131427566;
+			public const int PrefilledQuestions_List = 2131427566;
+			
+			// aapt resource value: 0x7f0b00ef
+			public const int PrefilledQuestions_QuestionnaireTitle = 2131427567;
 			
 			// aapt resource value: 0x7f0b0065
 			public const int RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = 2131427429;
@@ -2310,20 +2339,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b00a6
 			public const int Theme_AppCompat_NoActionBar = 2131427494;
 			
+			// aapt resource value: 0x7f0b00f9
+			public const int Theme_Blue_Light = 2131427577;
+			
+			// aapt resource value: 0x7f0b00f8
+			public const int Theme_Gray_Light = 2131427576;
+			
 			// aapt resource value: 0x7f0b00f6
-			public const int Theme_Blue_Light = 2131427574;
-			
-			// aapt resource value: 0x7f0b00f5
-			public const int Theme_Gray_Light = 2131427573;
-			
-			// aapt resource value: 0x7f0b00f3
-			public const int Theme_Light = 2131427571;
-			
-			// aapt resource value: 0x7f0b00f4
-			public const int Theme_Light_Base = 2131427572;
+			public const int Theme_Light = 2131427574;
 			
 			// aapt resource value: 0x7f0b00f7
-			public const int Theme_Splash = 2131427575;
+			public const int Theme_Light_Base = 2131427575;
+			
+			// aapt resource value: 0x7f0b00fa
+			public const int Theme_Splash = 2131427578;
 			
 			// aapt resource value: 0x7f0b00a7
 			public const int ThemeOverlay_AppCompat = 2131427495;
