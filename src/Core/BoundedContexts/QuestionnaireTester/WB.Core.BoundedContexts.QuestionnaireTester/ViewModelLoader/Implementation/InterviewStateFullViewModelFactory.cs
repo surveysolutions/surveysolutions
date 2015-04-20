@@ -18,6 +18,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
+        private static readonly Dictionary<QuestionModelType, Func<BaseInterviewItemViewModel>> questionTypeToViewModelMap = 
+            new Dictionary<QuestionModelType, Func<BaseInterviewItemViewModel>>
+            {
+                { QuestionModelType.SingleOption, Mvx.Create<SingleOptionQuestionViewModel> },
+                { QuestionModelType.LinkedSingleOption, Mvx.Create<LinkedSingleOptionQuestionViewModel> },
+                { QuestionModelType.MultiOption, Mvx.Create<MultiOptionQuestionViewModel> },
+                { QuestionModelType.LinkedMultiOption, Mvx.Create<LinkedMultiOptionQuestionViewModel> },
+                { QuestionModelType.IntegerNumeric, Mvx.Create<IntegerNumericQuestionViewModel> },
+                { QuestionModelType.RealNumeric, Mvx.Create<RealNumericQuestionViewModel> },
+                { QuestionModelType.MaskedText, Mvx.Create<MaskedTextQuestionViewModel> },
+                { QuestionModelType.TextList, Mvx.Create<TextListQuestionViewModel> },
+                { QuestionModelType.QrBarcode, Mvx.Create<QrBarcodeQuestionViewModel> },
+                { QuestionModelType.Multimedia, Mvx.Create<MultimediaQuestionViewModel> },
+                { QuestionModelType.DateTime, Mvx.Create<DateTimeQuestionViewModel> },
+                { QuestionModelType.GpsCoordinates, Mvx.Create<GpsCoordinatesQuestionViewModel> }
+            };
+
         public InterviewStateFullViewModelFactory(
             IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
             IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
@@ -44,20 +61,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             if (chapterId != null && questionnaire.GroupsWithoutNestedChildren.ContainsKey(chapterIdGuid))
                     throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterId));
 
-            var layout = questionnaire.GroupsWithoutNestedChildren[chapterIdGuid];
+            var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[chapterIdGuid];
 
             ObservableCollection<MvxViewModel> entities = new ObservableCollection<MvxViewModel>();
 
             var rosterVector = new decimal[0];
 
-            foreach (var itemPlaceholder in layout.Placeholders)
+            foreach (var itemPlaceholder in groupWithoutNestedChildren.Placeholders)
             {
                 if (itemPlaceholder is RosterPlaceholderModel)
                 {
                     var rosterModel = itemPlaceholder as RosterPlaceholderModel;
 
                     var identity = new Identity(rosterModel.Id, rosterVector);
-                    var questionViewModel = Mvx.Create<RosterReferenceViewModel>();
+                    var questionViewModel = Mvx.Create<RostersReferenceViewModel>();
                     questionViewModel.Init(identity, interview, questionnaire);
                     entities.Add(questionViewModel);
                 }
@@ -90,10 +107,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             InterviewModel interview,
             QuestionnaireModel questionnaire)
         {
-            var identity = new Identity(groupId, rosterVector);
-            
             var questionViewModel = Mvx.Create<GroupReferenceViewModel>();
-            questionViewModel.Init(identity, interview, questionnaire);
+            questionViewModel.Init(new Identity(groupId, rosterVector), interview, questionnaire);
             return questionViewModel;
         }
 
@@ -103,64 +118,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             InterviewModel interview,
             QuestionnaireModel questionnaire)
         {
-            var identity = new Identity(questionId, rosterVector);
-
             var questionModel = questionnaire.Questions[questionId];
 
-            BaseInterviewItemViewModel questionViewModel;
+            if (!questionTypeToViewModelMap.ContainsKey(questionModel.Type))
+                throw new ArgumentOutOfRangeException();
 
-            switch (questionModel.Type)
-            {
-                case QuestionModelType.SingleOption:
-                    questionViewModel = Mvx.Create<SingleOptionQuestionViewModel>();
-                    break;
-                case QuestionModelType.LinkedSingleOption:
-                    questionViewModel = Mvx.Create<LinkedSingleOptionQuestionViewModel>();
-                    break;
-                case QuestionModelType.MultiOption:
-                    questionViewModel = Mvx.Create<MultiOptionQuestionViewModel>();
-                    break;
-                case QuestionModelType.LinkedMultiOption:
-                    questionViewModel = Mvx.Create<LinkedMultiOptionQuestionViewModel>();
-                    break;
-                case QuestionModelType.IntegerNumeric:
-                    questionViewModel = Mvx.Create<IntegerNumericQuestionViewModel>();
-                    break;
-                case QuestionModelType.RealNumeric:
-                    questionViewModel = Mvx.Create<RealNumericQuestionViewModel>();
-                    break;
-                case QuestionModelType.MaskedText:
-                    questionViewModel = Mvx.Create<MaskedTextQuestionViewModel>();
-                    break;
-                case QuestionModelType.TextList:
-                    questionViewModel = Mvx.Create<TextListQuestionViewModel>();
-                    break;
-                case QuestionModelType.QrBarcode:
-                    questionViewModel = Mvx.Create<QrBarcodeQuestionViewModel>();
-                    break;
-                case QuestionModelType.Multimedia:
-                    questionViewModel = Mvx.Create<MultimediaQuestionViewModel>();
-                    break;
-                case QuestionModelType.DateTime:
-                    questionViewModel = Mvx.Create<DateTimeQuestionViewModel>();
-                    break;
-                case QuestionModelType.GpsCoordinates:
-                    questionViewModel = Mvx.Create<GpsCoordinatesQuestionViewModel>();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-           
-            questionViewModel.Init(identity, interview, questionnaire);
+            var questionViewModelCreator = questionTypeToViewModelMap[questionModel.Type];
+
+            BaseInterviewItemViewModel questionViewModel = questionViewModelCreator.Invoke();
+            
+            questionViewModel.Init(new Identity(questionId, rosterVector), interview, questionnaire);
+
             return questionViewModel;
         }
 
-        public Task<ObservableCollection<MvxViewModel>> GetPrefilledQuestionsAsync(string interviewId)
+        public List<MvxViewModel> GetPrefilledQuestionsAsync(string interviewId)
         {
-            return new Task<ObservableCollection<MvxViewModel>>(() =>
-                    {
-                        return new ObservableCollection<MvxViewModel>(new[] { new MaskedTextQuestionViewModel(null, null), });
-                    });
+            var interview = this.plainStorageInterviewAccessor.Get(interviewId);
+            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
+
+            var prefilledQuestionsIds = questionnaire.PrefilledQuestionsIds;
+
+            var prefilledViewModels = prefilledQuestionsIds.Select(
+                    x => CreateQuestionViewModel(x, new decimal[0], interview, questionnaire));
+
+            return new List<MvxViewModel>(prefilledViewModels);
         }
     }
 }

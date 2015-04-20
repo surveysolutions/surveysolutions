@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -17,29 +16,40 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IPrincipal principal;
         private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
+        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainRepository<InterviewModel> interviewRepository;
 
         public InterviewGroupViewModel(IPrincipal principal, IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory,
-             IPlainQuestionnaireRepository plainQuestionnaireRepository,
-            IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
+             IPlainRepository<QuestionnaireModel> questionnaireRepository,
+             IPlainRepository<InterviewModel> interviewRepository)
         {
             this.principal = principal;
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
+            this.questionnaireRepository = questionnaireRepository;
+            this.interviewRepository = interviewRepository;
         }
 
         public async void Init(string id, string chapterId)
         {
-            var interview = this.plainStorageInterviewAccessor.Get(id);
-            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var interview = this.interviewRepository.Get(id);
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
 
-            this.CurrentGroupName = string.IsNullOrEmpty(chapterId)? ((IGroup)questionnaire.Children[0]).Title : questionnaire.Find<IGroup>(Guid.Parse(chapterId)).Title;
+            var groupId = string.IsNullOrEmpty(chapterId) 
+                ? questionnaire.GroupsWithoutNestedChildren.Keys.First()
+                : Guid.Parse(chapterId);
+
+            var group = questionnaire.GroupsWithoutNestedChildren[groupId];
+
+            this.CurrentGroupName = group.Title;
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire.GetFeaturedQuestions()
-                .Select(_ => new PrefilledQuestion {Question = _.QuestionText})
+            this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
+                .Select(questionId => new PrefilledQuestion
+                              {
+                                  Question = questionnaire.Questions[questionId].Title,
+                                  Answer = string.Empty
+                              })
                 .ToList();
+
             this.Items = await interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
         }
 
