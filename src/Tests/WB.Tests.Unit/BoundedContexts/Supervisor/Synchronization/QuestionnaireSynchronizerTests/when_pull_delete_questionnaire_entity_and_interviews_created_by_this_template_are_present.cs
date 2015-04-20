@@ -35,10 +35,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
             };
 
 
-            plainStorageMock = new Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>();
+            plainStorageMock = new Mock<IPlainStorageAccessor<LocalQuestionnaireFeedEntry>>();
             plainStorageMock.Setup(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalQuestionnaireFeedEntry>, IQueryable<LocalQuestionnaireFeedEntry>>>()))
-                .Returns(localQuestionnaireFeedEntres.AsQueryable());
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalQuestionnaireFeedEntry>, List<LocalQuestionnaireFeedEntry>>>()))
+                .Returns(localQuestionnaireFeedEntres.ToList());
 
             headquartersQuestionnaireReaderMock = new Mock<IHeadquartersQuestionnaireReader>();
             headquartersQuestionnaireReaderMock.Setup(x => x.GetQuestionnaireByUri(Moq.It.IsAny<Uri>()))
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
         private static Mock<IDeleteQuestionnaireService> deleteQuestionnaireServiceMock;
         private static QuestionnaireSynchronizer questionnaireSynchronizer;
         private static LocalQuestionnaireFeedEntry deleteLocalQuestionnaireFeedEntry;
-        private static Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>> plainStorageMock;
+        private static Mock<IPlainStorageAccessor<LocalQuestionnaireFeedEntry>> plainStorageMock;
         private static Mock<IHeadquartersQuestionnaireReader> headquartersQuestionnaireReaderMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<ICommandService> commandServiceMock;

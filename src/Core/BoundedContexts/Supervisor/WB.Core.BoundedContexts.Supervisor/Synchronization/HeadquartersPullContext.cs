@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class HeadquartersPullContext : HeadquartersSynchronizationContext
     {
-        public HeadquartersPullContext(IPlainStorageAccessor<SynchronizationStatus> statusStorage)
+        public HeadquartersPullContext(IPlainKeyValueStorage<SynchronizationStatus> statusStorage)
             : base(statusStorage) {}
 
         protected override string StorageDocumentId

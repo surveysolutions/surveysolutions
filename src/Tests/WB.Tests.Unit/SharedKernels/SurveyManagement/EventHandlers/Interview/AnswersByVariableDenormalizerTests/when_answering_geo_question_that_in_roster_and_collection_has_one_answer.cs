@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
 
             var interviewBriefMock = Mock.Of<InterviewSummary>(i => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == 1);
 
-            interviewBriefStorage = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(x => x.GetById(interviewId.FormatGuid()) == interviewBriefMock);
+            interviewBriefStorage = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(x => x.GetById(interviewId.FormatGuid()) == interviewBriefMock);
 
             var questionIdToVariableMap = new Dictionary<Guid, string>() { { questionId, variableName } };
 
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
         private static double latitude = 11.154d;
         private static double longitude = 50.01d;
         private static Mock<IReadSideKeyValueStorage<AnswersByVariableCollection>> answersByVariableStorageMock;
-        private static IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
+        private static IReadSideRepositoryReader<InterviewSummary> interviewBriefStorage;
         private static IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage;
         private static AnswersByVariableDenormalizer denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> evnt;

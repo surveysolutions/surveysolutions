@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -9,13 +11,16 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using NHibernate.Mapping;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Files;
@@ -23,11 +28,13 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Esent;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Mappings;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
@@ -46,7 +53,6 @@ using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Controllers;
 using WebActivatorEx;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -73,7 +79,7 @@ namespace WB.UI.Supervisor.App_Start
         {
 #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
-
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
             string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
@@ -117,9 +123,20 @@ namespace WB.UI.Supervisor.App_Start
 
             var basePath = appDataDirectory;
 
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
-
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+
+
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                MappingAssemblies = new List<Assembly> { typeof (SupervisorBoundedContextModule).Assembly }
+            };
+
+            var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly }; 
+            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
+
+            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
+            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -130,13 +147,13 @@ namespace WB.UI.Supervisor.App_Start
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
-                new RavenPlainStorageInfrastructureModule(ravenSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, readSideMaps),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder),
+                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
@@ -176,6 +193,8 @@ namespace WB.UI.Supervisor.App_Start
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>();
 
+            
+
             return kernel;
         }
 
@@ -199,6 +218,7 @@ namespace WB.UI.Supervisor.App_Start
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
 

@@ -36,12 +36,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
         It should_supervisor_name_be_equal_to_supervisorName = () =>
             viewModel.SupervisorName.ShouldEqual(supervisorName);
 
-        It should_last_status_be_null = () =>
-            viewModel.LastStatus.ShouldBeNull();
-
-        It should_last_status_date_be_null = () =>
-            viewModel.LastCompletedDate.ShouldBeNull();
-
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");

@@ -4,7 +4,6 @@ using System.Web.Http;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
@@ -19,12 +18,12 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
-        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
         public QuestionnairesApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService)
             : base(commandService, globalInfo, logger)
         {
@@ -35,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public QuestionnaireBrowseView AllQuestionnaires(AllQuestionnairesListViewModel data)
         {
-            var input = new QuestionnaireBrowseInputModel()
+            var input = new QuestionnaireBrowseInputModel
             {
                 Orders = data.SortOrder  == null ? new List<OrderRequestItem>() : data.SortOrder.ToList()
             };

@@ -10,8 +10,8 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
     {
         private readonly IReadSideRepositoryWriter<TEntity> writer;
 
-        public MemoryCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> readSideStorage)
-            : base(readSideStorage)
+        public MemoryCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> readSideStorage, ReadSideStoreMemoryCacheSettings settings)
+            : base(readSideStorage, settings)
         {
             this.writer = readSideStorage;
         }

@@ -1,19 +1,15 @@
+using Machine.Specifications;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Machine.Specifications;
-
-using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
@@ -25,6 +21,8 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
+
+
             interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>
                                         {
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:3, itemType: SyncItemType.Interview, userId:user1Id),
@@ -33,13 +31,14 @@ namespace WB.Tests.Unit.Core.Synchronization
                                             CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:6, itemType: SyncItemType.Interview, userId:userId)
                                         };
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewQueryIndexName))
-                .Returns(interviewSyncPackageMetas.AsQueryable());
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
+            var writer = new TestInMemoryWriter<InterviewSyncPackageMeta>();
+            foreach (var package in interviewSyncPackageMetas)
+            {
+                writer.Store(package, package.PackageId);
+            }
+
+            syncManager = CreateSyncManager(devices: devices, interviewSyncPackageReader: writer);
         };
-
-
 
         Because of = () =>
             result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId);
@@ -76,8 +75,6 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static readonly Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string interviewQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas;
     }
 }

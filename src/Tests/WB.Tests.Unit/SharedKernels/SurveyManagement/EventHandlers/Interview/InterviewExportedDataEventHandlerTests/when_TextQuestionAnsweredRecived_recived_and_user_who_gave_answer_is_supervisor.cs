@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             }
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                 dataExportService.Object, recordFirstAnswerMarkerViewStorage.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles> { UserRoles.Supervisor } });
+                 dataExportService.Object, recordFirstAnswerMarkerViewStorage.Object, new UserDocument() { UserName = "user name", Roles = new HashSet<UserRoles> { UserRoles.Supervisor } });
         };
 
         Because of = ()  => HandleQuestionAnsweredEventsByDenormalizer(interviewExportedDataDenormalizer, eventsAndInterviewActionLog);

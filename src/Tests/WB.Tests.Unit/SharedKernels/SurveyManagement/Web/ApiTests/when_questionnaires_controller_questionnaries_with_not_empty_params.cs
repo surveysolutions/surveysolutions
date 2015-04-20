@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private Establish context = () =>
         {
             questionnaireBrowseViewFactoryMock = new
-                Mock<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>();
+                Mock<IQuestionnaireBrowseViewFactory>();
             controller = CreateQuestionnairesController(questionnaireBrowseViewViewFactory: questionnaireBrowseViewFactoryMock.Object);
         };
         
@@ -31,6 +31,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         private static QuestionnaireApiView actionResult;
         private static QuestionnairesController controller;
-        private static Mock<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>> questionnaireBrowseViewFactoryMock;
+        private static Mock<IQuestionnaireBrowseViewFactory> questionnaireBrowseViewFactoryMock;
     }
 }
