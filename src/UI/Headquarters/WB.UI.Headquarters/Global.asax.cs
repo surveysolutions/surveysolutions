@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
             //filters.Add(new SupervisorFunctionsEnabledAttribute());
-            filters.Add(new InstallationAttribute());
+            filters.Add(new InstallationAttribute(), 100);
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)

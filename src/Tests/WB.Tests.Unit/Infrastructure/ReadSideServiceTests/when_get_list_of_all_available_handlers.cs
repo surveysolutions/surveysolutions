@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock.Setup(x => x.GetAllRegistredEventHandlers()).Returns(new[] { firstEventHandlerMock.Object, secondEventHandlerMock.Object });
 
           
-            ravenReadSideService = CreateRavenReadSideService(eventDispatcher: eventDispatcherMock.Object);
+            ravenReadSideService = CreateReadSideService(eventDispatcher: eventDispatcherMock.Object);
         };
 
         Because of = () => result = ravenReadSideService.GetAllAvailableHandlers();

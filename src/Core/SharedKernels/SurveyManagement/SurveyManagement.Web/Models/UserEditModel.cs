@@ -35,6 +35,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 4)]
         public bool IsLocked { get; set; }
 
-        public List<DeviceInfo> DevicesHistory { get; set; }
+        public IList<DeviceInfo> DevicesHistory { get; set; }
     }
 }
