@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <MvxLinearLayout xmlns:local="http://schemas.android.com/apk/res-auto"
+    <MvxLinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
@@ -47,5 +48,12 @@
         </ScrollView>
     </MvxLinearLayout>
     <MvxLinearLayout
-        style="@style/Interview_LeftSidePanel" />
+        style="@style/Interview_LeftSidePanel">
+        <TextView
+            style="@style/Interview_QuestionnaireTitle"
+            local:MvxBind="Text QuestionnaireTitle" />
+        <MvxListView
+            style="@style/Interview_List"
+            local:MvxBind="ItemsSource PrefilledQuestions" />
+    </MvxLinearLayout>
 </android.support.v4.widget.DrawerLayout>

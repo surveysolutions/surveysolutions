@@ -2099,20 +2099,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0060
 			public const int Base_Widget_AppCompat_Toolbar_Button_Navigation = 2131427424;
 			
+			// aapt resource value: 0x7f0b00f4
+			public const int ButtonTheme_Blue_Light = 2131427572;
+			
 			// aapt resource value: 0x7f0b00f3
-			public const int ButtonTheme_Blue_Light = 2131427571;
+			public const int CheckBoxTheme_Blue_Light = 2131427571;
+			
+			// aapt resource value: 0x7f0b00f6
+			public const int DrawerArrowStyle = 2131427574;
 			
 			// aapt resource value: 0x7f0b00f2
-			public const int CheckBoxTheme_Blue_Light = 2131427570;
+			public const int EditTextTheme_Blue_Light = 2131427570;
 			
 			// aapt resource value: 0x7f0b00f5
-			public const int DrawerArrowStyle = 2131427573;
-			
-			// aapt resource value: 0x7f0b00f1
-			public const int EditTextTheme_Blue_Light = 2131427569;
-			
-			// aapt resource value: 0x7f0b00f4
-			public const int ImageButtonTheme_Blue_Light = 2131427572;
+			public const int ImageButtonTheme_Blue_Light = 2131427573;
 			
 			// aapt resource value: 0x7f0b00eb
 			public const int InterviewToolbarTitle = 2131427563;
@@ -2122,6 +2122,9 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f0b00ed
 			public const int Interview_List = 2131427565;
+			
+			// aapt resource value: 0x7f0b00f1
+			public const int Interview_QuestionnaireTitle = 2131427569;
 			
 			// aapt resource value: 0x7f0b0061
 			public const int Platform_AppCompat = 2131427425;
@@ -2339,20 +2342,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b00a6
 			public const int Theme_AppCompat_NoActionBar = 2131427494;
 			
+			// aapt resource value: 0x7f0b00fa
+			public const int Theme_Blue_Light = 2131427578;
+			
 			// aapt resource value: 0x7f0b00f9
-			public const int Theme_Blue_Light = 2131427577;
-			
-			// aapt resource value: 0x7f0b00f8
-			public const int Theme_Gray_Light = 2131427576;
-			
-			// aapt resource value: 0x7f0b00f6
-			public const int Theme_Light = 2131427574;
+			public const int Theme_Gray_Light = 2131427577;
 			
 			// aapt resource value: 0x7f0b00f7
-			public const int Theme_Light_Base = 2131427575;
+			public const int Theme_Light = 2131427575;
 			
-			// aapt resource value: 0x7f0b00fa
-			public const int Theme_Splash = 2131427578;
+			// aapt resource value: 0x7f0b00f8
+			public const int Theme_Light_Base = 2131427576;
+			
+			// aapt resource value: 0x7f0b00fb
+			public const int Theme_Splash = 2131427579;
 			
 			// aapt resource value: 0x7f0b00a7
 			public const int ThemeOverlay_AppCompat = 2131427495;
