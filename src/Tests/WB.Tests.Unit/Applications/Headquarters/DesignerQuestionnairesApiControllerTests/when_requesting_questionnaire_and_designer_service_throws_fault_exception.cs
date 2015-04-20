@@ -19,12 +19,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
     {
         Establish context = () =>
         {
-            var supportedVerstion = new ApplicationVersionSettings()
-            {
-                SupportedQuestionnaireVersionMajor = 1,
-                SupportedQuestionnaireVersionMinor = 2,
-                SupportedQuestionnaireVersionPatch = 3
-            };
+            var supportedVerstion = new Version(1, 2, 3);
+
             request = new ImportQuestionnaireRequest
             {
                 Questionnaire = new DesignerQuestionnaireListViewItem() {Id = questionnaireId}

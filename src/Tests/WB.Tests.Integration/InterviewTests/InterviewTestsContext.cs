@@ -189,7 +189,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireVersionProvider =new QuestionnaireVersionService();
+            var questionnaireVersionProvider =new ExpressionsEngineVersionService();
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(

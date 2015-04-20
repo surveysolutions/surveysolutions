@@ -1,10 +1,9 @@
 using System;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class QuestionnaireVersionService : IQuestionnaireVersionService
+    internal class ExpressionsEngineVersionService : IExpressionsEngineVersionService
     {
         /// <summary>
         /// New Era of c# conditions
