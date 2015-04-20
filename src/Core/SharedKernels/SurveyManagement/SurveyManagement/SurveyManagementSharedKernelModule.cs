@@ -92,16 +92,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            
-            var applicationVersionSettings = new ApplicationVersionSettings
-            {
-                SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
-                SupportedQuestionnaireVersionMinor = this.supportedQuestionnaireVersionMinor,
-                SupportedQuestionnaireVersionPatch = this.supportedQuestionnaireVersionPatch
-            };
+
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
-                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
+                .ToConstant(new SupportedVersionProvider(this.isDebug, this.applicationBuildVersion));
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
