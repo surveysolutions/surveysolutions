@@ -1,5 +1,3 @@
-using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using Ncqrs.Domain.Storage;
 using WB.Core.Infrastructure.Modularity;
 

@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     internal class PlainQuestionnaireRepository : IPlainQuestionnaireRepository
     {
-        private readonly IPlainStorageAccessor<QuestionnaireDocument> repository;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
 
-        public PlainQuestionnaireRepository(IPlainStorageAccessor<QuestionnaireDocument> repository)
+        public PlainQuestionnaireRepository(IPlainKeyValueStorage<QuestionnaireDocument> repository)
         {
             this.repository = repository;
         }

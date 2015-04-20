@@ -2,18 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
-    public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T> where T : class, IReadSideRepositoryEntity
+    public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
+        IQueryableReadSideRepositoryReader<T> 
+        where T : class, IReadSideRepositoryEntity
     {
         private readonly Dictionary<string, T> storage = new Dictionary<string, T>();
 
         public IReadOnlyDictionary<string, T> Dictionary
         {
             get { return new ReadOnlyDictionary<string, T>(this.storage); }
+        }
+
+        public int Count()
+        {
+            return this.Dictionary.Count;
         }
 
         public T GetById(string id)
@@ -50,5 +59,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             }
         }
 
+        public Type ViewType
+        {
+            get { return typeof(T); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "Test";
+        }
+
+        public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
+        {
+            return query.Invoke(this.Dictionary.Values.AsQueryable());
+        }
+
+        public IEnumerable<T> QueryAll(Expression<Func<T, bool>> condition = null)
+        {
+            return condition == null ? this.Dictionary.Values : this.Dictionary.Values.Where(condition.Compile()).ToList();
+        }
     }
 }

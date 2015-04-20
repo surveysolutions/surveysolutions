@@ -2,12 +2,13 @@ using System;
 using System.IO;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 {
-    internal class EsentKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
+    internal class EsentKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IPlainKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private PersistentDictionary<string, string> storage;
@@ -49,6 +50,16 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             this.storage.Dispose();
             PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
             this.storage = new PersistentDictionary<string, string>(collectionFolder);
+        }
+
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "ESENT :)";
         }
 
         public void Dispose()

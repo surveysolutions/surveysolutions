@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
@@ -14,38 +11,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 {
     public class AllUsersAndQuestionnairesFactory : IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
     {
-       private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> usersReader;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader;
 
-       public AllUsersAndQuestionnairesFactory(IReadSideRepositoryIndexAccessor indexAccessor)
+        public AllUsersAndQuestionnairesFactory(IQueryableReadSideRepositoryReader<UserDocument> usersReader,
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader)
         {
-            this.indexAccessor = indexAccessor;
+            this.usersReader = usersReader;
+            this.questionnairesReader = questionnairesReader;
         }
 
-       public AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input)
+        public AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input)
         {
-           string userIndexName = typeof(UserDocumentsByBriefFields).Name;
-           string questionnaireIndexName = typeof(QuestionnaireBrowseItemsGroupByQuestionnaireIdIndex).Name;
+            var allUsers = usersReader.Query(_ => 
+                _.Where(u => !u.IsLockedByHQ && !u.IsDeleted && u.Roles.Contains(UserRoles.Supervisor))
+                 .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName })
+                 .OrderBy(x => x.UserName)
+                 .ToList());
 
-           var allUsers = indexAccessor.Query<UserDocument>(userIndexName)
-               .Where(u => !u.IsLockedByHQ  && !u.IsDeleted && u.Roles.Contains(UserRoles.Supervisor))
-               .QueryAll()
-               .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName })
-               .OrderBy(x => x.UserName);
-
-           var allQuestionnaires = indexAccessor.Query<QuestionnaireAndVersionsItem>(questionnaireIndexName).QueryAll();
-
-           var questionnaires = allQuestionnaires.SelectMany(questionnaire => questionnaire.Versions.Select(version => new TemplateViewItem
-           {
-               TemplateId = questionnaire.QuestionnaireId,
-               TemplateName = questionnaire.Title,
-               TemplateVersion = version
-           })).ToList();
-
-           return new AllUsersAndQuestionnairesView
+            var questionnaires = this.questionnairesReader.Query(_ => _.Select(questionnaire => new TemplateViewItem
             {
-                Users = allUsers,
-                Questionnaires = questionnaires
-            };
+                TemplateId = questionnaire.QuestionnaireId,
+                TemplateName = questionnaire.Title,
+                TemplateVersion = questionnaire.Version
+            }).ToList());
+
+            return new AllUsersAndQuestionnairesView
+             {
+                 Users = allUsers,
+                 Questionnaires = questionnaires
+             };
         }
     }
 }

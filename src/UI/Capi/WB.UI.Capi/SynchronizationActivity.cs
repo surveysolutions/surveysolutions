@@ -75,7 +75,7 @@ namespace WB.UI.Capi
         }
 
         protected ProgressDialog progressDialog;
-        protected SynchronozationProcessor synchronizer;
+        protected SynchronizationProcessor synchronizer;
         private ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -288,7 +288,7 @@ namespace WB.UI.Capi
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
 
-                this.synchronizer = new SynchronozationProcessor(
+                this.synchronizer = new SynchronizationProcessor(
                     deviceChangeVerifier,
                     authenticator,
                     new CapiDataSynchronizationService(

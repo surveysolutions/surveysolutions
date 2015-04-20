@@ -11,6 +11,7 @@ using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
@@ -30,6 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private IReadSideStatusService readSideStatusService
         {
             get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
+        }
+
+        private ITransactionManagerProvider TransactionManagerProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
         internal static string[] SplitString(string original)
@@ -61,12 +67,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 return;
             }
 
+            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
             var userInfo = this.userViewFactory.Load(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
+         
             if (userInfo == null || !userInfo.Roles.Contains(UserRoles.Operator))
             {
                 this.RespondWithMessageThatUserIsNotAnInterviewer(actionContext);
                 return;
             }
+            this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
 
             var identity = new GenericIdentity(basicCredentials.Username, "Basic");
             var principal = new GenericPrincipal(identity, null);

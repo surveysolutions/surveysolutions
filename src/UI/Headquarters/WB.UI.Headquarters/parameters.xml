@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <parameters>
+   <parameter name="ReadSide-Web.config Connection String"
+      description="Provide the connection string for PostgreSQL database for read side"
+      defaultValue="Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=SuperHQ-RC-Views;Pooling=true;MinPoolSize=1;MaxPoolSize=100;">
+   </parameter>
+
+
    <parameter name="The RavenDB instance address"
       description="Provide the address for RavenDB instance"
       defaultValue="http://localhost:8081">

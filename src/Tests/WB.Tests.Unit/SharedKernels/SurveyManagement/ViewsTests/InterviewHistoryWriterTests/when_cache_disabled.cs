@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
             fileSystemAccessorMock.Verify(x => x.OpenOrCreateFile(Moq.It.Is<string>(_ => _.Contains(interviewId.FormatGuid())), true), Times.Once);
 
         It should_return_readable_status_with_disabled_cache = () =>
-            interviewHistoryWriter.GetReadableStatus().ShouldEqual("cache disabled;    items: 0");
+            interviewHistoryWriter.GetReadableStatus().ShouldEqual("Interview history -_- | cache disabled | items: 0");
 
         private static InterviewHistoryWriter interviewHistoryWriter;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;

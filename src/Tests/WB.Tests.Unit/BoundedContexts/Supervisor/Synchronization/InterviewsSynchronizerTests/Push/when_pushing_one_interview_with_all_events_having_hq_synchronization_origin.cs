@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryDataDescriptor>());
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
-                readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
+                readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
                 httpMessageHandler: () => httpMessageHandlerMock.Object,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
