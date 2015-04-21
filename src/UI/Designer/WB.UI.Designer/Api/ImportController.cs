@@ -130,9 +130,9 @@ namespace WB.UI.Designer.Api
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
 
