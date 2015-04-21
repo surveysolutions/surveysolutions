@@ -27,31 +27,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
                 var responsibles = GetUsersToCountOn(input, filteredInterviews);
 
-                var supervisorAssignedStatusCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.SupervisorAssigned);
-                var interviewerAssignedCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.InterviewerAssigned);
-                var completedCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.Completed);
-                var approvedBySupervisorCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.ApprovedBySupervisor);
-                var rejectedBySupervisorCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.RejectedBySupervisor);
-                var approvedByHeadquartersCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.ApprovedByHeadquarters);
-                var rejectedByHeadquartersCount = CountInStatus(filteredInterviews, responsibles, InterviewStatus.RejectedByHeadquarters);
-                var totalCount = CountInStatus(filteredInterviews, responsibles, null);
-
+                var groupedResults = (from i in filteredInterviews
+                                     where responsibles.Contains(i.TeamLeadId)
+                                     group i by new {i.TeamLeadId, i.TeamLeadName, i.Status}
+                                     into g 
+                                     select new CounterObject{
+                                        TeamLeadId = g.Key.TeamLeadId,
+                                        TeamLeadName = g.Key.TeamLeadName,
+                                        Status = g.Key.Status,
+                                        InterviewsCount = g.Count()
+                                     }).ToList();
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
+
                 foreach (var responsibleId in responsibles)
                 {
-                    Func<CounterObject, bool> findByResponsible = x => x.TeamLeadId == responsibleId;
                     statistics.Add(new StatisticsLineGroupedByUserAndTemplate
                     {
                         ResponsibleId = responsibleId,
-                        ResponsibleName = Monads.Maybe(() => totalCount.SingleOrDefault(findByResponsible).TeamLeadName),
-                        SupervisorAssignedCount = Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        InterviewerAssignedCount = Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        CompletedCount = Monads.Maybe(() => completedCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        ApprovedBySupervisorCount = Monads.Maybe(() => approvedBySupervisorCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        RejectedBySupervisorCount = Monads.Maybe(() => rejectedBySupervisorCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        ApprovedByHeadquartersCount = Monads.Maybe(() => approvedByHeadquartersCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        RejectedByHeadquartersCount = Monads.Maybe(() => rejectedByHeadquartersCount.SingleOrDefault(findByResponsible).InterviewsCount),
-                        TotalCount = Monads.Maybe(() => totalCount.SingleOrDefault(findByResponsible).InterviewsCount)
+                        ResponsibleName             = groupedResults.FirstOrDefault(x => x.TeamLeadId == responsibleId).TeamLeadName,
+                        SupervisorAssignedCount     = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.SupervisorAssigned),
+                        InterviewerAssignedCount    = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.InterviewerAssigned),
+                        CompletedCount              = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.Completed),
+                        ApprovedBySupervisorCount   = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.ApprovedBySupervisor),
+                        RejectedBySupervisorCount   = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedBySupervisor),
+                        ApprovedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.ApprovedByHeadquarters),
+                        RejectedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedByHeadquarters),
+                        TotalCount                  = groupedResults.Where(x => x.TeamLeadId == responsibleId).Sum(x => x.InterviewsCount)
                     });
                 }
 
@@ -87,6 +88,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     TotalCount = rowCount,
                     Items = currentPage
                 };
+        }
+
+        private static int GetCountInStatus(List<CounterObject> groupedResults, Guid responsibleId, InterviewStatus status)
+        {
+            var resultsByTeamLeadAndStatus = groupedResults.SingleOrDefault(x => x.TeamLeadId == responsibleId && x.Status == status);
+            if (resultsByTeamLeadAndStatus != null)
+            {
+                return resultsByTeamLeadAndStatus.InterviewsCount;
+            }
+            
+            return 0;
         }
 
         private static List<Guid> GetUsersToCountOn(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> filteredInterviews)
@@ -125,32 +137,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             return filteredInterviews;
         }
 
-        private static List<CounterObject> CountInStatus(IQueryable<InterviewSummary> filteredInterviews,
-            IEnumerable<Guid> responsibles,
-            InterviewStatus? requestedStatus)
-        {
-
-            filteredInterviews = filteredInterviews.Where(x => responsibles.Contains(x.TeamLeadId));
-            if (requestedStatus.HasValue)
-            {
-                filteredInterviews = filteredInterviews.Where(x => x.Status == requestedStatus);
-            }
-
-            var groupedResults = filteredInterviews.GroupBy(g => new
-            { 
-                g.TeamLeadId,
-                g.TeamLeadName
-            });
-            var result = groupedResults.Select(g => new CounterObject
-            {
-                TeamLeadName = g.Key.TeamLeadName,
-                TeamLeadId = g.Key.TeamLeadId,
-                InterviewsCount = g.Count()
-            }).ToList();
-            return result;
-
-        }
-
         private class CounterObject
         {
             public int InterviewsCount { get; set; }
@@ -158,6 +144,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             public string TeamLeadName { get; set; }
 
             public Guid TeamLeadId { get; set; }
+
+            public InterviewStatus Status { get; set; }
         }
     }
 }
