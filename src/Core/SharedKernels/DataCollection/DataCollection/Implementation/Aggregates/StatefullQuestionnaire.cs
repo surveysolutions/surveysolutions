@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 parentPlaceholder.Title = parent.Title;
                 parents.Add(parentPlaceholder);
 
-                parent = group.GetParent() as Group;
+                parent = parent.GetParent() as Group;
             }
             return parents;
         }
