@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
@@ -15,7 +16,6 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
-using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
@@ -29,12 +29,9 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
-using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Mappings;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
@@ -54,6 +51,7 @@ using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WebActivatorEx;
+using FilterScope = System.Web.Http.Filters.FilterScope;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -103,15 +101,6 @@ namespace WB.UI.Headquarters
 
             Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;
 
-            var ravenSettings = new RavenConnectionSettings(
-                storagePath: storePath,
-                username: WebConfigurationManager.AppSettings["Raven.Username"],
-                password: WebConfigurationManager.AppSettings["Raven.Password"],
-                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"],ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
-
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
@@ -119,7 +108,7 @@ namespace WB.UI.Headquarters
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
-                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+                appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
@@ -154,9 +143,6 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-
-                // new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
-                new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
@@ -196,14 +182,14 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
 
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
                 .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
-            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(FilterScope.Controller)
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();

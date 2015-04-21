@@ -62,7 +62,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             ITransactionManagerProviderManager transactionManagerProviderManager)
         {
             if (InstanceCount > 0)
-                throw new Exception(string.Format("Trying to create a new instance of RavenReadSideService when following count of instances exists: {0}.", InstanceCount));
+                throw new Exception(string.Format("Trying to create a new instance of {1} when following count of instances exists: {0}.", InstanceCount, typeof(ReadSideService).Name));
 
             Interlocked.Increment(ref InstanceCount);
 
