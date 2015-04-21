@@ -4,17 +4,17 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.Mvc;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using NHibernate.Mapping;
 using Ninject;
 using Ninject.Web.Common;
-using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor;
@@ -23,18 +23,15 @@ using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
-using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Mappings;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
@@ -47,12 +44,13 @@ using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
-using WB.UI.Supervisor.Code;
-using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
+using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
+using WB.UI.Supervisor.Injections;
 using WebActivatorEx;
-using Microsoft.Practices.ServiceLocation;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
+using FilterScope = System.Web.Http.Filters.FilterScope;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -81,22 +79,10 @@ namespace WB.UI.Supervisor.App_Start
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
-            string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-            var ravenSettings = new RavenConnectionSettings(storePath,
-                username: WebConfigurationManager.AppSettings["Raven.Username"],
-                password: WebConfigurationManager.AppSettings["Raven.Password"],
-                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"],
-                ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
-
-            
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
-            var headquartersSettings = (HeadquartersSettings) System.Configuration.ConfigurationManager.GetSection(
+            var headquartersSettings = (HeadquartersSettings) ConfigurationManager.GetSection(
                 "headquartersSettingsGroup/headquartersSettings");
 
             var interviewDetailsDataLoaderSettings =
@@ -109,7 +95,7 @@ namespace WB.UI.Supervisor.App_Start
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
-                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+                appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
@@ -190,7 +176,7 @@ namespace WB.UI.Supervisor.App_Start
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
 
             kernel.Bind<ITokenVerifier>().To<ApiValidationAntiForgeryTokenVerifier>().InSingletonScope();
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>();
 
             

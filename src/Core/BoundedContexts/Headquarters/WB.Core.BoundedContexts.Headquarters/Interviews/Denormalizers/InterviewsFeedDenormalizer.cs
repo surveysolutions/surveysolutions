@@ -1,9 +1,7 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Raven.Client.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;

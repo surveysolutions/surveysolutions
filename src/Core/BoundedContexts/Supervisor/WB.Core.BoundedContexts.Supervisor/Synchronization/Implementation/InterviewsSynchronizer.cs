@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Main.Core;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Ncqrs.Commanding;
-
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
-using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
