@@ -16,12 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatuse
         Establish context = () =>
         {
             viewerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var responsible = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Create.InterviewSummary(responsibleId: responsible, teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
             };
 
             var repository = new TestInMemoryWriter<InterviewSummary>();
