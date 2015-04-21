@@ -24,30 +24,34 @@ namespace WB.UI.Designer.Api
         private IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IQuestionnaireVersionService questionnaireVersionService)
+        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.questionnaireVersionService = questionnaireVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         [HttpGet]
-        public HttpResponseMessage GenerateExpressionsClass(Guid id)
+        public HttpResponseMessage GenerateExpressionsClassForLatestVersion(Guid id)
         {
             var questionnaire = GetQuestionnaire(id).Source;
-            string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire);
+
+            string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire,
+                expressionsEngineVersionService.GetLatestSupportedVersion());
 
             return Request.CreateResponse(HttpStatusCode.OK, generated);
         }
 
         [HttpGet]
-        public HttpResponseMessage GetAllClasses(Guid id)
+        public HttpResponseMessage GetAllClassesForLatestVersion(Guid id)
         {
             var questionnaire = GetQuestionnaire(id).Source;
-            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire);
+
+            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire,
+                expressionsEngineVersionService.GetLatestSupportedVersion());
             
             var resultBuilder =new StringBuilder();
             
@@ -61,14 +65,14 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GetAssembly(Guid id)
+        public HttpResponseMessage GetLatestVersionAssembly(Guid id)
         {
             //do async
             
             var questionnaire = GetQuestionnaire(id).Source;
             string assembly;
             var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
-                questionnaireVersionService.GetLatestSupportedVersion(), out assembly);
+                expressionsEngineVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

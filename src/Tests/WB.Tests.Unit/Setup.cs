@@ -34,13 +34,6 @@ namespace WB.Tests.Unit
                 .Returns(Mock.Of<T>());
         }
 
-        public static void SimpleQuestionnaireDocumentUpgraderToMockedServiceLocator()
-        {
-            var questionnaireDocumentUpgrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
-
-            Setup.InstanceToMockedServiceLocator(questionnaireDocumentUpgrader);
-        }
-
         public static IQueryableReadSideRepositoryReader<TEntity> QueryableReadSideRepositoryReaderByQueryResultType<TEntity, TResult>(IEnumerable<TEntity> entities)
             where TEntity : class, IReadSideRepositoryEntity
         {

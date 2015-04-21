@@ -5,20 +5,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private static ApplicationVersionSettings supportedQuestionnaireVersion;
+        private static Version expressionsEngineVersion = new Version(6, 0, 0);
         private static Func<bool> isDebugMode;
         private static Version applicationBuildVersion;
 
-        public SupportedVersionProvider(ApplicationVersionSettings settings, Func<bool> isDebug, Version applicationVersion)
+        public SupportedVersionProvider(Func<bool> isDebug, Version applicationVersion)
         {
-            supportedQuestionnaireVersion = settings;
             isDebugMode = isDebug;
             applicationBuildVersion = applicationVersion;
         }
 
-        public ApplicationVersionSettings GetSupportedQuestionnaireVersion()
+        public Version GetSupportedQuestionnaireVersion()
         {
-            return supportedQuestionnaireVersion;
+            return expressionsEngineVersion;
         }
 
         public int? GetApplicationBuildNumber()

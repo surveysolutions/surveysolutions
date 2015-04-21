@@ -45,9 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
-        private readonly int supportedQuestionnaireVersionMajor;
-        private readonly int supportedQuestionnaireVersionMinor;
-        private readonly int supportedQuestionnaireVersionPatch;
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
@@ -57,17 +54,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly InterviewHistorySettings interviewHistorySettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
-            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor,
-            int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
             InterviewHistorySettings interviewHistorySettings,
             bool isSupervisorFunctionsEnabled)
         {
             this.currentFolderPath = currentFolderPath;
-            this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
-            this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
-            this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
@@ -97,19 +89,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
-            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
-            this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
 
-            var applicationVersionSettings = new ApplicationVersionSettings
-            {
-                SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
-                SupportedQuestionnaireVersionMinor = this.supportedQuestionnaireVersionMinor,
-                SupportedQuestionnaireVersionPatch = this.supportedQuestionnaireVersionPatch
-            };
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
-                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
+                .ToConstant(new SupportedVersionProvider(this.isDebug, this.applicationBuildVersion));
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 

@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
         private readonly IJsonUtils jsonUtils;
         public ImportController(
             IStringCompressor zipUtils,
@@ -39,7 +39,9 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, ILogger logger, IQuestionnaireVersionService questionnaireVersionService, IJsonUtils jsonUtils)
+            IQuestionnaireHelper questionnaireHelper, 
+            IExpressionsEngineVersionService expressionsEngineVersionService, 
+            IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
@@ -49,7 +51,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
-            this.questionnaireVersionService = questionnaireVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -83,7 +85,7 @@ namespace WB.UI.Designer.Api
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
 
-            if (!questionnaireVersionService.IsClientVersionSupported(supportedClientVersion))
+            if (!expressionsEngineVersionService.IsClientVersionSupported(supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
@@ -128,9 +130,9 @@ namespace WB.UI.Designer.Api
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
 
