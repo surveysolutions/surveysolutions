@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, Version targetVersion,
           out string generatedAssembly);
-        Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire);
-        string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire);
+        Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, Version targetVersion);
+        string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire, Version targetVersion);
     }
 }
