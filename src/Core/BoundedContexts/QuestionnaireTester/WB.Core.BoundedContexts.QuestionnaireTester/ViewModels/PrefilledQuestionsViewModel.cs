@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils;
@@ -38,8 +37,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private List<MvxViewModel> prefilledQuestions = new List<MvxViewModel>();
-        public List<MvxViewModel> PrefilledQuestions
+        private IEnumerable prefilledQuestions;
+        public IEnumerable PrefilledQuestions
         {
             get { return prefilledQuestions; }
             set
@@ -57,7 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = this.interviewStateFullViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);
+            this.PrefilledQuestions = await this.interviewStateFullViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);
         }
 
         private void StartInterview()
