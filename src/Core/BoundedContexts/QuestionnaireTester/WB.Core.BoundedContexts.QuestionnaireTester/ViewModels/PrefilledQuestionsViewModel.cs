@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewId = interviewId;
 
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
+            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = await this.interviewStateFullViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);

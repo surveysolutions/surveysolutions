@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public async void Init(string id, string chapterId)
         {
             var interview = this.interviewRepository.Get(id);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
             var groupId = string.IsNullOrEmpty(chapterId) 
                 ? questionnaire.GroupsWithoutNestedChildren.Keys.First()
