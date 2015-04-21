@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewModel = interviewModel;
             this.questionnaireModel = questionnaireModel;
 
-            var staticText = this.questionnaireModel.Texts[this.identity.Id];
+            var staticText = this.questionnaireModel.StaticTexts[this.identity.Id];
 
             Title = staticText.Title;
           
