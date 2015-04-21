@@ -9,14 +9,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     internal class HealthCheckTestContext
     {
         protected static HealthCheckService CreateHealthCheckService(
-            IAtomicHealthCheck<RavenHealthCheckResult> databaseHealthCheck,
             IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck,
             IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker,
             IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker,
             IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker)
         {
             return new HealthCheckService(
-                databaseHealthCheck ?? Mock.Of<IAtomicHealthCheck<RavenHealthCheckResult>>(),
                 eventStoreHealthCheck ?? Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(),
                 numberOfUnhandledPackagesChecker ?? Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(),
                 numberOfSyncPackagesWithBigSizeChecker ?? Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(),
