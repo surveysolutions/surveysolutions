@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
@@ -49,7 +44,7 @@ namespace WB.Tests.Integration.Versions
         It should_designer_Build_version_be_equal_to_hq_Build_version = () =>
             designerVersion.Build.ShouldEqual(hqVersion.Build);
 
-        private static QuestionnnaireVersion testerVersion;
+        private static QuestionnaireVersion testerVersion;
         private static Version designerVersion;
         private static Version hqVersion;
 
