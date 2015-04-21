@@ -28,13 +28,13 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
-
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory)
+            IQuestionnaireListViewFactory viewFactory, IExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -42,6 +42,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         [Route("{id:Guid}")]
@@ -66,7 +67,7 @@ namespace WB.UI.Designer.Api
             string resultAssembly;
             try
             {
-                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source,expressionsEngineVersionService.GetLatestSupportedVersion(), out resultAssembly);
                 if(!generationResult.Success)
                     throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
