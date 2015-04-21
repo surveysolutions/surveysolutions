@@ -10,8 +10,6 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
     {
         private readonly JsonUtilsSettings jsonUtilsSettings;
         private readonly JsonSerializer jsonSerializer;
-        private readonly JsonSerializerSettings objectsOnlySerializeSettings;
-        private readonly JsonSerializerSettings allTypesSerializeSettings;
 
         private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings> JsonSerializerSettingsByTypeNameHandling =
                 new Dictionary<TypeSerializationSettings, JsonSerializerSettings>()
@@ -76,7 +74,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         public T Deserialize<T>(string payload)
         {
             var replaceOldAssemblyNames = ReplaceOldAssemblyNames(payload);
-            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.objectsOnlySerializeSettings);
+            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, JsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
         }
 
         [Obsolete]
