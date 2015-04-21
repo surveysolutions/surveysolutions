@@ -378,6 +378,10 @@
       <Project>{b73e686b-a06b-4fd5-9baf-b321a0d33dbd}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\layout\questions\" />

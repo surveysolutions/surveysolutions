@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Capi.Services;
+﻿using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 
-namespace WB.Core.BoundedContexts.Capi.Implementation.Services
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
-    public class CapiExpressionsEngineVersionService : ICapiExpressionsEngineVersionService
+    public class TesterExpressionsEngineVersionService : ITesterExpressionsEngineVersionService
     {
         private readonly QuestionnaireVersion questionnaireVersion = new QuestionnaireVersion
         {
@@ -19,7 +14,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
         public QuestionnaireVersion GetExpressionsEngineSupportedVersion()
         {
-            return questionnaireVersion;
+            return this.questionnaireVersion;
         }
     }
 }

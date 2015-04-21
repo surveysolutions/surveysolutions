@@ -2,6 +2,8 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.QuestionnaireTester.Implementation.Services
@@ -13,7 +15,14 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
-        
+
+        private ITesterExpressionsEngineVersionService versionService;
+
+        public ApplicationSettings(ITesterExpressionsEngineVersionService versionService)
+        {
+            this.versionService = versionService;
+        }
+
         private static ISharedPreferences sharedPreferences
         {
             get
@@ -69,7 +78,7 @@ namespace WB.UI.QuestionnaireTester.Implementation.Services
 
         public string EngineVersion
         {
-            get { return QuestionnaireVersionProvider.GetCurrentEngineVersion().ToString(); }
+            get { return versionService.GetExpressionsEngineSupportedVersion().ToString(); }
         }
 
         public string OSVersion

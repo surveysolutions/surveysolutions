@@ -36,10 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\DesignerApiServiceAccessor.cs" />
     <Compile Include="Implementation\Services\ErrorProcessor.cs" />
     <Compile Include="Implementation\Services\TesterQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Services\ErrorCode.cs" />
+    <Compile Include="Services\ITesterExpressionsEngineVersionService.cs" />
     <Compile Include="Services\IErrorProcessor.cs" />
     <Compile Include="InterviewModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -127,6 +129,10 @@
     <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

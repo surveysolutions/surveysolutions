@@ -21,7 +21,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
         public override void Load()
         {
-            this.Bind<IInterviewExpressionStateVersionAdapter>().To<InterviewExpressionStateVersionAdapter>().InSingletonScope();
+            this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
                 .To<TesterQuestionnaireAssemblyFileAccessor>().InSingletonScope()
