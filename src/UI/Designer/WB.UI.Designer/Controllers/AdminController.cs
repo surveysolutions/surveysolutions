@@ -69,7 +69,7 @@ namespace WB.UI.Designer.Controllers
 
             if (uploadFile != null && uploadFile.ContentLength > 0)
             {
-                var document = this.zipUtils.DecompressGZip<IQuestionnaireDocument>(uploadFile.InputStream);
+                var document = this.zipUtils.DecompressGZip<QuestionnaireDocument>(uploadFile.InputStream);
                 if (document != null)
                 {
                     this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));

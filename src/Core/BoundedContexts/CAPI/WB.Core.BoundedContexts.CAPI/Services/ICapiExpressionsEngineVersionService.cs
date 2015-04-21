@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Capi.Services
 {
     public interface ICapiExpressionsEngineVersionService
     {
-        QuestionnnaireVersion GetExpressionsEngineSupportedVersion();
+        QuestionnaireVersion GetExpressionsEngineSupportedVersion();
     }
 }
