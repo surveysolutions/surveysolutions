@@ -124,10 +124,14 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Android.Support.v4">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.22.0.0.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.AppCompat">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.AppCompat.21.0.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.RecyclerView">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.RecyclerView.22.0.0.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Insights">
       <HintPath>..\..\..\..\packages\Xamarin.Insights.1.9.1.107\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
@@ -166,8 +170,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="ValueConverters\LocalizationValueConverter.cs" />
-    <Compile Include="Views\Adapters\QuestionAdapter.cs" />
+    <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
+    <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
+    <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />
+    <Compile Include="Views\CustomControls\MvxRecyclerView.cs" />
+    <Compile Include="Views\CustomControls\MvxRecyclerViewAdapter.cs" />
+    <Compile Include="Views\CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="Views\InterviewGroupView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />

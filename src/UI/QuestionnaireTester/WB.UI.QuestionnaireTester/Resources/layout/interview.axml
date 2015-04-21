@@ -27,10 +27,11 @@
             <MvxRelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
-                <MvxListView
+                <MvxRecyclerView
                     style="@style/Interview_List"
                     android:id="@+id/questionnaireEntitiesList"
                     android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
+                    android:scrollbars="vertical"
                     local:MvxBind="ItemsSource Items" />
                 <MvxRelativeLayout
                     android:layout_width="fill_parent"

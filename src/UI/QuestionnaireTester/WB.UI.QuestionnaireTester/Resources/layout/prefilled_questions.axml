@@ -30,10 +30,11 @@
                     style="@style/PrefilledQuestions_QuestionnaireTitle"
                     local:MvxBind="Text QuestionnaireTitle" />
             </MvxRelativeLayout>
-            <MvxListView
+            <MvxRecyclerView
                 style="@style/PrefilledQuestions_List"
                 android:id="@+id/questionnaireEntitiesList"
                 android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
+                android:scrollbars="vertical"
                 local:MvxBind="ItemsSource PrefilledQuestions" />
             <MvxRelativeLayout
                 android:layout_width="fill_parent"

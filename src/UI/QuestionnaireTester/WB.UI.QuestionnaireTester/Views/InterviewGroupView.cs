@@ -9,6 +9,7 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using WB.UI.QuestionnaireTester.Views.Adapters;
+using WB.UI.QuestionnaireTester.Views.CustomControls;
 
 
 namespace WB.UI.QuestionnaireTester.Views
@@ -29,7 +30,7 @@ namespace WB.UI.QuestionnaireTester.Views
 
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             var drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
-            var listOfInterviewQuestionsAndGroups = FindViewById<MvxListView>(Resource.Id.questionnaireEntitiesList);
+            var listOfInterviewQuestionsAndGroups = FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
 
             this.SetSupportActionBar(toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
@@ -38,7 +39,11 @@ namespace WB.UI.QuestionnaireTester.Views
             this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
 
             drawerLayout.SetDrawerListener(this.drawerToggle);
-            listOfInterviewQuestionsAndGroups.Adapter = new QuestionAdapter(this, (IMvxAndroidBindingContext) BindingContext);
+
+            var layoutManager = new LinearLayoutManager(this);
+            listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
+            listOfInterviewQuestionsAndGroups.HasFixedSize = true;
+            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)BindingContext);
         }
 
 

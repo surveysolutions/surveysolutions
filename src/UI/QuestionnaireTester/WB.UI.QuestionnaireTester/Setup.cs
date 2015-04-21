@@ -11,14 +11,11 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.Ninject;
 using WB.UI.QuestionnaireTester.Views;
+using WB.UI.QuestionnaireTester.Views.CustomControls;
 using Xamarin;
 
 
@@ -49,25 +46,7 @@ namespace WB.UI.QuestionnaireTester
                 {typeof (LoginViewModel), typeof (LoginView)},
                 {typeof (InterviewGroupViewModel), typeof (InterviewGroupView)},
                 {typeof (DashboardViewModel), typeof (DashboardView)},
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)},
-
-                // interview items
-                {typeof (StaticTextViewModel), typeof (StaticText)},
-                {typeof (GroupReferenceViewModel), typeof (Group)},
-
-                // questions
-                {typeof (MaskedTextQuestionViewModel), typeof (MaskedTextQuestionModel)},
-                {typeof (SingleOptionQuestionViewModel), typeof (SingleOptionQuestionModel)},
-                {typeof (LinkedSingleOptionQuestionViewModel), typeof (LinkedSingleOptionQuestionModel)},
-                {typeof (MultiOptionQuestionViewModel), typeof (MultiOptionQuestionModel)},
-                {typeof (LinkedMultiOptionQuestionViewModel), typeof (LinkedMultiOptionQuestionModel)},
-                {typeof (IntegerNumericQuestionViewModel), typeof (IntegerNumericQuestionModel)},
-                {typeof (RealNumericQuestionViewModel), typeof (RealNumericQuestionModel)},
-                {typeof (TextListQuestionViewModel), typeof (TextListQuestionModel)},
-                {typeof (QrBarcodeQuestionViewModel), typeof (QrBarcodeQuestionModel)},
-                {typeof (MultimediaQuestionViewModel), typeof (MultimediaQuestionModel)},
-                {typeof (DateTimeQuestionViewModel), typeof (DateTimeQuestionModel)},
-                {typeof (GpsCoordinatesQuestionViewModel), typeof (GpsCoordinatesQuestionModel)}
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -90,6 +69,7 @@ namespace WB.UI.QuestionnaireTester
                 // Add assemblies with other views we use.  When the XML is inflated
                 // MvvmCross knows about the types and won't compain about them.  This
                 // speeds up inflation noticeably.
+                toReturn.Add(typeof(MvxRecyclerView).Assembly);
                 toReturn.Add(typeof(DrawerLayout).Assembly);
                 toReturn.Add(typeof(SwitchCompat).Assembly);
 
