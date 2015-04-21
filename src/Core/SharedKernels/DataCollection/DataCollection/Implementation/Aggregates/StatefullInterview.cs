@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             interview = new InterviewModel
             {
                 Id = EventSourceId,
-                QuestionnaireId = @event.QuestionnaireId,
+                QuestionnaireId = @event.QuestionnaireId.FormatGuid(),
                 QuestionnaireVersion = @event.QuestionnaireVersion
             };
 

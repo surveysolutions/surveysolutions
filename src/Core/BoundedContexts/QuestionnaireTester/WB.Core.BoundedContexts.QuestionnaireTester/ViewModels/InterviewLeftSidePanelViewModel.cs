@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public void Init(string interviewId, string chapterId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds

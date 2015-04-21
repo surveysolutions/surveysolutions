@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             QuestionIdToQuestionModelTypeMap = new Dictionary<Guid, QuestionModelType>();
             IsInProgress = true;
         }
-        public Guid QuestionnaireId { get; set; }
+        public string QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
 
         public Guid Id { get; set; }

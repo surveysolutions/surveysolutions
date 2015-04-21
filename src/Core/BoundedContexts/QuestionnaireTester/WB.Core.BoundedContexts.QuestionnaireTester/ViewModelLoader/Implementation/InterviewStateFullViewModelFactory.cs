@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
         private IEnumerable GenerateViewModels(string interviewId, string chapterId)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
+            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             var chapterIdGuid = string.IsNullOrEmpty(chapterId) 
                 ? questionnaire.GroupsWithoutNestedChildren.Keys.First()
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
         private IEnumerable GetPrefilledQuestionsImpl(string interviewId)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
+            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             return questionnaire.PrefilledQuestionsIds.Select(x => CreateQuestionViewModel(x, new decimal[0], interview, questionnaire));
         }
