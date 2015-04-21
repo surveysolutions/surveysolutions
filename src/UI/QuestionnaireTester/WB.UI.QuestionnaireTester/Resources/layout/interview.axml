@@ -47,13 +47,6 @@
             </MvxRelativeLayout>
         </ScrollView>
     </MvxLinearLayout>
-    <MvxLinearLayout
-        style="@style/Interview_LeftSidePanel">
-        <TextView
-            style="@style/Interview_QuestionnaireTitle"
-            local:MvxBind="Text QuestionnaireTitle" />
-        <MvxListView
-            style="@style/Interview_List"
-            local:MvxBind="ItemsSource PrefilledQuestions" />
-    </MvxLinearLayout>
+    <include
+        layout="@layout/interview_left_side_panel" />
 </android.support.v4.widget.DrawerLayout>

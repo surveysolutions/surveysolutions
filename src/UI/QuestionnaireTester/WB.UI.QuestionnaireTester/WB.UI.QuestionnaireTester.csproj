@@ -336,6 +336,12 @@
     <AndroidResource Include="Resources\layout\interview_multi_option_question_item_template.axml" />
     <AndroidResource Include="Resources\layout\interview_single_option_question.axml" />
     <AndroidResource Include="Resources\layout\interview_single_option_question_item_template.axml" />
+    <AndroidResource Include="Resources\layout\interview_left_side_panel.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

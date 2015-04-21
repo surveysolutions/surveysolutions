@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -43,12 +44,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
 
-        public Task<ObservableCollection<MvxViewModel>> LoadAsync(string interviewId, string chapterId)
+        public Task<IEnumerable> LoadAsync(string interviewId, string chapterId)
         {
             return Task.Run(()=> GenerateViewModels(interviewId, chapterId));
         }
 
-        private ObservableCollection<MvxViewModel> GenerateViewModels(string interviewId, string chapterId)
+        private IEnumerable GenerateViewModels(string interviewId, string chapterId)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
@@ -63,7 +64,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
 
             var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[chapterIdGuid];
 
-            ObservableCollection<MvxViewModel> entities = new ObservableCollection<MvxViewModel>();
+            var entities = new List<MvxViewModel>();
 
             var rosterVector = new decimal[0];
 
@@ -132,17 +133,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
             return questionViewModel;
         }
 
-        public List<MvxViewModel> GetPrefilledQuestionsAsync(string interviewId)
+        public Task<IEnumerable> GetPrefilledQuestionsAsync(string interviewId)
+        {
+            return Task.Run(() => GetPrefilledQuestionsImpl(interviewId));
+        }
+
+        private IEnumerable GetPrefilledQuestionsImpl(string interviewId)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId.FormatGuid());
 
-            var prefilledQuestionsIds = questionnaire.PrefilledQuestionsIds;
-
-            var prefilledViewModels = prefilledQuestionsIds.Select(
-                    x => CreateQuestionViewModel(x, new decimal[0], interview, questionnaire));
-
-            return new List<MvxViewModel>(prefilledViewModels);
+            return questionnaire.PrefilledQuestionsIds.Select(x => CreateQuestionViewModel(x, new decimal[0], interview, questionnaire));
         }
     }
 }

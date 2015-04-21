@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
@@ -21,12 +19,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public InterviewGroupViewModel(IPrincipal principal, IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory,
              IPlainRepository<QuestionnaireModel> questionnaireRepository,
-             IPlainRepository<InterviewModel> interviewRepository)
+             IPlainRepository<InterviewModel> interviewRepository,
+             InterviewLeftSidePanelViewModel interviewLeftSidePanelViewModel)
         {
             this.principal = principal;
             this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.LeftSide = interviewLeftSidePanelViewModel;
         }
 
         public async void Init(string id, string chapterId)
@@ -40,23 +40,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             var group = questionnaire.GroupsWithoutNestedChildren[groupId];
 
-            this.CurrentGroupName = group.Title;
-            this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
-                .Select(questionId => new PrefilledQuestion
-                              {
-                                  Question = questionnaire.Questions[questionId].Title,
-                                  Answer = string.Empty
-                              })
-                .ToList();
+            this.LeftSide.Init(id, chapterId);
 
-            this.Items = await interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
+            this.CurrentGroupName = group.Title;
+            this.Items = await this.interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
         }
 
-        public class PrefilledQuestion
+        public InterviewLeftSidePanelViewModel LeftSide { get; set; }
+        public string CurrentGroupName { get; set; }
+
+        private IEnumerable items;
+        public IEnumerable Items
         {
-            public string Question { get; set; }
-            public string Answer { get; set; }
+            get { return items; }
+            set { items = value; RaisePropertyChanged(() => Items); }
         }
 
         private IMvxCommand navigateToDashboardCommand;
@@ -107,34 +104,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private void ChangeLanguage()
         {
             throw new NotImplementedException();
-        }
-
-        public Guid Id { get; set; }
-        public decimal[] RosterVector { get; set; }
-
-        public Guid ParentId { get; set; }
-        public decimal[] ParentRosterVector { get; set; }
-
-        public string Title { get; set; }
-        public string RosterTitle { get; set; }
-        public bool IsRoster { get; set; }
-
-        public List<string> Breadcrumbs { get; set; }
-
-        public int CountOfQuestionsWithErrors { get; set; }
-        public int CountOfGroupsWithErrors { get; set; }
-        public int CountOfAnsweredQuestions { get; set; }
-        public int CountOfUnansweredQuestions { get; set; }
-
-        public string CurrentGroupName { get; set; }
-        public string QuestionnaireTitle { get; set; }
-        public IList PrefilledQuestions { get; set; } 
-
-        private ObservableCollection<MvxViewModel> items;
-        public ObservableCollection<MvxViewModel> Items
-        {
-            get { return items; }
-            set { items = value; RaisePropertyChanged(() => Items); }
         }
 
         public override void NavigateToPreviousViewModel()
