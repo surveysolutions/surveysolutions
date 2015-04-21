@@ -12,6 +12,7 @@ using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.Ninject;
 using WB.UI.QuestionnaireTester.Views;

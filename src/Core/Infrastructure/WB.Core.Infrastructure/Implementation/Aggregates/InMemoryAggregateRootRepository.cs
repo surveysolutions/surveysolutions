@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;

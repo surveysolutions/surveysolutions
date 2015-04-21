@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -40,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             var questionnaire = QuestionnaireModelRepository.Get(questionnaireId.FormatGuid());
-            interview.QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.Type);
+            interview.QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.GetType());
                 
             InterviewRepository.Store(interview, EventSourceId.FormatGuid());
         }

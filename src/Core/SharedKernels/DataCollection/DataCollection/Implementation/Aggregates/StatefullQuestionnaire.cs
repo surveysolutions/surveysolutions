@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
-
-using Ncqrs.Eventing.Sourcing;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
@@ -46,9 +41,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionnaireModel.Id = questionnaireDocument.PublicKey;
             questionnaireModel.Title = questionnaireDocument.Title;
-            questionnaireModel.ListOfRostersId = groups.Where(x => x.IsRoster).Select(x => x.PublicKey).ToList();
-            questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured).Select(x => x.PublicKey).ToList();
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, CreateQuestionModel);
+            questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
+                .Select(x => questionnaireModel.Questions[x.PublicKey])
+                .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
+                .ToList();
             questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, CreateGroupModelWithoutNestedChildren);
             questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, BuildParentsList);
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
@@ -71,16 +68,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                    };
         }
 
-        private List<GroupPlaceholderModel> BuildParentsList(Group group)
+        private List<QuestionnaireReferenceModel> BuildParentsList(Group group)
         {
-            var parents = new List<GroupPlaceholderModel>();
+            var parents = new List<QuestionnaireReferenceModel>();
 
             var parent = group.GetParent() as Group;
             while (parent != null && parent.PublicKey != EventSourceId )
             {
-                var parentPlaceholder = parent.IsRoster ? new RosterPlaceholderModel() : new GroupPlaceholderModel();
-                parentPlaceholder.Id = parent.PublicKey;
-                parentPlaceholder.Title = parent.Title;
+                var parentPlaceholder = new QuestionnaireReferenceModel
+                                        {
+                                            ModelType = parent.IsRoster ? typeof(RosterModel) : typeof(GroupModel),
+                                            Id = parent.PublicKey
+                                        };
                 parents.Add(parentPlaceholder);
 
                 parent = parent.GetParent() as Group;
@@ -103,32 +102,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (question.QuestionScope != QuestionScope.Interviewer || question.Featured)
                         continue;
 
-                    var questionModelPlaceholder = new QuestionPlaceholderModel { Id = question.PublicKey, Title = question.QuestionText };
-                    groupModel.Placeholders.Add(questionModelPlaceholder);
+                    var questionModelPlaceholder = new QuestionnaireReferenceModel { Id = question.PublicKey, ModelType = question.GetType() };
+                    groupModel.Children.Add(questionModelPlaceholder);
                     continue;
                 }
 
                 var text = child as StaticText;
                 if (text != null)
                 {
-                    var staticTextModel = new StaticTextModel { Id = text.PublicKey, Title = text.Text };
-                    groupModel.Placeholders.Add(staticTextModel);
+                    var staticTextModel = new QuestionnaireReferenceModel { Id = text.PublicKey, ModelType = typeof(StaticTextModel) };
+                    groupModel.Children.Add(staticTextModel);
                     continue;
                 }
 
                 var subGroup = child as Group;
                 if (subGroup != null)
                 {
-                    if (subGroup.IsRoster)
-                    {
-                        var rosterModelPlaceholder = new RosterPlaceholderModel { Id = subGroup.PublicKey, Title = subGroup.Title };
-                        groupModel.Placeholders.Add(rosterModelPlaceholder);
-                    }
-                    else
-                    {
-                        var groupModelPlaceholder = new GroupPlaceholderModel { Id = subGroup.PublicKey, Title = subGroup.Title };
-                        groupModel.Placeholders.Add(groupModelPlaceholder);
-                    }
+                    var subGroupPlaceholder = new QuestionnaireReferenceModel
+                                              {
+                                                  Id = subGroup.PublicKey,
+                                                  ModelType = subGroup.IsRoster ? typeof(RosterModel) : typeof(GroupModel)
+                                              };
+                     groupModel.Children.Add(subGroupPlaceholder);
                 }
             }
             return groupModel;
