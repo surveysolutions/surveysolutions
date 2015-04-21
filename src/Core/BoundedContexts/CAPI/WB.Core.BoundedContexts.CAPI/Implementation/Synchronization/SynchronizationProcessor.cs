@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
             {
                 this.ExitIfCanceled();
 
-                await this.synchronizationService.PushChunkAsync(credentials : this.credentials,  chunkAsString: chunckDescription.Content);
+                await this.synchronizationService.PushChunkAsync(credentials: this.credentials, chunkAsString: chunckDescription.Content, interviewId: chunckDescription.EventSourceId);
 
                 this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
 

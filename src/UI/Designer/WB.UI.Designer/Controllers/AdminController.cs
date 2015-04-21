@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IQuestionnaireVersionService questionnaireVersionService;
+        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -43,7 +43,7 @@ namespace WB.UI.Designer.Controllers
             IStringCompressor zipUtils,
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IQuestionnaireVersionService questionnaireVersionService, 
+            IExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils)
             : base(userHelper)
         {
@@ -52,7 +52,7 @@ namespace WB.UI.Designer.Controllers
             this.zipUtils = zipUtils;
             this.commandService = commandService;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.questionnaireVersionService = questionnaireVersionService;
+            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
         }
 

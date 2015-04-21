@@ -1889,8 +1889,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_TabletInformation_is_saving.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupportedVersionProviderTests\SupportedVersionProviderTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupportedVersionProviderTests\when_getting_supported_questionnaire_version_for_supervisor_app.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\UserSynchronizationDenormalizerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_created_on_client_and_assigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_is_created_on_client_and_sent_to_supervisor.cs" />
