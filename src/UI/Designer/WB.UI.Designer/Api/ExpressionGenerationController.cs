@@ -35,19 +35,23 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GenerateExpressionsClass(Guid id)
+        public HttpResponseMessage GenerateExpressionsClassForLatestVersion(Guid id)
         {
             var questionnaire = GetQuestionnaire(id).Source;
-            string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire);
+
+            string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire,
+                expressionsEngineVersionService.GetLatestSupportedVersion());
 
             return Request.CreateResponse(HttpStatusCode.OK, generated);
         }
 
         [HttpGet]
-        public HttpResponseMessage GetAllClasses(Guid id)
+        public HttpResponseMessage GetAllClassesForLatestVersion(Guid id)
         {
             var questionnaire = GetQuestionnaire(id).Source;
-            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire);
+
+            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire,
+                expressionsEngineVersionService.GetLatestSupportedVersion());
             
             var resultBuilder =new StringBuilder();
             
@@ -61,7 +65,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GetAssembly(Guid id)
+        public HttpResponseMessage GetLatestVersionAssembly(Guid id)
         {
             //do async
             
