@@ -37,16 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
-    <Compile Include="Implementation\Services\DesignerApiServiceAccessor.cs" />
-    <Compile Include="Implementation\Services\ErrorProcessor.cs" />
+    <Compile Include="Implementation\Services\DesignerApiService.cs" />
     <Compile Include="Implementation\Services\TesterQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="Services\ErrorCode.cs" />
     <Compile Include="Services\ITesterExpressionsEngineVersionService.cs" />
-    <Compile Include="Services\IErrorProcessor.cs" />
     <Compile Include="InterviewModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\TesterError.cs" />
-    <Compile Include="Services\TesterHttpAction.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
