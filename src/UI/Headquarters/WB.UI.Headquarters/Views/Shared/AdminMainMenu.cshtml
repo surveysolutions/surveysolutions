@@ -41,7 +41,12 @@
             </li>
             <li class="@(page == MenuItem.Headquarters ? "active" : "")">
                 <a href="@Url.Action("Index", "Headquarters", new {area = string.Empty})">
-                     @MainMenu.Headquarters
+                    @MainMenu.Headquarters
+                </a>
+            </li>
+            <li class="@(page == MenuItem.Observers ? "active" : "")">
+                <a href="@Url.Action("Index", "Observer", new {area = string.Empty})">
+                    @MainMenu.Observers
                 </a>
             </li>
         </ul>

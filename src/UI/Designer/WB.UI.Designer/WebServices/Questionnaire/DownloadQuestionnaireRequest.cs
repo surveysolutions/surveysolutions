@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
@@ -13,7 +12,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         [MessageHeader]
         public Guid QuestionnaireId { get; set; }
 
-        [MessageHeader]
-        public QuestionnaireVersion SupportedQuestionnaireVersion { get; set; }
+        [MessageHeader] 
+        public Version SupportedQuestionnaireVersion{ get; set; }
     }
-}
+} 

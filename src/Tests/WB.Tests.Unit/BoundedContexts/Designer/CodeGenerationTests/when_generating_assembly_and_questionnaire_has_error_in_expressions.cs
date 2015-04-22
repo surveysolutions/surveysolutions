@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(questionId, questionInRosterId);
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, CreateQuestionnaireVersion(), out resultAssembly);
 
                 return new InvokeResults
                 {

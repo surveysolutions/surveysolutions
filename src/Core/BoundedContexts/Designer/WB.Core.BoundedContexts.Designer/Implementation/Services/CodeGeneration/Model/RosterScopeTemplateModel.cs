@@ -6,11 +6,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class RosterScopeTemplateModel : RosterScopeBaseModel
     {
-        public RosterScopeTemplateModel(KeyValuePair<string, List<RosterTemplateModel>> rosterScope,
-            QuestionnaireExecutorTemplateModel executorModel, bool generateEmbeddedExpressionMethods)
-            : base(generateEmbeddedExpressionMethods, rosterScope.Value.First().ParentScope, String.Empty, rosterScope.Key,
-            rosterScope.Value.SelectMany(r => r.Groups).ToList(), rosterScope.Value.SelectMany(r => r.Questions).ToList(),
-            rosterScope.Value.SelectMany(r => r.Rosters).ToList(), new List<Guid>())
+        public RosterScopeTemplateModel(
+            KeyValuePair<string, List<RosterTemplateModel>> rosterScope,
+            QuestionnaireExecutorTemplateModel executorModel)
+            : base(
+            rosterScope.Value.First().ParentScope, 
+            String.Empty, 
+            rosterScope.Key,
+            rosterScope.Value.SelectMany(r => r.Groups).ToList(), 
+            rosterScope.Value.SelectMany(r => r.Questions).ToList(),
+            rosterScope.Value.SelectMany(r => r.Rosters).ToList(), 
+            new List<Guid>(),
+            executorModel.QuestionnaireLevelModel.AreRowSpecificVariablesPresent,
+            executorModel.QuestionnaireLevelModel.IsIRosterLevelInherited,
+            executorModel.QuestionnaireLevelModel.RosterType)
         {
             this.RostersInScope = rosterScope.Value;
             this.ParentTypeName = rosterScope.Value[0].ParentScope.GeneratedTypeName;

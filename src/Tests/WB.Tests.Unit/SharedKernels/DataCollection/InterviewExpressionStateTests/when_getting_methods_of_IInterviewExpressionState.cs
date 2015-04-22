@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests
 {
@@ -11,8 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
         Establish context = () => { };
 
         Because of = () =>
-            methods = typeof(IInterviewExpressionState).GetMethods()
-                .Concat(typeof(IInterviewExpressionState)
+            methods = typeof(IInterviewExpressionStateV2).GetMethods()
+                .Concat(typeof(IInterviewExpressionStateV2)
                     .GetInterfaces()
                     .SelectMany(i => i.GetMethods()))
                 .Select(x => new MetodInfo
@@ -74,9 +75,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
             methods.Get("ProcessEnablementConditions").ShouldMatchMethodInfo(interfaceMethods.Get("ProcessEnablementConditions"));
         It should_match_method_signature_for_SaveAllCurrentStatesAsPrevious = () =>
             methods.Get("SaveAllCurrentStatesAsPrevious").ShouldMatchMethodInfo(interfaceMethods.Get("SaveAllCurrentStatesAsPrevious"));
-        
-        It should_match_method_signature_for_Clone = () =>
-            methods.Get("Clone").ShouldMatchMethodInfo(interfaceMethods.Get("Clone"));
+
+        It should_match_method_signature_for_Clone_of_first_version = () =>
+            methods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionState)).ShouldMatchMethodInfo(interfaceMethods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionState)));
+        It should_match_method_signature_for_Clone_of_second_version = () =>
+           methods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionStateV2)).ShouldMatchMethodInfo(interfaceMethods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionStateV2)));
 
         private static List<MetodInfo> methods;
 
@@ -222,7 +225,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
                 ReturnType = typeof (void),
                 ParamsType =  new Type[0] 
             },
-            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] }
+            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionState), ParamsType = new Type[0] },
+            new MetodInfo { Name = "Clone", ReturnType = typeof (IInterviewExpressionStateV2), ParamsType = new Type[0] },
+            new MetodInfo
+            {
+                Name = "UpdateRosterTitle",
+                ReturnType = typeof (void),
+                ParamsType =  new Type[] { typeof (Guid), typeof (decimal[]), typeof (string) } 
+            }
         };
     }
 }

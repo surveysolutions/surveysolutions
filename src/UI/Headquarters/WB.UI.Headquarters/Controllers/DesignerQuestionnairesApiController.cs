@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -102,9 +101,9 @@ namespace WB.UI.Headquarters.Controllers
                         QuestionnaireId = request.Questionnaire.Id,
                         SupportedVersion = new QuestionnnaireVersion()
                         {
-                            Major = supportedVersion.SupportedQuestionnaireVersionMajor,
-                            Minor = supportedVersion.SupportedQuestionnaireVersionMinor,
-                            Patch = supportedVersion.SupportedQuestionnaireVersionPatch
+                            Major = supportedVersion.Major,
+                            Minor = supportedVersion.Minor,
+                            Patch = supportedVersion.Build
                         }
                     });
 

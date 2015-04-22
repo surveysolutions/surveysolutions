@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception = Catch.Exception(() =>
                 questionnaire.CloneGroupWithoutChildren(
                     groupId, responsibleId, "title", null, rosterSizeQuestionId, "description", null, chapterId,
-                    isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: new string[]{}, 
+                    isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: new FixedRosterTitleItem[] { }, 
                     rosterTitleQuestionId: null, sourceGroupId: sourceGroupId, targetIndex: 0));
 
         It should_not_fail = () =>

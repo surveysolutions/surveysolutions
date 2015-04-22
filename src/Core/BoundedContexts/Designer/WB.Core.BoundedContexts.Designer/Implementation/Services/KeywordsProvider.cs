@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Union(StataVariableRestrictions)
                 .Union(SpssReservedKeywords)
                 .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
+                .Union(SurveySolutionsServiceVariablesKeywords)
                 .ToArray();
         }
 
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             "sizeof", "stackalloc", "static", "string", "struct", "switch", "this",
             "throw", "true", "try", "typeof", "uint", "ulong", "unchecked",
             "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
+            
         };
 
         private static readonly List<string> StataVariableRestrictions = new List<string>()
@@ -42,6 +44,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static readonly List<string> SpssReservedKeywords = new List<string>()
         {
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
+        };
+
+        private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
+        {
+            "rowcode","rowname","rowindex","roster","Id"
         };
         
         public string[] GetAllReservedKeywords()

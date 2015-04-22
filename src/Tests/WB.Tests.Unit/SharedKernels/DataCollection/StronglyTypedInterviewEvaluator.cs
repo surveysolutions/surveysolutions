@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.V2;
 
 // ReSharper disable InconsistentNaming
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState 
+    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
     {
         public StronglyTypedInterviewEvaluator()
         {
@@ -82,6 +83,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 this.InterviewScopes.Add(rosterStringKey, rosterLevel);
                 this.SetSiblings(rosterIdentityKey, rosterStringKey);
             }
+        }
+
+        public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            string rosterTitle)
+        {
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
+            var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
+            if (rosterLevel != null)
+                rosterLevel.SetRowName(rosterTitle);
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -281,6 +299,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
         }
 
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
+        {
+            return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
+        }
 
         public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IExpressionExecutable
         {
@@ -367,27 +389,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 }
             }
 
-            public IEnumerable<HhMember_type> hhMembers
+            public RosterRowList<HhMember_type> hhMembers
             {
                 get
                 {
                     var rosters = this.GetInstances(new Identity[0], IdOf.hhMemberScopeIds.Last());
-                    return rosters == null ? new List<HhMember_type>() : rosters.Select(x => x as HhMember_type).ToList();
+                    return new RosterRowList<HhMember_type>(rosters);
                 }
             }
 
-            public IEnumerable<Education_type> educations
+            public RosterRowList<Education_type> educations
             {
                 get
                 {
                     var rosters = this.GetInstances(new Identity[0], IdOf.eduScopeIds.Last());
-                    return rosters == null ? new List<Education_type>() : rosters.Select(x => x as Education_type).ToList();
+                    return new RosterRowList<Education_type>(rosters);
                 }
             }
         }
 
         //roster first level
-        public class HhMember_type : AbstractConditionalLevel<HhMember_type>, IExpressionExecutable
+        public class HhMember_type : AbstractConditionalLevel<HhMember_type>, IRosterLevel<HhMember_type>, IExpressionExecutable
         {
             public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid,
                 IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -428,12 +450,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 get { return this.__parent.hhMembers; }
             }
 
-            public IEnumerable<FoodConsumption_type> foodConsumption
+            public RosterRowList<FoodConsumption_type> foodConsumption
             {
                 get
                 {
                     var rosters = this.GetInstances(this.RosterKey, IdOf.foodConsumptionIds.Last());
-                    return rosters == null ? new List<FoodConsumption_type>() : rosters.Select(x => x as FoodConsumption_type).ToList();
+                    return new RosterRowList<FoodConsumption_type>(rosters);
                 }
             }
 
@@ -626,6 +648,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     marital_status = this.@__maritalStatus,
                     married_with = this.@__marriedWith
                 };
+                ((IRosterLevel)level).SetRowName(this.@rowname);
                 foreach (var state in level.EnablementStates)
                 {
                     var originalState = this.EnablementStates[state.Key];
@@ -651,10 +674,31 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 this.Validate(out questionsToBeValid,out questionsToBeInvalid);
             }
 
+            public decimal @rowcode
+            {
+                get { return RosterVector.Last(); }
+            }
+
+            public string @rowname { get; private set; }
+
+            void IRosterLevel.SetRowName(string rosterRowName)
+            {
+                this.@rowname = rosterRowName;
+            }
+
+            public int @rowindex
+            {
+                get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); }
+            }
+
+            public RosterRowList<HhMember_type> @roster
+            {
+                get { return @__parent.hhMembers; }
+            }
         }
 
         //roster second level
-        public class FoodConsumption_type : AbstractConditionalLevel<FoodConsumption_type>, IExpressionExecutable
+        public class FoodConsumption_type : AbstractConditionalLevel<FoodConsumption_type>, IRosterLevel<FoodConsumption_type>, IExpressionExecutable
         {
             public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -776,7 +820,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 this.Validate(out questionsToBeValid, out questionsToBeInvalid);
             }
 
+            public decimal @rowcode
+            {
+                get { return RosterVector.Last(); }
+            }
 
+            public string @rowname { get; private set; }
+
+            public void SetRowName(string rosterRowName)
+            {
+                this.@rowname = rosterRowName;
+            }
+
+            public int @rowindex
+            {
+                get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); }
+            }
+
+            public RosterRowList<FoodConsumption_type> @roster
+            {
+                get { return @__parent.foodConsumption; }
+            }
 
             public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
             {
@@ -789,7 +853,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     price_for_food = this.priceForFood,
                     times_per_week = this.times_per_week
                 };
-
+                level.SetRowName(this.@rowname);
                 foreach (var state in level.EnablementStates)
                 {
                     var originalState = this.EnablementStates[state.Key];
@@ -822,7 +886,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
-        public class Education_type : AbstractConditionalLevel<Education_type>, IExpressionExecutable
+        public class Education_type : AbstractConditionalLevel<Education_type>, IRosterLevel<Education_type>, IExpressionExecutable
         {
             public Education_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -872,6 +936,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
                     edu = this.edu
                 };
+                level.SetRowName(this.@rowname);
                 foreach (var state in level.EnablementStates)
                 {
                     var originalState = this.EnablementStates[state.Key];
@@ -896,7 +961,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             {
                 this.Validate(out questionsToBeValid, out questionsToBeInvalid);
             }
-            
+
+            public decimal @rowcode
+            {
+                get { return RosterVector.Last(); }
+            }
+
+            public string @rowname { get; private set; }
+
+            public void SetRowName(string rosterRowName)
+            {
+                this.@rowname = rosterRowName;
+            }
+
+            public int @rowindex
+            {
+                get { return (@__parent).hhMembers.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); }
+            }
+
+            public RosterRowList<Education_type> @roster
+            {
+                get { return @__parent.educations; }
+            }
+
         }
 
         public static class IdOf

@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -41,14 +42,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         && _.GetRosterLevelForGroup(rosterGroupId) == 1
                                                         //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
-                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { "t1"}
+                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(1, "t1") }
                                                         && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { rosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
 
                                                         && _.GetNestedRostersOfGroupById(rosterGroupId) == new[] { fixedRosterGroupId}
                                                         && _.GetFixedRosterGroups(rosterGroupId) == new [] { fixedRosterGroupId }
                                                         && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
-                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { title1, title2 }
+                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(0, title1), new FixedRosterTitle(1, title2) }
                                                         );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

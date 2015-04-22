@@ -55,6 +55,7 @@ using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -63,6 +64,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Api;
 using WB.UI.Supervisor.Controllers;
@@ -135,9 +137,15 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, string[] titles)
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
             {
-                return new RosterChanged(Guid.NewGuid(), rosterId, null, rosterType, titles, null);
+                return new RosterChanged(Guid.NewGuid(), rosterId)
+                {
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = rosterType,
+                    FixedRosterTitles = titles,
+                    RosterTitleQuestionId = null
+                };
             }
 
             public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
@@ -1375,7 +1383,7 @@ namespace WB.Tests.Unit
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
                 new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
-                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>(), interviewerId?? Guid.NewGuid());
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
         }
 
         public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
