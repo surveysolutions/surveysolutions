@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -30,18 +29,18 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPasswordHasher passwordHasher;
         private static string lastReexportMessage = "no reexport performed";
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> readSideRepositoryIndexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
         public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
-            IDataExportRepositoryWriter dataExportRepositoryWriter, IQueryableReadSideRepositoryReader<InterviewSummary> readSideRepositoryIndexAccessor)
+            IDataExportRepositoryWriter dataExportRepositoryWriter, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
             : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
             this.dataExportRepositoryWriter = dataExportRepositoryWriter;
-            this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
+            this.interviewSummaries = interviewSummaries;
         }
 
         public ActionResult ReexportInterviews()
@@ -80,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private IQueryable<Guid> GetApprovedInterviewIds()
         {
-            return this.readSideRepositoryIndexAccessor.Query(_ =>
+            return this.interviewSummaries.Query(_ =>
                 _.Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters || x.Status == InterviewStatus.ApprovedBySupervisor)
                 .Select(x => x.InterviewId).ToList()).AsQueryable();
         }

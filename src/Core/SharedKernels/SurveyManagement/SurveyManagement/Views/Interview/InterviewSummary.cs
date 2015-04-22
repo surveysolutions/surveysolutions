@@ -107,24 +107,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return (this.SummaryId != null ? this.SummaryId.GetHashCode() : 0);
         }
     }
-
-    public class QuestionAnswer
-    {
-        public virtual int Id { get; set; }
-
-        public virtual Guid Questionid { get; set; }
-        public virtual string Title { get; set; }
-        public virtual string Answer { get; set; }
-        public virtual QuestionType Type { get; set; }
-        public virtual InterviewSummary InterviewSummary { get; set; }
-    }
-
-    public class QuestionOptions
-    {
-        public virtual int Id { get; set; }
-        public virtual InterviewSummary InterviewSummary { get; set; }
-        public virtual Guid QuestionId { get; set; }
-        public virtual decimal Value { get; set; }
-        public virtual string Text { get; set; }
-    }
 }

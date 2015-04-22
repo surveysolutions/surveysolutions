@@ -1,5 +1,4 @@
 using System.Linq;
-using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
