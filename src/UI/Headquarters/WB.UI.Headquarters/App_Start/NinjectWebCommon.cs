@@ -95,8 +95,6 @@ namespace WB.UI.Headquarters
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
 
             Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;
