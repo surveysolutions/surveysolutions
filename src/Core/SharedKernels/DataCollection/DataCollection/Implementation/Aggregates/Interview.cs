@@ -1833,7 +1833,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else
                 this.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion,
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, 
+                questionnaireId, 
+                questionnaireVersion,
                 interviewStatus,
                 featuredQuestionsMeta,
                 createdOnClient, comments));

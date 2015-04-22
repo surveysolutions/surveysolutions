@@ -90,6 +90,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
 
+            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
+            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
+            this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
+
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
                 .ToConstant(new SupportedVersionProvider(this.isDebug, this.applicationBuildVersion));
