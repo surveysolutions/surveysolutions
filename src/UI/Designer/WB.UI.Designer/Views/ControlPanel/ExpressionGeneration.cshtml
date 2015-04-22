@@ -1,5 +1,5 @@
 ﻿@{
-    this.Layout = "~/Views/Shared/Layout.admin.cshtml";
+    this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
     this.ViewBag.Title = "Control Panel: Expression Generation";
 }
 
@@ -40,7 +40,7 @@
         $('#generate').click(function () {
             performPrettyAjaxRequest($('#outputResult'), {
                 type: 'GET',
-                url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GenerateExpressionsClass" })',
+                url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GenerateExpressionsClassForLatestVersion" })',
                 data: { id: $('#questionnaireId').val() },
             });
         });
@@ -48,7 +48,7 @@
         $('#getPartial').click(function () {
             performPrettyAjaxRequest($('#outputResult'), {
                 type: 'GET',
-                url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAllClasses" })',
+                url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAllClassesForLatestVersion" })',
                 data: { id: $('#questionnaireId').val() },
             });
         });
@@ -56,7 +56,7 @@
         $('#getAssembly').click(function () {
             $('#outputResult').text("sending request...");
             $('#resultArea').text("");
-            downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAssembly" })' + '?id=' + $('#questionnaireId').val())
+            downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetLatestVersionAssembly" })' + '?id=' + $('#questionnaireId').val())
         });
 
 

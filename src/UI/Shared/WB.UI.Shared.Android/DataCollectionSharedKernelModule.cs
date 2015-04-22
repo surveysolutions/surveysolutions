@@ -1,6 +1,9 @@
 ﻿using Ninject.Modules;
+using WB.Core.BoundedContexts.Capi.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -63,6 +67,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.basePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
+            this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
+
+            this.Bind<ICapiExpressionsEngineVersionService>().To<CapiExpressionsEngineVersionService>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
             CommandRegistry

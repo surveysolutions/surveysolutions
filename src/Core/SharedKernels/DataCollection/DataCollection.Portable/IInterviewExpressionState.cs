@@ -35,4 +35,4 @@ namespace WB.Core.SharedKernels.DataCollection
 
         IInterviewExpressionState Clone();
     }
-}
+} 

@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
-            rosterFixedTitles = new[] { "fixed title" };
+            rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "fixed title") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -39,27 +40,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__fixed__ = () =>
-            exception.Message.ToLower().ShouldContain("fixed");
-
-        It should_throw_exception_with_message_containting__titles__ = () =>
-            exception.Message.ToLower().ShouldContain("titles");
-
-        It should_throw_exception_with_message_containting__should__ = () =>
-            exception.Message.ToLower().ShouldContain("should");
-
-        It should_throw_exception_with_message_containting__be__ = () =>
-            exception.Message.ToLower().ShouldContain("be");
-
-        It should_throw_exception_with_message_containting__empty__ = () =>
-            exception.Message.ToLower().ShouldContain("empty");
-
+        It should_throw_exception_with_message = () =>
+            new[] { "fixed", "titles", "should", "be", "empty"}.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+       
         private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid chapterId;
         private static Guid rosterSizeQuestionId;
-        private static string[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
     }
 }

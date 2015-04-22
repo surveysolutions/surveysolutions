@@ -164,6 +164,11 @@ namespace WB.UI.Capi.EventHandlers
                     featuredCategoricalOptions);
             }
 
+            if (featuredQuestion.QuestionType == QuestionType.DateTime && answer is string)
+            {
+                answer = DateTime.Parse((string) answer).ToLocalTime();
+            }
+
             return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
                 AnswerUtils.AnswerToString(answer));
         }

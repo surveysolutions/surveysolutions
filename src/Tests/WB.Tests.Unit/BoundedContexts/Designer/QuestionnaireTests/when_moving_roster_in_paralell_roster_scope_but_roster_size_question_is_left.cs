@@ -32,7 +32,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parallelRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId));
-            questionnaire.Apply(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, RosterSizeSourceType.Question, null, null));
+            questionnaire.Apply(new RosterChanged(responsibleId, groupId){
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles =  null,
+                    RosterTitleQuestionId =null 
+                });
         };
 
         Because of = () =>
