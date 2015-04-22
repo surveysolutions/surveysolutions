@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
-using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,9 +12,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementation
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
-    internal class InterviewStateFullViewModelFactory : IInterviewStateFullViewModelFactory
+    internal class InterviewViewModelFactory : IInterviewViewModelFactory
     {
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader.Implementa
                 { typeof(GpsCoordinatesQuestionModel), Mvx.Create<GpsCoordinatesQuestionViewModel> }
             };
 
-        public InterviewStateFullViewModelFactory(
+        public InterviewViewModelFactory(
             IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
             IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
         {

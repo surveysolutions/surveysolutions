@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -13,17 +14,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class InterviewGroupViewModel : BaseViewModel
     {
         private readonly IPrincipal principal;
-        private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
 
-        public InterviewGroupViewModel(IPrincipal principal, IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory,
+        public InterviewGroupViewModel(IPrincipal principal, IInterviewViewModelFactory interviewViewModelFactory,
              IPlainRepository<QuestionnaireModel> questionnaireRepository,
              IPlainRepository<InterviewModel> interviewRepository,
              InterviewLeftSidePanelViewModel interviewLeftSidePanelViewModel)
         {
             this.principal = principal;
-            this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.LeftSide = interviewLeftSidePanelViewModel;
@@ -43,7 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.LeftSide.Init(id, chapterId);
 
             this.CurrentGroupName = group.Title;
-            this.Items = await this.interviewStateFullViewModelFactory.LoadAsync(id, chapterId);
+            this.Items = await this.interviewViewModelFactory.LoadAsync(id, chapterId);
         }
 
         public InterviewLeftSidePanelViewModel LeftSide { get; set; }
