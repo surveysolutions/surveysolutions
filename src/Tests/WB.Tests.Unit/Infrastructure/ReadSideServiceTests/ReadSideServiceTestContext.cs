@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
@@ -20,7 +21,8 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     {
         protected static ReadSideService CreateReadSideService(IStreamableEventStore streamableEventStore = null,
             IEventDispatcher eventDispatcher = null,
-            IReadSideCleaner readSideCleaner = null)
+            IReadSideCleaner readSideCleaner = null,
+            ITransactionManagerProviderManager transactionManagerProviderManager = null)
         {
             ReadSideService.InstanceCount = 0;
 
@@ -28,7 +30,17 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
                 streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
                 readSideCleaner ?? Mock.Of<IReadSideCleaner>(),
-                Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()));
+                transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()));
+        }
+
+        protected static void WaitRebuildReadsideFinish(ReadSideService readSideService)
+        {
+            Thread.Sleep(100);
+
+            while (readSideService.AreViewsBeingRebuiltNow())
+            {
+                Thread.Sleep(100);
+            }
         }
     }
 }
