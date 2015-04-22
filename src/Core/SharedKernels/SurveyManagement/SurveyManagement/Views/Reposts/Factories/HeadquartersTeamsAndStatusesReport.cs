@@ -115,9 +115,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             return usersToCountOn;
         }
 
-        private static IQueryable<InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> _)
+        private static IQueryable<InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> interviews)
         {
-            var filteredInterviews = _.Where(x => !x.IsDeleted);
+            var filteredInterviews = interviews.Where(x => !x.IsDeleted);
 
             if (input.TemplateId.HasValue)
             {

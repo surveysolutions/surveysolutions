@@ -114,9 +114,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             return usersToCountOn;
         }
 
-        private static IQueryable<InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> _)
+        private static IQueryable<InterviewSummary> ApplyFilter(TeamsAndStatusesInputModel input, IQueryable<InterviewSummary> interviews)
         {
-            var filteredInterviews = _.Where(x => !x.IsDeleted);
+            var filteredInterviews = interviews.Where(x => !x.IsDeleted);
 
             if (input.TemplateId.HasValue)
             {
@@ -139,18 +139,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         private class CounterObject
         {
-            private InterviewStatus status;
             public int InterviewsCount { get; set; }
 
             public string ResponsibleName { get; set; }
 
             public Guid ResponsibleId { get; set; }
 
-            public InterviewStatus Status
-            {
-                get { return status; }
-                set { status = value; }
-            }
+            public InterviewStatus Status { get; set; }
         }
     }
 }
