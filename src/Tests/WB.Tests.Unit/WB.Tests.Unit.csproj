@@ -326,6 +326,8 @@
     <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
     <Compile Include="Core\Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archiving_process_thrown_an_exception.cs" />
+    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\NewtonJsonUtilsTestContext.cs" />
+    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publish_event_after_unsubscribe.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\LiteEventBusTestsContext.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publish_long_event_for_long_and_int_subscribers.cs" />

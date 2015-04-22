@@ -11,7 +11,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         private readonly JsonUtilsSettings jsonUtilsSettings;
         private readonly JsonSerializer jsonSerializer;
 
-        private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings> JsonSerializerSettingsByTypeNameHandling =
+        private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings> jsonSerializerSettingsByTypeNameHandling =
                 new Dictionary<TypeSerializationSettings, JsonSerializerSettings>()
                 {
                     {
@@ -42,15 +42,14 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                     }
                 };
 
-        public NewtonJsonUtils()
+        public NewtonJsonUtils() : this(new JsonUtilsSettings{ TypeNameHandling = TypeSerializationSettings.ObjectsOnly})
         {
-            this.jsonSerializer = JsonSerializer.Create(JsonSerializerSettingsByTypeNameHandling[this.jsonUtilsSettings.TypeNameHandling]);
         }
 
         public NewtonJsonUtils(JsonUtilsSettings jsonUtilsSettings)
         {
             this.jsonUtilsSettings = jsonUtilsSettings;
-            this.jsonSerializer = JsonSerializer.Create(JsonSerializerSettingsByTypeNameHandling[this.jsonUtilsSettings.TypeNameHandling]);
+            this.jsonSerializer = JsonSerializer.Create(this.jsonSerializerSettingsByTypeNameHandling[this.jsonUtilsSettings.TypeNameHandling]);
         }
 
         public string Serialize(object item)
@@ -60,7 +59,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettingsByTypeNameHandling[typeSerializationSettings]);
+            return JsonConvert.SerializeObject(item, Formatting.None, this.jsonSerializerSettingsByTypeNameHandling[typeSerializationSettings]);
         }
 
         public byte[] SerializeToByteArray(object payload)
@@ -74,7 +73,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         public T Deserialize<T>(string payload)
         {
             var replaceOldAssemblyNames = ReplaceOldAssemblyNames(payload);
-            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, JsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
+            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
         }
 
         [Obsolete]
