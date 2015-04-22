@@ -34,17 +34,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Dictionary<Type, Func<AbstractInterviewAnswerModel>> QuestionModelTypeToModelActivatorMap = new Dictionary<Type, Func<AbstractInterviewAnswerModel>>
                 {
                     { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswerModel()},
-                    { typeof(LinkedSingleOptionAnswerModel), () => new LinkedSingleOptionAnswerModel()},
-                    { typeof(MultiOptionAnswerModel), () => new MultiOptionAnswerModel()},
-                    { typeof(LinkedMultiOptionAnswerModel), () => new LinkedMultiOptionAnswerModel()},
-                    { typeof(IntegerNumericAnswerModel), () => new IntegerNumericAnswerModel()},
-                    { typeof(RealNumericAnswerModel), () => new RealNumericAnswerModel()},
-                    { typeof(MaskedTextAnswerModel), () => new MaskedTextAnswerModel()},
-                    { typeof(TextListAnswerModel), () => new TextListAnswerModel()},
-                    { typeof(QrBarcodeAnswerModel), () => new QrBarcodeAnswerModel()},
-                    { typeof(MultimediaAnswerModel), () => new MultimediaAnswerModel()},
-                    { typeof(DateTimeAnswerModel), () => new DateTimeAnswerModel()},
-                    { typeof(GpsCoordinatesAnswerModel), () => new GpsCoordinatesAnswerModel()}
+                    { typeof(LinkedSingleOptionQuestionModel), () => new LinkedSingleOptionAnswerModel()},
+                    { typeof(MultiOptionQuestionModel), () => new MultiOptionAnswerModel()},
+                    { typeof(LinkedMultiOptionQuestionModel), () => new LinkedMultiOptionAnswerModel()},
+                    { typeof(IntegerNumericQuestionModel), () => new IntegerNumericAnswerModel()},
+                    { typeof(RealNumericQuestionModel), () => new RealNumericAnswerModel()},
+                    { typeof(MaskedTextQuestionModel), () => new MaskedTextAnswerModel()},
+                    { typeof(TextListQuestionModel), () => new TextListAnswerModel()},
+                    { typeof(QrBarcodeQuestionModel), () => new QrBarcodeAnswerModel()},
+                    { typeof(MultimediaQuestionModel), () => new MultimediaAnswerModel()},
+                    { typeof(DateTimeQuestionModel), () => new DateTimeAnswerModel()},
+                    { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswerModel()}
                 };
 
         public GpsCoordinatesAnswerModel GetGpsCoordinatesAnswerModel(Identity identity)
