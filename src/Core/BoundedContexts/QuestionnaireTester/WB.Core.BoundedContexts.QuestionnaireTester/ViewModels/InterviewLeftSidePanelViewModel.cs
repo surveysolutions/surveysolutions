@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
-                .Select(questionId => new PrefilledQuestion
+                .Select(referenceToQuestion => new PrefilledQuestion
                 {
-                    Question = questionnaire.Questions[questionId.Id].Title,
+                    Question = questionnaire.Questions[referenceToQuestion.Id].Title,
                     Answer = "some answer"
                 })
                 .ToList();
