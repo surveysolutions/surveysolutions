@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization.Documents;
@@ -19,9 +20,8 @@ namespace WB.Core.Synchronization.EventHandler
 
         public TabletDocument Update(TabletDocument currentState, IPublishedEvent<TabletRegistered> evnt)
         {
-            return new TabletDocument
-                   {
-                       Id = evnt.EventSourceId.ToString(),
+            return new TabletDocument {
+                       Id = evnt.EventSourceId.FormatGuid(),
                        AndroidId = evnt.Payload.AndroidId,
                        DeviceId = evnt.EventSourceId,
                        RegistrationDate = evnt.EventTimeStamp
