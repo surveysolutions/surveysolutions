@@ -38,9 +38,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
+            var staticTexts = questionnaireDocument.GetEntitiesByType<IStaticText>().ToList();
 
             questionnaireModel.Id = questionnaireDocument.PublicKey;
             questionnaireModel.Title = questionnaireDocument.Title;
+            questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, CreateQuestionModel);
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
@@ -128,6 +130,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             return groupModel;
         }
+
+        private static StaticTextModel CreateStaticTextModel(IStaticText staticText)
+        {
+            var staticTextModel = new StaticTextModel();
+            staticTextModel.Title = staticText.Text;
+            staticTextModel.Id = staticText.PublicKey;
+            return staticTextModel;
+        }
+
 
         private static BaseQuestionModel CreateQuestionModel(IQuestion question)
         {
