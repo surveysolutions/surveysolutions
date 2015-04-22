@@ -22,6 +22,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class DashboardViewModel : BaseViewModel
     {
+        private const int PageSize = 20;
+
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
@@ -296,7 +298,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                 this.uiDialogs.Alert(this.ErrorMessage);
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 // show here the message that loading questionnaire was canceled
                 // don't needed in the current implementation
@@ -311,7 +313,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(async () =>
             {
-                var userQuestionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name);
+                var userQuestionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name).ToArray();
                 if (userQuestionnaires.Any())
                 {
                     this.MyQuestionnaires = new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => !qli.IsPublic));
@@ -327,25 +329,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async Task GetServerQuestionnaires()
         {
-
             this.IsInProgress = true;
-            
+            this.ClearQuestionnaires();
+
+            var pageIndex = 1;
+
             try
             {
-                this.ClearQuestionnaires();
-
-                int pageIndex = 1;
-                foreach (var batchOfServerQuestionnaires in this.designerApiServiceAccessor.GetPagedQuestionnaires(pageIndex++, 20, tokenSource.Token))
+                IEnumerable<SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem> batchOfServerQuestionnaires;
+                do
                 {
-                    var convertedQuestionnaires = (await batchOfServerQuestionnaires).Select(ConvertToLocalQuestionnaireListItem);
+                    batchOfServerQuestionnaires = await this.designerApiServiceAccessor.GetPagedQuestionnairesAsync(pageIndex: pageIndex++,
+                            pageSize: PageSize, token: tokenSource.Token);
+
+                    var convertedQuestionnaires = batchOfServerQuestionnaires.Select(ConvertToLocalQuestionnaireListItem).ToArray();
 
                     this.questionnairesStorageAccessor.Store(convertedQuestionnaires.Select(qli => new Tuple<QuestionnaireListItem, string>(qli, qli.Id)));
+
                     this.InvokeOnMainThread(() => this.AppendToQuestionnaires(convertedQuestionnaires));
-                }
+
+                } while (batchOfServerQuestionnaires.Any());
             }
             catch (RestException ex)
             {
-                var error = this.errorProcessor.GetInternalErrorAndLogException(ex, TesterHttpAction.FetchingQuestionnairesList);
+                var error = this.errorProcessor.GetInternalErrorAndLogException(ex,
+                    TesterHttpAction.FetchingQuestionnairesList);
 
                 switch (error.Code)
                 {
@@ -353,7 +361,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     case ErrorCode.AccountIsLockedOnDesigner:
                         this.SignOut();
                         break;
-                        
+
                     case ErrorCode.DesignerIsInMaintenanceMode:
                     case ErrorCode.DesignerIsUnavailable:
                     case ErrorCode.RequestTimeout:
@@ -362,7 +370,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         this.uiDialogs.Alert(error.Message);
                         break;
 
-                    default: throw;
+                    default:
+                        throw;
                 }
             }
             finally
