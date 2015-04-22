@@ -38,11 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(QrBarcodeQuestionModel), Mvx.Create<QrBarcodeQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Mvx.Create<MultimediaQuestionViewModel> },
                 { typeof(DateTimeQuestionModel), Mvx.Create<DateTimeQuestionViewModel> },
-                { typeof(GpsCoordinatesQuestionModel), Mvx.Create<GpsCoordinatesQuestionViewModel> },
-
-                { typeof(TextQuestion), Mvx.Create<MaskedTextQuestionViewModel> },
-                { typeof(NumericQuestion), Mvx.Create<RealNumericQuestionViewModel> },
-
+                { typeof(GpsCoordinatesQuestionModel), Mvx.Create<GpsCoordinatesQuestionViewModel> }
             };
 
         public InterviewViewModelFactory(

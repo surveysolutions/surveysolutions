@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
                 .ToList();
-            questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, CreateGroupModelWithoutNestedChildren);
+            questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
             questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, BuildParentsList);
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
 
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return parents;
         }
 
-        private static GroupModel CreateGroupModelWithoutNestedChildren(Group group)
+        private static GroupModel CreateGroupModelWithoutNestedChildren(Group @group, Dictionary<Guid, BaseQuestionModel> questions)
         {
             var groupModel = group.IsRoster ? new RosterModel() : new GroupModel();
 
@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (question.QuestionScope != QuestionScope.Interviewer || question.Featured)
                         continue;
 
-                    var questionModelPlaceholder = new QuestionnaireReferenceModel { Id = question.PublicKey, ModelType = question.GetType() };
+                    var questionModelPlaceholder = new QuestionnaireReferenceModel { Id = question.PublicKey, ModelType = questions[question.PublicKey].GetType() };
                     groupModel.Children.Add(questionModelPlaceholder);
                     continue;
                 }
