@@ -1,12 +1,14 @@
 ﻿@using System.Web.Optimization
 @{
     this.ViewBag.Title = "Health Check Page";
+    Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
 }
+@Styles.Render("~/Content/main")
 
 <div class="row health-check">
     <div class="col-md-8 col-md-offset-2">
 
-        <h1 class="page-header">Health check page</h1>
+        <h1 class="page-header">Health check monitor</h1>
 
         <div>
             <div class="panel-body">
@@ -50,6 +52,9 @@
 
 
 @section scripts {
+
+    @Scripts.Render("~/js/main")
+    @Html.Partial("GlobalSettings")
 
     @Scripts.Render("~/Scripts/viewmodels/pages/healthcheck.js")
     <script type="text/javascript">
