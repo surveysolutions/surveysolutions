@@ -20,6 +20,7 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text },
             {typeof (GroupReferenceViewModel), Resource.Layout.interview_group_reference },
+            {typeof (RostersReferenceViewModel), Resource.Layout.interview_roster_reference },
 
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_single_option_question },
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_date_question },
