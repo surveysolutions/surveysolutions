@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 interview.Status = evnt.Payload.Status;
-                interview.WasRejectedBySupervisor = evnt.Payload.Status == InterviewStatus.RejectedBySupervisor;
+                interview.WasRejectedBySupervisor = interview.WasRejectedBySupervisor || evnt.Payload.Status == InterviewStatus.RejectedBySupervisor;
                 interview.IsDeleted = evnt.Payload.Status == InterviewStatus.Deleted;
 
                 if (interview.Status == evnt.Payload.Status)

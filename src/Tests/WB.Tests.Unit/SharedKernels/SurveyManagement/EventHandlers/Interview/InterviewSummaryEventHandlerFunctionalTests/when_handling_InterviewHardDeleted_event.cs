@@ -6,7 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class when_handling_InterviewHardDeleted_event : InterviewSummaryEventHandlerFunctionalTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             viewModel = new InterviewSummary();
 
@@ -19,10 +19,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_updatedModel_be_marked_as_deleted = () =>
             updatedModel.IsDeleted.ShouldEqual(true);
 
-        private static InterviewSummaryEventHandlerFunctional denormalizer;
-        private static InterviewSummary viewModel;
-        private static InterviewSummary updatedModel;
-        private static string responsibleId = "11111111111111111111111111111111";
-        private static string responsibleName = "responsible";
+        static InterviewSummaryEventHandlerFunctional denormalizer;
+        static InterviewSummary viewModel;
+        static InterviewSummary updatedModel;
+        static string responsibleId = "11111111111111111111111111111111";
+        static string responsibleName = "responsible";
     }
 }
