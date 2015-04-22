@@ -3,9 +3,8 @@ using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -30,21 +29,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.LeftSide = interviewLeftSidePanelViewModel;
         }
 
-        public async void Init(string id, string chapterId)
+        public async void Init(string id, Identity chapterIdentity)
         {
             var interview = this.interviewRepository.Get(id);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            var groupId = string.IsNullOrEmpty(chapterId) 
-                ? questionnaire.GroupsWithoutNestedChildren.Keys.First()
-                : Guid.Parse(chapterId);
+            if (chapterIdentity == null)
+            {
+                chapterIdentity = new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]);
+            }
 
-            var group = questionnaire.GroupsWithoutNestedChildren[groupId];
+            var group = questionnaire.GroupsWithoutNestedChildren[chapterIdentity.Id];
 
-            this.LeftSide.Init(id, chapterId);
+            this.LeftSide.Init(id, chapterIdentity);
 
             this.CurrentGroupName = group.Title;
-            this.Items = await this.interviewViewModelFactory.LoadAsync(id, chapterId);
+            this.Items = await this.interviewViewModelFactory.GetEntitiesAsync(id, chapterIdentity);
         }
 
         public InterviewLeftSidePanelViewModel LeftSide { get; set; }

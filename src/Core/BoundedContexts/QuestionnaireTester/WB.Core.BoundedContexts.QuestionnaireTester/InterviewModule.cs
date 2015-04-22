@@ -1,7 +1,6 @@
 ﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester
