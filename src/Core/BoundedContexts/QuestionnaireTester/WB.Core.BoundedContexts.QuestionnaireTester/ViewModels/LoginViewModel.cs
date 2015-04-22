@@ -1,30 +1,19 @@
-﻿using System.Net;
-using Chance.MvvmCross.Plugins.UserInteraction;
+﻿using System;
 using Cirrious.MvvmCross.ViewModels;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private readonly IRestService restService;
         private readonly IPrincipal principal;
-        private readonly IUserInteraction uiDialogs;
-        private readonly IErrorProcessor errorProcessor;
+        private readonly DesignerApiService designerApiService;
 
-
-        public LoginViewModel(IRestService restService, IPrincipal principal, ILogger logger,
-            IUserInteraction uiDialogs, IErrorProcessor errorProcessor) : base(logger)
+        public LoginViewModel(IPrincipal principal, DesignerApiService designerApiService)
         {
-            this.restService = restService;
             this.principal = principal;
-            this.uiDialogs = uiDialogs;
-            this.errorProcessor = errorProcessor;
+            this.designerApiService = designerApiService;
         }
 
         private bool isInProgress = false;
@@ -66,36 +55,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             try
             {
-                await
-                    this.restService.GetAsync(url: "login",
-                        credentials: new RestCredentials() {Login = LoginName, Password = Password});
+                await this.designerApiService.Authorize(login: LoginName, password: Password);
 
                 this.principal.SignIn(userName: LoginName, password: Password, rememberMe: StaySignedIn);
-
                 this.ShowViewModel<DashboardViewModel>();
-            }
-            catch (RestException ex)
-            {
-                var error = this.errorProcessor.GetInternalErrorAndLogException(ex, TesterHttpAction.Login);
-
-                switch (error.Code)
-                {
-                    case ErrorCode.UserWasNotAuthoredOnDesigner:
-                    case ErrorCode.AccountIsLockedOnDesigner:
-                    case ErrorCode.DesignerIsInMaintenanceMode:
-                    case ErrorCode.DesignerIsUnavailable:
-                    case ErrorCode.RequestTimeout:
-                    case ErrorCode.RequestedUrlWasNotFound:
-                    case ErrorCode.InternalServerError:
-                        this.uiDialogs.Alert(error.Message);
-                        break;
-
-                    default: throw;
-                }
             }
             finally
             {
-                IsInProgress = false;
+                IsInProgress = false;    
             }
         }
 
