@@ -1,5 +1,6 @@
 using System.Collections;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModelLoader;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -10,18 +11,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class PrefilledQuestionsViewModel : BaseViewModel
     {
-        private readonly IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
         private string interviewId;
 
         public PrefilledQuestionsViewModel(ILogger logger,
-            IInterviewStateFullViewModelFactory interviewStateFullViewModelFactory,
+            IInterviewViewModelFactory interviewViewModelFactory,
             IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
             IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
             : base(logger)
         {
-            this.interviewStateFullViewModelFactory = interviewStateFullViewModelFactory;
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
@@ -56,7 +57,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = await this.interviewStateFullViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);
+            this.PrefilledQuestions = await this.interviewViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);
         }
 
         private void StartInterview()
