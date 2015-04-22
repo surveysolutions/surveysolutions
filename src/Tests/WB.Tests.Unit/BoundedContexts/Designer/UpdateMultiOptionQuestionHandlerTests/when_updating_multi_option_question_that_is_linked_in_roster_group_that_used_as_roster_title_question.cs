@@ -31,7 +31,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId));
-            questionnaire.Apply(new RosterChanged(responsibleId, groupId, rosterSizeQuestionId, RosterSizeSourceType.Question, null, rosterTitleQuestionId));
+            questionnaire.Apply(new RosterChanged(responsibleId, groupId){
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles =  null,
+                    RosterTitleQuestionId =rosterTitleQuestionId 
+                });
         };
 
         Because of = () =>

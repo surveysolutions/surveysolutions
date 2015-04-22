@@ -9,6 +9,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -17,20 +18,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+            var rosterFixedTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") };
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterSizeQuestionId: null, rosterFixedTitles: new[] { "1", "2" }));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
+                    RosterSizeQuestionId = null,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    FixedRosterTitles = rosterFixedTitles,
+                    RosterTitleQuestionId = null
+                });
 
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupToUpdateId, ParentGroupPublicKey = parentRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, groupToUpdateId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: groupToUpdateId,
-                rosterTitleQuestionId: null, rosterSizeSource: RosterSizeSourceType.FixedTitles,
-                rosterSizeQuestionId: null, rosterFixedTitles: new[] { "1", "2" }));
+            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: groupToUpdateId)
+            {
+                RosterSizeQuestionId = null,
+                RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                FixedRosterTitles = rosterFixedTitles,
+                RosterTitleQuestionId = null
+            });
 
 
             questionnaire.Apply(new NumericQuestionAdded()

@@ -17,6 +17,7 @@ namespace Main.Core.Entities.SubEntities
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
+            this.FixedRosterTitles = new FixedRosterTitle[0];
         }
 
         public Group(string text)
@@ -41,7 +42,24 @@ namespace Main.Core.Entities.SubEntities
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
-        public string[] RosterFixedTitles { get; set; }
+        [Obsolete]
+        public string[] RosterFixedTitles 
+        {
+            set
+            {
+                if (value != null && value.Any())
+                {
+                    FixedRosterTitles = value.Select((t, i) => new FixedRosterTitle(i, t)).ToArray();
+                }
+                else
+                {
+                    FixedRosterTitles = new FixedRosterTitle[0];
+                }
+            }
+            get { return FixedRosterTitles.Select(x => x.Title).ToArray(); }
+        } 
+
+        public FixedRosterTitle[] FixedRosterTitles { get; set; }
 
         public Guid? RosterTitleQuestionId { get; set; }
 
@@ -140,7 +158,7 @@ namespace Main.Core.Entities.SubEntities
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,
-                RosterFixedTitles = this.RosterFixedTitles
+                FixedRosterTitles = this.FixedRosterTitles
             };
 
             foreach (var composite in this.Children)

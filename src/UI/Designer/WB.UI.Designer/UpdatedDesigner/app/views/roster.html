@@ -35,7 +35,7 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression"/></label><br>
+            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeRoster.enablementCondition"></div>
             </div>
@@ -146,10 +146,31 @@
 
     </script>
 
-    <script type="text/ng-template" id="Fixed-template.html">
+<script type="text/ng-template" id="Fixed-template.html">
+
         <div class="form-group">
             <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <help key="fixedTitles" /></label>
-            <textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.rosterFixedTitles" msd-elastic split-array></textarea>
+            <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
+            <div class="singleOption">
+                <div class="table-holder">
+                    <div class="table-row" ng-repeat="title in activeRoster.fixedRosterTitles">
+                        <div class="column-2">
+                            <input type="text" ng-model="title.value" class="form-control">
+                        </div>
+                        <div class="column-3">
+                            <input type="text" ng-model="title.title" class="form-control">
+                        </div>
+                        <div class="column-4">
+                            <a href class="btn" tabindex="-1" ng:click="removeFixedTitle($index)"></a>
+                        </div>
+                    </div>
+                    <p>
+                        <button class="btn btn-link" ng-click="addFixedTitle()">Add title</button>
+                    </p>
+
+                </div>
+
+            </div>
         </div>
     </script>
 

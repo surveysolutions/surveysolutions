@@ -5,16 +5,22 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+ <#foreach (var namespaceToInclude in QuestionnaireTemplateStructure.Namespaces){#>
+	using <#=namespaceToInclude#>;
+ <#}#>
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState
+	 <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+	 , <#=additionInterface#>
+	<#}#>
+	
     {
         public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
@@ -51,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             {
                 return;
             }
-
+			 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             Guid[] rosterScopeIds = IdOf.parentScopeMap[rosterId];
             var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
@@ -73,7 +79,25 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
+		 <#if(QuestionnaireTemplateStructure.ShouldGenerateUpdateRosterTitleMethods){#>
 
+		 public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+            string rosterTitle)
+        {
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
+			var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+			
+			var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
+            if (rosterLevel != null)
+                rosterLevel.SetRowName(rosterTitle);
+        }
+		 <#}#>
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -197,24 +221,28 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return IdOf.parentScopeMap;
         }
 
-        public override IInterviewExpressionState Clone()
+		public override IInterviewExpressionState Clone ()
         {
             return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
 
+	    <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+	    <#=additionInterface#> <#=additionInterface#>.Clone()
+        {
+            return Clone () as <#=additionInterface#>;
+        }
+		<#}#>
     }
-
-
         //generate QuestionnaireLevel
-        <#           
-            QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+        <#    
+            QuestionnaireLevelTemplate questionnairetemplate = CreateQuestionnaireLevelTemplate();
             this.Write(questionnairetemplate.TransformText());                           
          #>
 
         //generating rosters
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
-                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure, QuestionnaireTemplateStructure.GenerateEmbeddedExpressionMethods);
+                RosterScopeTemplate template = CreateRosterScopeTemplate(rosterGroup);
                 this.Write(template.TransformText());
                 
            }

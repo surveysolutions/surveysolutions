@@ -15,6 +15,7 @@
         MapReport,
         InterviewsChart,
         ManageAccount,
-        Headquarters
+        Headquarters,
+        Observers
     }
 }

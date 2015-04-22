@@ -167,7 +167,7 @@
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
-                        "rosterFixedTitles": ["Title"],
+                        "fixedRosterTitles": [{ value:0, title: "Title" }],
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
                         "variableName": group.variableName,
@@ -220,7 +220,7 @@
                     switch (incomingRoster.type) {
                     case "Fixed":
                         command.rosterSizeSource = "FixedTitles";
-                        command.rosterFixedTitles = incomingRoster.rosterFixedTitles;
+                        command.fixedRosterTitles = incomingRoster.fixedRosterTitles;
                         break;
                     case "Numeric":
                         command.rosterSizeQuestionId = incomingRoster.rosterSizeNumericQuestionId;

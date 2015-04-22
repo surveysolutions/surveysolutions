@@ -66,6 +66,10 @@ namespace WB.UI.Designer.Code
 
         private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
         {
+            var hasAccess = (x.CreatedBy == this.userService.WebUser.UserId ||
+                x.SharedPersons.Contains(this.userService.WebUser.UserId) ||
+                this.userService.WebUser.IsAdmin) &&
+                !x.IsDeleted;
             return new QuestionnairePublicListViewModel
                        {
                            Id = x.PublicId, 
@@ -77,10 +81,8 @@ namespace WB.UI.Designer.Code
                                (x.CreatedBy == this.userService.WebUser.UserId
                                || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
                            CanExport = true, 
-                           CanOpen = (x.CreatedBy == this.userService.WebUser.UserId ||
-                                     x.SharedPersons.Contains(this.userService.WebUser.UserId) ||
-                                     this.userService.WebUser.IsAdmin) &&
-                                     !x.IsDeleted,
+                           CanOpen = hasAccess,
+                           CanEdit = hasAccess,
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
                            CanExportToPdf = true,
                            CreatorName =

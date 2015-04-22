@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
-using Ncqrs.Commanding;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -18,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
+        private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
@@ -28,6 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public JsonBundleCommandResponse ExecuteCommands(JsonBundleCommandRequest request)
         {
             var response = new JsonBundleCommandResponse();
@@ -37,17 +40,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             foreach (var command in request.Commands)
             {
-                response.CommandStatuses.Add(
-                    this.Execute(new JsonCommandRequest() {Type = request.Type, Command = command}));
+                response.CommandStatuses.Add(this.Execute(new JsonCommandRequest() {Type = request.Type, Command = command}));
             }
 
             return response;
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public JsonCommandResponse Execute(JsonCommandRequest request)
         {
             var response = new JsonCommandResponse();
+            
             if (request != null && !string.IsNullOrEmpty(request.Type) && !string.IsNullOrEmpty(request.Command))
             {
                 try
@@ -60,19 +64,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
                 catch (OverflowException e)
                 {
-                    response.IsSuccess = true;
-                    response.DomainException = e.Message;
+                    this.Logger.Error(DefaultErrorMessage, e);
+                    response.IsSuccess = false;
+                    response.DomainException = DefaultErrorMessage;
                 }
                 catch (Exception e)
                 {
+                    response.IsSuccess = false;
+
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        this.Logger.Error("Unexpected error occurred", e);
+                        this.Logger.Error(DefaultErrorMessage, e);
+                        response.DomainException = DefaultErrorMessage;
                     }
                     else
                     {
-                        response.IsSuccess = true;
                         response.DomainException = domainEx.Message;
                     }
                 }

@@ -118,8 +118,12 @@ namespace WB.UI.Headquarters
 
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
-                LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
-                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension, incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension, origin:Constants.SupervisorSynchronizationOrigin);
+                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension,
+                incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension,
+                origin: Constants.SupervisorSynchronizationOrigin, 
+                retryCount: int.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]),
+                retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
@@ -154,10 +158,7 @@ namespace WB.UI.Headquarters
 
             kernel.Load(
                 eventStoreModule,
-                new SurveyManagementSharedKernelModule(basePath,
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
+                new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
                     new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),

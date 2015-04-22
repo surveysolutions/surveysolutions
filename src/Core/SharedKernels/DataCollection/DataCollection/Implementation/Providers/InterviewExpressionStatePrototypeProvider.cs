@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
@@ -18,14 +19,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
-        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor)
+        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor, IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
-        public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
+        public IInterviewExpressionStateV2 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFile = this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
 
@@ -41,9 +44,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 //path is cached
                 //if assembly was loaded from this path it won't be loaded again 
                 var compiledAssembly = fileSystemAccessor.LoadAssembly(assemblyFile);
-                    
+
                 TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.
-                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)));
+                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)) && x.IsPublic);
 
                 if (interviewExpressionStateTypeInfo == null)
                     throw new Exception("Type implementing IInterviewExpressionState was not found");
@@ -51,9 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
                 {
-                    var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
+                    var initialExpressionState =
+                        Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
-                    return interviewExpressionState;
+                    IInterviewExpressionStateV2 upgradedExpressionState =
+                        interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
+
+                    return upgradedExpressionState;
                 }
                 catch (Exception e)
                 {

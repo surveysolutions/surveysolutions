@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
-            rosterFixedTitles = new[] { "fixed title" };
+            rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "fixed title") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -61,6 +62,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid groupId;
         private static Guid chapterId;
         private static Guid rosterSizeQuestionId;
-        private static string[] rosterFixedTitles;
+        private static FixedRosterTitleItem[] rosterFixedTitles;
     }
 }

@@ -9,11 +9,15 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 {
@@ -221,6 +225,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             };
         }
 
+        public static Version CreateQuestionnaireVersion()
+        {
+            return new ExpressionsEngineVersionService().GetLatestSupportedVersion();
+        }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
         {
@@ -495,7 +503,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                questionnaireDocument, new Version(6, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -526,7 +535,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
             return
-                new QuestionnireExpressionProcessorGenerator(
+                new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(
                         new DefaultDynamicCompillerSettings()
                         {

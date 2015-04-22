@@ -5,9 +5,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireLevelTemplateModel : RosterScopeBaseModel
     {
-        public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel,bool generateEmbeddedExpressionMethods)
-            : base(generateEmbeddedExpressionMethods, null, "@__questionnaire_scope", "QuestionnaireTopLevel",
-                new List<GroupTemplateModel>(), new List<QuestionTemplateModel>(), new List<RosterTemplateModel>(), new List<Guid>())
+        public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel,
+            bool areRowSpecificVariablesPresent, 
+            bool isIRosterLevelInherited, 
+            string rosterType)
+            : base(
+            null, 
+            "@__questionnaire_scope", 
+            "QuestionnaireTopLevel",
+            new List<GroupTemplateModel>(), 
+            new List<QuestionTemplateModel>(), 
+            new List<RosterTemplateModel>(), 
+            new List<Guid>(),
+            areRowSpecificVariablesPresent,
+            isIRosterLevelInherited,
+            rosterType)
         {
             ExecutorModel = executorModel;
         }

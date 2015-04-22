@@ -10,6 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+ <#foreach (var namespaceToInclude in Model.Namespaces){#>
+	using <#=namespaceToInclude#>;
+ <#}#>
+
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
    internal partial class <#=Model.GeneratedClassName#>

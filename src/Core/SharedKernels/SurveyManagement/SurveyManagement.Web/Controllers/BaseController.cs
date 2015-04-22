@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
@@ -40,6 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.WriteToTempData(Alerts.SUCCESS, message);
         }
 
+        
         private void WriteToTempData(string key, string message)
         {
             if (this.TempData.ContainsKey(key))
@@ -51,5 +53,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.TempData.Add(key, message);
             }
         }
+
+
+        
     }
 }
