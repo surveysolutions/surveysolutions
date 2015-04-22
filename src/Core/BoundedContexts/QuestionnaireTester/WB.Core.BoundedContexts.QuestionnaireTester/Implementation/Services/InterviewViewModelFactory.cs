@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
@@ -37,7 +38,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(QrBarcodeQuestionModel), Mvx.Create<QrBarcodeQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Mvx.Create<MultimediaQuestionViewModel> },
                 { typeof(DateTimeQuestionModel), Mvx.Create<DateTimeQuestionViewModel> },
-                { typeof(GpsCoordinatesQuestionModel), Mvx.Create<GpsCoordinatesQuestionViewModel> }
+                { typeof(GpsCoordinatesQuestionModel), Mvx.Create<GpsCoordinatesQuestionViewModel> },
+
+                { typeof(TextQuestion), Mvx.Create<MaskedTextQuestionViewModel> },
+                { typeof(NumericQuestion), Mvx.Create<RealNumericQuestionViewModel> },
+
             };
 
         public InterviewViewModelFactory(
@@ -48,9 +53,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
 
-        public Task<IEnumerable> LoadAsync(string interviewId, string chapterId)
+        public Task<IEnumerable> GetEntitiesAsync(string interviewId, Identity groupIdentity)
         {
-            return Task.Run(()=> GenerateViewModels(interviewId, chapterId));
+            return Task.Run(()=> GenerateViewModels(interviewId, groupIdentity));
         }
 
         public Task<IEnumerable> GetPrefilledQuestionsAsync(string interviewId)
@@ -58,25 +63,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return Task.Run(() => GetPrefilledQuestionsImpl(interviewId));
         }
 
-        private IEnumerable GenerateViewModels(string interviewId, string chapterId)
+        private IEnumerable GenerateViewModels(string interviewId, Identity chapterIdentity)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
-            var chapterIdGuid = string.IsNullOrEmpty(chapterId) 
-                ? questionnaire.GroupsWithoutNestedChildren.Keys.First()
-                : Guid.Parse(chapterId);
+            if (chapterIdentity == null || chapterIdentity.Id == Guid.Empty)
+            {
+                chapterIdentity = new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]);
+            }
 
-            if (chapterId != null && questionnaire.GroupsWithoutNestedChildren.ContainsKey(chapterIdGuid))
-                    throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterId));
+            if (!questionnaire.GroupsWithoutNestedChildren.ContainsKey(chapterIdentity.Id))
+                throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterIdentity));
 
-            var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[chapterIdGuid];
-
-            var rosterVector = new decimal[0];
+            var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[chapterIdentity.Id];
 
             var viewModels = groupWithoutNestedChildren
                 .Children
-                .Select(child => CreateInterviewItemViewModel(child.Id, rosterVector, child.ModelType, interview, questionnaire))
+                .Select(child => CreateInterviewItemViewModel(child.Id, chapterIdentity.RosterVector, child.ModelType, interview, questionnaire))
                 .ToList();
 
             return viewModels;
@@ -101,7 +105,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("entityModelType");
             }
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];

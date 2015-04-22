@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, string chapterId)
+        public void Init(string interviewId, Identity chapterIdentity)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
                 .Select(questionId => new PrefilledQuestion
                 {
-                    Question = questionnaire.Questions[questionId].Title,
+                    Question = questionnaire.Questions[questionId.Id].Title,
                     Answer = "some answer"
                 })
                 .ToList();
