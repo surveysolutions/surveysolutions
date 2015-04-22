@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Interview_InterviewQuestion">
+    <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
+    <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
+    <item name="android:layout_marginTop">@dimen/margin_Interview_Top</item>
+    <item name="android:layout_marginBottom">@dimen/margin_Interview_Bottom</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Interview_StaticText" parent="Interview_InterviewQuestion">
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">18dp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">#3F3F3F</item>
+  </style>
+  
+</resources>

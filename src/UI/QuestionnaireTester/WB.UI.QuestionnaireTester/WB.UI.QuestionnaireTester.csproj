@@ -225,7 +225,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values\themes.xml" />
-    <AndroidResource Include="Resources\values\dimentions.xml" />
+    <AndroidResource Include="Resources\values\dimentions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_focused_holo_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_holo_light.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_focused_holo_light.png" />
@@ -319,6 +321,9 @@
     <AndroidResource Include="Resources\drawable-xhdpi\theme_blue_light_textfield_disabled_holo_light.9.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\theme_blue_light_textfield_focused_holo_light.9.png" />
     <AndroidResource Include="Resources\menu\interview.xml" />
+    <AndroidResource Include="Resources\values\styles-interview.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -398,9 +403,7 @@
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\layout\questions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

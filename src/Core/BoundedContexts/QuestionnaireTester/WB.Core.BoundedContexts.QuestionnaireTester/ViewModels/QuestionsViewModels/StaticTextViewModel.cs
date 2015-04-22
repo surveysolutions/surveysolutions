@@ -12,15 +12,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public StaticTextViewModel() { }
 
-        public override void Init(Identity questionIdentity, InterviewModel interview, QuestionnaireModel questionnaireDocument)
+        public override void Init(Identity questionIdentity, InterviewModel interview, QuestionnaireModel questionnaire)
         {
-            if (identity == null) throw new ArgumentNullException("identity");
-            if (interviewModel == null) throw new ArgumentNullException("interviewModel");
-            if (questionnaireModel == null) throw new ArgumentNullException("questionnaireModel");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interview == null) throw new ArgumentNullException("interview");
+            if (questionnaire == null) throw new ArgumentNullException("questionnaire");
 
-            this.identity = identity;
-            this.interviewModel = interviewModel;
-            this.questionnaireModel = questionnaireModel;
+            this.identity = questionIdentity;
+            this.interviewModel = interview;
+            this.questionnaireModel = questionnaire;
 
             var staticText = this.questionnaireModel.StaticTexts[this.identity.Id];
 
@@ -29,7 +29,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         public bool IsDisabled { get; set; }
-        public Guid Id { get; set; }
 
         private string title;
 
