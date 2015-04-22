@@ -348,6 +348,13 @@
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Store_called_and_cache_is_enabled_and_cache_limit_is_reached.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_beginning_command_transaction.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_beginning_query_transaction.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_commiting_command_transaction_which_was_not_started.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_commiting_command_transaction_which_was_started.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_command_transaction_which_was_not_started.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_command_transaction_which_was_started.cs" />
+    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_query_transaction.cs" />
     <Compile Include="Infrastructure\TransactionManagerProviderTests\when_getting_session_and_nothing_was_pinned_nor_unpinned.cs" />
     <Compile Include="Infrastructure\TransactionManagerProviderTests\when_getting_session_and_rebuild_read_side_transaction_manager_was_pinned.cs" />
     <Compile Include="Infrastructure\TransactionManagerProviderTests\when_getting_session_and_rebuild_read_side_transaction_manager_was_pinned_but_then_unpinned.cs" />
