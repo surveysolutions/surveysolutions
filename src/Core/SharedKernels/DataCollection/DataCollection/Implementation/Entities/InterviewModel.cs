@@ -12,9 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             Answers = new Dictionary<string, AbstractInterviewAnswerModel>();
             this.Groups = new Dictionary<string, InterviewGroupModel>();
+            RosterInstancesIds = new Dictionary<string, List<string>>();
             QuestionIdToQuestionModelTypeMap = new Dictionary<Guid, Type>();
             IsInProgress = true;
         }
+
         public string QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
 
