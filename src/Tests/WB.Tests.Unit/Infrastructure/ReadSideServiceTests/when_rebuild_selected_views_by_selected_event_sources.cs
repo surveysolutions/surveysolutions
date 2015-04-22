@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
@@ -39,10 +40,20 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             streamableEventStoreMock.Setup(x => x.ReadFrom(eventSourceId, 0, long.MaxValue))
                 .Returns(new CommittedEventStream(eventSourceId, new[] { committedEvent }));
 
-            readSideService = CreateReadSideService(eventDispatcher: eventDispatcherMock.Object, streamableEventStore: streamableEventStoreMock.Object);
+            transactionManagerProviderManagerMock = Mock.Get(Mock.Of<ITransactionManagerProviderManager>(_
+                => _.GetTransactionManager() == Mock.Of<ITransactionManager>()));
+
+            readSideService = CreateReadSideService(
+                eventDispatcher: eventDispatcherMock.Object,
+                streamableEventStore: streamableEventStoreMock.Object,
+                transactionManagerProviderManager: transactionManagerProviderManagerMock.Object);
         };
 
-        Because of = () => WaitRebuildReadsideFinish();
+        Because of = () =>
+        {
+            readSideService.RebuildViewForEventSourcesAsync(new[] { HandlerToRebuild }, new[] { eventSourceId });
+            WaitRebuildReadsideFinish(readSideService);
+        };
 
         It should_rebuild_all_view = () =>
             readSideService.AreViewsBeingRebuiltNow().ShouldEqual(false);
@@ -56,6 +67,14 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         It should_disable_cache_for_registered_writers_once = () =>
            readSideRepositoryWriterMock.Verify(x => x.DisableCache(), Times.Once);
 
+        It should_pin_readside_transaction_manager = () =>
+            transactionManagerProviderManagerMock.Verify(
+                _ => _.PinRebuildReadSideTransactionManager(), Times.Once);
+
+        It should_unpin_transaction_manager = () =>
+            transactionManagerProviderManagerMock.Verify(
+                _ => _.UnpinTransactionManager(), Times.Once);
+
         It should_publish_one_event_on_event_dispatcher = () =>
             eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
@@ -67,21 +86,10 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IAtomicEventHandler> eventHandlerMock;
         private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<ITransactionManagerProviderManager> transactionManagerProviderManagerMock;
 
         private static Guid eventSourceId = Guid.Parse("11111111111111111111111111111111");
         private static CommittedEvent committedEvent;
         private static string HandlerToRebuild = "handler to rebuild";
-
-        protected static void WaitRebuildReadsideFinish()
-        {
-            readSideService.RebuildViewForEventSourcesAsync(new[] { HandlerToRebuild }, new[] { eventSourceId });
-
-            Thread.Sleep(1000);
-
-            while (readSideService.AreViewsBeingRebuiltNow())
-            {
-                Thread.Sleep(1000);
-            }
-        }
     }
 }
