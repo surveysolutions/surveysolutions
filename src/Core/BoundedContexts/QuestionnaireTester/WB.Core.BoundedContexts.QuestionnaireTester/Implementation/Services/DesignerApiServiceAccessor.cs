@@ -21,9 +21,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             this.principal = principal;
         }
 
-        public IEnumerable<Task<IEnumerable<QuestionnaireListItem>>> GetPagedQuestionnaires(int pageIndex, int pageSize, CancellationToken token)
+        public Task<QuestionnaireListItem[]> GetPagedQuestionnairesAsync(int pageIndex, int pageSize, CancellationToken token)
         {
-            yield return this.restService.GetAsync<IEnumerable<QuestionnaireListItem>>(
+            return this.restService.GetAsync<QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
                 credentials:
