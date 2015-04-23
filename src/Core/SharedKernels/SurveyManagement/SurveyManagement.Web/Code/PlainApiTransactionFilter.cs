@@ -1,33 +1,34 @@
 ﻿using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     public class PlainApiTransactionFilter : ActionFilterAttribute, IActionFilter
     {
-        private readonly IPlainTransactionManager transactionManager;
-
-        public PlainApiTransactionFilter(IPlainTransactionManager transactionManager)
+        IPlainTransactionManager TransactionManager
         {
-            this.transactionManager = transactionManager;
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            }
         }
-
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            transactionManager.BeginTransaction();
+            TransactionManager.BeginTransaction();
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             if (actionExecutedContext.Exception != null)
             {
-                transactionManager.RollbackTransaction();
+                TransactionManager.RollbackTransaction();
             }
             else
             {
-                transactionManager.CommitTransaction();
+                TransactionManager.CommitTransaction();
             }
         }
     }
