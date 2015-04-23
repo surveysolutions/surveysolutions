@@ -55,10 +55,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             try
             {
-                await this.designerApiService.Authorize(login: LoginName, password: Password);
-
-                this.principal.SignIn(userName: LoginName, password: Password, rememberMe: StaySignedIn);
-                this.ShowViewModel<DashboardViewModel>();
+                if (await this.designerApiService.Authorize(login: LoginName, password: Password))
+                {
+                    this.principal.SignIn(userName: LoginName, password: Password, rememberMe: StaySignedIn);
+                    this.ShowViewModel<DashboardViewModel>();   
+                }
             }
             finally
             {

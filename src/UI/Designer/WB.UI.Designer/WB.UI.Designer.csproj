@@ -233,7 +233,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
-    <Compile Include="Api\BaseApiController.cs" />
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />

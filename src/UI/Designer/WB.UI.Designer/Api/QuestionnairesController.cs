@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
     [RoutePrefix("api/v1/questionnaires")]
-    public class QuestionnairesController : BaseApiController
+    public class QuestionnairesController : ApiController
     {
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -43,6 +43,12 @@ namespace WB.UI.Designer.Api
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
             this.expressionsEngineVersionService = expressionsEngineVersionService;
+        }
+
+        [Route("~/api/v1/login")]
+        [HttpGet]
+        public void Login()
+        {
         }
 
         [Route("{id:Guid}")]
