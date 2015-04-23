@@ -94,9 +94,9 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+            var questionnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
 
-            if (questoinnaireErrors.Any())
+            if (questionnaireErrors.Any())
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
