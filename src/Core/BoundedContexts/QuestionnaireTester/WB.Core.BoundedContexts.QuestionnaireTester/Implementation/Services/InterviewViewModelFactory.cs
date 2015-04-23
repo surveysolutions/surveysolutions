@@ -22,23 +22,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private static readonly Dictionary<Type, Func<BaseInterviewItemViewModel>> QuestionnaireEntityTypeToViewModelMap = 
             new Dictionary<Type, Func<BaseInterviewItemViewModel>>
             {
-                { typeof(StaticTextModel), Mvx.Create<StaticTextViewModel> },
-                { typeof(GroupModel), Mvx.Create<GroupReferenceViewModel> },
-                { typeof(RosterModel), Mvx.Create<RostersReferenceViewModel> },
+                { typeof(StaticTextModel),                 Load<StaticTextViewModel>                 },
+                { typeof(GroupModel),                      Load<GroupReferenceViewModel>             },
+                { typeof(RosterModel),                     Load<RostersReferenceViewModel>           },
                 // questions
-                { typeof(SingleOptionQuestionModel), Mvx.Create<SingleOptionQuestionViewModel> },
-                { typeof(LinkedSingleOptionQuestionModel), Mvx.Create<LinkedSingleOptionQuestionViewModel> },
-                { typeof(MultiOptionQuestionModel), Mvx.Create<MultiOptionQuestionViewModel> },
-                { typeof(LinkedMultiOptionQuestionModel), Mvx.Create<LinkedMultiOptionQuestionViewModel> },
-                { typeof(IntegerNumericQuestionModel), Mvx.Create<IntegerNumericQuestionViewModel> },
-                { typeof(RealNumericQuestionModel), Mvx.Create<RealNumericQuestionViewModel> },
-                { typeof(MaskedTextQuestionModel), Mvx.Create<MaskedTextQuestionViewModel> },
-                { typeof(TextListQuestionModel), Mvx.Create<TextListQuestionViewModel> },
-                { typeof(QrBarcodeQuestionModel), Mvx.Create<QrBarcodeQuestionViewModel> },
-                { typeof(MultimediaQuestionModel), Mvx.Create<MultimediaQuestionViewModel> },
-                { typeof(DateTimeQuestionModel), Mvx.Create<DateTimeQuestionViewModel> },
-                { typeof(GpsCoordinatesQuestionModel), Mvx.Create<GpsCoordinatesQuestionViewModel> }
+                { typeof(SingleOptionQuestionModel),       Load<SingleOptionQuestionViewModel>       },
+                { typeof(LinkedSingleOptionQuestionModel), Load<LinkedSingleOptionQuestionViewModel> },
+                { typeof(MultiOptionQuestionModel),        Load<MultiOptionQuestionViewModel>        },
+                { typeof(LinkedMultiOptionQuestionModel),  Load<LinkedMultiOptionQuestionViewModel>  },
+                { typeof(IntegerNumericQuestionModel),     Load<IntegerNumericQuestionViewModel>     },
+                { typeof(RealNumericQuestionModel),        Load<RealNumericQuestionViewModel>        },
+                { typeof(MaskedTextQuestionModel),         Load<MaskedTextQuestionViewModel>         },
+                { typeof(TextListQuestionModel),           Load<TextListQuestionViewModel>           },
+                { typeof(QrBarcodeQuestionModel),          Load<QrBarcodeQuestionViewModel>          },
+                { typeof(MultimediaQuestionModel),         Load<MultimediaQuestionViewModel>         },
+                { typeof(DateTimeQuestionModel),           Load<DateTimeQuestionViewModel>           },
+                { typeof(GpsCoordinatesQuestionModel),     Load<GpsCoordinatesQuestionViewModel>     },
             };
+
+        private static T Load<T>() where T : class
+        {
+            return Mvx.Resolve<T>();
+        }
 
         public InterviewViewModelFactory(
             IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
@@ -58,24 +63,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return Task.Run(() => GetPrefilledQuestionsImpl(interviewId));
         }
 
-        private IEnumerable GenerateViewModels(string interviewId, Identity chapterIdentity)
+        private IEnumerable GenerateViewModels(string interviewId, Identity groupIdentity)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
-            if (chapterIdentity == null || chapterIdentity.Id == Guid.Empty)
+            if (groupIdentity == null || groupIdentity.Id == Guid.Empty)
             {
-                chapterIdentity = new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]);
+                groupIdentity = new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]);
             }
 
-            if (!questionnaire.GroupsWithoutNestedChildren.ContainsKey(chapterIdentity.Id))
-                throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(chapterIdentity));
+            if (!questionnaire.GroupsWithoutNestedChildren.ContainsKey(groupIdentity.Id))
+                throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(groupIdentity));
 
-            var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[chapterIdentity.Id];
+            var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[groupIdentity.Id];
 
             var viewModels = groupWithoutNestedChildren
                 .Children
-                .Select(child => CreateInterviewItemViewModel(child.Id, chapterIdentity.RosterVector, child.ModelType, interview, questionnaire))
+                .Select(child => CreateInterviewItemViewModel(child.Id, groupIdentity.RosterVector, child.ModelType, interview, questionnaire))
                 .ToList();
 
             return viewModels;
