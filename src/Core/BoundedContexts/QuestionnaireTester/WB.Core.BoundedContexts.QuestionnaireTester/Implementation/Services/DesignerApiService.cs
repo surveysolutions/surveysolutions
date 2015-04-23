@@ -32,8 +32,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             this.userInteraction = userInteraction;
         }
 
-        public async Task Authorize(string login, string password)
+        public async Task<bool> Authorize(string login, string password)
         {
+            bool isUserAuthrizedOnServer = false;
             try
             {
                 await this.restService.GetAsync(
@@ -43,35 +44,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         Login = login,
                         Password = password
                     });
+                isUserAuthrizedOnServer = true;
             }
             catch (RestException ex)
             {
-                switch (ex.StatusCode)
+                string errorMessage = this.GetErrorMessageByGeneralHttpStatuses(ex);
+                if (string.IsNullOrEmpty(errorMessage))
                 {
-                    case HttpStatusCode.Unauthorized:
-                        this.userInteraction.Alert(ex.Message.Contains("lock")
-                            ? UIResources.AccountIsLockedOnServer
-                            : UIResources.Unauthorized);
-                        break;
-                    case HttpStatusCode.ServiceUnavailable:
-                        this.userInteraction.Alert(ex.Message.Contains("maintenance")
-                            ? UIResources.Maintenance
-                            : UIResources.ServiceUnavailable);
-                        break;
-                    case HttpStatusCode.RequestTimeout:
-                        this.userInteraction.Alert(UIResources.RequestTimeout);
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        this.logger.Error("Internal server error when login.", ex);
-                        this.userInteraction.Alert(UIResources.InternalServerError);
-                        break;
-                    case HttpStatusCode.NotFound:
-                        this.userInteraction.Alert(UIResources.Login_Error_NotFound);
-                        break;
-                    default:
-                        throw;
+                    switch (ex.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            errorMessage = UIResources.Login_Error_NotFound;
+                            break;
+                    }
                 }
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                    this.userInteraction.Alert(errorMessage);
+                else throw;
             }
+
+            return isUserAuthrizedOnServer;
         }
 
         public async Task GetQuestionnairesAsync(Action<QuestionnaireListItem[]> onPageReceived, CancellationToken token)
@@ -93,28 +86,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             }
             catch (RestException ex)
             {
-                switch (ex.StatusCode)
-                {
-                    case HttpStatusCode.Unauthorized:
-                        this.userInteraction.Alert(ex.Message.Contains("lock")
-                            ? UIResources.AccountIsLockedOnServer
-                            : UIResources.Unauthorized);
-                        break;
-                    case HttpStatusCode.ServiceUnavailable:
-                        this.userInteraction.Alert(ex.Message.Contains("maintenance")
-                            ? UIResources.Maintenance
-                            : UIResources.ServiceUnavailable);
-                        break;
-                    case HttpStatusCode.RequestTimeout:
-                        this.userInteraction.Alert(UIResources.RequestTimeout);
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        this.logger.Error("Internal server error when getting questionnaires.", ex);
-                        this.userInteraction.Alert(UIResources.InternalServerError);
-                        break;
-                    default:
-                        throw;
-                }
+                string errorMessage = this.GetErrorMessageByGeneralHttpStatuses(ex);
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                    this.userInteraction.Alert(errorMessage);
+                else throw;
             }
         }
 
@@ -136,44 +112,30 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             }
             catch (RestException ex)
             {
-                switch (ex.StatusCode)
+                string errorMessage = this.GetErrorMessageByGeneralHttpStatuses(ex);
+                if (string.IsNullOrEmpty(errorMessage))
                 {
-                    case HttpStatusCode.Unauthorized:
-                        this.userInteraction.Alert(ex.Message.Contains("lock")
-                            ? UIResources.AccountIsLockedOnServer
-                            : UIResources.Unauthorized);
-                        break;
-                    case HttpStatusCode.Forbidden:
-                        this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
-                            this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id,
-                            selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName));
-                        break;
-                    case HttpStatusCode.UpgradeRequired:
-                        this.userInteraction.Alert(UIResources.ImportQuestionnaire_Error_UpgradeRequired);
-                        break;
-                    case HttpStatusCode.PreconditionFailed:
-                        this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                            this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title));
-                        break;
-                    case HttpStatusCode.NotFound:
-                        this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                            this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title));
-                        break;
-                    case HttpStatusCode.ServiceUnavailable:
-                        this.userInteraction.Alert(ex.Message.Contains("maintenance")
-                            ? UIResources.Maintenance
-                            : UIResources.ServiceUnavailable);
-                        break;
-                    case HttpStatusCode.RequestTimeout:
-                        this.userInteraction.Alert(UIResources.RequestTimeout);
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        this.logger.Error("Internal server error when getting questionnaires.", ex);
-                        this.userInteraction.Alert(UIResources.InternalServerError);
-                        break;
-                    default:
-                        throw;
+                    switch (ex.StatusCode)
+                    {
+                        case HttpStatusCode.Forbidden:
+                            this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
+                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id,
+                                selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName));
+                            break;
+                        case HttpStatusCode.PreconditionFailed:
+                            this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
+                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title));
+                            break;
+                        case HttpStatusCode.NotFound:
+                            this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
+                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title));
+                            break;
+                    }
                 }
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                    this.userInteraction.Alert(errorMessage);
+                else throw;
             }
             catch (OperationCanceledException)
             {
@@ -205,6 +167,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 IsPublic = questionnaireListItem.IsPublic,
                 OwnerName = this.principal.CurrentUserIdentity.Name
             }).ToArray();
+        }
+
+        private string GetErrorMessageByGeneralHttpStatuses(RestException ex)
+        {
+            string errorMessage = string.Empty;
+
+            switch (ex.StatusCode)
+            {
+                case HttpStatusCode.Unauthorized:
+                    errorMessage = ex.Message.Contains("lock") ? UIResources.AccountIsLockedOnServer : UIResources.Unauthorized;
+                    break;
+                case HttpStatusCode.ServiceUnavailable:
+                    errorMessage = ex.Message.Contains("maintenance") ? UIResources.Maintenance : UIResources.ServiceUnavailable;
+                    break;
+                case HttpStatusCode.RequestTimeout:
+                    errorMessage = UIResources.RequestTimeout;
+                    break;
+                case HttpStatusCode.UpgradeRequired:
+                    errorMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
+                    break;
+                case HttpStatusCode.InternalServerError:
+                    this.logger.Error("Internal server error when login.", ex);
+                    errorMessage = UIResources.InternalServerError;
+                    break;
+            }
+
+            return errorMessage;
         }
     }
 }
