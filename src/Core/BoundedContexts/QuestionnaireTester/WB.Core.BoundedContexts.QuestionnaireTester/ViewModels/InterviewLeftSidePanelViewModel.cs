@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,19 +30,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
-                .Select(referenceToQuestion => new PrefilledQuestion
+                .Select(referenceToQuestion => new 
                 {
+                    InterviewId = interviewId,
                     Question = questionnaire.Questions[referenceToQuestion.Id].Title,
-                    Answer = "some answer"
+                    AnswerModel = GetAnswerModel(interview, referenceToQuestion)
                 })
                 .ToList();
 
         }
 
-        public class PrefilledQuestion
+        private static AbstractInterviewAnswerModel GetAnswerModel(InterviewModel interview, QuestionnaireReferenceModel referenceToQuestion)
         {
-            public string Question { get; set; }
-            public string Answer { get; set; }
+            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
+            return interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
         }
     }
 }
