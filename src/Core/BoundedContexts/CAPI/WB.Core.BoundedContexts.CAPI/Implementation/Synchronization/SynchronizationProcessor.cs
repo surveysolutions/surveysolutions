@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
         private async Task DownloadAndProcessInterviewPackage(SynchronizationChunkMeta chunk)
         {
             var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
-            this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
+            this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType, this.userId);
             this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, this.userId, chunk.SortIndex);
         }
 
