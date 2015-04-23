@@ -235,6 +235,15 @@
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\ImportControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_and_questionnaire_is_valid.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_and_questionnaire_view_is_absent.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_and_request_parameter_is_null.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_client_version_is_not_supported.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_questionnaire_cant_be_compiled.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_questionnaire_cant_be_verified.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_questionnaire_compilation_throw_exception.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_user_dont_have_access_rights_to use_the_questionnaire.cs" />
     <Compile Include="Applications\Designer\MessageHandlerTests\MessageHandlerTestContext.cs" />
     <Compile Include="Applications\Designer\MessageHandlerTests\when_https_verifier_reseives_https_request.cs" />
     <Compile Include="Applications\Designer\MessageHandlerTests\when_https_verifier_reseives_non_https_request.cs" />
@@ -298,6 +307,8 @@
     <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
     <Compile Include="BoundedContexts\Capi\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_5_with_questionnaire_with_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_lower_then_5.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />

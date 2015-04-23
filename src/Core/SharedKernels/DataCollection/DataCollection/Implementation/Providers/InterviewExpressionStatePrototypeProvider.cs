@@ -17,20 +17,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
-        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor, IFileSystemAccessor fileSystemAccessor, IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
+        public InterviewExpressionStatePrototypeProvider(
+            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
+            IFileSystemAccessor fileSystemAccessor, 
+            IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
         {
-            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
         public IInterviewExpressionStateV2 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
-            string assemblyFile = this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+            string assemblyFile = this.questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
 
             if (!fileSystemAccessor.IsFileExists(assemblyFile))
             {
