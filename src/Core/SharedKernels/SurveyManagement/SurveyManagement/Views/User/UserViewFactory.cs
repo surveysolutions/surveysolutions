@@ -30,11 +30,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             }
             else if (!string.IsNullOrEmpty(input.UserName))
             {
-                query = x => x.UserName == input.UserName;
+                query = x => x.UserName.ToLower() == input.UserName.ToLower();
             }
             else if (!string.IsNullOrEmpty(input.UserEmail))
             {
-                query = x => x.Email == input.UserEmail;
+                query = x => x.Email.ToLower() == input.UserEmail.ToLower();
             }
 
             return

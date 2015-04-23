@@ -69,8 +69,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
             this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
             var userInfo = this.userViewFactory.Load(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
-         
-            if (userInfo == null || !userInfo.Roles.Contains(UserRoles.Operator))
+            if (userInfo == null)
+            {
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                return;
+            }
+
+            if (!userInfo.Roles.Contains(UserRoles.Operator))
             {
                 this.RespondWithMessageThatUserIsNotAnInterviewer(actionContext);
                 return;
