@@ -54,12 +54,12 @@ namespace WB.Tests.Unit.Core.Synchronization
         It should_return_list_with_package_ids_specified = () =>
             result.SyncPackagesMeta.Select(x => x.Id).ShouldContainOnly(
                 interviewSyncPackageMetas[2].PackageId,
-                interviewSyncPackageMetas[3].PackageId);
+                interviewSyncPackageMetas[5].PackageId);
 
         It should_return_list_with_ordered_by_index_items = () =>
             result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new[] {
                                                                             interviewSyncPackageMetas[2].SortIndex,
-                                                                            interviewSyncPackageMetas[3].SortIndex
+                                                                            interviewSyncPackageMetas[5].SortIndex
                                                                         });
 
         private static SyncManager syncManager;
