@@ -21,14 +21,16 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-
+            Guid deletedInterviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             interviewSyncPackageMetas = new List<InterviewSyncPackageMeta>
                                         {
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:3, itemType: SyncItemType.Interview, userId:user1Id),
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:4, itemType: SyncItemType.DeleteInterview, userId:user1Id),
                                             CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:5, itemType: SyncItemType.Interview, userId:userId),
-                                            CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:6, itemType: SyncItemType.Interview, userId:userId)
+                                            CreateInterviewSyncPackageMetaInformation(deletedInterviewId, sortIndex:6, itemType: SyncItemType.Interview, userId:userId),
+                                            CreateInterviewSyncPackageMetaInformation(deletedInterviewId, sortIndex:7, itemType: SyncItemType.DeleteInterview, userId:userId),
+                                            CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:8, itemType: SyncItemType.Interview, userId:userId)
                                         };
 
             var writer = new TestInMemoryWriter<InterviewSyncPackageMeta>();
@@ -41,7 +43,7 @@ namespace WB.Tests.Unit.Core.Synchronization
         };
 
         Because of = () =>
-            result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId);
+            result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, null);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
@@ -55,8 +57,7 @@ namespace WB.Tests.Unit.Core.Synchronization
                 interviewSyncPackageMetas[3].PackageId);
 
         It should_return_list_with_ordered_by_index_items = () =>
-            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new long[]
-                                                                        {
+            result.SyncPackagesMeta.Select(x => x.SortIndex).ShouldEqual(new[] {
                                                                             interviewSyncPackageMetas[2].SortIndex,
                                                                             interviewSyncPackageMetas[3].SortIndex
                                                                         });
@@ -71,7 +72,6 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid user1Id = Guid.Parse("22222222222222222222222222222222");
-        private static readonly string lastSyncedPackageId = null;
 
         private static readonly Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
