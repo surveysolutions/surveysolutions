@@ -146,6 +146,7 @@
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
+    <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="Implementation\Services\FileSystemAccessor.cs" />

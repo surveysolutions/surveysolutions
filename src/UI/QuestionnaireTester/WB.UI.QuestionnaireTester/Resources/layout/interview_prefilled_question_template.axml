@@ -11,5 +11,5 @@
         android:text=":" />
     <TextView
         style="@style/Interview_PrefilledQuestion_Answer"
-        local:MvxBind="Text Answer" />
+        local:MvxBind="Text GetAnswer(AnswerModel, InterviewId)" />
 </MvxLinearLayout>
