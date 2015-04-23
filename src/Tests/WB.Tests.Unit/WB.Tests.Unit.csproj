@@ -1986,7 +1986,6 @@
     <Folder Include="GenericSubdomains\Logging\" />
     <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
-    <Folder Include="SharedKernels\Synchronization\ReadSideChunkReaderTests\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
