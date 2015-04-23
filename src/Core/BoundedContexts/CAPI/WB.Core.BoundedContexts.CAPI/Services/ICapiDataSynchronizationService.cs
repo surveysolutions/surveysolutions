@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
     public interface ICapiDataSynchronizationService {
         void ProcessDownloadedPackage(UserSyncPackageDto item);
         void ProcessDownloadedPackage(QuestionnaireSyncPackageDto item, string itemType);
-        void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType);
+        void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType, Guid synchronizedUserId);
         IList<ChangeLogRecordWithContent> GetItemsToPush(Guid userId);
     }
 }
