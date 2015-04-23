@@ -266,6 +266,11 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 group p by p.InterviewId into g
                 select g.Last();
 
+            if (lastSyncedSortIndex == null)
+            {
+                result = result.Where(x => x.ItemType != SyncItemType.DeleteInterview);
+            }
+
             return result.AsQueryable();
         }
 
