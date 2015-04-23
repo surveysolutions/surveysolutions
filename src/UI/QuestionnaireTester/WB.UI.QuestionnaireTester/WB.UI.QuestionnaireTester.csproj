@@ -178,6 +178,7 @@
     <Compile Include="Views\CustomControls\MvxRecyclerView.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerViewViewHolder.cs" />
+    <Compile Include="Views\SearchQuestionnairesView.cs" />
     <Compile Include="Views\InterviewGroupView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
@@ -358,6 +359,7 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_roster_reference.axml" />
+    <AndroidResource Include="Resources\layout\search_questionnaires.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

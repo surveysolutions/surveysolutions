@@ -47,7 +47,8 @@ namespace WB.UI.QuestionnaireTester
                 {typeof (LoginViewModel), typeof (LoginView)},
                 {typeof (InterviewGroupViewModel), typeof (InterviewGroupView)},
                 {typeof (DashboardViewModel), typeof (DashboardView)},
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)}
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)},
+                {typeof (SearchQuestionnairesViewModel), typeof (SearchQuestionnairesView)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

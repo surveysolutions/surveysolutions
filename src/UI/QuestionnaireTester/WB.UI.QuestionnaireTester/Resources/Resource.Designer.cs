@@ -1683,10 +1683,13 @@ namespace WB.UI.QuestionnaireTester
 			public const int public_questionnaire_list_item = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int splash = 2130903088;
+			public const int search_questionnaires = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int support_simple_spinner_dropdown_item = 2130903089;
+			public const int splash = 2130903089;
+			
+			// aapt resource value: 0x7f030032
+			public const int support_simple_spinner_dropdown_item = 2130903090;
 			
 			static Layout()
 			{
