@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     UserName = evnt.Payload.Name,
                     Password = evnt.Payload.Password,
                     PublicKey = evnt.Payload.PublicKey,
-                    CreationDate = DateTime.UtcNow,
+                    CreationDate = evnt.EventTimeStamp,
                     Email = evnt.Payload.Email,
                     IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                     IsLockedByHQ = evnt.Payload.IsLocked,
