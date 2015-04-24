@@ -118,17 +118,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     switch (ex.StatusCode)
                     {
                         case HttpStatusCode.Forbidden:
-                            this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
+                            errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
                                 this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id,
-                                selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName));
+                                selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName);
                             break;
                         case HttpStatusCode.PreconditionFailed:
-                            this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title));
+                            errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
+                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
                             break;
                         case HttpStatusCode.NotFound:
-                            this.userInteraction.Alert(string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title));
+                            errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
+                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
                             break;
                     }
                 }
