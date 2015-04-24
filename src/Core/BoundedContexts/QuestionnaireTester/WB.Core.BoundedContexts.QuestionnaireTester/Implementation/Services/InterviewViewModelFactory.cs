@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection;
@@ -26,6 +27,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 // questions
                 { typeof(MaskedTextQuestionModel),         Load<MaskedTextQuestionViewModel>         },
                 { typeof(GpsCoordinatesQuestionModel),     Load<GpsCoordinatesQuestionViewModel>     },
+                { typeof(SingleOptionQuestionModel), Mvx.Create<QuestionContainerViewModel<SingleOptionQuestionViewModel>> },
+                { typeof(LinkedSingleOptionQuestionModel), Mvx.Create<QuestionContainerViewModel<LinkedSingleOptionQuestionViewModel>> },
+                { typeof(MultiOptionQuestionModel), Mvx.Create<QuestionContainerViewModel<MultiOptionQuestionViewModel>> },
+                { typeof(LinkedMultiOptionQuestionModel), Mvx.Create<QuestionContainerViewModel<LinkedMultiOptionQuestionViewModel>> },
+                { typeof(IntegerNumericQuestionModel), Mvx.Create<QuestionContainerViewModel<IntegerNumericQuestionViewModel>> },
+                { typeof(RealNumericQuestionModel), Mvx.Create<QuestionContainerViewModel<RealNumericQuestionViewModel>> },
+                { typeof(MaskedTextQuestionModel), Mvx.Create<QuestionContainerViewModel<MaskedTextQuestionViewModel>> },
+                { typeof(TextListQuestionModel), Mvx.Create<QuestionContainerViewModel<TextListQuestionViewModel>> },
+                { typeof(QrBarcodeQuestionModel), Mvx.Create<QuestionContainerViewModel<QrBarcodeQuestionViewModel>> },
+                { typeof(MultimediaQuestionModel), Mvx.Create<QuestionContainerViewModel<MultimediaQuestionViewModel>> },
+                { typeof(DateTimeQuestionModel), Mvx.Create<QuestionContainerViewModel<DateTimeQuestionViewModel>> },
+                { typeof(GpsCoordinatesQuestionModel), Mvx.Create<QuestionContainerViewModel<GpsCoordinatesQuestionViewModel>> }
             };
 
         private static T Load<T>() where T : class
