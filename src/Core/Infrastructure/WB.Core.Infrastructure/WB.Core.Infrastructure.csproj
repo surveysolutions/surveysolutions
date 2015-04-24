@@ -56,6 +56,7 @@
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\InMemoryAggregateRootRepository.cs" />
     <Compile Include="Implementation\CommandBus\CommandService.cs" />
+    <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideRepositoryWriterError.cs" />
