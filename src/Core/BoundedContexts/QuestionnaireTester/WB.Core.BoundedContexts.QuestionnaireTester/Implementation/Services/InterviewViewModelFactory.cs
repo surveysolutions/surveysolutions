@@ -19,24 +19,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
-        private static readonly Dictionary<Type, Func<BaseInterviewItemViewModel>> QuestionnaireEntityTypeToViewModelMap = 
-            new Dictionary<Type, Func<BaseInterviewItemViewModel>>
+        private static readonly Dictionary<Type, Func<IInterviewEntity>> QuestionnaireEntityTypeToViewModelMap = 
+            new Dictionary<Type, Func<IInterviewEntity>>
             {
                 { typeof(StaticTextModel),                 Load<StaticTextViewModel>                 },
-                { typeof(GroupModel),                      Load<GroupReferenceViewModel>             },
-                { typeof(RosterModel),                     Load<RostersReferenceViewModel>           },
                 // questions
-                { typeof(SingleOptionQuestionModel),       Load<SingleOptionQuestionViewModel>       },
-                { typeof(LinkedSingleOptionQuestionModel), Load<LinkedSingleOptionQuestionViewModel> },
-                { typeof(MultiOptionQuestionModel),        Load<MultiOptionQuestionViewModel>        },
-                { typeof(LinkedMultiOptionQuestionModel),  Load<LinkedMultiOptionQuestionViewModel>  },
-                { typeof(IntegerNumericQuestionModel),     Load<IntegerNumericQuestionViewModel>     },
-                { typeof(RealNumericQuestionModel),        Load<RealNumericQuestionViewModel>        },
                 { typeof(MaskedTextQuestionModel),         Load<MaskedTextQuestionViewModel>         },
-                { typeof(TextListQuestionModel),           Load<TextListQuestionViewModel>           },
-                { typeof(QrBarcodeQuestionModel),          Load<QrBarcodeQuestionViewModel>          },
-                { typeof(MultimediaQuestionModel),         Load<MultimediaQuestionViewModel>         },
-                { typeof(DateTimeQuestionModel),           Load<DateTimeQuestionViewModel>           },
                 { typeof(GpsCoordinatesQuestionModel),     Load<GpsCoordinatesQuestionViewModel>     },
             };
 
@@ -80,7 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             var viewModels = groupWithoutNestedChildren
                 .Children
-                .Select(child => CreateInterviewItemViewModel(child.Id, groupIdentity.RosterVector, child.ModelType, interview, questionnaire))
+                .Select(child => CreateInterviewItemViewModel(entityId: child.Id, rosterVector: groupIdentity.RosterVector, entityModelType: child.ModelType, interviewId: interviewId))
                 .ToList();
 
             return viewModels;
@@ -91,15 +79,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
-            return questionnaire.PrefilledQuestionsIds.Select(x => CreateInterviewItemViewModel(x.Id, new decimal[0], x.ModelType, interview, questionnaire));
+            return questionnaire.PrefilledQuestionsIds.Select(question => CreateInterviewItemViewModel(entityId: question.Id, rosterVector: new decimal[0], entityModelType: question.ModelType, interviewId: interviewId));
         }
 
-        private static BaseInterviewItemViewModel CreateInterviewItemViewModel(
+        private static IInterviewEntity CreateInterviewItemViewModel(
             Guid entityId,
             decimal[] rosterVector,
             Type entityModelType,
-            InterviewModel interview,
-            QuestionnaireModel questionnaire)
+            string interviewId)
         {
             var identity = new Identity(entityId, rosterVector);
 
@@ -110,9 +97,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
 
-            BaseInterviewItemViewModel viewModel = viewModelActivator.Invoke();
+            IInterviewEntity viewModel = viewModelActivator.Invoke();
 
-            viewModel.Init(identity, interview, questionnaire);
+            viewModel.Init(interviewId: interviewId, identity: identity);
             return viewModel;
         }
     }

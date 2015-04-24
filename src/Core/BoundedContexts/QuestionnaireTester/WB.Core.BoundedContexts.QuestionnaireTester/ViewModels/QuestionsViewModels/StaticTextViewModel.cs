@@ -1,41 +1,38 @@
 ﻿using System;
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class StaticTextViewModel : BaseInterviewItemViewModel
+    public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntity
     {
-        private Identity identity;
-        private InterviewModel interviewModel;
-        private QuestionnaireModel questionnaireModel;
+        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainRepository<InterviewModel> interviewRepository;
 
-        public StaticTextViewModel() { }
-
-        public override void Init(Identity questionIdentity, InterviewModel interview, QuestionnaireModel questionnaire)
+        public StaticTextViewModel(IPlainRepository<QuestionnaireModel> questionnaireRepository,
+             IPlainRepository<InterviewModel> interviewRepository)
         {
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
-            if (interview == null) throw new ArgumentNullException("interview");
-            if (questionnaire == null) throw new ArgumentNullException("questionnaire");
-
-            this.identity = questionIdentity;
-            this.interviewModel = interview;
-            this.questionnaireModel = questionnaire;
-
-            var staticText = this.questionnaireModel.StaticTexts[this.identity.Id];
-
-            Title = staticText.Title;
-          
+            this.questionnaireRepository = questionnaireRepository;
+            this.interviewRepository = interviewRepository;
         }
 
-        public bool IsDisabled { get; set; }
-
-        private string title;
-
-        public string Title
+        public void Init(string interviewId, Identity identity)
         {
-            get { return title; }
-            set { title = value; RaisePropertyChanged(() => Title); }
+            if (identity == null) throw new ArgumentNullException("identity");
+
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+
+            this.StaticText = questionnaire.StaticTexts[identity.Id].Title;
+        }
+
+        private string staticText;
+        public string StaticText
+        {
+            get { return staticText; }
+            set { staticText = value; RaisePropertyChanged(() => StaticText); }
         }
     }
 }
