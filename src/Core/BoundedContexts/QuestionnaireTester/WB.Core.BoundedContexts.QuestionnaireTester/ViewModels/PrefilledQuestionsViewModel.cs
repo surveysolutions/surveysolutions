@@ -1,7 +1,6 @@
 using System.Collections;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -41,11 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public IEnumerable PrefilledQuestions
         {
             get { return prefilledQuestions; }
-            set
-            {
-                prefilledQuestions = value;
-                RaisePropertyChanged(() => PrefilledQuestions);
-            }
+            set { prefilledQuestions = value; RaisePropertyChanged(); }
         }
 
         public async void Init(string interviewId)

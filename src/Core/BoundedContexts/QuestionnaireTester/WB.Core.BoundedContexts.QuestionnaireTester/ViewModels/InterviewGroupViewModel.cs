@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public IEnumerable Items
         {
             get { return items; }
-            set { items = value; RaisePropertyChanged(() => Items); }
+            set { items = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand navigateToDashboardCommand;
