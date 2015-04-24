@@ -3,6 +3,8 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.Views;
+
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Views.Adapters;
 using WB.UI.QuestionnaireTester.Views.CustomControls;
@@ -25,6 +27,7 @@ namespace WB.UI.QuestionnaireTester.Views
 
             var listOfInterviewQuestionsAndGroups = FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
             var layoutManager = new LinearLayoutManager(this);
+            
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
             listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)BindingContext);

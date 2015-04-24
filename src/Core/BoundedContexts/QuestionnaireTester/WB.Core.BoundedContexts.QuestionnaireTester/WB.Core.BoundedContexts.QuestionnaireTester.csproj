@@ -58,6 +58,7 @@
     <Compile Include="ViewModels\InterviewGroupViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IInterviewEntity.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GpsCoordinatesQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionContainerViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MaskedTextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />

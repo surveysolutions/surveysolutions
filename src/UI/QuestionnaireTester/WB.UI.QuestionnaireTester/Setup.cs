@@ -62,6 +62,16 @@ namespace WB.UI.QuestionnaireTester
             base.FillTargetFactories(registry);
         }
 
+        protected override IDictionary<string, string> ViewNamespaceAbbreviations
+        {
+            get
+            {
+                var namespaceAbbreviations = base.ViewNamespaceAbbreviations;
+                namespaceAbbreviations["Wb"] = "WB.UI.QuestionnaireTester.Controls";
+                return namespaceAbbreviations;
+            }
+        }
+
         protected override IList<Assembly> AndroidViewAssemblies
         {
             get

@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.QuestionnaireTester.Implementation.Services;
+using WB.UI.QuestionnaireTester.Views.Adapters;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
@@ -23,6 +24,8 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
+
+            this.Bind<IQuestionEditorViewAdapter>().To<QuestionEditorViewAdapter>().InSingletonScope();
         }
     }
 }

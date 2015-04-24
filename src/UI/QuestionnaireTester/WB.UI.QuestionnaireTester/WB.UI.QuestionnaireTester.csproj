@@ -81,6 +81,9 @@
     <Reference Include="Cirrious.MvvmCross.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Localization">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
@@ -186,11 +189,15 @@
     <Compile Include="Ninject\SecurityModule.cs" />
     <Compile Include="Ninject\PlainStorageInfrastructureModule.cs" />
     <Compile Include="Ninject\ServiceLocationModule.cs" />
+    <Compile Include="Controls\QuestionEditorContainer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
+    <Compile Include="Utils\TypeUtils.cs" />
     <Compile Include="ValueConverters\LocalizationValueConverter.cs" />
     <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
+    <Compile Include="Views\Adapters\IQuestionEditorViewAdapter.cs" />
+    <Compile Include="Views\Adapters\QuestionEditorViewAdapter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />
@@ -355,6 +362,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\search_questionnaires.axml" />
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_container.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
