@@ -87,6 +87,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (archiver == null) throw new ArgumentNullException("archiver");
             if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
+            if (cqrsTransactionManager == null) throw new ArgumentNullException("cqrsTransactionManager");
             if (interviewSummaryRepositoryReader == null) throw new ArgumentNullException("interviewSummaryRepositoryReader");
             if (readyToSendInterviewsRepositoryReader == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryReader");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
