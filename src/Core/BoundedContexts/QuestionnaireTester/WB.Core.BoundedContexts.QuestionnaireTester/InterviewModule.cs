@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
     {
         public override void Load()
         {
-            Bind<InterviewLeftSidePanelViewModel>().ToSelf();
+            Bind<NavigationState>().ToSelf().InSingletonScope();
 
             Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>();
             Bind<ITesterExpressionsEngineVersionService>().To<TesterExpressionsEngineVersionService>();

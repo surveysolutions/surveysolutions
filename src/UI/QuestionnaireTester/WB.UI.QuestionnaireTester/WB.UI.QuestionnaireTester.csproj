@@ -205,7 +205,7 @@
     <Compile Include="Views\CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="Views\SearchQuestionnairesView.cs" />
-    <Compile Include="Views\InterviewGroupView.cs" />
+    <Compile Include="Views\InterviewView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
     <Compile Include="Views\MvxActionBarActivity.cs" />
@@ -354,7 +354,7 @@
     <AndroidResource Include="Resources\layout\interview_text_question.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel.axml">
+    <AndroidResource Include="Resources\layout\interview_chapters.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
@@ -379,6 +379,9 @@
     <AndroidResource Include="Resources\layout\interview_roster_reference.axml" />
     <AndroidResource Include="Resources\layout\interview_group_reference.axml" />
     <AndroidResource Include="Resources\layout\interview_text_list_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_current_group.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

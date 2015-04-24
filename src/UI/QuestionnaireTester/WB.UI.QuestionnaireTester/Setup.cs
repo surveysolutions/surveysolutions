@@ -45,7 +45,7 @@ namespace WB.UI.QuestionnaireTester
             {
                 {typeof (SplashViewModel), typeof (SplashView)},
                 {typeof (LoginViewModel), typeof (LoginView)},
-                {typeof (InterviewGroupViewModel), typeof (InterviewGroupView)},
+                {typeof (InterviewViewModel), typeof (InterviewView)},
                 {typeof (DashboardViewModel), typeof (DashboardView)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)},
                 {typeof (SearchQuestionnairesViewModel), typeof (SearchQuestionnairesView)}

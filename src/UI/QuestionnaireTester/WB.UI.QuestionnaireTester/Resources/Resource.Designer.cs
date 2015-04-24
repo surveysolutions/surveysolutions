@@ -1617,85 +1617,88 @@ namespace WB.UI.QuestionnaireTester
 			public const int interview = 2130903064;
 			
 			// aapt resource value: 0x7f030019
-			public const int interview_date_question = 2130903065;
+			public const int interview_chapters = 2130903065;
 			
 			// aapt resource value: 0x7f03001a
-			public const int interview_decimal_question = 2130903066;
+			public const int interview_current_group = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int interview_gps_question = 2130903067;
+			public const int interview_date_question = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int interview_group_reference = 2130903068;
+			public const int interview_decimal_question = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int interview_image_question = 2130903069;
+			public const int interview_gps_question = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int interview_integer_question = 2130903070;
+			public const int interview_group_reference = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int interview_left_side_panel = 2130903071;
+			public const int interview_image_question = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int interview_linked_multi_question = 2130903072;
+			public const int interview_integer_question = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int interview_linked_single_question = 2130903073;
+			public const int interview_linked_multi_question = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int interview_multi_option_question = 2130903074;
+			public const int interview_linked_single_question = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int interview_multi_option_question_item_template = 2130903075;
+			public const int interview_multi_option_question = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int interview_prefilled_question_template = 2130903076;
+			public const int interview_multi_option_question_item_template = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int interview_qr_question = 2130903077;
+			public const int interview_prefilled_question_template = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int interview_question_container = 2130903078;
+			public const int interview_qr_question = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int interview_roster_reference = 2130903079;
+			public const int interview_question_container = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int interview_single_option_question = 2130903080;
+			public const int interview_roster_reference = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int interview_single_option_question_item_template = 2130903081;
+			public const int interview_single_option_question = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int interview_static_text = 2130903082;
+			public const int interview_single_option_question_item_template = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int interview_text_list_question = 2130903083;
+			public const int interview_static_text = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int interview_text_question = 2130903084;
+			public const int interview_text_list_question = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int login = 2130903085;
+			public const int interview_text_question = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int my_questionnaire_list_item = 2130903086;
+			public const int login = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int prefilled_questions = 2130903087;
+			public const int my_questionnaire_list_item = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int public_questionnaire_list_item = 2130903088;
+			public const int prefilled_questions = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int search_questionnaires = 2130903089;
+			public const int public_questionnaire_list_item = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int splash = 2130903090;
+			public const int search_questionnaires = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int support_simple_spinner_dropdown_item = 2130903091;
+			public const int splash = 2130903091;
+			
+			// aapt resource value: 0x7f030034
+			public const int support_simple_spinner_dropdown_item = 2130903092;
 			
 			static Layout()
 			{

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <MvxRecyclerView
+        style="@style/Interview_List"
+        android:id="@+id/questionnaireEntitiesList"
+        android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
+        android:scrollbars="vertical"
+        local:MvxBind="ItemsSource CurrentGroup.Items" />
+    <MvxRelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/height_PQ_StartButtonHoler"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/margin_Interview_LeftSide"
+            android:layout_marginRight="@dimen/margin_Interview_RightSide"
+            android:layout_centerVertical="true"
+            local:MvxBind="Click StartInterviewCommand; Text Localization('PrefilledQuestions_StartInterview')" />
+    </MvxRelativeLayout>
+</MvxLinearLayout>

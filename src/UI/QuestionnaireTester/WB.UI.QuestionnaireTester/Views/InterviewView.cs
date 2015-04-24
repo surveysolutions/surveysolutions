@@ -2,7 +2,6 @@
 using Android.Content.Res;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using Android.OS;
 using Android.Support.V4.Widget;
@@ -15,7 +14,7 @@ using WB.UI.QuestionnaireTester.Views.CustomControls;
 namespace WB.UI.QuestionnaireTester.Views
 {
     [Activity(Label = "", Theme = "@style/Theme.Blue.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
-    public class InterviewGroupView : BaseActivityView<InterviewGroupViewModel>
+    public class InterviewView : BaseActivityView<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
 
