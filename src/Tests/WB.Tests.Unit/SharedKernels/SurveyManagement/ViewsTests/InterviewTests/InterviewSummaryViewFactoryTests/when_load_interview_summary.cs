@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
@@ -15,16 +16,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
         Establish context = () =>
         {
             var interviewSummaryReaderMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
-            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary()
+            var interviewSummary = new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName,
-                CommentedStatusesHistory =
-                    new List<InterviewCommentedStatus>()
-                    {
-                        new InterviewCommentedStatus() {Status = lastStatus, Date = lastStatusDateTime}
-                    }
-            });
+                TeamLeadName = supervisorName
+            };
+
+            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId.FormatGuid()))
+                .Returns(interviewSummary);
+
             factory = CreateFactory(interviewSummaryReader: interviewSummaryReaderMock.Object);
         };
 
@@ -39,27 +39,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
         It should_TeamLeadName_be_equal_to_supervisorName = () =>
             viewModel.TeamLeadName.ShouldEqual(supervisorName);
 
-        It should_CommentedStatusesHistory_not_be_null = () =>
-            viewModel.CommentedStatusesHistory.ShouldNotBeNull();
-
-        It should_CommentedStatusesHistory_not_be_empty = () =>
-            viewModel.CommentedStatusesHistory.ShouldNotBeEmpty();
-
-        It should_status_from_first_element_of_CommentedStatusesHistory_be_equal_to_lastStatus = () =>
-            viewModel.CommentedStatusesHistory[0].Status.ShouldEqual(lastStatus);
-
-        It should_date_from_first_element_of_CommentedStatusesHistory_be_equal_to_lastStatusDateTime = () =>
-            viewModel.CommentedStatusesHistory[0].Date.ShouldEqual(lastStatusDateTime);
-
 
         private static InterviewSummaryViewFactory factory;
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string interviewerName = "interviewer";
         private static string supervisorName = "supervisor";
-        private static InterviewStatus lastStatus = InterviewStatus.Completed;
-        private static DateTime lastStatusDateTime = DateTime.Parse("2/2/2");
-
         private static InterviewSummary viewModel;
     }
 }

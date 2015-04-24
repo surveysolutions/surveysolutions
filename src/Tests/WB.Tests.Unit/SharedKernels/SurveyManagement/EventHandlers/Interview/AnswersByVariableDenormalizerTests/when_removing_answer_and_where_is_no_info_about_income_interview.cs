@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
 
             var interviewBriefMock = Mock.Of<InterviewSummary>(i => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == 1);
 
-            interviewBriefStorage = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(x => x.GetById(interviewId.ToString()) == interviewBriefMock);
+            interviewBriefStorage = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(x => x.GetById(interviewId.ToString()) == interviewBriefMock);
 
             var questionIdToVariableMap = new Dictionary<Guid, string>() { { questionId, variableName } };
 
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
         private static Guid questionId = Guid.Parse("33333333333333333333333333333333");
         private static readonly string variableName = "var";
         private static Mock<IReadSideKeyValueStorage<AnswersByVariableCollection>> answersByVariableStorageMock;
-        private static IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
+        private static IReadSideRepositoryReader<InterviewSummary> interviewBriefStorage;
         private static IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage;
         private static AnswersByVariableDenormalizer denormalizer;
         private static IPublishedEvent<AnswersRemoved> evnt;

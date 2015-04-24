@@ -11,14 +11,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     {
         private Establish context = () =>
         {
-            var databaseHealthCheck = Mock.Of<IAtomicHealthCheck<RavenHealthCheckResult>>(m => m.Check() == RavenHealthCheckResult.Happy());
             var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Happy());
             var numberOfUnhandledPackagesChecker = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Warning(numberOfunhandledPackages, numberOfUnhandledPackagesErrorMessage));
             var numberOfSyncPackagesWithBigSizeChecker = Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(m => m.Check() == NumberOfSyncPackagesWithBigSizeCheckResult.Warning(numberOfSyncPackagesWithBigSize, numberOfSyncPackagesWithBigSizeErrorMessage));
             var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
 
             service = CreateHealthCheckService(
-                databaseHealthCheck,
                 eventStoreHealthCheck,
                 numberOfUnhandledPackagesChecker,
                 numberOfSyncPackagesWithBigSizeChecker,
@@ -35,12 +33,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 
         It should_return_Down_status = () =>
             result.Status.ShouldEqual(HealthCheckStatus.Warning);
-
-        It should_return_Down_status_for_database_check = () =>
-            result.DatabaseConnectionStatus.Status.ShouldEqual(HealthCheckStatus.Happy);
-
-        It should_return_empty_error_message_for_database_check = () =>
-            result.DatabaseConnectionStatus.ErrorMessage.ShouldBeNull();
 
         It should_return_Down_status_for_EventStore_check = () =>
             result.EventstoreConnectionStatus.Status.ShouldEqual(HealthCheckStatus.Happy);

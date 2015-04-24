@@ -10,16 +10,11 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 {
     public class CapiExpressionsEngineVersionService : ICapiExpressionsEngineVersionService
     {
-        private readonly QuestionnaireVersion questionnaireVersion = new QuestionnaireVersion
-        {
-            Major = 6,
-            Minor = 0,
-            Patch = 0
-        };
+        private readonly Version version6 = new Version(6, 0, 0);
 
-        public QuestionnaireVersion GetExpressionsEngineSupportedVersion()
+        public Version GetExpressionsEngineSupportedVersion()
         {
-            return questionnaireVersion;
+            return version6;
         }
     }
 }

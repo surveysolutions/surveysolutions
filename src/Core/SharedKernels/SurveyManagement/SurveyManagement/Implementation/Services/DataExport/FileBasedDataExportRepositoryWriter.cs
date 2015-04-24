@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Resources;
-using Ionic.Zip;
-using Ionic.Zlib;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -171,8 +166,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetReadableStatus()
         {
-            return string.Format(FileBasedDataExportRepositoryWriterMessages.CacheDescriptionFormat,
-                this.isCacheEnabled ? FileBasedDataExportRepositoryWriterMessages.Enabled : FileBasedDataExportRepositoryWriterMessages.Disabled,
+            return string.Format(
+                "File Export ._. | cache {1}{0}updates db: {2}{0}insert interviews: {3}, delete interviews: {4}{0}insert actions: {5}",
+                Environment.NewLine,
+                this.isCacheEnabled ? "enabled" : "disabled",
                 cache.Count,
                 cache.Values.Sum(c=>c.InterviewIds.Count),
                 cache.Values.Sum(c => c.InterviewForDeleteIds.Count),

@@ -6,9 +6,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation
 {
     internal class VersionedQustionnaireDocumentViewFactory : IVersionedQuestionnaireReader
     {
-        private readonly IReadSideRepositoryReader<QuestionnaireDocument> documentStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
 
-        public VersionedQustionnaireDocumentViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> documentStorage)
+        public VersionedQustionnaireDocumentViewFactory(IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
             if (documentStorage == null) throw new ArgumentNullException("documentStorage");
             this.documentStorage = documentStorage;

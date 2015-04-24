@@ -1,19 +1,15 @@
+using Machine.Specifications;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Machine.Specifications;
-
-using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
@@ -34,10 +30,13 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             lastSyncedPackageId = userSyncPackages[0].PackageId;
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<UserSyncPackageMeta>(userQueryIndexName))
-                .Returns(userSyncPackages.AsQueryable());
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
+            var writer = new TestInMemoryWriter<UserSyncPackageMeta>();
+            foreach (var package in userSyncPackages)
+            {
+                writer.Store(package, package.PackageId);
+            }
+
+            syncManager = CreateSyncManager(devices: devices, usersReader: writer);
         };
 
         Because of = () =>
@@ -66,8 +65,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static string lastSyncedPackageId = null;
 
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
         private static List<UserSyncPackageMeta> userSyncPackages;
     }
 }

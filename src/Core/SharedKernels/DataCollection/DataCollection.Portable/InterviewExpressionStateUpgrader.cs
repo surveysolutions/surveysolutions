@@ -10,11 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public IInterviewExpressionStateV2 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state)
         {
-            var v2 = state as IInterviewExpressionStateV2;
-            if (v2 != null)
-                return v2;
-
-            return new InterviewExpressionStateV1ToV2Adapter(state);
+            return state as IInterviewExpressionStateV2 ?? new InterviewExpressionStateV1ToV2Adapter(state);
         }
     }
 }

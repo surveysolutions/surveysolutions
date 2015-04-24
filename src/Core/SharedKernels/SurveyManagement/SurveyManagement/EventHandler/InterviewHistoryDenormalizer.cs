@@ -55,12 +55,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>
     {
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
 
         public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
             : base(readSideStorage)
         {

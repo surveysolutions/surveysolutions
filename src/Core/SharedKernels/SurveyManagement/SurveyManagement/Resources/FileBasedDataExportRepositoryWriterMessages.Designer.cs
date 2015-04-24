@@ -62,33 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cache {0};    update db: {1}    insert interviews: {2};    delete interviews: {3}    insert actions: {4}.
-        /// </summary>
-        internal static string CacheDescriptionFormat {
-            get {
-                return ResourceManager.GetString("CacheDescriptionFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to disabled.
-        /// </summary>
-        internal static string Disabled {
-            get {
-                return ResourceManager.GetString("Disabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to enabled.
-        /// </summary>
-        internal static string Enabled {
-            get {
-                return ResourceManager.GetString("Enabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File content is missing for file name {0} interview {1}.
         /// </summary>
         internal static string FileContentIsMissingForFileNameAndInterviewFormat {

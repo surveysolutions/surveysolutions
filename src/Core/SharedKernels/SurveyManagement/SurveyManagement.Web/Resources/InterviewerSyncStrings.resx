@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewerApplicationHasHigherVersion_thanSupervisor_Format" xml:space="preserve">
-    <value>Synchronization failed. Interviewer application has higher version '{0}' than Supervisor '{1}'.</value>
+  <data name="InterviewerApplicationHasHigherVersionThanSupervisor" xml:space="preserve">
+    <value>Synchronization failed.  Your application is not compatible with server one. Uninstall your application and download older version of Interviewer app from your Supervisor.</value>
   </data>
   <data name="InvalidDeviceIdentifier" xml:space="preserve">
     <value>Invalid device identifier. Something has happened with the client app installation, please send tablet information.</value>
@@ -129,8 +129,8 @@
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>Synchronization failed. Please reinstall application. Installation identifier is missing. Please contact developers.</value>
   </data>
-  <data name="InterviewerApplicationHasVersion_butSupervisorHas_PleaseUpdateInterviewerApplication" xml:space="preserve">
-    <value>Synchronization failed. Interviewer application has version '{0}' but Supervisor has '{1}'. Please update Interviewer application.</value>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>Synchronization failed. Your application is not compatible with server one. Update your Interviewer app</value>
   </data>
   <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
     <value>Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app</value>

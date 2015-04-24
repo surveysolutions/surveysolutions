@@ -1,32 +1,75 @@
-using System.Collections.Generic;
 using System.Linq;
-using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     public class AllInterviewsFactory : IViewFactory<AllInterviewsInputModel, AllInterviewsView>
     {
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
 
-        public AllInterviewsFactory(IReadSideRepositoryIndexAccessor indexAccessor)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
         {
-            this.indexAccessor = indexAccessor;
+            this.reader = reader;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
         {
-            string indexName = typeof(InterviewsSearchIndex).Name;
 
-            var items = indexAccessor.Query<SeachIndexContent>(indexName);
-            
+            var interviews = this.reader.Query(_ =>
+            {
+                var items = ApplyFilter(input, _);
+                items = this.DefineOrderBy(items, input);
+
+                return items.Skip((input.Page - 1)*input.PageSize)
+                    .Take(input.PageSize)
+                    .ToList();
+            });
+
+
+            var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+            var result = new AllInterviewsView
+            {
+                Page = input.Page,
+                PageSize = input.PageSize,
+                TotalCount = totalCount,
+                Items = interviews.Select(x => new AllInterviewsViewItem
+                {
+                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion()
+                    {
+                        Id = a.Questionid,
+                        Answer = a.Answer,
+                        Question = a.Title,
+                        Type = a.Type
+                    }).ToList(),
+                    InterviewId = x.InterviewId,
+                    LastEntryDate = x.UpdateDate.ToShortDateString(),
+                    ResponsibleId = x.ResponsibleId,
+                    ResponsibleName = x.ResponsibleName,
+                    ResponsibleRole = x.ResponsibleRole,
+                    HasErrors = x.HasErrors,
+                    Status = x.Status.ToString(),
+                    CanDelete =    x.Status == InterviewStatus.Created
+                        || x.Status == InterviewStatus.SupervisorAssigned
+                        || x.Status == InterviewStatus.InterviewerAssigned
+                        || x.Status == InterviewStatus.SentToCapi,
+                    CanApproveOrReject = x.Status == InterviewStatus.ApprovedBySupervisor,
+                    QuestionnaireId = x.QuestionnaireId,
+                    QuestionnaireVersion = x.QuestionnaireVersion,
+                    CreatedOnClient = x.WasCreatedOnClient
+                }).ToList()
+            };
+            return result;
+        }
+
+        private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
+        {
+            var items = _;
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Search(x => x.FeaturedQuestionsWithAnswers, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards, options: SearchOptions.And);
+                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.Contains(input.SearchBy)));
             }
 
             if (input.Status.HasValue)
@@ -48,44 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             {
                 items = items.Where(x => x.QuestionnaireVersion == input.QuestionnaireVersion);
             }
-
-            List<InterviewSummary> interviewItems = this.DefineOrderBy(items.ProjectFromIndexFieldsInto<InterviewSummary>(), input)
-                            .Skip((input.Page - 1) * input.PageSize)
-                            .Take(input.PageSize)
-                            .ToList();
-
-            var result = new AllInterviewsView
-            {
-                Page = input.Page,
-                PageSize = input.PageSize,
-                TotalCount = items.Count(),
-                Items = interviewItems.Select(x => new AllInterviewsViewItem
-                {
-                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion()
-                    {
-                        Id = a.Id,
-                        Answer = a.Answer,
-                        Question = a.Title,
-                        Type = a.Type
-                    }),
-                    InterviewId = x.InterviewId,
-                    LastEntryDate = x.UpdateDate.ToShortDateString(),
-                    ResponsibleId = x.ResponsibleId,
-                    ResponsibleName = x.ResponsibleName,
-                    ResponsibleRole = x.ResponsibleRole,
-                    HasErrors = x.HasErrors,
-                    Status = x.Status.ToString(),
-                    CanDelete =    x.Status == InterviewStatus.Created
-                        || x.Status == InterviewStatus.SupervisorAssigned
-                        || x.Status == InterviewStatus.InterviewerAssigned
-                        || x.Status == InterviewStatus.SentToCapi,
-                    CanApproveOrReject = x.Status == InterviewStatus.ApprovedBySupervisor,
-                    QuestionnaireId = x.QuestionnaireId,
-                    QuestionnaireVersion = x.QuestionnaireVersion,
-                    CreatedOnClient = x.WasCreatedOnClient
-                })
-            };
-            return result;
+            return items;
         }
 
         private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query,

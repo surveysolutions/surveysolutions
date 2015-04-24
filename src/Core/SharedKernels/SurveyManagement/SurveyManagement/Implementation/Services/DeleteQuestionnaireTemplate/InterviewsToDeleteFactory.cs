@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Raven.Client;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -13,21 +9,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 {
     internal class InterviewsToDeleteFactory : IInterviewsToDeleteFactory
     {
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
-        public InterviewsToDeleteFactory(IReadSideRepositoryIndexAccessor indexAccessor)
+        public InterviewsToDeleteFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            this.indexAccessor = indexAccessor;
+            this.interviewSummaries = interviewSummaries;
         }
 
         public List<InterviewSummary> Load(Guid questionnaireId, long questionnaireVersion)
         {
-            return
-              indexAccessor.Query<SeachIndexContent>(typeof(InterviewsSearchIndex).Name)
-                  .Where(interview => !interview.IsDeleted &&
-                                      interview.QuestionnaireId == questionnaireId &&
-                                      interview.QuestionnaireVersion == questionnaireVersion)
-                  .ProjectFromIndexFieldsInto<InterviewSummary>().ToList();
+            var result = this.interviewSummaries.Query(_ => _.Where(interview => !interview.IsDeleted &&
+                interview.QuestionnaireId == questionnaireId &&
+                interview.QuestionnaireVersion == questionnaireVersion).ToList());
+
+            return result;
         }
     }
 }

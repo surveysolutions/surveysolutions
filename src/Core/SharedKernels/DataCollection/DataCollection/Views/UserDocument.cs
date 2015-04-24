@@ -12,43 +12,36 @@ namespace WB.Core.SharedKernels.DataCollection.Views
     {
         public UserDocument()
         {
-            this.CreationDate = DateTime.Now;
-            this.PublicKey = Guid.NewGuid();
-            this.Roles = new List<UserRoles>();
-            this.DeviceChangingHistory = new List<DeviceInfo>();
+            this.Roles = new HashSet<UserRoles>();
+            this.DeviceChangingHistory = new HashSet<DeviceInfo>();
         }
 
-        public DateTime CreationDate { get; set; }
-        public string Email { get; set; }
-        public bool IsDeleted { get; set; }
+        public virtual string UserId { get; set; }
+        public virtual DateTime CreationDate { get; set; }
+        public virtual string Email { get; set; }
+        public virtual bool IsDeleted { get; set; }
+        public virtual bool IsLockedByHQ { get; set; }
+        public virtual bool IsLockedBySupervisor { get; set; }
+        public virtual string Password { get; set; }
+        public virtual Guid PublicKey { get; set; }
+        public virtual UserLight Supervisor { get; set; }
+        public virtual string UserName { get; set; }
+        public virtual DateTime LastChangeDate { get; set; }
+        public virtual string DeviceId { get; set; }
+        public virtual ISet<UserRoles> Roles { get; set; }
+        public virtual ISet<DeviceInfo> DeviceChangingHistory { get; set; }
 
-        public bool IsLockedByHQ { get; set; }
-
-        public bool IsLockedBySupervisor { get; set; }
-
-        public string Password { get; set; }
-        public Guid PublicKey { get; set; }
-        public List<UserRoles> Roles { get; set; }
-        public UserLight Supervisor { get; set; }
-        public string UserName { get; set; }
-
-        public bool IsHq()
+        public virtual bool IsHq()
         {
-            return Roles.Any(role => role == UserRoles.Headquarter);
+            return this.Roles.Any(role => role == UserRoles.Headquarter);
         }
 
-        public bool IsAdmin()
+        public virtual bool IsAdmin()
         {
             return Roles.Any(role => role == UserRoles.Administrator);
         }
 
-        public DateTime LastChangeDate { get; set; }
-
-        public string DeviceId { get; set; }
-
-        public List<DeviceInfo> DeviceChangingHistory { get; set; }
-
-        public UserLight GetUseLight()
+        public virtual UserLight GetUseLight()
         {
             return new UserLight(this.PublicKey, this.UserName);
         }

@@ -268,16 +268,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You questionnaire &quot;{0}&quot; contains new functionality which is not supported by your installation. Please update..
-        /// </summary>
-        internal static string YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate {
-            get {
-                return ResourceManager.GetString("YouQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationP" +
-                        "leaseUpdate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Designer successfully verified your email..
         /// </summary>
         internal static string Your_email_is_verified {
@@ -292,6 +282,16 @@ namespace WB.UI.Designer.Resources {
         internal static string Your_password_successfully_changed {
             get {
                 return ResourceManager.GetString("Your_password_successfully_changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your questionnaire &quot;{0}&quot; contains new functionality which is not supported by your installation. Please update..
+        /// </summary>
+        internal static string YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate {
+            get {
+                return ResourceManager.GetString("YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallation" +
+                        "PleaseUpdate", resourceCulture);
             }
         }
     }

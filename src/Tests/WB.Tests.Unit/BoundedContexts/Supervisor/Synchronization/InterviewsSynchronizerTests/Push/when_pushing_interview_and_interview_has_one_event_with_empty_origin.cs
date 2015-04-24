@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var eventStore = Mock.Of<IEventStore>(store
                 => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == new CommittedEventStream(interviewId, interviewEvent));
 
-            var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
+            var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
@@ -79,8 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<object>(entity => syncItem = (SyncItem) entity);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
-                readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
-                interviewSummaryRepositoryWriter: interviewSummaryRepositoryWriter,
+                readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
+                interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
                 jsonUtils: jsonUtils,

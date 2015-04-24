@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Users.Denormalizers;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {

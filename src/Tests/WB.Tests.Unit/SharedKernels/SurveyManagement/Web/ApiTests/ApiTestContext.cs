@@ -42,13 +42,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewViewFactory = null,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemViewFactory = null
             )
         {
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
-                questionnaireBrowseViewViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>(),
+                questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 questionnaireBrowseItemViewFactory ?? Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>());
         }
 

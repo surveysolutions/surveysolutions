@@ -1,11 +1,12 @@
 ﻿using System;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.ReadSide
 {
     /// <summary>
     /// Interface which is implemented by each Raven-specific read side repository writer.
     /// </summary>
-    public interface IChacheableRepositoryWriter 
+    public interface IChacheableRepositoryWriter : IReadSideStorage
     {
         /// <summary>
         /// Enables caching of repository entities.
@@ -18,10 +19,6 @@ namespace WB.Core.Infrastructure.ReadSide
         /// Also stores entities which are cached but not yet stored.
         /// </summary>
         void DisableCache();
-
-        string GetReadableStatus();
-
-        Type ViewType { get; }
 
         bool IsCacheEnabled { get; }
     }
