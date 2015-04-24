@@ -11,19 +11,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         where TMeta : class, IReadSideRepositoryEntity, IOrderableSyncPackage
         where TContent : class, IReadSideRepositoryEntity, ISyncPackage
     {
-        private readonly IChacheableRepositoryWriter packageMetaCacheableWriter;
         private readonly IReadSideRepositoryWriter<TMeta> packageMetaWriter;
         private readonly IReadSideKeyValueStorage<TContent> packageContentWriter;
+        private readonly IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage;
 
         private static readonly object StoreSyncDeltaLockObject = new object();
-        private readonly IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage;
 
         public OrderableSyncPackageWriter(
             IReadSideRepositoryWriter<TMeta> packageMetaWriter, 
             IReadSideKeyValueStorage<SynchronizationDeltasCounter> counterStorage, 
             IReadSideKeyValueStorage<TContent> packageContentWriter)
         {
-            this.packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
             this.packageMetaWriter = packageMetaWriter;
             this.counterStorage = counterStorage;
             this.packageContentWriter = packageContentWriter;
@@ -76,9 +74,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public void EnableCache()
         {
-            if (this.packageMetaCacheableWriter != null)
+            var packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
+            if (packageMetaCacheableWriter != null)
             {
-                this.packageMetaCacheableWriter.EnableCache();
+                packageMetaCacheableWriter.EnableCache();
             }
 
             var packageContentCacheableWriter = this.packageContentWriter as IChacheableRepositoryWriter;
@@ -96,9 +95,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public void DisableCache()
         {
-            if (this.packageMetaCacheableWriter != null)
+            var packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
+            if (packageMetaCacheableWriter != null)
             {
-                this.packageMetaCacheableWriter.DisableCache();
+                packageMetaCacheableWriter.DisableCache();
             }
 
             var packageContentCacheableWriter = this.packageContentWriter as IChacheableRepositoryWriter;
@@ -116,13 +116,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public string GetReadableStatus()
         {
-            return this.packageMetaCacheableWriter != null ? this.packageMetaCacheableWriter.GetReadableStatus() : string.Empty;
+            return string.Format("Orderable sync package O_o{0}- {1}{0}- {2}{0}- {3}",
+                Environment.NewLine,
+                this.packageMetaWriter.GetReadableStatus(),
+                this.packageContentWriter.GetReadableStatus(),
+                this.counterStorage.GetReadableStatus());
         }
 
         public Type ViewType {
             get
             {
-                return this.packageMetaCacheableWriter != null ? this.packageMetaCacheableWriter.ViewType : typeof(TMeta);
+                return this.packageMetaWriter.ViewType;
             }
         }
 
@@ -130,7 +134,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         {
             get
             {
-                return this.packageMetaCacheableWriter != null && this.packageMetaCacheableWriter.IsCacheEnabled;
+                var packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
+
+                return packageMetaCacheableWriter != null && packageMetaCacheableWriter.IsCacheEnabled;
             }
         }
     }

@@ -114,7 +114,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
 
             if (interviewResponsibleInfo == null)
-                interviewResponsibleInfo = new InterviewResponsible { InterviewId = evnt.EventSourceId };
+                interviewResponsibleInfo = new InterviewResponsible
+                {
+                    Id = evnt.EventSourceId.FormatGuid(),
+                    InterviewId = evnt.EventSourceId
+                };
 
             interviewResponsibleInfo.UserId = evnt.Payload.InterviewerId;
             interviewResponsibleStorageWriter.Store(interviewResponsibleInfo, evnt.EventSourceId);
@@ -148,8 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(InterviewSummary interviewSummary)
         {
-            return !interviewSummary.WasCreatedOnClient ||
-                interviewSummary.CommentedStatusesHistory.Any(s => s.Status == InterviewStatus.RejectedBySupervisor);
+            return !interviewSummary.WasCreatedOnClient || interviewSummary.WasRejectedBySupervisor;
         }
 
         public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp,

@@ -22,14 +22,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
-        private readonly IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor;
+        private readonly IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly DesignerApiService designerApiService;
 
         public DashboardViewModel(
             IPrincipal principal,
-            ILogger logger, 
-            IQueryablePlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
+            ILogger logger,
+            IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
             DesignerApiService designerApiService, 
             ICommandService commandService)
             : base(logger)
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(async () =>
             {
-                var userQuestionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name).ToArray();
+                var userQuestionnaires = this.questionnairesStorageAccessor.Query(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name).ToArray());
                 if (userQuestionnaires.Any())
                 {
                     this.MyQuestionnaires = new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => !qli.IsPublic));
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     token: tokenSource.Token,
                     onPageReceived: (batchOfServerQuestionnaires) =>
                     {
-                        this.questionnairesStorageAccessor.Store(batchOfServerQuestionnaires.Select(qli => new Tuple<QuestionnaireListItem, string>(qli, qli.Id)));
+                        this.questionnairesStorageAccessor.Store(batchOfServerQuestionnaires.Select(qli => new Tuple<QuestionnaireListItem, object>(qli, qli.Id)));
                         this.InvokeOnMainThread(() => this.AppendToQuestionnaires(batchOfServerQuestionnaires));
                     });
             }
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void ClearQuestionnaires()
         {
-            var userQuestionnaires = this.questionnairesStorageAccessor.Query(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name);
+            var userQuestionnaires = this.questionnairesStorageAccessor.Query(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name));
             this.questionnairesStorageAccessor.Remove(userQuestionnaires);
             this.MyQuestionnaires.Clear();
             this.PublicQuestionnaires.Clear();

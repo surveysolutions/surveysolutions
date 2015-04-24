@@ -4,9 +4,6 @@ using Main.Core.Documents;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -14,13 +11,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly IDynamicCompiler codeCompiler;
         private readonly ICodeGenerator codeGenerator;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
-        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
+        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator)
         {
             this.codeCompiler =  codeCompiler;
             this.codeGenerator = codeGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire,
@@ -34,14 +29,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
         }
 
-        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire)
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            return this.codeGenerator.GenerateEvaluator(questionnaire, expressionsEngineVersionService.GetLatestSupportedVersion());
+            return this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
         }
 
-        public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire)
+        public string GenerateProcessorStateSingleClass(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            return this.codeGenerator.Generate(questionnaire);
+            return this.codeGenerator.Generate(questionnaire, targetVersion);
         }
     }
 }

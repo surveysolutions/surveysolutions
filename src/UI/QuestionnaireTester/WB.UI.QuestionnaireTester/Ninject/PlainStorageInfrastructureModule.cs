@@ -27,7 +27,6 @@ namespace WB.UI.QuestionnaireTester.Ninject
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.pathToStorage));
             
             this.Bind(typeof (IPlainStorageAccessor<>)).To(typeof (SiaqodbPlainStorageAccessor<>)).InSingletonScope();
-            this.Bind(typeof(IQueryablePlainStorageAccessor<>)).To(typeof(SiaqodbQueryablePlainStorageAccessor<>)).InSingletonScope();
 
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().To<InMemoryPlainStorageAccessor<QuestionnaireDocument>>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<QuestionnaireModel>>().To<InMemoryPlainStorageAccessor<QuestionnaireModel>>().InSingletonScope();

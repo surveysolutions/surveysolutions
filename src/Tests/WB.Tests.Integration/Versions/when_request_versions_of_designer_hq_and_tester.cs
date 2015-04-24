@@ -32,8 +32,8 @@ namespace WB.Tests.Integration.Versions
         It should_designer_Minor_version_be_equal_to_tester_Minor_version = () =>
             designerVersion.Minor.ShouldEqual(testerVersion.Minor);
 
-        It should_designer_Build_version_be_equal_to_tester_Patch_version = () =>
-            designerVersion.Build.ShouldEqual(testerVersion.Patch);
+        It should_designer_Build_version_be_equal_to_tester_Build_version = () =>
+            designerVersion.Build.ShouldEqual(testerVersion.Build);
 
         It should_designer_Major_version_be_equal_to_hq_Major_version = () =>
            designerVersion.Major.ShouldEqual(hqVersion.Major);
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.Versions
         It should_designer_Build_version_be_equal_to_hq_Build_version = () =>
             designerVersion.Build.ShouldEqual(hqVersion.Build);
 
-        private static QuestionnaireVersion testerVersion;
+        private static Version testerVersion;
         private static Version designerVersion;
         private static Version hqVersion;
 

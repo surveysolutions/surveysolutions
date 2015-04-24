@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
     internal class LocalFeedStorage : ILocalFeedStorage
     {
-        private readonly IQueryablePlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage;
+        private readonly IPlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage;
 
-        public LocalFeedStorage(IQueryablePlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage)
+        public LocalFeedStorage(IPlainStorageAccessor<LocalUserChangedFeedEntry> plainStorage)
         {
             if (plainStorage == null) throw new ArgumentNullException("plainStorage");
 
@@ -21,14 +21,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             return this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).FirstOrDefault());
         }
 
-        public void Store(LocalUserChangedFeedEntry userChangedEvent)
-        {
-            this.Store(new List<LocalUserChangedFeedEntry>{userChangedEvent});
-        }
-
         public void Store(IEnumerable<LocalUserChangedFeedEntry> userChangedEvent)
         {
-            this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, @event.EntryId)));
+            this.plainStorage.Store(userChangedEvent.Select(@event => Tuple.Create(@event, (object) @event.EntryId)));
         }
 
         public IEnumerable<LocalUserChangedFeedEntry> GetNotProcessedSupervisorEvents(string supervisorId)

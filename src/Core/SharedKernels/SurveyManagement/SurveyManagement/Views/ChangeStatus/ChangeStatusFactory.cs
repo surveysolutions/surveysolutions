@@ -7,9 +7,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
 {
     public class ChangeStatusFactory : IViewFactory<ChangeStatusInputModel, ChangeStatusView>
     {
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly IReadSideKeyValueStorage<InterviewStatusHistory> interviews;
 
-        public ChangeStatusFactory(IReadSideRepositoryReader<InterviewSummary> interviews)
+        public ChangeStatusFactory(IReadSideKeyValueStorage<InterviewStatusHistory> interviews)
         {
             this.interviews = interviews;
         }
@@ -20,27 +20,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
             if (interviewSummary == null)
                 return null;
 
-            return new ChangeStatusView
-                {
-                    InterviewId = interviewSummary.InterviewId,
-                    QuestionnaireId = interviewSummary.QuestionnaireId,
-                    QuestionnaireVersion =  interviewSummary.QuestionnaireVersion,
-                    QuestionnaireTitle = interviewSummary.QuestionnaireTitle,
-                    Status = interviewSummary.Status,
-                    StatusHistory = interviewSummary.CommentedStatusesHistory.Select(x => new CommentedStatusHistroyView
-                        {
-                            Comment = x.Comment,
-                            Date = x.Date,
-                            Status = x.Status,
-                            Responsible = x.Responsible
-                        }).ToList(),
-                    FeaturedQuestions = interviewSummary.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion
-                    {
-                        Id = a.Id,
-                        Answer = a.Answer,
-                        Question = a.Title
-                    }).ToList(),
-                    Responsible = interviewSummary.ResponsibleName
+            return new ChangeStatusView {
+                    StatusHistory = interviewSummary.StatusChangeHistory
+                                                    .Select(x => new CommentedStatusHistroyView {
+                                                        Comment = x.Comment,
+                                                        Date = x.Date,
+                                                        Status = x.Status,
+                                                        Responsible = x.Responsible
+                                                    }).ToList()
                 };
         }
     }

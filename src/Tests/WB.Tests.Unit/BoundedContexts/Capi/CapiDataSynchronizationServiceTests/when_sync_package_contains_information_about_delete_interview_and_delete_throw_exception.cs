@@ -4,7 +4,9 @@ using Moq;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -17,6 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         Establish context = () =>
         {
             interviewId = Guid.NewGuid();
+            responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             syncItem = new InterviewSyncPackageDto
                        {
@@ -33,11 +36,20 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             cleanUpExecutorMock = new Mock<ICapiCleanUpService>();
             cleanUpExecutorMock.Setup(x => x.DeleteInterview(interviewId)).Throws<NullReferenceException>();
 
-            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, null, null,
-                plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
+            var viewFactory = new Mock<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>();
+            var existingInterview = new InterviewMetaInfo
+            {
+                ResponsibleId = responsibleId
+            };
+            viewFactory.SetReturnsDefault(existingInterview);
+
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, 
+                commandService.Object, null, null,
+                plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object,
+                interviewMetaInfoFactory: viewFactory.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview, responsibleId));
 
         It should_never_call_any_command =
             () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);
@@ -56,5 +68,6 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         private static Mock<ICapiCleanUpService> cleanUpExecutorMock;
         private static Guid interviewId;
         private static Exception exception;
+        private static Guid responsibleId;
     }
 }

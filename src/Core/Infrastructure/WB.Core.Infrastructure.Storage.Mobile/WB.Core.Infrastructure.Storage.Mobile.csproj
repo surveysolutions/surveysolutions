@@ -40,7 +40,6 @@
     <Compile Include="Siaqodb\SiaqodbPlainStorageAccessor.cs" />
     <Compile Include="Siaqodb\SiaqodbPlainStorageSerializer.cs" />
     <Compile Include="Siaqodb\SiaqodbPlainStorageSettings.cs" />
-    <Compile Include="Siaqodb\SiaqodbQueryablePlainStorageAccessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SiaqodbPortable">

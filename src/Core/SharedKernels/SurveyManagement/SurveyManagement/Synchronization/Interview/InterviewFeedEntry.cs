@@ -5,18 +5,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview
 {
     public class InterviewFeedEntry : IReadSideRepositoryEntity
     {
-        public string EntryId { get; set; }
-
-        public string SupervisorId { get; set; }
-
-        public EntryType EntryType { get; set; }
-
-        public DateTime Timestamp { get; set; }
-
-        public string InterviewId { get; set; }
-
-        public string UserId { get; set; }
-
-        public string InterviewerId { get; set; }
+        public virtual string EntryId { get; set; }
+        public virtual string SupervisorId { get; set; }
+        public virtual EntryType EntryType { get; set; }
+        public virtual DateTime Timestamp { get; set; }
+        public virtual string InterviewId { get; set; }
+        public virtual string UserId { get; set; }
+        public virtual string InterviewerId { get; set; }
     }
 }

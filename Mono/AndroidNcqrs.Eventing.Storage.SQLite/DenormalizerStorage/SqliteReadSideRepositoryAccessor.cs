@@ -47,5 +47,15 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
                 this.Store(tuple.Item1, tuple.Item2);
             }
         }
+
+        public Type ViewType
+        {
+            get { return typeof (TView); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "SQLite";
+        }
     }
 }

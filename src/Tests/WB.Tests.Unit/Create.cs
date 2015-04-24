@@ -3,7 +3,6 @@
 using System;
 using System.Linq;
 using System.Net.Http;
-using System.Web.Http;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -17,12 +16,11 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
+using NHibernate;
 using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
@@ -42,9 +40,10 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -67,8 +66,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Core.SharedKernels.SurveySolutions.Services;
-using WB.UI.Designer.Api;
 using WB.UI.Supervisor.Controllers;
 using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
@@ -497,12 +494,26 @@ namespace WB.Tests.Unit
                 settings ?? Mock.Of<IHeadquartersSettings>());
         }
 
-        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, long? questionnaireVersion = null)
+        public static InterviewSummary InterviewSummary() // needed since overload cannot be used in lambda expression
+        {
+            return new InterviewSummary();
+        }
+
+        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, 
+            long? questionnaireVersion = null,
+            InterviewStatus? status = null,
+            Guid? responsibleId = null,
+            Guid? teamLeadId = null)
         {
             return new InterviewSummary()
             {
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                Status = status.GetValueOrDefault(),
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ResponsibleName = responsibleId.FormatGuid(),
+                TeamLeadId = teamLeadId.GetValueOrDefault(),
+                TeamLeadName = teamLeadId.FormatGuid()
             };
         }
 
@@ -1086,17 +1097,17 @@ namespace WB.Tests.Unit
 
         public static HeadquartersPullContext HeadquartersPullContext()
         {
-            return new HeadquartersPullContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>());
+            return new HeadquartersPullContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
         }
 
         public static HeadquartersPushContext HeadquartersPushContext()
         {
-            return new HeadquartersPushContext(Substitute.For<IPlainStorageAccessor<SynchronizationStatus>>());
+            return new HeadquartersPushContext(Substitute.For<IPlainKeyValueStorage<SynchronizationStatus>>());
         }
 
         public static InterviewsSynchronizer InterviewsSynchronizer(
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter = null,
-            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter = null,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader = null,
+            IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader = null,
             Func<HttpMessageHandler> httpMessageHandler = null,
             IEventStore eventStore = null,
             ILogger logger = null,
@@ -1104,7 +1115,7 @@ namespace WB.Tests.Unit
             ICommandService commandService = null,
             HeadquartersPushContext headquartersPushContext = null,
             IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null,
-            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
+            IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
             IHeadquartersInterviewReader headquartersInterviewReader = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null,
@@ -1115,7 +1126,7 @@ namespace WB.Tests.Unit
                 HeadquartersSettings(),
                 logger ?? Mock.Of<ILogger>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
+                plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
                 userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
                 plainQuestionnaireRepository ??
                     Mock.Of<IPlainQuestionnaireRepository>(
@@ -1125,13 +1136,15 @@ namespace WB.Tests.Unit
                 headquartersPushContext ?? HeadquartersPushContext(),
                 eventStore ?? Mock.Of<IEventStore>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
-                interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(),
+                interviewSummaryRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(),
+                readyToSendInterviewsRepositoryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(),
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(
                         _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()),
-                 archiver: archiver ?? Mock.Of<IArchiveUtils>());
+                archiver ?? Mock.Of<IArchiveUtils>(),
+                Mock.Of<IPlainTransactionManager>(),
+                Mock.Of<ITransactionManager>());
         }
 
         public static IHeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
@@ -1169,11 +1182,6 @@ namespace WB.Tests.Unit
                 payload ?? "some payload");
         }
 
-        public static InterviewSummary InterviewSummary()
-        {
-            return new InterviewSummary();
-        }
-
         public static Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
         {
             return new Synchronizer(
@@ -1182,8 +1190,10 @@ namespace WB.Tests.Unit
                 Mock.Of<ILocalUserFeedProcessor>(),
                 interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
                 Mock.Of<IQuestionnaireSynchronizer>(),
+                Mock.Of<IPlainTransactionManager>(),
                 HeadquartersPullContext(),
-                HeadquartersPushContext());
+                HeadquartersPushContext(),
+                Mock.Of<ILogger>());
         }
 
         public static HQSyncController HQSyncController(
@@ -1411,7 +1421,9 @@ namespace WB.Tests.Unit
 
         public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
         {
-            return new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[]{});
+            var ncqrCompatibleEventDispatcher = new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[]{});
+            ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
+            return ncqrCompatibleEventDispatcher;
         }
 
         public static ImportFromDesigner ImportFromDesignerCommand(Guid responsibleId, string base64StringOfAssembly)
@@ -1419,7 +1431,19 @@ namespace WB.Tests.Unit
             return new ImportFromDesigner(responsibleId, new QuestionnaireDocument(), false, base64StringOfAssembly);
         }
 
+        public static TransactionManagerProvider TransactionManagerProvider(
+            Func<ICqrsPostgresTransactionManager> transactionManagerFactory = null,
+            ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
+        {
+            return new TransactionManagerProvider(
+                transactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
+                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>());
+        }
 
+        public static RebuildReadSideCqrsPostgresTransactionManager RebuildReadSideCqrsPostgresTransactionManager()
+        {
+            return new RebuildReadSideCqrsPostgresTransactionManager(Mock.Of<ISessionFactory>());
+        }
         public static ILiteEventRegistry LiteEventRegistry()
         {
             return new LiteEventRegistry();

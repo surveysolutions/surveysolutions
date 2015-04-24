@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -33,11 +34,13 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             ILogger logger,
             ICapiSynchronizationCacheService capiSynchronizationCacheService, 
             IJsonUtils jsonUtils, 
+            IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
             this.jsonUtils = jsonUtils;
+            this.interviewIntoFactory = interviewIntoFactory;
             this.changelog = changelog;
             this.commandService = commandService;
             this.capiCleanUpService = capiCleanUpService;
@@ -54,6 +57,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IJsonUtils jsonUtils;
+        private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory;
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
@@ -89,7 +93,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             }
         }
 
-        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType)
+        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType, Guid synchronizedUserId)
         {
             switch (itemType)
             {
@@ -97,7 +101,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                     this.UpdateInterview(item);
                     break;
                 case SyncItemType.DeleteInterview:
-                    this.DeleteInterview(item);
+                    this.DeleteInterview(item, synchronizedUserId);
                     break;
             }
         }
@@ -108,13 +112,17 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
         }
 
-        private void DeleteInterview(InterviewSyncPackageDto item)
+        private void DeleteInterview(InterviewSyncPackageDto item, Guid synchronizedUserId)
         {
             var interviewId = Guid.Parse(item.Content);
 
             try
             {
-                this.capiCleanUpService.DeleteInterview(interviewId);
+                InterviewMetaInfo interviewMetaInfo = this.interviewIntoFactory.Load(new InterviewMetaInfoInputModel(interviewId));
+                if (interviewMetaInfo != null && interviewMetaInfo.ResponsibleId == synchronizedUserId)
+                {
+                    this.capiCleanUpService.DeleteInterview(interviewId);
+                }
             }
             catch (Exception ex)
             {

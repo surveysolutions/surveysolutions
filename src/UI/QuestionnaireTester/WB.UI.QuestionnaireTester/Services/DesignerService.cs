@@ -53,7 +53,13 @@ namespace WB.UI.QuestionnaireTester.Services
                 request: new DownloadQuestionnaireRequest()
                 {
                     QuestionnaireId = id,
-                    SupportedVersion = supportedVersion
+                    SupportedVersion =
+                        new QuestionnnaireVersion()
+                        {
+                            Major = supportedVersion.Major,
+                            Minor = supportedVersion.Minor,
+                            Patch = supportedVersion.Build
+                        }
                 });
         }
     }

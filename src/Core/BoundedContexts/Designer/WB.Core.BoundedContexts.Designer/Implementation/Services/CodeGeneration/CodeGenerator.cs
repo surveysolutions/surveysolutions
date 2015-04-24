@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using CsQuery.ExtensionMethods;
 using CsQuery.Utility;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -22,21 +21,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class CodeGenerator : ICodeGenerator
     {
-        public CodeGenerator(IExpressionsEngineVersionService expressionsEngineVersionService)
-        {
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
-        }
-
         private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
         private IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
 
-        public string Generate(QuestionnaireDocument questionnaire)
+        public string Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(expressionsEngineVersionService.GetLatestSupportedVersion());
+            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
                 CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, true);

@@ -66,6 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(settings);
         }
 
+        [NoTransaction]
         public ActionResult ReadSide()
         {
             return this.View();

@@ -22,12 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     internal class InterviewHistoryDenormalizerTestContext
     {
         protected static InterviewHistoryDenormalizer CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IReadSideRepositoryWriter<UserDocument> userDocumentWriter=null,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryWriter = null, IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
             QuestionnaireDocument questionnaireDocument = null)
         {
             return new InterviewHistoryDenormalizer(
                 interviewHistoryViewWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewHistoryView>>(),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_=>_.GetById(It.IsAny<string>())==new InterviewSummary()),
+                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
                         _ =>

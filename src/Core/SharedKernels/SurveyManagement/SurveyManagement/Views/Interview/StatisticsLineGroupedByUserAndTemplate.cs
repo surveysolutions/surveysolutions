@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public int RejectedByHeadquartersCount { get; set; }
 
+        // TODO Remove it
         public int RestoredCount { get; set; }
 
         public int TotalCount { get; set; }

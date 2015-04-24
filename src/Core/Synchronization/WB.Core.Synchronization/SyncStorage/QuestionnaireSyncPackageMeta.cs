@@ -18,20 +18,20 @@ namespace WB.Core.Synchronization.SyncStorage
             this.MetaInfoSize = metaInfoSize;
         }
 
-        public Guid QuestionnaireId { get; private set; }
+        public virtual Guid QuestionnaireId { get; protected set; }
 
-        public long QuestionnaireVersion { get; private set; }
+        public virtual long QuestionnaireVersion { get; protected set; }
 
-        public string PackageId { get; set; }
+        public virtual string PackageId { get; set; }
 
-        public DateTime Timestamp { get; private set; }
+        public virtual DateTime Timestamp { get; protected set; }
 
-        public long SortIndex { get; set; }
+        public virtual long SortIndex { get; set; }
 
-        public string ItemType { get; private set; }
+        public virtual string ItemType { get; protected set; }
 
-        public int ContentSize { get; private set; }
+        public virtual int ContentSize { get; protected set; }
 
-        public int MetaInfoSize { get; private set; }
+        public virtual int MetaInfoSize { get; protected set; }
     }
 }

@@ -1,20 +1,15 @@
+using Machine.Specifications;
+using Moq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
-using Machine.Specifications;
-
-using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
@@ -35,10 +30,14 @@ namespace WB.Tests.Unit.Core.Synchronization
             
             lastSyncedPackageId = questionnaireSyncPackageMetas[0].PackageId;
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName))
-                .Returns(questionnaireSyncPackageMetas.AsQueryable());
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
+
+            var writer = new TestInMemoryWriter<QuestionnaireSyncPackageMeta>();
+            foreach (var package in questionnaireSyncPackageMetas)
+            {
+                writer.Store(package, package.PackageId);
+            }
+
+            syncManager = CreateSyncManager(devices: devices, questionnairesReader: writer);
         };
 
         Because of = () =>
@@ -68,8 +67,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static string lastSyncedPackageId = null;
 
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
         private static List<QuestionnaireSyncPackageMeta> questionnaireSyncPackageMetas;
     }
 }

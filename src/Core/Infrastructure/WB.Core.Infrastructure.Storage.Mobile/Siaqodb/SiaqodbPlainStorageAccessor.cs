@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.ServiceModel;
 using Sqo;
 using Sqo.Transactions;
 using WB.Core.Infrastructure.PlainStorage;
@@ -16,12 +18,12 @@ namespace WB.Core.Infrastructure.Storage.Mobile.Siaqodb
             this.Storage = storage;
         }
 
-        public TEntity GetById(string id)
+        public TEntity GetById(object id)
         {
             return this.Storage.Query<TEntity>().FirstOrDefault(_ => _.Id == id);
         }
 
-        public void Remove(string id)
+        public void Remove(object id)
         {
             TEntity entity = this.GetById(id);
 
@@ -46,12 +48,12 @@ namespace WB.Core.Infrastructure.Storage.Mobile.Siaqodb
             }
         }
 
-        public void Store(TEntity view, string id)
+        public void Store(TEntity view, object id)
         {
-            this.Store(new[] {new Tuple<TEntity, string>(view, id),});
+            this.Store(new[] {new Tuple<TEntity, object>(view, id),});
         }
 
-        public void Store(IEnumerable<Tuple<TEntity, string>> entities)
+        public void Store(IEnumerable<Tuple<TEntity, object>> entities)
         {
             ITransaction transaction = this.Storage.BeginTransaction();
             try
@@ -67,6 +69,13 @@ namespace WB.Core.Infrastructure.Storage.Mobile.Siaqodb
             {
                 transaction.Rollback();
             }
+        }
+
+        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        {
+            var queryable = this.Storage.Cast<TEntity>().AsQueryable();
+            var result = query.Invoke(queryable);
+            return result;
         }
     }
 }

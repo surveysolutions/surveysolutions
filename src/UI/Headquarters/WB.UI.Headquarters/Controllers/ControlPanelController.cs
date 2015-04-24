@@ -11,9 +11,9 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -29,21 +29,19 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPasswordHasher passwordHasher;
         private static string lastReexportMessage = "no reexport performed";
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
-        private readonly IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
         public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
-            IDataExportRepositoryWriter dataExportRepositoryWriter, IReadSideRepositoryIndexAccessor readSideRepositoryIndexAccessor)
+            IDataExportRepositoryWriter dataExportRepositoryWriter, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
             : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
             this.dataExportRepositoryWriter = dataExportRepositoryWriter;
-            this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
+            this.interviewSummaries = interviewSummaries;
         }
-
-        #region reexport
 
         public ActionResult ReexportInterviews()
         {
@@ -59,16 +57,15 @@ namespace WB.UI.Headquarters.Controllers
 
         private void ReexportApprovedInterviewsImpl(int skip)
         {
-            string indexName = typeof(InterviewsSearchIndex).Name;
             int pageSize = 20;
 
-            int count = this.GetApprovedInterviewIds(indexName).Count();
+            int count = this.GetApprovedInterviewIds().Count();
             int processed = skip;
 
             lastReexportMessage = string.Format("found {0} interviews", count);
             while (processed < count)
             {
-                List<Guid> interviewIds = this.GetApprovedInterviewIds(indexName).Skip(processed).Take(pageSize).ToList();
+                List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
 
                 foreach (var interviewId in interviewIds)
                 {
@@ -80,20 +77,18 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        private IQueryable<Guid> GetApprovedInterviewIds(string indexName)
+        private IQueryable<Guid> GetApprovedInterviewIds()
         {
-            return this.readSideRepositoryIndexAccessor.Query<SeachIndexContent>(indexName)
-                .Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters || x.Status == InterviewStatus.ApprovedBySupervisor)
-                .Select(x => x.InterviewId);
+            return this.interviewSummaries.Query(_ =>
+                _.Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters || x.Status == InterviewStatus.ApprovedBySupervisor)
+                .Select(x => x.InterviewId).ToList()).AsQueryable();
         }
 
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReexportStatus()
         {
             return lastReexportMessage;
         }
 
-        #endregion
         public ActionResult CreateHeadquarters()
         {
             return this.View(new UserModel());
@@ -156,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
             return false;
         }
 
-        
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());
