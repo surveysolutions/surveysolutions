@@ -1,5 +1,4 @@
-﻿using System;
-using Cirrious.MvvmCross.ViewModels;
+﻿using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 
@@ -20,28 +19,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public bool IsInProgress
         {
             get { return isInProgress; }
-            set { isInProgress = value; RaisePropertyChanged(() => IsInProgress); }
+            set { isInProgress = value; RaisePropertyChanged(); }
         }
 
         private string loginName;
         public string LoginName
         {
             get { return loginName; }
-            set { loginName = value; RaisePropertyChanged(() => LoginName); }
+            set { loginName = value; RaisePropertyChanged(); }
         }
 
         private string password;
         public string Password
         {
             get { return password; }
-            set { password = value; RaisePropertyChanged(() => Password); }
+            set { password = value; RaisePropertyChanged(); }
         }
 
         private bool staySignedIn = true;
         public bool StaySignedIn
         {
             get { return staySignedIn; }
-            set { staySignedIn = value; RaisePropertyChanged(() => StaySignedIn); }
+            set { staySignedIn = value; RaisePropertyChanged(); }
         }
 
         public IMvxCommand LoginCommand

@@ -49,55 +49,35 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public ObservableCollection<QuestionnaireListItem> MyQuestionnaires
         {
             get { return myQuestionnaires; }
-            set
-            {
-                myQuestionnaires = value;
-                RaisePropertyChanged(() => MyQuestionnaires);
-            }
+            set { myQuestionnaires = value; RaisePropertyChanged(); }
         }
 
         private ObservableCollection<QuestionnaireListItem> publicQuestionnaires = new ObservableCollection<QuestionnaireListItem>();
         public ObservableCollection<QuestionnaireListItem> PublicQuestionnaires
         {
             get { return publicQuestionnaires; }
-            set
-            {
-                publicQuestionnaires = value;
-                RaisePropertyChanged(() => PublicQuestionnaires);
-            }
+            set { publicQuestionnaires = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
             get { return isInProgress; }
-            set
-            {
-                isInProgress = value;
-                RaisePropertyChanged(() => IsInProgress);
-            }
+            set { isInProgress = value; RaisePropertyChanged(); }
         }
 
         private bool isPublicShowed;
         public bool IsPublicShowed
         {
             get { return isPublicShowed; }
-            set
-            {
-                isPublicShowed = value;
-                RaisePropertyChanged(() => IsPublicShowed);
-            }
+            set { isPublicShowed = value; RaisePropertyChanged(); }
         }
 
         private string progressIndicator;
         public string ProgressIndicator
         {
             get { return progressIndicator; }
-            set
-            {
-                progressIndicator = value;
-                RaisePropertyChanged(() => ProgressIndicator);
-            }
+            set { progressIndicator = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand signOutCommand;

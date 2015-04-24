@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string StaticText
         {
             get { return staticText; }
-            set { staticText = value; RaisePropertyChanged(() => StaticText); }
+            set { staticText = value; RaisePropertyChanged(); }
         }
     }
 }
