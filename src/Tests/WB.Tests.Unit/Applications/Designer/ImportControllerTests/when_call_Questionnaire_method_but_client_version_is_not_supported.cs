@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             request = new DownloadQuestionnaireRequest()
             {
                 QuestionnaireId = questionnaireId,
-                SupportedVersion = new QuestionnnaireVersion()
+                SupportedVersion = new QuestionnaireVersion()
             };
 
             var membershipUserService =
