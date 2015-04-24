@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
-            this.Bind<IDataExportWriter>().To<SqlDataExportWriter>();
+            this.Bind<IDataExportWriter>().To<ReadSideRepositoryDataExportWriter>();
             this.Bind<ISqlDataAccessor>().To<SqlDataAccessor>();
             this.Bind<ISqlServiceFactory>().To<SqliteServiceFactory>();
 
@@ -171,6 +171,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
+
+            this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
+            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
+            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
         }
     }
 }

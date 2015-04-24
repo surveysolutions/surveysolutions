@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -18,24 +20,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 {
     internal class SqlToTabDataExportService : IDataExportService
     {
-        private readonly ISqlServiceFactory sqlServiceFactory;
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly string separator;
         private readonly Func<string, string> createDataFileName;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISqlDataAccessor sqlDataAccessor;
         private readonly string parentId = "ParentId";
-
+        private readonly IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
+        private readonly IJsonUtils jsonUtils;
 
-        public SqlToTabDataExportService(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory,
+        public SqlToTabDataExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter)
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
+            IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
+            IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage, IJsonUtils jsonUtils)
         {
-            this.sqlServiceFactory = sqlServiceFactory;
             this.csvWriterFactory = csvWriterFactory;
             this.sqlDataAccessor = sqlDataAccessor;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
+            this.interviewExportedDataStorage = interviewExportedDataStorage;
+            this.interviewActionsDataStorage = interviewActionsDataStorage;
+            this.jsonUtils = jsonUtils;
             this.createDataFileName = ExportFileSettings.GetContentFileName;
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.fileSystemAccessor = fileSystemAccessor;
@@ -70,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.CreateDirectory(allDataFolderPath);
 
-            return this.ExportToTabFile(questionnaireId, questionnaireVersion,allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFileName));
+            return this.ExportToTabFile(questionnaireId, questionnaireVersion, allDataFolderPath);
         }
 
         public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
@@ -82,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
 
-            return this.ExportToTabFile(questionnaireId, questionnaireVersion,approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFileName),
+            return this.ExportToTabFile(questionnaireId, questionnaireVersion,approvedDataFolderPath,
                 InterviewExportedAction.ApproveByHeadquarter);
         }
 
@@ -122,65 +129,83 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             fileWriter.NextRecord();
         }
 
-        private IEnumerable<DataRow> QueryRecordsFromTableByInterviewsInApprovedStatus(ISqlService sqlService, string tableName, InterviewExportedAction? action)
+        private IEnumerable<DataRow> QueryRecordsFromTableByInterviewsInApprovedStatus(InterviewExportedAction? action)
         {
-            if (!action.HasValue)
+        /*    if (!action.HasValue)
                 return sqlService.Query<DataRow>(string.Format("select * from [{0}]", tableName));
 
             return sqlService.Query<DataRow>(string.Format("select [{0}].* from [{1}] join [{0}] "
                 + "ON [{1}].[{2}]=[{0}].[{2}] "
                 + "where [{1}].[Action] = @interviewAction", tableName, sqlDataAccessor.InterviewActionsTableName,
-                sqlDataAccessor.InterviewIdColumnName), new { interviewAction = action.Value.ToString() });
+                sqlDataAccessor.InterviewIdColumnName), new { interviewAction = action.Value.ToString() });*/
+            return new DataRow[0];
         }
 
-        private IEnumerable<string[]> QueryFromActionTable(ISqlService sqlService, InterviewExportedAction? action)
+        private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId, long questionnaireVersion)
         {
-            IEnumerable<dynamic> queryResult;
+            IEnumerable<InterviewHistory> actions;
             if (!action.HasValue)
-                queryResult = sqlService.Query(string.Format("select * from [{0}]", sqlDataAccessor.InterviewActionsTableName));
+            {
+                actions =
+                    interviewActionsDataStorage.Query(
+                        _ =>
+                            _.Where(
+                                i =>
+                                    i.QuestionnaireId == questionnaireId &&
+                                    i.QuestionnaireVersion == questionnaireVersion).ToList());
+            }
             else
-                queryResult = sqlService.Query(string.Format("select i2.* from [{0}] as i1 join [{0}] as i2 "
-                    + "on i1.[{1}]=i2.[{1}] where i1.[Action]=@interviewAction", sqlDataAccessor.InterviewActionsTableName, sqlDataAccessor.InterviewIdColumnName),
-                    new { interviewAction = action.Value.ToString() });
+            {
+                var actionName = action.Value.ToString();
+                actions =
+                   interviewActionsDataStorage.Query(
+                       _ =>
+                           _.Where(
+                               i =>
+                                   i.QuestionnaireId == questionnaireId &&
+                                   i.QuestionnaireVersion == questionnaireVersion && i.InterviewActions.Any(a => a.Action == actionName)).ToList());
+            }
             var result = new List<string[]>();
 
-            foreach (var row in queryResult)
+            foreach (var interviewHistory in actions)
             {
-                var resultRow = new List<string>();
-                foreach (var cell in row)
+                foreach (var interviewAction in interviewHistory.InterviewActions)
                 {
-                    resultRow.Add(cell.Value);
+                    var resultRow = new List<string>();
+                    resultRow.Add(interviewHistory.InterviewId);
+                    resultRow.Add(interviewAction.Action);
+                    resultRow.Add(interviewAction.Originator);
+                    resultRow.Add(interviewAction.Role);
+                    resultRow.Add(interviewAction.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+                    resultRow.Add(interviewAction.Timestamp.ToString("T", CultureInfo.InvariantCulture));
+                    result.Add(resultRow.ToArray());
                 }
-                result.Add(resultRow.ToArray());
             }
             return result;
         }
 
-        private string[] ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath, string dbPath,
+        private string[] ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath,
             InterviewExportedAction? action = null)
         {
-            var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var structure = questionnaireExportStructureWriter.AsVersioned()
+                .Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             if (structure == null)
                 return new string[0];
 
             var result = new List<string>();
+            var dataFiles = this.CreateDataFiles(basePath, action, structure, questionnaireId, questionnaireVersion);
 
-            using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
-            {
-                var dataFiles = this.CreateDataFiles(basePath, action, structure, sqlService);
+            result.AddRange(dataFiles);
 
-                result.AddRange(dataFiles);
+            var actionFile = this.CreateFileForInterviewActions(action, basePath, questionnaireId, questionnaireVersion);
 
-                var actionFile = this.CreateFileForInterviewActions(action, basePath, sqlService);
+            result.Add(actionFile);
 
-                result.Add(actionFile);
-                
-                return result.ToArray();
-            }
+            return result.ToArray();
         }
 
-        private string[] CreateDataFiles(string basePath, InterviewExportedAction? action, QuestionnaireExportStructure structure, ISqlService sqlService)
+        private string[] CreateDataFiles(string basePath, InterviewExportedAction? action, QuestionnaireExportStructure structure, Guid questionnaireId, long questionnaireVersion)
         {
             var result = new List<string>();
 
@@ -188,16 +213,70 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 var dataFilePath =
                     this.fileSystemAccessor.CombinePath(basePath, this.createDataFileName(level.LevelName));
-
-                this.WriteDataFileForInterivewLvel(action, dataFilePath, level, sqlService);
+                
+                using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
+                using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
+                {
+                    this.CreateHeaderForDataFile(tabWriter, level);
+                }
 
                 result.Add(dataFilePath);
             }
+            List<InterviewExportedDataRecord> interviewDatas;
 
+            if (action.HasValue)
+            {
+                var actionString = action.Value.ToString();
+                interviewDatas = interviewExportedDataStorage.Query(
+                    _ =>
+                        _.Where(
+                            i =>
+                                i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
+                                i.LastAction == actionString)
+                            .ToList());
+            }
+            else
+            {
+                interviewDatas =
+                    interviewExportedDataStorage.Query(
+                        _ =>
+                            _.Where(
+                                i =>
+                                    i.QuestionnaireId == questionnaireId &&
+                                    i.QuestionnaireVersion == questionnaireVersion)
+                                .ToList());
+            }
+
+            foreach (var interviewExportedDataRecord in interviewDatas)
+            {
+                var data = jsonUtils.Deserialize<Dictionary<string, string[]>>(interviewExportedDataRecord.Data);
+                foreach (var levelName in data.Keys)
+                {
+                    var dataFilePath =
+                        this.fileSystemAccessor.CombinePath(basePath, this.createDataFileName(levelName));
+
+                    using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
+                    using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
+                    {
+                        foreach (var dataByLevel in data[levelName])
+                        {
+                            var parsedData = dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile);
+
+                            foreach (var cell in parsedData)
+                            {
+                                tabWriter.WriteField(cell);
+                            }
+
+                            tabWriter.NextRecord();
+                        }
+                    }
+                }
+            }
+            
             return result.ToArray();
         }
 
-        private string CreateFileForInterviewActions(InterviewExportedAction? action, string basePath, ISqlService sqlService)
+        private string CreateFileForInterviewActions(InterviewExportedAction? action, string basePath, Guid questionnaireId, long questionnaireVersion)
         {
             var actionFilePath =
                 fileSystemAccessor.CombinePath(basePath, createDataFileName(sqlDataAccessor.InterviewActionsTableName));
@@ -207,7 +286,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 this.CreateHeaderForActionFile(tabWriter);
 
-                var dataSet = this.QueryFromActionTable(sqlService, action);
+                var dataSet = this.QueryFromActionTable(action, questionnaireId, questionnaireVersion);
 
                 foreach (var dataRow in dataSet)
                 {
@@ -222,15 +301,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return actionFilePath;
         }
 
-        private void WriteDataFileForInterivewLvel(InterviewExportedAction? action, string dataFilePath, HeaderStructureForLevel level,
-            ISqlService sqlService)
+        private void WriteDataFileForInterivewLvel(InterviewExportedAction? action, string dataFilePath, HeaderStructureForLevel level)
         {
             using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
             using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
             {
                 this.CreateHeaderForDataFile(tabWriter, level);
 
-                var dataSet = this.QueryRecordsFromTableByInterviewsInApprovedStatus(sqlService, level.LevelName, action);
+                var dataSet = this.QueryRecordsFromTableByInterviewsInApprovedStatus(action);
 
                 foreach (var dataRow in dataSet)
                 {

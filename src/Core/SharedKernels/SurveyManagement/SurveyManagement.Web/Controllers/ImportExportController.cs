@@ -68,14 +68,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedDataAsync(Guid id, long version)
+        public ActionResult GetExportedDataAsync(Guid id, long version)
         {
             if (id == Guid.Empty)
             {
                 throw new HttpException(404, "Invalid query string parameters");
             }
-
-            AsyncQuestionnaireUpdater.Update(
+            var result = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
+            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
+       /*     AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
                 {
@@ -88,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         this.logger.Error("Error occurred during export. " + exc.Message, exc);
                         this.AsyncManager.Parameters["result"] = null;
                     }
-                });
+                });*/
         }
 
         public ActionResult GetExportedDataCompleted(string result)
@@ -97,14 +98,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedApprovedDataAsync(Guid id, long version)
+        public ActionResult GetExportedApprovedDataAsync(Guid id, long version)
         {
             if (id == Guid.Empty)
             {
                 throw new HttpException(404, "Invalid query string parameters");
             }
-
-            AsyncQuestionnaireUpdater.Update(
+            var result = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
+            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
+         /*   AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
                 {
@@ -117,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         this.logger.Error("Error occurred during export. " + exc.Message, exc);
                         this.AsyncManager.Parameters["result"] = null;
                     }
-                });
+                });*/
         }
 
         public ActionResult GetExportedApprovedDataCompleted(string result)
