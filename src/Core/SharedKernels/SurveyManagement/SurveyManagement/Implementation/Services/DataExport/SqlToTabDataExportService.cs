@@ -129,18 +129,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             fileWriter.NextRecord();
         }
 
-        private IEnumerable<DataRow> QueryRecordsFromTableByInterviewsInApprovedStatus(InterviewExportedAction? action)
-        {
-        /*    if (!action.HasValue)
-                return sqlService.Query<DataRow>(string.Format("select * from [{0}]", tableName));
-
-            return sqlService.Query<DataRow>(string.Format("select [{0}].* from [{1}] join [{0}] "
-                + "ON [{1}].[{2}]=[{0}].[{2}] "
-                + "where [{1}].[Action] = @interviewAction", tableName, sqlDataAccessor.InterviewActionsTableName,
-                sqlDataAccessor.InterviewIdColumnName), new { interviewAction = action.Value.ToString() });*/
-            return new DataRow[0];
-        }
-
         private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId, long questionnaireVersion)
         {
             IEnumerable<InterviewHistory> actions;
@@ -299,33 +287,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 }
             }
             return actionFilePath;
-        }
-
-        private void WriteDataFileForInterivewLvel(InterviewExportedAction? action, string dataFilePath, HeaderStructureForLevel level)
-        {
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
-            using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-            {
-                this.CreateHeaderForDataFile(tabWriter, level);
-
-                var dataSet = this.QueryRecordsFromTableByInterviewsInApprovedStatus(action);
-
-                foreach (var dataRow in dataSet)
-                {
-                    var otherRecords = this.ParseByteArray(dataRow.Data);
-                    foreach (var otherRecord in otherRecords)
-                    {
-                        tabWriter.WriteField(otherRecord ?? string.Empty);
-                    }
-
-                    tabWriter.NextRecord();
-                }
-            }
-        }
-
-        private string[] ParseByteArray(byte[] bytes)
-        {
-            return Encoding.Unicode.GetString(bytes).Split(ExportFileSettings.SeparatorOfExportedDataFile);
         }
     }
 }
