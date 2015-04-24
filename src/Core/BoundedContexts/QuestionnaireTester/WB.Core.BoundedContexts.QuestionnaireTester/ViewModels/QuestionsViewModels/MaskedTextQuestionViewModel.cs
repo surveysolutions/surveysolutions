@@ -25,8 +25,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public MaskedTextQuestionViewModel(ICommandService commandService, IPrincipal principal, IPlainRepository<QuestionnaireModel> questionnaireRepository,
-             IPlainRepository<InterviewModel> interviewRepository)
+        public MaskedTextQuestionViewModel(
+            ICommandService commandService, 
+            IPrincipal principal, 
+            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IPlainRepository<InterviewModel> interviewRepository)
         {
             this.commandService = commandService;
             this.principal = principal;
