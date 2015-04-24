@@ -1,60 +1,89 @@
 ﻿using System;
-
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GpsCoordinatesQuestionViewModel : BaseInterviewItemViewModel
+    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntity
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private Identity identity;
-        private InterviewModel interviewModel;
-        private QuestionnaireModel questionnaireModel;
+        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainRepository<InterviewModel> interviewRepository;
 
-        public GpsCoordinatesQuestionViewModel(ICommandService commandService, IPrincipal principal)
+        private Identity questionIdentity;
+        private Guid interviewId;
+
+        public GpsCoordinatesQuestionViewModel(ICommandService commandService, IPrincipal principal, IPlainRepository<QuestionnaireModel> questionnaireRepository,
+             IPlainRepository<InterviewModel> interviewRepository)
         {
             this.commandService = commandService;
             this.principal = principal;
+            this.questionnaireRepository = questionnaireRepository;
+            this.interviewRepository = interviewRepository;
         }
 
-        public override void Init(Identity identity, InterviewModel interviewModel, QuestionnaireModel questionnaireModel)
+        public void Init(string interviewId, Identity identity)
         {
             if (identity == null) throw new ArgumentNullException("identity");
-            if (interviewModel == null) throw new ArgumentNullException("interviewModel");
-            if (questionnaireModel == null) throw new ArgumentNullException("questionnaireModel");
 
-            this.identity = identity;
-            this.interviewModel = interviewModel;
-            this.questionnaireModel = questionnaireModel;
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            MaskedTextQuestionModel questionModel = (MaskedTextQuestionModel)this.questionnaireModel.Questions[this.identity.Id];
-            var answerModel = this.interviewModel.GetGpsCoordinatesAnswerModel(this.identity);
+            GpsCoordinatesQuestionModel questionModel = (GpsCoordinatesQuestionModel)questionnaire.Questions[identity.Id];
+            var answerModel = interview.GetGpsCoordinatesAnswerModel(identity);
+            
+            this.questionIdentity = identity;
+            this.interviewId = interview.Id;
 
-            Title = questionModel.Title;
+            this.Title = questionModel.Title;
 
             if (answerModel != null)
             {
-              
+
             }
+        }
+
+        private IMvxCommand saveAnswerCommand;
+        public IMvxCommand SaveAnswerCommand
+        {
+            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer)); }
         }
 
         private string title;
         public string Title
         {
             get { return title; }
-            set { title = value; RaisePropertyChanged(() => Title); }
+            set { title = value; RaisePropertyChanged(); }
         }
 
         private string answer;
         public string Answer
         {
             get { return answer; }
-            set { answer = value; RaisePropertyChanged(() => Answer); }
+            set { answer = value; RaisePropertyChanged(); }
+        }
+
+        private void SaveAnswer()
+        {
+            this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
+                interviewId: interviewId,
+                userId: principal.CurrentUserIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow, 
+                accuracy: 0, 
+                altitude: 0, 
+                latitude: 0, 
+                longitude: 0, 
+                timestamp: DateTimeOffset.UtcNow
+                ));
         }
     }
 }
