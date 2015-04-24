@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Designer
             file.Setup(x => x.ContentLength).Returns((int)inputStream.Length);
             file.Setup(x => x.InputStream).Returns(inputStream);
 
-            this.ZipUtilsMock.Setup(x => x.DecompressGZip<IQuestionnaireDocument>(file.Object.InputStream))
+            this.ZipUtilsMock.Setup(x => x.DecompressGZip<QuestionnaireDocument>(file.Object.InputStream))
                         .Returns(new QuestionnaireDocument());
             this.UserHelperMock.Setup(x => x.WebUser.UserId).Returns(Guid.NewGuid);
 
