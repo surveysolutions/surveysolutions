@@ -9,44 +9,49 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class MaskedTextQuestionViewModel : BaseInterviewItemViewModel,
+    public class MaskedTextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntity,
         ILiteEventBusEventHandler<TextQuestionAnswered>,
         ILiteEventBusEventHandler<QuestionsEnabled>,
         ILiteEventBusEventHandler<QuestionsDisabled>
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private Identity identity;
-        private InterviewModel interviewModel;
-        private QuestionnaireModel questionnaireModel;
+        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private Identity questionIdentity;
+        private Guid interviewId;
 
-        public MaskedTextQuestionViewModel(ICommandService commandService, IPrincipal principal)
+        public MaskedTextQuestionViewModel(ICommandService commandService, IPrincipal principal, IPlainRepository<QuestionnaireModel> questionnaireRepository,
+             IPlainRepository<InterviewModel> interviewRepository)
         {
             this.commandService = commandService;
             this.principal = principal;
+            this.questionnaireRepository = questionnaireRepository;
+            this.interviewRepository = interviewRepository;
         }
 
-        public override void Init(Identity identity, InterviewModel interviewModel, QuestionnaireModel questionnaireModel)
+
+        public void Init(string interviewId, Identity identity)
         {
             if (identity == null) throw new ArgumentNullException("identity");
-            if (interviewModel == null) throw new ArgumentNullException("interviewModel");
-            if (questionnaireModel == null) throw new ArgumentNullException("questionnaireModel");
 
-            this.identity = identity;
-            this.interviewModel = interviewModel;
-            this.questionnaireModel = questionnaireModel;
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            var questionModel = (MaskedTextQuestionModel)this.questionnaireModel.Questions[this.identity.Id];
-            var answerModel = this.interviewModel.GetTextAnswerModel(this.identity);
+            var questionModel = (MaskedTextQuestionModel)questionnaire.Questions[identity.Id];
+            var answerModel = interview.GetTextAnswerModel(identity);
 
-            Title = questionModel.Title;
+            this.questionIdentity = identity;
+            this.interviewId = interview.Id;
+            this.Title = questionModel.Title;
 
             if (answerModel != null)
             {
-                Answer = answerModel.Answer;
+                this.Answer = answerModel.Answer;
             }
         }
 
@@ -114,10 +119,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             isTextChanged = false;
 
             commandService.Execute(new AnswerTextQuestionCommand(
-                interviewId: interviewModel.Id,
+                interviewId: interviewId,
                 userId: principal.CurrentUserIdentity.UserId,
-                questionId: identity.Id,
-                rosterVector: identity.RosterVector,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
                 answer: Answer
                 ));
@@ -125,7 +130,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId != identity.Id && @event.PropagationVector != identity.RosterVector)
+            if (@event.QuestionId != questionIdentity.Id && @event.PropagationVector != questionIdentity.RosterVector)
                 return;
 
             Answer = @event.Answer;
@@ -133,7 +138,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(QuestionsEnabled @event)
         {
-            if (@event.Questions.Any(i => i.Id != identity.Id && i.RosterVector != identity.RosterVector))
+            if (@event.Questions.Any(i => i.Id != questionIdentity.Id && i.RosterVector != questionIdentity.RosterVector))
                 return;
 
             Enabled = true;
@@ -141,7 +146,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(QuestionsDisabled @event)
         {
-            if (@event.Questions.Any(i => i.Id != identity.Id && i.RosterVector != identity.RosterVector))
+            if (@event.Questions.Any(i => i.Id != questionIdentity.Id && i.RosterVector != questionIdentity.RosterVector))
                 return;
 
             Enabled = false;
