@@ -10,6 +10,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
@@ -28,8 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             return new SqlToTabDataExportService(Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
-                Mock.Of<ISqlDataAccessor>(), Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure), Mock.Of<IQueryableReadSideRepositoryReader<InterviewExportedDataRecord>>(), Mock.Of<IQueryableReadSideRepositoryReader<InterviewHistory>>(),Mock.Of<IJsonUtils>());
+                Mock.Of<ISqlDataAccessor>(),
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
+                    It.IsAny<string>()) == questionnaireExportStructure),
+                Mock.Of<IQueryableReadSideRepositoryReader<InterviewExportedDataRecord>>(),
+                Mock.Of<IQueryableReadSideRepositoryReader<InterviewHistory>>(), Mock.Of<IJsonUtils>(),
+                Mock.Of<ITransactionManagerProvider>());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     internal class SqlToTabDataExportService : IDataExportService
     {
         private readonly ICsvWriterFactory csvWriterFactory;
+        private readonly ITransactionManagerProvider transactionManager;
         private readonly string separator;
         private readonly Func<string, string> createDataFileName;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -35,7 +37,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage, IJsonUtils jsonUtils)
+            IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage, 
+            IJsonUtils jsonUtils, 
+            ITransactionManagerProvider transactionManager)
         {
             this.csvWriterFactory = csvWriterFactory;
             this.sqlDataAccessor = sqlDataAccessor;
@@ -43,6 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewExportedDataStorage = interviewExportedDataStorage;
             this.interviewActionsDataStorage = interviewActionsDataStorage;
             this.jsonUtils = jsonUtils;
+            this.transactionManager = transactionManager;
             this.createDataFileName = ExportFileSettings.GetContentFileName;
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.fileSystemAccessor = fileSystemAccessor;
@@ -182,6 +187,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 return new string[0];
 
             var result = new List<string>();
+            this.transactionManager.GetTransactionManager().BeginQueryTransaction();
             var dataFiles = this.CreateDataFiles(basePath, action, structure, questionnaireId, questionnaireVersion);
 
             result.AddRange(dataFiles);
@@ -189,7 +195,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var actionFile = this.CreateFileForInterviewActions(action, basePath, questionnaireId, questionnaireVersion);
 
             result.Add(actionFile);
-
+            this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
             return result.ToArray();
         }
 

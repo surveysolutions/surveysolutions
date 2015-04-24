@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression;
@@ -68,28 +69,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult GetExportedDataAsync(Guid id, long version)
+        public void GetExportedDataAsync(Guid id, long version)
         {
             if (id == Guid.Empty)
             {
                 throw new HttpException(404, "Invalid query string parameters");
             }
-            var result = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
-            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
-       /*     AsyncQuestionnaireUpdater.Update(
+            AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
                 {
+                    IsolatedThreadManager.MarkCurrentThreadAsIsolated();
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] =
+                            this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
                     }
                     catch (Exception exc)
                     {
                         this.logger.Error("Error occurred during export. " + exc.Message, exc);
                         this.AsyncManager.Parameters["result"] = null;
                     }
-                });*/
+                    finally
+                    {
+                        IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                    }
+                });
         }
 
         public ActionResult GetExportedDataCompleted(string result)
@@ -98,28 +103,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult GetExportedApprovedDataAsync(Guid id, long version)
+        public void GetExportedApprovedDataAsync(Guid id, long version)
         {
             if (id == Guid.Empty)
             {
                 throw new HttpException(404, "Invalid query string parameters");
             }
-            var result = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
-            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
-         /*   AsyncQuestionnaireUpdater.Update(
+            AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
                 {
+                    IsolatedThreadManager.MarkCurrentThreadAsIsolated();
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] =
+                            this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
                     }
                     catch (Exception exc)
                     {
                         this.logger.Error("Error occurred during export. " + exc.Message, exc);
                         this.AsyncManager.Parameters["result"] = null;
                     }
-                });*/
+                    finally
+                    {
+                        IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                    }
+                });
         }
 
         public ActionResult GetExportedApprovedDataCompleted(string result)
