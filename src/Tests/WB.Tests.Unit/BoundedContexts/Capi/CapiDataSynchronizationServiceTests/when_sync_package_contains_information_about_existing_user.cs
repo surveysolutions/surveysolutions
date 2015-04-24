@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             {
                 PublicKey = Guid.NewGuid(),
                 Email = "test@ddd.cc",
-                Roles = new List<UserRoles> { UserRoles.Operator },
+                Roles = new HashSet<UserRoles> { UserRoles.Operator },
                 UserName = "name",
                 Password = "password",
                 IsLockedByHQ = false,

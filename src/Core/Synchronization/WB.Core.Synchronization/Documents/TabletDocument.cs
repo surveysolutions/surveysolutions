@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
-
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.Documents
 {
     public class TabletDocument : IView
     {
-        public Guid DeviceId { get; set; }
+        public virtual string Id { get; set; }
 
-        public string AndroidId { get; set; }
+        public virtual Guid DeviceId { get; set; }
 
-        public DateTime RegistrationDate { get; set; }
+        public virtual string AndroidId { get; set; }
 
-        public List<Guid> Users { get; set; }
+        public virtual DateTime RegistrationDate { get; set; }
     }
 }

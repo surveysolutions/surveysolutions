@@ -15,6 +15,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <NuGetPackageImportStamp>5afc325e</NuGetPackageImportStamp>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,7 +80,6 @@
     <Compile Include="EventBus\Lite\ILiteEventBus.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventRegistry.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventBus.cs" />
-    <Compile Include="LinqUtils.cs" />
     <Compile Include="Modularity\IIocRegistry.cs" />
     <Compile Include="Modularity\Module.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
@@ -152,15 +153,17 @@
     <Compile Include="Ncqrs\NcqrsModule.cs" />
     <Compile Include="Ncqrs\Utils.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
-    <Compile Include="PlainStorage\IQueryablePlainStorageAccessor.cs" />
+    <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
+    <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
     <Compile Include="ReadSide\IChacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\IViewFactory.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
+    <Compile Include="PlainStorage\IPlainKeyValueStorage.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\IRavenReadSideRepositoryCleaner.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IReadSideCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideKeyValueStorage.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />
@@ -174,6 +177,12 @@
     <Compile Include="ReadSide\Repository\Accessors\ReadSideStorageVersionedWrapper.cs" />
     <Compile Include="Services\IAdditionalDataService.cs" />
     <Compile Include="InfrastructureModuleMobile.cs" />
+    <Compile Include="Transactions\ITransactionManager.cs" />
+    <Compile Include="Transactions\ITransactionManagerProvider.cs" />
+    <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
+    <Compile Include="Transactions\NoTransactionTransactionManager.cs" />
+    <Compile Include="Transactions\NoTransactionTransactionManagerProvider.cs" />
+    <Compile Include="Transactions\TransactionManagerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
@@ -189,8 +198,18 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Services
 
         Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId);
 
-        Task PushChunkAsync(SyncCredentials credentials, string chunkAsString);
+        Task PushChunkAsync(SyncCredentials credentials, string chunkAsString, Guid interviewId);
 
         Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData);
 

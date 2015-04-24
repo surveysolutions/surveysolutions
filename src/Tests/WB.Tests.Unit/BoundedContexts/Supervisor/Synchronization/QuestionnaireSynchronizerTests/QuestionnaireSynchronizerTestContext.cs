@@ -27,17 +27,18 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
     internal class QuestionnaireSynchronizerTestContext
     {
         protected static QuestionnaireSynchronizer CreateQuestionnaireSynchronizer(IAtomFeedReader atomFeedReader = null,
-            IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null,
+            IPlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IHeadquartersQuestionnaireReader headquartersQuestionnaireReader = null, HeadquartersPullContext headquartersPullContext = null,
             IDeleteQuestionnaireService deleteQuestionnaireService = null, ICommandService commandService = null)
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(), Create.HeadquartersSettings(questionnaireDetailsEndpoint: "http://localhost", questionnaireAssemblyEndpoint: "http://localhost"),
-                headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
-                plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
+                headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainKeyValueStorage<SynchronizationStatus>>()),
+                plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), commandService ?? Mock.Of<ICommandService>(),
                 headquartersQuestionnaireReader ?? Mock.Of<IHeadquartersQuestionnaireReader>(),
-                deleteQuestionnaireService ?? Mock.Of<IDeleteQuestionnaireService>());
+                deleteQuestionnaireService ?? Mock.Of<IDeleteQuestionnaireService>(),
+                Mock.Of<IPlainTransactionManager>());
 
         }
 

@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SynchronozationProcessorTests
 {
     public class SynchronozationProcessorTestContext
     {
-        protected SynchronozationProcessor CreateSynchronozationProcessor(
+        protected SynchronizationProcessor CreateSynchronozationProcessor(
             IDeviceChangingVerifier deviceChangingVerifier = null,
             ISyncAuthenticator authentificator = null,
             ICapiDataSynchronizationService dataProcessor = null,
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SynchronozationProcessorTests
             ISynchronizationService synchronizationService = null,
             IInterviewerSettings interviewerSettings = null)
         {
-            return new SynchronozationProcessor(
+            return new SynchronizationProcessor(
                 deviceChangingVerifier ?? Mock.Of<IDeviceChangingVerifier>(),
                 authentificator ?? Mock.Of<ISyncAuthenticator>(),
                 dataProcessor ?? Mock.Of<ICapiDataSynchronizationService>(),

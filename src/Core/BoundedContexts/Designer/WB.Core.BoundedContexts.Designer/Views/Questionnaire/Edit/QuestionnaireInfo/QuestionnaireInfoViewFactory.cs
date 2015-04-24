@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Raven.Abstractions.Extensions;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils;

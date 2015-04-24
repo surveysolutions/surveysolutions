@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
@@ -17,6 +20,7 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
@@ -25,10 +29,9 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Storage.Esent;
-using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -49,7 +52,7 @@ using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WebActivatorEx;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
+using FilterScope = System.Web.Http.Filters.FilterScope;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -90,22 +93,12 @@ namespace WB.UI.Headquarters
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
-
-           string storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
 
             Version applicationBuildVersion = typeof(SyncController).Assembly.GetName().Version;
-
-            var ravenSettings = new RavenConnectionSettings(
-                storagePath: storePath,
-                username: WebConfigurationManager.AppSettings["Raven.Username"],
-                password: WebConfigurationManager.AppSettings["Raven.Password"],
-                viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
-                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"],ravenFileSystemName: WebConfigurationManager.AppSettings["Raven.Databases.RavenFileSystemName"]);
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
@@ -114,7 +107,7 @@ namespace WB.UI.Headquarters
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
-                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
+                appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
@@ -129,9 +122,15 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
-
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+
+            var mappingAssemblies = new List<Assembly> { typeof (SurveyManagementSharedKernelModule).Assembly }; 
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings();
+            postgresPlainStorageSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString;
+            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
+
+            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
+            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -142,13 +141,14 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly, typeof(UserSyncPackagesByBriefFields).Assembly),
-                new RavenPlainStorageInfrastructureModule(ravenSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder),
+
+                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
@@ -169,6 +169,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
+
+
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -176,14 +178,14 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
 
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
                 .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
-            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(FilterScope.Controller)
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
@@ -216,6 +218,7 @@ namespace WB.UI.Headquarters
                 (IgnoredDenormalizersConfigSection) WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);

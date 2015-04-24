@@ -9,7 +9,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
@@ -19,35 +18,36 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly IReadSideRepositoryReader<TabletDocument> devices;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ICommandService commandService;
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
         private readonly IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage;
         private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
         private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
+        private readonly IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersSyncPackagesMeta;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackageMetaReader;
 
         private readonly ISyncLogger syncLogger;
-
-        private readonly string userQueryIndexName = typeof(UserSyncPackagesByBriefFields).Name;
-        private readonly string interviewGroupQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
-        private readonly string allInterviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
-        private readonly string questionnaireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
 
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
             ICommandService commandService,
-            IReadSideRepositoryIndexAccessor indexAccessor,
             IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, 
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore,
+            IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
+            IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersSyncPackagesMeta,
+            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackageMetaReader,
             ISyncLogger syncLogger)
         {
             this.devices = devices;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.commandService = commandService;
-            this.indexAccessor = indexAccessor;
             this.userPackageStorage = userPackageStorage;
             this.interviewPackageContentStore = interviewPackageContentStore;
             this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
+            this.syncPackagesMetaReader = syncPackagesMetaReader;
+            this.usersSyncPackagesMeta = usersSyncPackagesMeta;
+            this.questionnaireSyncPackageMetaReader = questionnaireSyncPackageMetaReader;
             this.syncLogger = syncLogger;
         }
 
@@ -226,51 +226,89 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         private IQueryable<InterviewSyncPackageMeta> GetLastInterviewSyncPackage(Guid userId)
         {
-           return indexAccessor.Query<InterviewSyncPackageMeta>(allInterviewQueryIndexName).Where(x=>x.UserId==userId);
+            List<InterviewSyncPackageMeta> result = this.syncPackagesMetaReader.Query(_ =>
+               _.Where(x => x.UserId == userId).ToList()
+            );
+
+            return result.AsQueryable();
         }
 
         private IQueryable<UserSyncPackageMeta> GetLastUserSyncPackage(Guid userId)
         {
-            return indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId);
+            var packages = this.usersSyncPackagesMeta.Query(_ => _.Where(x => x.UserId == userId).ToList());
+            return packages.AsQueryable();
         }
 
         private IQueryable<QuestionnaireSyncPackageMeta> GetLastQuestionnaireSyncPackage(Guid userId)
         {
-            return indexAccessor.Query<QuestionnaireSyncPackageMeta>(this.questionnaireQueryIndexName);
+            var result = this.questionnaireSyncPackageMetaReader.Query(_ => _.ToList());
+
+            return result.AsQueryable();
         }
 
         private IQueryable<InterviewSyncPackageMeta> GetGroupedInterviewSyncPackage(Guid userId, long? lastSyncedSortIndex)
         {
-            var items = indexAccessor.Query<InterviewSyncPackageMeta>(interviewGroupQueryIndexName).Where(x => x.UserId == userId);
-            const string deleteInterviewItemType = SyncItemType.DeleteInterview;
-            var filteredItems = lastSyncedSortIndex.HasValue
-                ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
-                : items.Where(x => x.ItemType != deleteInterviewItemType);
+            var packages = this.syncPackagesMetaReader.Query(_ =>
+            {
+                var filteredItems = _.Where(x => x.UserId == userId);
 
-            return filteredItems.OrderBy(x => x.SortIndex);
+                if (lastSyncedSortIndex.HasValue)
+                {
+                    filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
+                }
+
+                filteredItems.OrderBy(x => x.SortIndex);
+                return filteredItems.ToList();
+            });
+
+            IEnumerable<InterviewSyncPackageMeta> result = 
+                from p in packages
+                group p by p.InterviewId into g
+                select g.Last();
+
+            if (lastSyncedSortIndex == null)
+            {
+                result = result.Where(x => x.ItemType != SyncItemType.DeleteInterview);
+            }
+
+            return result.AsQueryable();
         }
 
         private IQueryable<UserSyncPackageMeta> GetGroupedUserSyncPackage(Guid userId, long? lastSyncedSortIndex)
         {
-            var items = indexAccessor.Query<UserSyncPackageMeta>(userQueryIndexName).Where(x => x.UserId == userId);
+            var packages = this.usersSyncPackagesMeta.Query(_ =>
+            {
+                var filteredItems = _.Where(x => x.UserId == userId);
 
-            var filteredItems = lastSyncedSortIndex.HasValue
-             ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
-             : items;
+                if (lastSyncedSortIndex.HasValue)
+                {
+                    filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
+                }
 
-            return filteredItems.OrderBy(x => x.SortIndex);
+                filteredItems.OrderBy(x => x.SortIndex);
+                return filteredItems.ToList();
+            });
+
+            return packages.AsQueryable();
         }
 
         private IQueryable<QuestionnaireSyncPackageMeta> GetGroupedQuestionnaireSyncPackage(Guid userId,
             long? lastSyncedSortIndex)
         {
-            var items = indexAccessor.Query<QuestionnaireSyncPackageMeta>(this.questionnaireQueryIndexName);
+            var items = this.questionnaireSyncPackageMetaReader.Query(_ =>
+            {
+                var filteredItems = _;
 
-            var filteredItems = lastSyncedSortIndex.HasValue
-                ? items.Where(x => x.SortIndex > lastSyncedSortIndex.Value)
-                : items;
+                if (lastSyncedSortIndex.HasValue)
+                {
+                    filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
+                }
 
-            return filteredItems.OrderBy(x => x.SortIndex);
+                return filteredItems.OrderBy(x => x.SortIndex).ToList();
+            });
+
+
+            return items.AsQueryable();
         }
 
         private IList<T> GetUpdateFromLastPackage<T>(Guid userId, string lastSyncedPackageId,
@@ -279,21 +317,21 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             if (lastSyncedPackageId == null)
             {
-                return QueryAll<T>(() => groupedQuery(userId, null));
+                return groupedQuery(userId, null).ToList();
             }
 
-            var lastSyncedPackage = allQuery(userId)
+            var queryable = allQuery(userId).ToList();
+            var lastSyncedPackage = queryable
                 .FirstOrDefault(x => x.PackageId == lastSyncedPackageId);
 
             if (lastSyncedPackage == null)
             {
-                throw new SyncPackageNotFoundException(string.Format(
-                    "Sync package with id {0} was not found on server", lastSyncedPackageId));
+                throw new SyncPackageNotFoundException(string.Format("Sync package with id {0} was not found on server", lastSyncedPackageId));
             }
 
             long lastSyncedSortIndex = lastSyncedPackage.SortIndex;
 
-            return QueryAll<T>(() => groupedQuery(userId, lastSyncedSortIndex));
+            return groupedQuery(userId, lastSyncedSortIndex).ToList();
         }
 
         private void MakeSureThisDeviceIsRegisteredOrThrow(Guid deviceId)
@@ -334,21 +372,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private void TrackDeviceRegistration(Guid deviceId, Guid userId, string appVersion, string androidId)
         {
             this.syncLogger.TrackDeviceRegistration(deviceId, userId, appVersion, androidId);
-        }
-       
-        public IList<T> QueryAll<T>(Func<IQueryable<T>> query)
-        {
-            var result = new List<T>();
-            int skipResults = 0;
-            bool receivedAnyFromDb;
-            do
-            {
-                var chunk = query().Skip(skipResults).Take(128).ToList();
-                receivedAnyFromDb = chunk.Any();
-                result.AddRange(chunk);
-                skipResults = result.Count;
-            } while (receivedAnyFromDb);
-            return result;
         }
     }
 }

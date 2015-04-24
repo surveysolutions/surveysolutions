@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -1831,7 +1832,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else
                 this.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion,
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, 
+                questionnaireId, 
+                questionnaireVersion,
                 interviewStatus,
                 featuredQuestionsMeta,
                 createdOnClient, comments));
