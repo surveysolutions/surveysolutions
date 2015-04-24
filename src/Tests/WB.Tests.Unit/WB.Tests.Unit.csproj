@@ -1888,7 +1888,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_enabled.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_interview_is_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called_and_interview_is_deleted.cs" />
