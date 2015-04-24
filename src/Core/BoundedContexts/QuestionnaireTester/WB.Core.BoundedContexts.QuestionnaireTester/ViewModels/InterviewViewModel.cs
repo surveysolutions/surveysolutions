@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -10,52 +9,58 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class InterviewGroupViewModel : BaseViewModel
+    public class InterviewViewModel : BaseViewModel
     {
         private readonly IPrincipal principal;
-        private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly NavigationState navigationState;
 
-        public InterviewGroupViewModel(IPrincipal principal, IInterviewViewModelFactory interviewViewModelFactory,
-             IPlainRepository<QuestionnaireModel> questionnaireRepository,
-             IPlainRepository<InterviewModel> interviewRepository,
-             InterviewLeftSidePanelViewModel interviewLeftSidePanelViewModel)
+        public InterviewViewModel(IPrincipal principal, IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IPlainRepository<InterviewModel> interviewRepository,
+            ChaptersViewModel chaptersViewModel, BreadcrumbsViewModel breadcrumbsViewModel,
+            GroupViewModel groupViewModel, NavigationState navigationState)
         {
             this.principal = principal;
-            this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.LeftSide = interviewLeftSidePanelViewModel;
+            this.navigationState = navigationState;
+
+            this.Breadcrumbs = breadcrumbsViewModel;
+            this.CurrentGroup = groupViewModel;
+            this.Chapters = chaptersViewModel;
         }
 
-        public async void Init(string id, Identity chapterIdentity)
+        public void Init(string interviewId)
         {
-            var interview = this.interviewRepository.Get(id);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            if (chapterIdentity == null)
-            {
-                chapterIdentity = new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]);
-            }
+            this.QuestionnaireTitle = questionnaire.Title;
+            this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
+                .Select(referenceToQuestion => new
+                {
+                    InterviewId = interviewId,
+                    Question = questionnaire.Questions[referenceToQuestion.Id].Title,
+                    AnswerModel = GetAnswerModel(interview, referenceToQuestion)
+                })
+                .ToList();
 
-            var group = questionnaire.GroupsWithoutNestedChildren[chapterIdentity.Id];
-
-            this.LeftSide.Init(id, chapterIdentity);
-
-            this.CurrentGroupName = group.Title;
-            this.Items = await this.interviewViewModelFactory.GetEntitiesAsync(id, chapterIdentity);
+            this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId,
+                currentGroupIdentity: new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]));
         }
 
-        public InterviewLeftSidePanelViewModel LeftSide { get; set; }
-        public string CurrentGroupName { get; set; }
-
-        private IEnumerable items;
-        public IEnumerable Items
+        private static AbstractInterviewAnswerModel GetAnswerModel(InterviewModel interview, QuestionnaireReferenceModel referenceToQuestion)
         {
-            get { return items; }
-            set { items = value; RaisePropertyChanged(); }
+            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
+            return interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
         }
+
+        public BreadcrumbsViewModel Breadcrumbs { get; set; }
+        public GroupViewModel CurrentGroup { get; set; }
+        public ChaptersViewModel Chapters { get; set; }
+        public string QuestionnaireTitle { get; set; }
+        public IEnumerable PrefilledQuestions { get; set; } 
 
         private IMvxCommand navigateToDashboardCommand;
         public IMvxCommand NavigateToDashboardCommand

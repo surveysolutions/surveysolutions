@@ -51,15 +51,18 @@
     </Compile>
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BreadcrumbsViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
-    <Compile Include="ViewModels\InterviewLeftSidePanelViewModel.cs" />
+    <Compile Include="ViewModels\ChaptersViewModel.cs" />
+    <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\InterviewGroupViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\CascadingSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\DateTimeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\FilteredSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupReferenceViewModel.cs" />
+    <Compile Include="ViewModels\InterviewViewModel.cs" />
+    <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IInterviewEntity.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GpsCoordinatesQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionContainerViewModel.cs" />

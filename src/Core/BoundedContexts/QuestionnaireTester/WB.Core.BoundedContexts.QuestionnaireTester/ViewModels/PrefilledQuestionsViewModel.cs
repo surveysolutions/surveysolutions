@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void StartInterview()
         {
-            this.ShowViewModel<InterviewGroupViewModel>(new { id = this.interviewId });
+            this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
         }
 
         public override void NavigateToPreviousViewModel()
