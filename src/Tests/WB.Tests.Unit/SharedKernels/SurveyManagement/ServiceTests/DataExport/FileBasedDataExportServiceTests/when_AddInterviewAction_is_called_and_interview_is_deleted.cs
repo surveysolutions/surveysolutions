@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileBasedDataExportRepositoryWriter.AddInterviewAction(InterviewExportedAction.InterviewerAssigned, interviewId, Guid.NewGuid(), DateTime.Now);
 
         It should_never_call_AddActionRecord = () =>
-           interviewExportServiceMock.Verify(x => x.AddActionRecord(Moq.It.IsAny<InterviewActionExportView>(), Moq.It.IsAny<string>()), Times.Never);
+           interviewExportServiceMock.Verify(x => x.AddActionRecord(Moq.It.IsAny<InterviewActionExportView>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Never);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 

@@ -109,7 +109,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
             this.Bind<IDataExportWriter>().To<ReadSideRepositoryDataExportWriter>();
             this.Bind<ISqlDataAccessor>().To<SqlDataAccessor>();
-            this.Bind<ISqlServiceFactory>().To<SqliteServiceFactory>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
