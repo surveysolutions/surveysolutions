@@ -63,7 +63,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\GroupReferenceViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\IInterviewEntity.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\IInterviewItemViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GpsCoordinatesQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionContainerViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IntegerNumericQuestionViewModel.cs" />

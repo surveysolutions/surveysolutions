@@ -20,24 +20,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
-        private static readonly Dictionary<Type, Func<IInterviewEntity>> QuestionnaireEntityTypeToViewModelMap = 
-            new Dictionary<Type, Func<IInterviewEntity>>
+        private static readonly Dictionary<Type, Func<IInterviewItemViewModel>> QuestionnaireEntityTypeToViewModelMap = 
+            new Dictionary<Type, Func<IInterviewItemViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
                 { typeof(RosterModel), Load<RostersReferenceViewModel> },
                 { typeof(GroupModel), Load<GroupReferenceViewModel> },
                 // questions
-                { typeof(SingleOptionQuestionModel), Load<QuestionContainerViewModel<SingleOptionQuestionViewModel>> },
-                { typeof(LinkedSingleOptionQuestionModel), Load<QuestionContainerViewModel<LinkedSingleOptionQuestionViewModel>> },
-                { typeof(MultiOptionQuestionModel), Load<QuestionContainerViewModel<MultiOptionQuestionViewModel>> },
-                { typeof(LinkedMultiOptionQuestionModel), Load<QuestionContainerViewModel<LinkedMultiOptionQuestionViewModel>> },
-                { typeof(IntegerNumericQuestionModel), Load<QuestionContainerViewModel<IntegerNumericQuestionViewModel>> },
-                { typeof(RealNumericQuestionModel), Load<QuestionContainerViewModel<RealNumericQuestionViewModel>> },
                 { typeof(MaskedTextQuestionModel), Load<QuestionContainerViewModel<MaskedTextQuestionViewModel>> },
-                { typeof(TextListQuestionModel), Load<QuestionContainerViewModel<TextListQuestionViewModel>> },
-                { typeof(QrBarcodeQuestionModel), Load<QuestionContainerViewModel<QrBarcodeQuestionViewModel>> },
-                { typeof(MultimediaQuestionModel), Load<QuestionContainerViewModel<MultimediaQuestionViewModel>> },
-                { typeof(DateTimeQuestionModel), Load<QuestionContainerViewModel<DateTimeQuestionViewModel>> },
                 { typeof(GpsCoordinatesQuestionModel), Load<QuestionContainerViewModel<GpsCoordinatesQuestionViewModel>> }
             };
 
@@ -95,7 +85,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return questionnaire.PrefilledQuestionsIds.Select(question => CreateInterviewItemViewModel(entityId: question.Id, rosterVector: new decimal[0], entityModelType: question.ModelType, interviewId: interviewId));
         }
 
-        private static IInterviewEntity CreateInterviewItemViewModel(
+        private static IInterviewItemViewModel CreateInterviewItemViewModel(
             Guid entityId,
             decimal[] rosterVector,
             Type entityModelType,
@@ -110,9 +100,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
 
-            IInterviewEntity viewModel = viewModelActivator.Invoke();
+            IInterviewItemViewModel viewModel = viewModelActivator.Invoke();
 
-            viewModel.Init(interviewId: interviewId, identity: identity);
+            viewModel.Init(interviewId: interviewId, questionIdentity: identity);
             return viewModel;
         }
     }

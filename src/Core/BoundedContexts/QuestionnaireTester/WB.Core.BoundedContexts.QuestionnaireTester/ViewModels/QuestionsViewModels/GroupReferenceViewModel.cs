@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GroupReferenceViewModel : MvxNotifyPropertyChanged, IInterviewEntity
+    public class GroupReferenceViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
         private IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private IPlainRepository<InterviewModel> interviewRepository;
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, Identity identity)
+        public void Init(string interviewId, Identity questionIdentity)
         {
         }
 
