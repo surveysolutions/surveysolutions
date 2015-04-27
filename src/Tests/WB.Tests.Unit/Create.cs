@@ -1449,10 +1449,12 @@ namespace WB.Tests.Unit
             return new LiteEventRegistry();
         }
 
-        public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null)
+        public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null,
+            IEventStore eventStore = null)
         {
             var eventReg = liteEventRegistry ?? Mock.Of<ILiteEventRegistry>();
-            return new LiteEventBus(eventReg);
+            var eventSt = eventStore ?? Mock.Of<IEventStore>();
+            return new LiteEventBus(eventReg, eventSt);
         }
     }
 }
