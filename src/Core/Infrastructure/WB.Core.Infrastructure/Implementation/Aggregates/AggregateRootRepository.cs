@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             this.repository = repository;
         }
 
-        public IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
+        public virtual IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
         {
             Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, long.MaxValue);
 

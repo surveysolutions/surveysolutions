@@ -170,6 +170,7 @@
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
+    <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="Implementation\Services\FileSystemAccessor.cs" />
     <Compile Include="Implementation\Services\NetworkService.cs" />

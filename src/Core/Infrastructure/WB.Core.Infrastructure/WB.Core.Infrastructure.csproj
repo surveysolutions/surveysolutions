@@ -54,7 +54,7 @@
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
-    <Compile Include="Implementation\Aggregates\InMemoryAggregateRootRepository.cs" />
+    <Compile Include="Implementation\Aggregates\AggregateRootRepositoryWithCache.cs" />
     <Compile Include="Implementation\CommandBus\CommandService.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />

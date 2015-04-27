@@ -79,48 +79,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { enabled = value; RaisePropertyChanged(() => Enabled); }
         }
 
-        private bool isTextChanged = false;
-        private IMvxCommand afterTextChangedCommand;
-        public IMvxCommand AfterTextChangedCommand
+        private IMvxCommand valueChangedCommand;
+        public IMvxCommand ValueChangedCommand
         {
-            get { return afterTextChangedCommand ?? (afterTextChangedCommand = new MvxCommand(MarkTextChangedAndTrySendAnswerTextQuestionCommand)); }
+            get { return valueChangedCommand ?? (valueChangedCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
         }
 
-        private bool isFocusChange = false;
-        private IMvxCommand focusChangeCommand;
-        public IMvxCommand FocusChangeCommand
+        private void SendAnswerTextQuestionCommand()
         {
-            get { return focusChangeCommand ?? (focusChangeCommand = new MvxCommand(MarkFocusChangedAndTrySendAnswerTextQuestionCommand)); }
-        }
-
-/*        private IMvxCommand answerTextQuestionCommand;
-        public IMvxCommand AnswerTextQuestionCommand
-        {
-            get { return answerTextQuestionCommand ?? (answerTextQuestionCommand = new MvxCommand(SendAnswerTextQuestionCommandAfterEndEditing)); }
-        }*/
-
-        private void MarkTextChangedAndTrySendAnswerTextQuestionCommand()
-        {
-            isTextChanged = true;
-            if (isFocusChange)
-                TrySendAnswerTextQuestionCommand();
-        }
-
-        private void MarkFocusChangedAndTrySendAnswerTextQuestionCommand()
-        {
-            isFocusChange = true;
-            if (isTextChanged)
-                TrySendAnswerTextQuestionCommand();
-        }
-
-        private void TrySendAnswerTextQuestionCommand()
-        {
-            if (!isFocusChange || !isTextChanged)
-                return;
-
-            isFocusChange = false;
-            isTextChanged = false;
-
             commandService.Execute(new AnswerTextQuestionCommand(
                 interviewId: interviewId,
                 userId: principal.CurrentUserIdentity.UserId,

@@ -58,6 +58,7 @@ namespace WB.UI.QuestionnaireTester
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("ValueChanged", (view) => new EditTextValueChangedBinding(view)));
 
             base.FillTargetFactories(registry);
         }
