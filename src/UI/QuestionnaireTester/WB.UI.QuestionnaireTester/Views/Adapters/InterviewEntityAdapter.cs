@@ -3,10 +3,9 @@ using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Android.Content;
 using System;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.UI.QuestionnaireTester.Utils;
+using WB.Core.GenericSubdomains.Utils;
 using WB.UI.QuestionnaireTester.Views.CustomControls;
 
 
@@ -32,7 +31,7 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             var viewModel = this.GetRawItem(position);
             var viewModelType = viewModel.GetType();
 
-            if (viewModelType.IsImplementationOfGenericType(typeof(QuestionContainerViewModel<>)))
+            if (viewModelType.IsSubclassOfRawGeneric(typeof(QuestionContainerViewModel<>)))
             {
                 viewModelType = typeof(QuestionContainerViewModel<>);
             }

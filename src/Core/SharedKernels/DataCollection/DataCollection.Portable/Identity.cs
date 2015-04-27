@@ -17,12 +17,8 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         protected bool Equals(Identity other)
         {
-            var str = string.Join(",", RosterVector);
             return this.Id.Equals(other.Id) && this.RosterVector.SequenceEqual(other.RosterVector);
-            
         }
-
-
 
         public override int GetHashCode()
         {

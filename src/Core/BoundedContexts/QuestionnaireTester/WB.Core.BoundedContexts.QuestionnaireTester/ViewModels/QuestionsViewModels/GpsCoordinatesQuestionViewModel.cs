@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntity
+    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
@@ -29,17 +29,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, Identity identity)
+        public void Init(string interviewId, Identity questionIdentity)
         {
-            if (identity == null) throw new ArgumentNullException("identity");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            GpsCoordinatesQuestionModel questionModel = (GpsCoordinatesQuestionModel)questionnaire.Questions[identity.Id];
-            var answerModel = interview.GetGpsCoordinatesAnswerModel(identity);
+            GpsCoordinatesQuestionModel questionModel = (GpsCoordinatesQuestionModel)questionnaire.Questions[questionIdentity.Id];
+            var answerModel = interview.GetGpsCoordinatesAnswerModel(questionIdentity);
             
-            this.questionIdentity = identity;
+            this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
             this.Title = questionModel.Title;

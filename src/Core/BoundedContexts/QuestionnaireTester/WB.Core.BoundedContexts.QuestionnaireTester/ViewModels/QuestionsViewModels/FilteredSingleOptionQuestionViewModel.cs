@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntity
+    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
@@ -34,14 +34,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, Identity identity)
+        public void Init(string interviewId, Identity questionIdentity)
         {
-            if (identity == null) throw new ArgumentNullException("identity");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            this.identity = identity;
+            this.identity = questionIdentity;
             this.interviewId = interview.Id;
 
 

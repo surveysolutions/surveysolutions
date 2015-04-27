@@ -11,19 +11,17 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using EventIdentity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class QuestionContainerViewModel<T> : MvxNotifyPropertyChanged, IInterviewEntity,
+    public class QuestionContainerViewModel<T> : MvxNotifyPropertyChanged, IInterviewItemViewModel,
         ILiteEventBusEventHandler<QuestionsEnabled>,
         ILiteEventBusEventHandler<QuestionsDisabled>
-        where T : class, IInterviewEntity
+        where T : class, IInterviewItemViewModel
     {
         private Identity identity;
-        private Guid interviewId;
 
-        private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
         private IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private IPlainRepository<InterviewModel> interviewRepository;
 
@@ -38,27 +36,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
 
-            this.commandService = commandService;
-            this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, Identity identity)
+        public void Init(string interviewId, Identity questionIdentity)
         {
-            if (identity == null) throw new ArgumentNullException("identity");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
             
-            this.identity = identity;
-            this.interviewId = interview.Id;
+            this.identity = questionIdentity;
 
-            BaseQuestionModel questionModel = questionnaire.Questions[identity.Id];
+            BaseQuestionModel questionModel = questionnaire.Questions[questionIdentity.Id];
             //var answerModel = this.interviewModel.GetTextAnswerModel(this.identity);
 
             Editor = Mvx.Create<T>();
-            Editor.Init(interviewId, identity);
+            Editor.Init(interviewId, questionIdentity);
 
             this.Title = questionModel.Title;
         }
@@ -86,7 +81,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Handle(QuestionsEnabled @event)
         {
-            if (@event.Questions.Any(i => i.Id != this.identity.Id && i.RosterVector != this.identity.RosterVector))
+            if (!@event.Questions.All(i => EventIdentity.ToIdentity(i) == this.identity))
                 return;
 
             this.Enabled = true;
@@ -94,7 +89,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Handle(QuestionsDisabled @event)
         {
-            if (@event.Questions.Any(i => i.Id != this.identity.Id && i.RosterVector != this.identity.RosterVector))
+            if (!@event.Questions.Any(i => EventIdentity.ToIdentity(i) == this.identity))
                 return;
 
             this.Enabled = false;

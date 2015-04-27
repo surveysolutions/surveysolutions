@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class MaskedTextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntity,
+    public class MaskedTextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel,
         ILiteEventBusEventHandler<TextQuestionAnswered>,
         ILiteEventBusEventHandler<QuestionsEnabled>,
         ILiteEventBusEventHandler<QuestionsDisabled>
@@ -38,17 +38,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
 
-        public void Init(string interviewId, Identity identity)
+        public void Init(string interviewId, Identity questionIdentity)
         {
-            if (identity == null) throw new ArgumentNullException("identity");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            var questionModel = (MaskedTextQuestionModel)questionnaire.Questions[identity.Id];
-            var answerModel = interview.GetTextAnswerModel(identity);
+            var questionModel = (MaskedTextQuestionModel)questionnaire.Questions[questionIdentity.Id];
+            var answerModel = interview.GetTextAnswerModel(questionIdentity);
 
-            this.questionIdentity = identity;
+            this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
             this.Title = questionModel.Title;
 
