@@ -7,7 +7,6 @@ using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
@@ -65,7 +64,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             }
 
             if (!questionnaire.GroupsWithoutNestedChildren.ContainsKey(groupIdentity.Id))
-                throw new KeyNotFoundException("Group with id : {0} don't found".FormatString(groupIdentity));
+                throw new KeyNotFoundException(string.Format("Group with id : {0} don't found", groupIdentity));
 
             var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[groupIdentity.Id];
 

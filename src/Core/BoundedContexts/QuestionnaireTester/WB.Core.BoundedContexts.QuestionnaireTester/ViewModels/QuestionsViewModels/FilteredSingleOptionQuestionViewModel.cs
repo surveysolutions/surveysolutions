@@ -1,6 +1,6 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;

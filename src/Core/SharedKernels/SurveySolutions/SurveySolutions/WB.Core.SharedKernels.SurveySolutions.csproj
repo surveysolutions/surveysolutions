@@ -55,7 +55,6 @@
     <Compile Include="Documents\IConditional.cs" />
     <Compile Include="Documents\IGroup.cs" />
     <Compile Include="Documents\Image.cs" />
-    <Compile Include="Documents\IPlainStorageEntity.cs" />
     <Compile Include="Documents\IQuestion.cs" />
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\IStaticText.cs" />

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;

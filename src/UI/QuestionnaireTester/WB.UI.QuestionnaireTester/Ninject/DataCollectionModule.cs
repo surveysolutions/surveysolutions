@@ -1,10 +1,8 @@
 using Ninject.Modules;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 
@@ -12,20 +10,9 @@ namespace WB.UI.QuestionnaireTester.Ninject
 {
     public class DataCollectionModule: NinjectModule
     {
-        private readonly string pathToQuestionnaireAssemblies;
-
-        public DataCollectionModule(string pathToQuestionnaireAssemblies)
-        {
-            this.pathToQuestionnaireAssemblies = pathToQuestionnaireAssemblies;
-        }
-
         public override void Load()
         {
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
-
-            this.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<TesterQuestionnaireAssemblyFileAccessor>().InSingletonScope()
-                .WithConstructorArgument("assemblyStorageDirectory", this.pathToQuestionnaireAssemblies);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 

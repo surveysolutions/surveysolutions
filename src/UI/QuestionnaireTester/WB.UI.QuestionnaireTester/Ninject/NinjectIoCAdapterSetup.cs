@@ -1,8 +1,9 @@
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
 using WB.Core.BoundedContexts.QuestionnaireTester;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Files;
+using WB.Core.Infrastructure.Android;
 
 namespace WB.UI.QuestionnaireTester.Ninject
 {
@@ -12,13 +13,16 @@ namespace WB.UI.QuestionnaireTester.Ninject
         {
             return new NinjectMvxIocProvider(
                 new SecurityModule(),
-                new NetworkModule(),
                 new LoggerModule(),
-                new ApplicationModule(),
                 new ServiceLocationModule(),
-                new FileInfrastructureModule(),
-                new PlainStorageInfrastructureModule(GetPathToSubfolderInLocalDirectory("database")),
-                new DataCollectionModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries")),
+                new FileSystemModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries")),
+                new JsonModule(),
+                new SettingsModule(),
+                new NetworkModule(),
+                new ApplicationModule(),
+                new PlainStorageModule(new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
+                new PlainStorageInfrastructureModule(),
+                new DataCollectionModule(),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()),
                 new InterviewModule());
         }

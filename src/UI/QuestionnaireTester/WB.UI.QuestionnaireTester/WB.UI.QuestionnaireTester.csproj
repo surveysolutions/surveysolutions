@@ -17,6 +17,7 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>0062ed4a</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,11 +58,13 @@
     <Reference Include="Chance.MvvmCross.Plugins.UserInteraction.Droid">
       <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.3\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
+    <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.2\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.1.2\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.CrossCore">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
@@ -87,40 +90,42 @@
     <Reference Include="Cirrious.MvvmCross.Localization">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Color">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Color.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.File">
+    <Reference Include="Cirrious.MvvmCross.Plugins.File, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.File.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.File.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.File.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.File.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.File.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Network">
+    <Reference Include="Cirrious.MvvmCross.Plugins.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Network.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Network.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Network.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Network.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Network.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="IHS.MvvmCross.Plugins.Keychain">
+    <Reference Include="IHS.MvvmCross.Plugins.Keychain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.dll</HintPath>
     </Reference>
     <Reference Include="IHS.MvvmCross.Plugins.Keychain.Droid">
       <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
@@ -132,16 +137,6 @@
     </Reference>
     <Reference Include="PCLStorage.Abstractions">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="Siaqodb">
-      <HintPath>..\..\..\..\packages\Siaqodb.4.0.2.29\lib\MonoAndroid\Siaqodb.dll</HintPath>
-    </Reference>
-    <Reference Include="SiaqodbPortable">
-      <HintPath>..\..\..\..\packages\Siaqodb.4.0.2.29\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -155,13 +150,13 @@
     <Reference Include="Xamarin.Android.Support.v7.RecyclerView">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.RecyclerView.22.0.0.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Insights">
+    <Reference Include="Xamarin.Insights, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Xamarin.Insights.1.9.1.107\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
@@ -172,24 +167,13 @@
     <Compile Include="CustomBindings\BindingWrapper.cs" />
     <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
-    <Compile Include="Implementation\Services\FileSystemAccessor.cs" />
-    <Compile Include="Implementation\Services\NetworkService.cs" />
-    <Compile Include="Implementation\Services\ApplicationSettings.cs" />
-    <Compile Include="Implementation\Services\Principal.cs" />
-    <Compile Include="Implementation\Services\RestServiceSettings.cs" />
-    <Compile Include="Implementation\Services\XamarinInsightsLogger.cs" />
-    <Compile Include="Implementation\Views\UserIdentity.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
-    <Compile Include="Ninject\LoggerModule.cs" />
     <Compile Include="Ninject\DataCollectionModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
     <Compile Include="Ninject\NinjectModuleAdapter.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
-    <Compile Include="Ninject\NetworkModule.cs" />
-    <Compile Include="Ninject\SecurityModule.cs" />
     <Compile Include="Ninject\PlainStorageInfrastructureModule.cs" />
-    <Compile Include="Ninject\ServiceLocationModule.cs" />
     <Compile Include="Controls\QuestionEditorContainer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -388,21 +372,9 @@
       <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
       <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
-      <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj">
-      <Project>{8CEACD5D-AB0E-4104-8BCE-DDD7900887E0}</Project>
-      <Name>WB.Core.Infrastructure.Files.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage.Mobile\WB.Core.Infrastructure.Storage.Mobile.csproj">
-      <Project>{AC9D8028-37EA-44F6-92EC-05F20EF27253}</Project>
-      <Name>WB.Core.Infrastructure.Storage.Mobile</Name>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj">
+      <Project>{C6B1BA38-E58E-4E3D-BA59-5289FA10CCBB}</Project>
+      <Name>WB.Core.Infrastructure.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -439,7 +411,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
+  <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

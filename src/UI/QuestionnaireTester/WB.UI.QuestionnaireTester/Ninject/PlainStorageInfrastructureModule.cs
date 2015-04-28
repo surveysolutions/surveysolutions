@@ -1,10 +1,8 @@
 using Main.Core.Documents;
 using Ninject;
 using Ninject.Modules;
-using Sqo;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Storage.Mobile.Siaqodb;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -13,21 +11,8 @@ namespace WB.UI.QuestionnaireTester.Ninject
 {
     public class PlainStorageInfrastructureModule : NinjectModule
     {
-        private readonly string pathToStorage;
-
-        public PlainStorageInfrastructureModule(string pathToStorage)
-        {
-            this.pathToStorage = pathToStorage;
-        }
-
         public override void Load()
         {
-            this.ConfigurePlainStorage();
-
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.pathToStorage));
-            
-            this.Bind(typeof (IPlainStorageAccessor<>)).To(typeof (SiaqodbPlainStorageAccessor<>)).InSingletonScope();
-
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<QuestionnaireModel>>().To<InMemoryPlainStorageAccessor<QuestionnaireModel>>().InSingletonScope();
             this.Bind<IPlainStorageAccessor<InterviewModel>>().To<InMemoryPlainStorageAccessor<InterviewModel>>().InSingletonScope();
@@ -37,12 +22,6 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             this.Bind<IPlainRepository<InterviewModel>>().To<PlainRepository<InterviewModel>>().InSingletonScope();
             this.Bind<IPlainRepository<QuestionnaireModel>>().To<PlainRepository<QuestionnaireModel>>().InSingletonScope();
-        }
-
-        private void ConfigurePlainStorage()
-        {
-            this.Bind<IDocumentSerializer>().To<SiaqodbPlainStorageSerializer>().InSingletonScope();
-            SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
         }
     }
 }

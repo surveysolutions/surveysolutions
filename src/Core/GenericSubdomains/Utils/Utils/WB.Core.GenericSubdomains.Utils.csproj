@@ -76,12 +76,10 @@
     <Compile Include="OrderDirection.cs" />
     <Compile Include="OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IUserIdentity.cs" />
     <Compile Include="Services\IInfoFileSupplierRegistry.cs" />
     <Compile Include="Services\IJsonUtils.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
-    <Compile Include="Services\IPrincipal.cs" />
     <Compile Include="Services\IRestService.cs" />
     <Compile Include="Services\IRestServiceSettings.cs" />
     <Compile Include="Services\IStringCompressor.cs" />
