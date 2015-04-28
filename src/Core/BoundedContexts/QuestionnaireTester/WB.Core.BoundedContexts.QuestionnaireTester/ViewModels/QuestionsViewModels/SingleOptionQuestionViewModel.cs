@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
@@ -50,12 +51,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var answerModel = interview.GetSingleAnswerModel(this.identity);
 
             this.Title = questionModel.Title;
+            this.Options = questionModel.Options.Select(ToViewModel).ToList();
 
             if (answerModel != null)
             {
                 Answer = answerModel.Answer;
             }
         }
+
+        public IList<QuestionOptionViewModel> Options { get; private set; }
+        public QuestionOptionViewModel SelectedOption { get; private set; }
 
         private string title;
         public string Title
@@ -69,6 +74,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get { return answer; }
             set { answer = value; RaisePropertyChanged(() => Answer); }
+        }
+
+        private static QuestionOptionViewModel ToViewModel(OptionModel model)
+        {
+            return new QuestionOptionViewModel
+            {
+                Title = model.Title,
+                IsSelected = false,
+            };
         }
     }
 }

@@ -86,6 +86,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\MultimediaQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\QrBarcodeQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\QuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\RealNumericQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\RosterReferenceViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\RostersReferenceViewModel.cs" />
