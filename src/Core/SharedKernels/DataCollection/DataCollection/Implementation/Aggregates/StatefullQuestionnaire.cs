@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -160,7 +161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                         {
                                             CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
                                             IsFilteredCombobox = singleQuestion.IsFilteredCombobox,
-                                            Options = singleQuestion.Answers.Select(x => new OptionModel { Id = decimal.Parse(x.AnswerValue), Title = x.AnswerText }).ToList()
+                                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList()
                                         };
                     }
                     break;
@@ -179,7 +180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                         {
                                             AreAnswersOrdered = multiQuestion.AreAnswersOrdered,
                                             MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
-                                            Options = question.Answers.Select(x => new OptionModel { Id = decimal.Parse(x.AnswerValue), Title = x.AnswerText }).ToList()
+                                            Options = question.Answers.Select(ToOptionModel).ToList()
                                         };
                     }
                     break;
@@ -223,6 +224,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionModel.IsPrefilled = question.Featured;
 
             return questionModel;
+        }
+
+        private static OptionModel ToOptionModel(Answer answer)
+        {
+            return new OptionModel
+            {
+                Id = decimal.Parse(answer.AnswerValue, CultureInfo.InvariantCulture),
+                Title = answer.AnswerText,
+            };
         }
     }
 
