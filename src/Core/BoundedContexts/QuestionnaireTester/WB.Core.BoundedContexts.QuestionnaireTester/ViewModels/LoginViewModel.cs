@@ -1,6 +1,6 @@
 ﻿using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {

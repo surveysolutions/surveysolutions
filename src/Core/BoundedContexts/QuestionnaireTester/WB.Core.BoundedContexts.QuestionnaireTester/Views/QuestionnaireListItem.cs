@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Views
 {

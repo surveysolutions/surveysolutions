@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await Task.Delay(3000);
 
-            if (this.principal.CurrentUserIdentity.IsAuthenticated)
+            if (this.principal.IsAuthenticated)
             {
                 this.ShowViewModel<DashboardViewModel>();
             }

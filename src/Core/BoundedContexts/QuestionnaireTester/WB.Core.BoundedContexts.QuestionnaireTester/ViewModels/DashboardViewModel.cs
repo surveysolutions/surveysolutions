@@ -6,12 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
@@ -28,8 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public DashboardViewModel(
             IPrincipal principal,
-            ILogger logger,
-            IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
+            ILogger logger, IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
             DesignerApiService designerApiService, 
             ICommandService commandService)
             : base(logger)
@@ -196,7 +193,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             return Task.Run(async () =>
             {
-                var userQuestionnaires = this.questionnairesStorageAccessor.Query(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name).ToArray());
+                var userQuestionnaires = await this.questionnairesStorageAccessor.QueryAsync(
+                            _ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name)
+                                  .ToArray());
                 if (userQuestionnaires.Any())
                 {
                     this.MyQuestionnaires = new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => !qli.IsPublic));
@@ -213,15 +212,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public async Task GetServerQuestionnaires()
         {
             this.IsInProgress = true;
-            this.ClearQuestionnaires();
+            await this.ClearQuestionnaires();
 
             try
             {
                 await this.designerApiService.GetQuestionnairesAsync(
                     token: tokenSource.Token,
-                    onPageReceived: (batchOfServerQuestionnaires) =>
+                    onPageReceived: async (batchOfServerQuestionnaires) =>
                     {
-                        this.questionnairesStorageAccessor.Store(batchOfServerQuestionnaires.Select(qli => new Tuple<QuestionnaireListItem, object>(qli, qli.Id)));
+                        await this.questionnairesStorageAccessor.StoreAsync(batchOfServerQuestionnaires);
                         this.InvokeOnMainThread(() => this.AppendToQuestionnaires(batchOfServerQuestionnaires));
                     });
             }
@@ -231,10 +230,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private void ClearQuestionnaires()
+        private async Task ClearQuestionnaires()
         {
-            var userQuestionnaires = this.questionnairesStorageAccessor.Query(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name));
-            this.questionnairesStorageAccessor.Remove(userQuestionnaires);
+            var userQuestionnaires = await this.questionnairesStorageAccessor.QueryAsync(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name));
+            await this.questionnairesStorageAccessor.RemoveAsync(userQuestionnaires);
             this.MyQuestionnaires.Clear();
             this.PublicQuestionnaires.Clear();
         }

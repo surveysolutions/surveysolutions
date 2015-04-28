@@ -4,10 +4,8 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.QuestionnaireTester.Views.QuestionnaireListItem;
 
@@ -19,16 +17,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         private readonly ILogger logger;
         private readonly IRestService restService;
-        private readonly IRestServiceSettings restServiceSettings;
-        private readonly IPrincipal principal;
+        private readonly RestServiceSettings restServiceSettings;
+        private readonly IUserIdentity userIdentity;
         private readonly IUserInteraction userInteraction;
 
-        public DesignerApiService(ILogger logger, IRestService restService, IRestServiceSettings restServiceSettings, IPrincipal principal, IUserInteraction userInteraction)
+        public DesignerApiService(ILogger logger, IRestService restService, RestServiceSettings restServiceSettings, IUserIdentity userIdentity, IUserInteraction userInteraction)
         {
             this.logger = logger;
             this.restService = restService;
             this.restServiceSettings = restServiceSettings;
-            this.principal = principal;
+            this.userIdentity = userIdentity;
             this.userInteraction = userInteraction;
         }
 
@@ -105,8 +103,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     credentials:
                         new RestCredentials()
                         {
-                            Login = this.principal.CurrentUserIdentity.Name,
-                            Password = this.principal.CurrentUserIdentity.Password
+                            Login = this.userIdentity.Name,
+                            Password = this.userIdentity.Password
                         },
                     progressPercentage: downloadProgress, token: token);
             }
@@ -154,8 +152,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 credentials:
                     new RestCredentials()
                     {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
+                        Login = this.userIdentity.Name,
+                        Password = this.userIdentity.Password
                     },
                 queryString: new { pageIndex = pageIndex, pageSize = pageSize });
 
@@ -165,7 +163,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 Title = questionnaireListItem.Title,
                 LastEntryDate = questionnaireListItem.LastEntryDate,
                 IsPublic = questionnaireListItem.IsPublic,
-                OwnerName = this.principal.CurrentUserIdentity.Name
+                OwnerName = this.userIdentity.Name
             }).ToArray();
         }
 

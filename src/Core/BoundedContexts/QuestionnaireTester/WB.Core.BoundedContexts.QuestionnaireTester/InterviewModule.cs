@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             Bind<NavigationState>().ToSelf().InSingletonScope();
 
             Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>();
-            Bind<ITesterExpressionsEngineVersionService>().To<TesterExpressionsEngineVersionService>();
         }
     }
 }
