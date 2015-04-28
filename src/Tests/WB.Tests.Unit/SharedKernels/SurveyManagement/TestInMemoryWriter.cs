@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Linq.Expressions;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -72,11 +71,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
         {
             return query.Invoke(this.Dictionary.Values.AsQueryable());
-        }
-
-        public IEnumerable<T> QueryAll(Expression<Func<T, bool>> condition = null)
-        {
-            return condition == null ? this.Dictionary.Values : this.Dictionary.Values.Where(condition.Compile()).ToList();
         }
     }
 }
