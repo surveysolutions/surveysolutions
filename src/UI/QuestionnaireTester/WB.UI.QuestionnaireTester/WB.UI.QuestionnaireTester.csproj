@@ -372,6 +372,10 @@
       <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
       <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj">
       <Project>{C6B1BA38-E58E-4E3D-BA59-5289FA10CCBB}</Project>
       <Name>WB.Core.Infrastructure.Android</Name>
