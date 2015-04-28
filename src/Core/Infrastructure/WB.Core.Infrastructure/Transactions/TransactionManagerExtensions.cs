@@ -39,7 +39,10 @@ namespace WB.Core.Infrastructure.Transactions
         {
             try
             {
-                transactionManager.BeginQueryTransaction();
+                if (!transactionManager.IsQueryTransactionStarted)
+                {
+                    transactionManager.BeginQueryTransaction();
+                }
 
                 return func.Invoke();
             }
