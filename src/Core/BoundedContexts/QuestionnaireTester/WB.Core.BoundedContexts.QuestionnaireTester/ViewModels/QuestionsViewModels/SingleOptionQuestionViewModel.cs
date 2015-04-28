@@ -49,10 +49,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[this.identity.Id];
             var answerModel = interview.GetSingleAnswerModel(this.identity);
 
+            this.Title = questionModel.Title;
+
             if (answerModel != null)
             {
                 Answer = answerModel.Answer;
             }
+        }
+
+        private string title;
+        public string Title
+        {
+            get { return title; }
+            set { title = value; RaisePropertyChanged(() => Title); }
         }
 
         private decimal answer;
