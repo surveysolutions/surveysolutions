@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(GroupModel), Load<GroupReferenceViewModel> },
                 // questions
                 { typeof(MaskedTextQuestionModel), Load<QuestionContainerViewModel<MaskedTextQuestionViewModel>> },
+                { typeof(SingleOptionQuestionModel), Load<QuestionContainerViewModel<SingleOptionQuestionViewModel>> },
                 { typeof(GpsCoordinatesQuestionModel), Load<QuestionContainerViewModel<GpsCoordinatesQuestionViewModel>> }
             };
 
@@ -94,7 +95,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
-                throw new ArgumentOutOfRangeException("entityModelType");
+                throw new ArgumentOutOfRangeException("entityModelType", entityModelType, "View model is not registered");
             }
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];

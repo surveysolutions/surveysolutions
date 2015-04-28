@@ -6,4 +6,9 @@
     <TextView
         style="@style/Interview_TextQuestion_Caption"
         local:MvxBind="Text Title" />
+    <MvxRadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        local:MvxItemTemplate="@layout/interview_single_option_question_item_template"
+        local:MvxBind="ItemsSource Options; SelectedItem SelectedOption" />
 </MvxLinearLayout>
