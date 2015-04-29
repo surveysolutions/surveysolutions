@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -37,9 +38,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.commandService = commandService;
         }
 
-        public async void Init()
+        public void Init()
         {
-            await this.BindQuestionnairesFromStorage();
+            this.BindQuestionnairesFromStorage();
         }
 
         private ObservableCollection<QuestionnaireListItem> myQuestionnaires = new ObservableCollection<QuestionnaireListItem>();
@@ -189,30 +190,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private Task BindQuestionnairesFromStorage()
+        private async void BindQuestionnairesFromStorage()
         {
-            return Task.Run(async () =>
+            var userQuestionnaires = this.questionnairesStorageAccessor.Query(
+                _ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name).ToArray());
+            if (userQuestionnaires.Any())
             {
-                var userQuestionnaires = await this.questionnairesStorageAccessor.QueryAsync(
-                            _ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name)
-                                  .ToArray());
-                if (userQuestionnaires.Any())
-                {
-                    this.MyQuestionnaires = new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => !qli.IsPublic));
-                    this.PublicQuestionnaires = new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => qli.IsPublic));    
-                }
-                else
-                {
-                    await this.GetServerQuestionnaires();
-                }
-                
-            });
+                this.MyQuestionnaires =
+                    new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => !qli.IsPublic));
+                this.PublicQuestionnaires =
+                    new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => qli.IsPublic));
+            }
+            else
+            {
+                await this.GetServerQuestionnaires();
+            }
         }
 
         public async Task GetServerQuestionnaires()
         {
             this.IsInProgress = true;
-            await this.ClearQuestionnaires();
+            this.ClearQuestionnaires();
 
             try
             {
@@ -230,9 +228,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private async Task ClearQuestionnaires()
+        private async void ClearQuestionnaires()
         {
-            var userQuestionnaires = await this.questionnairesStorageAccessor.QueryAsync(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name));
+            var userQuestionnaires = this.questionnairesStorageAccessor.Query(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name));
             await this.questionnairesStorageAccessor.RemoveAsync(userQuestionnaires);
             this.MyQuestionnaires.Clear();
             this.PublicQuestionnaires.Clear();

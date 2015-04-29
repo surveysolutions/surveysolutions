@@ -12,15 +12,9 @@ namespace WB.UI.QuestionnaireTester.Ninject
         public static IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(
-                new SecurityModule(),
-                new LoggerModule(),
-                new ServiceLocationModule(),
-                new FileSystemModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries")),
-                new JsonModule(),
-                new SettingsModule(),
-                new NetworkModule(),
+                new AndroidInfrastructureModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries"),
+                    plainStorageSettings: new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
                 new ApplicationModule(),
-                new PlainStorageModule(new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
                 new PlainStorageInfrastructureModule(),
                 new DataCollectionModule(),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()),

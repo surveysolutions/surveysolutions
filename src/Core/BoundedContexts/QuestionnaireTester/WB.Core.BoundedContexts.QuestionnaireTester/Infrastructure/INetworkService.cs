@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
 {
     public interface INetworkService
     {
-        Task<bool> IsNetworkEnabledAsync();
+        bool IsNetworkEnabled();
     }
 }

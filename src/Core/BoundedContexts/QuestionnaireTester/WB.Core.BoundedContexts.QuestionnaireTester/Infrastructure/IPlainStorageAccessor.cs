@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
 {
     public interface IPlainStorageAccessor<TEntity> where TEntity : class, IPlainStorageEntity
     {
-        Task<TEntity> GetByIdAsync(string id);
+        TEntity GetById(string id);
 
         Task RemoveAsync(string id);
         Task RemoveAsync(IEnumerable<TEntity> entities);
@@ -15,6 +15,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
         Task StoreAsync(TEntity entity);
         Task StoreAsync(IEnumerable<TEntity> entities);
 
-        Task<TResult> QueryAsync<TResult>(Func<IQueryable<TEntity>, TResult> query);
+        TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
     }
 }

@@ -32,7 +32,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url, Func<FlurlClient, Task<HttpResponseMessage>> request, CancellationToken token,
             object queryString = null, RestCredentials credentials = null)
         {
-            if (!await this.networkService.IsNetworkEnabledAsync())
+            if (!this.networkService.IsNetworkEnabled())
             {
                 throw new RestException("No network");
             }

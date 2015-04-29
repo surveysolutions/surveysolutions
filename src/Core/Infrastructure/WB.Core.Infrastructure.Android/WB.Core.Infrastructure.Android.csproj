@@ -145,13 +145,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileSystemModule.cs" />
     <Compile Include="Implementation\Services\FileSystem\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Services\Settings\ApplicationSettings.cs" />
     <Compile Include="Implementation\Services\Compression\Compressor.cs" />
     <Compile Include="Implementation\Services\Settings\ExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\FileSystem\FileSystemService.cs" />
-    <Compile Include="Implementation\Services\Json\NewtonJsonUtils.cs" />
+    <Compile Include="Implementation\Services\Json\NewtonJsonSerializer.cs" />
     <Compile Include="Implementation\Services\Log\XamarinInsightsLogger.cs" />
     <Compile Include="Implementation\Services\Network\NetworkService.cs" />
     <Compile Include="Implementation\Services\Rest\RestExtensions.cs" />
@@ -160,16 +159,9 @@
     <Compile Include="Implementation\Services\Security\Principal.cs" />
     <Compile Include="Implementation\Services\Security\UserIdentity.cs" />
     <Compile Include="Implementation\Services\Storage\PlainStorageAccessor.cs" />
-    <Compile Include="Implementation\Services\Storage\PlainStorageSerializer.cs" />
-    <Compile Include="SettingsModule.cs" />
-    <Compile Include="JsonModule.cs" />
-    <Compile Include="LoggerModule.cs" />
-    <Compile Include="NetworkModule.cs" />
-    <Compile Include="PlainStorageModule.cs" />
+    <Compile Include="AndroidInfrastructureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="SecurityModule.cs" />
-    <Compile Include="ServiceLocationModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

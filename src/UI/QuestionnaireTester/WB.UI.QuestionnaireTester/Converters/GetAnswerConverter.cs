@@ -4,6 +4,7 @@ using System.Linq;
 using Cirrious.CrossCore.Converters;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
