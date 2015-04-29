@@ -9,14 +9,16 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.Infrastructure.Android.Implementation.Services.Compression;
+using WB.Core.Infrastructure.Android.Implementation.Services.Json;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
 {
     public static class RestExtensions
     {
-        private static ICompressor Compressor
+        private static Compressor Compressor
         {
-            get { return ServiceLocator.Current.GetInstance<ICompressor>(); }
+            get { return ServiceLocator.Current.GetInstance<Compressor>(); }
         }
 
         private static RestServiceSettings RestServiceSettings
@@ -24,9 +26,9 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             get { return ServiceLocator.Current.GetInstance<RestServiceSettings>(); }
         }
 
-        private static IJsonUtils JsonUtils
+        private static NewtonJsonSerializer JsonUtils
         {
-            get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
+            get { return ServiceLocator.Current.GetInstance<NewtonJsonSerializer>(); }
         }
 
         public static async Task<T> ReceiveCompressedJsonAsync<T>(this Task<HttpResponseMessage> response)
@@ -82,18 +84,18 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
                 {
                     if (acceptedEncodings.Contains("gzip"))
                     {
-                        responseContent = await Compressor.DecompressGZipAsync(responseContent);
+                        responseContent = Compressor.DecompressGZip(responseContent);
                     }
 
                     if (acceptedEncodings.Contains("deflate"))
                     {
-                        responseContent = await Compressor.DecompressDeflateAsync(responseContent);
+                        responseContent = Compressor.DecompressDeflate(responseContent);
                     }
                 }
 
                 try
                 {
-                    return await JsonUtils.DeserializeAsync<T>(responseContent);
+                    return JsonUtils.DeserializeAsync<T>(responseContent);
                 }
                 catch (JsonReaderException ex)
                 {
