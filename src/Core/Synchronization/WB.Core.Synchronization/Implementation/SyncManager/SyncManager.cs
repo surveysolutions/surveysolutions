@@ -286,8 +286,13 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                 }
 
                 filteredItems = filteredItems.OrderByDescending(x => x.SortIndex);
-                return filteredItems.First();
+                return filteredItems.FirstOrDefault();
             });
+
+            if (package == null)
+            {
+                return Enumerable.Empty<UserSyncPackageMeta>().AsQueryable();
+            }
 
             return new List<UserSyncPackageMeta>{package}.AsQueryable();
         }
