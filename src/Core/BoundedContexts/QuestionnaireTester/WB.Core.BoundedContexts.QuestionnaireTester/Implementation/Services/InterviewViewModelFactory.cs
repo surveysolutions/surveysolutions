@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -23,12 +21,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             new Dictionary<Type, Func<IInterviewItemViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
-                { typeof(RosterModel), Load<RostersReferenceViewModel> },
-                { typeof(GroupModel), Load<GroupReferenceViewModel> },
-                // questions
-                { typeof(MaskedTextQuestionModel), Load<QuestionContainerViewModel<MaskedTextQuestionViewModel>> },
-                { typeof(SingleOptionQuestionModel), Load<QuestionContainerViewModel<SingleOptionQuestionViewModel>> },
-                { typeof(GpsCoordinatesQuestionModel), Load<QuestionContainerViewModel<GpsCoordinatesQuestionViewModel>> }
+                { typeof(MaskedTextQuestionModel), Load<MaskedTextQuestionViewModel> },
+                { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
+                { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> }
             };
 
         private static T Load<T>() where T : class
@@ -44,17 +39,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
         }
 
-        public Task<IEnumerable> GetEntitiesAsync(string interviewId, Identity groupIdentity)
+        public IList GetEntities(string interviewId, Identity groupIdentity)
         {
-            return Task.Run(()=> GenerateViewModels(interviewId, groupIdentity));
+            return GenerateViewModels(interviewId, groupIdentity);
         }
 
-        public Task<IEnumerable> GetPrefilledQuestionsAsync(string interviewId)
+        public IList GetPrefilledQuestions(string interviewId)
         {
-            return Task.Run(() => GetPrefilledQuestionsImpl(interviewId));
+            return GetPrefilledQuestionsImpl(interviewId);
         }
 
-        private IEnumerable GenerateViewModels(string interviewId, Identity groupIdentity)
+        private IList GenerateViewModels(string interviewId, Identity groupIdentity)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
@@ -77,12 +72,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return viewModels;
         }
 
-        private IEnumerable GetPrefilledQuestionsImpl(string interviewId)
+        private IList GetPrefilledQuestionsImpl(string interviewId)
         {
             var interview = this.plainStorageInterviewAccessor.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
-            return questionnaire.PrefilledQuestionsIds.Select(question => CreateInterviewItemViewModel(entityId: question.Id, rosterVector: new decimal[0], entityModelType: question.ModelType, interviewId: interviewId));
+            return questionnaire.PrefilledQuestionsIds.Select(
+                    question => CreateInterviewItemViewModel(entityId: question.Id, rosterVector: new decimal[0],
+                                                             entityModelType: question.ModelType, interviewId: interviewId)).ToList();
         }
 
         private static IInterviewItemViewModel CreateInterviewItemViewModel(
