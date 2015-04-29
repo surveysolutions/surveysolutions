@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,34 +12,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
-        private readonly NavigationState navigationState;
+        private NavigationState navigationState;
 
         public GroupViewModel(IInterviewViewModelFactory interviewViewModelFactory,
-             IPlainRepository<QuestionnaireModel> questionnaireRepository, NavigationState navigationState)
+             IPlainRepository<QuestionnaireModel> questionnaireRepository)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
+        }
+
+        public void Init(NavigationState navigationState)
+        {
+            if (navigationState == null) throw new ArgumentNullException("navigationState");
+            if (this.navigationState != null) throw new Exception("ViewModel already initialized");
+
             this.navigationState = navigationState;
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
         }
 
         async void navigationState_OnGroupChanged(Identity newGroupIdentity)
         {
-            await this.Init();
-        }
+            var questionnaire = this.questionnaireRepository.Get(this.navigationState.QuestionnaireId);
 
-        private Task Init()
-        {
-            return Task.Run(async () =>
-            {
-                var questionnaire = this.questionnaireRepository.Get(this.navigationState.QuestionnaireId);
+            var group = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id];
 
-                var group = questionnaire.GroupsWithoutNestedChildren[this.navigationState.CurrentGroup.Id];
-
-                this.Name = group.Title;
-                this.Items = await this.interviewViewModelFactory.GetEntitiesAsync(interviewId: this.navigationState.InterviewId,
-                                                                                   groupIdentity: this.navigationState.CurrentGroup);
-            });
+            this.Name = group.Title;
+            this.Items = await this.interviewViewModelFactory.GetEntitiesAsync(interviewId: this.navigationState.InterviewId,
+                    groupIdentity: newGroupIdentity);
         }
 
         private string name;
