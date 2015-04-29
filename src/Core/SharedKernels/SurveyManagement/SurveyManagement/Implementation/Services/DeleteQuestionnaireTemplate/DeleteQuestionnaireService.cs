@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate
 {
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
-        private readonly IInterviewsToDeleteFactory interviewsToDeleteFactory;
+        private readonly Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory;
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
         private readonly ICommandService commandService;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -25,8 +29,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
-        public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory, ICommandService commandService,
-            ILogger logger, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
+            ICommandService commandService,
+            ILogger logger, 
+            IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -52,7 +59,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
             return Task.Factory.StartNew(() =>
             {
-                this.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
+                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                try
+                {
+                    this.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
+                }
+                finally
+                {
+                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                }
             });
         }
 
@@ -88,9 +103,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
         private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
-            var exceptionsDuringDelete=new List<Exception>();
+            var exceptionsDuringDelete = new List<Exception>();
 
-            var listOfInterviews = interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
+            IInterviewsToDeleteFactory toDeleteFactory = interviewsToDeleteFactory.Invoke();
+            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+            List<InterviewSummary> listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() => 
+                                                            toDeleteFactory.Load(questionnaireId, questionnaireVersion));
             do
             {
                 foreach (var interviewSummary in listOfInterviews)
@@ -105,7 +123,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
                        exceptionsDuringDelete.Add(e);
                     }
                 }
-                listOfInterviews = interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
+                listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                                                            toDeleteFactory.Load(questionnaireId, questionnaireVersion));
 
             } while (listOfInterviews.Any());
 

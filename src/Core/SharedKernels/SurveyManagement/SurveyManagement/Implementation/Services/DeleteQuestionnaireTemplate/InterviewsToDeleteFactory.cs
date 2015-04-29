@@ -9,16 +9,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 {
     internal class InterviewsToDeleteFactory : IInterviewsToDeleteFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
 
-        public InterviewsToDeleteFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
+        public InterviewsToDeleteFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
         {
-            this.interviewSummaries = interviewSummaries;
+            this.interviewsReader = interviewsReader;
         }
 
         public List<InterviewSummary> Load(Guid questionnaireId, long questionnaireVersion)
         {
-            var result = this.interviewSummaries.Query(_ => _.Where(interview => !interview.IsDeleted &&
+            var result = this.interviewsReader.Query(_ => _.Where(interview => !interview.IsDeleted &&
                 interview.QuestionnaireId == questionnaireId &&
                 interview.QuestionnaireVersion == questionnaireVersion).ToList());
 
