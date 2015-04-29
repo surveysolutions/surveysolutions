@@ -37,8 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var group = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id];
 
             this.Name = group.Title;
-            this.Items = await this.interviewViewModelFactory.GetEntitiesAsync(interviewId: this.navigationState.InterviewId,
-                    groupIdentity: newGroupIdentity);
+            this.Items = this.interviewViewModelFactory.GetEntities(interviewId: this.navigationState.InterviewId, groupIdentity: newGroupIdentity);
         }
 
         private string name;
@@ -48,8 +47,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { name = value; RaisePropertyChanged(); }
         }
 
-        private IEnumerable items;
-        public IEnumerable Items
+        private IList items;
+        public IList Items
         {
             get { return items; }
             set { items = value; RaisePropertyChanged(); }

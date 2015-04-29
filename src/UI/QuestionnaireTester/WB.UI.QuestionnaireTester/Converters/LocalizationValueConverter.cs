@@ -3,7 +3,7 @@ using System.Globalization;
 using Cirrious.CrossCore.Converters;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 
-namespace WB.UI.QuestionnaireTester.ValueConverters
+namespace WB.UI.QuestionnaireTester.Converters
 {
     public class LocalizationValueConverter : MvxValueConverter<string, string>
     {

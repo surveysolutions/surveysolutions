@@ -3,9 +3,7 @@ using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Android.Content;
 using System;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.GenericSubdomains.Utils;
 using WB.UI.QuestionnaireTester.Views.CustomControls;
 
 
@@ -17,31 +15,27 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             : base(context, bindingContext)
         {
         }
-       
-        private static readonly Dictionary<Type, int> GroupItemsTemplates = new Dictionary<Type, int>
+
+        private static readonly Dictionary<Type, int> QuestionTemplates = new Dictionary<Type, int>
         {
-            {typeof (StaticTextViewModel), Resource.Layout.interview_static_text },
-            {typeof (GroupReferenceViewModel), Resource.Layout.interview_group_reference },
-            {typeof (RostersReferenceViewModel), Resource.Layout.interview_roster_reference },
-            {typeof (QuestionContainerViewModel<>), Resource.Layout.interview_question_container }
+            {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
+            {typeof (MaskedTextQuestionViewModel), Resource.Layout.interview_text_question},
+            {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_gps_question},
+            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_single_option_question}
         };
 
         public override int GetItemViewType(int position)
         {
-            var viewModel = this.GetRawItem(position);
-            var viewModelType = viewModel.GetType();
+            var source = this.GetRawItem(position);
 
-            if (viewModelType.IsSubclassOfRawGeneric(typeof(QuestionContainerViewModel<>)))
-            {
-                viewModelType = typeof(QuestionContainerViewModel<>);
-            }
+            var typeOfViewModel = source.GetType();
 
-            return GroupItemsTemplates[viewModelType];
+            return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : -1;
         }
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
         {
-            return bindingContext.BindingInflate(viewType, parent, false);
+            return viewType == -1 ? new View(Context) : bindingContext.BindingInflate(viewType, parent, false);
         }
     }
 }

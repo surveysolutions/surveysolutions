@@ -36,14 +36,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private IEnumerable prefilledQuestions;
-        public IEnumerable PrefilledQuestions
+        private IList prefilledQuestions;
+        public IList PrefilledQuestions
         {
             get { return prefilledQuestions; }
             set { prefilledQuestions = value; RaisePropertyChanged(); }
         }
 
-        public async void Init(string interviewId)
+        public void Init(string interviewId)
         {
             this.interviewId = interviewId;
 
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = await this.interviewViewModelFactory.GetPrefilledQuestionsAsync(this.interviewId);
+            this.PrefilledQuestions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
         }
 
         private void StartInterview()

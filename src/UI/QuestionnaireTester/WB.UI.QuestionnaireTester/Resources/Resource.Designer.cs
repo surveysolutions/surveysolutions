@@ -33,6 +33,12 @@ namespace WB.UI.QuestionnaireTester
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.Infrastructure.Android.Resource.String.AcceptUnsignedSslCertificate = global::WB.UI.QuestionnaireTester.Resource.String.AcceptUnsignedSslCertificate;
+			global::WB.Core.Infrastructure.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::WB.Core.Infrastructure.Android.Resource.String.BufferSize = global::WB.UI.QuestionnaireTester.Resource.String.BufferSize;
+			global::WB.Core.Infrastructure.Android.Resource.String.DesignerEndpoint = global::WB.UI.QuestionnaireTester.Resource.String.DesignerEndpoint;
+			global::WB.Core.Infrastructure.Android.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.Infrastructure.Android.Resource.String.HttpResponseTimeout = global::WB.UI.QuestionnaireTester.Resource.String.HttpResponseTimeout;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -1330,20 +1336,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080018
 			public const int collapseActionView = 2131230744;
 			
-			// aapt resource value: 0x7f080048
-			public const int dashboard_about = 2131230792;
+			// aapt resource value: 0x7f080047
+			public const int dashboard_about = 2131230791;
+			
+			// aapt resource value: 0x7f080044
+			public const int dashboard_refresh = 2131230788;
 			
 			// aapt resource value: 0x7f080045
-			public const int dashboard_refresh = 2131230789;
+			public const int dashboard_search = 2131230789;
 			
 			// aapt resource value: 0x7f080046
-			public const int dashboard_search = 2131230790;
+			public const int dashboard_settings = 2131230790;
 			
-			// aapt resource value: 0x7f080047
-			public const int dashboard_settings = 2131230791;
-			
-			// aapt resource value: 0x7f080049
-			public const int dashboard_signout = 2131230793;
+			// aapt resource value: 0x7f080048
+			public const int dashboard_signout = 2131230792;
 			
 			// aapt resource value: 0x7f080030
 			public const int decor_content_parent = 2131230768;
@@ -1390,20 +1396,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080024
 			public const int image = 2131230756;
 			
+			// aapt resource value: 0x7f080049
+			public const int interview_dashboard = 2131230793;
+			
 			// aapt resource value: 0x7f08004a
-			public const int interview_dashboard = 2131230794;
+			public const int interview_help = 2131230794;
 			
 			// aapt resource value: 0x7f08004b
-			public const int interview_help = 2131230795;
+			public const int interview_language = 2131230795;
 			
 			// aapt resource value: 0x7f08004c
-			public const int interview_language = 2131230796;
+			public const int interview_settings = 2131230796;
 			
 			// aapt resource value: 0x7f08004d
-			public const int interview_settings = 2131230797;
-			
-			// aapt resource value: 0x7f08004e
-			public const int interview_signout = 2131230798;
+			public const int interview_signout = 2131230797;
 			
 			// aapt resource value: 0x7f08000a
 			public const int listMode = 2131230730;
@@ -1431,9 +1437,6 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f080006
 			public const int progress_horizontal = 2131230726;
-			
-			// aapt resource value: 0x7f080044
-			public const int question_editor_container = 2131230788;
 			
 			// aapt resource value: 0x7f080042
 			public const int questionnaireEntitiesList = 2131230786;
@@ -1621,82 +1624,43 @@ namespace WB.UI.QuestionnaireTester
 			public const int interview_current_group = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int interview_date_question = 2130903067;
+			public const int interview_gps_question = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int interview_decimal_question = 2130903068;
+			public const int interview_prefilled_question_template = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int interview_gps_question = 2130903069;
+			public const int interview_single_option_question = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int interview_group_reference = 2130903070;
+			public const int interview_single_option_question_item_template = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int interview_image_question = 2130903071;
+			public const int interview_static_text = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int interview_integer_question = 2130903072;
+			public const int interview_text_question = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int interview_linked_multi_question = 2130903073;
+			public const int login = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int interview_linked_single_question = 2130903074;
+			public const int my_questionnaire_list_item = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int interview_multi_option_question = 2130903075;
+			public const int prefilled_questions = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int interview_multi_option_question_item_template = 2130903076;
+			public const int public_questionnaire_list_item = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int interview_prefilled_question_template = 2130903077;
+			public const int search_questionnaires = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int interview_qr_question = 2130903078;
+			public const int splash = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int interview_question_container = 2130903079;
-			
-			// aapt resource value: 0x7f030028
-			public const int interview_roster_reference = 2130903080;
-			
-			// aapt resource value: 0x7f030029
-			public const int interview_single_option_question = 2130903081;
-			
-			// aapt resource value: 0x7f03002a
-			public const int interview_single_option_question_item_template = 2130903082;
-			
-			// aapt resource value: 0x7f03002b
-			public const int interview_static_text = 2130903083;
-			
-			// aapt resource value: 0x7f03002c
-			public const int interview_text_list_question = 2130903084;
-			
-			// aapt resource value: 0x7f03002d
-			public const int interview_text_question = 2130903085;
-			
-			// aapt resource value: 0x7f03002e
-			public const int login = 2130903086;
-			
-			// aapt resource value: 0x7f03002f
-			public const int my_questionnaire_list_item = 2130903087;
-			
-			// aapt resource value: 0x7f030030
-			public const int prefilled_questions = 2130903088;
-			
-			// aapt resource value: 0x7f030031
-			public const int public_questionnaire_list_item = 2130903089;
-			
-			// aapt resource value: 0x7f030032
-			public const int search_questionnaires = 2130903090;
-			
-			// aapt resource value: 0x7f030033
-			public const int splash = 2130903091;
-			
-			// aapt resource value: 0x7f030034
-			public const int support_simple_spinner_dropdown_item = 2130903092;
+			public const int support_simple_spinner_dropdown_item = 2130903079;
 			
 			static Layout()
 			{
@@ -1730,11 +1694,23 @@ namespace WB.UI.QuestionnaireTester
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f0a0015
+			public const int AcceptUnsignedSslCertificate = 2131361813;
+			
 			// aapt resource value: 0x7f0a0011
 			public const int ApplicationName = 2131361809;
 			
+			// aapt resource value: 0x7f0a0014
+			public const int BufferSize = 2131361812;
+			
+			// aapt resource value: 0x7f0a0012
+			public const int DesignerEndpoint = 2131361810;
+			
 			// aapt resource value: 0x7f0a0010
 			public const int Hello = 2131361808;
+			
+			// aapt resource value: 0x7f0a0013
+			public const int HttpResponseTimeout = 2131361811;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int abc_action_bar_home_description = 2131361792;
@@ -1784,8 +1760,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0a000f
 			public const int abc_toolbar_collapse_description = 2131361807;
 			
-			// aapt resource value: 0x7f0a0012
-			public const int library_name = 2131361810;
+			// aapt resource value: 0x7f0a0016
+			public const int library_name = 2131361814;
 			
 			static String()
 			{
