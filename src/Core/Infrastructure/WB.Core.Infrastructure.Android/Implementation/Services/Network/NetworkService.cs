@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 
@@ -19,9 +18,9 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Network
             this.restServiceSettings = restServiceSettings;
         }
 
-        public Task<bool> IsNetworkEnabledAsync()
+        public bool IsNetworkEnabled()
         {
-            return Task.Run(() => this.mvxReachability.IsHostReachable(this.restServiceSettings.Endpoint));
+            return this.mvxReachability.IsHostReachable(this.restServiceSettings.Endpoint);
         }
     }
 }

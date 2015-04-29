@@ -17,20 +17,22 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
             this.Storage = storage;
         }
 
-        public Task<TEntity> GetByIdAsync(string id)
+        public TEntity GetById(string id)
         {
-            return Task.Run(() => this.Storage.Query<TEntity>().FirstOrDefault(_ => _.Id == id));
+            return this.Storage.Query<TEntity>().FirstOrDefault(_ => _.Id == id);
         }
 
         public async Task RemoveAsync(string id)
         {
-            TEntity entity = await this.GetByIdAsync(id);
+            TEntity entity = this.GetById(id);
 
             await this.RemoveAsync(new[] { entity });
         }
 
         public async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
+            var isFailedTransaction = false;
+
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
@@ -39,12 +41,15 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
                     await this.Storage.DeleteAsync(entity, transaction);
                 }
 
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch
             {
-                transaction.Rollback();
+                isFailedTransaction = true;
             }
+
+            if (isFailedTransaction)
+                await transaction.RollbackAsync();
         }
 
         public async Task StoreAsync(TEntity entity)
@@ -54,6 +59,8 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
 
         public async Task StoreAsync(IEnumerable<TEntity> entities)
         {
+            var isFailedTransaction = false;
+
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
@@ -62,22 +69,22 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
                     await this.Storage.StoreObjectAsync(entity, transaction);
                 }
 
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch
             {
-                transaction.Rollback();
+                isFailedTransaction = true;
             }
+
+            if(isFailedTransaction)
+                await transaction.RollbackAsync();
         }
 
-        public Task<TResult> QueryAsync<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return Task.Run(() =>
-            {
-                var queryable = this.Storage.Cast<TEntity>().AsQueryable();
-                var result = query.Invoke(queryable);
-                return result;
-            });
+            var queryable = this.Storage.Cast<TEntity>().AsQueryable();
+            var result = query.Invoke(queryable);
+            return result;
         }
     }
 }

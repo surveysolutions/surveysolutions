@@ -117,16 +117,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     {
                         case HttpStatusCode.Forbidden:
                             errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
-                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id,
+                                GetDomainName(this.restServiceSettings.Endpoint), selectedQuestionnaire.Id,
                                 selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName);
                             break;
                         case HttpStatusCode.PreconditionFailed:
                             errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
+                                GetDomainName(this.restServiceSettings.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
                             break;
                         case HttpStatusCode.NotFound:
                             errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                                this.restServiceSettings.Endpoint.GetDomainName(), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
+                                GetDomainName(this.restServiceSettings.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
                             break;
                     }
                 }
@@ -192,6 +192,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             }
 
             return errorMessage;
+        }
+
+        private static string GetDomainName(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            Uri uri;
+
+            if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
+                throw new ArgumentException("invalid url string");
+
+            return uri.ToString().Replace(uri.PathAndQuery, "");
         }
     }
 }
