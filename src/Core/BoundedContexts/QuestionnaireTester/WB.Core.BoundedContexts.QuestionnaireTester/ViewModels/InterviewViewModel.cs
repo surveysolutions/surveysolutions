@@ -46,8 +46,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 })
                 .ToList();
 
-            this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId,
-                currentGroupIdentity: new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]));
+            this.Breadcrumbs.Init(this.navigationState);
+            this.Chapters.Init(this.navigationState);
+            this.CurrentGroup.Init(this.navigationState);
+
+            this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
+            this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]), 
+                shouldBeAddedToNavigationStack: false);
         }
 
         private static AbstractInterviewAnswerModel GetAnswerModel(InterviewModel interview, QuestionnaireReferenceModel referenceToQuestion)
@@ -114,7 +119,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.ShowViewModel<DashboardViewModel>();
+            this.navigationState.NavigateBack(()=>this.ShowViewModel<DashboardViewModel>());
         }
     }
 }
