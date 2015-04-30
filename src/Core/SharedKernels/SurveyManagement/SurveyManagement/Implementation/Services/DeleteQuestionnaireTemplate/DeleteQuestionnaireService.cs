@@ -44,7 +44,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
-            var questionnaire = questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+            var questionnaire = cqrsTransactionManager.ExecuteInQueryTransaction(() => 
+                questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
             if (questionnaire == null)
                 throw new ArgumentException(string.Format("questionnaire with id {0} and version {1} is absent", questionnaireId.FormatGuid(), questionnaireVersion));
