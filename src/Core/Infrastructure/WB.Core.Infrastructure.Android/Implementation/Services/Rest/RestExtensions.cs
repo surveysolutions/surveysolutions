@@ -95,7 +95,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
 
                 try
                 {
-                    return JsonUtils.DeserializeAsync<T>(responseContent);
+                    return JsonUtils.Deserialize<T>(responseContent);
                 }
                 catch (JsonReaderException ex)
                 {
