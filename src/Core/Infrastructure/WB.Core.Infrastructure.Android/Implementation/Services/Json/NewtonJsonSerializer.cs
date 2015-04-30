@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Json
 {
-    public class NewtonJsonSerializer
+    internal class NewtonJsonSerializer
     {
         private readonly JsonSerializer jsonSerializer;
 
@@ -19,30 +19,13 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Json
             });
         }
 
-        public T DeserializeAsync<T>(byte[] payload)
+        public T Deserialize<T>(byte[] payload)
         {
             var input = new MemoryStream(payload);
             using (var reader = new StreamReader(input))
             {
                 return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
             }
-        }
-
-        public object DeserializeFromStreamAsync(Stream stream, Type type)
-        {
-            using (var sr = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(sr))
-            {
-                return jsonSerializer.Deserialize(jsonTextReader, type);
-            }
-        }
-
-        public byte[] SerializeToByteArrayAsync(object payload)
-        {
-            var output = new MemoryStream();
-            using (var writer = new StreamWriter(output))
-                jsonSerializer.Serialize(writer, payload);
-            return output.ToArray();
         }
     }
 }
