@@ -1136,7 +1136,7 @@ namespace WB.Tests.Unit
                 eventStore ?? Mock.Of<IEventStore>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewSummaryRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(),
-                readyToSendInterviewsRepositoryReader ?? new TestInMemoryWriter<ReadyToSendToHeadquartersInterview>(),
+                readyToSendInterviewsRepositoryReader ?? Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>(),
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(

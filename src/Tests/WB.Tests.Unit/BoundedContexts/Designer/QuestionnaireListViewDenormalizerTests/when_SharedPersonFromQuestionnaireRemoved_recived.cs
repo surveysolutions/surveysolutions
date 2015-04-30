@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
            Result.LastEntryDate.ShouldEqual(sharedPersonFromQuestionnaireRemovedEvent.EventTimeStamp);
 
         private static QuestionnaireListViewItemDenormalizer questionnaireListViewItemDenormalizer;
-        private static TestInMemoryWriter<QuestionnaireListViewItem> questionnaireListViewItemInMemoryWriter = new TestInMemoryWriter<QuestionnaireListViewItem>();
+        private static TestInMemoryWriter<QuestionnaireListViewItem> questionnaireListViewItemInMemoryWriter = Stub.ReadSideRepository<QuestionnaireListViewItem>();
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static IPublishedEvent<SharedPersonFromQuestionnaireRemoved> sharedPersonFromQuestionnaireRemovedEvent;
         private static QuestionnaireListViewItem Result

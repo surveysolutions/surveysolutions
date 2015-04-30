@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
     {
         protected static HeadquartersTeamsAndStatusesReport CreateTeamsAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> reader = null)
         {
-            return new HeadquartersTeamsAndStatusesReport(reader ?? new TestInMemoryWriter<InterviewSummary>());
+            return new HeadquartersTeamsAndStatusesReport(reader ?? Stub.ReadSideRepository<InterviewSummary>());
         }
     }
 }

@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns(Task<HttpResponseMessage>.Factory.StartNew(() =>
                     new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(positiveResponse) }));
 
-            var readyToSendInterviewsRepositoryWriter = new TestInMemoryWriter<ReadyToSendToHeadquartersInterview>();
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             var eventStore = Mock.Of<IEventStore>(store

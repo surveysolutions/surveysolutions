@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns(Task<HttpResponseMessage>.Factory.StartNew(() =>
                     new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(negativeResponse) }));
 
-            var readyToSendInterviewsRepositoryWriter = new TestInMemoryWriter<ReadyToSendToHeadquartersInterview>();
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             CommittedEvent interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);

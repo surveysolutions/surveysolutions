@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
-            var readyToSendInterviewsRepositoryWriter = new TestInMemoryWriter<ReadyToSendToHeadquartersInterview>();
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);

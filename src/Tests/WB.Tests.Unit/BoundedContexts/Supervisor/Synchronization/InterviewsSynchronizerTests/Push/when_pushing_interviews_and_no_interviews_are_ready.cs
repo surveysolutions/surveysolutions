@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
     {
         Establish context = () =>
         {
-            var readyToSendInterviewsRepositoryWriter = new TestInMemoryWriter<ReadyToSendToHeadquartersInterview>();
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
