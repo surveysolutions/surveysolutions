@@ -10,6 +10,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class GroupViewModel : MvxNotifyPropertyChanged
     {
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set { name = value; RaisePropertyChanged(); }
+        }
+
+        private IList items;
+        public IList Items
+        {
+            get { return items; }
+            set { items = value; RaisePropertyChanged(); }
+        }
+
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private NavigationState navigationState;
@@ -38,20 +52,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.Name = group.Title;
             this.Items = this.interviewViewModelFactory.GetEntities(interviewId: this.navigationState.InterviewId, groupIdentity: newGroupIdentity);
-        }
-
-        private string name;
-        public string Name
-        {
-            get { return name; } 
-            set { name = value; RaisePropertyChanged(); }
-        }
-
-        private IList items;
-        public IList Items
-        {
-            get { return items; }
-            set { items = value; RaisePropertyChanged(); }
         }
     }
 }
