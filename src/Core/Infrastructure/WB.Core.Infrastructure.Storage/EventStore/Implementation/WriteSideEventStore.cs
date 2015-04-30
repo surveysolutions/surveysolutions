@@ -119,19 +119,15 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         public void Store(UncommittedEventStream eventStream)
         {
             int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
-            using (EventStoreTransaction transaction = this.RunWithDefaultTimeout(this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
-            {
-                using (var transactionTimeout = new CancellationTokenSource()) 
-                {
-                    transactionTimeout.CancelAfter(this.defaultTimeout);
-                    transaction.WriteAsync(eventStream.Select(BuildEventData)).WaitAndUnwrapException(transactionTimeout.Token);
-                }
 
-                using (var commitTimeout = new CancellationTokenSource()) 
-                {
-                    commitTimeout.CancelAfter(this.defaultTimeout);
-                    transaction.CommitAsync().WaitAndUnwrapException(commitTimeout.Token);
-                }
+            using (var writeTimeout = new CancellationTokenSource())
+            {
+                writeTimeout.CancelAfter(this.defaultTimeout);
+
+                var stream = EventsPrefix + eventStream.SourceId.FormatGuid();
+                var events = eventStream.Select(BuildEventData);
+                this.connection.AppendToStreamAsync(stream, expectedStreamVersion, events)
+                               .WaitAndUnwrapException(writeTimeout.Token);
             }
         }
 
