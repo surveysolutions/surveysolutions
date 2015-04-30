@@ -49,7 +49,6 @@
     <Compile Include="Infrastructure\RestCredentials.cs" />
     <Compile Include="Infrastructure\RestException.cs" />
     <Compile Include="Infrastructure\RestServiceSettings.cs" />
-    <Compile Include="InterviewModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">

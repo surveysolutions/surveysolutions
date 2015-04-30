@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
-    internal class InterviewViewModelFactory : IInterviewViewModelFactory
+    public class InterviewViewModelFactory : IInterviewViewModelFactory
     {
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
