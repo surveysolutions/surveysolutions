@@ -13,18 +13,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
+        private readonly IUserIdentity userIdentity;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
 
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public GpsCoordinatesQuestionViewModel(ICommandService commandService, IPrincipal principal, IPlainRepository<QuestionnaireModel> questionnaireRepository,
+        public GpsCoordinatesQuestionViewModel(ICommandService commandService, IUserIdentity userIdentity, IPlainRepository<QuestionnaireModel> questionnaireRepository,
              IPlainRepository<InterviewModel> interviewRepository)
         {
             this.commandService = commandService;
-            this.principal = principal;
+            this.userIdentity = userIdentity;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
         }
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
                 interviewId: interviewId,
-                userId: principal.CurrentUserIdentity.UserId,
+                userId: userIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow, 
@@ -82,8 +82,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 altitude: 0, 
                 latitude: 0, 
                 longitude: 0, 
-                timestamp: DateTimeOffset.UtcNow
-                ));
+                timestamp: DateTimeOffset.UtcNow));
         }
     }
 }

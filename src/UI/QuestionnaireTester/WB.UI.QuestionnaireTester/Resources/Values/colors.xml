@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="red">#ffff0000</color>
-  <color name="white">#ffffff</color>
-
   <color name="applicationBackground">#FFFAFAFA</color>
   <color name="colorBlueThemePrimary">#FF2A81CB</color>
 

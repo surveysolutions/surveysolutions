@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:indeterminateOnly="true"
+        android:layout_marginTop="-7dp"
         android:keepScreenOn="false"
         local:MvxBind="Visible IsInProgress" />
     <ScrollView

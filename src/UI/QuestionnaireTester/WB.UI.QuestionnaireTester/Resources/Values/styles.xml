@@ -100,7 +100,18 @@
     <item name="android:layout_marginLeft">10dp</item>
   </style>
 
+  <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+    <item name="spinBars">true</item>
+    <item name="color">@android:color/white</item>
+  </style>
+
   <style name="EditTextTheme_Blue_Light" parent="android:Widget.EditText">
+    <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
+    <item name="android:textColor">#000000</item>
+  </style>
+
+  <style name="AutoCompleteTextViewTheme_Blue_Light" parent="android:Widget.AutoCompleteTextView">
+    <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
     <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
     <item name="android:textColor">#000000</item>
   </style>
@@ -109,20 +120,45 @@
     <item name="android:button">@drawable/theme_blue_light_btn_check_holo_light</item>
   </style>
 
+  <style name="RadioButtonTheme_Blue_Light" parent="android:Widget.CompoundButton.RadioButton">
+    <item name="android:button">@drawable/theme_blue_light_btn_radio_holo_light</item>
+  </style>
+
   <style name="ButtonTheme_Blue_Light" parent="android:Widget.Button">
     <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
-    <item name="android:minHeight">64dip</item>
-    <item name="android:minWidth">96dip</item>
-    <item name="android:textColor">#FFFFFFFF</item>
+    <item name="android:minHeight">48dip</item>
+    <item name="android:minWidth">64dip</item>
+    <item name="android:textColor">#FFFFFF</item>
   </style>
 
   <style name="ImageButtonTheme_Blue_Light" parent="android:Widget.ImageButton">
     <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
   </style>
 
-  <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-    <item name="spinBars">true</item>
-    <item name="color">@android:color/white</item>
+  <style name="SpinnerTheme_Blue_Light" parent="android:Widget.Spinner">
+    <item name="android:background">@drawable/theme_blue_light_spinner_background_holo_light</item>
+    <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
+  </style>
+
+  <style name="SpinnerDropDownItemTheme_Blue_Light" parent="android:Widget.DropDownItem.Spinner">
+    <item name="android:checkMark">@drawable/theme_blue_light_btn_radio_holo_light</item>
+  </style>
+  <style name="ProgressBarTheme_Blue_Light" parent="android:Widget.ProgressBar.Horizontal">
+    <item name="android:progressDrawable">@drawable/theme_blue_light_progress_horizontal_holo_light</item>
+    <item name="android:indeterminateDrawable">@drawable/theme_blue_light_progress_indeterminate_horizontal_holo_light</item>
+    <item name="android:minHeight">16dip</item>
+    <item name="android:maxHeight">16dip</item>
+  </style>
+
+  <style name="SeekBarTheme_Blue_Light" parent="android:Widget.SeekBar">
+    <item name="android:progressDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
+    <item name="android:indeterminateDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
+    <item name="android:minHeight">13dip</item>
+    <item name="android:maxHeight">13dip</item>
+    <item name="android:thumb">@drawable/theme_blue_light_scrubber_control_selector_holo_light</item>
+    <item name="android:thumbOffset">16dip</item>
+    <item name="android:paddingLeft">16dip</item>
+    <item name="android:paddingRight">16dip</item>
   </style>
   
 </resources>

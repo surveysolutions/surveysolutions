@@ -17,7 +17,6 @@
             local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
             <TextView
-                style="@style/InterviewToolbarTitle"
                 local:MvxBind="Text CurrentGroup.Name" />
         </android.support.v7.widget.Toolbar>
         <ScrollView
