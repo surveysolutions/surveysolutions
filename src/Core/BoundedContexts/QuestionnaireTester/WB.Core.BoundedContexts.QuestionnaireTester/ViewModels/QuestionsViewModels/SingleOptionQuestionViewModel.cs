@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -14,9 +16,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
-        private IPlainRepository<QuestionnaireModel> questionnaireRepository;
-        private IPlainRepository<InterviewModel> interviewRepository;
+        private readonly Guid userId;
+        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainRepository<InterviewModel> interviewRepository;
         private Identity identity;
         private Guid interviewId;
 
@@ -32,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
 
             this.commandService = commandService;
-            this.principal = principal;
+            this.userId = principal.CurrentUserIdentity.UserId;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
         }
@@ -52,6 +54,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.Title = questionModel.Title;
             this.Options = questionModel.Options.Select(ToViewModel).ToList();
+            this.selectedOption = this.Options.SingleOrDefault(option => option.Value == Monads.Maybe(() => answerModel.Answer));
 
             if (answerModel != null)
             {
@@ -60,7 +63,34 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         public IList<QuestionOptionViewModel> Options { get; private set; }
-        public QuestionOptionViewModel SelectedOption { get; private set; }
+
+        public QuestionOptionViewModel SelectedOption
+        {
+            get { return selectedOption; }
+            set
+            {
+                try
+                {
+                    this.ExecuteAnswerCommand(value);
+                    selectedOption = value;
+                }
+                finally
+                {
+                    this.RaisePropertyChanged(() => SelectedOption);
+                }
+            }
+        }
+
+        private void ExecuteAnswerCommand(QuestionOptionViewModel option)
+        {
+            this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
+                this.interviewId,
+                this.userId,
+                this.identity.Id,
+                this.identity.RosterVector,
+                DateTime.Now,
+                option.Value));
+        }
 
         private string title;
         public string Title
@@ -70,6 +100,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private decimal answer;
+        private QuestionOptionViewModel selectedOption;
+
         public decimal Answer
         {
             get { return answer; }
@@ -80,6 +112,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             return new QuestionOptionViewModel
             {
+                Value = model.Value,
                 Title = model.Title,
                 IsSelected = false,
             };

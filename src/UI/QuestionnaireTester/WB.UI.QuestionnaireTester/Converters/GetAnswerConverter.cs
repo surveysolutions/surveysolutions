@@ -51,7 +51,7 @@ namespace WB.UI.QuestionnaireTester.Converters
         private static string GetAnswerOnSingleOptionQuestionAsString(string interviewId, SingleOptionAnswerModel singleOptionAnswerModel)
         {
             var singleOptionQuestionModel = GetQuestionnaire(interviewId).Questions[singleOptionAnswerModel.Id] as SingleOptionQuestionModel;
-            return singleOptionQuestionModel != null ? singleOptionQuestionModel.Options.FirstOrDefault(_ => _.Id == singleOptionAnswerModel.Answer).Title : string.Empty;
+            return singleOptionQuestionModel != null ? singleOptionQuestionModel.Options.FirstOrDefault(_ => _.Value == singleOptionAnswerModel.Answer).Title : string.Empty;
         }
 
         private static string GetAnswerOnMultiOptionQuestionAsString(string interviewId, MultiOptionAnswerModel multiOptionAnswerModel)
@@ -60,7 +60,7 @@ namespace WB.UI.QuestionnaireTester.Converters
             return multiOptionQuestionModel != null
                 ? string.Join(",",
                     multiOptionQuestionModel.Options.Where(
-                        _ => multiOptionAnswerModel.Answers.Contains(_.Id)).Select(_ => _.Title))
+                        _ => multiOptionAnswerModel.Answers.Contains(_.Value)).Select(_ => _.Title))
                 : string.Empty;
         }
     }
