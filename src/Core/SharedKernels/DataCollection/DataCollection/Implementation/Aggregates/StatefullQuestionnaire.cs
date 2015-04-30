@@ -230,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return new OptionModel
             {
-                Id = decimal.Parse(answer.AnswerValue, CultureInfo.InvariantCulture),
+                Value = decimal.Parse(answer.AnswerValue, CultureInfo.InvariantCulture),
                 Title = answer.AnswerText,
             };
         }

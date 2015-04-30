@@ -2,7 +2,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionM
 {
     public class OptionModel
     {
-        public decimal Id { get; set; }
+        public decimal Value { get; set; }
         public string Title { get; set; }
     }
 }
