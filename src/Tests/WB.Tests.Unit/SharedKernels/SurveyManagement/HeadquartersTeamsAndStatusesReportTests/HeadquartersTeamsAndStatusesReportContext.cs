@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatusesReportTests
 {
-    [Subject(typeof(SupervisorTeamsAndStatusesReport))]
+    [Subject(typeof(HeadquartersTeamsAndStatusesReport))]
     internal class HeadquartersTeamsAndStatusesReportContext
     {
         protected static HeadquartersTeamsAndStatusesReport CreateTeamsAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> reader = null)
