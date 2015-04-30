@@ -1,6 +1,5 @@
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
-using WB.Core.BoundedContexts.QuestionnaireTester;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Android;
@@ -17,8 +16,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
                 new ApplicationModule(),
                 new PlainStorageInfrastructureModule(),
                 new DataCollectionModule(),
-                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()),
-                new InterviewModule());
+                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
         }
 
         private static string GetPathToSubfolderInLocalDirectory(string subFolderName)
