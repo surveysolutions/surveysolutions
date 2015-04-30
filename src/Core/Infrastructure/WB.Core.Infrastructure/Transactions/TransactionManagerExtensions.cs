@@ -37,9 +37,11 @@ namespace WB.Core.Infrastructure.Transactions
 
         public static T ExecuteInQueryTransaction<T>(this ITransactionManager transactionManager, Func<T> func)
         {
+            bool shouldStartTransaction = !transactionManager.IsQueryTransactionStarted;
             try
             {
-                if (!transactionManager.IsQueryTransactionStarted)
+
+                if (shouldStartTransaction)
                 {
                     transactionManager.BeginQueryTransaction();
                 }
@@ -48,7 +50,10 @@ namespace WB.Core.Infrastructure.Transactions
             }
             finally
             {
-                transactionManager.RollbackQueryTransaction();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.RollbackQueryTransaction();
+                }
             }
         }
     }
