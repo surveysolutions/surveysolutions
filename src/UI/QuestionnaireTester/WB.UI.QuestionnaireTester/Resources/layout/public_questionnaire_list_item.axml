@@ -18,10 +18,7 @@
         android:padding="5dp"
         android:orientation="vertical">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:lines="2"
+            style="@style/QuestionnaireListItem_Title"
             local:MvxBind="Text Title" />
         <LinearLayout
             android:layout_width="wrap_content"

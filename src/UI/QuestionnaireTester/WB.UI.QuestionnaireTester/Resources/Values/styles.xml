@@ -1,9 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
- 
-  <style name="InterviewToolbarTitle" parent="ToolbarTitle">
+  <style name="QuestionnaireListItem_Title" parent="Theme.Light.Base">
+    <item name="android:textStyle">bold</item>
+    <item name="android:maxLines">4</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:singleLine">false</item>
+    <item name="android:layout_marginLeft">wrap_content</item>
+    <item name="android:layout_marginRight">wrap_content</item>
+  </style>
+  
+  <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
     <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
     <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
+  </style>
+
+  <style name="InterviewToolbarTitle" parent="ToolbarTitle">
+    <item name="android:maxLines">4</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:layout_marginLeft">0dp</item>
+    <item name="android:layout_marginRight">0dp</item>
   </style>
 
   <style name="ToolbarTitle" parent="Theme.Light.Base">
@@ -53,6 +68,8 @@
     <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
     <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
     <item name="android:layout_centerVertical">true</item>
+    <item name="android:maxLines">5</item>
+    <item name="android:ellipsize">end</item>
   </style>
 
   <style name="PrefilledQuestions_StartButton" parent="Theme.Light.Base">
@@ -98,6 +115,7 @@
     <item name="android:layout_marginTop">5dp</item>
     <item name="android:layout_marginBottom">10dp</item>
     <item name="android:layout_marginLeft">10dp</item>
+    <item name="android:singleLine">false</item>
   </style>
 
   <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
