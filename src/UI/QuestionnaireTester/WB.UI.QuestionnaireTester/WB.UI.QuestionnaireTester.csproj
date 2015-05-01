@@ -97,6 +97,13 @@
     <Reference Include="Cirrious.MvvmCross.Plugins.File.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.File.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.File.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Location">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Location.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Location.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Location.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Network.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Network.dll</HintPath>
@@ -112,6 +119,9 @@
       <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MapboxAndroidSdk">
+      <HintPath>..\..\..\..\packages\MapboxAndroidSdk.0.7.1\lib\MonoAndroid23\MapboxAndroidSdk.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -126,6 +136,9 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="NineOldAndroids">
+      <HintPath>..\..\..\..\packages\Xamarin.NineOldAndroids.0.0.1\lib\MonoAndroid\NineOldAndroids.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
@@ -160,6 +173,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
@@ -308,6 +322,7 @@
     <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_progress_horizontal_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\loginLogo.png" />
+    <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -333,6 +348,15 @@
     <AndroidResource Include="Resources\layout\interview_single_option_question_item_template.axml" />
     <AndroidResource Include="Resources\layout\interview_single_option_question.axml" />
     <AndroidResource Include="Resources\layout\interview_current_group.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_header.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_errors.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_comments.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -291,4 +291,10 @@
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Designer web application is not accessable at this moment. Check connection setting or try again later</value>
   </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Tap to record GPS</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
 </root>

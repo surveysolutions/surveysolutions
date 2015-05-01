@@ -350,6 +350,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instruction.
+        /// </summary>
+        public static string Interview_Instruction_Title {
+            get {
+                return ResourceManager.GetString("Interview_Instruction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to record GPS.
+        /// </summary>
+        public static string Interview_Questions_Gps_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Gps_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modified on:.
         /// </summary>
         public static string LastModifiedDateTitle {

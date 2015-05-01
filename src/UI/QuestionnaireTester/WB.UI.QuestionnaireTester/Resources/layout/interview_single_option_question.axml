@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_InterviewQuestion_Layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
-    <TextView
-        style="@style/Interview_TextQuestion_Caption"
-        local:MvxBind="Text Title" />
-    <MvxRadioGroup
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        local:MvxItemTemplate="@layout/interview_single_option_question_item_template"
-        local:MvxBind="ItemsSource Options; SelectedItem SelectedOption" />
+    <MvxLinearLayout
+        style="@style/Interview_InterviewQuestion_Layout">
+        <include
+            layout="@layout/interview_question_header" />
+        <MvxRadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            local:MvxItemTemplate="@layout/interview_single_option_question_item_template"
+            local:MvxBind="ItemsSource Options; SelectedItem SelectedOption" />
+        <include
+            layout="@layout/interview_question_errors" />
+        <include
+            layout="@layout/interview_question_comments" />
+    </MvxLinearLayout>
+    <View
+        style="@style/InterviewEntity_Divider" />
 </MvxLinearLayout>

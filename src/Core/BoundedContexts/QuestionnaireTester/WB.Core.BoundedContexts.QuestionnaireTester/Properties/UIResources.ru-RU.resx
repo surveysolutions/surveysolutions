@@ -291,4 +291,10 @@
   <data name="PrefilledQuestions_ToolbarTitle" xml:space="preserve">
     <value>Начальная информация по обследованию</value>
   </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Определить местоположение</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Инструкция</value>
+  </data>
 </root>

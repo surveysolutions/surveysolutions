@@ -11,6 +11,7 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+using Mapbox.MapboxSdk.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.UI.QuestionnaireTester.CustomBindings;
@@ -86,7 +87,7 @@ namespace WB.UI.QuestionnaireTester
                 toReturn.Add(typeof(MvxRecyclerView).Assembly);
                 toReturn.Add(typeof(DrawerLayout).Assembly);
                 toReturn.Add(typeof(SwitchCompat).Assembly);
-
+                toReturn.Add(typeof(MapView).Assembly);
                 return toReturn;
             }
         }

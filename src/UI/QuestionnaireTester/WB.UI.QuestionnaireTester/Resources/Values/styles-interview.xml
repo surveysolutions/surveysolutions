@@ -8,34 +8,50 @@
     <item name="android:layout_marginBottom">@dimen/margin_Interview_Bottom</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
   </style>  
   
-  <style name="Interview_InterviewQuestion_Caption">
+  <style name="InterviewEntity_Title">
     <item name="android:fontFamily">Arial</item>
-    <item name="android:textSize">18dp</item>
+    <item name="android:textSize">16dp</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">#3F3F3F</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
   </style>
 
-  <style name="Interview_StaticText" parent="Interview_InterviewQuestion_Layout">
+  <style name="InterviewEntity_Instruction">
     <item name="android:fontFamily">Arial</item>
-    <item name="android:textSize">18dp</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textColor">#3F3F3F</item>
-  </style>
-  
-  <style name="Interview_TextQuestion_Caption" parent="Interview_InterviewQuestion_Caption">
-  </style>  
-  <style name="Interview_TextQuestion_Editor" >
+    <item name="android:textStyle">italic</item>
+    <item name="android:textSize">12dp</item>
+    <item name="android:textColor">#2a81cb</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
+  </style>
+
+  <style name="InterviewEntity_Instruction_Label" parent="InterviewEntity_Instruction">
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textSize">10dp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginTop">10dp</item>
   </style>
 
   <style name="Interview_TextQuestion_Editor" >
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
+  </style>
+
+  <style name="InterviewEntity_Divider" >
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">1dp</item>
+    <item name="android:background">#dadada</item>
   </style>
 
 </resources>

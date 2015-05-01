@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
+        public QuestionHeaderViewModel Header { get; set; }
+
         private readonly ICommandService commandService;
         private readonly Guid userId;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
@@ -26,7 +28,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             ICommandService commandService,
             IPrincipal principal,
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
-            IPlainRepository<InterviewModel> interviewRepository)
+            IPlainRepository<InterviewModel> interviewRepository,
+            QuestionHeaderViewModel questionHeaderViewModel)
         {
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (principal == null) throw new ArgumentNullException("principal");
@@ -37,6 +40,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.userId = principal.CurrentUserIdentity.UserId;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+
+            this.Header = questionHeaderViewModel;
         }
 
         public void Init(string interviewId, Identity questionIdentity)
@@ -52,7 +57,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[this.identity.Id];
             var answerModel = interview.GetSingleAnswerModel(this.identity);
 
-            this.Title = questionModel.Title;
+            this.Header.Init(interviewId, questionIdentity);
             this.Options = questionModel.Options.Select(ToViewModel).ToList();
             this.selectedOption = this.Options.SingleOrDefault(option => option.Value == Monads.Maybe(() => answerModel.Answer));
 
