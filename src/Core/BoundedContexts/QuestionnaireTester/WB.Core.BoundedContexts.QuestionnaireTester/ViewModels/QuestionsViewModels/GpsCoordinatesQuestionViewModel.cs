@@ -1,52 +1,87 @@
 ﻿using System;
+using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
     {
+        public QuestionHeaderViewModel Header { get; set; }
+
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return isInProgress; }
+            set { isInProgress = value; RaisePropertyChanged(); }
+        }
+
+        private MvxCoordinates answer;
+        public MvxCoordinates Answer
+        {
+            get { return answer; }
+            set { answer = value; RaisePropertyChanged(); }
+        }
+
+        private string coordinates;
+        public string Coordinates
+        {
+            get { return coordinates; }
+            set { coordinates = value; RaisePropertyChanged(); }
+        }
+
         private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly IMvxLocationWatcher geoLocationWatcher;
 
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public GpsCoordinatesQuestionViewModel(ICommandService commandService, IUserIdentity userIdentity, IPlainRepository<QuestionnaireModel> questionnaireRepository,
-             IPlainRepository<InterviewModel> interviewRepository)
+        public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
+            IUserIdentity userIdentity, 
+            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IPlainRepository<InterviewModel> interviewRepository,
+            IMvxLocationWatcher geoLocationWatcher,
+            QuestionHeaderViewModel questionHeaderViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.geoLocationWatcher = geoLocationWatcher;
+
+            this.Header = questionHeaderViewModel;
         }
 
         public void Init(string interviewId, Identity questionIdentity)
         {
+            if(interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
-
-            GpsCoordinatesQuestionModel questionModel = (GpsCoordinatesQuestionModel)questionnaire.Questions[questionIdentity.Id];
-            var answerModel = interview.GetGpsCoordinatesAnswerModel(questionIdentity);
             
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
-            this.Title = questionModel.Title;
+            this.Header.Init(interviewId, questionIdentity);
 
+            var answerModel = interview.GetGpsCoordinatesAnswerModel(questionIdentity);
             if (answerModel != null)
             {
-
+                this.Answer = new MvxCoordinates()
+                {
+                    Altitude = answerModel.Altitude,
+                    Longitude = answerModel.Longitude,
+                    Latitude = answerModel.Latitude,
+                    Accuracy = answerModel.Accuracy
+                };
             }
         }
 
@@ -56,33 +91,42 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer)); }
         }
 
-        private string title;
-        public string Title
+        private IMvxCommand removeAnswerCommand;
+        public IMvxCommand RemoveAnswerCommand
         {
-            get { return title; }
-            set { title = value; RaisePropertyChanged(); }
+            get { return removeAnswerCommand ?? (removeAnswerCommand = new MvxCommand(RemoveAnswer)); }
         }
 
-        private string answer;
-        public string Answer
+        private void RemoveAnswer()
         {
-            get { return answer; }
-            set { answer = value; RaisePropertyChanged(); }
+            throw new NotImplementedException();
         }
 
         private void SaveAnswer()
         {
-            this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
-                interviewId: interviewId,
-                userId: userIdentity.UserId,
-                questionId: this.questionIdentity.Id,
-                rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow, 
-                accuracy: 0, 
-                altitude: 0, 
-                latitude: 0, 
-                longitude: 0, 
-                timestamp: DateTimeOffset.UtcNow));
+            this.IsInProgress = true;
+            this.geoLocationWatcher.Start(options: new MvxLocationOptions(), success: (location) =>
+            {
+                this.geoLocationWatcher.Stop();
+                this.IsInProgress = false;
+                this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
+                 interviewId: interviewId,
+                 userId: userIdentity.UserId,
+                 questionId: this.questionIdentity.Id,
+                 rosterVector: this.questionIdentity.RosterVector,
+                 answerTime: DateTime.UtcNow,
+                 accuracy: location.Coordinates.Accuracy ?? 0,
+                 altitude: location.Coordinates.Altitude ?? 0,
+                 latitude: location.Coordinates.Latitude,
+                 longitude: location.Coordinates.Longitude,
+                 timestamp: location.Timestamp));
+                this.Answer = location.Coordinates;
+                this.Coordinates = string.Format("{0}, {1}", location.Coordinates.Latitude,
+                    location.Coordinates.Longitude);
+            }, error: (error) =>
+            {
+                this.IsInProgress = false;
+            });
         }
     }
 }

@@ -18,6 +18,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         ILiteEventBusEventHandler<QuestionsEnabled>,
         ILiteEventBusEventHandler<QuestionsDisabled>
     {
+        public QuestionHeaderViewModel Header { get; set; }
+
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
@@ -29,12 +31,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             ICommandService commandService, 
             IPrincipal principal, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
-            IPlainRepository<InterviewModel> interviewRepository)
+            IPlainRepository<InterviewModel> interviewRepository,
+            QuestionHeaderViewModel questionHeaderViewModel)
         {
             this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+
+            this.Header = questionHeaderViewModel;
         }
 
 
@@ -43,15 +48,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
-
-            var questionModel = (MaskedTextQuestionModel)questionnaire.Questions[questionIdentity.Id];
-            var answerModel = interview.GetTextAnswerModel(questionIdentity);
 
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
-            this.Title = questionModel.Title;
 
+            this.Header.Init(interviewId, questionIdentity);
+
+            var answerModel = interview.GetTextAnswerModel(questionIdentity);
             if (answerModel != null)
             {
                 this.Answer = answerModel.Answer;
