@@ -14,25 +14,28 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<TextQuestionAnswered>,
-        ILiteEventBusEventHandler<QuestionsEnabled>,
-        ILiteEventBusEventHandler<QuestionsDisabled>
-    {
-        public QuestionHeaderViewModel Header { get; set; }
+        ILiteEventBusEventHandler<TextQuestionAnswered>
 
+    {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
-        private Identity questionIdentity;
-        private Guid interviewId;
+        private Identity entityIdentity;
+        private string interviewId;
+
+        public QuestionHeaderViewModel Header { get; private set; }
+        public ValidityViewModel ValidityViewModel { get; private set; }
+        public EnablementViewModel EnablementViewModel { get; private set; }
 
         public TextQuestionViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
             IPlainRepository<InterviewModel> interviewRepository,
-            QuestionHeaderViewModel questionHeaderViewModel)
+            QuestionHeaderViewModel questionHeaderViewModel,
+            ValidityViewModel validityViewModel,
+            EnablementViewModel enablementViewModel)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -40,6 +43,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.Header = questionHeaderViewModel;
+            ValidityViewModel = validityViewModel;
+            EnablementViewModel = enablementViewModel;
         }
 
 
@@ -48,12 +53,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            var interview = this.interviewRepository.Get(interviewId);
-
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interview.Id;
+            this.entityIdentity = entityIdentity;
+            this.interviewId = interviewId;
 
             this.Header.Init(interviewId, entityIdentity);
+            this.ValidityViewModel.Init(interviewId, entityIdentity);
+            this.EnablementViewModel.Init(interviewId, entityIdentity);
+
+            var interview = this.interviewRepository.Get(interviewId);
 
             var answerModel = interview.GetTextAnswerModel(entityIdentity);
             if (answerModel != null)
@@ -66,63 +73,52 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string Title
         {
             get { return title; }
-            set { title = value; RaisePropertyChanged(() => Title); }
+            private set { title = value; RaisePropertyChanged(() => Title); }
         }
 
         private string answer;
         public string Answer
         {
             get { return answer; }
-            set { answer = value; RaisePropertyChanged(() => Answer); }
+            private set { answer = value; RaisePropertyChanged(() => Answer); }
         }
 
-        private bool enabled;
-        public bool Enabled
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
         {
-            get { return enabled; }
-            set { enabled = value; RaisePropertyChanged(() => Enabled); }
-        }
-
-        private IMvxCommand valueChangedCommand;
-        public IMvxCommand ValueChangedCommand
-        {
-            get { return valueChangedCommand ?? (valueChangedCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
         }
 
         private void SendAnswerTextQuestionCommand()
         {
             commandService.Execute(new AnswerTextQuestionCommand(
-                interviewId: interviewId,
+                interviewId: Guid.Parse(interviewId),
                 userId: principal.CurrentUserIdentity.UserId,
-                questionId: this.questionIdentity.Id,
-                rosterVector: this.questionIdentity.RosterVector,
+                questionId: this.entityIdentity.Id,
+                rosterVector: this.entityIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
                 answer: Answer
                 ));
         }
 
+
+        private void UpdateSelfFromModel()
+        {
+            var interview = this.interviewRepository.Get(interviewId);
+
+            var answerModel = interview.GetTextAnswerModel(entityIdentity);
+            if (answerModel != null)
+            {
+                this.Answer = answerModel.Answer;
+            }
+        }
+
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId != questionIdentity.Id && @event.PropagationVector != questionIdentity.RosterVector)
+            if (@event.QuestionId != entityIdentity.Id && @event.PropagationVector != entityIdentity.RosterVector)
                 return;
 
-            Answer = @event.Answer;
-        }
-
-        public void Handle(QuestionsEnabled @event)
-        {
-            if (@event.Questions.Any(i => i.Id != questionIdentity.Id && i.RosterVector != questionIdentity.RosterVector))
-                return;
-
-            Enabled = true;
-        }
-
-        public void Handle(QuestionsDisabled @event)
-        {
-            if (@event.Questions.Any(i => i.Id != questionIdentity.Id && i.RosterVector != questionIdentity.RosterVector))
-                return;
-
-            Enabled = false;
+            UpdateSelfFromModel();
         }
     }
 }
