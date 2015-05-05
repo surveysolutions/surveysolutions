@@ -423,7 +423,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 Conditions = childAsIGroup.ConditionExpression,
                                 VariableName = varName,
                                 GeneratedTypeName =
-                                    GenerateTypeNameByScope(currentRosterScope, generatedScopesTypeNames),
+                                    GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey), currentRosterScope, generatedScopesTypeNames),
                                 GeneratedStateName = "@__" + varName + "_state",
                                 ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
@@ -572,12 +572,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return group.IsRoster;
         }
 
-        private string GenerateTypeNameByScope(IEnumerable<Guid> currentRosterScope,
-            Dictionary<string, string> generatedScopesTypeNames)
+        private string GenerateTypeNameByScope(string rosterClassNamePrefix, IEnumerable<Guid> currentRosterScope, Dictionary<string, string> generatedScopesTypeNames)
         {
             string scopeStringKey = String.Join("$", currentRosterScope);
             if (!generatedScopesTypeNames.ContainsKey(scopeStringKey))
-                generatedScopesTypeNames.Add(scopeStringKey, "@__" + Guid.NewGuid().FormatGuid());
+                generatedScopesTypeNames.Add(scopeStringKey, "@__" + rosterClassNamePrefix + Guid.NewGuid().FormatGuid());
 
             return generatedScopesTypeNames[scopeStringKey];
         }
