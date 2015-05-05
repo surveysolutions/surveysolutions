@@ -113,5 +113,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!Answers.ContainsKey(questionId)) return null;
             return (T)Answers[questionId];
         }
+
+        public bool IsEnabled(Identity entityIdentity)
+        {
+            var entityKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+
+            if (this.Groups.ContainsKey(entityKey))
+            {
+                return !this.Groups[entityKey].IsDisabled;
+            }
+
+            if (this.Answers.ContainsKey(entityKey))
+            {
+                return !this.Answers[entityKey].IsDisabled();
+            }
+
+            return true;
+        }
     }
 }

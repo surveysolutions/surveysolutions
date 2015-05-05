@@ -8,6 +8,10 @@
         style="@style/Interview_InterviewQuestion_Layout">
         <include
             layout="@layout/interview_question__header" />
+        <TextView
+            style="@style/InterviewEntity_Title"
+            android:text="Enabled"
+            local:MvxBind="Visible Enablement.Enabled" />
         <MvxRadioGroup
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
