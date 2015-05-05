@@ -25,7 +25,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
             IPlainRepository<InterviewModel> interviewRepository,
-            QuestionHeaderViewModel questionHeaderViewModel)
+            QuestionHeaderViewModel questionHeaderViewModel,
+            EnablementViewModel enablementViewModel)
         {
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (principal == null) throw new ArgumentNullException("principal");
@@ -38,12 +39,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.Header = questionHeaderViewModel;
+            this.Enablement = enablementViewModel;
         }
 
         private Identity questionIdentity;
         private Guid interviewId;
 
         public QuestionHeaderViewModel Header { get; private set; }
+        public EnablementViewModel Enablement { get; private set; }
         public IList<QuestionOptionViewModel> Options { get; private set; }
         private QuestionOptionViewModel selectedOption;
 
@@ -53,6 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.Header.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
@@ -86,7 +90,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 }
                 finally
                 {
-                    this.RaisePropertyChanged(() => SelectedOption);
+                    this.RaisePropertyChanged();
                 }
             }
         }

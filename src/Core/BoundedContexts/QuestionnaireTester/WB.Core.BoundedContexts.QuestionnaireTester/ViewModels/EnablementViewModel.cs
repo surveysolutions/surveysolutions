@@ -1,0 +1,89 @@
+using System;
+using System.Linq;
+using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+{
+    public class EnablementViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
+        ILiteEventBusEventHandler<GroupsEnabled>,
+        ILiteEventBusEventHandler<GroupsDisabled>,
+        ILiteEventBusEventHandler<QuestionsEnabled>,
+        ILiteEventBusEventHandler<QuestionsDisabled>
+    {
+        private readonly IPlainRepository<InterviewModel> interviewRepository;
+
+        public EnablementViewModel(IPlainRepository<InterviewModel> interviewRepository)
+        {
+            this.interviewRepository = interviewRepository;
+        }
+
+        private string interviewId;
+        private Identity entityIdentity;
+        private SharedKernels.DataCollection.Events.Interview.Dtos.Identity identityForEvents;
+
+        public void Init(string interviewId, Identity entityIdentity)
+        {
+            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+
+            this.interviewId = interviewId;
+            this.entityIdentity = entityIdentity;
+            this.identityForEvents = entityIdentity.ToIdentityForEvents();
+
+            this.UpdateSelfFromModel();
+        }
+
+        private bool enabled;
+        public bool Enabled
+        {
+            get { return enabled; }
+            private set { enabled = value; RaisePropertyChanged(); }
+        }
+
+        private void UpdateSelfFromModel()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId);
+
+            this.Enabled = interview.IsEnabled(this.entityIdentity);
+        }
+
+        public void Handle(GroupsEnabled @event)
+        {
+            if (@event.Groups.Contains(this.identityForEvents))
+            {
+                this.UpdateSelfFromModel();
+            }
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            if (@event.Groups.Contains(this.identityForEvents))
+            {
+                this.UpdateSelfFromModel();
+            }
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            if (@event.Questions.Contains(this.identityForEvents))
+            {
+                this.UpdateSelfFromModel();
+            }
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            if (@event.Questions.Contains(this.identityForEvents))
+            {
+                this.UpdateSelfFromModel();
+            }
+        }
+    }
+}
