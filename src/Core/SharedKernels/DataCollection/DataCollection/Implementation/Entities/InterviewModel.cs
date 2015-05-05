@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 
@@ -112,6 +112,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var questionId = ConversionHelper.ConvertIdentityToString(identity);
             if (!Answers.ContainsKey(questionId)) return null;
             return (T)Answers[questionId];
+        }
+
+
+        public bool IsValid(Identity identity)
+        {
+            var questionId = ConversionHelper.ConvertIdentityToString(identity);
+            if (!Answers.ContainsKey(questionId))
+                return true;
+
+            var interviewAnswerModel = Answers[questionId];
+            return !interviewAnswerModel.IsInvalid();
         }
 
         public bool IsEnabled(Identity entityIdentity)
