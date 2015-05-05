@@ -7,15 +7,15 @@
     <MvxLinearLayout
         style="@style/Interview_InterviewQuestion_Layout">
         <include
-            layout="@layout/interview_question_header" />
+            layout="@layout/interview_question__header" />
         <EditText
             style="@style/Interview_TextQuestion_Editor"
             android:hint="Tap to enter text"
             local:MvxBind="Text Answer; ValueChanged ValueChangedCommand;" />
         <include
-            layout="@layout/interview_question_errors" />
+            layout="@layout/interview_question__errors" />
         <include
-            layout="@layout/interview_question_comments" />
+            layout="@layout/interview_question__comments" />
     </MvxLinearLayout>
     <View
         style="@style/InterviewEntity_Divider" />

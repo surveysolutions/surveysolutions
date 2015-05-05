@@ -7,16 +7,16 @@
     <MvxLinearLayout
         style="@style/Interview_InterviewQuestion_Layout">
         <include
-            layout="@layout/interview_question_header" />
+            layout="@layout/interview_question__header" />
         <MvxRadioGroup
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            local:MvxItemTemplate="@layout/interview_single_option_question_item_template"
+            local:MvxItemTemplate="@layout/interview_question_single_option_item"
             local:MvxBind="ItemsSource Options; SelectedItem SelectedOption" />
         <include
-            layout="@layout/interview_question_errors" />
+            layout="@layout/interview_question__errors" />
         <include
-            layout="@layout/interview_question_comments" />
+            layout="@layout/interview_question__comments" />
     </MvxLinearLayout>
     <View
         style="@style/InterviewEntity_Divider" />

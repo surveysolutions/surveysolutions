@@ -7,7 +7,7 @@
     <MvxLinearLayout
         style="@style/Interview_InterviewQuestion_Layout">
         <include
-            layout="@layout/interview_question_header" />
+            layout="@layout/interview_question__header" />
         <MvxLinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -45,9 +45,9 @@
                 local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_Gps_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
         </MvxLinearLayout>
         <include
-            layout="@layout/interview_question_errors" />
+            layout="@layout/interview_question__errors" />
         <include
-            layout="@layout/interview_question_comments" />
+            layout="@layout/interview_question__comments" />
     </MvxLinearLayout>
     <View
         style="@style/InterviewEntity_Divider" />

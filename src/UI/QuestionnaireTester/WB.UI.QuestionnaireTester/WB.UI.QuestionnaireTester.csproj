@@ -210,7 +210,7 @@
     <Compile Include="Views\SplashView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_gps_question.axml">
+    <AndroidResource Include="Resources\layout\interview_question_gps.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values\Strings.xml">
@@ -334,7 +334,7 @@
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\interview.axml" />
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
-    <AndroidResource Include="Resources\layout\interview_text_question.axml">
+    <AndroidResource Include="Resources\layout\interview_question_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_chapters.axml">
@@ -345,18 +345,18 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\search_questionnaires.axml" />
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
-    <AndroidResource Include="Resources\layout\interview_single_option_question_item_template.axml" />
-    <AndroidResource Include="Resources\layout\interview_single_option_question.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_single_option_item.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_single_option.axml" />
     <AndroidResource Include="Resources\layout\interview_current_group.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_header.axml">
+    <AndroidResource Include="Resources\layout\interview_question__header.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_errors.axml">
+    <AndroidResource Include="Resources\layout\interview_question__errors.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_comments.axml">
+    <AndroidResource Include="Resources\layout\interview_question__comments.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

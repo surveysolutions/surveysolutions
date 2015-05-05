@@ -1810,31 +1810,31 @@ namespace WB.UI.QuestionnaireTester
 			public const int interview_current_group = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int interview_gps_question = 2130903067;
+			public const int interview_prefilled_question_template = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int interview_prefilled_question_template = 2130903068;
+			public const int interview_question__comments = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int interview_question_comments = 2130903069;
+			public const int interview_question__errors = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int interview_question_errors = 2130903070;
+			public const int interview_question__header = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int interview_question_header = 2130903071;
+			public const int interview_question_gps = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int interview_single_option_question = 2130903072;
+			public const int interview_question_single_option = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int interview_single_option_question_item_template = 2130903073;
+			public const int interview_question_single_option_item = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int interview_static_text = 2130903074;
+			public const int interview_question_text = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int interview_text_question = 2130903075;
+			public const int interview_static_text = 2130903075;
 			
 			// aapt resource value: 0x7f030024
 			public const int login = 2130903076;
