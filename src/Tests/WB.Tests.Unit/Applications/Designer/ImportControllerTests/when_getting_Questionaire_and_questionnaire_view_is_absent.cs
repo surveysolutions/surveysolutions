@@ -11,16 +11,16 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 
 namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 {
-    internal class when_call_Questionnaire_method_and_questionnaire_view_is_absent : ImportControllerTestContext
+    internal class when_getting_Questionaire_and_questionnaire_view_is_absent : ImportControllerTestContext
     {
         Establish context = () =>
         {
-            request = new DownloadQuestionnaireRequest() {QuestionnaireId = Guid.NewGuid()};
+            request = Create.DownloadQuestionnaireRequest(Guid.NewGuid());
             importController = CreateImportController();
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
+            exception = Catch.Only<HttpResponseException>(() =>
                 importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>

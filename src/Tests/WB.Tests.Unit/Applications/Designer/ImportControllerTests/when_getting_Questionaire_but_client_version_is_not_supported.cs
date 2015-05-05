@@ -19,29 +19,29 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 {
-    internal class when_call_Questionnaire_method_but_client_version_is_not_supported : ImportControllerTestContext
+    internal class when_getting_Questionaire_but_client_version_is_not_supported : ImportControllerTestContext
     {
         Establish context = () =>
         {
-            request = new DownloadQuestionnaireRequest()
-            {
-                QuestionnaireId = questionnaireId,
-                SupportedVersion = new QuestionnnaireVersion()
-            };
+            request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService =
-                Mock.Of<IMembershipUserService>(
-                    _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
-
-            var questionnaireViewFactory =
-                Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+            var membershipUserService = Mock
+                .Of<IMembershipUserService>(
                     _ =>
-                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
-                        new QuestionnaireView(new QuestionnaireDocument() { CreatedBy = userId }));
+                        _.WebUser == Mock
+                            .Of<IMembershipWebUser>(
+                                u =>
+                                    u.UserId == userId));
 
-            var expressionsEngineVersionService =
-                Mock.Of<IExpressionsEngineVersionService>(
-                    _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == false);
+            var questionnaireViewFactory = Mock
+                .Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+                    _ =>
+                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
+
+            var expressionsEngineVersionService = Mock
+                .Of<IExpressionsEngineVersionService>(
+                    _ =>
+                        _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == false);
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
+            exception = Catch.Only<HttpResponseException>(() =>
                 importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>
