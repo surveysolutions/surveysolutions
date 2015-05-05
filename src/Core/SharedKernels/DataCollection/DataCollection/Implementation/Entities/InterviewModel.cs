@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetQuestionModel<MaskedTextAnswerModel>(identity);
         }
 
-        public SingleOptionAnswerModel GetSingleAnswerModel(Identity identity)
+        public SingleOptionAnswerModel GetSingleOptionAnswerModel(Identity identity)
         {
             return GetQuestionModel<SingleOptionAnswerModel>(identity);
         }
