@@ -101,7 +101,6 @@
     <Compile Include="Implementation\Services\DataExport\ReadSideRepositoryDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
-    <Compile Include="Mappings\InterviewActionMap.cs" />
     <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
     <Compile Include="Mappings\InterviewHistoryMap.cs" />

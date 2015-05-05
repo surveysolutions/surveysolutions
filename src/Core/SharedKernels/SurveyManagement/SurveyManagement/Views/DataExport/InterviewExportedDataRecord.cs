@@ -9,6 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         public virtual Guid QuestionnaireId { get; set; }
         public virtual long QuestionnaireVersion { get; set; }
         public virtual byte[] Data { get; set; }
-        public virtual string LastAction { get; set; }
+        public virtual InterviewExportedAction LastAction { get; set; }
     }
 }
