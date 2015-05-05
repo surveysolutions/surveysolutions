@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
@@ -13,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
@@ -163,97 +160,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public bool IsCacheEnabled
         {
             get { return ((IChacheableRepositoryWriter) interviewActionsDataStorage).IsCacheEnabled; }
-        }
-    }
-
-    public class InterviewExportedDataRecord : IView
-    {
-        public virtual string InterviewId { get; set; }
-        public virtual Guid QuestionnaireId { get; set; }
-        public virtual long QuestionnaireVersion { get; set; }
-        public virtual byte[] Data { get; set; }
-        public virtual string LastAction { get; set; }
-    }
-
-    public class InterviewExportedDataMap : ClassMapping<InterviewExportedDataRecord>
-    {
-        public InterviewExportedDataMap()
-        {
-            Table("InterviewExportedData");
-
-            Id(x => x.InterviewId, idMap =>
-            {
-                idMap.Generator(Generators.Assigned);
-                idMap.Column("Id");
-            });
-            Property(x => x.Data);
-            Property(x => x.QuestionnaireId);
-            Property(x => x.QuestionnaireVersion);
-            Property(x => x.LastAction);
-        }
-    }
-
-    public class InterviewHistory : IView
-    {
-        public InterviewHistory()
-        {
-            this.InterviewActions = new HashSet<InterviewAction>();
-        }
-
-        public virtual string InterviewId { get; set; }
-        public virtual Guid QuestionnaireId { get; set; }
-        public virtual long QuestionnaireVersion { get; set; }
-        public virtual ISet<InterviewAction> InterviewActions { get; set; }
-    }
-
-    public class InterviewAction
-    {
-        public virtual int Id { get; set; }
-        public virtual string Action { get; set; }
-        public virtual string Originator { get; set; }
-        public virtual string Role { get; set; }
-        public virtual DateTime Timestamp { get; set; }
-        public virtual InterviewHistory History { get; set; }
-    }
-
-    public class InterviewActionsMap : ClassMapping<InterviewHistory>
-    {
-        public InterviewActionsMap()
-        {
-            Table("InterviewHistory");
-
-            Id(x => x.InterviewId, idMap =>
-            {
-                idMap.Generator(Generators.Assigned);
-                idMap.Column("Id");
-            });
-            Property(x => x.QuestionnaireId);
-            Property(x => x.QuestionnaireVersion);
-
-            Set(x => x.InterviewActions, set =>
-            {
-                set.Key(key => key.Column("InterviewId"));
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
-            },
-            relation => relation.OneToMany());
-        }
-    }
-
-    public class InterviewActionMap : ClassMapping<InterviewAction>
-    {
-        public InterviewActionMap()
-        {
-            Id(x => x.Id, Idmap => Idmap.Generator(Generators.HighLow));
-            Property(x => x.Action);
-            Property(x => x.Originator);
-            Property(x => x.Role);
-            Property(x => x.Timestamp);
-            ManyToOne(x => x.History, mto =>
-            {
-                mto.Index("InterviewHistorys_InterviewActions");
-                mto.Cascade(Cascade.None);
-            });
         }
     }
 }

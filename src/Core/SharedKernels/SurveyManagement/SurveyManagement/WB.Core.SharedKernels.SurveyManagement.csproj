@@ -101,7 +101,10 @@
     <Compile Include="Implementation\Services\DataExport\ReadSideRepositoryDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="Mappings\InterviewActionMap.cs" />
+    <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
+    <Compile Include="Mappings\InterviewHistoryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
@@ -234,11 +237,14 @@
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewAction.cs" />
     <Compile Include="Views\DataExport\InterviewActionExportView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewHistory.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
