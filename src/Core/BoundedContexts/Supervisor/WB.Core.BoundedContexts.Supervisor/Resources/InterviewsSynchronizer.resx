@@ -135,39 +135,6 @@
   <data name="Interview0wasrejectedbyHQFormat" xml:space="preserve">
     <value>Interview {0} was rejected by HQ</value>
   </data>
-  <data name="Found0interviewstopushFormat" xml:space="preserve">
-    <value>Found {0} interviews to push.</value>
-  </data>
-  <data name="Pushinginterview01outof2Format" xml:space="preserve">
-    <value>Pushing interview {0} ({1} out of {2}).</value>
-  </data>
-  <data name="Interview0successfullypushedFormat" xml:space="preserve">
-    <value>Interview {0} successfully pushed.</value>
-  </data>
-  <data name="Failed_to_push_interview__0__to_Headquarters_Format" xml:space="preserve">
-    <value>Failed to push interview {0} to Headquarters.</value>
-  </data>
-  <data name="Failed_to_push_interview__0___Error_message___1___Exception_messages___2_Format" xml:space="preserve">
-    <value>Failed to push interview {0}. Error message: {1}. Exception messages: {2}</value>
-  </data>
-  <data name="Getting_interviews_files_to_be_pushed_" xml:space="preserve">
-    <value>Getting interviews files to be pushed.</value>
-  </data>
-  <data name="Found__0__files_to_push_Format" xml:space="preserve">
-    <value>Found {0} files to push.</value>
-  </data>
-  <data name="Pushing_file__0__for_interview__1____2__out_of__3_Format" xml:space="preserve">
-    <value>Pushing file {0} for interview {1} ({2} out of {3}).</value>
-  </data>
-  <data name="File__0__for_interview__1__successfully_pushed_Format" xml:space="preserve">
-    <value>File {0} for interview {1} successfully pushed.</value>
-  </data>
-  <data name="Failed_to_push_file__0__for_interview__1__to_Headquarters_Format" xml:space="preserve">
-    <value>Failed to push file {0} for interview {1} to Headquarters.</value>
-  </data>
-  <data name="Failed_to_push_file__0__for_interview__1___Error_message___2___Exception_messages___3_Format" xml:space="preserve">
-    <value>Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}</value>
-  </data>
   <data name="Interview__0__was_assigned_by_HQ_for_supervisor__1_Format" xml:space="preserve">
     <value>Interview {0} was assigned by HQ for supervisor {1}</value>
   </data>
@@ -179,9 +146,6 @@
   </data>
   <data name="Received__0__events_from__1__feedFormat" xml:space="preserve">
     <value>Received {0} events from {1} feed</value>
-  </data>
-  <data name="Interview__0__was_not_sent_to_Headquarters_because_there_are_no_events_which_should_be_sent_Format" xml:space="preserve">
-    <value>Interview {0} was not sent to Headquarters because there are no events which should be sent.</value>
   </data>
   <data name="Failed_to_send_interview__0___Server_response___1_Format" xml:space="preserve">
     <value>Failed to send interview {0}. Server response: {1}</value>

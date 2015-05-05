@@ -21,7 +21,7 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>
         /// An <see cref="long"/> representing the current version of this aggregate root.
         /// </value>
-        long Version { get; }
+        int Version { get; }
 
         /// <summary>
         /// Gets the initial version.
@@ -34,7 +34,7 @@ namespace Ncqrs.Eventing.Sourcing
         /// </para>
         /// </summary>
         /// <value>The initial version.</value>
-        long InitialVersion { get; }
+        int InitialVersion { get; }
 
         /// <summary>
         /// Initializes from history.

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Linq;
@@ -99,11 +98,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
             return query.Invoke(this.sessionProvider.GetSession().Query<TEntity>());
-        }
-
-        public IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> condition = null)
-        {
-            return this.sessionProvider.GetSession().Query<TEntity>().Where(condition).ToList();
         }
 
         public Type ViewType
