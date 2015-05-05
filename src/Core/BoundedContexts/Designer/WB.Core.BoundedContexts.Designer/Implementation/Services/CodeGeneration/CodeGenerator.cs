@@ -423,7 +423,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 Conditions = childAsIGroup.ConditionExpression,
                                 VariableName = varName,
                                 GeneratedTypeName =
-                                    GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey), currentRosterScope, generatedScopesTypeNames),
+                                    GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey.FormatGuid()), currentRosterScope, generatedScopesTypeNames),
                                 GeneratedStateName = "@__" + varName + "_state",
                                 ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
