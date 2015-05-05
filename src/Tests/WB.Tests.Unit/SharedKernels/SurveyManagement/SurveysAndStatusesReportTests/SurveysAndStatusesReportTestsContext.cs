@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
     {
         protected static SurveysAndStatusesReport CreateSurveysAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> summariesRepository = null)
         {
-            return new SurveysAndStatusesReport(summariesRepository ?? new TestInMemoryWriter<InterviewSummary>());
+            return new SurveysAndStatusesReport(summariesRepository ?? Stub.ReadSideRepository<InterviewSummary>());
         }
     }
 }

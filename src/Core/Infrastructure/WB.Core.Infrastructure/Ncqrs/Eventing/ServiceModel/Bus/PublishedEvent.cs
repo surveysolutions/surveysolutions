@@ -45,7 +45,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     public abstract class PublishedEvent : IPublishableEvent
     {
         private readonly object _payload;
-        private readonly long _eventSequence;
+        private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
         private readonly Guid _eventSourceId;
@@ -107,7 +107,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// An sequence of events always starts with <c>1</c>. So the first event in a sequence has the <see cref="EventSequence"/> value of <c>1</c>.
         /// </remarks>
         /// <value>A number that represents the order of where this events occurred in the sequence.</value>
-        public long EventSequence
+        public int EventSequence
         {
             get { return _eventSequence; }
         }

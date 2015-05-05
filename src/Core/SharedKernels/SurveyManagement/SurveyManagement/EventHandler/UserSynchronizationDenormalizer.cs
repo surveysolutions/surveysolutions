@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.AllTypes);
+            string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.ObjectsOnly);
 
             var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp);
             

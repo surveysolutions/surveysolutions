@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
                 Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, teamLeadId: Guid.NewGuid()),
             };
 
-            var interviewsReader = new TestInMemoryWriter<InterviewSummary>();
+            var interviewsReader = Stub.ReadSideRepository<InterviewSummary>();
             interviews.ForEach(summary => interviewsReader.Store(summary, Guid.NewGuid().FormatGuid()));
 
             reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
