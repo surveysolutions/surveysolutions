@@ -18,30 +18,39 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 {
-    internal class when_call_Questionnaire_method_but_user_dont_have_access_rights_to_use_the_questionnaire : ImportControllerTestContext
+    internal class when_getting_Questionaire_but_user_dont_have_access_rights_to_use_the_questionnaire : ImportControllerTestContext
     {
         Establish context = () =>
         {
-            request = new DownloadQuestionnaireRequest() { QuestionnaireId = questionnaireId };
+            request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService =
-                Mock.Of<IMembershipUserService>(
-                    _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
+            var membershipUserService = Mock
+                .Of<IMembershipUserService>(
+                    _ =>
+                        _.WebUser ==
+                        Mock
+                            .Of<IMembershipWebUser>(
+                                u =>
+                                    u.UserId == userId));
 
-            var questionnaireViewFactory =
-                Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+            var questionnaireViewFactory = Mock
+                .Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                     _ =>
                         _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
-                        new QuestionnaireView(new QuestionnaireDocument() {CreatedBy = questionnaireOwnerId}));
+                        Create.QuestionnaireView(questionnaireOwnerId));
 
-            var sharedPersonsViewFactory =
-                Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(_ => _.Load(Moq.It.IsAny<QuestionnaireSharedPersonsInputModel>()) == new QuestionnaireSharedPersons(questionnaireId));
+            var sharedPersonsViewFactory = Mock
+                .Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(
+                    _ =>
+                        _.Load(Moq.It.IsAny<QuestionnaireSharedPersonsInputModel>()) ==
+                        Create.QuestionnaireSharedPersons(questionnaireId));
 
-            importController = CreateImportController(membershipUserService: membershipUserService, questionnaireViewFactory: questionnaireViewFactory, sharedPersonsViewFactory: sharedPersonsViewFactory);
+            importController = CreateImportController(membershipUserService: membershipUserService,
+                questionnaireViewFactory: questionnaireViewFactory, sharedPersonsViewFactory: sharedPersonsViewFactory);
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
+            exception = Catch.Only<HttpResponseException>(() =>
                 importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>

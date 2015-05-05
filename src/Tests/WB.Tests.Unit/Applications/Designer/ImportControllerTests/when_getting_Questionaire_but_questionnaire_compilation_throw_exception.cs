@@ -19,52 +19,55 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 {
-    internal class when_call_Questionnaire_method_but_questionnaire_cant_be_compiled : ImportControllerTestContext
+    internal class when_getting_Questionaire_but_questionnaire_compilation_throw_exception : ImportControllerTestContext
     {
         Establish context = () =>
         {
-            request = new DownloadQuestionnaireRequest()
-            {
-                QuestionnaireId = questionnaireId,
-                SupportedVersion = new QuestionnnaireVersion()
-            };
+            request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService =
-                Mock.Of<IMembershipUserService>(
-                    _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
-
-            var questionnaireViewFactory =
-                Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+            var membershipUserService = Mock
+                .Of<IMembershipUserService>(
                     _ =>
-                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
-                        new QuestionnaireView(new QuestionnaireDocument() { CreatedBy = userId }));
+                        _.WebUser ==
+                        Mock
+                            .Of<IMembershipWebUser>(
+                                u =>
+                                    u.UserId == userId));
 
-            var expressionsEngineVersionService =
-                Mock.Of<IExpressionsEngineVersionService>(
-                    _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
-
-            var questionnaireVerifier =
-                Mock.Of<IQuestionnaireVerifier>(
+            var questionnaireViewFactory = Mock
+                .Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                     _ =>
-                        _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationError[0]);
+                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
+
+            var expressionsEngineVersionService = Mock
+                .Of<IExpressionsEngineVersionService>(
+                    _ =>
+                        _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
 
             string generatedAssembly;
-            var expressionProcessorGenerator =
-                Mock.Of<IExpressionProcessorGenerator>(
+            var expressionProcessorGenerator = new Mock<IExpressionProcessorGenerator>();
+
+            expressionProcessorGenerator
+                .Setup(
+                    x =>
+                        x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generatedAssembly))
+                .Throws<NullReferenceException>();
+
+            var questionnaireVerifier = Mock
+                .Of<IQuestionnaireVerifier>(
                     _ =>
-                        _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
-                            out generatedAssembly) == new GenerationResult() {Success = false});
+                        _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationError[0]);
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
                 expressionsEngineVersionService: expressionsEngineVersionService,
-                questionnaireVerifier: questionnaireVerifier,
-                expressionProcessorGenerator: expressionProcessorGenerator);
+                expressionProcessorGenerator: expressionProcessorGenerator.Object,
+                questionnaireVerifier: questionnaireVerifier);
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                importController.Questionnaire(request));
+           exception = Catch.Only<HttpResponseException>(() =>
+               importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>
             exception.ShouldBeOfExactType<HttpResponseException>();
