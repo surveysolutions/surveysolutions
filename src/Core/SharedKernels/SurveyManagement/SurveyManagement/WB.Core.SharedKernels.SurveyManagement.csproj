@@ -11,7 +11,7 @@
     <AssemblyName>WB.Core.SharedKernels.SurveyManagement</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>361b1af8</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>7deae2dd</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
@@ -48,9 +48,6 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\..\..\..\..\packages\Dapper.1.37\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -78,10 +75,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.96.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\lib\net451\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,9 +98,12 @@
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Implementation\Services\DataExport\ReadSideRepositoryDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
+    <Compile Include="Mappings\InterviewHistoryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
@@ -156,12 +152,8 @@
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlToTabDataExportService.cs" />
-    <Compile Include="Implementation\Services\Sql\DataRow.cs" />
     <Compile Include="Implementation\Services\Sql\SqlDataAccessor.cs" />
-    <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
-    <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
@@ -221,8 +213,6 @@
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
     <Compile Include="Services\Sql\ISqlDataAccessor.cs" />
-    <Compile Include="Services\Sql\ISqlService.cs" />
-    <Compile Include="Services\Sql\ISqlServiceFactory.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
     <Compile Include="Synchronization\IBrokenSyncPackagesStorage.cs" />
@@ -246,11 +236,14 @@
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewAction.cs" />
     <Compile Include="Views\DataExport\InterviewActionExportView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewHistory.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
@@ -457,10 +450,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets'))" />
   </Target>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
