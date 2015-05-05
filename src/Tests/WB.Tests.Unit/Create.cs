@@ -156,13 +156,15 @@ namespace WB.Tests.Unit
                 };
             }
 
-            public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName)
+            public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
                 return new NumericQuestionChanged
                 {
                     PublicKey = questionId,
                     StataExportCaption = variableName,
-                    IsInteger = true
+                    IsInteger = true,
+                    ConditionExpression = enablementCondition,
+                    ValidationExpression = validationExpression
                 };
             }
 
