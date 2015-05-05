@@ -46,8 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
 
         It should_pass_InterviewerAssigned_action_to_data_export_writer = () =>
             interviewExportServiceMock.Verify(
-                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.InterviewerAssigned),
-                    Moq.It.IsAny<string>()), Times.Once);
+                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.InterviewerAssigned), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 
