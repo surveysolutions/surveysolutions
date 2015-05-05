@@ -62,10 +62,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
         }
 
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
-            int normalMin = minVersion > 0 ? (int)Math.Max(0, minVersion - 1) : 0;
-            int normalMax = (int)Math.Min(int.MaxValue, maxVersion - 1);
+            int normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
+            int normalMax = Math.Min(int.MaxValue, maxVersion - 1);
             if (minVersion > maxVersion)
             {
                 return new CommittedEventStream(id);
@@ -118,17 +118,22 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
+            int expectedStreamVersion = eventStream.InitialVersion - 1;
+            var stream = GetStreamName(eventStream.SourceId);
+            var events = eventStream.Select(BuildEventData).ToList();
 
             using (var writeTimeout = new CancellationTokenSource())
             {
                 writeTimeout.CancelAfter(this.defaultTimeout);
 
-                var stream = EventsPrefix + eventStream.SourceId.FormatGuid();
-                var events = eventStream.Select(BuildEventData);
                 this.connection.AppendToStreamAsync(stream, expectedStreamVersion, events)
-                               .WaitAndUnwrapException(writeTimeout.Token);
+                    .WaitAndUnwrapException(writeTimeout.Token);
             }
+        }
+
+        private static string GetStreamName(Guid eventSourceId)
+        {
+            return EventsPrefix + eventSourceId.FormatGuid();
         }
 
         public int CountOfAllEvents()

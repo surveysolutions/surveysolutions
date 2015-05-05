@@ -25,7 +25,7 @@ namespace Ncqrs.Eventing.Storage
         /// <summary>
         /// Gets a snapshot of a particular event source, if one exists. Otherwise, returns <c>null</c>.
         /// </summary>
-        public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
+        public Snapshot GetSnapshot(Guid eventSourceId, int maxVersion)
         {
             if (!_snapshots.ContainsKey(eventSourceId))
                 return null;
@@ -35,7 +35,7 @@ namespace Ncqrs.Eventing.Storage
                 : result;
         }
 
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
             Queue<CommittedEvent> events;
             
