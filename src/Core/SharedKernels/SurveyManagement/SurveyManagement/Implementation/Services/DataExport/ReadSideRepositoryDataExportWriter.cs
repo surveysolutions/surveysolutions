@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var interviewExportedData = interviewExportedDataStorage.GetById(history.InterviewId);
             if (interviewExportedData != null)
             {
-                interviewExportedData.LastAction = action.Action.ToString();
+                interviewExportedData.LastAction = action.Action;
                 interviewExportedDataStorage.Store(interviewExportedData, history.InterviewId);
             }
         }
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             return new InterviewAction()
             {
-                Action = action.Action.ToString(),
+                Action = action.Action,
                 Originator = action.Originator,
                 Role = action.Role,
                 Timestamp = action.Timestamp

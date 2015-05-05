@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -131,30 +132,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             fileWriter.NextRecord();
         }
 
-        private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId, long questionnaireVersion)
+        private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId,
+            long questionnaireVersion)
         {
-            IEnumerable<InterviewHistory> actions;
-            if (!action.HasValue)
+            Expression<Func<InterviewHistory, bool>> queryActions =
+                (i) => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion;
+
+            if (action.HasValue)
             {
-                actions =
-                    interviewActionsDataStorage.Query(
-                        _ =>
-                            _.Where(
+                queryActions =
+                    (i) =>
+                        i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
+                        i.InterviewActions.Any(a => a.Action == action.Value);
+            }
+
+            IEnumerable<InterviewHistory> actions =
+                interviewActionsDataStorage.Query(
+                    _ =>
+                        _.Where(queryActions)
+                            .Select(
                                 i =>
-                                    i.QuestionnaireId == questionnaireId &&
-                                    i.QuestionnaireVersion == questionnaireVersion).ToList());
-            }
-            else
-            {
-                var actionName = action.Value.ToString();
-                actions =
-                   interviewActionsDataStorage.Query(
-                       _ =>
-                           _.Where(
-                               i =>
-                                   i.QuestionnaireId == questionnaireId &&
-                                   i.QuestionnaireVersion == questionnaireVersion && i.InterviewActions.Any(a => a.Action == actionName)).ToList());
-            }
+                                    new InterviewHistory()
+                                    {
+                                        InterviewId = i.InterviewId,
+                                        InterviewActions = i.InterviewActions
+                                    }).ToList());
+
             var result = new List<string[]>();
 
             foreach (var interviewHistory in actions)
@@ -163,7 +166,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 {
                     var resultRow = new List<string>();
                     resultRow.Add(interviewHistory.InterviewId);
-                    resultRow.Add(interviewAction.Action);
+                    resultRow.Add(interviewAction.Action.ToString());
                     resultRow.Add(interviewAction.Originator);
                     resultRow.Add(interviewAction.Role);
                     resultRow.Add(interviewAction.Timestamp.ToString("d", CultureInfo.InvariantCulture));
@@ -213,30 +216,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 result.Add(dataFilePath);
             }
-            List<InterviewExportedDataRecord> interviewDatas;
+
+            Expression<Func<InterviewExportedDataRecord, bool>> queryData =
+               (i) => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion;
 
             if (action.HasValue)
             {
-                var actionString = action.Value.ToString();
-                interviewDatas = interviewExportedDataStorage.Query(
-                    _ =>
-                        _.Where(
-                            i =>
-                                i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
-                                i.LastAction == actionString)
-                            .ToList());
+                queryData =
+                    (i) =>
+                        i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
+                        i.LastAction == action.Value;
             }
-            else
-            {
-                interviewDatas =
-                    interviewExportedDataStorage.Query(
-                        _ =>
-                            _.Where(
-                                i =>
-                                    i.QuestionnaireId == questionnaireId &&
-                                    i.QuestionnaireVersion == questionnaireVersion)
-                                .ToList());
-            }
+
+            List<InterviewExportedDataRecord> interviewDatas = interviewExportedDataStorage.Query(
+                _ =>
+                    _.Where(queryData)
+                        .ToList());
 
             foreach (var interviewExportedDataRecord in interviewDatas)
             {
