@@ -25,6 +25,6 @@ namespace Ncqrs.Eventing.Storage
         /// Returns the most recent <see cref="Snapshot"/> that exists in the store. If the store has a 
         /// snapshot that is more recent than the <paramref name="maxVersion"/>, then <c>null</c> will be returned.
         /// </returns>
-        Snapshot GetSnapshot(Guid eventSourceId, long maxVersion);
+        Snapshot GetSnapshot(Guid eventSourceId, int maxVersion);
     }
 }

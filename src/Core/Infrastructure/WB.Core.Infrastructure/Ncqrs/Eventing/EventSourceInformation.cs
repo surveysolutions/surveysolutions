@@ -8,22 +8,22 @@ namespace Ncqrs.Eventing
     public class EventSourceInformation
     {
         private readonly Guid _id;
-        private readonly long _initialVersion;
-        private readonly long _currentVersion;
+        private readonly int _initialVersion;
+        private readonly int _currentVersion;
 
-        public EventSourceInformation(Guid id, long initialVersion, long currentVersion)
+        public EventSourceInformation(Guid id, int initialVersion, int currentVersion)
         {
             _id = id;
             _currentVersion = currentVersion;
             _initialVersion = initialVersion;
         }
 
-        public long CurrentVersion
+        public int CurrentVersion
         {
             get { return _currentVersion; }
         }
 
-        public long InitialVersion
+        public int InitialVersion
         {
             get { return _initialVersion; }
         }

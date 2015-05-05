@@ -33,14 +33,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
-            return this.GetHistoricalQuestionnaireImpl(id, version);
+            return this.GetHistoricalQuestionnaireImpl(id, (int)version);
         }
 
-        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, long? version = null)
+        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, int? version = null)
         {
-            long maxEvent = long.MaxValue;
+            int maxEvent = int.MaxValue;
             Snapshot snapshot = null;
-            long minVersion = long.MinValue;
+            int minVersion = int.MinValue;
             snapshot = snapshotStore.GetSnapshot(id, maxEvent);
             if (snapshot != null)
             {

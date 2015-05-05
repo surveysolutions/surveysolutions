@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             });
 
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == eventStream);
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<int>()) == eventStream);
 
 
             var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();

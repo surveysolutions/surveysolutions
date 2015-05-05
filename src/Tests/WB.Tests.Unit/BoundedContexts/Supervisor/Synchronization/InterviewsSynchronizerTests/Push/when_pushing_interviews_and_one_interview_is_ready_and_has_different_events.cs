@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == eventStream);
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<int>()) == eventStream);
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
