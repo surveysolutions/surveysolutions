@@ -3638,6 +3638,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static bool IsQuestionAndHaveQuestionIdInConditionOrValidation(IComposite composite, IQuestion sourceQuestion)
         {
             var question = composite as IQuestion;
+            bool isSelfReferenceIsChecking = composite.PublicKey == sourceQuestion.PublicKey;
+
+            if (isSelfReferenceIsChecking)
+            {
+                // we should allow do delete questions that reference itself in condition or validation expression
+                return false;
+            }
 
             if (question != null)
             {

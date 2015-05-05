@@ -8,7 +8,7 @@
                     var regex = new RegExp(/^([^\.\…]+)[\…\.\s]+([-+]?\d+(?:\.\d+)?)\s*$/);
 
                     optionsService.validateOptionAsText = function (option) {
-                        return regex.test((option || "").trim());
+                        return regex.test((option || ""));
                     };
 
                     optionsService.stringifyOptions = function (options) {
