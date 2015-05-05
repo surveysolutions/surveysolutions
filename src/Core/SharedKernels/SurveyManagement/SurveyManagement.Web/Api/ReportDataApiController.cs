@@ -94,7 +94,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public QuestionnaireAndVersionsView Questionnaires(QuestionnaireBrowseInputModel input)
         {
-            input.PageSize = 1024;
             QuestionnaireBrowseView questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(input);
             var result = new QuestionnaireAndVersionsView
             {
