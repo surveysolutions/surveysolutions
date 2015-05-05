@@ -13,16 +13,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
+    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        public QuestionHeaderViewModel Header { get; set; }
-
         private readonly ICommandService commandService;
         private readonly Guid userId;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
-        private Identity identity;
-        private Guid interviewId;
 
         public SingleOptionQuestionViewModel(
             ICommandService commandService,
@@ -44,39 +40,48 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header = questionHeaderViewModel;
         }
 
-        public void Init(string interviewId, Identity questionIdentity)
+        private Identity questionIdentity;
+        private Guid interviewId;
+
+        public QuestionHeaderViewModel Header { get; private set; }
+        public IList<QuestionOptionViewModel> Options { get; private set; }
+        private QuestionOptionViewModel selectedOption;
+
+        public void Init(string interviewId, Identity entityIdentity)
         {
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+
+            this.Header.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+            var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var answerModel = interview.GetSingleOptionAnswerModel(entityIdentity);
 
-            this.identity = questionIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[this.identity.Id];
-            var answerModel = interview.GetSingleAnswerModel(this.identity);
-
-            this.Header.Init(interviewId, questionIdentity);
             this.Options = questionModel.Options.Select(ToViewModel).ToList();
             this.selectedOption = this.Options.SingleOrDefault(option => option.Value == Monads.Maybe(() => answerModel.Answer));
-
-            if (answerModel != null)
-            {
-                Answer = answerModel.Answer;
-            }
         }
-
-        public IList<QuestionOptionViewModel> Options { get; private set; }
 
         public QuestionOptionViewModel SelectedOption
         {
             get { return selectedOption; }
+
             set
             {
                 try
                 {
-                    this.ExecuteAnswerCommand(value);
+                    this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
+                        this.interviewId,
+                        this.userId,
+                        this.questionIdentity.Id,
+                        this.questionIdentity.RosterVector,
+                        DateTime.Now,
+                        value.Value));
+
                     selectedOption = value;
                 }
                 finally
@@ -86,40 +91,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void ExecuteAnswerCommand(QuestionOptionViewModel option)
-        {
-            this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
-                this.userId,
-                this.identity.Id,
-                this.identity.RosterVector,
-                DateTime.Now,
-                option.Value));
-        }
-
-        private string title;
-        public string Title
-        {
-            get { return title; }
-            set { title = value; RaisePropertyChanged(() => Title); }
-        }
-
-        private decimal answer;
-        private QuestionOptionViewModel selectedOption;
-
-        public decimal Answer
-        {
-            get { return answer; }
-            set { answer = value; RaisePropertyChanged(() => Answer); }
-        }
-
         private static QuestionOptionViewModel ToViewModel(OptionModel model)
         {
             return new QuestionOptionViewModel
             {
                 Value = model.Value,
                 Title = model.Title,
-                IsSelected = false,
             };
         }
     }
