@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
+    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public QuestionHeaderViewModel Header { get; set; }
 
@@ -60,19 +60,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header = questionHeaderViewModel;
         }
 
-        public void Init(string interviewId, Identity questionIdentity)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if(interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
             
-            this.questionIdentity = questionIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Header.Init(interviewId, questionIdentity);
+            this.Header.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetGpsCoordinatesAnswerModel(questionIdentity);
+            var answerModel = interview.GetGpsCoordinatesAnswerModel(entityIdentity);
             if (answerModel != null)
             {
                 this.Answer = new MvxCoordinates()

@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel
+    public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
@@ -18,14 +18,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, Identity questionIdentity)
+        public void Init(string interviewId, Identity entityIdentity)
         {
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
-            this.StaticText = questionnaire.StaticTexts[questionIdentity.Id].Title;
+            this.StaticText = questionnaire.StaticTexts[entityIdentity.Id].Title;
         }
 
         private string staticText;

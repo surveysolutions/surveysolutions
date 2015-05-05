@@ -17,11 +17,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
 
-        private static readonly Dictionary<Type, Func<IInterviewItemViewModel>> QuestionnaireEntityTypeToViewModelMap = 
-            new Dictionary<Type, Func<IInterviewItemViewModel>>
+        private static readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap = 
+            new Dictionary<Type, Func<IInterviewEntityViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
-                { typeof(MaskedTextQuestionModel), Load<MaskedTextQuestionViewModel> },
+                { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> }
             };
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                                                              entityModelType: question.ModelType, interviewId: interviewId)).ToList();
         }
 
-        private static IInterviewItemViewModel CreateInterviewItemViewModel(
+        private static IInterviewEntityViewModel CreateInterviewItemViewModel(
             Guid entityId,
             decimal[] rosterVector,
             Type entityModelType,
@@ -97,9 +97,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
 
-            IInterviewItemViewModel viewModel = viewModelActivator.Invoke();
+            IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
 
-            viewModel.Init(interviewId: interviewId, questionIdentity: identity);
+            viewModel.Init(interviewId: interviewId, entityIdentity: identity);
             return viewModel;
         }
     }

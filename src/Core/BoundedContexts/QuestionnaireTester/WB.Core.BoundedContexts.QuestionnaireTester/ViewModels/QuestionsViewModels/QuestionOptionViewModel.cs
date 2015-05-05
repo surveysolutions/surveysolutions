@@ -4,6 +4,5 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         public decimal Value { get; set; }
         public string Title { get; set; }
-        public bool IsSelected { get; set; }
     }
 }

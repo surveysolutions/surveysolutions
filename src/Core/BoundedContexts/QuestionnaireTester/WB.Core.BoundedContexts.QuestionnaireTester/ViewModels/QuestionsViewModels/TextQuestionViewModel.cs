@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class MaskedTextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewItemViewModel,
+    public class TextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,
         ILiteEventBusEventHandler<TextQuestionAnswered>,
         ILiteEventBusEventHandler<QuestionsEnabled>,
         ILiteEventBusEventHandler<QuestionsDisabled>
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public MaskedTextQuestionViewModel(
+        public TextQuestionViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
@@ -43,18 +43,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
 
-        public void Init(string interviewId, Identity questionIdentity)
+        public void Init(string interviewId, Identity entityIdentity)
         {
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
 
-            this.questionIdentity = questionIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Header.Init(interviewId, questionIdentity);
+            this.Header.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetTextAnswerModel(questionIdentity);
+            var answerModel = interview.GetTextAnswerModel(entityIdentity);
             if (answerModel != null)
             {
                 this.Answer = answerModel.Answer;

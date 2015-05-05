@@ -2,8 +2,8 @@
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public interface IInterviewItemViewModel
+    public interface IInterviewEntityViewModel
     {
-        void Init(string interviewId, Identity questionIdentity);
+        void Init(string interviewId, Identity entityIdentity);
     }
 }
