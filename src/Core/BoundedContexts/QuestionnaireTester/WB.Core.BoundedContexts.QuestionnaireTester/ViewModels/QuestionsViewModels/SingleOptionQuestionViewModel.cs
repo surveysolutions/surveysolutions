@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionModel.Options.Select(ToViewModel).ToList();
+            this.Options = questionModel.Options.Select(this.ToViewModel).ToList();
             this.selectedOption = this.Options.SingleOrDefault(option => option.Value == Monads.Maybe(() => answerModel.Answer));
         }
 
@@ -95,12 +95,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private static QuestionOptionViewModel ToViewModel(OptionModel model)
+        private QuestionOptionViewModel ToViewModel(OptionModel model)
         {
             return new QuestionOptionViewModel
             {
                 Value = model.Value,
                 Title = model.Title,
+                Enablement = this.Enablement,
             };
         }
     }
