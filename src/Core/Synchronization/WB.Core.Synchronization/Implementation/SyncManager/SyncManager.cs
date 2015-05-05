@@ -276,7 +276,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
         private IQueryable<UserSyncPackageMeta> GetGroupedUserSyncPackage(Guid userId, long? lastSyncedSortIndex)
         {
-            var packages = this.usersSyncPackagesMeta.Query(_ =>
+            var package = this.usersSyncPackagesMeta.Query(_ =>
             {
                 var filteredItems = _.Where(x => x.UserId == userId);
 
@@ -285,11 +285,16 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
                 }
 
-                filteredItems.OrderBy(x => x.SortIndex);
-                return filteredItems.ToList();
+                filteredItems = filteredItems.OrderByDescending(x => x.SortIndex);
+                return filteredItems.FirstOrDefault();
             });
 
-            return packages.AsQueryable();
+            if (package == null)
+            {
+                return Enumerable.Empty<UserSyncPackageMeta>().AsQueryable();
+            }
+
+            return new List<UserSyncPackageMeta>{package}.AsQueryable();
         }
 
         private IQueryable<QuestionnaireSyncPackageMeta> GetGroupedQuestionnaireSyncPackage(Guid userId,

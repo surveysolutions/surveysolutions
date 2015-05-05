@@ -78,7 +78,7 @@ namespace WB.Core.Synchronization.SyncProvider
         {
             return
                 stream.GroupBy(x => x.EventSourceId).Select(
-                    g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
+                    g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, int.MinValue, int.MaxValue)));
         }
 
         /// <summary>

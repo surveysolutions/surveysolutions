@@ -152,6 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
 
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
+            this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);

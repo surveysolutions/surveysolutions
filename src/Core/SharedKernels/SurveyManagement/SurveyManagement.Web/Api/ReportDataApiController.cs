@@ -95,15 +95,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public QuestionnaireAndVersionsView Questionnaires(QuestionnaireBrowseInputModel input)
         {
             QuestionnaireBrowseView questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(input);
-            var result = new QuestionnaireAndVersionsView();
-            result.Items = questionnaireBrowseView.Items.Select(x => new QuestionnaireAndVersionsItem
+            var result = new QuestionnaireAndVersionsView
             {
-                   QuestionnaireId = x.QuestionnaireId,
-                   Title = x.Title,
-                   Versions = questionnaireBrowseView.Items.Where(q => q.QuestionnaireId == x.QuestionnaireId)
-                                                           .Select(y => y.Version).ToArray()
-            }).ToArray();
-            result.TotalCount = questionnaireBrowseView.TotalCount;
+                Items = questionnaireBrowseView.Items
+                                               .Select(x => new QuestionnaireAndVersionsItem {
+                                                        QuestionnaireId = x.QuestionnaireId,
+                                                        Title = x.Title,
+                                                        Versions = questionnaireBrowseView.Items
+                                                                                          .Where(q => q.QuestionnaireId == x.QuestionnaireId)
+                                                                                          .Select(y => y.Version)
+                                                                                          .ToArray()
+                                                    }).ToArray(),
+                TotalCount = questionnaireBrowseView.TotalCount
+            };
             return result;
         }
 

@@ -81,7 +81,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.Tests
 
 			this._store.Store(stream);
 
-			var result = this._store.ReadFrom(id, long.MinValue, long.MaxValue);
+			var result = this._store.ReadFrom(id, int.MinValue, int.MaxValue);
 
 			result.Count().Should().Be(stream.Count());
 
@@ -117,7 +117,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.Tests
 
 			this._store.Store(stream);
 
-			var commitedStream = this._store.ReadFrom(id, long.MinValue, long.MaxValue);
+			var commitedStream = this._store.ReadFrom(id, int.MinValue, int.MaxValue);
 
 			commitedStream.Count().Should().BeGreaterThan(0);
 

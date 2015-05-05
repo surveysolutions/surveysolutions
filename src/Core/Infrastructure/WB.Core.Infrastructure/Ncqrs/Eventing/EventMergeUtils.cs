@@ -32,7 +32,7 @@ namespace Ncqrs.Eventing
                 return uncommitedStream;
             }
 
-            long lastSequenceNumber = 1;
+            int lastSequenceNumber = 1;
             if (baseStream.Any())
             {
                 lastSequenceNumber = baseStream.Last().EventSequence + 1;

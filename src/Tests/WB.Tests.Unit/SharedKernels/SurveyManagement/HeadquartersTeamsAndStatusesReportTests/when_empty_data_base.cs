@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatu
             reportFactory = CreateTeamsAndStatusesReport();
         };
 
-        private Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel());
+        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel());
 
-        private It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
+        It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
 
         private static HeadquartersTeamsAndStatusesReport reportFactory;
         private static TeamsAndStatusesReportView report;

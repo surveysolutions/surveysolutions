@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.Core.Synchronization
                 interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
                 questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
                 interviewSyncPackageReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
-                usersReader ?? new TestInMemoryWriter<UserSyncPackageMeta>(),
-                questionnairesReader ?? new TestInMemoryWriter<QuestionnaireSyncPackageMeta>(),
+                usersReader ?? Stub.ReadSideRepository<UserSyncPackageMeta>(),
+                questionnairesReader ?? Stub.ReadSideRepository<QuestionnaireSyncPackageMeta>(),
                 syncLogger ?? Mock.Of<ISyncLogger>());
         }
 
