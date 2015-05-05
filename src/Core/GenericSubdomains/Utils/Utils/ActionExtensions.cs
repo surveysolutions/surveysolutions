@@ -9,7 +9,7 @@ namespace WB.Core.GenericSubdomains.Utils
             return () =>
             {
                 action.Invoke();
-                return Unit.Empty;
+                return Unit.Value;
             };
         }
     }
