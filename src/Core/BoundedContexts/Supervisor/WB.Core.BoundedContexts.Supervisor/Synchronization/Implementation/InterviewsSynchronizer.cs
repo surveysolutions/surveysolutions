@@ -520,7 +520,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue).ToList();
+            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue).ToList();
 
             int indexOfLastEventSentToHeadquarters = storedEvents.FindLastIndex(storedEvent => storedEvent.Payload is InterviewSentToHeadquarters);
             int countOfEventsSentToHeadquarters = indexOfLastEventSentToHeadquarters + 1;

@@ -1169,7 +1169,7 @@ namespace WB.Tests.Unit
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
-            Guid? eventIdentifier = null, long eventSequence = 1)
+            Guid? eventIdentifier = null, int eventSequence = 1)
         {
             return new CommittedEvent(
                 Guid.Parse("33330000333330000003333300003333"),
