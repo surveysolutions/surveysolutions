@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileBasedDataExportRepositoryWriter.DeleteInterview(interviewId);
 
         It should_never_call_DeleteInterviewRecords = () =>
-           interviewExportServiceMock.Verify(x => x.DeleteInterviewRecords(Moq.It.IsAny<string>(), interviewId), Times.Never);
+           interviewExportServiceMock.Verify(x => x.DeleteInterviewRecords(interviewId), Times.Never);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 
