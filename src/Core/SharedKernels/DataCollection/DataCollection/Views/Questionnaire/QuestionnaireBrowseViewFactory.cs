@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             if (count == 0)
             {
                 return new QuestionnaireBrowseView(
-                    input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
+                    input.Page, input.PageSize.GetValueOrDefault(), count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
             return this.reader.Query(queryable =>
@@ -58,10 +58,15 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 
-                var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
+                IQueryable<QuestionnaireBrowseItem> pagedResults = queryResult;
+
+                if (input.PageSize.HasValue)
+                {
+                    pagedResults = queryResult.Skip((input.Page - 1) * input.PageSize.Value).Take(input.PageSize.Value);
+                }
 
 
-                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
+                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), pagedResults.ToList(), input.Order);
             });
         }
     }
