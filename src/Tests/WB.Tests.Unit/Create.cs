@@ -21,7 +21,11 @@ using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Supervisor;
@@ -42,6 +46,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -322,10 +327,11 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
+        public static Group Chapter(string title = "Chapter X",Guid? chapterId=null, IEnumerable<IComposite> children = null)
         {
             return Create.Group(
                 title: title,
+                groupId: chapterId,
                 children: children);
         }
 
@@ -1444,6 +1450,35 @@ namespace WB.Tests.Unit
         public static RebuildReadSideCqrsPostgresTransactionManager RebuildReadSideCqrsPostgresTransactionManager()
         {
             return new RebuildReadSideCqrsPostgresTransactionManager(Mock.Of<ISessionFactory>());
+        }
+
+        public static DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnnaireVersion questionnaireVersion=null)
+        {
+            return new DownloadQuestionnaireRequest()
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                SupportedVersion = questionnaireVersion ?? new QuestionnnaireVersion()
+            };
+        }
+
+        public static QuestionnaireView QuestionnaireView(Guid? createdBy)
+        {
+            return new QuestionnaireView(new QuestionnaireDocument() {CreatedBy = createdBy ?? Guid.NewGuid()});
+        }
+
+        public static GenerationResult GenerationResult(bool success=false)
+        {
+            return new GenerationResult() {Success = success};
+        }
+
+        public static QuestionnaireVerificationError QuestionnaireVerificationError()
+        {
+            return new QuestionnaireVerificationError("ee", "mm");
+        }
+
+        public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId)
+        {
+            return  new QuestionnaireSharedPersons(questionnaireId ?? Guid.NewGuid());
         }
     }
 }
