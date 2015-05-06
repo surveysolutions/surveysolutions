@@ -34,8 +34,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         private bool disposed;
         private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
 
-        internal static readonly string AllEventsStream = "$ce-" + EventsCategory;
-
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
@@ -79,7 +77,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                currentSlice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
+                currentSlice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), nextSliceStart, batchSize, false));
 
                 nextSliceStart = currentSlice.NextEventNumber;
 
@@ -155,7 +153,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
+            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 
