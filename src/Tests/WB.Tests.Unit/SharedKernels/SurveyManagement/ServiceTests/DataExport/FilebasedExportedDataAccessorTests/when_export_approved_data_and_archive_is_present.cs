@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             archiveName = filebasedExportedDataAccessor.GetFilePathToExportedApprovedCompressedData(questionnaireId, questionnaireVersion, ExportDataType.Tab);
 
         It should_archive_name_contain_questionnaire_id_and_version_and_Approved_addition = () =>
-            archiveName.ShouldContain("exported_data_11111111-1111-1111-1111-111111111111_3_Approved");
+            archiveName.ShouldContain("exported_data_11111111-1111-1111-1111-111111111111_3_Tab_Approved");
 
         It should_archive_contain_data_files_and_environment_files = () =>
             addedFiles.ShouldEqual(new[] { "f1", "f2", "e1", "e2" });
