@@ -19,10 +19,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventBusEventHandler<QuestionsDisabled>
     {
         private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly ILiteEventRegistry eventRegistry;
 
-        public EnablementViewModel(IPlainRepository<InterviewModel> interviewRepository)
+        public EnablementViewModel(IPlainRepository<InterviewModel> interviewRepository, ILiteEventRegistry eventRegistry)
         {
+            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
+            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
+
             this.interviewRepository = interviewRepository;
+            this.eventRegistry = eventRegistry;
         }
 
         private string interviewId;
@@ -31,6 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Init(string interviewId, Identity entityIdentity)
         {
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.interviewId = interviewId;
@@ -38,6 +44,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
             this.UpdateSelfFromModel();
+        }
+
+        public void Start()
+        {
+            this.eventRegistry.Subscribe(this);
         }
 
         private bool enabled;
