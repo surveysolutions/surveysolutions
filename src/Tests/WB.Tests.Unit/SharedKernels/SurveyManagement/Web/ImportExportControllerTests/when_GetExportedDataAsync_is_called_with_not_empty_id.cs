@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
         {
             dataExportServiceMock = new Mock<IFilebasedExportedDataAccessor>();
             questionnaireId = Guid.NewGuid();
-            dataExportServiceMock.Setup(x => x.GetFilePathToExportedCompressedData(questionnaireId, 1)).Returns("hello.txt");
+            dataExportServiceMock.Setup(x => x.GetFilePathToExportedCompressedData(questionnaireId, 1, ExportDataType.Tab)).Returns("hello.txt");
             controller = CreateImportExportController(dataExportServiceMock.Object);
         };
 
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
         });
 
         It should_DataExportService_be_called_once = () =>
-            dataExportServiceMock.Verify(x => x.GetFilePathToExportedCompressedData(questionnaireId, 1), Times.Once());
+            dataExportServiceMock.Verify(x => x.GetFilePathToExportedCompressedData(questionnaireId, 1, ExportDataType.Tab), Times.Once());
 
         It should_return_FilePathResult = () =>
             result.ShouldNotBeNull();
