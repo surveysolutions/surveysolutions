@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size question is categorical multy answers question could not have roster title question..
+        ///   Looks up a localized string similar to Group where roster size question is categorical multi answers question could not have roster title question..
         /// </summary>
         internal static string WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion {
             get {
