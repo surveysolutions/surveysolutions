@@ -30,6 +30,10 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         [DataMember]
         public int Patch { get; set; }
 
+        public QuestionnaireVersion()
+        {
+        }
+
         public QuestionnaireVersion(int major, int minor, int patch)
         {
             this.Major = major;
