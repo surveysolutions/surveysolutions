@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 {
-    [Ignore("Failed test should be fixed in KP-5380")]
     internal class when_generating_assembly_and_questionnaire_third_level_nested_roster : CodeGenerationTestsContext
     {
         Establish context = () =>
@@ -33,7 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 var roster3 = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var roster4 = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var roster5 = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-                var roster6 = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
                 QuestionnaireDocument questionnaireDocument =
                     Create.QuestionnaireDocument(
@@ -45,11 +43,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                                         rosterSizeQuestionId: level1QuestionId, 
                                         children: new IComposite[]{ 
                                             Create.NumericIntegerQuestion(level2QuestionId),
-                                            Create.NumericRoster(roster3, "roster3", rosterSizeQuestionId: level2QuestionId) }),
+                                            Create.NumericRoster(roster2, "roster2", rosterSizeQuestionId: level2QuestionId) }),
                                 }),
                         Create.Chapter(children: new List<IComposite>
                                 {
-                                    Create.NumericRoster(roster2, "roster2", 
+                                    Create.NumericRoster(roster3, "roster3", 
                                         rosterSizeQuestionId: level1QuestionId,
                                         children: new []
                                                   {
@@ -82,8 +80,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         private static AppDomainContext appDomainContext;
         private static InvokeResults results;
-        private static string[] namesToCheck = new[] { "parent", "conditionExpressions" };
-
 
         [Serializable]
         internal class InvokeResults
