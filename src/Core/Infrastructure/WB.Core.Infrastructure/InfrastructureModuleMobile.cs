@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure
         {
             registry.Bind<IAggregateRootRepository, AggregateRootRepositoryWithCache>();
             registry.Bind<ICommandService, CommandService>();
-            registry.Bind<ILiteEventRegistry, LiteEventRegistry>();
+            registry.Singleton<ILiteEventRegistry, LiteEventRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<ISnapshottingPolicy, NoSnapshottingPolicy>();
             registry.Bind<IAggregateRootCreationStrategy, SimpleAggregateRootCreationStrategy>();

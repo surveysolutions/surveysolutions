@@ -297,4 +297,7 @@
   <data name="Interview_Instruction_Title" xml:space="preserve">
     <value>Инструкция</value>
   </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Нажмите для ввода текста</value>
+  </data>
 </root>
