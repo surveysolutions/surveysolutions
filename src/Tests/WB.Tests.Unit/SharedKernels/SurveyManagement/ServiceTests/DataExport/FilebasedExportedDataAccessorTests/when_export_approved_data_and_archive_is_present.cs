@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.FilebasedExportedDataAccessorTests
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            archiveName = filebasedExportedDataAccessor.GetFilePathToExportedApprovedCompressedData(questionnaireId, questionnaireVersion);
+            archiveName = filebasedExportedDataAccessor.GetFilePathToExportedApprovedCompressedData(questionnaireId, questionnaireVersion, ExportDataType.Tab);
 
         It should_archive_name_contain_questionnaire_id_and_version_and_Approved_addition = () =>
             archiveName.ShouldContain("exported_data_11111111-1111-1111-1111-111111111111_3_Approved");

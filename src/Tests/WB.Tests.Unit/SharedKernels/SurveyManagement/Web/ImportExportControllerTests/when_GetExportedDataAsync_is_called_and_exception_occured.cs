@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;
@@ -18,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
         {
             questionnaireId = Guid.NewGuid();
             dataExportServiceMock = new Mock<IFilebasedExportedDataAccessor>();
-            dataExportServiceMock.Setup(x => x.GetFilePathToExportedCompressedData(questionnaireId, 1)).Throws<NullReferenceException>();
+            dataExportServiceMock.Setup(x => x.GetFilePathToExportedCompressedData(questionnaireId, 1, ExportDataType.Tab)).Throws<NullReferenceException>();
             
             controller = CreateImportExportController(dataExportServiceMock.Object);
         };
