@@ -6,19 +6,17 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     public class QuestionnaireItemViewFactory: IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>
     {
-        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession;
+        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
 
-        public QuestionnaireItemViewFactory(IReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession)
+        public QuestionnaireItemViewFactory(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
         {
-            this.documentGroupSession = documentGroupSession;
+            this.questionnaires = questionnaires;
         }
 
         public QuestionnaireBrowseItem Load(QuestionnaireItemInputModel input)
         {
-            //return documentGroupSession.GetById(input.QuestionnaireId);
-            return
-                this.documentGroupSession.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.Version)/*.Query(
-                    _ => _.Where(q => q.QuestionnaireId == input.QuestionnaireId).OrderByDescending(q=>q.Version).ToList().FirstOrDefault())*/;
+            var result = this.questionnaires.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.Version);
+            return result;
         }
     }
 }
