@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionM
         public bool IsPrefilled { get; set; }
         public string Instructions { get; set; }
         public bool IsMandatory { get; set; }
+        public string ValidationMessage { get; set; }
     }
 }
