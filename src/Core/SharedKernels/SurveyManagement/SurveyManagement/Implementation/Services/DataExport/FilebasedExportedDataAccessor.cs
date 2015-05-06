@@ -140,19 +140,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
         }
 
-        public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version)
+        public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType)
         {
             var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
+            var fileName = string.Format("{0}_{1}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath), exportDataType.ToString());
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
             var filesToArchive = new List<string>();
 
-            filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
-            filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+            switch (exportDataType)
+            {
+                case ExportDataType.Stata:
+                {
+                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+                    break;
+                }
+                case ExportDataType.Spss:
+                {
+                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+                    break;
+                }
+                case ExportDataType.Tab:
+                default:
+                {
+                    filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+                    filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+                    break;
+                }
+            }
 
             archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
 
@@ -178,19 +197,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return archiveFilePath;
         }
 
-        public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version)
+        public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType)
         {
             var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}_Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
+            var fileName = string.Format("{0}_{1}_Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath), exportDataType.ToString());
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
             var filesToArchive = new List<string>();
 
-            filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath));
-            filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+
+            switch (exportDataType)
+            {
+                case ExportDataType.Stata:
+                    {
+                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, dataDirectoryPath));
+                        break;
+                    }
+                case ExportDataType.Spss:
+                    {
+                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, dataDirectoryPath));
+                        break;
+                    }
+                case ExportDataType.Tab:
+                default:
+                    {
+                        filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath));
+                        filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath)); 
+                        break;
+                    }
+            }
 
             archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
           

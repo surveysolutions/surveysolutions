@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedDataAsync(Guid id, long version)
+        public void GetExportedDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
         {
             if (id == Guid.Empty)
             {
@@ -82,8 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     IsolatedThreadManager.MarkCurrentThreadAsIsolated();
                     try
                     {
-                        this.AsyncManager.Parameters["result"] =
-                            this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version, type);
                     }
                     catch (Exception exc)
                     {
@@ -103,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedApprovedDataAsync(Guid id, long version)
+        public void GetExportedApprovedDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
         {
             if (id == Guid.Empty)
             {
@@ -116,8 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     IsolatedThreadManager.MarkCurrentThreadAsIsolated();
                     try
                     {
-                        this.AsyncManager.Parameters["result"] =
-                            this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version, type);
                     }
                     catch (Exception exc)
                     {
@@ -135,6 +133,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
+
 
         [Authorize(Roles = "Administrator, Headquarter")]
         public void GetExportedFilesAsync(Guid id, long version)
