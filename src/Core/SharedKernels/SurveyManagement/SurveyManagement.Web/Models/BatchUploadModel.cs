@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Web;
@@ -16,6 +17,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [ValidateFile(ErrorMessage = "Please select file")]
         [Display(Name = "CSV File")]
         public HttpPostedFileBase File { get; set; }
-        public FeaturedQuestionItem[] FeaturedQuestions { get; set; }
+        public List<FeaturedQuestionItem> FeaturedQuestions { get; set; }
     }
 }
