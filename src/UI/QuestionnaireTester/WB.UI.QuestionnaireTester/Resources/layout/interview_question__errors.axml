@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" />
+    style="@style/Interview_InterviewQuestion_Error_Layout"
+    local:MvxBind="Visible Validity.IsInvalid">
+    <TextView
+        style="@style/Interview_InterviewQuestion_Error_Caption"
+        android:text="error" />
+    <TextView
+        style="@style/Interview_InterviewQuestion_Error_Message"
+        local:MvxBind="Text Validity.ErrorMessage" />
+</MvxLinearLayout>

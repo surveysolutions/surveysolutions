@@ -11,7 +11,7 @@
         <EditText
             style="@style/Interview_TextQuestion_Editor"
             android:hint="Tap to enter text"
-            local:MvxBind="Text Answer; ValueChange ValueChangeCommand;" />
+            local:MvxBind="Text Answer; Hint Localization('TextQuestion_Hint'); ValueChange ValueChangeCommand;" />
         <include
             layout="@layout/interview_question__errors" />
         <include

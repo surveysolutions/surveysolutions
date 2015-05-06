@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
@@ -40,6 +41,28 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
         public static IEnumerable<DataCollection.Identity> ToIdentities(IEnumerable<Identity> identities)
         {
             return identities.Select(ToIdentity).ToArray();
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Identity p = obj as Identity;
+            if (p == null)
+                return false;
+
+            return Equals(p);
+        }
+
+        public bool Equals(Identity p)
+        {
+            if (p == null)
+                return false;
+
+            return this.Id == p.Id && this.RosterVector.SequenceEqual(p.RosterVector);
         }
     }
 

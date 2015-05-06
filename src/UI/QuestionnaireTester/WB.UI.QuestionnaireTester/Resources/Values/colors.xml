@@ -2,6 +2,8 @@
 <resources>
   <color name="applicationBackground">#FFFAFAFA</color>
   <color name="colorBlueThemePrimary">#FF2A81CB</color>
+  
+  <color name="errorTextColor">#FFE32102</color>
 
   <color name="colorToolbarText">#FFFFFFFF</color>
 

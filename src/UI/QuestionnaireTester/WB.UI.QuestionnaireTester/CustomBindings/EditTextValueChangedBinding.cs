@@ -9,7 +9,6 @@ using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-
     public class EditTextValueChangedBinding : MvxAndroidTargetBinding
     {
         private IMvxCommand Command;
@@ -37,31 +36,25 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         private void FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             this.wasFocused = isFocused && e.HasFocus == false;
-            isFocused = e.HasFocus;
+            this.isFocused = e.HasFocus;
 
-            if (wasFocused && isTextChanged)
-            {
-                TrySendAnswerTextQuestionCommand();
-            }
+            TrySendAnswerTextQuestionCommand();
         }
 
         private void AfterTextChanged(object sender, AfterTextChangedEventArgs e)
         {
-            isTextChanged = true;
+            this.isTextChanged = true;
 
-            if (wasFocused && isTextChanged)
-            {
-                TrySendAnswerTextQuestionCommand();
-            }
+            TrySendAnswerTextQuestionCommand();
         }
 
         private void TrySendAnswerTextQuestionCommand()
         {
-            if (!wasFocused || !isTextChanged)
+            if (!this.wasFocused || !this.isTextChanged)
                 return;
 
-            isTextChanged = false;
-            wasFocused = false;
+            this.isTextChanged = false;
+            this.wasFocused = false;
 
             if (Target == null)
                 return;

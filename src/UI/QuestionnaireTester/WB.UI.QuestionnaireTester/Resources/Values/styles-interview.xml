@@ -52,6 +52,35 @@
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">1dp</item>
     <item name="android:background">#dadada</item>
+  </style>  
+  
+  <style name="Interview_InterviewQuestion_Error_Layout" >
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
+  </style>    
+  
+  <style name="Interview_InterviewQuestion_Error_Caption" >
+    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textSize">12dp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/errorTextColor</item>
+  </style>  
+  
+  <style name="Interview_InterviewQuestion_Error_Message" >
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">14dp</item>
+    <item name="android:textStyle">bold|italic</item>
+    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:textColor">@color/errorTextColor</item>
   </style>
 
 </resources>

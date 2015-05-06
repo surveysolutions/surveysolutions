@@ -222,6 +222,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionModel.Title = question.QuestionText;
             questionModel.IsMandatory = question.Mandatory;
             questionModel.IsPrefilled = question.Featured;
+            questionModel.ValidationMessage = question.ValidationMessage;
 
             return questionModel;
         }

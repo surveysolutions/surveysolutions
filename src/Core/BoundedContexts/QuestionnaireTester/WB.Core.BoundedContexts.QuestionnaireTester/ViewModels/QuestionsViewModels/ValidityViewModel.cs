@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
@@ -14,13 +15,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventBusEventHandler<AnswersDeclaredValid>,
-        ILiteEventBusEventHandler<AnswersDeclaredInvalid>
+        ILiteEventBusEventHandler<AnswersDeclaredInvalid>,
+        IDisposable
     {
+        private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
 
-        public ValidityViewModel(IPlainRepository<InterviewModel> interviewRepository)
+        public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
+            IPlainRepository<InterviewModel> interviewRepository,
+            IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository)
         {
+            this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         private string interviewId;
@@ -35,21 +43,41 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.entityIdentity = entityIdentity;
             this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
+            liteEventRegistry.Subscribe(this);
+
             this.UpdateSelfFromModel();
         }
 
-        private bool isValid;
-        public bool IsValid
+        private bool isInvalid;
+        public bool IsInvalid
         {
-            get { return isValid; }
-            private set { isValid = value; RaisePropertyChanged(); }
+            get { return isInvalid; }
+            private set { isInvalid = value; RaisePropertyChanged(); }
+        }        
+        
+        private string errorMessage;
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            private set { errorMessage = value; RaisePropertyChanged(); }
         }
 
         private void UpdateSelfFromModel()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            this.IsValid = interview.IsValid(this.entityIdentity);
+            this.IsInvalid = !interview.IsValid(this.entityIdentity);
+
+            if (IsInvalid)
+            {
+                var questionnaireModel = plainQuestionnaireRepository.Get(interview.QuestionnaireId);
+                var questionModel = questionnaireModel.Questions[entityIdentity.Id];
+                ErrorMessage = questionModel.ValidationMessage;
+            }
+            else
+            {
+                ErrorMessage = string.Empty;
+            }
         }
 
 
@@ -67,6 +95,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 UpdateSelfFromModel();
             }
+        }
+
+        public void MarkAsError()
+        {
+            IsInvalid = true;
+            ErrorMessage = "You've entered invalid answer.";
+        }
+
+        public void Dispose()
+        {
+            liteEventRegistry.Unsubscribe(this);
         }
     }
 }

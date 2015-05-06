@@ -13,10 +13,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class TextQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<TextQuestionAnswered>
-
+    public class TextQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel,
+        ILiteEventBusEventHandler<TextQuestionAnswered>,
+        IDisposable
     {
+        private readonly ILiteEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
@@ -25,26 +27,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionHeaderViewModel Header { get; private set; }
-        public ValidityViewModel ValidityViewModel { get; private set; }
-        public EnablementViewModel EnablementViewModel { get; private set; }
+        public ValidityViewModel Validity { get; private set; }
+        public EnablementViewModel Enablement { get; private set; }
 
         public TextQuestionViewModel(
+            ILiteEventRegistry liteEventRegistry,
             ICommandService commandService, 
             IPrincipal principal, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
             IPlainRepository<InterviewModel> interviewRepository,
             QuestionHeaderViewModel questionHeaderViewModel,
-            ValidityViewModel validityViewModel,
-            EnablementViewModel enablementViewModel)
+            ValidityViewModel validity,
+            EnablementViewModel enablement)
         {
+            this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
             this.Header = questionHeaderViewModel;
-            ValidityViewModel = validityViewModel;
-            EnablementViewModel = enablementViewModel;
+            Validity = validity;
+            Enablement = enablement;
         }
 
 
@@ -56,17 +60,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.entityIdentity = entityIdentity;
             this.interviewId = interviewId;
 
+            liteEventRegistry.Subscribe(this);
+
             this.Header.Init(interviewId, entityIdentity);
-            this.ValidityViewModel.Init(interviewId, entityIdentity);
-            this.EnablementViewModel.Init(interviewId, entityIdentity);
+            this.Validity.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, entityIdentity);
 
-            var interview = this.interviewRepository.Get(interviewId);
-
-            var answerModel = interview.GetTextAnswerModel(entityIdentity);
-            if (answerModel != null)
-            {
-                this.Answer = answerModel.Answer;
-            }
+            UpdateSelfFromModel();
         }
 
         private string title;
@@ -91,14 +91,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void SendAnswerTextQuestionCommand()
         {
-            commandService.Execute(new AnswerTextQuestionCommand(
-                interviewId: Guid.Parse(interviewId),
-                userId: principal.CurrentUserIdentity.UserId,
-                questionId: this.entityIdentity.Id,
-                rosterVector: this.entityIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
-                answer: Answer
-                ));
+            try
+            {
+                commandService.Execute(new AnswerTextQuestionCommand(
+                    interviewId: Guid.Parse(interviewId),
+                    userId: principal.CurrentUserIdentity.UserId,
+                    questionId: this.entityIdentity.Id,
+                    rosterVector: this.entityIdentity.RosterVector,
+                    answerTime: DateTime.UtcNow,
+                    answer: Answer
+                    ));
+            }
+            catch (Exception)
+            {
+                Validity.MarkAsError();
+            }
         }
 
 
@@ -115,10 +122,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId != entityIdentity.Id && @event.PropagationVector != entityIdentity.RosterVector)
+            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector != entityIdentity.RosterVector)
                 return;
 
             UpdateSelfFromModel();
+        }
+
+        public void Dispose()
+        {
+            liteEventRegistry.Unsubscribe(this);
         }
     }
 }
