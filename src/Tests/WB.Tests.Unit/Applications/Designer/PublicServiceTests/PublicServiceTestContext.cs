@@ -7,12 +7,14 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Membership;
+using DownloadQuestionnaireRequest = WB.UI.Designer.WebServices.Questionnaire.DownloadQuestionnaireRequest;
 
 namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 {
@@ -43,7 +45,13 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         {
             return new DownloadQuestionnaireRequest
             {
-                SupportedQuestionnaireVersion = supportedExpressionsEngineVersion,
+                SupportedQuestionnaireVersion =
+                    new QuestionnnaireVersion()
+                    {
+                        Major = supportedExpressionsEngineVersion.Major,
+                        Minor = supportedExpressionsEngineVersion.Minor,
+                        Patch = supportedExpressionsEngineVersion.Build
+                    },
                 QuestionnaireId = questionnaireId
             };
         }
