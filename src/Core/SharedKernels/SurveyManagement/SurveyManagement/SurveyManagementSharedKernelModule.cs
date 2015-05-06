@@ -171,10 +171,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
             this.Bind<IHealthCheckService>().To<HealthCheckService>();
-
-            this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
-            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
-            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
         }
     }
 }
