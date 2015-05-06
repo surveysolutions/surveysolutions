@@ -90,11 +90,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
+            var featuredQuestionItems = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions;
             var viewModel = new BatchUploadModel()
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
-                FeaturedQuestions = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions ?? new FeaturedQuestionItem[] {}
+                FeaturedQuestions = new List<FeaturedQuestionItem>(featuredQuestionItems)
             };
 
             return this.View(viewModel);
