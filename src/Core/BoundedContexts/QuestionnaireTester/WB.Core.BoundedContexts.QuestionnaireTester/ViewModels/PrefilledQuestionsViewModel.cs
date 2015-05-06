@@ -11,18 +11,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
-        private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private string interviewId;
 
         public PrefilledQuestionsViewModel(ILogger logger,
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
-            IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
+            IStatefulInterviewRepository interviewRepository)
             : base(logger)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
+            this.interviewRepository = interviewRepository;
         }
 
         public string QuestionnaireTitle { get; set; }
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.interviewId = interviewId;
 
-            var interview = this.plainStorageInterviewAccessor.Get(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;

@@ -13,9 +13,9 @@ namespace WB.UI.QuestionnaireTester.Converters
 {
     public class GetAnswerConverter : MvxValueConverter<AbstractInterviewAnswerModel, string>
     {
-        private static IPlainRepository<InterviewModel> interviewRepository
+        private static IStatefulInterviewRepository interviewRepository
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainRepository<InterviewModel>>(); }
+            get { return ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>(); }
         }
 
         private static IPlainRepository<QuestionnaireModel> questionnaireRepository

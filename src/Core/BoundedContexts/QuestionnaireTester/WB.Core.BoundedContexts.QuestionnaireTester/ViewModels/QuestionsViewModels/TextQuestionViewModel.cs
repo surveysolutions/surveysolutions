@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
-        private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private Identity entityIdentity;
         private string interviewId;
 
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             ICommandService commandService, 
             IPrincipal principal, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
-            IPlainRepository<InterviewModel> interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             QuestionHeaderViewModel questionHeaderViewModel,
             ValidityViewModel validity,
             EnablementViewModel enablement)

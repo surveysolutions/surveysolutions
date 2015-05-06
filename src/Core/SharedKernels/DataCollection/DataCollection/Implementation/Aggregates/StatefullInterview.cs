@@ -22,11 +22,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return interview; }
         }
 
-        private static IPlainRepository<InterviewModel> InterviewRepository
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainRepository<InterviewModel>>(); }
-        }
-
         private static IPlainRepository<QuestionnaireModel> QuestionnaireModelRepository
         {
             get { return ServiceLocator.Current.GetInstance<IPlainRepository<QuestionnaireModel>>(); }
@@ -44,8 +39,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionnaire = QuestionnaireModelRepository.Get(questionnaireId.FormatGuid());
             interview.QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.GetType());
-                
-            InterviewRepository.Store(interview, EventSourceId.FormatGuid());
         }
 
         #region Applying answers
