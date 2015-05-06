@@ -409,6 +409,20 @@ namespace WB.Tests.Unit
             return group;
         }
 
+        public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
+        {
+            Group group = Create.Group(
+                groupId: rosterId,
+                title: "Roster X",
+                variable: variable,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+            return group;
+        }
+
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
         {
             return new NumericQuestion
