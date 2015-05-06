@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
-        private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IMvxLocationWatcher geoLocationWatcher;
 
         private Identity questionIdentity;
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
             IUserIdentity userIdentity, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
-            IPlainRepository<InterviewModel> interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
             QuestionHeaderViewModel questionHeaderViewModel)
         {

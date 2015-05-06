@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
     public class InterviewViewModelFactory : IInterviewViewModelFactory
     {
         private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
-        private readonly IPlainRepository<InterviewModel> plainStorageInterviewAccessor;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         private static readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap = 
             new Dictionary<Type, Func<IInterviewEntityViewModel>>
@@ -33,10 +33,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         public InterviewViewModelFactory(
             IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
-            IPlainRepository<InterviewModel> plainStorageInterviewAccessor)
+            IStatefulInterviewRepository interviewRepository)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.plainStorageInterviewAccessor = plainStorageInterviewAccessor;
+            this.interviewRepository = interviewRepository;
         }
 
         public IList GetEntities(string interviewId, Identity groupIdentity)
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         private IList GenerateViewModels(string interviewId, Identity groupIdentity)
         {
-            var interview = this.plainStorageInterviewAccessor.Get(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             if (groupIdentity == null || groupIdentity.Id == Guid.Empty)
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         private IList GetPrefilledQuestionsImpl(string interviewId)
         {
-            var interview = this.plainStorageInterviewAccessor.Get(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
 
             return questionnaire.PrefilledQuestionsIds.Select(

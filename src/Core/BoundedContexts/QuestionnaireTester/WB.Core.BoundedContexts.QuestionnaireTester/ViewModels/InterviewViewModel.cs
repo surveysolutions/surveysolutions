@@ -13,12 +13,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IPrincipal principal;
         private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
-        private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly NavigationState navigationState;
 
         public InterviewViewModel(IPrincipal principal, 
             IPlainRepository<QuestionnaireModel> questionnaireRepository,
-            IPlainRepository<InterviewModel> interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             ChaptersViewModel chaptersViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
             GroupViewModel groupViewModel, 
