@@ -16,6 +16,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     internal class StatefullInterview : Interview
     {
         private InterviewModel interview;
+
+        public InterviewModel InterviewModel
+        {
+            get { return interview; }
+        }
+
         private static IPlainRepository<InterviewModel> InterviewRepository
         {
             get { return ServiceLocator.Current.GetInstance<IPlainRepository<InterviewModel>>(); }
