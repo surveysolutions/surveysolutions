@@ -19,6 +19,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>().InSingletonScope();
             this.Bind<IQuestionnaireRepository>().ToConstant<IQuestionnaireRepository>(this.Kernel.Get<IPlainQuestionnaireRepository>());
+            this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
 
             this.Bind<IPlainRepository<InterviewModel>>().To<PlainRepository<InterviewModel>>().InSingletonScope();
             this.Bind<IPlainRepository<QuestionnaireModel>>().To<PlainRepository<QuestionnaireModel>>().InSingletonScope();
