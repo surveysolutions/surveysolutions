@@ -3,6 +3,7 @@ using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -18,10 +19,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventBusEventHandler<QuestionsEnabled>,
         ILiteEventBusEventHandler<QuestionsDisabled>
     {
-        private readonly IPlainRepository<InterviewModel> interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
 
-        public EnablementViewModel(IPlainRepository<InterviewModel> interviewRepository, ILiteEventRegistry eventRegistry)
+        public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
         {
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
@@ -44,10 +45,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
             this.UpdateSelfFromModel();
-        }
 
-        public void Start()
-        {
             this.eventRegistry.Subscribe(this);
         }
 
@@ -55,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public bool Enabled
         {
             get { return enabled; }
-            private set { enabled = value; RaisePropertyChanged(); }
+            private set { enabled = value; this.RaisePropertyChanged(); }
         }
 
         private void UpdateSelfFromModel()
