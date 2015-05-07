@@ -59,7 +59,8 @@ namespace WB.UI.QuestionnaireTester
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("ValueChange", (view) => new EditTextValueChangedBinding(view)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("ValueChange", (editText) => new EditTextValueChangedBinding(editText)));
             registry.RegisterFactory(new MvxCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view)));
 
             base.FillTargetFactories(registry);

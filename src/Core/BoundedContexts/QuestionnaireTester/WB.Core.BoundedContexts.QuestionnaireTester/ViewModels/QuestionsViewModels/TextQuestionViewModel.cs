@@ -69,18 +69,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             UpdateSelfFromModel();
         }
 
-        private string title;
-        public string Title
+        private string mask;
+        public string Mask
         {
-            get { return title; }
-            private set { title = value; RaisePropertyChanged(() => Title); }
+            get { return mask; }
+            private set { mask = value; RaisePropertyChanged(); }
         }
 
         private string answer;
         public string Answer
         {
             get { return answer; }
-            private set { answer = value; RaisePropertyChanged(() => Answer); }
+            private set { answer = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand valueChangeCommand;
@@ -112,6 +112,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private void UpdateSelfFromModel()
         {
             var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+
+            var textQuestionModel = questionnaire.Questions[entityIdentity.Id] as MaskedTextQuestionModel;
+            if (textQuestionModel != null)
+            {
+                this.Mask = textQuestionModel.Mask;
+            }
 
             var answerModel = interview.GetTextAnswerModel(entityIdentity);
             if (answerModel != null)
@@ -122,7 +129,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector != entityIdentity.RosterVector)
+            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
                 return;
 
             UpdateSelfFromModel();

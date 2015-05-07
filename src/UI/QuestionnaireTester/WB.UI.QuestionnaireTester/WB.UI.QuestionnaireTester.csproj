@@ -184,6 +184,7 @@
     <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
+    <Compile Include="CustomBindings\EditTextMaskBinding.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\DataCollectionModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />

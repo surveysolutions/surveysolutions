@@ -1,0 +1,75 @@
+﻿using System;
+using Android.Text;
+using Android.Widget;
+using Cirrious.MvvmCross.Binding;
+using WB.Core.SharedKernels.DataCollection.MaskFormatter;
+
+
+namespace WB.UI.QuestionnaireTester.CustomBindings
+{
+    public class EditTextMaskBinding : BindingWrapper<EditText, string>
+    {
+        private class MaskedWatcher : Java.Lang.Object, ITextWatcher
+        {
+            private readonly IMaskedFormatter maskFormatter;
+            private readonly EditText editor;
+            private string previousValue = null;
+
+            public MaskedWatcher(String mask, EditText editor)
+            {
+                this.editor = editor;
+                if (string.IsNullOrEmpty(mask))
+                    this.maskFormatter = new EmptyMaskFormatter();
+                else
+                    this.maskFormatter = new MaskedFormatter(mask);
+            }
+
+            public void AfterTextChanged(IEditable s)
+            {
+                string newValue = s.ToString();
+
+                if (previousValue == newValue)
+                    return;
+
+                try
+                {
+                    int cursorPosition = editor.SelectionEnd;
+                    var filtered = this.maskFormatter.FormatValue(newValue ?? "", ref cursorPosition);
+                    if (string.Equals(newValue, filtered))
+                        return;
+
+                    previousValue = filtered;
+                    s.Replace(0, s.Length(), filtered);
+                    editor.SetSelection(cursorPosition);
+                }
+                catch (System.Exception e) { }
+            }
+
+            public void BeforeTextChanged(Java.Lang.ICharSequence s, int start, int count, int after) { }
+
+            public void OnTextChanged(Java.Lang.ICharSequence s, int start, int before, int count) { }
+        }
+
+        public EditTextMaskBinding(EditText target)
+            : base(target)
+        {
+        }
+
+        protected override void SetValueToView(EditText view, string value)
+        {
+            bool isInputMasked = !string.IsNullOrWhiteSpace(value);
+
+            if (isInputMasked)
+            {
+                var maskedWatcher = new MaskedWatcher(value, Target);
+                Target.AddTextChangedListener(maskedWatcher);
+                //Target.InputType = InputTypes.TextVariationVisiblePassword; //fix for samsung 
+            }
+        }
+
+        public override MvxBindingMode DefaultMode
+        {
+            get { return MvxBindingMode.OneWay; }
+        }
+    }
+}
