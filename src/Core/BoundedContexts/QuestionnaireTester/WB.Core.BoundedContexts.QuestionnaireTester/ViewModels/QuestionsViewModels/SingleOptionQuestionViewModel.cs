@@ -19,13 +19,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ICommandService commandService;
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefullInterviewRepository interviewRepository;
 
         public SingleOptionQuestionViewModel(
             ICommandService commandService,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
+            IStatefullInterviewRepository interviewRepository,
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel)
         {

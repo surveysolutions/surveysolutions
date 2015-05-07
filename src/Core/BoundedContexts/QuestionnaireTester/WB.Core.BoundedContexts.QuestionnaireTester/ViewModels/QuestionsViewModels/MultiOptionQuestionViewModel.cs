@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefullInterviewRepository interviewRepository;
 
         public MultiOptionQuestionViewModel(QuestionHeaderViewModel questionHeaderViewModel,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
-            IStatefulInterviewRepository interviewRepository)
+            IStatefullInterviewRepository interviewRepository)
         {
             this.Options = new ReadOnlyCollection<QuestionOptionViewModel>(new List<QuestionOptionViewModel>());
             this.Header = questionHeaderViewModel;

@@ -12,13 +12,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefullInterviewRepository interviewRepository;
         private string interviewId;
 
         public PrefilledQuestionsViewModel(ILogger logger,
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefullInterviewRepository interviewRepository)
             : base(logger)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;

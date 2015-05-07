@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefullInterviewRepository interviewRepository;
 
         public void Init(string interviewId, Identity questionIdentity)
         {
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public QuestionHeaderViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefullInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
