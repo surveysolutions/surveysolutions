@@ -341,7 +341,9 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_functional_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_text_list_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
