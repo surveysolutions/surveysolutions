@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Machine.Specifications;
+using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -73,8 +74,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            ((HttpResponseException)exception).Response.ReasonPhrase.ShouldEqual(
-                    "Your questionnaire \"\" contains new functionality which is not supported by your installation. Please update.");
+            (new[] { "questionnaire", "contains", "functionality", "not", "supported", "update"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
 
         private static ImportController importController;
         private static Exception exception;
