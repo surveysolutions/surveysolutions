@@ -10,36 +10,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         string QuestionnaireId { get; set; }
         long QuestionnaireVersion { get; set; }
         Guid Id { get; set; }
-        Dictionary<string, AbstractInterviewAnswerModel> Answers { get; set; }
-        Dictionary<string, InterviewGroupModel> Groups { get; set; }
+        Dictionary<string, BaseInterviewAnswer> Answers { get; set; }
+        Dictionary<string, InterviewGroup> Groups { get; set; }
         Dictionary<string, List<string>> RosterInstancesIds { get; set; }
         
         bool HasErrors { get; set; }
         bool IsInProgress { get; set; }
 
-        GpsCoordinatesAnswerModel GetGpsCoordinatesAnswerModel(Identity identity);
+        GpsCoordinatesAnswer GetGpsCoordinatesAnswerModel(Identity identity);
 
-        DateTimeAnswerModel GetDateTimeAnswerModel(Identity identity);
+        DateTimeAnswer GetDateTimeAnswerModel(Identity identity);
 
-        MultimediaAnswerModel GetMultimediaAnswerModel(Identity identity);
+        MultimediaAnswer GetMultimediaAnswerModel(Identity identity);
 
-        QrBarcodeAnswerModel GetQrBarcodeAnswerModel(Identity identity);
+        QrBarcodeAnswer GetQrBarcodeAnswerModel(Identity identity);
 
-        TextListAnswerModel GetTextListAnswerModel(Identity identity);
+        TextListAnswer GetTextListAnswerModel(Identity identity);
 
-        LinkedSingleOptionAnswerModel GetLinkedSingleOptionAnswerModel(Identity identity);
+        LinkedSingleOptionAnswer GetLinkedSingleOptionAnswerModel(Identity identity);
 
-        MultiOptionAnswerModel GetMultiOptionAnswerModel(Identity identity);
+        MultiOptionAnswer GetMultiOptionAnswerModel(Identity identity);
 
-        LinkedMultiOptionAnswerModel GetLinkedMultiOptionAnswerModel(Identity identity);
+        LinkedMultiOptionAnswer GetLinkedMultiOptionAnswerModel(Identity identity);
 
-        IntegerNumericAnswerModel GetIntegerNumericAnswerModel(Identity identity);
+        IntegerNumericAnswer GetIntegerNumericAnswerModel(Identity identity);
 
-        RealNumericAnswerModel GetRealNumericAnswerModel(Identity identity);
+        RealNumericAnswer GetRealNumericAnswerModel(Identity identity);
 
-        MaskedTextAnswerModel GetTextAnswerModel(Identity identity);
+        MaskedTextAnswer GetTextAnswerModel(Identity identity);
 
-        SingleOptionAnswerModel GetSingleOptionAnswerModel(Identity identity);
+        SingleOptionAnswer GetSingleOptionAnswerModel(Identity identity);
         
         bool IsValid(Identity identity);
 
