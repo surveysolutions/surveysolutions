@@ -57,10 +57,13 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
-            if (!expressionsEngineVersionService.IsClientVersionSupported(request.SupportedQuestionnaireVersion))
+            var clientSupportedQuestionnaireVersion = new Version(request.SupportedQuestionnaireVersion.Major,
+                request.SupportedQuestionnaireVersion.Minor, request.SupportedQuestionnaireVersion.Patch);
+
+            if (!expressionsEngineVersionService.IsClientVersionSupported(clientSupportedQuestionnaireVersion))
             {
                 var message =
-                    string.Format(ErrorMessages.ClientVersionIsNotSupported, request.SupportedQuestionnaireVersion);
+                    string.Format(ErrorMessages.ClientVersionIsNotSupported, clientSupportedQuestionnaireVersion);
 
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
@@ -81,7 +84,7 @@ namespace WB.UI.Designer.WebServices
             {
                 generationResult =
                     this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                        questionnaireView.Source, request.SupportedQuestionnaireVersion,
+                        questionnaireView.Source, clientSupportedQuestionnaireVersion,
                         out resultAssembly);
             }
             catch (Exception)
@@ -96,7 +99,7 @@ namespace WB.UI.Designer.WebServices
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                var message = String.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title);
+                var message = String.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
