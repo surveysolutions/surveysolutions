@@ -99,7 +99,7 @@ namespace WB.UI.Designer.WebServices
 
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
-                var message = String.Format(ErrorMessages.Questionnaire_verification_failed, questionnaireView.Title);
+                var message = String.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
