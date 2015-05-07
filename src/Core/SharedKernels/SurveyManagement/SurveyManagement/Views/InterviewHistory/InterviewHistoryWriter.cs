@@ -150,8 +150,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 
         public string GetReadableStatus()
         {
-            return string.Format("cache {0};    items: {1}",
-              this.cacheEnabled ? FileBasedDataExportRepositoryWriterMessages.Enabled : FileBasedDataExportRepositoryWriterMessages.Disabled,
+            return string.Format("Interview history -_- | cache {0} | items: {1}",
+              this.cacheEnabled ? "enabled" : "disabled",
               cache.Count);
         }
 

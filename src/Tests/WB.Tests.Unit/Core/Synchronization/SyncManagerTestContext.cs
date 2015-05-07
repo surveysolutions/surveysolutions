@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.DenormalizerStorage;
 using Moq;
 
 using WB.Core.GenericSubdomains.Utils;
@@ -11,6 +12,7 @@ using WB.Core.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.Core.Synchronization
 {
@@ -25,16 +27,21 @@ namespace WB.Tests.Unit.Core.Synchronization
             IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage = null,
             IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore = null,
             IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore = null,
+            IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackageReader  = null,
+            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnairesReader = null,
+            IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersReader = null,
             ISyncLogger syncLogger = null)
         {
             return new SyncManager(
                 devices ?? Mock.Of<IReadSideRepositoryReader<TabletDocument>>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                indexAccessor ?? Mock.Of<IReadSideRepositoryIndexAccessor>(),
                 userPackageStorage ?? Mock.Of<IReadSideKeyValueStorage<UserSyncPackageContent>>(),
                 interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
                 questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
+                interviewSyncPackageReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
+                usersReader ?? Stub.ReadSideRepository<UserSyncPackageMeta>(),
+                questionnairesReader ?? Stub.ReadSideRepository<QuestionnaireSyncPackageMeta>(),
                 syncLogger ?? Mock.Of<ISyncLogger>());
         }
 

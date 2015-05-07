@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
@@ -48,22 +46,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             Guid responsibleSupervisorId)
         {
             this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id);
-            new Task(() => this.CreateInterviewInternal(questionnaireId, version, id, (preloadedDataService) => preloadedDataService.CreatePreloadedDataDtosFromPanelData(data), responsibleHeadquarterId, responsibleSupervisorId))
-                .Start();
+
+            this.CreateInterviewInternal(
+                questionnaireId,
+                version,
+                id,
+                preloadedDataService => preloadedDataService.CreatePreloadedDataDtosFromPanelData(data),
+                responsibleHeadquarterId,
+                responsibleSupervisorId);
         }
 
         public void CreateSample(Guid questionnaireId, long version, string id, PreloadedDataByFile data, Guid responsibleHeadquarterId,
             Guid responsibleSupervisorId)
         {
-
             this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id);
-            new Task(() => this.CreateInterviewInternal(questionnaireId, 
-                    version, 
-                    id, 
-                    preloadedDataService => preloadedDataService.CreatePreloadedDataDtoFromSampleData(data), 
-                    responsibleHeadquarterId, 
-                    responsibleSupervisorId))
-                .Start();
+
+            this.CreateInterviewInternal(
+                questionnaireId, 
+                version, 
+                id, 
+                preloadedDataService => preloadedDataService.CreatePreloadedDataDtoFromSampleData(data), 
+                responsibleHeadquarterId, 
+                responsibleSupervisorId);
         }
 
         public SampleCreationStatus GetSampleCreationStatus(string id)
@@ -109,16 +113,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             int errorCountOccuredOnInterviewsCreaition = 0;
 
+            DateTime startTime = DateTime.Now;
+
             var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
-            for (int i = 0; i < interviewForCreate.Length; i++)
+            for (int interviewIndex = 0; interviewIndex < interviewForCreate.Length; interviewIndex++)
             {
                 try
                 {
                     commandInvoker.Execute(new CreateInterviewWithPreloadedData(Guid.NewGuid(), responsibleHeadquarterId,
-                        bigTemplate.PublicKey, version, interviewForCreate[i],
+                        bigTemplate.PublicKey, version, interviewForCreate[interviewIndex],
                         DateTime.UtcNow, responsibleSupervisorId));
 
-                    result.SetStatusMessage(string.Format("Processed {0} interview(s) from {1}", i, interviewForCreate.Length));
+                    result.SetStatusMessage(string.Format(
+                        @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",
+                        interviewIndex,
+                        interviewForCreate.Length,
+                        DateTime.Now - startTime,
+                        CalulateEstimatedTime(interviewIndex, interviewForCreate.Length, startTime, DateTime.Now)));
+
                     this.tempSampleCreationStorage.Store(result, id);
                 }
                 catch (Exception e)
@@ -137,6 +149,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 result.CompleteProcess();
 
             this.tempSampleCreationStorage.Store(result, id);
+        }
+
+        private static TimeSpan CalulateEstimatedTime(int interviewIndex, int totalInterviews, DateTime startTime, DateTime currentTime)
+        {
+            double spentMilliseconds = (currentTime - startTime).TotalMilliseconds;
+            double estimatedMilliseconds = spentMilliseconds / (interviewIndex + 1) * totalInterviews;
+
+            return TimeSpan.FromMilliseconds(estimatedMilliseconds);
         }
     }
 }

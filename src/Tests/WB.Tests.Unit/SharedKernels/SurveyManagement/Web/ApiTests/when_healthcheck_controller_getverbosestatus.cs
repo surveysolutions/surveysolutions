@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             folderPermissionCheckerMock = new Mock<IFolderPermissionChecker>();*/
             healthCheckService = new Mock<IHealthCheckService>();
             healthCheckService.Setup(x => x.Check())
-                .Returns(new HealthCheckResults(HealthCheckStatus.Happy, RavenHealthCheckResult.Happy(),
+                .Returns(new HealthCheckResults(HealthCheckStatus.Happy, 
                     EventStoreHealthCheckResult.Happy(), NumberOfUnhandledPackagesHealthCheckResult.Happy(0),
                     NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0),
                     new FolderPermissionCheckResult(HealthCheckStatus.Happy, "t", new string[0], new string[0])));

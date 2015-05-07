@@ -5,8 +5,10 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     public class InterviewResponsible : IView
     {
-        public Guid InterviewId { get; set; }
+        public virtual string Id { get; set; }
 
-        public Guid UserId { get; set; }
+        public virtual Guid InterviewId { get; set; }
+
+        public virtual Guid UserId { get; set; }
     }
 }

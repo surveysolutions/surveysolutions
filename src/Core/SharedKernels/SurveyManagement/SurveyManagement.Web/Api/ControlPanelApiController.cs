@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web.Http;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.Models;
@@ -13,6 +15,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
+    [NoTransaction]
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
@@ -36,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
         }
 
+        [NoTransaction]
         public int GetIncomingPackagesQueueLength()
         {
             if (this.cache.Contains("incomingPackagesQueueLength"))
@@ -54,9 +58,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
 
+        [NoTransaction]
         public ReadSideStatus GetReadSideStatus()
         {
-            return this.readSideAdministrationService.GetRebuildStatus();
+            ReadSideStatus readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
+            return readSideStatus;
         }
 
         [HttpPost]

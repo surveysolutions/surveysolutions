@@ -17,12 +17,12 @@ namespace WB.Core.Synchronization.SyncStorage
             this.Timestamp = timestamp;
         }
 
-        public Guid UserId { get; private set; }
+        public virtual Guid UserId { get; protected set; }
 
-        public string PackageId { get; set; }
+        public virtual string PackageId { get; set; }
 
-        public DateTime Timestamp { get; private set; }
+        public virtual DateTime Timestamp { get; protected set; }
 
-        public long SortIndex { get; set; }
+        public virtual long SortIndex { get; set; }
     }
 }

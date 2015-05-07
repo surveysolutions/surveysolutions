@@ -104,6 +104,7 @@ namespace WB.UI.Capi
             this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             this.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
+            this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();

@@ -2,7 +2,6 @@
 using System.Web.Configuration;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Storage.EventStore;
-using WB.Core.Infrastructure.Storage.Raven;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Modules

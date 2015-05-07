@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Raven.Abstractions.Extensions;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;

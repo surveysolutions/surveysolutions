@@ -15,7 +15,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.documentStorage = documentStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;

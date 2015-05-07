@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
              .Returns(new UserDocument());
 
             var interviewSummaryStorage =
-                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(it.IsAny<string>()) == new InterviewSummary());
+                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(it.IsAny<string>()) == new InterviewSummary());
 
             var interviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "",
                      userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
             synchronizer = Create.InterviewsSynchronizer(plainStorage: plainStorage,
                 commandService: commandServiceMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object,
-                userDocumentStorage: userDocumentStorageMock.Object, interviewSummaryRepositoryWriter: interviewSummaryStorage);
+                userDocumentStorage: userDocumentStorageMock.Object, interviewSummaryRepositoryReader: interviewSummaryStorage);
         };
 
         Because of = () => synchronizer.PullInterviewsForSupervisors(new[] { supervisorId });

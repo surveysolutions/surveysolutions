@@ -20,11 +20,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<Synchronizer>()
+            IJobDetail job = JobBuilder.Create<SynchronizationJob>()
                 .WithIdentity("HQ sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();
-
 
             if (this.schedulerSettigns.SchedulerEnabled)
             {
