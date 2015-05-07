@@ -11,15 +11,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
     {
         private Establish context = () =>
         {
-            ravenHealthCheckResult = RavenHealthCheckResult.Happy();
             eventStoreHealthCheckResult = EventStoreHealthCheckResult.Happy();
             numberOfUnhandledPackagesHealthCheckResult = NumberOfUnhandledPackagesHealthCheckResult.Happy(0);
             numberOfSyncPackagesWithBigSizeCheckResult = NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0);
             folderPermissionCheckResult = new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null);
 
 
-            databaseHealthCheckMock = new Mock<IAtomicHealthCheck<RavenHealthCheckResult>>();
-            databaseHealthCheckMock.Setup(m => m.Check()).Returns(ravenHealthCheckResult);
             eventStoreHealthCheckMock = new Mock<IAtomicHealthCheck<EventStoreHealthCheckResult>>();
             eventStoreHealthCheckMock.Setup(m => m.Check()).Returns(eventStoreHealthCheckResult);
             numberOfUnhandledPackagesCheckerMock = new Mock<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>();
@@ -30,7 +27,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             folderPermissionCheckerMock.Setup(m => m.Check()).Returns(folderPermissionCheckResult);
 
             service = CreateHealthCheckService(
-                databaseHealthCheckMock.Object,
                 eventStoreHealthCheckMock.Object,
                 numberOfUnhandledPackagesCheckerMock.Object,
                 numberOfSyncPackagesWithBigSizeCheckerMock.Object,
@@ -44,12 +40,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 
         It should_return_HealthCheckModel = () =>
             result.ShouldBeOfExactType<HealthCheckResults>();
-
-        It should_call_DatabaseHealthCheck_Check_once = () =>
-            databaseHealthCheckMock.Verify(x => x.Check(), Times.Once());
-
-        It should_return_RavenHealthCheckResult_after_call_RavenHealthCheck = () =>
-            result.DatabaseConnectionStatus.ShouldEqual(ravenHealthCheckResult);
 
         It should_call_EventStoreHealthCheck_Check_once = () =>
             eventStoreHealthCheckMock.Verify(x => x.Check(), Times.Once());
@@ -77,13 +67,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 
 
 
-        private static Mock<IAtomicHealthCheck<RavenHealthCheckResult>> databaseHealthCheckMock;
         private static Mock<IAtomicHealthCheck<EventStoreHealthCheckResult>> eventStoreHealthCheckMock;
         private static Mock<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>> numberOfUnhandledPackagesCheckerMock;
         private static Mock<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>> numberOfSyncPackagesWithBigSizeCheckerMock;
         private static Mock<IAtomicHealthCheck<FolderPermissionCheckResult>> folderPermissionCheckerMock;
 
-        private static RavenHealthCheckResult ravenHealthCheckResult;
         private static EventStoreHealthCheckResult eventStoreHealthCheckResult;
         private static NumberOfUnhandledPackagesHealthCheckResult numberOfUnhandledPackagesHealthCheckResult;
         private static NumberOfSyncPackagesWithBigSizeCheckResult numberOfSyncPackagesWithBigSizeCheckResult;

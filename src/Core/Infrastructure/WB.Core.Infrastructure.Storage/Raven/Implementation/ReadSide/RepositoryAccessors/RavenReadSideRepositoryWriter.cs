@@ -101,5 +101,15 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         {
             throw new NotImplementedException();
         }
+
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "Raven >:-|";
+        }
     }
 }

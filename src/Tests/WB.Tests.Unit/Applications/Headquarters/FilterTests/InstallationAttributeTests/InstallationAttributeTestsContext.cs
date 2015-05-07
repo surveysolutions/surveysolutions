@@ -16,7 +16,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
         {
             Setup.InstanceToMockedServiceLocator<IIdentityManager>(identityManager ?? Mock.Of<IIdentityManager>());
 
-            return new InstallationAttribute();
+            var installationAttribute = new InstallationAttribute();
+            InstallationAttribute.Installed = false;
+            return installationAttribute;
         }
 
         protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null)

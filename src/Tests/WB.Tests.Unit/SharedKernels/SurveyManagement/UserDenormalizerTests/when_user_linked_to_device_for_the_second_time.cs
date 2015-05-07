@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserDenormalizerTests
     {
         Establish context = () =>
         {
-            user = CreateUser(userId, history: new List<DeviceInfo>
+            user = CreateUser(userId, history: new HashSet<DeviceInfo>
             {
                 CreateDeviceInfo(deviceIdHistory, eventTimeStampHistory)   
             });

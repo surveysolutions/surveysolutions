@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
         private int pushedErrorsCount = 0;
         public int PushedErrorsCount { get { return this.pushedErrorsCount; } }
         public HeadquartersPullContextStub()
-            : base(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()) { }
+            : base(Mock.Of<IPlainKeyValueStorage<SynchronizationStatus>>()) { }
 
         public override void PushError(string message)
         {

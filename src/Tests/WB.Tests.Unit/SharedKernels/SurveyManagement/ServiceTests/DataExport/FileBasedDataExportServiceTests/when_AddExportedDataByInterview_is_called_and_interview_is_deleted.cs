@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(Guid.NewGuid());
 
         It should_never_calll_AddOrUpdateInterviewRecords = () =>
-            dataExportWriterMock.Verify(x => x.AddOrUpdateInterviewRecords(Moq.It.IsAny<InterviewDataExportView>(), Moq.It.IsAny<string>()), Times.Never);
+            dataExportWriterMock.Verify(x => x.AddOrUpdateInterviewRecords(Moq.It.IsAny<InterviewDataExportView>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Never);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
         private static Mock<IDataExportWriter> dataExportWriterMock;

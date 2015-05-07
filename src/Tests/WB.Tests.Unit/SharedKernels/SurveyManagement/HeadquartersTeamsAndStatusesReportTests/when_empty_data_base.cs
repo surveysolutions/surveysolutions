@@ -1,0 +1,23 @@
+﻿using Machine.Specifications;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
+
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HeadquartersTeamsAndStatusesReportTests
+{
+    internal class when_empty_data_base : HeadquartersTeamsAndStatusesReportContext
+    {
+        Establish context = () =>
+        {
+            reportFactory = CreateTeamsAndStatusesReport();
+        };
+
+        Because of = () => report = reportFactory.Load(new TeamsAndStatusesInputModel());
+
+        It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
+
+        private static HeadquartersTeamsAndStatusesReport reportFactory;
+        private static TeamsAndStatusesReportView report;
+    }
+}
+

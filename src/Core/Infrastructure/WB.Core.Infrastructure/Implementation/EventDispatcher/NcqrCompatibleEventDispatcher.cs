@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 {
@@ -20,6 +21,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly Type[] handlersToIgnore;
         private readonly Func<InProcessEventBus> getInProcessEventBus;
         private readonly IEventStore eventStore;
+
+        public ITransactionManagerProvider TransactionManager { get; set; }
 
         public NcqrCompatibleEventDispatcher(IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
         {
@@ -78,11 +81,14 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 try
                 {
+                    this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
                     functionalEventHandler.Handle(events, firstEventSourceId);
+                    this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                 }
                 catch (Exception exception)
                 {
                     errorsDuringHandling.Add(exception);
+                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
                 }
             }
 
@@ -92,11 +98,14 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 {
                     try
                     {
+                        this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
                         handler.Bus.Publish(publishableEvent);
+                        this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                     }
                     catch (Exception exception)
                     {
                         errorsDuringHandling.Add(exception);
+                        this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
                     }
                 }
             }
@@ -143,11 +152,14 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
                 try
                 {
+                    this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
                     bus.Publish(eventMessage);
+                    this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                 }
                 catch (Exception exception)
                 {
                     occurredExceptions.Add(exception);
+                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
                 }
 
                 stopWatch.Stop();

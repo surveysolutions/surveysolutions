@@ -199,7 +199,7 @@
     <value>Group where roster size source is question has invalid roster title question.</value>
   </data>
   <data name="WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Group where roster size question is categorical multy answers question could not have roster title question.</value>
+    <value>Group where roster size question is categorical multi answers question could not have roster title question.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
     <value>Fixed titles roster cannot have empty titles.</value>

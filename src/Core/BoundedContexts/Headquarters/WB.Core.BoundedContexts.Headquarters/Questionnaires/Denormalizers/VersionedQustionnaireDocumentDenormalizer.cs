@@ -15,10 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
 
         public VersionedQustionnaireDocumentDenormalizer(IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage)
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
             if (questionnaireCacheInitializer == null) throw new ArgumentNullException("questionnaireCacheInitializer");
 

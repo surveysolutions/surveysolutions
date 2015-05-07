@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var userDocument = new UserDocument
                                {
                                    PublicKey = userId,
-                                   Roles = new List<UserRoles> { UserRoles.Operator }
+                                   Roles = new HashSet<UserRoles> { UserRoles.Operator }
                                };
 
             return userDocument;

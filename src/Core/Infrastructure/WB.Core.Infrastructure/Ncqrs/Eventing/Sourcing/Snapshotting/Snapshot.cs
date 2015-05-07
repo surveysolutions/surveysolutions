@@ -13,7 +13,7 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
         /// <param name="eventSourceId">The value which uniquely identifies the stream to which the snapshot applies.</param>
         /// <param name="version">The position at which the snapshot applies.</param>
         /// <param name="payload">The snapshot or materialized view of the stream at the revision indicated.</param>
-        public Snapshot(Guid eventSourceId, long version, object payload)
+        public Snapshot(Guid eventSourceId, int version, object payload)
             : this()
         {
             EventSourceId = eventSourceId;
@@ -36,7 +36,7 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
         /// <summary>
         /// Gets the position at which the snapshot applies.
         /// </summary>
-        public long Version { get; private set; }
+        public int Version { get; private set; }
 
         /// <summary>
         /// Gets the snapshot or materialized view of the stream at the revision indicated.
