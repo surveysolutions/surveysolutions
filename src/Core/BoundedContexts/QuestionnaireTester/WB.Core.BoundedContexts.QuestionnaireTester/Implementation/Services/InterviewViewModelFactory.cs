@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
+                { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> }
             };
 
@@ -92,7 +93,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
-                throw new ArgumentOutOfRangeException("entityModelType", entityModelType, "View model is not registered");
+                //throw new ArgumentOutOfRangeException("entityModelType", entityModelType, "View model is not registered");
+                var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
+                text.StaticText = entityModelType.ToString();
+                return text;
             }
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
