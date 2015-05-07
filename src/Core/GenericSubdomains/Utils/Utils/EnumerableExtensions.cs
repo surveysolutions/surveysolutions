@@ -11,6 +11,11 @@ namespace WB.Core.GenericSubdomains.Utils
             yield return element;
         }
 
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
+        {
+            return new HashSet<T>(source);
+        }
+
         public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             return enumerable.Where(element => !predicate.Invoke(element));
@@ -53,6 +58,14 @@ namespace WB.Core.GenericSubdomains.Utils
                 ? String.Empty
                 : String.Join(",",
                     orders.Select(o => o.Field + (o.Direction == OrderDirection.Asc ? String.Empty : " Desc")));
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        {
+            foreach (T item in enumeration)
+            {
+                action(item);
+            }
         }
     }
 }

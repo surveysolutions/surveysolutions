@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -40,13 +39,6 @@ namespace Main.DenormalizerStorage
             return query.Invoke(this.repository.Values.AsQueryable());
         }
 
-        public IEnumerable<TView> QueryAll(Expression<Func<TView, bool>> condition)
-        {
-            return condition != null
-                ? repository.Values.Where(condition.Compile())
-                : repository.Values;
-        }
-
         public void Remove(string id)
         {
             lock (locker)
@@ -82,5 +74,15 @@ namespace Main.DenormalizerStorage
         {
            this.repository.Clear();
        }
+
+        public Type ViewType
+        {
+            get { return typeof(TView); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "in-memory-2";
+        }
     }
 }

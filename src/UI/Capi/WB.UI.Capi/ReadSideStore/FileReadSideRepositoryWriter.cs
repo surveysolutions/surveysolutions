@@ -91,5 +91,15 @@ namespace WB.UI.Capi.ReadSideStore
                 File.Copy(file, Path.Combine(this.StoreDirPath, Path.GetFileName(file)));
             this.memcache = new Dictionary<string, TEntity>();
         }
+
+        public Type ViewType
+        {
+            get { return typeof(TEntity); }
+        }
+
+        public string GetReadableStatus()
+        {
+            return "File";
+        }
     }
 }

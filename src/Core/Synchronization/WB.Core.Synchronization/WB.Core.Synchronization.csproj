@@ -44,15 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -77,16 +68,11 @@
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesByBriefFields.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\InterviewSyncPackagesGroupedByRoot.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\QuestionnaireSyncPackagesByBriefFields.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\SynchronizationDeltasByRecordSize.cs" />
     <Compile Include="Implementation\SyncLogger\SyncLogger.cs" />
     <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="IncomingSyncPackageException.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
-    <Compile Include="Implementation\ReadSide\Indexes\UserSyncPackagesByBriefFields.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISyncManager.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />

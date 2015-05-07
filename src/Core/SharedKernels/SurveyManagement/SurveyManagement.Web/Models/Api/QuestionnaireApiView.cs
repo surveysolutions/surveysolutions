@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 
             this.Offset = questionnaireBrowseView.Page;
             this.TotalCount = questionnaireBrowseView.TotalCount;
-            this.Limit = questionnaireBrowseView.PageSize;
+            this.Limit = questionnaireBrowseView.PageSize.GetValueOrDefault();
             this.Questionnaires = questionnaireBrowseView.Items.Select(
                     item => new QuestionnaireApiItem(item.QuestionnaireId, item.Version, item.Title, item.LastEntryDate));
             this.Order = questionnaireBrowseView.Order;

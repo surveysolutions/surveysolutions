@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 plainQuestionnaireRepositoryMock.Object, syncCacher.Object);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Interview);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Interview, questionnaireMetadata.ResponsibleId);
 
         It should_call_ApplySynchronizationMetadata_once =
             () =>

@@ -351,31 +351,6 @@ namespace WB.Tests.Integration
             return new RosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId);
         }
 
-        public static ISqlServiceFactory SqliteServiceFactoryForTests(string dbFileName, IFileSystemAccessor fileSystemAccessor=null)
-        {
-            fileSystemAccessor = fileSystemAccessor ?? new FileSystemIOAccessor();
-            if(fileSystemAccessor.IsFileExists(dbFileName))
-                fileSystemAccessor.DeleteFile(dbFileName);
-
-            return new SqlServiceFactoryForTests(dbFileName, fileSystemAccessor);
-        }
-
-        class SqlServiceFactoryForTests : ISqlServiceFactory
-        {
-            private readonly string dbFileName;
-            private readonly IFileSystemAccessor fileSystemAccessor;
-            public SqlServiceFactoryForTests(string dbFileName, IFileSystemAccessor fileSystemAccessor)
-            {
-                this.dbFileName = dbFileName;
-                this.fileSystemAccessor = fileSystemAccessor;
-            }
-
-            public ISqlService CreateSqlService(string dbPath)
-            {
-                return new SqliteService(dbFileName, fileSystemAccessor);
-            }
-        }
-
         public static HeaderStructureForLevel HeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
         {
             return new HeaderStructureForLevel()

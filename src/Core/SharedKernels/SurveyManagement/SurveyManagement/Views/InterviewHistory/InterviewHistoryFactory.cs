@@ -19,13 +19,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
     internal class InterviewHistoryFactory : IInterviewHistoryFactory
     {
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
         private readonly IEventStore eventStore;
         private readonly ILogger logger;
 
-        public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
+        public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
         {
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             var interviewHistoryDenormalizer =
                 new InterviewHistoryDenormalizer(interviewHistoryReader, interviewSummaryReader, userReader, questionnaireReader);
 
-            var events = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue);
+            var events = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue);
             foreach (var @event in events)
             {
                 this.PublishToHandlers(@event, interviewHistoryDenormalizer);

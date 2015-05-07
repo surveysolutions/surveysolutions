@@ -11,18 +11,18 @@ namespace Ncqrs.Eventing
     public class UncommittedEvent : IPublishableEvent
     {
         private readonly object _payload;
-        private readonly long _eventSequence;
+        private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
         private readonly Guid _eventSourceId;
-        private readonly long _initialVersionOfEventSource;
+        private readonly int _initialVersionOfEventSource;
         private Guid _commitId;
         private string _origin;
 
         /// <summary>
         /// Gets the initial version of event source (the version it was just after creating/retrieving from the store)
         /// </summary>
-        public long InitialVersionOfEventSource
+        public int InitialVersionOfEventSource
         {
             get { return _initialVersionOfEventSource; }
         }
@@ -69,7 +69,7 @@ namespace Ncqrs.Eventing
         /// An sequence of events always starts with <c>1</c>. So the first event in a sequence has the <see cref="EventSequence"/> value of <c>1</c>.
         /// </remarks>
         /// <value>A number that represents the order of where this events occurred in the sequence.</value>
-        public long EventSequence
+        public int EventSequence
         {
             get { return _eventSequence; }
         }
@@ -93,7 +93,7 @@ namespace Ncqrs.Eventing
             _origin = streamOrigin;
         }
 
-        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, long eventSequence, long initialVersionOfEventSource, DateTime eventTimeStamp, object payload)            
+        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, int eventSequence, int initialVersionOfEventSource, DateTime eventTimeStamp, object payload)            
         {
             _payload = payload;
             _initialVersionOfEventSource = initialVersionOfEventSource;

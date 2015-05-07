@@ -11,8 +11,6 @@
     self.hasWarnings = ko.observable(false);
     self.hasErrors = ko.observable(false);
 
-    self.databaseConnectionStatus = ko.observable('');
-    self.databaseConnectionError = ko.observable('');
     self.eventstoreConnectionStatus = ko.observable('');
     self.eventstoreConnectionError = ko.observable('');
     self.numberOfUnhandledPackagesStatus = ko.observable('');
@@ -30,8 +28,6 @@
             self.status(self.getTextStatus(data.Status));
             self.hasWarnings(data.Status == 2);
             self.hasErrors(data.Status == 3);
-            self.databaseConnectionStatus(self.getTextStatus(data.DatabaseConnectionStatus.Status));
-            self.databaseConnectionError(data.DatabaseConnectionStatus.ErrorMessage);
             self.eventstoreConnectionStatus(self.getTextStatus(data.EventstoreConnectionStatus.Status));
             self.eventstoreConnectionError(data.EventstoreConnectionStatus.ErrorMessage);
             self.numberOfUnhandledPackagesStatus(self.getTextStatus(data.NumberOfUnhandledPackages.Status));

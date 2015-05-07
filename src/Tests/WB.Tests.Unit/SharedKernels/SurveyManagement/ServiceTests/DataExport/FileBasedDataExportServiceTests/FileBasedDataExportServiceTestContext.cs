@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
                             (interviewDataExportView ??
                                 new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
-                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(), new FileBasedDataExportRepositorySettings(256));
+                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>());
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,

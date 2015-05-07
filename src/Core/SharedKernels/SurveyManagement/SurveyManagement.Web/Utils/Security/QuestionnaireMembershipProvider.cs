@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
@@ -28,6 +29,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
         public ICommandService CommandInvoker
         {
             get { return ServiceLocator.Current.GetInstance<ICommandService>(); }
+        }
+
+        private ITransactionManagerProvider TransactionProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
         public override bool EnablePasswordReset
@@ -240,13 +246,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override bool ValidateUser(string username, string password)
         {
-            UserWebView user =
-                this.ViewFactory.Load(
-                    new UserWebViewInputModel(
-                        username.ToLower(), 
-                        // bad hack due to key insensitivity of login
-                        password));
-            return user != null && !user.isLockedBySupervisor && !user.IsLockedByHQ;
+            var transactionManager = this.TransactionProvider.GetTransactionManager();
+            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
+
+            if (shouldUseOwnTransaction)
+            {
+                transactionManager.BeginQueryTransaction();
+            }
+            try
+            {
+                UserWebView user =
+                    this.ViewFactory.Load(
+                        new UserWebViewInputModel(
+                            username.ToLower(), 
+                            // bad hack due to key insensitivity of login
+                            password));
+                return user != null && !user.isLockedBySupervisor && !user.IsLockedByHQ;
+            }
+            finally
+            {
+                if (shouldUseOwnTransaction)
+                {
+                    transactionManager.RollbackQueryTransaction();
+                }
+            }
         }
 
         private MembershipUser MembershipInstance(UserWebView person)

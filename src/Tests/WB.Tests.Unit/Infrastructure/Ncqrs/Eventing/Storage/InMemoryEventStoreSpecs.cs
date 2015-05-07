@@ -31,7 +31,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             var eventSourceId = Guid.NewGuid();
             var store = new InMemoryEventStore();
 
-            var events = store.ReadFrom(eventSourceId, long.MinValue, long.MaxValue);
+            var events = store.ReadFrom(eventSourceId, int.MinValue, int.MaxValue);
 
             events.Should().NotBeNull();
             events.Should().BeEmpty();
@@ -56,7 +56,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             store.Store(stream1);
             store.Store(stream2);
 
-            var events = store.ReadFrom(eventSourceId, long.MinValue, long.MaxValue);
+            var events = store.ReadFrom(eventSourceId, int.MinValue, int.MaxValue);
 
             events.Count().Should().Be(5);
         }

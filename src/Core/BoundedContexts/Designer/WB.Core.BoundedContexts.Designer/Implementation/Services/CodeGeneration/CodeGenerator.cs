@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using CsQuery.ExtensionMethods;
-using CsQuery.Utility;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -12,11 +10,8 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -93,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             foreach (var groupedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
             {
-                foreach (QuestionTemplateModel questionTemplateModel in groupedRosters.Value.SelectMany(roster => roster.Questions))
+                foreach (QuestionTemplateModel questionTemplateModel in groupedRosters.Value.RostersInScope.SelectMany(roster => roster.Questions))
                 {
                     if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
                     {
@@ -133,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
 
-                foreach (GroupTemplateModel groupTemplateModel in groupedRosters.Value.SelectMany(roster => roster.Groups))
+                foreach (GroupTemplateModel groupTemplateModel in groupedRosters.Value.RostersInScope.SelectMany(roster => roster.Groups))
                 {
                     if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
                     {
@@ -155,7 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
 
-                foreach (RosterTemplateModel rosterTemplateModel in groupedRosters.Value)
+                foreach (RosterTemplateModel rosterTemplateModel in groupedRosters.Value.RostersInScope)
                 {
                     if (!string.IsNullOrWhiteSpace(rosterTemplateModel.Conditions))
                     {
@@ -254,12 +249,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.AdditionInterfaces = codeGenerationSettings.AdditionInterfaces;
             template.Namespaces = codeGenerationSettings.Namespaces;
             template.ShouldGenerateUpdateRosterTitleMethods = codeGenerationSettings.AreRosterServiceVariablesPresent;
-
+            
             var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(
                 executorModel: template,
                 areRowSpecificVariablesPresent: codeGenerationSettings.AreRosterServiceVariablesPresent,
                 isIRosterLevelInherited: codeGenerationSettings.AreRosterServiceVariablesPresent,
                 rosterType: codeGenerationSettings.RosterType);
+
+            template.QuestionnaireLevelModel = questionnaireLevelModel;
 
             string generatedClassName = string.Format("{0}_{1}", InterviewExpressionStatePrefix,
                 Guid.NewGuid().FormatGuid());
@@ -271,8 +268,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             BuildStructures(questionnaire, questionnaireLevelModel, out generatedScopesTypeNames, out allQuestions,
                 out allGroups, out allRosters);
-            Dictionary<string, List<RosterTemplateModel>> rostersGroupedByScope =
-                allRosters.GroupBy(r => r.GeneratedTypeName).ToDictionary(g => g.Key, g => g.ToList());
+
+            Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope = 
+                allRosters.GroupBy(r => r.GeneratedTypeName)
+                    .ToDictionary(g => g.Key, g => new RosterScopeTemplateModel(g.Key, g.ToList(), template));
+
+            foreach (var rosterScopeModel in rostersGroupedByScope.Values)
+            {
+                var allParentsQuestionsToTop = new List<QuestionTemplateModel>();
+                var allParentsRostersToTop = new List<RosterTemplateModel>();
+
+                foreach (var rosterTemplateModel in rosterScopeModel.RostersInScope)
+                {
+                    if (rosterTemplateModel.ParentScope != null)
+                    {
+                        allParentsQuestionsToTop.AddRange(rosterTemplateModel.ParentScope.Questions);
+                        allParentsQuestionsToTop.AddRange(rosterTemplateModel.ParentScope.GetAllQuestionsToTop());
+
+                        allParentsRostersToTop.AddRange(rosterTemplateModel.ParentScope.Rosters);
+                        allParentsRostersToTop.AddRange(rosterTemplateModel.ParentScope.GetAllRostersToTop());
+                    }
+                }
+                
+                rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop.Distinct();
+                rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop.Distinct();
+            }
 
             Dictionary<Guid, List<Guid>> structuralDependencies = questionnaire
                 .GetAllGroups()
@@ -330,7 +350,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.ConditionalDependencies = conditionalDependencies;
             template.StructuralDependencies = structuralDependencies;
             template.ConditionsPlayOrder = listOfOrderedContitions.ToList();
-            template.QuestionnaireLevelModel = questionnaireLevelModel;
             template.VariableNames = variableNames;
             return template;
         }
@@ -424,7 +443,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 Conditions = childAsIGroup.ConditionExpression,
                                 VariableName = varName,
                                 GeneratedTypeName =
-                                    GenerateTypeNameByScope(currentRosterScope, generatedScopesTypeNames),
+                                    GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey.FormatGuid()), currentRosterScope, generatedScopesTypeNames),
                                 GeneratedStateName = "@__" + varName + "_state",
                                 ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
@@ -573,12 +592,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return group.IsRoster;
         }
 
-        private string GenerateTypeNameByScope(IEnumerable<Guid> currentRosterScope,
-            Dictionary<string, string> generatedScopesTypeNames)
+        private string GenerateTypeNameByScope(string rosterClassNamePrefix, IEnumerable<Guid> currentRosterScope, Dictionary<string, string> generatedScopesTypeNames)
         {
             string scopeStringKey = String.Join("$", currentRosterScope);
             if (!generatedScopesTypeNames.ContainsKey(scopeStringKey))
-                generatedScopesTypeNames.Add(scopeStringKey, "@__" + Guid.NewGuid().FormatGuid());
+                generatedScopesTypeNames.Add(scopeStringKey, "@__" + rosterClassNamePrefix + Guid.NewGuid().FormatGuid());
 
             return generatedScopesTypeNames[scopeStringKey];
         }
