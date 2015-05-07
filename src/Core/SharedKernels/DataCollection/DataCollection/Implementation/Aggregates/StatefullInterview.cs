@@ -20,8 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Guid Id { get; set; }
 
-        public Dictionary<string, AbstractInterviewAnswerModel> Answers { get; set; }
-        public Dictionary<string, InterviewGroupModel> Groups { get; set; }
+        public Dictionary<string, BaseInterviewAnswer> Answers { get; set; }
+        public Dictionary<string, InterviewGroup> Groups { get; set; }
         public Dictionary<string, List<string>> RosterInstancesIds { get; set; }
 
         public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap { get; set; }
@@ -29,83 +29,83 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasErrors { get; set; }
         public bool IsInProgress { get; set; }
 
-        private Dictionary<Type, Func<AbstractInterviewAnswerModel>> QuestionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<AbstractInterviewAnswerModel>>
+        private Dictionary<Type, Func<BaseInterviewAnswer>> QuestionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<BaseInterviewAnswer>>
         {
-            { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswerModel()},
-            { typeof(LinkedSingleOptionQuestionModel), () => new LinkedSingleOptionAnswerModel()},
-            { typeof(MultiOptionQuestionModel), () => new MultiOptionAnswerModel()},
-            { typeof(LinkedMultiOptionQuestionModel), () => new LinkedMultiOptionAnswerModel()},
-            { typeof(IntegerNumericQuestionModel), () => new IntegerNumericAnswerModel()},
-            { typeof(RealNumericQuestionModel), () => new RealNumericAnswerModel()},
-            { typeof(MaskedTextQuestionModel), () => new MaskedTextAnswerModel()},
-            { typeof(TextListQuestionModel), () => new TextListAnswerModel()},
-            { typeof(QrBarcodeQuestionModel), () => new QrBarcodeAnswerModel()},
-            { typeof(MultimediaQuestionModel), () => new MultimediaAnswerModel()},
-            { typeof(DateTimeQuestionModel), () => new DateTimeAnswerModel()},
-            { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswerModel()}
+            { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswer()},
+            { typeof(LinkedSingleOptionQuestionModel), () => new LinkedSingleOptionAnswer()},
+            { typeof(MultiOptionQuestionModel), () => new MultiOptionAnswer()},
+            { typeof(LinkedMultiOptionQuestionModel), () => new LinkedMultiOptionAnswer()},
+            { typeof(IntegerNumericQuestionModel), () => new IntegerNumericAnswer()},
+            { typeof(RealNumericQuestionModel), () => new RealNumericAnswer()},
+            { typeof(MaskedTextQuestionModel), () => new MaskedTextAnswer()},
+            { typeof(TextListQuestionModel), () => new TextListAnswer()},
+            { typeof(QrBarcodeQuestionModel), () => new QrBarcodeAnswer()},
+            { typeof(MultimediaQuestionModel), () => new MultimediaAnswer()},
+            { typeof(DateTimeQuestionModel), () => new DateTimeAnswer()},
+            { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswer()}
         };
 
-        public GpsCoordinatesAnswerModel GetGpsCoordinatesAnswerModel(Identity identity)
+        public GpsCoordinatesAnswer GetGpsCoordinatesAnswerModel(Identity identity)
         {
-            return GetQuestionModel<GpsCoordinatesAnswerModel>(identity);
+            return GetQuestionModel<GpsCoordinatesAnswer>(identity);
         }
 
-        public DateTimeAnswerModel GetDateTimeAnswerModel(Identity identity)
+        public DateTimeAnswer GetDateTimeAnswerModel(Identity identity)
         {
-            return GetQuestionModel<DateTimeAnswerModel>(identity);
+            return GetQuestionModel<DateTimeAnswer>(identity);
         }
 
-        public MultimediaAnswerModel GetMultimediaAnswerModel(Identity identity)
+        public MultimediaAnswer GetMultimediaAnswerModel(Identity identity)
         {
-            return GetQuestionModel<MultimediaAnswerModel>(identity);
+            return GetQuestionModel<MultimediaAnswer>(identity);
         }
 
-        public QrBarcodeAnswerModel GetQrBarcodeAnswerModel(Identity identity)
+        public QrBarcodeAnswer GetQrBarcodeAnswerModel(Identity identity)
         {
-            return GetQuestionModel<QrBarcodeAnswerModel>(identity);
+            return GetQuestionModel<QrBarcodeAnswer>(identity);
         }
 
-        public TextListAnswerModel GetTextListAnswerModel(Identity identity)
+        public TextListAnswer GetTextListAnswerModel(Identity identity)
         {
-            return GetQuestionModel<TextListAnswerModel>(identity);
+            return GetQuestionModel<TextListAnswer>(identity);
         }
 
-        public LinkedSingleOptionAnswerModel GetLinkedSingleOptionAnswerModel(Identity identity)
+        public LinkedSingleOptionAnswer GetLinkedSingleOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<LinkedSingleOptionAnswerModel>(identity);
+            return GetQuestionModel<LinkedSingleOptionAnswer>(identity);
         }
 
-        public MultiOptionAnswerModel GetMultiOptionAnswerModel(Identity identity)
+        public MultiOptionAnswer GetMultiOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<MultiOptionAnswerModel>(identity);
+            return GetQuestionModel<MultiOptionAnswer>(identity);
         }
 
-        public LinkedMultiOptionAnswerModel GetLinkedMultiOptionAnswerModel(Identity identity)
+        public LinkedMultiOptionAnswer GetLinkedMultiOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<LinkedMultiOptionAnswerModel>(identity);
+            return GetQuestionModel<LinkedMultiOptionAnswer>(identity);
         }
 
-        public IntegerNumericAnswerModel GetIntegerNumericAnswerModel(Identity identity)
+        public IntegerNumericAnswer GetIntegerNumericAnswerModel(Identity identity)
         {
-            return GetQuestionModel<IntegerNumericAnswerModel>(identity);
+            return GetQuestionModel<IntegerNumericAnswer>(identity);
         }
 
-        public RealNumericAnswerModel GetRealNumericAnswerModel(Identity identity)
+        public RealNumericAnswer GetRealNumericAnswerModel(Identity identity)
         {
-            return GetQuestionModel<RealNumericAnswerModel>(identity);
+            return GetQuestionModel<RealNumericAnswer>(identity);
         }
 
-        public MaskedTextAnswerModel GetTextAnswerModel(Identity identity)
+        public MaskedTextAnswer GetTextAnswerModel(Identity identity)
         {
-            return GetQuestionModel<MaskedTextAnswerModel>(identity);
+            return GetQuestionModel<MaskedTextAnswer>(identity);
         }
 
-        public SingleOptionAnswerModel GetSingleOptionAnswerModel(Identity identity)
+        public SingleOptionAnswer GetSingleOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<SingleOptionAnswerModel>(identity);
+            return GetQuestionModel<SingleOptionAnswer>(identity);
         }
 
-        private T GetQuestionModel<T>(Identity identity) where T : AbstractInterviewAnswerModel
+        private T GetQuestionModel<T>(Identity identity) where T : BaseInterviewAnswer
         {
             var questionId = ConversionHelper.ConvertIdentityToString(identity);
             if (!Answers.ContainsKey(questionId)) return null;
@@ -162,28 +162,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal new void Apply(TextQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<MaskedTextAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<MaskedTextAnswer>(@event);
             answer.Answer = @event.Answer;
         }
 
         internal new void Apply(QRBarcodeQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<QrBarcodeAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<QrBarcodeAnswer>(@event);
             answer.Answer = @event.Answer;
         }
 
         internal new void Apply(PictureQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<MultimediaAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<MultimediaAnswer>(@event);
             answer.PictureFileName = @event.PictureFileName;
         }
 
         internal new void Apply(NumericRealQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<RealNumericAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<RealNumericAnswer>(@event);
 
             answer.Answer = @event.Answer;
         }
@@ -191,35 +191,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal new void Apply(NumericIntegerQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<IntegerNumericAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<IntegerNumericAnswer>(@event);
             answer.Answer = @event.Answer;
         }
 
         internal new void Apply(DateTimeQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<DateTimeAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<DateTimeAnswer>(@event);
             answer.Answer = @event.Answer;
         }
 
         internal new void Apply(SingleOptionQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<SingleOptionAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<SingleOptionAnswer>(@event);
             answer.Answer = @event.SelectedValue;
         }
 
         internal new void Apply(MultipleOptionsQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<MultiOptionAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<MultiOptionAnswer>(@event);
             answer.Answers = @event.SelectedValues;
         }
 
         internal new void Apply(GeoLocationQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<GpsCoordinatesAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<GpsCoordinatesAnswer>(@event);
             answer.Latitude = @event.Latitude;
             answer.Longitude = @event.Longitude;
             answer.Accuracy = @event.Accuracy;
@@ -229,21 +229,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal new void Apply(TextListQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<TextListAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<TextListAnswer>(@event);
             answer.Answers = @event.Answers;
         }
 
         internal new void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<LinkedSingleOptionAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(@event);
             answer.Answer = @event.SelectedPropagationVector;
         }
 
         internal new void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<LinkedMultiOptionAnswerModel>(@event);
+            var answer = this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(@event);
             answer.Answers = @event.SelectedPropagationVectors;
         }
        
@@ -328,7 +328,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
             {
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedRosterInstanceTitle.RosterInstance.GroupId, GetFullRosterVector(changedRosterInstanceTitle.RosterInstance));
-                var roster = (InterviewRosterModel)Groups[rosterKey];
+                var roster = (InterviewRoster)Groups[rosterKey];
                 roster.Title = changedRosterInstanceTitle.Title;
             }
         }
@@ -342,7 +342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
                 var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
 
-                Groups[rosterKey] = new InterviewRosterModel
+                Groups[rosterKey] = new InterviewRoster
                 {
                     Id = rosterInstance.GroupId,
                     RosterVector = GetFullRosterVector(rosterInstance),
@@ -399,7 +399,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         #endregion
 
-        private T GetOrCreateAnswer<T>(QuestionActiveEvent @event) where T : AbstractInterviewAnswerModel, new()
+        private T GetOrCreateAnswer<T>(QuestionActiveEvent @event) where T : BaseInterviewAnswer, new()
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -411,11 +411,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question;
         }
 
-        private InterviewGroupModel GetOrCreateGroupOrRoster(Guid id, decimal[] rosterVector)
+        private InterviewGroup GetOrCreateGroupOrRoster(Guid id, decimal[] rosterVector)
         {
             var groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
-            InterviewGroupModel groupOrRoster;
+            InterviewGroup groupOrRoster;
             if (this.Groups.ContainsKey(groupKey))
             {
                 groupOrRoster = this.Groups[groupKey];
@@ -425,18 +425,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // rosters must be created with event RosterInstancesAdded. Groups has no such event, so
                 // they should be created eventually. So if group model was not found that means that
                 // we got event about group that was not created previously. Rosters should not be created here.
-                groupOrRoster = new InterviewGroupModel { Id = id, RosterVector = rosterVector };
+                groupOrRoster = new InterviewGroup { Id = id, RosterVector = rosterVector };
             }
 
             this.Groups[groupKey] = groupOrRoster;
             return groupOrRoster;
         }
 
-        private AbstractInterviewAnswerModel GetOrCreateAnswer(Guid id, decimal[] rosterVector)
+        private BaseInterviewAnswer GetOrCreateAnswer(Guid id, decimal[] rosterVector)
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
-            AbstractInterviewAnswerModel answer;
+            BaseInterviewAnswer answer;
             if (this.Answers.ContainsKey(questionKey))
             {
                 answer = this.Answers[questionKey];
