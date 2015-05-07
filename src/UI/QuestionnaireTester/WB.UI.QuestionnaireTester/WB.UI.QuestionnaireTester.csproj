@@ -324,6 +324,7 @@
     <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
+    <AndroidResource Include="Resources\drawable\question_option_background.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -349,7 +350,7 @@
     <AndroidResource Include="Resources\layout\interview_question_single_option_item.axml" />
     <AndroidResource Include="Resources\layout\interview_question_single_option.axml" />
     <AndroidResource Include="Resources\layout\interview_current_group.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__header.axml">
       <SubType>AndroidResource</SubType>
