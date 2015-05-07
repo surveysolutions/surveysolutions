@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void UpdateSelfFromModel()
         {
-            var interview = this.interviewRepository.GetById(this.interviewId);
+            var interview = this.interviewRepository.Get(this.interviewId);
 
             this.IsInvalid = !interview.IsValid(this.entityIdentity);
 

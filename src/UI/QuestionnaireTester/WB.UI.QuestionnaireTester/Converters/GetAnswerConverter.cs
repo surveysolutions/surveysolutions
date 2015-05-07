@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.QuestionnaireTester.Converters
 {
@@ -43,7 +44,7 @@ namespace WB.UI.QuestionnaireTester.Converters
 
         private static QuestionnaireModel GetQuestionnaire(string interviewId)
         {
-            var interview = interviewRepository.GetById(interviewId);
+            var interview = interviewRepository.Get(interviewId);
             return questionnaireRepository.GetById(interview.QuestionnaireId);
         }
 

@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Init(string interviewId)
         {
-            var interview = this.interviewRepository.GetById(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
