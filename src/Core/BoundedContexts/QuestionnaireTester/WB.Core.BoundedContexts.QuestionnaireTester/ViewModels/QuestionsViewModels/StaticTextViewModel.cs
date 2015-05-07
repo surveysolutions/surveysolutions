@@ -1,17 +1,17 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public StaticTextViewModel(IPlainRepository<QuestionnaireModel> questionnaireRepository,
+        public StaticTextViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
              IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -23,8 +23,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+            var interview = this.interviewRepository.GetById(interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.StaticText = questionnaire.StaticTexts[entityIdentity.Id].Title;
         }

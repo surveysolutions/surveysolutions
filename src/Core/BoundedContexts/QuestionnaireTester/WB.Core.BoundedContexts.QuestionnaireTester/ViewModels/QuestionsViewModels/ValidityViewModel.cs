@@ -3,6 +3,7 @@ using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -20,11 +21,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
 
         public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository)
+            IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
@@ -64,13 +65,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void UpdateSelfFromModel()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
+            var interview = this.interviewRepository.GetById(this.interviewId);
 
             this.IsInvalid = !interview.IsValid(this.entityIdentity);
 
             if (IsInvalid)
             {
-                var questionnaireModel = plainQuestionnaireRepository.Get(interview.QuestionnaireId);
+                var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
                 var questionModel = questionnaireModel.Questions[entityIdentity.Id];
                 ErrorMessage = questionModel.ValidationMessage;
             }

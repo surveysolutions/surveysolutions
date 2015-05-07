@@ -5,11 +5,11 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -17,13 +17,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         private readonly ICommandService commandService;
         private readonly Guid userId;
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public SingleOptionQuestionViewModel(
             ICommandService commandService,
             IPrincipal principal,
-            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel)
@@ -58,8 +58,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+            var interview = this.interviewRepository.GetById(interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetSingleOptionAnswerModel(entityIdentity);
 

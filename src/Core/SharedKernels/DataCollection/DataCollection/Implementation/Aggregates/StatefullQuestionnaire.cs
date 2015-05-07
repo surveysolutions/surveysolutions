@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,9 +22,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
         }
 
-        private static IPlainRepository<QuestionnaireModel> QuestionnaireModelRepository
+        private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainRepository<QuestionnaireModel>>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
         }
 
         public StatefullQuestionnaire() { }
@@ -63,12 +64,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
 
             return new GroupsHierarchyModel
-                   {
-                       Id = currentGroup.PublicKey,
-                       Title = currentGroup.Title,
-                       IsRoster = currentGroup.IsRoster,
-                       Children = childrenHierarchy
-                   };
+            {
+                Id = currentGroup.PublicKey,
+                Title = currentGroup.Title,
+                IsRoster = currentGroup.IsRoster,
+                Children = childrenHierarchy
+            };
         }
 
         private List<QuestionnaireReferenceModel> BuildParentsList(Group group)
@@ -79,10 +80,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             while (parent != null && parent.PublicKey != EventSourceId )
             {
                 var parentPlaceholder = new QuestionnaireReferenceModel
-                                        {
-                                            ModelType = parent.IsRoster ? typeof(RosterModel) : typeof(GroupModel),
-                                            Id = parent.PublicKey
-                                        };
+                {
+                    ModelType = parent.IsRoster ? typeof(RosterModel) : typeof(GroupModel),
+                    Id = parent.PublicKey
+                };
                 parents.Add(parentPlaceholder);
 
                 parent = parent.GetParent() as Group;
@@ -122,11 +123,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (subGroup != null)
                 {
                     var subGroupPlaceholder = new QuestionnaireReferenceModel
-                                              {
-                                                  Id = subGroup.PublicKey,
-                                                  ModelType = subGroup.IsRoster ? typeof(RosterModel) : typeof(GroupModel)
-                                              };
-                     groupModel.Children.Add(subGroupPlaceholder);
+                    {
+                        Id = subGroup.PublicKey,
+                        ModelType = subGroup.IsRoster ? typeof(RosterModel) : typeof(GroupModel)
+                    };
+                    groupModel.Children.Add(subGroupPlaceholder);
                 }
             }
             return groupModel;
@@ -151,18 +152,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (singleQuestion.LinkedToQuestionId.HasValue)
                     {
                         questionModel = new LinkedSingleOptionQuestionModel
-                                        {
-                                            LinkedToQuestionId = singleQuestion.LinkedToQuestionId.Value
-                                        };
+                        {
+                            LinkedToQuestionId = singleQuestion.LinkedToQuestionId.Value
+                        };
                     }
                     else
                     {
                         questionModel = new SingleOptionQuestionModel
-                                        {
-                                            CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
-                                            IsFilteredCombobox = singleQuestion.IsFilteredCombobox,
-                                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList()
-                                        };
+                        {
+                            CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
+                            IsFilteredCombobox = singleQuestion.IsFilteredCombobox,
+                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList()
+                        };
                     }
                     break;
                 case QuestionType.MultyOption:
@@ -170,18 +171,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (multiQuestion.LinkedToQuestionId.HasValue)
                     {
                         questionModel = new LinkedMultiOptionQuestionModel
-                                        {
-                                            LinkedToQuestionId = multiQuestion.LinkedToQuestionId.Value
-                                        };
+                        {
+                            LinkedToQuestionId = multiQuestion.LinkedToQuestionId.Value
+                        };
                     }
                     else
                     {
                         questionModel = new MultiOptionQuestionModel
-                                        {
-                                            AreAnswersOrdered = multiQuestion.AreAnswersOrdered,
-                                            MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
-                                            Options = question.Answers.Select(ToOptionModel).ToList()
-                                        };
+                        {
+                            AreAnswersOrdered = multiQuestion.AreAnswersOrdered,
+                            MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
+                            Options = question.Answers.Select(ToOptionModel).ToList()
+                        };
                     }
                     break;
                 case QuestionType.Numeric:

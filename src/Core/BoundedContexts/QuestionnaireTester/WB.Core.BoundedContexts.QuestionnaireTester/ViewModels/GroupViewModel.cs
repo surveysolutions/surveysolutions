@@ -2,6 +2,7 @@
 using System.Collections;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -25,11 +26,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private NavigationState navigationState;
 
         public GroupViewModel(IInterviewViewModelFactory interviewViewModelFactory,
-             IPlainRepository<QuestionnaireModel> questionnaireRepository)
+             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         async void navigationState_OnGroupChanged(Identity newGroupIdentity)
         {
-            var questionnaire = this.questionnaireRepository.Get(this.navigationState.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
             var group = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id];
 

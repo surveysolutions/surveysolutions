@@ -5,16 +5,16 @@ using System.Linq;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
     public class InterviewViewModelFactory : IInterviewViewModelFactory
     {
-        private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private static readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap = 
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         }
 
         public InterviewViewModelFactory(
-            IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private IList GenerateViewModels(string interviewId, Identity groupIdentity)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
+            var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
             if (groupIdentity == null || groupIdentity.Id == Guid.Empty)
             {
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private IList GetPrefilledQuestionsImpl(string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
+            var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
             return questionnaire.PrefilledQuestionsIds.Select(
                     question => CreateInterviewItemViewModel(entityId: question.Id, rosterVector: new decimal[0],

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,12 +13,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class InterviewViewModel : BaseViewModel
     {
         private readonly IPrincipal principal;
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly NavigationState navigationState;
 
-        public InterviewViewModel(IPrincipal principal, 
-            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+        public InterviewViewModel(IPrincipal principal,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ChaptersViewModel chaptersViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
@@ -36,8 +37,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Init(string interviewId)
         {
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+            var interview = this.interviewRepository.GetById(interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
