@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Machine.Specifications;
+using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -63,8 +64,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.PreconditionFailed);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            ((HttpResponseException)exception).Response.ReasonPhrase.ShouldEqual(
-                    "Your questionnaire has errors. Please verify the questionnaire on Designer.");
+            (new[] { "questionnaire", "errors", "verify"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
 
         private static ImportController importController;
         private static Exception exception;

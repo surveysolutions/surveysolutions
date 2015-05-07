@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Machine.Specifications;
+using Machine.Specifications.Utility;
 using WB.UI.Designer.Api;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 
@@ -30,10 +31,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            ((HttpResponseException) exception).Response.ReasonPhrase.ShouldEqual(
-                string.Format(
-                    "Questionnaire with id={0} cannot be found. Please check the list of available questionnaires, or contact the colleague who shared the questionnaire link with you.",
-                    request.QuestionnaireId));
+            (new[] { "questionnaire", "cannot", "found", "shared"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
 
         private static ImportController importController;
         private static Exception exception;
