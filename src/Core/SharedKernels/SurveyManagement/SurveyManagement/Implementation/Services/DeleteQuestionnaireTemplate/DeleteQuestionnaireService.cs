@@ -48,15 +48,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
             var questionnaire = cqrsTransactionManager.ExecuteInQueryTransaction(() => 
                 questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
-            if (questionnaire == null)
-                throw new ArgumentException(string.Format("questionnaire with id {0} and version {1} is absent", questionnaireId.FormatGuid(), questionnaireVersion));
-
-            if (!questionnaire.Disabled)
+            if (questionnaire != null)
             {
-                this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
-                    userId));
+                if (!questionnaire.Disabled)
+                {
+                    this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
+                        userId));
 
-                this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion);
+                    this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion);
+                }
             }
 
             return Task.Factory.StartNew(() =>
