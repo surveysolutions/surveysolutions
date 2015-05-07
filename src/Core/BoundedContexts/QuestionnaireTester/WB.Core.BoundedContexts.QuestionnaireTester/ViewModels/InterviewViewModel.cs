@@ -5,6 +5,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -14,12 +15,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefullInterviewRepository interviewRepository;
         private readonly NavigationState navigationState;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
+            IStatefullInterviewRepository interviewRepository,
             ChaptersViewModel chaptersViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
             GroupViewModel groupViewModel, 
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 shouldBeAddedToNavigationStack: false);
         }
 
-        private static AbstractInterviewAnswerModel GetAnswerModel(InterviewModel interview, QuestionnaireReferenceModel referenceToQuestion)
+        private static AbstractInterviewAnswerModel GetAnswerModel(IStatefullInterview interview, QuestionnaireReferenceModel referenceToQuestion)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             return interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;

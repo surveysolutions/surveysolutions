@@ -20,11 +20,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
 
         public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
-            IStatefulInterviewRepository interviewRepository,
+            IStatefullInterviewRepository interviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository)
         {
             this.liteEventRegistry = liteEventRegistry;

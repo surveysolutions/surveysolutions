@@ -15,14 +15,12 @@ namespace WB.UI.QuestionnaireTester.Ninject
         {
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<InMemoryKeyValueStorage<QuestionnaireModel>>().InSingletonScope();
-            this.Bind<IPlainKeyValueStorage<InterviewModel>>().To<InMemoryKeyValueStorage<InterviewModel>>().InSingletonScope();
 
             this.Bind<IPlainStorageAccessor<QuestionnaireModel>>().To<InMemoryPlainStorageAccessor<QuestionnaireModel>>().InSingletonScope();
-            this.Bind<IPlainStorageAccessor<InterviewModel>>().To<InMemoryPlainStorageAccessor<InterviewModel>>().InSingletonScope();
 
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>().InSingletonScope();
             this.Bind<IQuestionnaireRepository>().ToConstant<IQuestionnaireRepository>(this.Kernel.Get<IPlainQuestionnaireRepository>());
-            this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
+            this.Bind<IStatefullInterviewRepository>().To<StatefullInterviewRepository>().InSingletonScope();
         }
     }
 }
