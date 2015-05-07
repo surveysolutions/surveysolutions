@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -46,12 +45,10 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             return new DownloadQuestionnaireRequest
             {
                 SupportedQuestionnaireVersion =
-                    new QuestionnnaireVersion()
-                    {
-                        Major = supportedExpressionsEngineVersion.Major,
-                        Minor = supportedExpressionsEngineVersion.Minor,
-                        Patch = supportedExpressionsEngineVersion.Build
-                    },
+                    new QuestionnaireVersion(
+                        supportedExpressionsEngineVersion.Major,
+                        supportedExpressionsEngineVersion.Minor,
+                        supportedExpressionsEngineVersion.Build),
                 QuestionnaireId = questionnaireId
             };
         }
