@@ -3,6 +3,7 @@ using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IMvxLocationWatcher geoLocationWatcher;
 
@@ -45,8 +46,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid interviewId;
 
         public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
-            IUserIdentity userIdentity, 
-            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IUserIdentity userIdentity,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
             QuestionHeaderViewModel questionHeaderViewModel)
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if(interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.GetById(interviewId);
             
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;

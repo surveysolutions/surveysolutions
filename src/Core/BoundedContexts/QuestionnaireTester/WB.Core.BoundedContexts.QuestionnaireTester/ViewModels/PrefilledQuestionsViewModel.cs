@@ -2,21 +2,21 @@ using System.Collections;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class PrefilledQuestionsViewModel : BaseViewModel
     {
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private string interviewId;
 
         public PrefilledQuestionsViewModel(ILogger logger,
             IInterviewViewModelFactory interviewViewModelFactory,
-            IPlainRepository<QuestionnaireModel> plainQuestionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository)
             : base(logger)
         {
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewId = interviewId;
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.Get(interview.QuestionnaireId);
+            var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);

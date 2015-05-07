@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public class InterviewModel : IInterview
+    public class InterviewModel
     {
         public InterviewModel()
         {
@@ -31,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasErrors { get; set; }
         public bool IsInProgress { get; set; }
 
-        public Dictionary<Type, Func<AbstractInterviewAnswerModel>> QuestionModelTypeToModelActivatorMap = new Dictionary<Type, Func<AbstractInterviewAnswerModel>>
+        public Dictionary<Type, Func<AbstractInterviewAnswerModel>> QuestionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<AbstractInterviewAnswerModel>>
                 {
                     { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswerModel()},
                     { typeof(LinkedSingleOptionQuestionModel), () => new LinkedSingleOptionAnswerModel()},

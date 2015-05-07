@@ -3,11 +3,10 @@ using System.Globalization;
 using System.Linq;
 using Cirrious.CrossCore.Converters;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.QuestionnaireTester.Converters
 {
@@ -18,9 +17,9 @@ namespace WB.UI.QuestionnaireTester.Converters
             get { return ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>(); }
         }
 
-        private static IPlainRepository<QuestionnaireModel> questionnaireRepository
+        private static IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainRepository<QuestionnaireModel>>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
         }
 
         protected override string Convert(AbstractInterviewAnswerModel value, Type targetType, object parameter, CultureInfo culture)
@@ -44,8 +43,8 @@ namespace WB.UI.QuestionnaireTester.Converters
 
         private static QuestionnaireModel GetQuestionnaire(string interviewId)
         {
-            var interview = interviewRepository.Get(interviewId);
-            return questionnaireRepository.Get(interview.QuestionnaireId);
+            var interview = interviewRepository.GetById(interviewId);
+            return questionnaireRepository.GetById(interview.QuestionnaireId);
         }
 
         private static string GetAnswerOnSingleOptionQuestionAsString(string interviewId, SingleOptionAnswerModel singleOptionAnswerModel)

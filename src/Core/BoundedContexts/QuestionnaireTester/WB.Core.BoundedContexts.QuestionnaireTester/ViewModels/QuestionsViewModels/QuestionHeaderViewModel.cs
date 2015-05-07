@@ -1,5 +1,7 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
+
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -17,7 +19,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { title = value; RaisePropertyChanged(); }
         }
 
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public void Init(string interviewId, Identity questionIdentity)
@@ -25,8 +27,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+            var interview = this.interviewRepository.GetById(interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = questionnaire.Questions[questionIdentity.Id];
 
             this.Title = questionModel.Title;
@@ -35,7 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         public QuestionHeaderViewModel(
-            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;

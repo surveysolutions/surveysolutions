@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -21,7 +19,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private Identity entityIdentity;
         private string interviewId;
@@ -33,8 +31,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
             ICommandService commandService, 
-            IPrincipal principal, 
-            IPlainRepository<QuestionnaireModel> questionnaireRepository,
+            IPrincipal principal,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionHeaderViewModel questionHeaderViewModel,
             ValidityViewModel validity,
@@ -111,7 +109,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void UpdateSelfFromModel()
         {
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.GetById(interviewId);
             var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
 
             var textQuestionModel = questionnaire.Questions[entityIdentity.Id] as MaskedTextQuestionModel;
