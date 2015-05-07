@@ -6,7 +6,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionM
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public string VariableName { get; set; }
         public bool IsPrefilled { get; set; }
         public string Instructions { get; set; }
         public bool IsMandatory { get; set; }
