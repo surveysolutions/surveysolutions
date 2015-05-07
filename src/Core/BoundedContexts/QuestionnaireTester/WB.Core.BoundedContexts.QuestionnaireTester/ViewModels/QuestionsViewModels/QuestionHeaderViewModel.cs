@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
-            var interview = this.interviewRepository.GetById(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = questionnaire.Questions[questionIdentity.Id];
 

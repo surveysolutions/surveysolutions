@@ -3,6 +3,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            var interview = this.interviewRepository.GetById(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.StaticText = questionnaire.StaticTexts[entityIdentity.Id].Title;

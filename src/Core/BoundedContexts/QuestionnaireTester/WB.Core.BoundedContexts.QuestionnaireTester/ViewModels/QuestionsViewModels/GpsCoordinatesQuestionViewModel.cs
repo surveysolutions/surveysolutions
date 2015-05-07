@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if(interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            var interview = this.interviewRepository.GetById(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
