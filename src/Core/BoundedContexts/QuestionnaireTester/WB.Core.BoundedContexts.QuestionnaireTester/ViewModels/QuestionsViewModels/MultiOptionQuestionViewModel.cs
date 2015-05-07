@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
@@ -12,11 +13,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        private readonly IPlainRepository<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public MultiOptionQuestionViewModel(QuestionHeaderViewModel questionHeaderViewModel, 
-            IPlainRepository<QuestionnaireModel> questionnaireRepository, 
+        public MultiOptionQuestionViewModel(QuestionHeaderViewModel questionHeaderViewModel,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository)
         {
             this.Options = new ReadOnlyCollection<QuestionOptionViewModel>(new List<QuestionOptionViewModel>());
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.Get(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (MultiOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
 
             this.Options = new ReadOnlyCollection<QuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
