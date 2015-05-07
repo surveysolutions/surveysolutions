@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Machine.Specifications;
+using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -60,8 +61,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            ((HttpResponseException)exception).Response.ReasonPhrase.ShouldEqual(
-                    "User is not authorized. Please check your login and password.");
+             (new[] { "user", "not", "authorized", "check"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
 
         private static ImportController importController;
         private static Exception exception;
