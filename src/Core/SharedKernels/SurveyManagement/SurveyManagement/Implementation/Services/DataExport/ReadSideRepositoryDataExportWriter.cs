@@ -56,8 +56,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void AddOrUpdateInterviewRecords(InterviewDataExportView item, Guid questionnaireId, long questionnaireVersion)
         {
-            DeleteInterviewExportedDataByInterviewId(item.InterviewId);
-
             var interviewExportedData = CreateInterviewExportedData(item, questionnaireId, questionnaireVersion);
 
             interviewExportedDataStorage.Store(interviewExportedData, item.InterviewId);
