@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 shouldBeAddedToNavigationStack: false);
         }
 
-        private static AbstractInterviewAnswerModel GetAnswerModel(IStatefullInterview interview, QuestionnaireReferenceModel referenceToQuestion)
+        private static BaseInterviewAnswer GetAnswerModel(IStatefullInterview interview, QuestionnaireReferenceModel referenceToQuestion)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             return interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;

@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.QuestionnaireTester.Converters
 {
-    public class GetAnswerConverter : MvxValueConverter<AbstractInterviewAnswerModel, string>
+    public class GetAnswerConverter : MvxValueConverter<BaseInterviewAnswer, string>
     {
         private static IStatefullInterviewRepository interviewRepository
         {
@@ -23,7 +23,7 @@ namespace WB.UI.QuestionnaireTester.Converters
             get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
         }
 
-        protected override string Convert(AbstractInterviewAnswerModel value, Type targetType, object parameter, CultureInfo culture)
+        protected override string Convert(BaseInterviewAnswer value, Type targetType, object parameter, CultureInfo culture)
         {
             string interviewId = (string) parameter;
 
@@ -31,12 +31,12 @@ namespace WB.UI.QuestionnaireTester.Converters
             if (value != null)
             {
                 TypeSwitch.Do(value, 
-                    TypeSwitch.Case<MaskedTextAnswerModel>((maskedTextAnswerModel)=>answerAsString = maskedTextAnswerModel.Answer),
-                    TypeSwitch.Case<IntegerNumericAnswerModel>((integerAnswerModel)=>answerAsString = integerAnswerModel.Answer.ToString(culture)),
-                    TypeSwitch.Case<RealNumericAnswerModel>((realAnswerModel)=>answerAsString = realAnswerModel.Answer.ToString(culture)),
-                    TypeSwitch.Case<DateTimeAnswerModel>((dateAnswerModel)=>answerAsString = dateAnswerModel.Answer.ToString("d", culture)),
-                    TypeSwitch.Case<SingleOptionAnswerModel>((singleOptionAnswerModel) => answerAsString = GetAnswerOnSingleOptionQuestionAsString(interviewId, singleOptionAnswerModel)),
-                    TypeSwitch.Case<MultiOptionAnswerModel>((multiOptionAnswerModel) => answerAsString = GetAnswerOnMultiOptionQuestionAsString(interviewId, multiOptionAnswerModel)));
+                    TypeSwitch.Case<MaskedTextAnswer>((maskedTextAnswerModel)=>answerAsString = maskedTextAnswerModel.Answer),
+                    TypeSwitch.Case<IntegerNumericAnswer>((integerAnswerModel)=>answerAsString = integerAnswerModel.Answer.ToString(culture)),
+                    TypeSwitch.Case<RealNumericAnswer>((realAnswerModel)=>answerAsString = realAnswerModel.Answer.ToString(culture)),
+                    TypeSwitch.Case<DateTimeAnswer>((dateAnswerModel)=>answerAsString = dateAnswerModel.Answer.ToString("d", culture)),
+                    TypeSwitch.Case<SingleOptionAnswer>((singleOptionAnswerModel) => answerAsString = GetAnswerOnSingleOptionQuestionAsString(interviewId, singleOptionAnswerModel)),
+                    TypeSwitch.Case<MultiOptionAnswer>((multiOptionAnswerModel) => answerAsString = GetAnswerOnMultiOptionQuestionAsString(interviewId, multiOptionAnswerModel)));
             }
 
             return answerAsString;
@@ -48,19 +48,19 @@ namespace WB.UI.QuestionnaireTester.Converters
             return questionnaireRepository.GetById(interview.QuestionnaireId);
         }
 
-        private static string GetAnswerOnSingleOptionQuestionAsString(string interviewId, SingleOptionAnswerModel singleOptionAnswerModel)
+        private static string GetAnswerOnSingleOptionQuestionAsString(string interviewId, SingleOptionAnswer singleOptionAnswer)
         {
-            var singleOptionQuestionModel = GetQuestionnaire(interviewId).Questions[singleOptionAnswerModel.Id] as SingleOptionQuestionModel;
-            return singleOptionQuestionModel != null ? singleOptionQuestionModel.Options.FirstOrDefault(_ => _.Value == singleOptionAnswerModel.Answer).Title : string.Empty;
+            var singleOptionQuestionModel = GetQuestionnaire(interviewId).Questions[singleOptionAnswer.Id] as SingleOptionQuestionModel;
+            return singleOptionQuestionModel != null ? singleOptionQuestionModel.Options.FirstOrDefault(_ => _.Value == singleOptionAnswer.Answer).Title : string.Empty;
         }
 
-        private static string GetAnswerOnMultiOptionQuestionAsString(string interviewId, MultiOptionAnswerModel multiOptionAnswerModel)
+        private static string GetAnswerOnMultiOptionQuestionAsString(string interviewId, MultiOptionAnswer multiOptionAnswer)
         {
-            var multiOptionQuestionModel = GetQuestionnaire(interviewId).Questions[multiOptionAnswerModel.Id] as MultiOptionQuestionModel;
+            var multiOptionQuestionModel = GetQuestionnaire(interviewId).Questions[multiOptionAnswer.Id] as MultiOptionQuestionModel;
             return multiOptionQuestionModel != null
                 ? string.Join(",",
                     multiOptionQuestionModel.Options.Where(
-                        _ => multiOptionAnswerModel.Answers.Contains(_.Value)).Select(_ => _.Title))
+                        _ => multiOptionAnswer.Answers.Contains(_.Value)).Select(_ => _.Title))
                 : string.Empty;
         }
     }
