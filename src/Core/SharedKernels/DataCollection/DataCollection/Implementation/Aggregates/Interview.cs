@@ -2056,6 +2056,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return result.Distinct(equalityComparer).ToList();
         }
 
+        private Dictionary<RosterIdentity, string>
+            GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(
+            params RosterCalculationData[] datas)
+        {
+            var result = new Dictionary<RosterIdentity, string>(new RosterIdentityComparer());
+            foreach (var data in datas)
+            {
+                var rosterInstancesToAdd = data.RosterInstancesToAdd;
+                if (rosterInstancesToAdd != null)
+                {
+                    foreach (var rosterIdentity in rosterInstancesToAdd)
+                    {
+                        result[rosterIdentity] = data.TitlesForRosterInstancesToAdd == null
+                            ? null
+                            : data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId];
+                    }
+                }
+
+                foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
+                {
+                    var nestedRosterInstancesToAdd =
+                        GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(
+                            rosterInstantiatesFromNestedLevel);
+                    foreach (var nestedRosterInstanceToAdd in nestedRosterInstancesToAdd)
+                    {
+                        result[nestedRosterInstanceToAdd.Key] = nestedRosterInstanceToAdd.Value;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private void ApplyAnswersEvents(IEnumerable<AnswerChange> interviewByAnswerChanges)
         {
             foreach (AnswerChange change in interviewByAnswerChanges)
@@ -2302,8 +2335,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //Update State
             expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
 
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
+
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
@@ -2316,7 +2349,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstancesWithAffectedTitle.RosterInstanceId, AnswerUtils.AnswerToString(answer));
             }
 
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            foreach (var rosterIdentityToAdd in rosterInstancesToAdd)
+            {
+                expressionProcessorState.AddRoster(rosterIdentityToAdd.Key.GroupId, rosterIdentityToAdd.Key.OuterRosterVector,
+                    rosterIdentityToAdd.Key.RosterInstanceId, rosterIdentityToAdd.Key.SortIndex);
+                expressionProcessorState.UpdateRosterTitle(rosterIdentityToAdd.Key.GroupId,
+                    rosterIdentityToAdd.Key.OuterRosterVector, rosterIdentityToAdd.Key.RosterInstanceId,
+                    rosterIdentityToAdd.Value);
+            }
+
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
@@ -2373,13 +2414,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
 
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
+
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, rosterCalculationData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]));
+            foreach (var rosterInstanceToAdd in rosterInstancesToAdd)
+            {
+                expressionProcessorState.AddRoster(rosterInstanceToAdd.Key.GroupId,
+                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
+                    rosterInstanceToAdd.Key.SortIndex);
+                expressionProcessorState.UpdateRosterTitle(rosterInstanceToAdd.Key.GroupId,
+                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
+                    rosterInstanceToAdd.Value);
+            }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             //Apply other changes on expressionProcessorState
@@ -2457,13 +2505,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateTextListAnswer(questionId, rosterVector, answers);
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, rosterCalculationData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]));
+            foreach (var rosterInstanceToAdd in rosterInstancesToAdd)
+            {
+                expressionProcessorState.AddRoster(rosterInstanceToAdd.Key.GroupId,
+                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
+                    rosterInstanceToAdd.Key.SortIndex);
+                expressionProcessorState.UpdateRosterTitle(rosterInstanceToAdd.Key.GroupId,
+                    rosterInstanceToAdd.Key.OuterRosterVector, rosterInstanceToAdd.Key.RosterInstanceId,
+                    rosterInstanceToAdd.Value);
+            }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
@@ -2482,9 +2536,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
             enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
-
-          
-
           
             var answerChanges = new List<AnswerChange>()
             {
