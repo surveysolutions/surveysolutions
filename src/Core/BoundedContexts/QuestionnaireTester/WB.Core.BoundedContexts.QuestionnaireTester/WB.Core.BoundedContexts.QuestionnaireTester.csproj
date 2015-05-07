@@ -71,6 +71,7 @@
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IInterviewEntityViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GpsCoordinatesQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\QuestionOptionViewModel.cs" />

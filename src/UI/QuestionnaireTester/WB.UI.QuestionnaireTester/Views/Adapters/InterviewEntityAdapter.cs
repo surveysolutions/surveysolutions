@@ -21,7 +21,8 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
-            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option}
+            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option}
         };
 
         public override int GetItemViewType(int position)
