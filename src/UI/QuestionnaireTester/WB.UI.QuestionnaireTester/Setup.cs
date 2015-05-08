@@ -63,6 +63,8 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("ValueChange", (editText) => new EditTextValueChangedBinding(editText)));
             registry.RegisterFactory(new MvxCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view)));
 
+            registry.RegisterCustomBindingFactory<CheckBox>("Bold", checkBox => new BoldWhenCheckedBinding(checkBox));
+
             base.FillTargetFactories(registry);
         }
 

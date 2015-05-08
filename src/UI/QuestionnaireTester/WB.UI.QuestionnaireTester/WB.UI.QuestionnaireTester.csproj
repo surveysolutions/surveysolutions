@@ -181,6 +181,7 @@
     <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
+    <Compile Include="CustomBindings\CheckedBinding.cs" />
     <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
