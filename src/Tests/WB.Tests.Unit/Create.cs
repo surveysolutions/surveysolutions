@@ -60,11 +60,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -1490,9 +1492,48 @@ namespace WB.Tests.Unit
             return new QuestionnaireVerificationError("ee", "mm");
         }
 
-        public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId)
+        public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
         {
             return  new QuestionnaireSharedPersons(questionnaireId ?? Guid.NewGuid());
+        }
+
+        public static InterviewExportedDataRecord InterviewExportedDataRecord()
+        {
+            return new InterviewExportedDataRecord();
+        }
+
+        public static InterviewActionExportView InterviewActionExportView(Guid? interviewId = null)
+        {
+            return new InterviewActionExportView((interviewId ?? Guid.NewGuid()).FormatGuid(),
+                InterviewExportedAction.SupervisorAssigned, "test", DateTime.Now, "test");
+        }
+
+        public static InterviewDataExportView InterviewDataExportView(
+            Guid? interviewId = null, 
+            Guid? questionnaireId = null, 
+            long questionnaireVersion = 1, 
+            params InterviewDataExportLevelView[] levels)
+        {
+            return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), questionnaireId ?? Guid.NewGuid(),
+                questionnaireVersion, levels);
+        }
+
+        public static InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
+        {
+            return new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records, interviewId.FormatGuid());
+        }
+
+        public static InterviewDataExportRecord InterviewDataExportRecord(
+            Guid interviewId,
+            params ExportedQuestion[] questions)
+        {
+            return new InterviewDataExportRecord(interviewId, "test", new string[0], new string[0],
+                questions);
+        }
+
+        public static ExportedQuestion ExportedQuestion()
+        {
+            return new ExportedQuestion() {Answers = new string[0]};
         }
     }
 }
