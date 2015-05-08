@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class AnswerChange
+    public class AnswerChange
     {
         public AnswerChange(AnswerChangeType atomicChangeType, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, object answer)
         {
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public object Answer { set; get; }
     }
 
-    internal enum AnswerChangeType
+    public enum AnswerChangeType
     {
         Text,
         DateTime,

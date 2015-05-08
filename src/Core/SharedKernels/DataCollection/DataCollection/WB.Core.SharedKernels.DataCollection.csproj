@@ -65,9 +65,6 @@
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
-    <Compile Include="Implementation\Repositories\StatefullInterviewRepository.cs" />
-    <Compile Include="Repositories\IStatefullInterviewRepository.cs" />
-    <Compile Include="Implementation\Aggregates\StatefullQuestionnaire.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
@@ -333,7 +330,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\ReadSide\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
