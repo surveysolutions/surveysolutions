@@ -49,8 +49,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public QuestionHeaderViewModel Header { get; private set; }
         public EnablementViewModel Enablement { get; private set; }
-        public IList<SigleOptionQuestionOptionViewModel> Options { get; private set; }
-        private SigleOptionQuestionOptionViewModel selectedOption;
+        public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity)
         {
@@ -64,47 +63,51 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetSingleOptionAnswerModel(entityIdentity);
+            var selectedValue = Monads.Maybe(() => answerModel.Answer);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionModel.Options.Select(this.ToViewModel).ToList();
-            this.selectedOption = this.Options.SingleOrDefault(option => option.Value == Monads.Maybe(() => answerModel.Answer));
+            this.Options = questionModel
+                .Options
+                .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
+                .ToList();
         }
 
-        public SigleOptionQuestionOptionViewModel SelectedOption
+        private void OptionSelected(object sender, EventArgs eventArgs)
         {
-            get { return selectedOption; }
+            var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
 
-            set
+            this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
+                this.interviewId,
+                this.userId,
+                this.questionIdentity.Id,
+                this.questionIdentity.RosterVector,
+                DateTime.Now,
+                selectedOption.Value));
+
+            var optionsToUnselect = this.Options.Where(option => option != selectedOption && option.Selected);
+
+            foreach (var optionToUnselect in optionsToUnselect)
             {
-                try
-                {
-                    this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
-                        this.interviewId,
-                        this.userId,
-                        this.questionIdentity.Id,
-                        this.questionIdentity.RosterVector,
-                        DateTime.Now,
-                        value.Value));
-
-                    selectedOption = value;
-                }
-                finally
-                {
-                    this.RaisePropertyChanged();
-                }
+                optionToUnselect.Selected = false;
             }
         }
 
-        private SigleOptionQuestionOptionViewModel ToViewModel(OptionModel model)
+        private SingleOptionQuestionOptionViewModel ToViewModel(OptionModel model, bool isSelected)
         {
-            return new SigleOptionQuestionOptionViewModel
+            var optionViewModel = new SingleOptionQuestionOptionViewModel
             {
+                Enablement = this.Enablement,
+
                 Value = model.Value,
                 Title = model.Title,
-                Enablement = this.Enablement,
+                Selected = isSelected,
             };
+
+            optionViewModel.BeforeSelected += OptionSelected;
+
+            return optionViewModel;
         }
     }
 }

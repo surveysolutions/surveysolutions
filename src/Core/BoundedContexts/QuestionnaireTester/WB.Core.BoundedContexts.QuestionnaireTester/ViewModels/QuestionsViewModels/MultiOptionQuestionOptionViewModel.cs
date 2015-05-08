@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         private bool @checked;
 
-        public event BeforeCheckedChanged BeforeCheckedChanged;
+        public event EventHandler<OptionCheckedArgs> BeforeCheckedChanged;
 
         public decimal Value { get; set; }
         public string Title { get; set; }
@@ -37,8 +37,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (handler != null) handler(this, new OptionCheckedArgs(newValue));
         }
     }
-
-    public delegate void BeforeCheckedChanged(object sender, OptionCheckedArgs args);
 
     public class OptionCheckedArgs : EventArgs
     {
