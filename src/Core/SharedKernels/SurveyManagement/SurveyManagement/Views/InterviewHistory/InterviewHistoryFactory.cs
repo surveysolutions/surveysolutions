@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
         private readonly IEventStore eventStore;
         private readonly ILogger logger;
 
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             IEventStore eventStore, 
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader, 
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
             ILogger logger)
         {
             this.eventStore = eventStore;

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Establish context = () =>
         {
             interviewHistoryView = CreateInterviewHistoryView();
-            interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaireDocument: CreateQuestionnaireDocument(questionId, variableName));
+            interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaire: CreateQuestionnaireExportStructure(questionId, variableName));
         };
 
         Because of = () =>
