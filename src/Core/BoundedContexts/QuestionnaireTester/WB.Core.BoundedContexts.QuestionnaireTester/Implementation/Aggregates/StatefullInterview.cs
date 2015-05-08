@@ -4,16 +4,20 @@ using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+using Identity = WB.Core.SharedKernels.DataCollection.Identity;
+
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 {
-    internal class StatefullInterview : Interview, IStatefullInterview
+    public class StatefullInterview : Interview, IStatefullInterview
     {
         private Dictionary<string, BaseInterviewAnswer> answers;
         private Dictionary<string, InterviewGroup> groups;
@@ -67,79 +71,79 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public GpsCoordinatesAnswer GetGpsCoordinatesAnswerModel(Identity identity)
         {
-            return GetQuestionModel<GpsCoordinatesAnswer>(identity);
+            return this.GetQuestionModel<GpsCoordinatesAnswer>(identity);
         }
 
         public DateTimeAnswer GetDateTimeAnswerModel(Identity identity)
         {
-            return GetQuestionModel<DateTimeAnswer>(identity);
+            return this.GetQuestionModel<DateTimeAnswer>(identity);
         }
 
         public MultimediaAnswer GetMultimediaAnswerModel(Identity identity)
         {
-            return GetQuestionModel<MultimediaAnswer>(identity);
+            return this.GetQuestionModel<MultimediaAnswer>(identity);
         }
 
         public QrBarcodeAnswer GetQrBarcodeAnswerModel(Identity identity)
         {
-            return GetQuestionModel<QrBarcodeAnswer>(identity);
+            return this.GetQuestionModel<QrBarcodeAnswer>(identity);
         }
 
         public TextListAnswer GetTextListAnswerModel(Identity identity)
         {
-            return GetQuestionModel<TextListAnswer>(identity);
+            return this.GetQuestionModel<TextListAnswer>(identity);
         }
 
         public LinkedSingleOptionAnswer GetLinkedSingleOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<LinkedSingleOptionAnswer>(identity);
+            return this.GetQuestionModel<LinkedSingleOptionAnswer>(identity);
         }
 
         public MultiOptionAnswer GetMultiOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<MultiOptionAnswer>(identity);
+            return this.GetQuestionModel<MultiOptionAnswer>(identity);
         }
 
         public LinkedMultiOptionAnswer GetLinkedMultiOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<LinkedMultiOptionAnswer>(identity);
+            return this.GetQuestionModel<LinkedMultiOptionAnswer>(identity);
         }
 
         public IntegerNumericAnswer GetIntegerNumericAnswerModel(Identity identity)
         {
-            return GetQuestionModel<IntegerNumericAnswer>(identity);
+            return this.GetQuestionModel<IntegerNumericAnswer>(identity);
         }
 
         public RealNumericAnswer GetRealNumericAnswerModel(Identity identity)
         {
-            return GetQuestionModel<RealNumericAnswer>(identity);
+            return this.GetQuestionModel<RealNumericAnswer>(identity);
         }
 
         public MaskedTextAnswer GetTextAnswerModel(Identity identity)
         {
-            return GetQuestionModel<MaskedTextAnswer>(identity);
+            return this.GetQuestionModel<MaskedTextAnswer>(identity);
         }
 
         public SingleOptionAnswer GetSingleOptionAnswerModel(Identity identity)
         {
-            return GetQuestionModel<SingleOptionAnswer>(identity);
+            return this.GetQuestionModel<SingleOptionAnswer>(identity);
         }
 
         private T GetQuestionModel<T>(Identity identity) where T : BaseInterviewAnswer
         {
             var questionId = ConversionHelper.ConvertIdentityToString(identity);
-            if (!Answers.ContainsKey(questionId)) return null;
-            return (T)Answers[questionId];
+            if (!this.Answers.ContainsKey(questionId)) return null;
+            return (T)this.Answers[questionId];
         }
 
 
         public bool IsValid(Identity identity)
         {
             var questionId = ConversionHelper.ConvertIdentityToString(identity);
-            if (!Answers.ContainsKey(questionId))
+            if (!this.Answers.ContainsKey(questionId))
                 return true;
 
-            var interviewAnswerModel = Answers[questionId];
+            var interviewAnswerModel = this.Answers[questionId];
             return !interviewAnswerModel.IsInvalid();
         }
 
@@ -165,16 +169,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
         }
 
-        internal new void Apply(InterviewOnClientCreated @event)
+        protected new void Apply(InterviewOnClientCreated @event)
         {
             base.Apply(@event);
 
-            Id = EventSourceId;
-            QuestionnaireId = @event.QuestionnaireId.FormatGuid();
-            QuestionnaireVersion = @event.QuestionnaireVersion;
+            this.Id = this.EventSourceId;
+            this.QuestionnaireId = @event.QuestionnaireId.FormatGuid();
+            this.QuestionnaireVersion = @event.QuestionnaireVersion;
 
-            var questionnaire = QuestionnaireModelRepository.GetById(questionnaireId.FormatGuid());
-            QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.GetType());
+            var questionnaire = QuestionnaireModelRepository.GetById(this.questionnaireId.FormatGuid());
+            this.QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.GetType());
         }
 
         #region Applying answers
@@ -277,13 +281,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         #region Group and question status and validity
-        internal override void Apply(AnswersRemoved @event)
+
+        protected override void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => Answers.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)));
+            @event.Questions.ForEach(x => this.Answers.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)));
         }
 
-        internal override void Apply(AnswersDeclaredValid @event)
+        protected override void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -292,7 +297,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             });
         }
 
-        internal override void Apply(AnswersDeclaredInvalid @event)
+        protected override void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -301,7 +306,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             });
         }
 
-        internal override void Apply(GroupsDisabled @event)
+        protected override void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x => {
@@ -310,7 +315,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             });
         }
 
-        internal override void Apply(GroupsEnabled @event)
+        protected override void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x =>
@@ -320,7 +325,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             });
         }
 
-        internal override void Apply(QuestionsDisabled @event)
+        protected override void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -329,7 +334,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             });
         }
 
-        internal override void Apply(QuestionsEnabled @event)
+        protected override void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -342,18 +347,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Roster instances and titles
 
-        internal override void Apply(RosterInstancesTitleChanged @event)
+        protected override void Apply(RosterInstancesTitleChanged @event)
         {
             base.Apply(@event);
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
             {
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedRosterInstanceTitle.RosterInstance.GroupId, GetFullRosterVector(changedRosterInstanceTitle.RosterInstance));
-                var roster = (InterviewRoster)Groups[rosterKey];
+                var roster = (InterviewRoster)this.Groups[rosterKey];
                 roster.Title = changedRosterInstanceTitle.Title;
             }
         }
 
-        internal override void Apply(RosterInstancesAdded @event)
+        protected override void Apply(RosterInstancesAdded @event)
         {
             base.Apply(@event);
 
@@ -362,21 +367,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
                 var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
 
-                Groups[rosterKey] = new InterviewRoster
+                this.Groups[rosterKey] = new InterviewRoster
                 {
                     Id = rosterInstance.GroupId,
                     RosterVector = GetFullRosterVector(rosterInstance),
                     ParentRosterVector = rosterInstance.OuterRosterVector,
                     RowCode = rosterInstance.RosterInstanceId
                 };
-                if (!RosterInstancesIds.ContainsKey(rosterParentKey))
-                    RosterInstancesIds.Add(rosterParentKey, new List<string>());
+                if (!this.RosterInstancesIds.ContainsKey(rosterParentKey))
+                    this.RosterInstancesIds.Add(rosterParentKey, new List<string>());
 
-                RosterInstancesIds[rosterParentKey].Add(rosterKey);
+                this.RosterInstancesIds[rosterParentKey].Add(rosterKey);
             }
         }
 
-        internal override void Apply(RosterInstancesRemoved @event)
+        protected override void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
             foreach (var rosterInstance in @event.Instances)
@@ -384,37 +389,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
                 var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
 
-                Groups.Remove(rosterKey);
-                RosterInstancesIds[rosterParentKey].Remove(rosterKey);
+                this.Groups.Remove(rosterKey);
+                this.RosterInstancesIds[rosterParentKey].Remove(rosterKey);
             }
         }
 
         #endregion
 
         #region Interview status and validity
-        
-        internal override void Apply(InterviewCompleted @event)
+
+        protected override void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
-            IsInProgress = false;
+            this.IsInProgress = false;
         }
 
-        internal override void Apply(InterviewRestarted @event)
+        protected override void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
-            IsInProgress = true;
+            this.IsInProgress = true;
         }
 
-        internal override void Apply(InterviewDeclaredValid @event)
+        protected override void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
-            HasErrors = false;
+            this.HasErrors = false;
         }
 
-        internal override void Apply(InterviewDeclaredInvalid @event)
+        protected override void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
-            HasErrors = true;
+            this.HasErrors = true;
         }
         
         #endregion

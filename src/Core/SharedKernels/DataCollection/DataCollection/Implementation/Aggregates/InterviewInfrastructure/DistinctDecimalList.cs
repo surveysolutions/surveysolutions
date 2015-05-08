@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     /// After sync CAPI calculates rosterGroupInstanceIds on the fly from sync packages. 
     /// Supervisor gets bunch of events and grabs roster information from them.
     /// </remarks>
-    internal class DistinctDecimalList : IEnumerable<decimal>
+    public class DistinctDecimalList : IEnumerable<decimal>
     {
         private readonly List<decimal> list = new List<decimal>();
 

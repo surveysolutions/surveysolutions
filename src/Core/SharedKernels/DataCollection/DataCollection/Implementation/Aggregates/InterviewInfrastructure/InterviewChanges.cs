@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class InterviewChanges
+    public class InterviewChanges
     {
         public InterviewChanges(List<AnswerChange> interviewByAnswerChanges, EnablementChanges enablementChanges, ValidityChanges validityChanges,
             RosterCalculationData rosterCalculationData, List<Identity> answersForLinkedQuestionsToRemove,
