@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Sql
 {
-    internal interface ISqlDataAccessor
+    internal interface IExportedDataAccessor
     {
         string GetAllDataFolder(string basePath);
         string GetApprovedDataFolder(string basePath);

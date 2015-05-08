@@ -55,13 +55,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>
     {
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
-
-        public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        public InterviewHistoryDenormalizer(
+            IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
+            IReadSideRepositoryWriter<UserDocument> userReader,
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
             : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;
@@ -293,7 +294,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, Guid? userId,
-            DateTime? timestamp, Dictionary<string, string> parameters, QuestionnaireDocument questionnaire)
+            DateTime? timestamp, Dictionary<string, string> parameters, QuestionnaireExportStructure questionnaire)
         {
             string userName = string.Empty;
             string userRole = string.Empty;
@@ -313,11 +314,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var newParameters = new Dictionary<string, string>();
                 if (parameters.ContainsKey("questionId"))
                 {
-                    var questionId = parameters["questionId"];
-                    var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == Guid.Parse(questionId));
-                    if (question != null)
+                    var questionId = Guid.Parse(parameters["questionId"]);
+                    var question = questionnaire.HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).FirstOrDefault(q => q.Key == questionId);
+                    if (!question.Equals(new KeyValuePair<Guid, ExportedHeaderItem>()))
                     {
-                        newParameters["question"] = question.StataExportCaption;
+                        newParameters["question"] = question.Value.VariableName;
                         if (action == InterviewHistoricalAction.CommentSet)
                         {
                             newParameters["comment"] = parameters["comment"];
@@ -388,11 +389,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if(view ==null)
                 return;
 
-            var questionnaireWithVersion = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
-            if (questionnaireWithVersion == null || questionnaireWithVersion.Questionnaire == null)
+            var questionnaire = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
+            if (questionnaire == null)
                 return;
-
-            var questionnaire = questionnaireWithVersion.Questionnaire;
 
             var record = CreateInterviewHistoricalRecordView(action, userId, timestamp, parameters ?? new Dictionary<string, string>(),
                 questionnaire);

@@ -22,7 +22,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public ReadSideRepositoryDataExportWriter(
             IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage, 
-            IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage, IJsonUtils jsonUtils)
+            IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage, 
+            IJsonUtils jsonUtils)
         {
             this.interviewExportedDataStorage = interviewExportedDataStorage;
             this.interviewActionsDataStorage = interviewActionsDataStorage;
@@ -63,18 +64,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void DeleteInterviewRecords(Guid interviewId)
         {
-            DeleteInterviewExportedDataByInterviewId(interviewId);
-            DeleteInterviewActionsByInterviewId(interviewId.FormatGuid());
-        }
-
-        private void DeleteInterviewExportedDataByInterviewId(Guid interviewId)
-        {
             interviewExportedDataStorage.Remove(interviewId);
-        }
-
-        private void DeleteInterviewActionsByInterviewId(string interviewId)
-        {
-            interviewActionsDataStorage.Remove(interviewId);
+            interviewActionsDataStorage.Remove(interviewId.FormatGuid());
         }
 
         private InterviewAction CreateInterviewAction(InterviewActionExportView action)

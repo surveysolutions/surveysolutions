@@ -31,10 +31,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             ITabFileReader tabFileReader = null,
             IDatasetWriterFactory datasetWriterFactory = null)
         {
-            return new SqlToTabDataExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
-                sqlDataAccessor ?? Mock.Of<ISqlDataAccessor>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(It.IsAny<string>()) == questionnaireExportStructure),
+            return new SqlToTabDataExportService(Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
+                    It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
+                Mock.Of<IExportedDataAccessor>(),
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
+                    It.IsAny<string>()) == questionnaireExportStructure),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewExportedDataRecord>>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewHistory>>(), Mock.Of<IJsonUtils>(),
                 Mock.Of<ITransactionManagerProvider>(),
