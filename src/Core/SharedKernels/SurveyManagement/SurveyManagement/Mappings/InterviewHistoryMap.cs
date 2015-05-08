@@ -9,8 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public InterviewHistoryMap()
         {
-            Table("InterviewHistory");
-
             Id(x => x.InterviewId, idMap =>
             {
                 idMap.Generator(Generators.Assigned);
@@ -40,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Timestamp);
             ManyToOne(x => x.History, mto =>
             {
-                mto.Index("InterviewHistorys_InterviewActions");
+                mto.Index("InterviewHistories_InterviewActions");
                 mto.Cascade(Cascade.None);
             });
         }

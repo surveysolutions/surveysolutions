@@ -19,15 +19,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
     internal class InterviewHistoryFactory : IInterviewHistoryFactory
     {
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
         private readonly IEventStore eventStore;
         private readonly ILogger logger;
 
-        public InterviewHistoryFactory(IEventStore eventStore, IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
+        public InterviewHistoryFactory(
+            IEventStore eventStore, 
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader, ILogger logger)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader, 
+            ILogger logger)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
