@@ -325,6 +325,7 @@
     <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
     <AndroidResource Include="Resources\drawable\question_option_background.xml" />
+    <AndroidResource Include="Resources\drawable\checkbox_picker_color.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
