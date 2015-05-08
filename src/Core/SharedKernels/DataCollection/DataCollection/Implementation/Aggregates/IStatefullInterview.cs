@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         string QuestionnaireId { get; set; }
         long QuestionnaireVersion { get; set; }
         Guid Id { get; set; }
-        Dictionary<string, BaseInterviewAnswer> Answers { get; set; }
-        Dictionary<string, InterviewGroup> Groups { get; set; }
-        Dictionary<string, List<string>> RosterInstancesIds { get; set; }
+        Dictionary<string, BaseInterviewAnswer> Answers { get; }
+        Dictionary<string, InterviewGroup> Groups { get; }
+        Dictionary<string, List<string>> RosterInstancesIds { get; }
         
         bool HasErrors { get; set; }
         bool IsInProgress { get; set; }

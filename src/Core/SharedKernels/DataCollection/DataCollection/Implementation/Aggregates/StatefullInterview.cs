@@ -15,16 +15,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class StatefullInterview : Interview, IStatefullInterview
     {
+        private Dictionary<string, BaseInterviewAnswer> answers;
+        private Dictionary<string, InterviewGroup> groups;
+        private Dictionary<string, List<string>> rosterInstancesIds;
+        private Dictionary<Guid, Type> questionIdToQuestionModelTypeMap;
+
         public string QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
 
         public Guid Id { get; set; }
 
-        public Dictionary<string, BaseInterviewAnswer> Answers { get; set; }
-        public Dictionary<string, InterviewGroup> Groups { get; set; }
-        public Dictionary<string, List<string>> RosterInstancesIds { get; set; }
+        public Dictionary<string, BaseInterviewAnswer> Answers
+        {
+            get { return this.answers ?? (this.answers = new Dictionary<string, BaseInterviewAnswer>()); }
+        }
 
-        public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap { get; set; }
+        public Dictionary<string, InterviewGroup> Groups
+        {
+            get { return this.groups ?? (this.groups = new Dictionary<string, InterviewGroup>()); }
+        }
+
+        public Dictionary<string, List<string>> RosterInstancesIds
+        {
+            get { return this.rosterInstancesIds ?? (this.rosterInstancesIds = new Dictionary<string, List<string>>()); }
+        }
+
+        public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap
+        {
+            get { return this.questionIdToQuestionModelTypeMap ?? (this.questionIdToQuestionModelTypeMap = new Dictionary<Guid, Type>()); }
+            set { this.questionIdToQuestionModelTypeMap = value; }
+        }
 
         public bool HasErrors { get; set; }
         public bool IsInProgress { get; set; }
