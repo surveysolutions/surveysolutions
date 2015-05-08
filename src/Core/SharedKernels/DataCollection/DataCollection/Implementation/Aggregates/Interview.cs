@@ -24,7 +24,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class Interview : AggregateRootMappedByConvention, ISnapshotable<InterviewState>
+    public class Interview : AggregateRootMappedByConvention, ISnapshotable<InterviewState>
     {
         private static readonly decimal[] EmptyRosterVector = { };
 
@@ -58,31 +58,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
-        internal virtual void Apply(InterviewCreated @event)
+        protected virtual void Apply(InterviewCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
-        internal virtual void Apply(InterviewFromPreloadedDataCreated @event)
+        protected virtual void Apply(InterviewFromPreloadedDataCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
-        internal virtual void Apply(InterviewForTestingCreated @event)
+        protected virtual void Apply(InterviewForTestingCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
-        internal virtual void Apply(InterviewOnClientCreated @event)
+        protected virtual void Apply(InterviewOnClientCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
-        internal virtual void Apply(InterviewSynchronized @event)
+        protected virtual void Apply(InterviewSynchronized @event)
         {
             this.interviewState = new InterviewStateDependentOnAnswers();
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
@@ -198,14 +198,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.InvalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
         }
 
-        internal virtual void Apply(SynchronizationMetadataApplied @event)
+        protected virtual void Apply(SynchronizationMetadataApplied @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
             this.status = @event.Status;
         }
 
-        internal virtual void Apply(TextQuestionAnswered @event)
+        protected virtual void Apply(TextQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -215,7 +215,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
-        internal virtual void Apply(QRBarcodeQuestionAnswered @event)
+        protected virtual void Apply(QRBarcodeQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
-        internal virtual void Apply(PictureQuestionAnswered @event)
+        protected virtual void Apply(PictureQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -235,7 +235,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.PropagationVector, @event.PictureFileName);
         }
 
-        internal virtual void Apply(NumericRealQuestionAnswered @event)
+        protected virtual void Apply(NumericRealQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.PropagationVector, (double)@event.Answer);
         }
 
-        internal virtual void Apply(NumericIntegerQuestionAnswered @event)
+        protected virtual void Apply(NumericIntegerQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -255,7 +255,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
-        internal virtual void Apply(DateTimeQuestionAnswered @event)
+        protected virtual void Apply(DateTimeQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -265,7 +265,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateDateAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
-        internal virtual void Apply(SingleOptionQuestionAnswered @event)
+        protected virtual void Apply(SingleOptionQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -275,7 +275,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValue);
         }
 
-        internal virtual void Apply(MultipleOptionsQuestionAnswered @event)
+        protected virtual void Apply(MultipleOptionsQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValues);
         }
 
-        internal virtual void Apply(GeoLocationQuestionAnswered @event)
+        protected virtual void Apply(GeoLocationQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -302,7 +302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 @event.Longitude, @event.Accuracy, @event.Altitude);
         }
 
-        internal virtual void Apply(TextListQuestionAnswered @event)
+        protected virtual void Apply(TextListQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
             this.interviewState.TextListAnswers[questionKey] = @event.Answers;
@@ -311,7 +311,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.PropagationVector, @event.Answers);
         }
 
-        internal virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
+        protected virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -322,7 +322,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
         }
 
-        internal virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
+        protected virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -341,40 +341,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVectors);
         }
 
-        internal virtual void Apply(AnswersDeclaredValid @event)
+        protected virtual void Apply(AnswersDeclaredValid @event)
         {
             this.interviewState.DeclareAnswersValid(@event.Questions);
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions.ToIdentities());
         }
 
-        internal virtual void Apply(AnswersDeclaredInvalid @event)
+        protected virtual void Apply(AnswersDeclaredInvalid @event)
         {
             this.interviewState.DeclareAnswersInvalid(@event.Questions);
             this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions.ToIdentities());
         }
 
-        internal virtual void Apply(GroupsDisabled @event)
+        protected virtual void Apply(GroupsDisabled @event)
         {
             this.interviewState.DisableGroups(@event.Groups);
 
             this.ExpressionProcessorStatePrototype.DisableGroups(@event.Groups.ToIdentities());
         }
 
-        internal virtual void Apply(GroupsEnabled @event)
+        protected virtual void Apply(GroupsEnabled @event)
         {
             this.interviewState.EnableGroups(@event.Groups);
 
             this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups.ToIdentities());
         }
 
-        internal virtual void Apply(QuestionsDisabled @event)
+        protected virtual void Apply(QuestionsDisabled @event)
         {
             this.interviewState.DisableQuestions(@event.Questions);
 
             this.ExpressionProcessorStatePrototype.DisableQuestions(@event.Questions.ToIdentities());
         }
 
-        internal virtual void Apply(QuestionsEnabled @event)
+        protected virtual void Apply(QuestionsEnabled @event)
         {
             this.interviewState.EnableQuestions(@event.Questions);
 
@@ -382,16 +382,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
-        internal virtual void Apply(AnswerCommented @event)
+        protected virtual void Apply(AnswerCommented @event)
         {
             this.interviewState.AnswerComments.Add(new AnswerComment(@event.UserId, @event.CommentTime, @event.Comment, @event.QuestionId, @event.PropagationVector));
         }
 
-        internal virtual void Apply(FlagSetToAnswer @event) { }
+        protected virtual void Apply(FlagSetToAnswer @event) { }
 
-        internal virtual void Apply(FlagRemovedFromAnswer @event) { }
+        protected virtual void Apply(FlagRemovedFromAnswer @event) { }
 
-        internal virtual void Apply(GroupPropagated @event)
+        protected virtual void Apply(GroupPropagated @event)
         {
             string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterScopePropagationVector);
             var rosterRowInstances = new DistinctDecimalList();
@@ -406,7 +406,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //expressionProcessorStatePrototype could also be changed but it's an old code.
         }
 
-        internal virtual void Apply(RosterInstancesTitleChanged @event)
+        protected virtual void Apply(RosterInstancesTitleChanged @event)
         {
             foreach (var instance in @event.ChangedInstances)
             {
@@ -414,7 +414,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        internal virtual void Apply(RosterInstancesAdded @event)
+        protected virtual void Apply(RosterInstancesAdded @event)
         {
             this.interviewState.AddRosterInstances(@event.Instances);
 
@@ -424,7 +424,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        internal virtual void Apply(RosterInstancesRemoved @event)
+        protected virtual void Apply(RosterInstancesRemoved @event)
         {
             this.interviewState.RemoveRosterInstances(@event.Instances);
             foreach (var instance in @event.Instances)
@@ -433,52 +433,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        internal virtual void Apply(InterviewStatusChanged @event)
+        protected virtual void Apply(InterviewStatusChanged @event)
         {
             this.status = @event.Status;
         }
 
-        internal virtual void Apply(SupervisorAssigned @event) { }
+        protected virtual void Apply(SupervisorAssigned @event) { }
 
-        internal virtual void Apply(InterviewerAssigned @event)
+        protected virtual void Apply(InterviewerAssigned @event)
         {
             this.interviewerId = @event.InterviewerId;
         }
 
-        internal virtual void Apply(InterviewDeleted @event) { }
+        protected virtual void Apply(InterviewDeleted @event) { }
 
-        internal virtual void Apply(InterviewHardDeleted @event)
+        protected virtual void Apply(InterviewHardDeleted @event)
         {
             wasHardDeleted = true;
         }
 
-        internal virtual void Apply(InterviewSentToHeadquarters @event) { }
+        protected virtual void Apply(InterviewSentToHeadquarters @event) { }
 
-        internal virtual void Apply(InterviewRestored @event) { }
+        protected virtual void Apply(InterviewRestored @event) { }
 
-        internal virtual void Apply(InterviewCompleted @event)
+        protected virtual void Apply(InterviewCompleted @event)
         {
             this.wasCompleted = true;
         }
 
-        internal virtual void Apply(InterviewRestarted @event) { }
+        protected virtual void Apply(InterviewRestarted @event) { }
 
-        internal virtual void Apply(InterviewApproved @event) { }
+        protected virtual void Apply(InterviewApproved @event) { }
 
-        internal virtual void Apply(InterviewApprovedByHQ @event) { }
+        protected virtual void Apply(InterviewApprovedByHQ @event) { }
 
-        internal virtual void Apply(InterviewRejected @event)
+        protected virtual void Apply(InterviewRejected @event)
         {
             this.wasCompleted = false;
         }
 
-        internal virtual void Apply(InterviewRejectedByHQ @event) { }
+        protected virtual void Apply(InterviewRejectedByHQ @event) { }
 
-        internal virtual void Apply(InterviewDeclaredValid @event) { }
+        protected virtual void Apply(InterviewDeclaredValid @event) { }
 
-        internal virtual void Apply(InterviewDeclaredInvalid @event) { }
+        protected virtual void Apply(InterviewDeclaredInvalid @event) { }
 
-        internal virtual void Apply(AnswersRemoved @event)
+        protected virtual void Apply(AnswersRemoved @event)
         {
             this.interviewState.RemoveAnswers(@event.Questions);
         }
