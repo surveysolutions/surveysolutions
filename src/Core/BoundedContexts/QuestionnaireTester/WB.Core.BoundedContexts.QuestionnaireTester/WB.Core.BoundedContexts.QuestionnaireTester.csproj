@@ -83,7 +83,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\SigleOptionQuestionOptionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\SingleOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\QuestionHeaderViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />

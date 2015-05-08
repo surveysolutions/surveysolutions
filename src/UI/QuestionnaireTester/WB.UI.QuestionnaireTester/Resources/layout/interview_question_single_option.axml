@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
     <MvxLinearLayout
         style="@style/Interview_InterviewQuestion_Layout"
         local:MvxBind="Enabled Enablement.Enabled">
         <include
             layout="@layout/interview_question__header" />
-        <MvxRadioGroup
-            android:layout_width="fill_parent"
+        <MvxLinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             local:MvxItemTemplate="@layout/interview_question_single_option_item"
-            local:MvxBind="ItemsSource Options; SelectedItem SelectedOption" />
+            local:MvxBind="ItemsSource Options" />
         <include
             layout="@layout/interview_question__errors" />
         <include
