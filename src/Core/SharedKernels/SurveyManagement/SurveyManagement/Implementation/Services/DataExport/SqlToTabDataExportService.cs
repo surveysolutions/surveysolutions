@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string separator;
         private readonly Func<string, string> createDataFileName;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ISqlDataAccessor sqlDataAccessor;
+        private readonly IExportedDataAccessor exportedDataAccessor;
         private readonly string parentId = "ParentId";
         private readonly IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage;
@@ -35,11 +35,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IJsonUtils jsonUtils;
 
-        private readonly ITabFileReader tabReader;
-        private readonly IDatasetWriterFactory datasetWriterFactory;
-
-        public SqlToTabDataExportService(IFileSystemAccessor fileSystemAccessor,
-            ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor,
+        public SqlToTabDataExportService(
+            IFileSystemAccessor fileSystemAccessor,
+            ICsvWriterFactory csvWriterFactory, 
+            IExportedDataAccessor exportedDataAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
             IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage, 
@@ -50,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IDatasetWriterFactory datasetWriterFactory)
         {
             this.csvWriterFactory = csvWriterFactory;
-            this.sqlDataAccessor = sqlDataAccessor;
+            this.exportedDataAccessor = exportedDataAccessor;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.interviewExportedDataStorage = interviewExportedDataStorage;
             this.interviewActionsDataStorage = interviewActionsDataStorage;
@@ -91,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            var allDataFolderPath = sqlDataAccessor.GetAllDataFolder(basePath);
+            var allDataFolderPath = exportedDataAccessor.GetAllDataFolder(basePath);
             
             if (!fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
             {
@@ -230,7 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            var approvedDataFolderPath = sqlDataAccessor.GetApprovedDataFolder(basePath);
+            var approvedDataFolderPath = exportedDataAccessor.GetApprovedDataFolder(basePath);
 
             if (!fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
             {
@@ -246,7 +245,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void CreateHeaderForActionFile(ICsvWriterService fileWriter)
         {
-            foreach (var actionFileColumn in sqlDataAccessor.ActionFileColumns)
+            foreach (var actionFileColumn in exportedDataAccessor.ActionFileColumns)
             {
                 fileWriter.WriteField(actionFileColumn);
             }
@@ -403,7 +402,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private void CreateFileForInterviewActions(InterviewExportedAction? action, string basePath, Guid questionnaireId, long questionnaireVersion)
         {
             var actionFilePath =
-                fileSystemAccessor.CombinePath(basePath, createDataFileName(sqlDataAccessor.InterviewActionsTableName));
+                fileSystemAccessor.CombinePath(basePath, createDataFileName(exportedDataAccessor.InterviewActionsTableName));
 
             using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(actionFilePath, true))
             using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))

@@ -39,12 +39,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public FileBasedDataExportRepositoryWriter(
             IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository,
+            IFileSystemAccessor fileSystemAccessor, 
+            ILogger logger, 
+            IPlainInterviewFileStorage plainFileRepository,
             IReadSideKeyValueStorage<InterviewData> interviewDataWriter,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
-            IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+            IExportViewFactory exportViewFactory, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;

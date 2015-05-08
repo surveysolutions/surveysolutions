@@ -416,6 +416,10 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_without_filter.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewsToDeleteFactoryTests\when_questionnaireId_and_version_provided.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\ReadSideRepositoryDataExportWriterTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_action.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_data_records.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
