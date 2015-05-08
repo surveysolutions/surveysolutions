@@ -12,14 +12,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
     {
         Establish context = () =>
         {
-            var sqlDataAccessor = new Mock<ISqlDataAccessor>();
+            var sqlDataAccessor = new Mock<IExportedDataAccessor>();
             sqlDataAccessor.Setup(x => x.GetAllDataFolder(Moq.It.IsAny<string>())).Returns(string.Empty);
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(false);
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName, "2.txt" });
 
-            sqlToTabDataExportService = CreateSqlToTabDataExportService(sqlDataAccessor: sqlDataAccessor.Object, 
+            sqlToTabDataExportService = CreateSqlToTabDataExportService(exportedDataAccessor: sqlDataAccessor.Object, 
                 fileSystemAccessor: fileSystemAccessor.Object);
         };
 
@@ -39,3 +39,4 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         private static string fileName = "1.tab";
     }
 }
+ 
