@@ -22,7 +22,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public ReadSideRepositoryDataExportWriter(
             IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage, 
-            IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage, IJsonUtils jsonUtils)
+            IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage, 
+            IJsonUtils jsonUtils)
         {
             this.interviewExportedDataStorage = interviewExportedDataStorage;
             this.interviewActionsDataStorage = interviewActionsDataStorage;

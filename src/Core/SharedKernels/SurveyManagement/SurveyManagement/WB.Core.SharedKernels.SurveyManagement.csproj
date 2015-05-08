@@ -157,7 +157,7 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlToTabDataExportService.cs" />
-    <Compile Include="Implementation\Services\Sql\SqlDataAccessor.cs" />
+    <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
@@ -216,7 +216,7 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
-    <Compile Include="Services\Sql\ISqlDataAccessor.cs" />
+    <Compile Include="Services\Sql\IExportedDataAccessor.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
     <Compile Include="Synchronization\IBrokenSyncPackagesStorage.cs" />

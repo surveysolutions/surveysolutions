@@ -9,8 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public InterviewExportedDataMap()
         {
-            Table("InterviewExportedData");
-
             Id(x => x.InterviewId, idMap =>
             {
                 idMap.Generator(Generators.Assigned);

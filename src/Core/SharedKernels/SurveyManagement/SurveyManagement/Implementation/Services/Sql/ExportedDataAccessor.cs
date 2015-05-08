@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
 {
-    internal class SqlDataAccessor : ISqlDataAccessor
+    internal class ExportedDataAccessor : IExportedDataAccessor
     {
         private const string interviewActions = "interview_actions";
         private const string dataFileName = "data.sqlite";
@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly List<string> actionFileColumns;
 
-        public SqlDataAccessor(IFileSystemAccessor fileSystemAccessor)
+        public ExportedDataAccessor(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             actionFileColumns = new List<string> { this.InterviewIdColumnName, "Action", "Originator", "Role", "Date", "Time" };
