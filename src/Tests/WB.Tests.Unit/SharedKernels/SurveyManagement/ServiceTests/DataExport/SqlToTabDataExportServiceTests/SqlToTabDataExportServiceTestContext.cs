@@ -26,12 +26,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
     {
         protected static SqlToTabDataExportService CreateSqlToTabDataExportService(ICsvWriterService csvWriterService = null, 
             QuestionnaireExportStructure questionnaireExportStructure = null,
-            ISqlDataAccessor sqlDataAccessor = null,
+            IExportedDataAccessor exportedDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IDatasetWriterFactory datasetWriterFactory = null)
         {
-            return new SqlToTabDataExportService(Mock.Of<IFileSystemAccessor>(),
+            return new SqlToTabDataExportService(
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
                 Mock.Of<IExportedDataAccessor>(),
