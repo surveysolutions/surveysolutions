@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class RosterCalculationData
+    public class RosterCalculationData
     {
         public RosterCalculationData(List<RosterIdentity> rosterInstancesToAdd,
             Dictionary<decimal, string> titlesForRosterInstancesToAdd)

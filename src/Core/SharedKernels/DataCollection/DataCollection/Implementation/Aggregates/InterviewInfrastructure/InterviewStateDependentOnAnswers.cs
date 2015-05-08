@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class InterviewStateDependentOnAnswers
+    public class InterviewStateDependentOnAnswers
     {
         public InterviewStateDependentOnAnswers()
         {
