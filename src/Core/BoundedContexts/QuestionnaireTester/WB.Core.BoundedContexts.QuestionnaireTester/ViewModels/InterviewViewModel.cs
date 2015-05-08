@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -60,7 +61,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 shouldBeAddedToNavigationStack: false);
         }
 
-        private static BaseInterviewAnswer GetAnswerModel(IStatefullInterview interview, QuestionnaireReferenceModel referenceToQuestion)
+        private static BaseInterviewAnswer GetAnswerModel(IStatefulInterview interview, QuestionnaireReferenceModel referenceToQuestion)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             return interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;

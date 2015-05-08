@@ -2,40 +2,31 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
-    internal class StatefullQuestionnaire : Questionnaire
+    internal class QuestionnaireImportService : IQuestionnaireImportService
     {
-        private static IPlainQuestionnaireRepository QuestionnaireRepository
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
+
+        public QuestionnaireImportService(IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository)
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
+            this.questionnaireModelRepository = questionnaireModelRepository;
         }
 
-        private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
+        public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
-        }
-
-        public StatefullQuestionnaire() { }
-
-        new protected internal void Apply(TemplateImported e)
-        {
-            var questionnaireDocument = e.Source;
             questionnaireDocument.ConnectChildrenWithParent();
-
-            QuestionnaireRepository.StoreQuestionnaire(questionnaireDocument.PublicKey, 1, questionnaireDocument);
-
+            
             var questionnaireModel = new QuestionnaireModel();
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
@@ -51,13 +42,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
                 .ToList();
             questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
-            questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, BuildParentsList);
+            questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, x => this.BuildParentsList(x, questionnaireDocument.PublicKey));
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
 
-            QuestionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
+            questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
         }
 
-        public GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup)
+        private GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup)
         {
             var childrenHierarchy = currentGroup.Children.OfType<Group>()
                 .Select(this.BuildGroupsHierarchy)
@@ -72,12 +63,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
         }
 
-        private List<QuestionnaireReferenceModel> BuildParentsList(Group group)
+        private List<QuestionnaireReferenceModel> BuildParentsList(Group group, Guid questionnaireId)
         {
             var parents = new List<QuestionnaireReferenceModel>();
 
             var parent = group.GetParent() as Group;
-            while (parent != null && parent.PublicKey != EventSourceId )
+            while (parent != null && parent.PublicKey != questionnaireId )
             {
                 var parentPlaceholder = new QuestionnaireReferenceModel
                 {
@@ -237,6 +228,4 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
         }
     }
-
-
 }

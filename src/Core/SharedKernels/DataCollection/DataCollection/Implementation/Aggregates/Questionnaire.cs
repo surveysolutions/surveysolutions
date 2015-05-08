@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
+    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
         #region State
 
