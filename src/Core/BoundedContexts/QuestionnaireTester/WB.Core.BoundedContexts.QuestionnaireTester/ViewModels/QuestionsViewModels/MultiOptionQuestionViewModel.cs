@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -15,14 +20,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly ICommandService commandService;
+        private readonly IPrincipal principal;
+        private Guid interviewId;
+        private Identity questionIdentity;
+        private Guid userId;
 
         public MultiOptionQuestionViewModel(QuestionHeaderViewModel questionHeaderViewModel,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
-            IStatefullInterviewRepository interviewRepository)
+            ICommandService commandService,
+            IStatefullInterviewRepository interviewRepository,
+            IPrincipal principal)
         {
-            this.Options = new ReadOnlyCollection<QuestionOptionViewModel>(new List<QuestionOptionViewModel>());
+            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
             this.Header = questionHeaderViewModel;
             this.questionnaireRepository = questionnaireRepository;
+            this.commandService = commandService;
+            this.principal = principal;
             this.interviewRepository = interviewRepository;
         }
 
@@ -32,25 +46,60 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.Header.Init(interviewId, entityIdentity);
+            
+            this.questionIdentity = entityIdentity;
 
+
+            this.userId = principal.CurrentUserIdentity.UserId;
             var interview = this.interviewRepository.Get(interviewId);
+            this.interviewId = interview.Id;
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+
             var questionModel = (MultiOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
 
-            this.Options = new ReadOnlyCollection<QuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
+
+            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
         }
 
         public QuestionHeaderViewModel Header { get; private set; }
 
-        public ReadOnlyCollection<QuestionOptionViewModel> Options { get; private set; }
+        public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private QuestionOptionViewModel ToViewModel(OptionModel model)
+        private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model)
         {
-            return new QuestionOptionViewModel
+            var result = new MultiOptionQuestionOptionViewModel
             {
                 Value = model.Value,
                 Title = model.Title
             };
+            result.BeforeCheckedChanged += CheckedPropertyChanged;
+
+            return result;
+        }
+
+        void CheckedPropertyChanged(object sender, OptionCheckedArgs args)
+        {
+            var changedOption = (MultiOptionQuestionOptionViewModel) sender;
+
+            var allSelectedOptions = this.Options.Where(x => x.Checked);
+
+            if (args.NewValue)
+            {
+                allSelectedOptions.Concat(changedOption.ToEnumerable());
+            }
+            else
+            {
+                allSelectedOptions = allSelectedOptions.Except(changedOption.ToEnumerable());
+            }
+
+            var command = new AnswerMultipleOptionsQuestionCommand(
+                this.interviewId,
+                this.userId,
+                this.questionIdentity.Id,
+                this.questionIdentity.RosterVector,
+                DateTime.Now,
+                allSelectedOptions.Select(x => x.Value).ToArray());
+            this.commandService.Execute(command);
         }
     }
 }

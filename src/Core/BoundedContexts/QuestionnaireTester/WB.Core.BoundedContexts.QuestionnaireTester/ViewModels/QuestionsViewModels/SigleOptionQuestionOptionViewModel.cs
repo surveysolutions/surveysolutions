@@ -1,6 +1,6 @@
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class QuestionOptionViewModel
+    public class SigleOptionQuestionOptionViewModel
     {
         public decimal Value { get; set; }
         public string Title { get; set; }

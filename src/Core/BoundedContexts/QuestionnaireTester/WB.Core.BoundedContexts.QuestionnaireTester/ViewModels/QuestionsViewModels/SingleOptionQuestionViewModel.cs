@@ -48,8 +48,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public QuestionHeaderViewModel Header { get; private set; }
         public EnablementViewModel Enablement { get; private set; }
-        public IList<QuestionOptionViewModel> Options { get; private set; }
-        private QuestionOptionViewModel selectedOption;
+        public IList<SigleOptionQuestionOptionViewModel> Options { get; private set; }
+        private SigleOptionQuestionOptionViewModel selectedOption;
 
         public void Init(string interviewId, Identity entityIdentity)
         {
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.selectedOption = this.Options.SingleOrDefault(option => option.Value == Monads.Maybe(() => answerModel.Answer));
         }
 
-        public QuestionOptionViewModel SelectedOption
+        public SigleOptionQuestionOptionViewModel SelectedOption
         {
             get { return selectedOption; }
 
@@ -96,9 +96,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private QuestionOptionViewModel ToViewModel(OptionModel model)
+        private SigleOptionQuestionOptionViewModel ToViewModel(OptionModel model)
         {
-            return new QuestionOptionViewModel
+            return new SigleOptionQuestionOptionViewModel
             {
                 Value = model.Value,
                 Title = model.Title,
