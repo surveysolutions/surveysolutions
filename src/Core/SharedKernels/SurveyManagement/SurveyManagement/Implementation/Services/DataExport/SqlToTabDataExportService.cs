@@ -34,6 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IJsonUtils jsonUtils;
+        private readonly ITabFileReader tabReader;
+        private readonly IDatasetWriterFactory datasetWriterFactory;
 
         public SqlToTabDataExportService(
             IFileSystemAccessor fileSystemAccessor,

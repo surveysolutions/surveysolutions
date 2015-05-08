@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] { "r1", "r2" },
                     levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() })));
 
-            var sqlDataAccessor = new Mock<ISqlDataAccessor>();
+            var sqlDataAccessor = new Mock<IExportedDataAccessor>();
             sqlDataAccessor.Setup(x => x.GetAllDataFolder(Moq.It.IsAny<string>())).Returns(string.Empty);
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
             datasetWriterFactory.Setup(x => x.CreateDatasetWriter(ExportDataType.Spss)).Returns(datasetWriter.Object);
 
-            sqlToTabDataExportService = CreateSqlToTabDataExportService(sqlDataAccessor: sqlDataAccessor.Object,
+            sqlToTabDataExportService = CreateSqlToTabDataExportService(exportedDataAccessor: sqlDataAccessor.Object,
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
                 tabFileReader: tabFileReader.Object, datasetWriterFactory: datasetWriterFactory.Object);
         };
