@@ -17,7 +17,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 {
-    public class StatefullInterview : Interview, IStatefullInterview
+    public class StatefulInterview : Interview, IStatefulInterview
     {
         private Dictionary<string, BaseInterviewAnswer> answers;
         private Dictionary<string, InterviewGroup> groups;
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public bool HasErrors { get; set; }
         public bool IsInProgress { get; set; }
 
-        private Dictionary<Type, Func<BaseInterviewAnswer>> QuestionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<BaseInterviewAnswer>>
+        private readonly Dictionary<Type, Func<BaseInterviewAnswer>> questionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<BaseInterviewAnswer>>
         {
             { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswer()},
             { typeof(LinkedSingleOptionQuestionModel), () => new LinkedSingleOptionAnswer()},
@@ -282,13 +282,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Group and question status and validity
 
-        protected override void Apply(AnswersRemoved @event)
+        public virtual void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => this.Answers.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)));
         }
 
-        protected override void Apply(AnswersDeclaredValid @event)
+        public virtual void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -297,7 +297,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        protected override void Apply(AnswersDeclaredInvalid @event)
+        public override void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        protected override void Apply(GroupsDisabled @event)
+        public virtual void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x => {
@@ -315,7 +315,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        protected override void Apply(GroupsEnabled @event)
+        public virtual void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x =>
@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        protected override void Apply(QuestionsDisabled @event)
+        public virtual void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -334,7 +334,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        protected override void Apply(QuestionsEnabled @event)
+        public virtual void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x => {
@@ -347,7 +347,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Roster instances and titles
 
-        protected override void Apply(RosterInstancesTitleChanged @event)
+        public virtual void Apply(RosterInstancesTitleChanged @event)
         {
             base.Apply(@event);
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
@@ -358,7 +358,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        protected override void Apply(RosterInstancesAdded @event)
+        public virtual void Apply(RosterInstancesAdded @event)
         {
             base.Apply(@event);
 
@@ -381,7 +381,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        protected override void Apply(RosterInstancesRemoved @event)
+        public virtual void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
             foreach (var rosterInstance in @event.Instances)
@@ -398,25 +398,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Interview status and validity
 
-        protected override void Apply(InterviewCompleted @event)
+        public virtual void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
             this.IsInProgress = false;
         }
 
-        protected override void Apply(InterviewRestarted @event)
+        public virtual void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
             this.IsInProgress = true;
         }
 
-        protected override void Apply(InterviewDeclaredValid @event)
+        public virtual void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
             this.HasErrors = false;
         }
 
-        protected override void Apply(InterviewDeclaredInvalid @event)
+        public virtual void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
             this.HasErrors = true;
@@ -469,7 +469,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             else
             {
                 var questionModelType = this.QuestionIdToQuestionModelTypeMap[id];
-                var questionActivator = this.QuestionModelTypeToAnswerModelActivatorMap[questionModelType];
+                var questionActivator = this.questionModelTypeToAnswerModelActivatorMap[questionModelType];
                 answer = questionActivator();
                 answer.Id = id;
                 answer.RosterVector = rosterVector;

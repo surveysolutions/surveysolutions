@@ -1,6 +1,7 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
 
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;

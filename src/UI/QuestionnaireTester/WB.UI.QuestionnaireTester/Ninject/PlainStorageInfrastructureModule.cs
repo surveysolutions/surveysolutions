@@ -20,7 +20,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>().InSingletonScope();
             this.Bind<IQuestionnaireRepository>().ToConstant<IQuestionnaireRepository>(this.Kernel.Get<IPlainQuestionnaireRepository>());
-            this.Bind<IStatefullInterviewRepository>().To<StatefullInterviewRepository>().InSingletonScope();
+            
         }
     }
 }

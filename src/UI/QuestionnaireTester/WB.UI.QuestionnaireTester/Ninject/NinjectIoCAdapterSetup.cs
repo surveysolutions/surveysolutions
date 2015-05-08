@@ -1,5 +1,6 @@
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
+using WB.Core.BoundedContexts.QuestionnaireTester;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Android;
@@ -15,6 +16,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
                     plainStorageSettings: new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
                 new ApplicationModule(),
                 new PlainStorageInfrastructureModule(),
+                new TesterBoundedContextModule(),
                 new DataCollectionModule(),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
         }

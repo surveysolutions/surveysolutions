@@ -1,9 +1,9 @@
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
-namespace WB.Core.SharedKernels.DataCollection.Repositories
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Repositories
 {
     public interface IStatefullInterviewRepository
     {
-        IStatefullInterview Get(string interviewId);
+        IStatefulInterview Get(string interviewId);
     }
 }

@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public interface IStatefullInterview
+    public interface IStatefulInterview
     {
         string QuestionnaireId { get; set; }
         long QuestionnaireVersion { get; set; }

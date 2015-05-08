@@ -3,6 +3,7 @@ using System.Linq;
 
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;

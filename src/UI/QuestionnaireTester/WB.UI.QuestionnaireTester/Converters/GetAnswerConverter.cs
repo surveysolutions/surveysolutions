@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Linq;
 using Cirrious.CrossCore.Converters;
 using Microsoft.Practices.ServiceLocation;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
