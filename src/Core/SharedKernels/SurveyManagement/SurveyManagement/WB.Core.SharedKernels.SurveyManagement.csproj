@@ -101,7 +101,11 @@
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Implementation\Services\DataExport\DatasetWriterFactory.cs" />
+    <Compile Include="Implementation\Services\DataExport\IDatasetWriterFactory.cs" />
+    <Compile Include="Implementation\Services\DataExport\ITabFileReader.cs" />
     <Compile Include="Implementation\Services\DataExport\ReadSideRepositoryDataExportWriter.cs" />
+    <Compile Include="Implementation\Services\DataExport\TabFileReader.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="Mappings\InterviewExportedDataMap.cs" />

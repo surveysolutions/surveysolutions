@@ -221,6 +221,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public string ChangeExtension(string path1, string newExtension)
+        {
+            return ZlpPathHelper.ChangeExtension(path1, newExtension);
+        }
+
         private bool IsAllowWriteForIdentityReferance(
             AuthorizationRuleCollection authorizationRuleCollection, List<IdentityReference> identityReferences)
         {
