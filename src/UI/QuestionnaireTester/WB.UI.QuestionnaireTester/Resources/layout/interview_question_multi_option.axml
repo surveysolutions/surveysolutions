@@ -4,23 +4,29 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
+  <MvxLinearLayout
+      style="@style/Interview_InterviewQuestion_Layout"
+      local:MvxBind="Enabled Enablement.Enabled">
+    <include
+        layout="@layout/interview_question__header" />
     <MvxLinearLayout
-        style="@style/Interview_InterviewQuestion_Layout"
-        local:MvxBind="Enabled Enablement.Enabled">
-        <include
-            layout="@layout/interview_question__header" />
-        <MvxLinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            local:MvxBind="ItemsSource Options"
-            local:MvxItemTemplate="@layout/interview_question_multi_option_item" />
-          
-        <include
-            layout="@layout/interview_question__errors" />
-        <include
-            layout="@layout/interview_question__comments" />
+      android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/active_question_background">
+      <MvxLinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        local:MvxBind="ItemsSource Options"
+        local:MvxItemTemplate="@layout/interview_question_multi_option_item" />
     </MvxLinearLayout>
-    <View
-        style="@style/InterviewEntity_Divider" />
+
+    <include
+        layout="@layout/interview_question__errors" />
+    <include
+        layout="@layout/interview_question__comments" />
+  </MvxLinearLayout>
+  <View
+      style="@style/InterviewEntity_Divider" />
 </MvxLinearLayout>

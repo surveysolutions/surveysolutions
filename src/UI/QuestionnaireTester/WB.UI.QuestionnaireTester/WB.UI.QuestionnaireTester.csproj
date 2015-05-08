@@ -327,6 +327,7 @@
     <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
     <AndroidResource Include="Resources\drawable\question_option_background.xml" />
     <AndroidResource Include="Resources\drawable\checkbox_picker_color.xml" />
+    <AndroidResource Include="Resources\drawable\active_question_background.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -358,7 +359,7 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__errors.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__comments.axml">
       <SubType>AndroidResource</SubType>

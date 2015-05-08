@@ -83,4 +83,9 @@
     <item name="android:textColor">@color/errorTextColor</item>
   </style>
 
+  <style name="Interview_MultiOption_Question_CheckBox">
+    <item name="android:background">#ffffff</item>
+    <item name="android:layout_marginTop">4.5dp</item>
+    <item name="android:layout_marginBottom">4.5dp</item>
+  </style>
 </resources>
