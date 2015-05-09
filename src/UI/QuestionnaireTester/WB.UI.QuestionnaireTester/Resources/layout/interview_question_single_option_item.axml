@@ -8,5 +8,6 @@
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
     android:paddingLeft="0dp"
+    android:textColor="@drawable/question_option_text_color"
     android:background="@drawable/question_option_background"
     local:MvxBind="Text Title; Checked Selected; Bold Selected" />
