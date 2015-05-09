@@ -10,10 +10,7 @@
     <include
         layout="@layout/interview_question__header" />
     <MvxLinearLayout
-      android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/active_question_background">
+        style="@style/Interview_AnswerBlock">
       <MvxLinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

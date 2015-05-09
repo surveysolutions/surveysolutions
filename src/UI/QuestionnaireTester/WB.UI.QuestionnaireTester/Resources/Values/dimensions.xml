@@ -5,7 +5,7 @@
   <dimen name="margin_Interview_LeftSide">72dp</dimen>
   <dimen name="margin_Interview_RightSide">72dp</dimen>
   <dimen name="margin_Interview_Top">16dp</dimen>
-  <dimen name="margin_Interview_Bottom">36dp</dimen>
+  <dimen name="margin_Interview_Bottom">16dp</dimen>
 
   <dimen name="height_PQ_QuestionnaireTitleHoler">240dp</dimen>
   <dimen name="height_PQ_StartButtonHoler">110dp</dimen>

@@ -9,18 +9,29 @@
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">vertical</item>
-  </style>  
+  </style>
+
+  <style name="Interview_AnswerBlock">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_horizontal</item>
+    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_marginBottom">16dp</item>
+    <item name="android:background">@drawable/active_question_background</item>
+  </style>
 
   <style name="InterviewEntity_BasicFont">
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/converted_textsize_18pt</item>
-  </style>  
+  </style>
 
   <style name="InterviewEntity_Title" parent="InterviewEntity_BasicFont">
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">#3F3F3F</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_marginBottom">10dp</item>
     <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
     <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
   </style>
@@ -45,10 +56,11 @@
   </style>
 
   <style name="Interview_TextQuestion_Editor" parent="InterviewEntity_BasicFont">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">#3f3f3f</item>
+    <item name="android:textColorHint">#b2b2b2</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
-    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
   </style>
 
   <style name="Interview_OptionsQuestion_Option" parent="InterviewEntity_BasicFont">
@@ -66,6 +78,7 @@
   <style name="InterviewEntity_Divider" >
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">1dp</item>
+    <item name="android:layout_margin">0dp</item>
     <item name="android:background">#dadada</item>
   </style>  
   

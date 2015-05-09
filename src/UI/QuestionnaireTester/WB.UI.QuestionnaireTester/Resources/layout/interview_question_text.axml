@@ -8,9 +8,13 @@
         style="@style/Interview_InterviewQuestion_Layout">
         <include
             layout="@layout/interview_question__header" />
-        <EditText
-            style="@style/Interview_TextQuestion_Editor"
-            local:MvxBind="Text Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); ValueChange ValueChangeCommand;" />
+        <MvxLinearLayout
+            style="@style/Interview_AnswerBlock"
+            local:MvxBind="Visible Enablement.Enabled">
+            <EditText
+                style="@style/Interview_TextQuestion_Editor"
+                local:MvxBind="Text Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); ValueChange ValueChangeCommand;" />
+        </MvxLinearLayout>
         <include
             layout="@layout/interview_question__errors" />
         <include
