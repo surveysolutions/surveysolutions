@@ -8,14 +8,14 @@
   </solid>
 
   <padding
-      android:left="16dp"
-      android:top="11.5dp"
-      android:right="16dp"
-      android:bottom="11.5dp">
+      android:left="14dp"
+      android:top="14dp"
+      android:right="14dp"
+      android:bottom="14dp">
   </padding>
 
   <corners
-      android:radius="11dp">
+      android:radius="8dp">
   </corners>
 
 </shape>

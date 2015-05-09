@@ -5,16 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <MvxLinearLayout
-        style="@style/Interview_InterviewQuestion_Layout"
-        local:MvxBind="Enabled Enablement.Enabled">
+        style="@style/Interview_InterviewQuestion_Layout">
         <include
             layout="@layout/interview_question__header" />
         <MvxLinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            local:MvxItemTemplate="@layout/interview_question_single_option_item"
-            local:MvxBind="ItemsSource Options" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/active_question_background"
+            local:MvxBind="Visible Enablement.Enabled">
+            <MvxLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                local:MvxItemTemplate="@layout/interview_question_single_option_item"
+                local:MvxBind="ItemsSource Options" />
+        </MvxLinearLayout>
         <include
             layout="@layout/interview_question__errors" />
         <include
