@@ -9,4 +9,4 @@
     android:layout_marginRight="0dp"
     android:paddingLeft="0dp"
     android:background="@drawable/question_option_background"
-    local:MvxBind="Text Title; Checked Selected" />
+    local:MvxBind="Text Title; Checked Selected; Bold Selected" />
