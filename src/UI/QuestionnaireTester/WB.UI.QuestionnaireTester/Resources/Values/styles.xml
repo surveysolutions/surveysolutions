@@ -23,8 +23,8 @@
 
   <style name="ToolbarTitle" parent="Theme.Light.Base">
     <item name="android:textColor">@color/colorToolbarText</item>
-    <item name="android:fontFamily">sans-serif-medium</item>
-    <item name="android:textSize">18dp</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/converted_textsize_20pt</item>
     <item name="android:layout_centerVertical">true</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
@@ -94,7 +94,7 @@
   <style name="Interview_PrefilledQuestion_Question" parent="Theme.Light.Base">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:textSize">12dp</item>
+    <item name="android:textSize">@dimen/converted_textsize_18pt</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">#FF747474</item>
   </style>
@@ -103,7 +103,7 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:textSize">12dp</item>
+    <item name="android:textSize">@dimen/converted_textsize_18pt</item>
     <item name="android:layout_marginLeft">10dp</item>
   </style>
 

@@ -241,7 +241,7 @@
     <AndroidResource Include="Resources\values\themes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\values\dimentions.xml">
+    <AndroidResource Include="Resources\values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
