@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged
     {
         public string Instruction { get; set; }
-        public bool HasInstruction { get; set; }
         private string title;
         public string Title
         {
@@ -34,7 +33,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.Title = questionModel.Title;
             this.Instruction = questionModel.Instructions;
-            this.HasInstruction = !string.IsNullOrEmpty(questionModel.Instructions);
         }
 
         public QuestionHeaderViewModel(

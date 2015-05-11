@@ -300,4 +300,7 @@
   <data name="TextQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода текста</value>
   </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Нажмите для ввода целого числа</value>
+  </data>
 </root>

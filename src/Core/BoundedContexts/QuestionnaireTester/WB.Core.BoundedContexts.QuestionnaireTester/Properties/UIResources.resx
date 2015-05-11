@@ -300,4 +300,7 @@
   <data name="TextQuestion_Hint" xml:space="preserve">
     <value>Tap to enter text</value>
   </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter integer number</value>
+  </data>
 </root>
