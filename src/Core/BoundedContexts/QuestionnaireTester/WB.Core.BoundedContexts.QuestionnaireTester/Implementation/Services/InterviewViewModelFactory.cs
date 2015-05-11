@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             new Dictionary<Type, Func<IInterviewEntityViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
+                { typeof(IntegerNumericQuestionModel), Load<IntegerQuestionViewModel> },
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
