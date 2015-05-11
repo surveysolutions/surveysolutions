@@ -3,13 +3,11 @@ using System.Globalization;
 using System.Linq;
 using Cirrious.CrossCore.Converters;
 using Microsoft.Practices.ServiceLocation;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.QuestionnaireTester.Converters
 {
@@ -34,7 +32,7 @@ namespace WB.UI.QuestionnaireTester.Converters
             {
                 TypeSwitch.Do(value, 
                     TypeSwitch.Case<MaskedTextAnswer>((maskedTextAnswerModel)=>answerAsString = maskedTextAnswerModel.Answer),
-                    TypeSwitch.Case<IntegerNumericAnswer>((integerAnswerModel)=>answerAsString = integerAnswerModel.Answer.ToString(culture)),
+                    TypeSwitch.Case<IntegerNumericAnswer>((integerAnswerModel) => answerAsString = GetAnswerOnIntegerQuestionAsString(integerAnswerModel, culture)),
                     TypeSwitch.Case<RealNumericAnswer>((realAnswerModel)=>answerAsString = realAnswerModel.Answer.ToString(culture)),
                     TypeSwitch.Case<DateTimeAnswer>((dateAnswerModel)=>answerAsString = dateAnswerModel.Answer.ToString("d", culture)),
                     TypeSwitch.Case<SingleOptionAnswer>((singleOptionAnswerModel) => answerAsString = GetAnswerOnSingleOptionQuestionAsString(interviewId, singleOptionAnswerModel)),
@@ -48,6 +46,11 @@ namespace WB.UI.QuestionnaireTester.Converters
         {
             var interview = interviewRepository.Get(interviewId);
             return questionnaireRepository.GetById(interview.QuestionnaireId);
+        }
+
+        private static string GetAnswerOnIntegerQuestionAsString(IntegerNumericAnswer integerAnswer, CultureInfo culture)
+        {
+            return integerAnswer.Answer.HasValue ? integerAnswer.Answer.Value.ToString(culture) : string.Empty;
         }
 
         private static string GetAnswerOnSingleOptionQuestionAsString(string interviewId, SingleOptionAnswer singleOptionAnswer)
