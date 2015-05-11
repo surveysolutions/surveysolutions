@@ -254,6 +254,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     return FileBasedDataExportRepositoryWriterMessages.Supervisor;
                 case UserRoles.Headquarter:
                     return FileBasedDataExportRepositoryWriterMessages.Headquarter;
+                case UserRoles.Administrator:
+                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }
