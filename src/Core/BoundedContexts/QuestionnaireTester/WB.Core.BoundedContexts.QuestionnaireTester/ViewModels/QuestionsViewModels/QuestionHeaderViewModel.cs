@@ -20,6 +20,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { title = value; RaisePropertyChanged(); }
         }
 
+        public EnablementViewModel Enablement { get; set; }
+
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
 
