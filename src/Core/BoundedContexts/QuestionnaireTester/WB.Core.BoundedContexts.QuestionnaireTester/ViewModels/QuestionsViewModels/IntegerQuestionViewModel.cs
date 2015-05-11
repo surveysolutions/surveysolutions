@@ -85,8 +85,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { this.maxValue = value; RaisePropertyChanged(); }
         }
 
-        private int answer;
-        public int Answer
+        private int? answer;
+        public int? Answer
         {
             get { return answer; }
             private set { answer = value; RaisePropertyChanged(); }
@@ -100,6 +100,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void SendAnswerTextQuestionCommand()
         {
+            if (!Answer.HasValue) return;
+
             try
             {
                 commandService.Execute(new AnswerNumericIntegerQuestionCommand(
@@ -108,7 +110,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     questionId: this.entityIdentity.Id,
                     rosterVector: this.entityIdentity.RosterVector,
                     answerTime: DateTime.UtcNow,
-                    answer: Answer
+                    answer: Answer.Value
                     ));
             }
             catch (Exception)

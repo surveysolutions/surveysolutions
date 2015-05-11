@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
     public class IntegerNumericAnswer : BaseInterviewAnswer
     {
-        public int Answer { get; set; }
+        public int? Answer { get; set; }
 
         public IntegerNumericAnswer() { }
         public IntegerNumericAnswer(Guid id, decimal[] rosterVector)
