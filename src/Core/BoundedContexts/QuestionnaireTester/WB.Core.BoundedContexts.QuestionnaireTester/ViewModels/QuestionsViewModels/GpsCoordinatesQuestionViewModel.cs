@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public QuestionHeaderViewModel Header { get; set; }
+        public EnablementViewModel Enablement { get; private set; }
 
         private bool isInProgress;
         public bool IsInProgress
@@ -51,7 +52,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
-            QuestionHeaderViewModel questionHeaderViewModel)
+            QuestionHeaderViewModel questionHeaderViewModel,
+            EnablementViewModel enablementViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -60,6 +62,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.geoLocationWatcher = geoLocationWatcher;
 
             this.Header = questionHeaderViewModel;
+            this.Enablement = enablementViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -73,6 +76,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewId = interview.Id;
 
             this.Header.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, entityIdentity);
+
+            this.Header.Enablement = Enablement;
 
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel != null)
