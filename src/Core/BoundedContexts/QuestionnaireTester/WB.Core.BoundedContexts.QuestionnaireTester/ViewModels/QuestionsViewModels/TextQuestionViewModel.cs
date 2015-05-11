@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.Mask = textQuestionModel.Mask;
             }
 
-            var answerModel = interview.GetTextAnswerModel(entityIdentity);
+            var answerModel = interview.GetTextAnswer(entityIdentity);
             if (answerModel != null)
             {
                 this.Answer = answerModel.Answer;

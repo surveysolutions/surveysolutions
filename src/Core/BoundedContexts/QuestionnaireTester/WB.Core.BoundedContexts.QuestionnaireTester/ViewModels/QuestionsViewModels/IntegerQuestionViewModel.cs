@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
-            var answerModel = interview.GetIntegerNumericAnswerModel(entityIdentity);
+            var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
             this.Answer = Monads.Maybe(() => answerModel.Answer);
             this.MaxValue = Monads.Maybe(() => questionModel.MaxValue);
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 return;
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetIntegerNumericAnswerModel(entityIdentity);
+            var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
             if (answerModel != null)
             {
                 this.Answer = answerModel.Answer;
