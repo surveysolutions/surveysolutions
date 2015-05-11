@@ -6,7 +6,7 @@
     android:layout_height="fill_parent">
     <TextView
         style="@style/InterviewEntity_Title"
-        local:MvxBind="Text Header.Title" />
+        local:MvxBind="Text Header.Title; Enabled Enablement.Enabled" />
     <MvxLinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"

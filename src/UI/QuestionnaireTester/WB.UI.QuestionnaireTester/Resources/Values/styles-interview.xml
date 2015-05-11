@@ -27,7 +27,7 @@
 
   <style name="InterviewEntity_Title" parent="InterviewEntity_BasicFont">
     <item name="android:textStyle">bold</item>
-    <item name="android:textColor">#3F3F3F</item>
+    <item name="android:textColor">@color/question_title_text</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">10dp</item>
