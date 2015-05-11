@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    style="@style/Interview_QuestionWithDivider"
+    local:MvxBind="Enabled Enablement.Enabled">
     <MvxLinearLayout
-        style="@style/Interview_InterviewQuestion_Layout">
+        style="@style/Interview_Question">
         <include
             layout="@layout/interview_question__header" />
         <MvxLinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:background="@drawable/theme_blue_light_btn_default_disabled_holo_light"
-            android:orientation="vertical">
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:stretchColumns="1">
-                <TableRow>
-                    <com.mapbox.mapboxsdk.views.MapView
-                        android:layout_column="1"
-                        android:layout_width="fill_parent"
-                        android:layout_height="200dp"
-                        local:accessToken="sk.eyJ1IjoibGl0dmlucm9tYW4iLCJhIjoiNHVuMTBLYyJ9.P8ThV2zKFREm-enK24dyUA" />
-                    <TextView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/ic_action_cancel"
-                        android:gravity="right"
-                        local:MvxBind="Click RemoveAnswerCommand" />
-                </TableRow>
-            </TableLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                local:MvxBind="Text Coordinates" />
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_Gps_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
+            style="@style/Interview_Question_Body"
+            local:MvxBind="Visible Enablement.Enabled">
+            <MvxLinearLayout
+                style="@style/Interview_Question_Answer">
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:stretchColumns="1">
+                    <TableRow>
+                        <com.mapbox.mapboxsdk.views.MapView
+                            android:layout_column="1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="200dp"
+                            local:accessToken="sk.eyJ1IjoibGl0dmlucm9tYW4iLCJhIjoiNHVuMTBLYyJ9.P8ThV2zKFREm-enK24dyUA" />
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/ic_action_cancel"
+                            android:gravity="right"
+                            local:MvxBind="Click RemoveAnswerCommand" />
+                    </TableRow>
+                </TableLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    local:MvxBind="Text Coordinates" />
+                <Button
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_Gps_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
+            </MvxLinearLayout>
+            <include
+                layout="@layout/interview_question__errors" />
+            <include
+                layout="@layout/interview_question__comments" />
         </MvxLinearLayout>
-        <include
-            layout="@layout/interview_question__errors" />
-        <include
-            layout="@layout/interview_question__comments" />
     </MvxLinearLayout>
     <View
-        style="@style/InterviewEntity_Divider" />
+        style="@style/Interview_Question_Divider" />
 </MvxLinearLayout>

@@ -29,6 +29,9 @@
   <style name="Interview_Question_Answer" parent="Interview_AnswerBlock">
   </style>
 
+  <style name="Interview_Question_Answer_Editor" parent="Interview_TextQuestion_Editor">
+  </style>
+
   <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout">
   </style>
 
