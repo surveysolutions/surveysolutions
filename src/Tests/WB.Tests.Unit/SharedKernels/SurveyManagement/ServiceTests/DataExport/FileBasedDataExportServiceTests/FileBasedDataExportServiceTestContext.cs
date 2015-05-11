@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                             (interviewDataExportView ??
                                 new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
-                Mock.Of<IExportedDataAccessor>());
+                Mock.Of<IExportedDataAccessor>(_ => _.GetAllDataFolder(Moq.It.IsAny<string>()) == "AllData" && _.GetApprovedDataFolder(Moq.It.IsAny<string>()) == "ApprovedData"));
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,
