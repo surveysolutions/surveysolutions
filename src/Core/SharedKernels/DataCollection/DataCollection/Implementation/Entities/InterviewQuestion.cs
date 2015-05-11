@@ -20,14 +20,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
     public abstract class BaseInterviewAnswer
     {
-        protected BaseInterviewAnswer() { }
+        protected BaseInterviewAnswer()
+        {
+            this.QuestionState = QuestionState.Valid | QuestionState.Enabled;
+        }
 
         protected BaseInterviewAnswer(Guid id, decimal[] rosterVector)
             : this()
         {
             this.Id = id;
             this.RosterVector = rosterVector;
-            this.QuestionState = QuestionState.Valid | QuestionState.Enabled;
         }
 
         public Guid Id { get; set; }
