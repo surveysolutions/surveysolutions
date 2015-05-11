@@ -328,6 +328,16 @@
     <AndroidResource Include="Resources\drawable\question_option_background.xml" />
     <AndroidResource Include="Resources\drawable\question_option_text_color.xml" />
     <AndroidResource Include="Resources\drawable\active_question_background.xml" />
+    <AndroidResource Include="Resources\drawable\question_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_background_disabled.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_background_enabled.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_background_disabled_tile.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
