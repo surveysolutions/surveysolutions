@@ -27,7 +27,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid userId;
 
-        public MultiOptionQuestionViewModel(QuestionHeaderViewModel questionHeaderViewModel,
+        public MultiOptionQuestionViewModel(
+            QuestionHeaderViewModel questionHeaderViewModel,
+            EnablementViewModel enablementViewModel,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             ICommandService commandService,
             IStatefullInterviewRepository interviewRepository,
@@ -35,6 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
             this.Header = questionHeaderViewModel;
+            this.Enablement = enablementViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
             this.principal = principal;
@@ -47,6 +50,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.Header.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, entityIdentity);
+
+            this.Header.Enablement = Enablement;
             
             this.questionIdentity = entityIdentity;
 
@@ -63,6 +69,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         public QuestionHeaderViewModel Header { get; private set; }
+
+        public EnablementViewModel Enablement { get; private set; }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
