@@ -215,6 +215,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionModel.IsMandatory = question.Mandatory;
             questionModel.IsPrefilled = question.Featured;
             questionModel.ValidationMessage = question.ValidationMessage;
+            questionModel.Instructions = question.Instructions;
 
             return questionModel;
         }
