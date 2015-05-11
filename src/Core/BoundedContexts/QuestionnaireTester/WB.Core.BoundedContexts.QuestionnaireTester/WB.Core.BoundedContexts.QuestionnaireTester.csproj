@@ -81,6 +81,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\GpsCoordinatesQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\IntegerQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionQuestionOptionViewModel.cs" />
