@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Interview_QuestionWithDivider" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:background">@drawable/question_background</item>
+  </style>
+
+  <style name="Interview_Question" parent="Interview_InterviewQuestion_Layout">
+  </style>
+
+  <style name="Interview_Question_Header" parent="VerticalFullWidthWrappingLayout">
+  </style>
+
+  <style name="Interview_Question_Title" parent="InterviewEntity_Title">
+  </style>
+
+  <style name="Interview_Question_Instruction" parent="VerticalFullWidthWrappingLayout">
+  </style>
+
+  <style name="Interview_Question_Instruction_Title" parent="InterviewEntity_Instruction_Label">
+  </style>
+
+  <style name="Interview_Question_Instruction_Details" parent="InterviewEntity_Instruction">
+  </style>
+
+  <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
+  </style>
+
+  <style name="Interview_Question_Answer" parent="Interview_AnswerBlock">
+  </style>
+
+  <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout">
+  </style>
+
+  <style name="Interview_Question_Answer_Option" parent="Interview_OptionsQuestion_Option">
+  </style>
+
+  <style name="Interview_Question_Errors" parent="Interview_InterviewQuestion_Error_Layout">
+  </style>
+
+  <style name="Interview_Question_Errors_Title" parent="Interview_InterviewQuestion_Error_Caption">
+  </style>
+
+  <style name="Interview_Question_Errors_Details" parent="Interview_InterviewQuestion_Error_Message">
+  </style>
+
+  <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">
+  </style>
+
+  <style name="Interview_Question_Divider" parent="InterviewEntity_Divider">
+  </style>
+
+</resources>
