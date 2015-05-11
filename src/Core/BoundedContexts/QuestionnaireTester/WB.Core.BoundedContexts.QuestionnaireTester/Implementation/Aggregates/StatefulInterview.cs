@@ -69,67 +69,67 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswer()}
         };
 
-        public GpsCoordinatesAnswer GetGpsCoordinatesAnswerModel(Identity identity)
+        public GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity)
         {
-            return this.GetQuestionModel<GpsCoordinatesAnswer>(identity);
+            return this.GetQuestionAnswer<GpsCoordinatesAnswer>(identity);
         }
 
-        public DateTimeAnswer GetDateTimeAnswerModel(Identity identity)
+        public DateTimeAnswer GetDateTimeAnswer(Identity identity)
         {
-            return this.GetQuestionModel<DateTimeAnswer>(identity);
+            return this.GetQuestionAnswer<DateTimeAnswer>(identity);
         }
 
-        public MultimediaAnswer GetMultimediaAnswerModel(Identity identity)
+        public MultimediaAnswer GetMultimediaAnswer(Identity identity)
         {
-            return this.GetQuestionModel<MultimediaAnswer>(identity);
+            return this.GetQuestionAnswer<MultimediaAnswer>(identity);
         }
 
-        public QrBarcodeAnswer GetQrBarcodeAnswerModel(Identity identity)
+        public QrBarcodeAnswer GetQrBarcodeAnswer(Identity identity)
         {
-            return this.GetQuestionModel<QrBarcodeAnswer>(identity);
+            return this.GetQuestionAnswer<QrBarcodeAnswer>(identity);
         }
 
-        public TextListAnswer GetTextListAnswerModel(Identity identity)
+        public TextListAnswer GetTextListAnswer(Identity identity)
         {
-            return this.GetQuestionModel<TextListAnswer>(identity);
+            return this.GetQuestionAnswer<TextListAnswer>(identity);
         }
 
-        public LinkedSingleOptionAnswer GetLinkedSingleOptionAnswerModel(Identity identity)
+        public LinkedSingleOptionAnswer GetLinkedSingleOptionAnswer(Identity identity)
         {
-            return this.GetQuestionModel<LinkedSingleOptionAnswer>(identity);
+            return this.GetQuestionAnswer<LinkedSingleOptionAnswer>(identity);
         }
 
-        public MultiOptionAnswer GetMultiOptionAnswerModel(Identity identity)
+        public MultiOptionAnswer GetMultiOptionAnswer(Identity identity)
         {
-            return this.GetQuestionModel<MultiOptionAnswer>(identity);
+            return this.GetQuestionAnswer<MultiOptionAnswer>(identity);
         }
 
-        public LinkedMultiOptionAnswer GetLinkedMultiOptionAnswerModel(Identity identity)
+        public LinkedMultiOptionAnswer GetLinkedMultiOptionAnswer(Identity identity)
         {
-            return this.GetQuestionModel<LinkedMultiOptionAnswer>(identity);
+            return this.GetQuestionAnswer<LinkedMultiOptionAnswer>(identity);
         }
 
-        public IntegerNumericAnswer GetIntegerNumericAnswerModel(Identity identity)
+        public IntegerNumericAnswer GetIntegerNumericAnswer(Identity identity)
         {
-            return this.GetQuestionModel<IntegerNumericAnswer>(identity);
+            return this.GetQuestionAnswer<IntegerNumericAnswer>(identity);
         }
 
-        public RealNumericAnswer GetRealNumericAnswerModel(Identity identity)
+        public RealNumericAnswer GetRealNumericAnswer(Identity identity)
         {
-            return this.GetQuestionModel<RealNumericAnswer>(identity);
+            return this.GetQuestionAnswer<RealNumericAnswer>(identity);
         }
 
-        public MaskedTextAnswer GetTextAnswerModel(Identity identity)
+        public MaskedTextAnswer GetTextAnswer(Identity identity)
         {
-            return this.GetQuestionModel<MaskedTextAnswer>(identity);
+            return this.GetQuestionAnswer<MaskedTextAnswer>(identity);
         }
 
-        public SingleOptionAnswer GetSingleOptionAnswerModel(Identity identity)
+        public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
         {
-            return this.GetQuestionModel<SingleOptionAnswer>(identity);
+            return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
         }
 
-        private T GetQuestionModel<T>(Identity identity) where T : BaseInterviewAnswer
+        private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
         {
             var questionId = ConversionHelper.ConvertIdentityToString(identity);
             if (!this.Answers.ContainsKey(questionId)) return null;
@@ -153,12 +153,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
             if (this.Groups.ContainsKey(entityKey))
             {
-                return !this.Groups[entityKey].IsDisabled;
+                var group = this.Groups[entityKey];
+                return !group.IsDisabled;
             }
 
             if (this.Answers.ContainsKey(entityKey))
             {
-                return !this.Answers[entityKey].IsDisabled();
+                var answer = this.Answers[entityKey];
+                return !answer.IsDisabled();
             }
 
             return true;

@@ -17,29 +17,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         bool HasErrors { get; set; }
         bool IsInProgress { get; set; }
 
-        GpsCoordinatesAnswer GetGpsCoordinatesAnswerModel(Identity identity);
+        GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity);
 
-        DateTimeAnswer GetDateTimeAnswerModel(Identity identity);
+        DateTimeAnswer GetDateTimeAnswer(Identity identity);
 
-        MultimediaAnswer GetMultimediaAnswerModel(Identity identity);
+        MultimediaAnswer GetMultimediaAnswer(Identity identity);
 
-        QrBarcodeAnswer GetQrBarcodeAnswerModel(Identity identity);
+        QrBarcodeAnswer GetQrBarcodeAnswer(Identity identity);
 
-        TextListAnswer GetTextListAnswerModel(Identity identity);
+        TextListAnswer GetTextListAnswer(Identity identity);
 
-        LinkedSingleOptionAnswer GetLinkedSingleOptionAnswerModel(Identity identity);
+        LinkedSingleOptionAnswer GetLinkedSingleOptionAnswer(Identity identity);
 
-        MultiOptionAnswer GetMultiOptionAnswerModel(Identity identity);
+        MultiOptionAnswer GetMultiOptionAnswer(Identity identity);
 
-        LinkedMultiOptionAnswer GetLinkedMultiOptionAnswerModel(Identity identity);
+        LinkedMultiOptionAnswer GetLinkedMultiOptionAnswer(Identity identity);
 
-        IntegerNumericAnswer GetIntegerNumericAnswerModel(Identity identity);
+        IntegerNumericAnswer GetIntegerNumericAnswer(Identity identity);
 
-        RealNumericAnswer GetRealNumericAnswerModel(Identity identity);
+        RealNumericAnswer GetRealNumericAnswer(Identity identity);
 
-        MaskedTextAnswer GetTextAnswerModel(Identity identity);
+        MaskedTextAnswer GetTextAnswer(Identity identity);
 
-        SingleOptionAnswer GetSingleOptionAnswerModel(Identity identity);
+        SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
         
         bool IsValid(Identity identity);
 

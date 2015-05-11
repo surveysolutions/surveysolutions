@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.Header.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetGpsCoordinatesAnswerModel(entityIdentity);
+            var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel != null)
             {
                 this.Answer = new MvxCoordinates()
