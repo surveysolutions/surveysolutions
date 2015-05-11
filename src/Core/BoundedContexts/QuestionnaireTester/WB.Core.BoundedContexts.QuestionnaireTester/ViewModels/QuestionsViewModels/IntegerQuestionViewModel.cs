@@ -3,6 +3,7 @@ using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -48,10 +49,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.Header = questionHeaderViewModel;
-            Validity = validity;
-            Enablement = enablement;
+            this.Validity = validity;
+            this.Enablement = enablement;
         }
-
 
         public void Init(string interviewId, Identity entityIdentity)
         {
@@ -67,7 +67,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Validity.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
-            UpdateSelfFromModel();
+            this.Header.Enablement = Enablement;
+
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var answerModel = interview.GetIntegerNumericAnswerModel(entityIdentity);
+
+            this.Answer = Monads.Maybe(() => answerModel.Answer);
+            this.MaxValue = Monads.Maybe(() => questionModel.MaxValue);
         }
 
         private int? maxValue;
@@ -109,30 +117,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void UpdateSelfFromModel()
-        {
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-
-            var numericQuestionModel = questionnaire.Questions[entityIdentity.Id] as IntegerNumericQuestionModel;
-            if (numericQuestionModel != null)
-            {
-                this.MaxValue = numericQuestionModel.MaxValue;
-            }
-
-            var answerModel = interview.GetIntegerNumericAnswerModel(entityIdentity);
-            if (answerModel != null)
-            {
-                this.Answer = answerModel.Answer;
-            }
-        }
-
         public void Handle(NumericIntegerQuestionAnswered @event)
         {
             if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
                 return;
 
-            UpdateSelfFromModel();
+            var interview = this.interviewRepository.Get(interviewId);
+            var answerModel = interview.GetIntegerNumericAnswerModel(entityIdentity);
+            if (answerModel != null)
+            {
+                this.Answer = answerModel.Answer;
+            }
         }
 
         public void Dispose()
