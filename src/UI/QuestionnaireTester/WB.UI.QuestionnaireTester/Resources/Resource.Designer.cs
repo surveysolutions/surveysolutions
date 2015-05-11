@@ -33,6 +33,12 @@ namespace WB.UI.QuestionnaireTester
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.Infrastructure.Android.Resource.String.AcceptUnsignedSslCertificate = global::WB.UI.QuestionnaireTester.Resource.String.AcceptUnsignedSslCertificate;
+			global::WB.Core.Infrastructure.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
+			global::WB.Core.Infrastructure.Android.Resource.String.BufferSize = global::WB.UI.QuestionnaireTester.Resource.String.BufferSize;
+			global::WB.Core.Infrastructure.Android.Resource.String.DesignerEndpoint = global::WB.UI.QuestionnaireTester.Resource.String.DesignerEndpoint;
+			global::WB.Core.Infrastructure.Android.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.Infrastructure.Android.Resource.String.HttpResponseTimeout = global::WB.UI.QuestionnaireTester.Resource.String.HttpResponseTimeout;
 			global::Xamarin.InsightsCore.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::Xamarin.InsightsCore.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 		}
@@ -1934,11 +1940,23 @@ namespace WB.UI.QuestionnaireTester
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f080014
+			public const int AcceptUnsignedSslCertificate = 2131230740;
+			
 			// aapt resource value: 0x7f080000
 			public const int ApplicationName = 2131230720;
 			
+			// aapt resource value: 0x7f080013
+			public const int BufferSize = 2131230739;
+			
+			// aapt resource value: 0x7f080015
+			public const int DesignerEndpoint = 2131230741;
+			
 			// aapt resource value: 0x7f080011
 			public const int Hello = 2131230737;
+			
+			// aapt resource value: 0x7f080012
+			public const int HttpResponseTimeout = 2131230738;
 			
 			// aapt resource value: 0x7f080001
 			public const int abc_action_bar_home_description = 2131230721;
@@ -1988,20 +2006,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080010
 			public const int abc_toolbar_collapse_description = 2131230736;
 			
+			// aapt resource value: 0x7f08001a
+			public const int library_name = 2131230746;
+			
 			// aapt resource value: 0x7f080016
-			public const int library_name = 2131230742;
+			public const int mapboxAndroidSDKVersion = 2131230742;
 			
-			// aapt resource value: 0x7f080012
-			public const int mapboxAndroidSDKVersion = 2131230738;
+			// aapt resource value: 0x7f080017
+			public const int toolTipAddress = 2131230743;
 			
-			// aapt resource value: 0x7f080013
-			public const int toolTipAddress = 2131230739;
+			// aapt resource value: 0x7f080018
+			public const int toolTipDescription = 2131230744;
 			
-			// aapt resource value: 0x7f080014
-			public const int toolTipDescription = 2131230740;
-			
-			// aapt resource value: 0x7f080015
-			public const int toolTipTitle = 2131230741;
+			// aapt resource value: 0x7f080019
+			public const int toolTipTitle = 2131230745;
 			
 			static String()
 			{
