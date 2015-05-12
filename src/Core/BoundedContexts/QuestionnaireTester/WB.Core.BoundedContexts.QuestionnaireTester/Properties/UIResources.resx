@@ -303,7 +303,4 @@
   <data name="IntegerQuestion_Hint" xml:space="preserve">
     <value>Tap to enter integer number</value>
   </data>
-  <data name="Answer_ExceedsMaxValue_" xml:space="preserve">
-    <value>Answer '{0}' exceeds max value {1}</value>
-  </data>
 </root>
