@@ -301,6 +301,9 @@
     <value>Tap to enter text</value>
   </data>
   <data name="IntegerQuestion_Hint" xml:space="preserve">
-    <value>Tap to enter integer number</value>
+    <value>Tap to enter number</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter number</value>
   </data>
 </root>

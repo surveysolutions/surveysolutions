@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
                 { typeof(IntegerNumericQuestionModel), Load<IntegerQuestionViewModel> },
+                { typeof(RealNumericQuestionModel), Load<RealQuestionViewModel> },
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
