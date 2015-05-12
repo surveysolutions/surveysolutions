@@ -1,6 +1,5 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -12,7 +11,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public decimal Value { get; set; }
         public string Title { get; set; }
-        public EnablementViewModel Enablement { get; set; }
 
         public bool Checked
         {
