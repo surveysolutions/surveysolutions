@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
                     var questionModel = questionnaireModel.Questions[entityIdentity.Id];
                     errorMessageText = questionModel.ValidationMessage;
-                    errorCaptionText = "Answer was saved, but thire is error";
+                    errorCaptionText = "Answer was saved, but there is error";
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 }
                 else
                 {
-                    errorCaptionText = "Internal aaplication error";
+                    errorCaptionText = "Internal application error";
                     errorMessageText = exceptionErrorMessage;
                 }
             }

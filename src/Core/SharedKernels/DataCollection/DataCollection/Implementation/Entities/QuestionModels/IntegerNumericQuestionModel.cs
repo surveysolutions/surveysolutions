@@ -2,6 +2,5 @@
 {
     public class IntegerNumericQuestionModel : BaseQuestionModel
     {
-        public int? MaxValue { get; set; }
     }
 }
