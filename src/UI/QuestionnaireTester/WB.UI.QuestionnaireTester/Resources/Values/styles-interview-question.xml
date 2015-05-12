@@ -27,7 +27,7 @@
 
   <style name="Interview_Question_Instruction_Details" parent="VerticalFullWidthWrappingLayout">
     <item name="android:fontFamily">Arial</item>
-    <item name="android:textStyle">italic</item>
+    <item name="android:textStyle">bold|italic</item>
     <item name="android:textSize">@dimen/converted_textsize_14pt</item>
     <item name="android:textColor">#2a81cb</item>
   </style>

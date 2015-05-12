@@ -6,7 +6,6 @@ using System;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.UI.QuestionnaireTester.Views.CustomControls;
 
-
 namespace WB.UI.QuestionnaireTester.Views.Adapters
 {
     public class InterviewEntityAdapter : MvxRecyclerViewAdapter
@@ -21,6 +20,7 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
+            {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
             {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option}
@@ -48,4 +48,3 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
         }
     }
 }
-

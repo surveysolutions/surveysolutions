@@ -1876,40 +1876,43 @@ namespace WB.UI.QuestionnaireTester
 			public const int interview_question_multi_option_item = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int interview_question_single_option = 2130903075;
+			public const int interview_question_real = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int interview_question_single_option_item = 2130903076;
+			public const int interview_question_single_option = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int interview_question_text = 2130903077;
+			public const int interview_question_single_option_item = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int interview_static_text = 2130903078;
+			public const int interview_question_text = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int login = 2130903079;
+			public const int interview_static_text = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int my_questionnaire_list_item = 2130903080;
+			public const int login = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int prefilled_questions = 2130903081;
+			public const int my_questionnaire_list_item = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int public_questionnaire_list_item = 2130903082;
+			public const int prefilled_questions = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int search_questionnaires = 2130903083;
+			public const int public_questionnaire_list_item = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int splash = 2130903084;
+			public const int search_questionnaires = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int support_simple_spinner_dropdown_item = 2130903085;
+			public const int splash = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int tooltip = 2130903086;
+			public const int support_simple_spinner_dropdown_item = 2130903086;
+			
+			// aapt resource value: 0x7f03002f
+			public const int tooltip = 2130903087;
 			
 			static Layout()
 			{

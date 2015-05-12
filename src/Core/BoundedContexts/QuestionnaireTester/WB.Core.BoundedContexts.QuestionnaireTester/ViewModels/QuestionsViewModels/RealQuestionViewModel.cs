@@ -14,9 +14,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class RealQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<NumericIntegerQuestionAnswered>,
+        ILiteEventBusEventHandler<NumericRealQuestionAnswered>,
         IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public ValidityViewModel Validity { get; private set; }
         public EnablementViewModel Enablement { get; private set; }
 
-        public IntegerQuestionViewModel(
+        public RealQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
             ICommandService commandService, 
             IPrincipal principal,
@@ -67,13 +67,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Enablement.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
+            var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
             this.Answer = Monads.Maybe(() => answerModel.Answer);
         }
 
-        private int? answer;
-        public int? Answer
+        private decimal? answer;
+        public decimal? Answer
         {
             get { return answer; }
             private set { answer = value; RaisePropertyChanged(); }
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                commandService.Execute(new AnswerNumericIntegerQuestionCommand(
+                commandService.Execute(new AnswerNumericRealQuestionCommand(
                     interviewId: Guid.Parse(interviewId),
                     userId: principal.CurrentUserIdentity.UserId,
                     questionId: this.entityIdentity.Id,
@@ -107,13 +107,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        public void Handle(NumericIntegerQuestionAnswered @event)
+        public void Handle(NumericRealQuestionAnswered @event)
         {
             if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
                 return;
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
+            var answerModel = interview.GetRealNumericAnswer(entityIdentity);
             this.Answer = Monads.Maybe(() => answerModel.Answer);
         }
 
