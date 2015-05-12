@@ -69,7 +69,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             var viewModels = groupWithoutNestedChildren
                 .Children
-                .Select(child => CreateInterviewItemViewModel(entityId: child.Id, rosterVector: groupIdentity.RosterVector, entityModelType: child.ModelType, interviewId: interviewId))
+                .Select(child => CreateInterviewEntityViewModel(
+                    entityId: child.Id, 
+                    rosterVector: groupIdentity.RosterVector, 
+                    entityModelType: child.ModelType, 
+                    interviewId: interviewId))
                 .ToList();
 
             return viewModels;
@@ -81,11 +85,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
             return questionnaire.PrefilledQuestionsIds.Select(
-                    question => CreateInterviewItemViewModel(entityId: question.Id, rosterVector: new decimal[0],
-                                                             entityModelType: question.ModelType, interviewId: interviewId)).ToList();
+                question => CreateInterviewEntityViewModel(
+                    entityId: question.Id,
+                    rosterVector: new decimal[0],
+                    entityModelType: question.ModelType,
+                    interviewId: interviewId)).ToList();
         }
 
-        private static IInterviewEntityViewModel CreateInterviewItemViewModel(
+        private static IInterviewEntityViewModel CreateInterviewEntityViewModel(
             Guid entityId,
             decimal[] rosterVector,
             Type entityModelType,
