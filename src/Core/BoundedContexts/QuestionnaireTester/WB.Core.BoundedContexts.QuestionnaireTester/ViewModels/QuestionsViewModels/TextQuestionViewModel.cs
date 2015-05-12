@@ -18,8 +18,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<TextQuestionAnswered>,
-        IDisposable
+        ILiteEventBusEventHandler<TextQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
@@ -86,7 +85,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { answer = value; RaisePropertyChanged(); }
         }
 
+        private bool isAnswered;
+        public bool IsAnswered
+        {
+            get { return isAnswered; }
+            set { isAnswered = value; RaisePropertyChanged(); }
+        }
+
         private IMvxCommand valueChangeCommand;
+
         public IMvxCommand ValueChangeCommand
         {
             get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
@@ -104,10 +111,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answerTime: DateTime.UtcNow,
                     answer: Answer
                     ));
+
+                Validity.RemoveExceptionFlag();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Validity.MarkAsError("You've entered invalid answer.");
+                Validity.AddExceptionFlag(ex);
             }
         }
 
@@ -128,6 +137,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.Answer = answerModel.Answer;
             }
+
+            IsAnswered = interview.WasAnswered(entityIdentity);
         }
 
         public void Handle(TextQuestionAnswered @event)
@@ -136,11 +147,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 return;
 
             UpdateSelfFromModel();
-        }
-
-        public void Dispose()
-        {
-            liteEventRegistry.Unsubscribe(this);
         }
     }
 }

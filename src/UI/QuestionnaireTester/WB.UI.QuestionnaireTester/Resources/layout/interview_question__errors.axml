@@ -5,7 +5,7 @@
     local:MvxBind="Visible Validity.IsInvalid">
     <TextView
         style="@style/Interview_Question_Errors_Title"
-        android:text="error" />
+        local:MvxBind="Text Validity.ErrorCaption" />
     <TextView
         style="@style/Interview_Question_Errors_Details"
         local:MvxBind="Text Validity.ErrorMessage" />

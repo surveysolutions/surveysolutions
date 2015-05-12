@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventBusEventHandler<AnswersDeclaredValid>,
-        ILiteEventBusEventHandler<AnswersDeclaredInvalid>,
-        IDisposable
+        ILiteEventBusEventHandler<AnswersDeclaredInvalid>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefullInterviewRepository interviewRepository;
@@ -48,8 +44,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             liteEventRegistry.Subscribe(this);
 
-            this.UpdateSelfFromModel();
+            this.UpdateValidState();
         }
+
+        private Exception exception;
+
+        private string exceptionErrorMessage = "You've entered invalid answer.";
+        private string mandatoryErrorMessage = "This question is mandatory.";
 
         private bool isInvalid;
         public bool IsInvalid
@@ -63,24 +64,57 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get { return errorMessage; }
             private set { errorMessage = value; RaisePropertyChanged(); }
+        }        
+        
+        private string errorCaption;
+        public string ErrorCaption
+        {
+            get { return errorCaption; }
+            private set { errorCaption = value; RaisePropertyChanged(); }
         }
 
-        private void UpdateSelfFromModel()
+        private void UpdateValidState()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            this.IsInvalid = !interview.IsValid(this.entityIdentity);
+            bool isInvalidAnswer = !interview.IsValid(this.entityIdentity);
+            bool isAnswered = interview.WasAnswered(this.entityIdentity);
+            bool wasException = exception != null;
+            string errorMessageText = String.Empty;
+            string errorCaptionText = String.Empty;
 
-            if (IsInvalid)
+            if (isInvalidAnswer)
             {
-                var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
-                var questionModel = questionnaireModel.Questions[entityIdentity.Id];
-                ErrorMessage = questionModel.ValidationMessage;
+                if (isAnswered)
+                {
+                    var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
+                    var questionModel = questionnaireModel.Questions[entityIdentity.Id];
+                    errorMessageText = questionModel.ValidationMessage;
+                    errorCaptionText = "Answer was saved, but thire is error";
+                }
+                else
+                {
+                    errorCaptionText = "mandatory";
+                    errorMessageText = mandatoryErrorMessage;
+                }
             }
-            else
+            else if (wasException)
             {
-                ErrorMessage = string.Empty;
+                if (exception is InterviewException)
+                {
+                    errorCaptionText = "Answer was not saved";
+                    errorMessageText = exception.Message;
+                }
+                else
+                {
+                    errorCaptionText = "Internal aaplication error";
+                    errorMessageText = exceptionErrorMessage;
+                }
             }
+
+            IsInvalid = isInvalidAnswer || wasException;
+            ErrorMessage = errorMessageText;
+            ErrorCaption = errorCaptionText;
         }
 
 
@@ -88,7 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (@event.Questions.Contains(identityForEvents))
             {
-                UpdateSelfFromModel();
+                UpdateValidState();
             }
         }
 
@@ -96,19 +130,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (@event.Questions.Contains(identityForEvents))
             {
-                UpdateSelfFromModel();
+                UpdateValidState();
             }
         }
 
-        public void MarkAsError(string message)
+        public void AddExceptionFlag(Exception ex)
         {
-            this.IsInvalid = true;
-            this.ErrorMessage = message;
+            this.exception = ex;
+
+            UpdateValidState();
         }
 
-        public void Dispose()
+        public void RemoveExceptionFlag()
         {
-            liteEventRegistry.Unsubscribe(this);
+            exception = null;
+
+            UpdateValidState();
         }
     }
 }

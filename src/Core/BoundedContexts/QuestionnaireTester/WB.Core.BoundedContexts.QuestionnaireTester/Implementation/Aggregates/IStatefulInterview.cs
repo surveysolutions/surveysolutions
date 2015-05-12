@@ -44,5 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         bool IsValid(Identity identity);
 
         bool IsEnabled(Identity entityIdentity);
+
+        bool WasAnswered(Identity entityIdentity);
     }
 }

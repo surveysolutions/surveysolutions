@@ -199,6 +199,7 @@
     <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
     <Compile Include="Views\Adapters\ViewType.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
+    <Compile Include="Views\CustomControls\AnswerFrameLinearLayout.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerView.cs" />
@@ -345,6 +346,7 @@
     <AndroidResource Include="Resources\values\styles-interview-question.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\error_question_background.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -429,6 +431,7 @@
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-mdpi\" />
     <Folder Include="Resources\drawable-xhdpi\" />
+    <Folder Include="ValueCombiners\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
