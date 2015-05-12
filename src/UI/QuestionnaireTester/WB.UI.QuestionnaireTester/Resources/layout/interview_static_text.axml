@@ -5,12 +5,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
     <MvxLinearLayout
-        style="@style/Interview_InterviewQuestion_Layout"
+        style="@style/Interview_Entity"
         android:orientation="vertical">
         <TextView
-            style="@style/InterviewEntity_Title"
+            style="@style/Interview_Entity_Title"
             local:MvxBind="Text StaticText" />
     </MvxLinearLayout>
     <View
-        style="@style/InterviewEntity_Divider" />
+        style="@style/Interview_Entity_Divider" />
 </MvxLinearLayout>

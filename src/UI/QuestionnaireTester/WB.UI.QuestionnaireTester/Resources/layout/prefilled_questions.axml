@@ -31,7 +31,7 @@
                     local:MvxBind="Text QuestionnaireTitle" />
             </MvxRelativeLayout>
             <View
-                style="@style/InterviewEntity_Divider"
+                style="@style/Interview_Entity_Divider"
                 android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder" />
             <MvxRecyclerView
                 style="@style/PrefilledQuestions_List"

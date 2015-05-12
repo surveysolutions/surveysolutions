@@ -5,52 +5,88 @@
     <item name="android:background">@drawable/question_background</item>
   </style>
 
-  <style name="Interview_Question" parent="Interview_InterviewQuestion_Layout">
-  </style>
+  <style name="Interview_Question" parent="Interview_Entity" />
 
   <style name="Interview_Question_Header" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
   </style>
 
-  <style name="Interview_Question_Title" parent="InterviewEntity_Title">
+  <style name="Interview_Question_Title" parent="Interview_Entity_Title" />
+
+  <style name="Interview_Question_Instruction" parent="VerticalFullWidthWrappingLayout" />
+
+  <style name="Interview_Question_Instruction_Title" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textSize">@dimen/converted_textsize_12pt</item>
+    <item name="android:textColor">#2a81cb</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginTop">10dp</item>
   </style>
 
-  <style name="Interview_Question_Instruction" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Instruction_Details" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textStyle">italic</item>
+    <item name="android:textSize">@dimen/converted_textsize_14pt</item>
+    <item name="android:textColor">#2a81cb</item>
   </style>
 
-  <style name="Interview_Question_Instruction_Title" parent="InterviewEntity_Instruction_Label">
+  <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout" />
+
+  <style name="Interview_Question_Answer" parent="FullWidthWrappingLayout">
+    <item name="android:layout_gravity">center_horizontal</item>
+    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_marginBottom">16dp</item>
+    <item name="android:background">@drawable/active_question_background</item>
   </style>
 
-  <style name="Interview_Question_Instruction_Details" parent="InterviewEntity_Instruction">
+  <style name="Interview_Question_Answer_Editor" parent="Interview_Entity_BasicFont">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">#3f3f3f</item>
+    <item name="android:textColorHint">#b2b2b2</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout" />
+
+  <style name="Interview_Question_Answer_Option" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">1.5dp</item>
+    <item name="android:layout_marginBottom">1.5dp</item>
+    <item name="android:layout_marginLeft">0dp</item>
+    <item name="android:layout_marginRight">0dp</item>
+    <item name="android:paddingLeft">0dp</item>
+    <item name="android:textColor">@drawable/question_option_text_color</item>
+    <item name="android:background">@drawable/question_option_background</item>
   </style>
 
-  <style name="Interview_Question_Answer" parent="Interview_AnswerBlock">
+  <style name="Interview_Question_Errors" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
   </style>
 
-  <style name="Interview_Question_Answer_Editor" parent="Interview_TextQuestion_Editor">
+  <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textSize">@dimen/converted_textsize_12pt</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/errorTextColor</item>
+    <item name="android:layout_marginTop">10dp</item>
   </style>
 
-  <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Errors_Details" parent="FullWidthWrappingLayout">
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/converted_textsize_14pt</item>
+    <item name="android:textStyle">bold|italic</item>
+    <item name="android:textColor">@color/errorTextColor</item>
+    <item name="android:layout_marginTop">10dp</item>
   </style>
 
-  <style name="Interview_Question_Answer_Option" parent="Interview_OptionsQuestion_Option">
-  </style>
+  <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout" />
 
-  <style name="Interview_Question_Errors" parent="Interview_InterviewQuestion_Error_Layout">
-  </style>
-
-  <style name="Interview_Question_Errors_Title" parent="Interview_InterviewQuestion_Error_Caption">
-  </style>
-
-  <style name="Interview_Question_Errors_Details" parent="Interview_InterviewQuestion_Error_Message">
-  </style>
-
-  <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">
-  </style>
-
-  <style name="Interview_Question_Divider" parent="InterviewEntity_Divider">
-  </style>
+  <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
 
 </resources>

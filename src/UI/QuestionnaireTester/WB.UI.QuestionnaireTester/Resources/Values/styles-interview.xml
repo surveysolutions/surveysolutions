@@ -1,121 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="Interview_InterviewQuestion_Layout">
+  <style name="Interview_Entity" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
     <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
     <item name="android:layout_marginTop">@dimen/margin_Interview_Top</item>
     <item name="android:layout_marginBottom">@dimen/margin_Interview_Bottom</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="Interview_AnswerBlock">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_gravity">center_horizontal</item>
-    <item name="android:layout_marginTop">10dp</item>
-    <item name="android:layout_marginBottom">16dp</item>
-    <item name="android:background">@drawable/active_question_background</item>
-  </style>
-
-  <style name="InterviewEntity_BasicFont">
+  <style name="Interview_Entity_BasicFont">
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/converted_textsize_18pt</item>
   </style>
 
-  <style name="InterviewEntity_Title" parent="InterviewEntity_BasicFont">
+  <style name="Interview_Entity_Title" parent="Interview_Entity_BasicFont">
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/question_title_text</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">10dp</item>
     <item name="android:layout_marginBottom">10dp</item>
-    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
-    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
   </style>
 
-  <style name="InterviewEntity_Instruction">
-    <item name="android:fontFamily">Arial</item>
-    <item name="android:textStyle">italic</item>
-    <item name="android:textSize">@dimen/converted_textsize_14pt</item>
-    <item name="android:textColor">#2a81cb</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
-    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
-  </style>
-
-  <style name="InterviewEntity_Instruction_Label" parent="InterviewEntity_Instruction">
-    <item name="android:fontFamily">Trebuchet</item>
-    <item name="android:textSize">@dimen/converted_textsize_12pt</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginTop">10dp</item>
-  </style>
-
-  <style name="Interview_TextQuestion_Editor" parent="InterviewEntity_BasicFont">
-    <item name="android:textStyle">bold</item>
-    <item name="android:textColor">#3f3f3f</item>
-    <item name="android:textColorHint">#b2b2b2</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <style name="Interview_OptionsQuestion_Option" parent="InterviewEntity_BasicFont">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">1.5dp</item>
-    <item name="android:layout_marginBottom">1.5dp</item>
-    <item name="android:layout_marginLeft">0dp</item>
-    <item name="android:layout_marginRight">0dp</item>
-    <item name="android:paddingLeft">0dp</item>
-    <item name="android:textColor">@drawable/question_option_text_color</item>
-    <item name="android:background">@drawable/question_option_background</item>
-  </style>
-
-  <style name="Interview_IntegerQuestion_Editor" >
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
-    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
-  </style>
-
-  <style name="InterviewEntity_Divider" >
+  <style name="Interview_Entity_Divider" >
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">1dp</item>
     <item name="android:layout_margin">0dp</item>
     <item name="android:background">#dadada</item>
   </style>  
-  
-  <style name="Interview_InterviewQuestion_Error_Layout" >
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:orientation">vertical</item>
-    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
-    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
-  </style>    
-  
-  <style name="Interview_InterviewQuestion_Error_Caption" >
-    <item name="android:layout_marginTop">10dp</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:fontFamily">Trebuchet</item>
-    <item name="android:textSize">@dimen/converted_textsize_12pt</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:textColor">@color/errorTextColor</item>
-  </style>  
-  
-  <style name="Interview_InterviewQuestion_Error_Message" >
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:fontFamily">Arial</item>
-    <item name="android:textSize">@dimen/converted_textsize_14pt</item>
-    <item name="android:textStyle">bold|italic</item>
-    <item name="android:layout_marginTop">10dp</item>
-    <item name="android:textColor">@color/errorTextColor</item>
-  </style>
 
 </resources>
