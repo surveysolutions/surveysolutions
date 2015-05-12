@@ -5,31 +5,31 @@
     <item name="android:background">@drawable/question_background</item>
   </style>
 
-  <style name="Interview_Question" parent="Interview_InterviewQuestion_Layout">
+  <style name="Interview_Question" parent="Interview_Entity">
   </style>
 
   <style name="Interview_Question_Header" parent="VerticalFullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Title" parent="InterviewEntity_Title">
+  <style name="Interview_Question_Title" parent="Interview_Entity_Title">
   </style>
 
   <style name="Interview_Question_Instruction" parent="VerticalFullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Instruction_Title" parent="InterviewEntity_Instruction_Label">
+  <style name="Interview_Question_Instruction_Title" parent="VerticalFullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Instruction_Details" parent="InterviewEntity_Instruction">
+  <style name="Interview_Question_Instruction_Details" parent="VerticalFullWidthWrappingLayout">
   </style>
 
   <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Answer" parent="Interview_AnswerBlock">
+  <style name="Interview_Question_Answer" parent="FullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Answer_Editor" parent="Interview_TextQuestion_Editor">
+  <style name="Interview_Question_Answer_Editor" parent="Interview_Entity_BasicFont">
   </style>
 
   <style name="Interview_Question_Answer_Remove_Button" parent="Theme.Light.Base">
@@ -38,25 +38,25 @@
   <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Answer_Option" parent="Interview_OptionsQuestion_Option">
+  <style name="Interview_Question_Answer_Option" parent="Interview_Entity_BasicFont">
   </style>
 
-  <style name="Interview_Question_Errors" parent="Interview_InterviewQuestion_Error_Layout">
+  <style name="Interview_Question_Errors" parent="FullWidthWrappingLayout">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_centerVertical">true</item>
   </style>
 
-  <style name="Interview_Question_Errors_Title" parent="Interview_InterviewQuestion_Error_Caption">
+  <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Errors_Details" parent="Interview_InterviewQuestion_Error_Message">
+  <style name="Interview_Question_Errors_Details" parent="FullWidthWrappingLayout">
   </style>
 
   <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">
   </style>
 
-  <style name="Interview_Question_Divider" parent="InterviewEntity_Divider">
+  <style name="Interview_Question_Divider" parent="Interview_Entity_Divider">
   </style>
 
 </resources>
