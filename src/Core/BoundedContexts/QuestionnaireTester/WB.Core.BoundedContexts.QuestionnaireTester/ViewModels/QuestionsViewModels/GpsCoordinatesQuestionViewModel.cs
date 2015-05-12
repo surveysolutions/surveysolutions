@@ -78,8 +78,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
-            this.Header.Enablement = Enablement;
-
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel != null)
             {

@@ -67,8 +67,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Validity.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
-            this.Header.Enablement = Enablement;
-
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];

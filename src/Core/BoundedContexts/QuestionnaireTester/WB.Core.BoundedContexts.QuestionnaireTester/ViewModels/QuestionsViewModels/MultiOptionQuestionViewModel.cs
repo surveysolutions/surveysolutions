@@ -55,7 +55,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Enablement.Init(interviewId, entityIdentity);
             this.Validity.Init(interviewId, entityIdentity);
 
-            this.Header.Enablement = Enablement;
             this.questionIdentity = entityIdentity;
 
             this.userId = principal.CurrentUserIdentity.UserId;
