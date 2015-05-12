@@ -101,12 +101,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (!Answer.HasValue) return;
 
-            if (MaxValue.HasValue && Answer.Value > MaxValue.Value)
-            {
-                this.Validity.MarkAsError(string.Format(UIResources.Answer_ExceedsMaxValue_, Answer.Value, MaxValue.Value));
-                return;
-            }
-
             try
             {
                 commandService.Execute(new AnswerNumericIntegerQuestionCommand(
