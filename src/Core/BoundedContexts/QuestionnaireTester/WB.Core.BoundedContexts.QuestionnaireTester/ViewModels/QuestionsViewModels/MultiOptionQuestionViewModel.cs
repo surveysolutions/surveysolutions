@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public MultiOptionQuestionViewModel(
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel,
+            ValidityViewModel validityViewModel,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             ICommandService commandService,
             IStatefullInterviewRepository interviewRepository,
@@ -38,6 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
             this.Header = questionHeaderViewModel;
             this.Enablement = enablementViewModel;
+            this.Validity = validityViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
             this.principal = principal;
@@ -51,11 +53,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.Header.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
+            this.Validity.Init(interviewId, entityIdentity);
 
             this.Header.Enablement = Enablement;
-            
             this.questionIdentity = entityIdentity;
-
 
             this.userId = principal.CurrentUserIdentity.UserId;
             var interview = this.interviewRepository.Get(interviewId);
@@ -71,6 +72,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionHeaderViewModel Header { get; private set; }
 
         public EnablementViewModel Enablement { get; private set; }
+
+        public ValidityViewModel Validity { get; private set; }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
@@ -94,20 +97,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             if (args.NewValue)
             {
-                allSelectedOptions.Concat(changedOption.ToEnumerable());
+                allSelectedOptions = allSelectedOptions.Concat(changedOption.ToEnumerable());
             }
             else
             {
                 allSelectedOptions = allSelectedOptions.Except(changedOption.ToEnumerable());
             }
 
+            var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
             var command = new AnswerMultipleOptionsQuestionCommand(
                 this.interviewId,
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.Now,
-                allSelectedOptions.Select(x => x.Value).ToArray());
+                selectedValues);
             this.commandService.Execute(command);
         }
     }
