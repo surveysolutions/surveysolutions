@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -69,19 +68,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Enablement.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
             this.Answer = Monads.Maybe(() => answerModel.Answer);
-            this.MaxValue = Monads.Maybe(() => questionModel.MaxValue);
-        }
-
-        private int? maxValue;
-        public int? MaxValue
-        {
-            get { return this.maxValue; }
-            private set { this.maxValue = value; RaisePropertyChanged(); }
         }
 
         private int? answer;

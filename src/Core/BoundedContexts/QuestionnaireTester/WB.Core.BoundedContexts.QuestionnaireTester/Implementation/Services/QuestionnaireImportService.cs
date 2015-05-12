@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion.IsInteger)
                     {
-                        questionModel = new IntegerNumericQuestionModel { MaxValue = numericQuestion.MaxValue };
+                        questionModel = new IntegerNumericQuestionModel();
                     }
                     else
                     {
