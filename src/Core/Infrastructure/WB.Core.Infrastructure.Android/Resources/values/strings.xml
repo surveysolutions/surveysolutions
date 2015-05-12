@@ -4,10 +4,9 @@
   <string name="HttpResponseTimeout">30</string>
   <string name="BufferSize">512</string>
   <string name="AcceptUnsignedSslCertificate">true</string>
-  <string name="DesignerEndpoint">https://192.168.1.90/designer/api/v1</string>
   <!--<string name="DesignerEndpoint">http://192.168.88.226/designer/api/v1</string>-->
   <!--<string name="DesignerEndpoint">https://192.168.1.90/designer/api/v1</string>-->
-  <!--<string name="DesignerEndpoint">https://192.168.88.159/designer/api/v1</string>-->
+  <string name="DesignerEndpoint">https://192.168.88.159/designer/api/v1</string>
 
   <!--via android player-->
   <!--<string name="DesignerEndpoint">http://192.168.56.1/designer/api/v1</string>-->
