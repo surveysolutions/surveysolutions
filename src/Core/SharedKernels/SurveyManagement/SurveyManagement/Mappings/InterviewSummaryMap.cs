@@ -42,30 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                     rel.OneToMany();
                     
                 });
-
-            Set(x => x.QuestionOptions,
-               collection =>
-               {
-                   collection.Key(key => key.Column("InterviewSummaryId"));
-                   collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                   collection.Inverse(true);
-                   collection.Lazy(CollectionLazy.NoLazy);
-               },
-               relation => relation.OneToMany());
-        }
-    }
-
-    public class QuestionOptionsMap : ClassMapping<QuestionOptions>
-    {
-        public QuestionOptionsMap()
-        {
-            Id(x => x.Id, id => id.Generator(Generators.HighLow));
-            Property(x => x.QuestionId);
-            Property(x => x.Text);
-            Property(x => x.Value);
-            ManyToOne(x => x.InterviewSummary, mtm => {
-                mtm.Column("InterviewSummaryId");
-                mtm.Index("InterviewSummaries_QuestionOptions"); });
         }
     }
 
