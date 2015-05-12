@@ -80,6 +80,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answer &apos;{0}&apos; exceeds max value {1}.
+        /// </summary>
+        public static string Answer_ExceedsMaxValue_ {
+            get {
+                return ResourceManager.GetString("Answer_ExceedsMaxValue_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application name:.
         /// </summary>
         public static string ApplicationNameText {

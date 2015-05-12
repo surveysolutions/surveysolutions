@@ -2,6 +2,7 @@
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
@@ -102,7 +103,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             if (MaxValue.HasValue && Answer.Value > MaxValue.Value)
             {
-                this.Validity.MarkAsError();
+                this.Validity.MarkAsError(string.Format(UIResources.Answer_ExceedsMaxValue_, Answer.Value, MaxValue.Value));
                 return;
             }
 
@@ -117,9 +118,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answer: Answer.Value
                     ));
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                Validity.MarkAsError();
+                Validity.MarkAsError(exception.Message);
             }
         }
 
