@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
     public class RealNumericAnswer : BaseInterviewAnswer
     {
-        public decimal Answer { get; set; }
+        public decimal? Answer { get; set; }
 
         public RealNumericAnswer() { }
         public RealNumericAnswer(Guid id, decimal[] rosterVector)
