@@ -166,6 +166,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return true;
         }
 
+        public bool WasAnswered(Identity entityIdentity)
+        {
+            var questionId = ConversionHelper.ConvertIdentityToString(entityIdentity);
+            if (!Answers.ContainsKey(questionId))
+                return false;
+
+            var interviewAnswerModel = Answers[questionId];
+            return interviewAnswerModel != null;
+        }
+
         private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
         {
             get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
