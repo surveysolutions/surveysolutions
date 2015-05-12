@@ -100,10 +100,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        public void MarkAsError()
+        public void MarkAsError(string message)
         {
-            IsInvalid = true;
-            ErrorMessage = "You've entered invalid answer.";
+            this.IsInvalid = true;
+            this.ErrorMessage = message;
         }
 
         public void Dispose()

@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
             catch (Exception)
             {
-                Validity.MarkAsError();
+                Validity.MarkAsError("You've entered invalid answer.");
             }
         }
 

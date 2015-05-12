@@ -303,4 +303,7 @@
   <data name="IntegerQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода целого числа</value>
   </data>
+  <data name="Answer_ExceedsMaxValue_" xml:space="preserve">
+    <value>Ответ '{0}' превыжает максимальное значение {1}</value>
+  </data>
 </root>
