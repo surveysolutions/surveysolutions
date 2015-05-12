@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.ResponsibleRole);
             Property(x => x.UpdateDate);
             Property(x => x.WasCreatedOnClient);
+            Property(x => x.WasRejectedBySupervisor);
             Property(x => x.InterviewId);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
