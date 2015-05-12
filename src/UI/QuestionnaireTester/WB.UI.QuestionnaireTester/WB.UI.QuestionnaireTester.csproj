@@ -197,6 +197,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
+    <Compile Include="Views\Adapters\ViewType.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />

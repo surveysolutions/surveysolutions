@@ -6,6 +6,7 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Widget;
 using Cirrious.CrossCore;
+using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Droid.Platform;
@@ -14,6 +15,7 @@ using Cirrious.MvvmCross.Views;
 using Mapbox.MapboxSdk.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
+using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.Ninject;
 using WB.UI.QuestionnaireTester.Views;
@@ -54,6 +56,13 @@ namespace WB.UI.QuestionnaireTester
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
             container.AddAll(viewModelViewLookup);
+        }
+
+        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
+        {
+            base.FillValueConverters(registry);
+
+            registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

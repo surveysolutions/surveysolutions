@@ -32,12 +32,19 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
 
             var typeOfViewModel = source.GetType();
 
-            return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : -1;
+            return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : (int) ViewType.UnknownViewType;
         }
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
         {
-            return viewType == -1 ? new View(Context) : bindingContext.BindingInflate(viewType, parent, false);
+            return viewType != (int) ViewType.UnknownViewType
+                ? bindingContext.BindingInflate(viewType, parent, false)
+                : CreateEmptyView();
+        }
+
+        private View CreateEmptyView()
+        {
+            return new View(this.Context);
         }
     }
 }
