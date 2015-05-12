@@ -9,12 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     public class InterviewSummary : InterviewBrief
     {
-        private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
-
         public InterviewSummary()
         {
             this.AnswersToFeaturedQuestions = new HashSet<QuestionAnswer>();
-            this.QuestionOptions = new HashSet<QuestionOptions>();
         }
 
         public InterviewSummary(QuestionnaireDocument questionnaire) : this()
@@ -31,21 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 };
 
                 this.AnswersToFeaturedQuestions.Add(result);
-
-                if (this.questionTypesWithOptions.Contains(featuredQuestion.QuestionType) && featuredQuestion.Answers != null)
-                {
-                    var options = featuredQuestion.Answers.Select(option => 
-                        new QuestionOptions
-                        {
-                            QuestionId = featuredQuestion.PublicKey,
-                            Text = option.AnswerText,
-                            Value = decimal.Parse(option.AnswerValue)
-                        });
-                    foreach (var option in options)
-                    {
-                        this.QuestionOptions.Add(option);
-                    }
-                }
             }
         }
 
@@ -70,23 +52,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public virtual bool WasRejectedBySupervisor { get; set; }
         public virtual ISet<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
-        public virtual ISet<QuestionOptions> QuestionOptions { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
 
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {
             this.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer = answer;
-        }
-
-        public virtual void AnswerFeaturedQuestion(Guid questionId, decimal[] answers)
-        {
-            var questionOptions = this.QuestionOptions.Where(x => x.QuestionId == questionId);
-
-            var optionStrings =  answers.Select(answerValue => questionOptions.First(x => x.Value == answerValue).Text)
-                                       .ToList();
-
-            this.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
         }
 
         protected bool Equals(InterviewSummary other)
