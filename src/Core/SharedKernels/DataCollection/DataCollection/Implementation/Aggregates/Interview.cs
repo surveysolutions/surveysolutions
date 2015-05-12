@@ -2068,7 +2068,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     foreach (var rosterIdentity in rosterInstancesToAdd)
                     {
-                        result[rosterIdentity] = data.TitlesForRosterInstancesToAdd == null
+                        result[rosterIdentity] = data.TitlesForRosterInstancesToAdd == null || !data.TitlesForRosterInstancesToAdd.ContainsKey(rosterIdentity.RosterInstanceId)
                             ? null
                             : data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId];
                     }
@@ -3878,7 +3878,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId,
                             r.SortIndex);
-                        expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, changes.RosterCalculationData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]);
+                        if (changes.RosterCalculationData.TitlesForRosterInstancesToAdd != null)
+                        {
+                            if (
+                                changes.RosterCalculationData.TitlesForRosterInstancesToAdd.ContainsKey(
+                                    r.RosterInstanceId))
+                            {
+                                expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
+                                    r.RosterInstanceId,
+                                    changes.RosterCalculationData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]);
+                            }
+                        }
                     }
                     changes.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
                 }
@@ -3890,7 +3900,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId,
                         r.SortIndex);
-                    expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, rosterData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]);
+                    if (rosterData.TitlesForRosterInstancesToAdd != null)
+                    {
+                        if (rosterData.TitlesForRosterInstancesToAdd.ContainsKey(r.RosterInstanceId))
+                        {
+                            expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
+                                r.RosterInstanceId,
+                                rosterData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]);
+                        }
+                    }
                 }
                 rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
             }
