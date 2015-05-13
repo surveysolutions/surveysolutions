@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
-                DateTime.Now,
+                DateTime.UtcNow,
                 selectedOption.Value));
 
             var optionsToUnselect = this.Options.Where(option => option != selectedOption && option.Selected);
