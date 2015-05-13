@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Linq;
+
+using Chance.MvvmCross.Plugins.UserInteraction;
+
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
@@ -11,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -69,8 +75,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
+
             this.Answer = Monads.Maybe(() => answerModel.Answer);
+            this.previousAnswer = Monads.Maybe(() => answerModel.Answer);
+            this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
         }
+
+        private bool isRosterSizeQuestion;
+
+        private int? previousAnswer;
 
         private int? answer;
         public int? Answer
@@ -79,15 +94,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { answer = value; RaisePropertyChanged(); }
         }
 
+        private bool isAnswered;
+        public bool IsAnswered
+        {
+            get { return isAnswered; }
+            set { isAnswered = value; RaisePropertyChanged(); }
+        }
+
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
             get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
         }
 
-        private void SendAnswerTextQuestionCommand()
+        private async void SendAnswerTextQuestionCommand()
         {
             if (!Answer.HasValue) return;
+
+            if (isRosterSizeQuestion && previousAnswer.HasValue && previousAnswer < Answer)
+            {
+                var amountOfRostersToRemove = previousAnswer - Math.Max(Answer.Value, 0);
+                var message = string.Format(UIResources.Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster, amountOfRostersToRemove);
+                if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
+                {
+                    return;
+                }
+            }
 
             try
             {
@@ -115,6 +147,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
             this.Answer = Monads.Maybe(() => answerModel.Answer);
+            this.IsAnswered = interview.WasAnswered(entityIdentity);
         }
 
         public void Dispose()

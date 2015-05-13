@@ -9,5 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionM
         public int? MaxAllowedAnswers { get; set; }
 
         public List<OptionModel> Options { get; set; }
+
+        public bool IsRosterSizeQuestion { get; set; }
     }
 }
