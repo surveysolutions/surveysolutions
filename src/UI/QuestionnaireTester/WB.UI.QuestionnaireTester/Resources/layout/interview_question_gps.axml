@@ -10,6 +10,7 @@
 
         <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
           <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout"
+              android:layout_marginBottom="28dp"
               local:MvxBind="Visible HasAnswer">
             <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout"
                 android:background="@drawable/white_border"
@@ -22,14 +23,11 @@
                   android:layout_margin="2dp"
                   local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer)" />
             </MvxLinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <TextView style="@style/Interview_Question_Gps_Location_Text"
+                android:layout_marginTop="8dp"
                 local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
           </MvxLinearLayout>
-          <Button
-              android:layout_height="wrap_content"
-              android:layout_width="wrap_content"
+          <Button style="@style/Interview_Question_Gps_Location_Button"
               local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_Gps_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
         </MvxLinearLayout>
 
