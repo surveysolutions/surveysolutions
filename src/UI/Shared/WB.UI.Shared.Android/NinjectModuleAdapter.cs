@@ -23,7 +23,7 @@ namespace WB.UI.Shared.Android
             this.Kernel.Bind<TInterface>().To<TImplementation>();
         }
 
-        public void Singleton<TInterface, TImplementation>() where TImplementation : TInterface
+        public void BindAsSingleton<TInterface, TImplementation>() where TImplementation : TInterface
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
         }
