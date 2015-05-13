@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -13,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -22,24 +22,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
-        private class ServiceColumns
+        private readonly IUserViewFactory userViewFactory;
+
+
+        private static class ServiceColumns
         {
             public const string Id = "Id";
             public const string ParentId = "ParentId";
-        }
 
+            public const string SupervisorName = "_Supervisor";
+        }
+        
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
         public PreloadedDataVerifier(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
-            IPreloadedDataServiceFactory preloadedDataServiceFactory)
+            IPreloadedDataServiceFactory preloadedDataServiceFactory,
+            IUserViewFactory userViewFactory)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
+            this.userViewFactory = userViewFactory;
+
         }
 
         public IEnumerable<PreloadedDataVerificationError> VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
@@ -62,7 +70,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
                         preloadedDataService));
+
             result.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
+            result.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
             return result;
         }
 
@@ -127,7 +137,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
                     this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
                         PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
-                    this.ErrorsByQuestionsWasntParsed
+                    this.ErrorsByQuestionsWasntParsed,
+                    this.ErrorsBySupervisorName
                 };
             }
         }
@@ -140,6 +151,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 yield break;
             var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
+            var listOfPermittedExtraColumns = this.GetListOfPermittedExtraColumnsForLevel(levelExportStructure).ToArray(); 
+
             foreach (var columnName in levelData.Header)
             {
                 if (string.Equals(columnName, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase))
@@ -150,7 +163,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                 if (referenceNames.Contains(columnName))
                     continue;
-                
+
+                if (listOfPermittedExtraColumns.Contains(columnName))
+                    continue;
+
                 if (!levelExportStructure.HeaderItems.Values.Any(headerItem => headerItem.ColumnNames.Contains(columnName)))
                     yield return columnName;
             }
@@ -202,6 +218,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         yield return columnStartWithParentId;
                 }
             }
+        }
+
+        private IEnumerable<string> GetListOfPermittedExtraColumnsForLevel(HeaderStructureForLevel levelExportStructure)
+        {
+            if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
+                yield return ServiceColumns.SupervisorName;
         }
 
         private IEnumerable<PreloadedDataVerificationReference> OrphanRosters(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
@@ -517,6 +539,90 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     .Select(
                         entity =>
                             new PreloadedDataVerificationError(code, message, entity)));
+        }
+
+        private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        {
+            foreach (var levelData in allLevels)
+            {
+                var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.SupervisorName);
+
+                if (supervisorNameIndex < 0)
+                    yield break;
+
+                var supervisorCache = new Dictionary<string, Tuple<bool, bool>>();
+
+                for (int y = 0; y < levelData.Content.Length; y++)
+                {
+                    var row = levelData.Content[y];
+                    var name = row[supervisorNameIndex];
+
+                    if (String.IsNullOrWhiteSpace(name))
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0025",
+                                PreloadingVerificationMessages.PL0025_SupervisorNameIsEmpty,
+                                new PreloadedDataVerificationReference(supervisorNameIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+
+                    var userState = GetUserStateAndUpdateCache(supervisorCache, name);
+
+                    if (userState == null)
+                    {
+
+                        yield return
+                            new PreloadedDataVerificationError("PL0026",
+                                PreloadingVerificationMessages.PL0026_SupervisorWasNotFound,
+                                new PreloadedDataVerificationReference(supervisorNameIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+                    if (userState.Item1)
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0027",
+                                PreloadingVerificationMessages.PL0027_SupervisorIsLocked,
+                                new PreloadedDataVerificationReference(supervisorNameIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                        continue;
+                    }
+                    if (!userState.Item2)
+                    {
+                        yield return
+                            new PreloadedDataVerificationError("PL0028",
+                                PreloadingVerificationMessages.PL0028_UserIsNotSupervisor,
+                                new PreloadedDataVerificationReference(supervisorNameIndex, y,
+                                    PreloadedDataVerificationReferenceType.Cell,
+                                    "",
+                                    levelData.FileName));
+                    }
+                }
+            }
+        }
+
+        private Tuple<bool, bool> GetUserStateAndUpdateCache(Dictionary<string, Tuple<bool, bool>> supervisorCache, string name)
+        {
+            if (supervisorCache.ContainsKey(name))
+                return supervisorCache[name];
+            
+            var user = userViewFactory.Load(new UserViewInputModel(UserName: name, UserEmail: null));
+            if (user == null)
+            {
+                supervisorCache.Add(name, null);
+                return null;
+            }
+            
+            var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor());
+            supervisorCache.Add(name, item);
+            return item;
         }
     }
 }

@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
@@ -24,6 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
+        private readonly IUserViewFactory userViewFactory;
+
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
@@ -33,13 +39,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
+            IUserViewFactory userViewFactory)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.userViewFactory = userViewFactory;
         }
 
         public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
@@ -77,8 +85,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         private void CreateInterviewInternal(Guid questionnaireId, 
             long version, 
-            string id, 
-            Func<IPreloadedDataService, PreloadedDataDto[]> preloadedDataDtoCreator,
+            string id,
+            Func<IPreloadedDataService, PreloadedDataRecord[]> preloadedDataDtoCreator,
             Guid responsibleHeadquarterId, 
             Guid responsibleSupervisorId)
         {
@@ -112,17 +120,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             }
 
             int errorCountOccuredOnInterviewsCreaition = 0;
-
             DateTime startTime = DateTime.Now;
+            var supervisorsCache = new Dictionary<string, Guid>();
 
             var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
             for (int interviewIndex = 0; interviewIndex < interviewForCreate.Length; interviewIndex++)
             {
                 try
                 {
+                    if (!string.IsNullOrEmpty(interviewForCreate[interviewIndex].SupervisorName))
+                        responsibleSupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache,
+                            interviewForCreate[interviewIndex].SupervisorName);
+
                     commandInvoker.Execute(new CreateInterviewWithPreloadedData(Guid.NewGuid(), responsibleHeadquarterId,
-                        bigTemplate.PublicKey, version, interviewForCreate[interviewIndex],
-                        DateTime.UtcNow, responsibleSupervisorId));
+                        bigTemplate.PublicKey, version, 
+                        interviewForCreate[interviewIndex].PreloadedDataDto,
+                        DateTime.UtcNow, 
+                        responsibleSupervisorId));
 
                     result.SetStatusMessage(string.Format(
                         @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",
@@ -157,6 +171,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             double estimatedMilliseconds = spentMilliseconds / (interviewIndex + 1) * totalInterviews;
 
             return TimeSpan.FromMilliseconds(estimatedMilliseconds);
+        }
+
+        protected UserView GetUserByName(string userName)
+        {
+            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+            
+            return cqrsTransactionManager.ExecuteInQueryTransaction(() => this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null)));
+        }
+
+        private Guid GetSupervisorIdAndUpdateCache(Dictionary<string, Guid> cache, string name)
+        {
+            if (cache.ContainsKey(name))
+                return cache[name];
+
+            var user = GetUserByName(name);//assuming that user exists
+            if (!user.IsSupervisor()) throw new Exception("User is not supervisor.");
+            
+            cache.Add(name, user.PublicKey);
+            return user.PublicKey;
         }
     }
 }

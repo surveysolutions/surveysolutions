@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 .Returns(ValueParsingResult.OK);
 
             preloadedDataServiceMock.Setup(x => x.GetQuestionByVariableName(Moq.It.IsAny<string>())).Returns(question);
-
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
