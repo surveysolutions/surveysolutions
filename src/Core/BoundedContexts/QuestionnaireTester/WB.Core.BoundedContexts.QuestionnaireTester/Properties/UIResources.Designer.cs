@@ -368,6 +368,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove {0} row(s) from dependent roster?.
+        /// </summary>
+        public static string Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster {
+            get {
+                return ResourceManager.GetString("Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record GPS.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {
@@ -436,6 +445,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string Maintenance {
             get {
                 return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
         
@@ -625,6 +643,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

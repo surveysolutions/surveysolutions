@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Xml.Linq;
+
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -36,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionnaireModel.Id = questionnaireDocument.PublicKey;
             questionnaireModel.Title = questionnaireDocument.Title;
             questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
-            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, CreateQuestionModel);
+            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument));
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
@@ -133,9 +135,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         }
 
 
-        private static BaseQuestionModel CreateQuestionModel(IQuestion question)
+        private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument)
         {
             BaseQuestionModel questionModel;
+            
+            var isRosterSizeQuestion = questionnaireDocument.Find<Group>(g => g.IsRoster && g.RosterSizeQuestionId == question.PublicKey).Any();
+
             switch (question.QuestionType)
             {
                 case QuestionType.SingleOption:
@@ -172,7 +177,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         {
                             AreAnswersOrdered = multiQuestion.AreAnswersOrdered,
                             MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
-                            Options = question.Answers.Select(ToOptionModel).ToList()
+                            Options = question.Answers.Select(ToOptionModel).ToList(),
+                            IsRosterSizeQuestion = isRosterSizeQuestion
                         };
                     }
                     break;
@@ -180,7 +186,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion.IsInteger)
                     {
-                        questionModel = new IntegerNumericQuestionModel();
+                        questionModel = new IntegerNumericQuestionModel { IsRosterSizeQuestion = isRosterSizeQuestion };
                     }
                     else
                     {
@@ -197,7 +203,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     questionModel = new MaskedTextQuestionModel { Mask = (question as TextQuestion).Mask };
                     break;
                 case QuestionType.TextList:
-                    questionModel = new TextListQuestionModel();
+                    questionModel = new TextListQuestionModel{ IsRosterSizeQuestion = isRosterSizeQuestion};
                     break;
                 case QuestionType.QRBarcode:
                     questionModel = new QrBarcodeQuestionModel();

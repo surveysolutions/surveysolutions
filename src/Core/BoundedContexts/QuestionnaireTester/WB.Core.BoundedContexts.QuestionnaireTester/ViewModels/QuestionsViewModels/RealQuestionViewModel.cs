@@ -79,6 +79,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { answer = value; RaisePropertyChanged(); }
         }
 
+        private bool isAnswered;
+        public bool IsAnswered
+        {
+            get { return isAnswered; }
+            set { isAnswered = value; RaisePropertyChanged(); }
+        }
+
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
@@ -115,6 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetRealNumericAnswer(entityIdentity);
             this.Answer = Monads.Maybe(() => answerModel.Answer);
+            this.IsAnswered = interview.WasAnswered(entityIdentity);
         }
 
         public void Dispose()

@@ -306,4 +306,13 @@
   <data name="RealQuestion_Hint" xml:space="preserve">
     <value>Tap to enter number</value>
   </data>
+  <data name="Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster" xml:space="preserve">
+    <value>Are you sure you want to remove {0} row(s) from dependent roster?</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

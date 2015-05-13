@@ -306,4 +306,13 @@
   <data name="RealQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода числа</value>
   </data>
+  <data name="Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {0} строк(у) у зависимого списка?</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
 </root>

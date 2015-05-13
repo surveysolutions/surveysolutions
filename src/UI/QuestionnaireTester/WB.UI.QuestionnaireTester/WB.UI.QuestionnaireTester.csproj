@@ -180,6 +180,8 @@
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
+    <Compile Include="Converters\NullableDecimalToStringConverter.cs" />
+    <Compile Include="Converters\NullableIntToStringConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
