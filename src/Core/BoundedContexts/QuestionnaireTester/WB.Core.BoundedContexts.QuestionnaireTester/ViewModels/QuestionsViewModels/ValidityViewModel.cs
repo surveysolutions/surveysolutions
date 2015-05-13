@@ -83,14 +83,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             if (isInvalidAnswer)
             {
+                var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
+                var questionModel = questionnaireModel.Questions[entityIdentity.Id];
+
                 if (isAnswered)
                 {
-                    var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
-                    var questionModel = questionnaireModel.Questions[entityIdentity.Id];
                     errorMessageText = questionModel.ValidationMessage;
                     errorCaptionText = UIResources.Validity_Answered_Invalid_ErrorCaption;
                 }
-                else
+                else if (questionModel.IsMandatory)
                 {
                     errorCaptionText = UIResources.Validity_Mandatory_ErrorCaption;
                     errorMessageText = UIResources.Validity_Mandatory_ErrorMessage;
