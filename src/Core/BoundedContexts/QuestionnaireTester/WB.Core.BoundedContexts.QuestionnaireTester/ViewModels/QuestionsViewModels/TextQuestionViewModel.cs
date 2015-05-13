@@ -68,6 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Validity.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
+            InitQuestionSettings();
             UpdateSelfFromModel();
         }
 
@@ -121,7 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
 
-        private void UpdateSelfFromModel()
+        private void InitQuestionSettings()
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
@@ -131,6 +132,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.Mask = textQuestionModel.Mask;
             }
+        }
+
+        private void UpdateSelfFromModel()
+        {
+            var interview = this.interviewRepository.Get(interviewId);
 
             var answerModel = interview.GetTextAnswer(entityIdentity);
             if (answerModel != null)
