@@ -339,7 +339,6 @@
     <AndroidResource Include="Resources\drawable\question_background_enabled.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background_disabled_tile.png" />
     <AndroidResource Include="Resources\color\question_title_text.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -347,6 +346,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\error_question_background.xml" />
+    <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -433,7 +433,6 @@
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-mdpi\" />
-    <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="ValueCombiners\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
