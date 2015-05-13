@@ -2,5 +2,6 @@
 {
     public class IntegerNumericQuestionModel : BaseQuestionModel
     {
+        public bool IsRosterSizeQuestion { get; set; }
     }
 }
