@@ -2,4 +2,11 @@
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Comments"
-    local:MvxBind="Visible Comments.HasComments" />
+    local:MvxBind="Visible Comments.HasComments">
+    <TextView
+        style="@style/Interview_Question_Comments_InterviewerTitle"
+        local:MvxBind="Text Localization('Interviewer_Comment_Caption')" />
+    <TextView
+        style="@style/Interview_Question_Comments_SupervisorTitle"
+        local:MvxBind="Text Localization('Supervisor_Comment_Caption')" />
+</MvxLinearLayout>

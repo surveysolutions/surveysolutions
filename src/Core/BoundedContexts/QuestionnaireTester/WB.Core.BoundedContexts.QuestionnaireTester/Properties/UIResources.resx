@@ -332,7 +332,7 @@
   </data>
   <data name="Validity_Mandatory_ErrorMessage" xml:space="preserve">
     <value>This field is mandatory. You have to fill it in.</value>
-   </data>
+  </data>
   <data name="ConfirmationCancelText" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -341,5 +341,11 @@
   </data>
   <data name="Interview_GeoLocation_Confirm_NoLocation" xml:space="preserve">
     <value>Could not locate your position</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Your comment</value>
+  </data>
+  <data name="Interview_Comment_Supervisor_Caption" xml:space="preserve">
+    <value>Supervisor comment</value>
   </data>
 </root>

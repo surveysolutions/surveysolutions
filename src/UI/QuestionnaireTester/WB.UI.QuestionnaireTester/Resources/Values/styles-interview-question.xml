@@ -98,8 +98,32 @@
     <item name="android:layout_marginTop">10dp</item>
   </style>
 
-  <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout" />
+  <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginLeft">@dimen/weight_InterviewEntity_Border</item>
+    <item name="android:layout_marginRight">@dimen/weight_InterviewEntity_Border</item>
+  </style>
+
+  <style name="Interview_Question_Comments_InterviewerTitle" parent="FullWidthWrappingLayout">
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textSize">@dimen/converted_textsize_12pt</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/commentInterviewerTextColor</item>
+  </style>
+
+  <style name="Interview_Question_Comments_SupervisorTitle" parent="Interview_Question_Comments_InterviewerTitle">
+    <item name="android:textColor">@color/commentSupervisorTextColor</item>
+  </style>
+
+  <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/converted_textsize_14pt</item>
+    <item name="android:textStyle">bold|italic</item>
+    <item name="android:textColor">@color/commentDetailsInterviewerTextColor</item>
+  </style>
+
+  <style name="Interview_Question_Comments_SupervisorDetails" parent="Interview_Question_Comments_InterviewerDetails">
+    <item name="android:textColor">@color/commentSupervisorTextColor</item>
+  </style>
 
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
-
 </resources>

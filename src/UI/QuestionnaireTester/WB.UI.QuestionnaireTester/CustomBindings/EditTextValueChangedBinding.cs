@@ -37,14 +37,12 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             this.wasFocused = isFocused && e.HasFocus == false;
             this.isFocused = e.HasFocus;
-
             TrySendAnswerTextQuestionCommand();
         }
 
         private void AfterTextChanged(object sender, AfterTextChangedEventArgs e)
         {
             this.isTextChanged = true;
-
             TrySendAnswerTextQuestionCommand();
         }
 
