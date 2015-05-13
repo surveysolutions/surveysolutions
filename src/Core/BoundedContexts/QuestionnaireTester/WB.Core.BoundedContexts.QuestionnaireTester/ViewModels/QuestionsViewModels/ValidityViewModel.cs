@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -49,9 +50,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private Exception exception;
 
-        private string exceptionErrorMessage = "You've entered invalid answer.";
-        private string mandatoryErrorMessage = "This question is mandatory.";
-
         private bool isInvalid;
         public bool IsInvalid
         {
@@ -90,25 +88,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
                     var questionModel = questionnaireModel.Questions[entityIdentity.Id];
                     errorMessageText = questionModel.ValidationMessage;
-                    errorCaptionText = "Answer was saved, but there is error";
+                    errorCaptionText = UIResources.Validity_Answered_Invalid_ErrorCaption;
                 }
                 else
                 {
-                    errorCaptionText = "mandatory";
-                    errorMessageText = mandatoryErrorMessage;
+                    errorCaptionText = UIResources.Validity_Mandatory_ErrorCaption;
+                    errorMessageText = UIResources.Validity_Mandatory_ErrorMessage;
                 }
             }
             else if (wasException)
             {
                 if (exception is InterviewException)
                 {
-                    errorCaptionText = "Answer was not saved";
+                    errorCaptionText = UIResources.Validity_InterviewException_ErrorCaption;
                     errorMessageText = exception.Message;
                 }
                 else
                 {
-                    errorCaptionText = "Internal application error";
-                    errorMessageText = exceptionErrorMessage;
+                    errorCaptionText = UIResources.Validity_ApplicationException_ErrorCaption;
+                    errorMessageText = UIResources.Validity_ApplicationException_ErrorMessage;
                 }
             }
 
@@ -134,14 +132,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        public void AddExceptionFlag(Exception ex)
+        public void ProcessException(Exception ex)
         {
             this.exception = ex;
 
             UpdateValidState();
         }
 
-        public void RemoveExceptionFlag()
+        public void ExecutedWithoutExceptions()
         {
             exception = null;
 

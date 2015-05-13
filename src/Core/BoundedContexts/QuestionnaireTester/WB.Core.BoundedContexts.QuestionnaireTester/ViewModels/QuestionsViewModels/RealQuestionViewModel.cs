@@ -106,11 +106,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answerTime: DateTime.UtcNow,
                     answer: Answer.Value
                     ));
-                Validity.RemoveExceptionFlag();
+                Validity.ExecutedWithoutExceptions();
             }
             catch (Exception ex)
             {
-                Validity.AddExceptionFlag(ex);
+                Validity.ProcessException(ex);
             }
         }
 

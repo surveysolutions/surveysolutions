@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 return false;
 
             var interviewAnswerModel = Answers[questionId];
-            return interviewAnswerModel != null;
+            return interviewAnswerModel.IsAnswered();
         }
 
         private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
@@ -199,88 +199,84 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<MaskedTextAnswer>(@event);
-            answer.Answer = @event.Answer;
+            answer.SetAnswer(@event.Answer);
         }
 
         internal new void Apply(QRBarcodeQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<QrBarcodeAnswer>(@event);
-            answer.Answer = @event.Answer;
+            answer.SetAnswer(@event.Answer);
         }
 
         internal new void Apply(PictureQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<MultimediaAnswer>(@event);
-            answer.PictureFileName = @event.PictureFileName;
+            answer.SetAnswer(@event.PictureFileName);
         }
 
         internal new void Apply(NumericRealQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<RealNumericAnswer>(@event);
-
-            answer.Answer = @event.Answer;
+            answer.SetAnswer(@event.Answer);
         }
 
         internal new void Apply(NumericIntegerQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<IntegerNumericAnswer>(@event);
-            answer.Answer = @event.Answer;
+            answer.SetAnswer(@event.Answer);
         }
 
         internal new void Apply(DateTimeQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<DateTimeAnswer>(@event);
-            answer.Answer = @event.Answer;
+            answer.SetAnswer(@event.Answer);
         }
 
         internal new void Apply(SingleOptionQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<SingleOptionAnswer>(@event);
-            answer.Answer = @event.SelectedValue;
+            answer.SetAnswer(@event.SelectedValue);
         }
 
         internal new void Apply(MultipleOptionsQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<MultiOptionAnswer>(@event);
-            answer.Answers = @event.SelectedValues;
+            answer.SetAnswers(@event.SelectedValues);
         }
 
         internal new void Apply(GeoLocationQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<GpsCoordinatesAnswer>(@event);
-            answer.Latitude = @event.Latitude;
-            answer.Longitude = @event.Longitude;
-            answer.Accuracy = @event.Accuracy;
-            answer.Altitude = @event.Altitude;
+            answer.SetAnswer(@event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude);
         }
 
         internal new void Apply(TextListQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<TextListAnswer>(@event);
-            answer.Answers = @event.Answers;
+            answer.SetAnswers(@event.Answers);
         }
 
         internal new void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(@event);
-            answer.Answer = @event.SelectedPropagationVector;
+            answer.SetAnswer(@event.SelectedPropagationVector);
         }
 
         internal new void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(@event);
-            answer.Answers = @event.SelectedPropagationVectors;
+            answer.SetAnswers(@event.SelectedPropagationVectors);
         }
        
         #endregion

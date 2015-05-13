@@ -315,4 +315,22 @@
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Ваш ответ содержит ошибку</value>
+  </data>
+  <data name="Validity_ApplicationException_ErrorCaption" xml:space="preserve">
+    <value>Ошибка сохранения</value>
+  </data>
+  <data name="Validity_ApplicationException_ErrorMessage" xml:space="preserve">
+    <value>Вы ввели неправильный ответ. Мы не можем сохранить его.</value>
+  </data>
+  <data name="Validity_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Вы ввели неправильный ответ. Мы не можем сохранить его.</value>
+  </data>
+  <data name="Validity_Mandatory_ErrorCaption" xml:space="preserve">
+    <value>Обязательное поле</value>
+  </data>
+  <data name="Validity_Mandatory_ErrorMessage" xml:space="preserve">
+    <value>Это поле обязательное. Заполните его.</value>
+  </data>
 </root>
