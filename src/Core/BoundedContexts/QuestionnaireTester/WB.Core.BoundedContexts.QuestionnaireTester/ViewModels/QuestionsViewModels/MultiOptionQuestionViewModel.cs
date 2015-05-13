@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
+        private int? maxAllowedAnswers;
 
         public MultiOptionQuestionViewModel(
             QuestionHeaderViewModel questionHeaderViewModel,
@@ -63,7 +64,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             var questionModel = (MultiOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
-
+            maxAllowedAnswers = questionModel.MaxAllowedAnswers;
 
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
         }
@@ -83,16 +84,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 Value = model.Value,
                 Title = model.Title
             };
-            result.BeforeCheckedChanged += CheckedPropertyChanged;
+            result.BeforeCheckedChanged += BeforeChecked;
 
             return result;
         }
 
-        void CheckedPropertyChanged(object sender, OptionCheckedArgs args)
+        void BeforeChecked(object sender, OptionCheckedArgs args)
         {
-            var changedOption = (MultiOptionQuestionOptionViewModel) sender;
-
             var allSelectedOptions = this.Options.Where(x => x.Checked);
+            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count() >= maxAllowedAnswers)
+            {
+                args.CancelCheck = true;
+                return;
+            }
+
+            var changedOption = (MultiOptionQuestionOptionViewModel) sender;
 
             if (args.NewValue)
             {
@@ -118,6 +124,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
             catch (Exception e)
             {
+                args.CancelCheck = true;
                 Validity.AddExceptionFlag(e);
             }
         }
