@@ -110,23 +110,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
+
             var command = new AnswerMultipleOptionsQuestionCommand(
-                this.interviewId,
-                this.userId,
-                this.questionIdentity.Id,
-                this.questionIdentity.RosterVector,
-                DateTime.UtcNow,
-                selectedValues);
+                    this.interviewId,
+                    this.userId,
+                    this.questionIdentity.Id,
+                    this.questionIdentity.RosterVector,
+                    DateTime.UtcNow,
+                    selectedValues);
             try
             {
                 this.commandService.Execute(command);
-                Validity.RemoveExceptionFlag();
+
+                Validity.ExecutedWithoutExceptions();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                args.CancelCheck = true;
-                Validity.AddExceptionFlag(e);
+                Validity.ProcessException(ex);
             }
+
         }
     }
 }

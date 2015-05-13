@@ -113,11 +113,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answer: Answer
                     ));
 
-                Validity.RemoveExceptionFlag();
+                Validity.ExecutedWithoutExceptions();
             }
             catch (Exception ex)
             {
-                Validity.AddExceptionFlag(ex);
+                Validity.ProcessException(ex);
             }
         }
 
@@ -149,10 +149,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
-                return;
-
-            UpdateSelfFromModel();
+            if (@event.QuestionId == entityIdentity.Id &&
+                @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
+            {
+                UpdateSelfFromModel();
+            }
         }
     }
 }
