@@ -35,7 +35,7 @@
                 </div>
                 <div class="chapter-level-buttons" ng-show="!search.searchText">
                     <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
-                    <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
+                    <input type="button" class="btn lighter-hover" value="ADD SUB-SECTION" ng-click="addGroup(currentChapter)" />
                     <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
                     <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)" />
                 </div>
@@ -43,11 +43,11 @@
 
             <div class="start-box" ng-if="showStartScreen()">
 
-                <p>This chapter is empty.</p>
+                <p>This section is empty.</p>
 
                 <p>
-                    You can start by using <button class="btn" disabled type="button">ADD QUESTION</button> and <button type="button" class="btn" disabled>ADD GROUP</button> buttons<br />
-                    on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel
+                    You can start by using <button class="btn" disabled type="button">ADD QUESTION</button> and <button type="button" class="btn" disabled>ADD SUB-SECTION</button> buttons<br />
+                    on top of this block or manage sections with <span class="left-panel-glyph"></span> left panel
                 </p>
 
                 <p>

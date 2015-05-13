@@ -43,7 +43,7 @@
                 var newId = utilityService.guid();
 
                 var newChapter = {
-                    title: 'New Chapter',
+                    title: 'New Section',
                     itemId: newId
                 };
 

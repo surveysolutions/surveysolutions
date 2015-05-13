@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CantBeLinkedAndCascadingAtSameTime" xml:space="preserve">
-    <value>Question can't be linked and cascading at the same time</value>
+    <value>Question can't be linked and cascading at the same time.</value>
   </data>
   <data name="CantRemoveParentQuestionInCascading" xml:space="preserve">
-    <value>Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed</value>
+    <value>Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed.</value>
   </data>
   <data name="CascadingCantHaveConditionExpression" xml:space="preserve">
-    <value>Cascading questions can't have condition expression</value>
+    <value>Cascading questions can't have enabling condition.</value>
   </data>
   <data name="CascadingCantHaveValidationExpression" xml:space="preserve">
-    <value>Cascading questions can't have validation expression</value>
+    <value>Cascading questions can't have validation condition.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have empty ParentValue column</value>
+    <value>Options in cascading question can not have empty ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have not numeric value in ParentValue column</value>
+    <value>Options in cascading question can not have not numeric value in ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
@@ -142,6 +142,6 @@
     <value>Identifier '{0}' from expression '{1}' is not valid question or roster identifier. Question or roster with such an identifier is missing.</value>
   </data>
   <data name="ShouldCascadeFromExistingQuestion" xml:space="preserve">
-    <value>Question to cascade from should exist in questionnaire</value>
+    <value>Question to cascade from should exist in questionnaire.</value>
   </data>
 </root>

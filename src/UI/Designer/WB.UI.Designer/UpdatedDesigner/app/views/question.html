@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="form-group col-xs-7">
-                <label for="edit-group-title" class="wb-label">Question Type</label><br>
+                <label for="edit-group-title" class="wb-label">Question type</label><br>
                 <div class="btn-group type-container-dropdown" dropdown>
                     <button id="questionTypeBtn" class="btn btn-default form-control" dropdown-toggle type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-question-title" class="wb-label">Title</label><br>
+            <label for="edit-question-title" class="wb-label">Question text</label><br>
             <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" msd-elastic></textarea>
 
             <div class="question-type-specific-block"
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="form-group" ng-show="!((showInstruction===undefined && initialQuestion.instructions) || showInstruction)">
-            <button type="button" class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
+            <button type="button" class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Interviewer Instruction</button>
         </div>
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
@@ -70,21 +70,21 @@
         </div>
 
         <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()">
-            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression"/></label>
+            <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression"/></label>
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
             </div>
         </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
-            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression"/></label>
+            <label for="edit-question-validation-expression">Validation condition <help key="validationExpression"/></label>
             <div class="pseudo-form-control">
                 <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
             </div>
         </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
-            <label for="edit-question-validation-message">Validation message <help key="validationMessage" /></label>
+            <label for="edit-question-validation-message">Error message <help key="validationMessage" /></label>
             <textarea id="edit-question-validation-message" ng-model="activeQuestion.validationMessage"
                       class="form-control" msd-elastic></textarea>
         </div>
@@ -172,21 +172,13 @@
                    href="javascript:void(0);"
                    class="btn btn-link"
                    ng-click="editFilteredComboboxOptions()">
-                    <ng-pluralize count="activeQuestion.optionsCount"
-                                  when="{'0': 'Add options',
-                                     'one': 'Edit 1 option',
-                                     'other': 'Edit {} options'}">
-                    </ng-pluralize>
+                    Upload new options
                 </a>
                 <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
                    href="javascript:void(0);"
                    class="btn btn-link"
                    ng-click="editCascadingComboboxOptions()">
-                    <ng-pluralize count="activeQuestion.optionsCount"
-                                  when="{'0': 'Add options',
-                                     'one': 'Edit 1 option',
-                                     'other': 'Edit {} options'}">
-                    </ng-pluralize>
+                    Upload new options
                 </a>
             </p>
             <div class="table-holder">
@@ -194,7 +186,7 @@
                     <div class="col-xs-4">
                         <div ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
                             <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
-                            <label for="cb-is-filtered-combobox"><span></span>Is filtered combobox</label>
+                            <label for="cb-is-filtered-combobox"><span></span>Combo box</label>
                         </div>
                     </div>
                     <div class="col-xs-4">
@@ -206,7 +198,7 @@
                     <div class="col-xs-4">
                         <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
                             <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
-                            <label for="cb-is-cascading"><span></span>Is cascading</label>
+                            <label for="cb-is-cascading"><span></span>Cascading combo box</label>
                         </div>
                     </div>
                 </div>
@@ -346,12 +338,12 @@
                     <div class="col-xs-3">
                         <div class="checkbox checkbox-in-column">
                             <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
-                            <label for="cb-is-ordered"><span></span>Ordered</label>
+                            <label for="cb-is-ordered"><span></span>Record answer order</label>
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group singleline-group" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
-                            <label for="edit-question-max-answers-number">Maximum answers count</label>
+                            <label for="edit-question-max-answers-number">Max number of answers</label>
                             <input name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
                             <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
                                 Only integers are allowed
@@ -369,12 +361,12 @@
                 <div class="col-xs-4">
                     <div class="checkbox checkbox-in-column">
                         <input id="cb-is-integer" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isInteger" />
-                        <label for="cb-is-integer"><span></span>Is Integer</label>
+                        <label for="cb-is-integer"><span></span>nteger</label>
                     </div>
                 </div>
                 <div class="col-xs-8 inline-inputs">
                     <div class="form-group" ng-show="!activeQuestion.isInteger" ng-class="{'has-error': !questionForm.countOfDecimalPlaces.$valid}">
-                        <label for="edit-question-count-decimal">Count Of Decimal Places</label>
+                        <label for="edit-question-count-decimal">Number of decimal places</label>
                         <input id="edit-question-count-decimal" type="text"
                                name="countOfDecimalPlaces"
                                ng-pattern="/^\d+$/"
@@ -399,14 +391,14 @@
 
         <script type="text/ng-template" id="Text-template.html">
             <div class="form-group">
-                <label for="edit-mask">Mask <help key="mask" /></label>
+                <label for="edit-mask">Pattern <help key="mask" /></label>
                 <input id="edit-mask" type="text" ng-model="activeQuestion.mask" class="form-control">
             </div>
         </script>
 
         <script type="text/ng-template" id="TextList-template.html">
             <div class="form-group" ng-class="{'has-error': !questionForm.maxAnswerCount.$valid}">
-                <label for="edit-question-max-answers-number">Maximum number of answers</label>
+                <label for="edit-question-max-answers-number">Maximum number of list elements</label>
                 <input id="edit-question-max-answers-number" 
                        name="maxAnswerCount" 
                        type="text" 

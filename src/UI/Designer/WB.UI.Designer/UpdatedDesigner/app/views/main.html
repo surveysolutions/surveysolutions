@@ -11,7 +11,6 @@
                                                                                                    </span>
                                                                                                </span>
             <div class="buttons">
-                <button class="btn" type="button" ng-click="toggleCheatSheet()">Cheat Sheet</button>
                 <button class="btn" type="button" ng-click="showShareInfo()">Settings</button>
                 <a class="btn" href="../../account/logoff">LOG OUT</a>
             </div>
@@ -23,7 +22,7 @@
                 </div>
                 <div class="questionnarie-title-buttons">
                     <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
-                    <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
+                    <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()" />
                     <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
                         <a href="javascript:void(0);"
                            ng-click="verificationStatus.visible = true"
@@ -53,7 +52,7 @@
         <div class="ul-holder">
             <div class="chapters">
                 <perfect-scrollbar class="scroller">
-                    <h3>Chapters:</h3>
+                    <h3>Sections:</h3>
                     <ul ui-tree-nodes ng-model="questionnaire.chapters">
                         <li class="chapter-panel-item"
                             ng-repeat="chapter in questionnaire.chapters"
@@ -77,7 +76,7 @@
                         </li>
                     </ul>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
+                        <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -90,7 +89,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">
-                Verification: <span ng-pluralize count="verificationStatus.errorsCount"
+                Compilation: <span ng-pluralize count="verificationStatus.errorsCount"
                                     when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
             </h3>
             <button type="button" class="close" ng-click="verificationStatus.visible = false" aria-hidden="true"> <!--&times;--> </button>
@@ -117,7 +116,7 @@
             </perfect-scrollbar>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-link" ng-click="verify()">REVERIFY</button>
+            <button class="btn btn-link" ng-click="verify()">RECOMPILE</button>
             <button class="btn btn-link" data-dismiss="modal" ng-click="verificationStatus.visible = false">CLOSE</button>
         </div>
     </div>

@@ -93,7 +93,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
             Guid chapterId = mainChapterId ?? Guid.NewGuid();
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId, ResponsibleId = responsibleId, GroupText = "New chapter" });
+            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId, ResponsibleId = responsibleId, GroupText = "New section" });
             AddQuestion(questionnaire, rosterSizeQuestionId, chapterId, responsibleId, QuestionType.MultyOption, "rosterSizeQuestion",
                 new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") });
             AddGroup(questionnaire, rosterGroupId, chapterId, "", responsibleId, rosterSizeQuestionId, isRoster: true);

@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__title__contains_illegal__substitution__ = () =>
-            new[] { "title", "contains", "illegal", "substitution" }.ShouldEachConformTo(
+            new[] { "text", "contains", "illegal", "substitution" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 
