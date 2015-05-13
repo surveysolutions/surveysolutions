@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -103,6 +104,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult SampleBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
@@ -132,6 +134,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult PanelBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
@@ -198,6 +201,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Panel));
         }
 
+        [ObserverNotAllowed]
         public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
             if (User.Identity.IsObserver())
@@ -234,6 +238,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
+        [ObserverNotAllowed]
         public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
             if (User.Identity.IsObserver())
