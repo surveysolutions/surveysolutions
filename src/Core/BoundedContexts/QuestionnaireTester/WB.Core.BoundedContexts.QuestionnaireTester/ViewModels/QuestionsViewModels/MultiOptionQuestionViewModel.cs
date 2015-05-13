@@ -109,9 +109,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
-                DateTime.Now,
+                DateTime.UtcNow,
                 selectedValues);
-            this.commandService.Execute(command);
+            try
+            {
+                this.commandService.Execute(command);
+                Validity.RemoveExceptionFlag();
+            }
+            catch (Exception e)
+            {
+                Validity.AddExceptionFlag(e);
+            }
         }
     }
 }
