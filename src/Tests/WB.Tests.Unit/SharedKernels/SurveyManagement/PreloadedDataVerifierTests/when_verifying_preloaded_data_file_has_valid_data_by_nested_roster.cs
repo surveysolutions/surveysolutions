@@ -74,6 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileNestedRosterLevel, Moq.It.IsAny<ValueVector<Guid>>(), new[] { "5", "1" }))
                 .Returns(new decimal[] { 10 });
 
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
