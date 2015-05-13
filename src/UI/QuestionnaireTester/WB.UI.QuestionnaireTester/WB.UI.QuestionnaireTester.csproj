@@ -183,6 +183,7 @@
     <Compile Include="Converters\NullableDecimalToStringConverter.cs" />
     <Compile Include="Converters\NullableIntToStringConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
+    <Compile Include="CustomBindings\LinearLayoutStyleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
@@ -198,10 +199,10 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
+    <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
     <Compile Include="Views\Adapters\ViewType.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
-    <Compile Include="Views\CustomControls\AnswerFrameLinearLayout.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerView.cs" />
@@ -435,7 +436,6 @@
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-mdpi\" />
-    <Folder Include="ValueCombiners\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

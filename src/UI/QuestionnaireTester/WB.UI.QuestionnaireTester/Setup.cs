@@ -8,7 +8,9 @@ using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
+using Cirrious.MvvmCross.Binding.Binders;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
+using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
@@ -63,6 +65,9 @@ namespace WB.UI.QuestionnaireTester
             base.FillValueConverters(registry);
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
+
+            Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
+                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -71,6 +76,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText)));
             registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("ValueChange", (editText) => new EditTextValueChangedBinding(editText)));
             registry.RegisterFactory(new MvxCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<LinearLayout>("Style", (view) => new LinearLayoutStyleBinding(view)));
 
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
 
