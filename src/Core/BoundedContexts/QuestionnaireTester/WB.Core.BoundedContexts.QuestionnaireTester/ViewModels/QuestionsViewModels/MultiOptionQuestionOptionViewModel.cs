@@ -17,28 +17,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return @checked; }
             set
             {
-                try
+                var args = new OptionCheckedArgs(value);
+                OnBeforeCheckedChanged(args);
+                if (!args.CancelCheck)
                 {
-                    OnBeforeCheckedChanged(value);
                     @checked = value;
                 }
-                finally
-                {
-                    RaisePropertyChanged();
-                }
+
+                RaisePropertyChanged();
             }
         }
 
-        protected virtual void OnBeforeCheckedChanged(bool newValue)
+        protected virtual void OnBeforeCheckedChanged(OptionCheckedArgs args)
         {
             var handler = BeforeCheckedChanged;
-            if (handler != null) handler(this, new OptionCheckedArgs(newValue));
+            if (handler != null) handler(this, args);
         }
     }
 
     public class OptionCheckedArgs : EventArgs
     {
         public bool NewValue { get; set; }
+
+        public bool CancelCheck { get; set; }
 
         public OptionCheckedArgs(bool newValue)
         {
