@@ -1,17 +1,12 @@
 using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
+
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {

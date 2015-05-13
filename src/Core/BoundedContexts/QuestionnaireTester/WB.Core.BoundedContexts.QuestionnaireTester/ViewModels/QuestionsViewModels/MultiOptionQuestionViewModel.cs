@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -32,6 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel,
             ValidityViewModel validityViewModel,
+            CommentsViewModel comments,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             ICommandService commandService,
             IStatefullInterviewRepository interviewRepository,
@@ -41,6 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header = questionHeaderViewModel;
             this.Enablement = enablementViewModel;
             this.Validity = validityViewModel;
+            this.Comments = comments;
             this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
             this.principal = principal;
@@ -53,8 +53,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.Header.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.Comments.Init(interviewId, entityIdentity);
             this.Validity.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
 
@@ -74,6 +75,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public EnablementViewModel Enablement { get; private set; }
 
         public ValidityViewModel Validity { get; private set; }
+
+        public CommentsViewModel Comments { get; private set; }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
