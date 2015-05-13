@@ -69,6 +69,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BreadcrumbsViewModel.cs" />
+    <Compile Include="ViewModels\CommentsViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\EnablementViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />

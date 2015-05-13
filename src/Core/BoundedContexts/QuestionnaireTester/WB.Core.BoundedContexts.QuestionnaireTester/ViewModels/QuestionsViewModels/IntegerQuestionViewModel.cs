@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionHeaderViewModel Header { get; private set; }
         public ValidityViewModel Validity { get; private set; }
         public EnablementViewModel Enablement { get; private set; }
+        public CommentsViewModel Comments { get; private set; }
 
         public IntegerQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
@@ -45,7 +46,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefullInterviewRepository interviewRepository,
             QuestionHeaderViewModel questionHeaderViewModel,
             ValidityViewModel validity,
-            EnablementViewModel enablement)
+            EnablementViewModel enablement,
+            CommentsViewModel comments)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
@@ -56,6 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header = questionHeaderViewModel;
             this.Validity = validity;
             this.Enablement = enablement;
+            this.Comments = comments;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -70,6 +73,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.Header.Init(interviewId, entityIdentity);
             this.Validity.Init(interviewId, entityIdentity);
+            this.Comments.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
