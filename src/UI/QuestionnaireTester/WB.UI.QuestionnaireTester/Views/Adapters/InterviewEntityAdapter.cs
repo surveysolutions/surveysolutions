@@ -10,6 +10,8 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
 {
     public class InterviewEntityAdapter : MvxRecyclerViewAdapter
     {
+        private const int UnknownViewType = -1;
+
         public InterviewEntityAdapter(Context context, IMvxAndroidBindingContext bindingContext)
             : base(context, bindingContext)
         {
@@ -32,12 +34,12 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
 
             var typeOfViewModel = source.GetType();
 
-            return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : (int) ViewType.UnknownViewType;
+            return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
         }
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
         {
-            return viewType != (int) ViewType.UnknownViewType
+            return viewType != UnknownViewType
                 ? bindingContext.BindingInflate(viewType, parent, false)
                 : CreateEmptyView();
         }

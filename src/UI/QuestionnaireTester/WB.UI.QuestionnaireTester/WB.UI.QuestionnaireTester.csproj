@@ -210,7 +210,6 @@
     <Compile Include="Setup.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
-    <Compile Include="Views\Adapters\ViewType.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
     <Compile Include="Views\CustomControls\HttpImageView.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
