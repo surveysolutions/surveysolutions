@@ -14,9 +14,7 @@ using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using Mapbox.MapboxSdk.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.Ninject;
@@ -64,20 +62,24 @@ namespace WB.UI.QuestionnaireTester
         {
             base.FillValueConverters(registry);
 
-            registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
 
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
+
+            registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
+            registry.AddOrOverwrite("GetAnswer", new GetAnswerConverter());
+            registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
+            registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
-            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<EditText>("ValueChange", (editText) => new EditTextValueChangedBinding(editText)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view)));
-            registry.RegisterFactory(new MvxCustomBindingFactory<LinearLayout>("Style", (view) => new LinearLayoutStyleBinding(view)));
-
+            
+            registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
+            registry.RegisterCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText));
+            registry.RegisterCustomBindingFactory<EditText>("ValueChange", (editText) => new EditTextValueChangedBinding(editText));
+            registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
+			registry.RegisterCustomBindingFactory<LinearLayout>("Style", (view) => new LinearLayoutStyleBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
 
             base.FillTargetFactories(registry);
@@ -105,7 +107,6 @@ namespace WB.UI.QuestionnaireTester
                 toReturn.Add(typeof(MvxRecyclerView).Assembly);
                 toReturn.Add(typeof(DrawerLayout).Assembly);
                 toReturn.Add(typeof(SwitchCompat).Assembly);
-                toReturn.Add(typeof(MapView).Assembly);
                 return toReturn;
             }
         }
