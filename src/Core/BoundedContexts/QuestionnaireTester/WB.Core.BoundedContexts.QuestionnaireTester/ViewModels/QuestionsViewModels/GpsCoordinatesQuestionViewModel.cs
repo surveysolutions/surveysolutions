@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -31,18 +33,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { answer = value; RaisePropertyChanged(); }
         }
 
-        private string coordinates;
-        public string Coordinates
+        private bool hasAnswer;
+        public bool HasAnswer
         {
-            get { return coordinates; }
-            set { coordinates = value; RaisePropertyChanged(); }
+            get { return hasAnswer; }
+            set { hasAnswer = value; RaisePropertyChanged(); }
         }
 
         private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IMvxLocationWatcher geoLocationWatcher;
+        private readonly IUserInteraction userInteraction;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -52,14 +54,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
+            IUserInteraction userInteraction,
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
-            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.geoLocationWatcher = geoLocationWatcher;
+            this.userInteraction = userInteraction;
 
             this.Header = questionHeaderViewModel;
             this.Enablement = enablementViewModel;
@@ -88,6 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     Latitude = answerModel.Latitude,
                     Accuracy = answerModel.Accuracy
                 };
+                this.HasAnswer = true;
             }
         }
 
@@ -97,42 +101,48 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer)); }
         }
 
-        private IMvxCommand removeAnswerCommand;
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get { return removeAnswerCommand ?? (removeAnswerCommand = new MvxCommand(RemoveAnswer)); }
-        }
-
-        private void RemoveAnswer()
-        {
-            throw new NotImplementedException();
-        }
-
         private void SaveAnswer()
         {
             this.IsInProgress = true;
-            this.geoLocationWatcher.Start(options: new MvxLocationOptions(), success: (location) =>
+            this.geoLocationWatcher.Start(options: new MvxLocationOptions(),
+                success: this.SetGeoLocationAnswer,
+                error: async (error) => { await this.TryGetGeoLocationAgain(); });
+        }
+
+        private async Task TryGetGeoLocationAgain()
+        {
+            this.geoLocationWatcher.Stop();
+            this.IsInProgress = false;
+
+            if (await this.userInteraction.ConfirmAsync(
+                message: UIResources.Interview_GeoLocation_Confirm_NoLocation,
+                title: UIResources.ConfirmationText, 
+                okButton: UIResources.ConfirmationTryAgainText,
+                cancelButton: UIResources.ConfirmationCancelText))
             {
-                this.geoLocationWatcher.Stop();
-                this.IsInProgress = false;
-                this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
-                 interviewId: interviewId,
-                 userId: userIdentity.UserId,
-                 questionId: this.questionIdentity.Id,
-                 rosterVector: this.questionIdentity.RosterVector,
-                 answerTime: DateTime.UtcNow,
-                 accuracy: location.Coordinates.Accuracy ?? 0,
-                 altitude: location.Coordinates.Altitude ?? 0,
-                 latitude: location.Coordinates.Latitude,
-                 longitude: location.Coordinates.Longitude,
-                 timestamp: location.Timestamp));
-                this.Answer = location.Coordinates;
-                this.Coordinates = string.Format("{0}, {1}", location.Coordinates.Latitude,
-                    location.Coordinates.Longitude);
-            }, error: (error) =>
-            {
-                this.IsInProgress = false;
-            });
+                this.SaveAnswer();
+            }
+        }
+
+        private void SetGeoLocationAnswer(MvxGeoLocation location)
+        {
+            this.geoLocationWatcher.Stop();
+            this.IsInProgress = false;
+
+            this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
+                interviewId: interviewId,
+                userId: userIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow,
+                accuracy: location.Coordinates.Accuracy ?? 0,
+                altitude: location.Coordinates.Altitude ?? 0,
+                latitude: location.Coordinates.Latitude,
+                longitude: location.Coordinates.Longitude,
+                timestamp: location.Timestamp));
+
+            this.HasAnswer = true;
+            this.Answer = location.Coordinates;
         }
     }
 }
