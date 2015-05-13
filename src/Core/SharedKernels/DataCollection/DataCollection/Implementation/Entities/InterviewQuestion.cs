@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         protected void MarkUnAnswered()
         {
-            this.QuestionState |= ~QuestionState.Answered;
+            this.QuestionState &= ~QuestionState.Answered;
         }
     }
 
