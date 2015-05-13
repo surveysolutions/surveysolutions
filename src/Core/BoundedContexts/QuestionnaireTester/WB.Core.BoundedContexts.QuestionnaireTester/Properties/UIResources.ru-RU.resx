@@ -300,7 +300,6 @@
   <data name="TextQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода текста</value>
   </data>
-
   <data name="IntegerQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода числа</value>
   </data>
@@ -333,7 +332,7 @@
   </data>
   <data name="Validity_Mandatory_ErrorMessage" xml:space="preserve">
     <value>Это поле обязательное. Заполните его.</value>
-   </data>
+  </data>
   <data name="ConfirmationCancelText" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -342,5 +341,11 @@
   </data>
   <data name="Interview_GeoLocation_Confirm_NoLocation" xml:space="preserve">
     <value>Не могу определить Ваше местоположение</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Ваш комментарий</value>
+  </data>
+  <data name="Interview_Comment_Supervisor_Caption" xml:space="preserve">
+    <value>Комментарий супервизора</value>
   </data>
 </root>
