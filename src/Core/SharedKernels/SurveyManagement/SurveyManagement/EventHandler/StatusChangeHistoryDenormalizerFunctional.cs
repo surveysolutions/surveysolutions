@@ -2,6 +2,7 @@
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -13,170 +14,328 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class StatusChangeHistoryDenormalizerFunctional :
-        AbstractFunctionalEventHandler<InterviewStatusHistory, IReadSideKeyValueStorage<InterviewStatusHistory>>,
-        IUpdateHandler<InterviewStatusHistory, InterviewStatusChanged>,
-        IUpdateHandler<InterviewStatusHistory, InterviewerAssigned>,
-        IUpdateHandler<InterviewStatusHistory, InterviewCompleted>,
-        IUpdateHandler<InterviewStatusHistory, InterviewRejected>,
-        IUpdateHandler<InterviewStatusHistory, InterviewApproved>,
-        IUpdateHandler<InterviewStatusHistory, InterviewRejectedByHQ>,
-        IUpdateHandler<InterviewStatusHistory, InterviewApprovedByHQ>,
-        IUpdateHandler<InterviewStatusHistory, InterviewOnClientCreated>,
-        IUpdateHandler<InterviewStatusHistory, InterviewFromPreloadedDataCreated>,
-        IUpdateHandler<InterviewStatusHistory, InterviewRestarted>,
-        IUpdateHandler<InterviewStatusHistory, SupervisorAssigned>,
-        IUpdateHandler<InterviewStatusHistory, InterviewDeleted>,
-        IUpdateHandler<InterviewStatusHistory, InterviewHardDeleted>,
-        IUpdateHandler<InterviewStatusHistory, InterviewRestored>,
-        IUpdateHandler<InterviewStatusHistory, InterviewCreated>
+        BaseDenormalizer,
+        IEventHandler<InterviewerAssigned>,
+        IEventHandler<InterviewCompleted>,
+        IEventHandler<InterviewRejected>,
+        IEventHandler<InterviewApproved>,
+        IEventHandler<InterviewRejectedByHQ>,
+        IEventHandler<InterviewApprovedByHQ>,
+        IEventHandler<InterviewOnClientCreated>,
+        IEventHandler<InterviewFromPreloadedDataCreated>,
+        IEventHandler<InterviewRestarted>,
+        IEventHandler<SupervisorAssigned>,
+        IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewHardDeleted>,
+        IEventHandler<InterviewRestored>,
+        IEventHandler<InterviewCreated>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
+        private readonly IReadSideRepositoryWriter<InterviewStatuses> statuses;
 
-        public StatusChangeHistoryDenormalizerFunctional(IReadSideKeyValueStorage<InterviewStatusHistory> statuses,
-            IReadSideRepositoryWriter<UserDocument> users)
-            : base(statuses)
+
+        public override object[] Readers
         {
+            get { return new object[] { this.users, this.interviewSummares }; }
+        }
+
+        public override object[] Writers
+        {
+            get { return new[] {this.statuses}; }
+        }
+
+        public StatusChangeHistoryDenormalizerFunctional(IReadSideRepositoryWriter<InterviewStatuses> statuses,
+            IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
+        {
+            this.statuses = statuses;
             this.users = users;
+            this.interviewSummares = interviewSummares;
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewStatusChanged> evnt)
+        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            var lastStatusChange = currentState.StatusChangeHistory.LastOrDefault();
-            if (lastStatusChange != null && lastStatusChange.Status == evnt.Payload.Status)
-            {
-                lastStatusChange.Comment = evnt.Payload.Comment;
-            }
-            return currentState;
+            this.statuses.Store(
+                new InterviewStatuses()
+                {
+                    InterviewId = evnt.EventSourceId.FormatGuid(),
+                    QuestionnaireId = evnt.Payload.QuestionnaireId,
+                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
+                }, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
+        public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
-            var result = CreateStatusHistory();
-            AddInterviewStatus(result, InterviewStatus.Created, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            return result;
+            this.statuses.Store(
+                new InterviewStatuses()
+                {
+                    InterviewId = evnt.EventSourceId.FormatGuid(),
+                    QuestionnaireId = evnt.Payload.QuestionnaireId,
+                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
+                }, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewCreated> evnt)
+        public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
-            var result = CreateStatusHistory();
-            AddInterviewStatus(result, InterviewStatus.Created, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            return result;
+            this.statuses.Store(
+               new InterviewStatuses()
+               {
+                   InterviewId = evnt.EventSourceId.FormatGuid(),
+                   QuestionnaireId = evnt.Payload.QuestionnaireId,
+                   QuestionnaireVersion = evnt.Payload.QuestionnaireVersion
+               }, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
         {
-            var result = CreateStatusHistory();
-            AddInterviewStatus(result, InterviewStatus.Created, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            return result;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if(interviewStatuses==null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
+                evnt.Payload.UserId, 
+                interviewSummary.TeamLeadId,
+                interviewSummary.ResponsibleId,
+                InterviewStatus.Restarted,
+                evnt.Payload.RestartTime ?? evnt.EventTimeStamp, 
+                evnt.Payload.Comment,
+                GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRestarted> evnt)
+        public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.Restarted, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, null,
-                evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
+                evnt.Payload.UserId,
+                evnt.Payload.SupervisorId,
+                null,
+                InterviewStatus.SupervisorAssigned,
+                evnt.EventTimeStamp, 
+                null, 
+                GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<SupervisorAssigned> evnt)
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.SupervisorAssigned, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    interviewSummary.TeamLeadId,
+                    interviewSummary.ResponsibleId,
+                    InterviewStatus.Completed,
+                    evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, 
+                    evnt.Payload.Comment,
+                    GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewCompleted> evnt)
+        public void Handle(IPublishedEvent<InterviewRejected> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.Completed, evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, null,
-                evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(evnt.Payload.UserId,
+                interviewSummary.TeamLeadId,
+                interviewSummary.ResponsibleId,
+                InterviewStatus.RejectedBySupervisor,
+                evnt.EventTimeStamp, 
+                evnt.Payload.Comment,
+                GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRejected> evnt)
+        public void Handle(IPublishedEvent<InterviewApproved> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.RejectedBySupervisor, evnt.EventTimeStamp, evnt.Payload.Comment,
-                evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    interviewSummary.TeamLeadId,
+                    interviewSummary.ResponsibleId,
+                    InterviewStatus.ApprovedBySupervisor,
+                    evnt.EventTimeStamp, 
+                    evnt.Payload.Comment,
+                    GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewApproved> evnt)
+        public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.ApprovedBySupervisor, evnt.EventTimeStamp, evnt.Payload.Comment,
-                evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    interviewSummary.TeamLeadId,
+                    interviewSummary.ResponsibleId,
+                    InterviewStatus.RejectedByHeadquarters,
+                    evnt.EventTimeStamp, 
+                    evnt.Payload.Comment,
+                    GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRejectedByHQ> evnt)
+        public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.RejectedByHeadquarters, evnt.EventTimeStamp, evnt.Payload.Comment,
-                evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    interviewSummary.TeamLeadId,
+                    interviewSummary.ResponsibleId,
+                    InterviewStatus.ApprovedByHeadquarters,
+                    evnt.EventTimeStamp, 
+                    evnt.Payload.Comment,
+                    GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewApprovedByHQ> evnt)
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.ApprovedByHeadquarters, evnt.EventTimeStamp, evnt.Payload.Comment,
-                evnt.Payload.UserId);
-            return currentState;
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
+
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    interviewSummary.TeamLeadId,
+                    evnt.Payload.InterviewerId,
+                    InterviewStatus.InterviewerAssigned,
+                    evnt.EventTimeStamp, 
+                    null,
+                    GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewerAssigned> evnt)
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.InterviewerAssigned, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            return currentState;
+            if (evnt.Origin == Constants.HeadquartersSynchronizationOrigin)
+                return;
+          
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
+
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    null,
+                    null,
+                    InterviewStatus.Deleted,
+                    evnt.EventTimeStamp, 
+                    null,
+                    null));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewDeleted> evnt)
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            if (evnt.Origin != Constants.HeadquartersSynchronizationOrigin)
-            {
-                AddInterviewStatus(currentState, InterviewStatus.Deleted, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            }
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
 
-            return currentState;
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    null,
+                    null,
+                    InterviewStatus.Deleted,
+                    evnt.EventTimeStamp, 
+                    null, 
+                    null));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewHardDeleted> evnt)
+        public void Handle(IPublishedEvent<InterviewRestored> evnt)
         {
-            AddInterviewStatus(currentState, InterviewStatus.Deleted, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            return currentState;
-        }
+            if (evnt.Origin == Constants.HeadquartersSynchronizationOrigin)
+                return;
 
-        public InterviewStatusHistory Update(InterviewStatusHistory currentState, IPublishedEvent<InterviewRestored> evnt)
-        {
-            if (evnt.Origin != Constants.HeadquartersSynchronizationOrigin)
-            {
-                AddInterviewStatus(currentState, InterviewStatus.Restored, evnt.EventTimeStamp, null, evnt.Payload.UserId);
-            }
-            return currentState;
-        }
+            var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
+            if (interviewSummary == null)
+                return;
 
-        private InterviewStatusHistory AddInterviewStatus(InterviewStatusHistory interviewHistory, InterviewStatus status, DateTime date, string comment,
-            Guid responsibleId)
-        {
-            interviewHistory.StatusChangeHistory.Add(new InterviewCommentedStatus
-            {
-                Status = status,
-                Date = date,
-                Comment = comment,
-                Responsible = GetResponsibleIdName(responsibleId),
-                ResponsibleId = responsibleId
-            });
+            var interviewStatuses = statuses.GetById(evnt.EventSourceId);
+            if (interviewStatuses == null)
+                return;
 
-            return interviewHistory;
+            interviewStatuses.InterviewCommentedStatuses.Add(
+                new InterviewCommentedStatus(
+                    evnt.Payload.UserId, 
+                    interviewSummary.TeamLeadId,
+                    interviewSummary.ResponsibleId,
+                    InterviewStatus.Restored,
+                    evnt.EventTimeStamp, 
+                    null,
+                    GetResponsibleIdName(evnt.Payload.UserId)));
+
+            this.statuses.Store(interviewStatuses, evnt.EventSourceId);
         }
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
             return Monads.Maybe(() => this.users.GetById(responsibleId).UserName) ?? "Unknown";
-        }
-
-        private InterviewStatusHistory CreateStatusHistory()
-        {
-            return new InterviewStatusHistory();
-        }
-
-        public override object[] Readers
-        {
-            get { return new[] { this.users }; }
         }
     }
 }

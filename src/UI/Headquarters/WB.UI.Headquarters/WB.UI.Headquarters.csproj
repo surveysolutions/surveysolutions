@@ -433,6 +433,7 @@
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
     <Content Include="Views\HQ\DataExport.cshtml" />
+    <Content Include="Views\HQ\QuantityByResponsibles.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -476,6 +477,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuantityReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuantityReport.resx</DependentUpon>
     </Compile>
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
@@ -628,6 +634,10 @@
     <Content Include="App_GlobalResources\Interviews.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuantityReport.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuantityReport.Designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
