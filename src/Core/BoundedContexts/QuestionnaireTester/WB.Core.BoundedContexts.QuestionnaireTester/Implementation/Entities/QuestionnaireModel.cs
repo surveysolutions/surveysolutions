@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class QuestionnaireModel
     {

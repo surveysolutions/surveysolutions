@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class InterviewGroup
     {
@@ -79,8 +80,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(decimal answer)
         {
-            Answer = answer;
-            MarkAnswered();
+            this.Answer = answer;
+            this.MarkAnswered();
         }
     }
 
@@ -96,12 +97,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(decimal[] answer)
         {
-            Answer = answer;
+            this.Answer = answer;
 
-            if (Answer.Any())
-                MarkAnswered();
+            if (this.Answer.Any())
+                this.MarkAnswered();
             else
-                MarkUnAnswered();
+                this.MarkUnAnswered();
         }
     }
 
@@ -117,12 +118,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswers(decimal[] answer)
         {
-            Answers = answer;
+            this.Answers = answer;
 
-            if (Answers.Any())
-                MarkAnswered();
+            if (this.Answers.Any())
+                this.MarkAnswered();
             else
-                MarkUnAnswered();
+                this.MarkUnAnswered();
         }
     }
 
@@ -139,12 +140,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswers(decimal[][] answer)
         {
-            Answers = answer;
+            this.Answers = answer;
 
-            if (Answers.Any())
-                MarkAnswered();
+            if (this.Answers.Any())
+                this.MarkAnswered();
             else
-                MarkUnAnswered();
+                this.MarkUnAnswered();
         }
     }
 
@@ -160,12 +161,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(int? answer)
         {
-            Answer = answer;
+            this.Answer = answer;
 
-            if (Answer.HasValue)
-                MarkAnswered();
+            if (this.Answer.HasValue)
+                this.MarkAnswered();
             else
-                MarkUnAnswered();
+                this.MarkUnAnswered();
         }
     }
 
@@ -181,12 +182,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(decimal? answer)
         {
-            Answer = answer;
+            this.Answer = answer;
 
-            if (Answer.HasValue)
-                MarkAnswered();
+            if (this.Answer.HasValue)
+                this.MarkAnswered();
             else
-                MarkUnAnswered();
+                this.MarkUnAnswered();
         }
     }
 
@@ -202,12 +203,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(string answer)
         {
-            Answer = answer;
+            this.Answer = answer;
 
-            if (Answer.IsNullOrEmpty())
-                MarkUnAnswered();
+            if (this.Answer.IsNullOrEmpty())
+                this.MarkUnAnswered();
             else
-                MarkAnswered();
+                this.MarkAnswered();
         }
     }
 
@@ -223,12 +224,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswers(Tuple<decimal, string>[] answer)
         {
-            Answers = answer;
+            this.Answers = answer;
 
-            if (Answers.Any())
-                MarkUnAnswered();
+            if (this.Answers.Any())
+                this.MarkUnAnswered();
             else
-                MarkAnswered();
+                this.MarkAnswered();
         }
     }
 
@@ -244,12 +245,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(string answer)
         {
-            Answer = answer;
+            this.Answer = answer;
 
-            if (Answer.IsNullOrEmpty())
-                MarkUnAnswered();
+            if (this.Answer.IsNullOrEmpty())
+                this.MarkUnAnswered();
             else
-                MarkAnswered();
+                this.MarkAnswered();
         }
     }
 
@@ -265,12 +266,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(string answer)
         {
-            PictureFileName = answer;
+            this.PictureFileName = answer;
 
-            if (PictureFileName.IsNullOrEmpty())
-                MarkUnAnswered();
+            if (this.PictureFileName.IsNullOrEmpty())
+                this.MarkUnAnswered();
             else
-                MarkAnswered();
+                this.MarkAnswered();
         }
     }
 
@@ -286,8 +287,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(DateTime answer)
         {
-            Answer = answer;
-            MarkAnswered();
+            this.Answer = answer;
+            this.MarkAnswered();
         }
     }
 
@@ -306,12 +307,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public void SetAnswer(double latitude, double longitude, double accuracy, double altitude)
         {
-            Latitude = latitude;
-            Longitude = longitude;
-            Accuracy = accuracy;
-            Altitude = altitude;
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Accuracy = accuracy;
+            this.Altitude = altitude;
 
-            MarkAnswered();
+            this.MarkAnswered();
         }
     }
 }

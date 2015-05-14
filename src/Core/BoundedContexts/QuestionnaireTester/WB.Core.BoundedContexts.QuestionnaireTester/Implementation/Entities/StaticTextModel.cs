@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class StaticTextModel
     {
