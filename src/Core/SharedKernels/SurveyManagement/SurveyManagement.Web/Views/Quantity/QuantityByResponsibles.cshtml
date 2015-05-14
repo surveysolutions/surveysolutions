@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Resources
 @model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.TemplateViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
@@ -11,9 +12,18 @@
     "~/Scripts/ko.datepicker.js",
             "~/Scripts/viewmodels/pages/quantitybyresponsibles.js")
     <script type="text/javascript">
-        var $interviewersUrl = '@Url.Action("QuantityByInterviewers", "HQ")';
+        function GetInterviewersUrl(supervisorId) {
+            var url = new Url(window.location.href);
+            return '@Url.Action("ByInterviewers", "Quantity")'
+                + '?questionnaireId=' + url.query['questionnaireId']
+                + '&questionnaireVersion=' + url.query['questionnaireVersion']
+                + '&from=' + url.query['from']
+                + '&period=' + url.query['period']
+                + '&columnCount=' + url.query['columnCount']
+                + '&supervisorId=' + supervisorId;
+        }
         $(function () {
-            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuantityByInterviewers" })');
+            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.DataAction })');
             ko.applyBindings(model);
             model.load();
         });
@@ -27,7 +37,7 @@
 
 @section header
 {
-    <h3>@QuantityReport.NumberOfVompletedInterviews</h3>
+    <h3>@QuantityReport.NumberOfCompletedInterviews</h3>
 }
 
 @section filters
@@ -83,8 +93,7 @@
                 <th>Team member</th>
                 <!-- ko foreach:DateTimeRanges -->
                 <th>
-
-                     <span data-bind="text: moment(To()).format('MM/DD/YYYY')"></span> - <span data-bind="text: moment(From()).format('MM/DD/YYYY')"></span>
+                    <span data-bind="text: moment(To()).format('MM/DD/YYYY')"></span> - <span data-bind="text: moment(From()).format('MM/DD/YYYY')"></span>
                 </th>
                 <!-- /ko -->
                 <th>@QuantityReport.Average</th>
@@ -95,7 +104,11 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
+                    @if(ViewBag.IsResponsibleNameLink){
+                    <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
+                    }else{
                     <span data-bind="text: ResponsibleName"></span>
+                    }
                 </td>
                 <!-- ko foreach:QuantityByPeriod -->
                 <td><span data-bind="text: $data"></span></td>

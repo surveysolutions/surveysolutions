@@ -129,7 +129,7 @@
   <data name="Month" xml:space="preserve">
     <value>Month</value>
   </data>
-  <data name="NumberOfVompletedInterviews" xml:space="preserve">
+  <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Number of completed interviews</value>
   </data>
   <data name="Period" xml:space="preserve">
