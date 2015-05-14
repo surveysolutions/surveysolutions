@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         MultimediaAnswer GetMultimediaAnswer(Identity identity);
 
-        QrBarcodeAnswer GetQrBarcodeAnswer(Identity identity);
+        QRBarcodeAnswer GetQRBarcodeAnswer(Identity identity);
 
         TextListAnswer GetTextListAnswer(Identity identity);
 

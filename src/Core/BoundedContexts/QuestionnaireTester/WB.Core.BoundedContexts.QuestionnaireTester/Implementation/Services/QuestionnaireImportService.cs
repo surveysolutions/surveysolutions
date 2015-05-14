@@ -218,7 +218,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     questionModel = new TextListQuestionModel{ IsRosterSizeQuestion = isRosterSizeQuestion};
                     break;
                 case QuestionType.QRBarcode:
-                    questionModel = new QrBarcodeQuestionModel();
+                    questionModel = new QRBarcodeQuestionModel();
                     break;
                 case QuestionType.Multimedia:
                     questionModel = new MultimediaQuestionModel();
