@@ -233,12 +233,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         }
     }
 
-    public class QrBarcodeAnswer : BaseInterviewAnswer
+    public class QRBarcodeAnswer : BaseInterviewAnswer
     {
         public string Answer { get; private set; }
 
-        public QrBarcodeAnswer() { }
-        public QrBarcodeAnswer(Guid id, decimal[] rosterVector)
+        public QRBarcodeAnswer() { }
+        public QRBarcodeAnswer(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }

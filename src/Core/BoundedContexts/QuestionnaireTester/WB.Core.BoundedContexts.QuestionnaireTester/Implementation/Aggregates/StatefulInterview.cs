@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             { typeof(RealNumericQuestionModel), () => new RealNumericAnswer()},
             { typeof(MaskedTextQuestionModel), () => new MaskedTextAnswer()},
             { typeof(TextListQuestionModel), () => new TextListAnswer()},
-            { typeof(QrBarcodeQuestionModel), () => new QrBarcodeAnswer()},
+            { typeof(QRBarcodeQuestionModel), () => new QRBarcodeAnswer()},
             { typeof(MultimediaQuestionModel), () => new MultimediaAnswer()},
             { typeof(DateTimeQuestionModel), () => new DateTimeAnswer()},
             { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswer()}
@@ -84,9 +84,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<MultimediaAnswer>(identity);
         }
 
-        public QrBarcodeAnswer GetQrBarcodeAnswer(Identity identity)
+        public QRBarcodeAnswer GetQRBarcodeAnswer(Identity identity)
         {
-            return this.GetQuestionAnswer<QrBarcodeAnswer>(identity);
+            return this.GetQuestionAnswer<QRBarcodeAnswer>(identity);
         }
 
         public TextListAnswer GetTextListAnswer(Identity identity)
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         internal new void Apply(QRBarcodeQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<QrBarcodeAnswer>(@event);
+            var answer = this.GetOrCreateAnswer<QRBarcodeAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
 
