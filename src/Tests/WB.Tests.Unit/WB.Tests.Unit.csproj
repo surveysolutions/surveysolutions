@@ -437,7 +437,7 @@
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\SurveysAndStatusesReportTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_interview_exists_in_each_status.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_user.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_responsible.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_viewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedBySupervisor.cs" />
