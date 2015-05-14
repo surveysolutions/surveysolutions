@@ -58,7 +58,7 @@
             }
             hotkeys.add({
                 combo: focusSearchField,
-                description: 'Search for groups and questions in chapter',
+                description: 'Search for sub-sections and questions in section',
                 callback: function (event) {
                     event.preventDefault();
                     $scope.showSearch();
@@ -442,7 +442,7 @@
 
                                     notificationService.notify({
                                         title: 'Depended items might be broken',
-                                        text: '<div class="broken-links"><p>One or more questions/groups depend on<p>' + links + '</div>',
+                                        text: '<div class="broken-links"><p>One or more questions/sub-sections depend on<p>' + links + '</div>',
                                         hide: false,
                                         confirm: { confirm: true },
                                         history: { history: false },
