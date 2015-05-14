@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -9,11 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-
-using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 {
@@ -131,19 +128,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
         {
-            var questionId = ConversionHelper.ConvertIdentityToString(identity);
-            if (!this.Answers.ContainsKey(questionId)) return null;
-            return (T)this.Answers[questionId];
+            var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            if (!this.Answers.ContainsKey(questionKey)) return null;
+            return (T)this.Answers[questionKey];
         }
 
 
         public bool IsValid(Identity identity)
         {
-            var questionId = ConversionHelper.ConvertIdentityToString(identity);
-            if (!this.Answers.ContainsKey(questionId))
+            var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            if (!this.Answers.ContainsKey(questionKey))
                 return true;
 
-            var interviewAnswerModel = this.Answers[questionId];
+            var interviewAnswerModel = this.Answers[questionKey];
             return !interviewAnswerModel.IsInvalid();
         }
 
@@ -168,11 +165,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public bool WasAnswered(Identity entityIdentity)
         {
-            var questionId = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            if (!Answers.ContainsKey(questionId))
+            var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+            if (!Answers.ContainsKey(questionKey))
                 return false;
 
-            var interviewAnswerModel = Answers[questionId];
+            var interviewAnswerModel = Answers[questionKey];
             return interviewAnswerModel.IsAnswered();
         }
 

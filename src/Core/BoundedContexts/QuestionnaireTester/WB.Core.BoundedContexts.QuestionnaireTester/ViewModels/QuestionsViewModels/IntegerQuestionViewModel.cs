@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
-
 using Chance.MvvmCross.Plugins.UserInteraction;
-
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -15,8 +14,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {

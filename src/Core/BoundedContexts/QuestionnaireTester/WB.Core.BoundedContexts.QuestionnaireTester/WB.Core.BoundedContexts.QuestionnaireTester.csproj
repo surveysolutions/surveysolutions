@@ -37,6 +37,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Aggregates\StatefulQuestionnaire.cs" />
+    <Compile Include="Implementation\Entities\GroupsHierarchyModel.cs" />
+    <Compile Include="Implementation\Entities\InterviewQuestion.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\BaseQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\DateTimeQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\GpsCoordinatesQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\GroupModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\IntegerNumericQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\LinkedMultiOptionQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\LinkedSingleOptionQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\MaskedTextQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\MultimediaQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\MultiOptionQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\OptionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\QrBarcodeQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\RealNumericQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\SingleOptionQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\TextListQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionnaireModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionnaireReferenceModel.cs" />
+    <Compile Include="Implementation\Entities\RosterModel.cs" />
+    <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />

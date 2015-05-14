@@ -7,7 +7,6 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class EnablementViewModel : MvxNotifyPropertyChanged,

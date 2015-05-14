@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Linq;
 using Cirrious.CrossCore.Converters;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities.QuestionModels;
 
 namespace WB.UI.QuestionnaireTester.Converters
 {

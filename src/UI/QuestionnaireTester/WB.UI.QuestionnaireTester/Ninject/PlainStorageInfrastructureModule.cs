@@ -1,6 +1,8 @@
 using Main.Core.Documents;
 using Ninject;
 using Ninject.Modules;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
