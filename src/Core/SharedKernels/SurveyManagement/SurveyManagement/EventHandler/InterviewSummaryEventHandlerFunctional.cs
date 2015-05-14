@@ -82,7 +82,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     if (featuredQuestion == null)
                         return;
 
-                    interview.AnswerFeaturedQuestion(questionId, answers);
+                    var questionnaire = this.questionnaires.AsVersioned().Get(interviewSummary.QuestionnaireId.FormatGuid(), interviewSummary.QuestionnaireVersion);
+                    if (questionnaire == null || questionnaire.Questionnaire==null)
+                        return;
+
+                    var question = questionnaire.Questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
+                    if (question == null || question.Answers == null) 
+                        return;
+
+                    var optionStrings = answers.Select(answerValue => question.Answers.First(x => decimal.Parse(x.AnswerValue) == answerValue).AnswerText)
+                                       .ToList();
+
+                    interview.AnswerFeaturedQuestion(questionId, string.Join(",", optionStrings));
                 }
             });
         }

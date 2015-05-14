@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -35,6 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IExportedDataAccessor exportedDataAccessor;
 
         public FileBasedDataExportRepositoryWriter(
             IDataExportWriter dataExportWriter,
@@ -47,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IReadSideRepositoryWriter<UserDocument> users,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
             IExportViewFactory exportViewFactory, 
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, IExportedDataAccessor exportedDataAccessor)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -60,6 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.exportedDataAccessor = exportedDataAccessor;
         }
 
         public void Clear()
@@ -150,13 +153,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
+
+            var dataFolderForQuestionnaire =
+                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                    questionnaireVersion);
+
+            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
         }
 
         private void AddExportedDataByInterviewImpl(InterviewDataExportView interviewDataExportView)
         {
             this.dataExportWriter.AddOrUpdateInterviewRecords(interviewDataExportView,
                 interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
-
+             
             var filesFolderForInterview =
                 this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaireForInterview(
                     interviewDataExportView.TemplateId,
@@ -195,6 +204,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             InterviewActionExportView action)
         {
             this.dataExportWriter.AddActionRecord(action, questionnaireId, questionnaireVersion);
+
+            var dataFolderForQuestionnaire =
+                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                    questionnaireVersion);
+
+            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
+
+            if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
+                fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetApprovedDataFolder(dataFolderForQuestionnaire));
         }
 
         private string[] GetAllMultimediaQuestionFileNames(InterviewDataExportView interviewDataExportView)

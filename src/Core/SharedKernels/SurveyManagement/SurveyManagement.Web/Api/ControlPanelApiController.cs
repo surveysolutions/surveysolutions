@@ -42,13 +42,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [NoTransaction]
         public int GetIncomingPackagesQueueLength()
         {
-            if (this.cache.Contains("incomingPackagesQueueLength"))
+            object cachedLength = this.cache.Get("incomingPackagesQueueLength");
+            if (cachedLength != null)
             {
-                return (int)this.cache.Get("incomingPackagesQueueLength");
+                return (int)cachedLength;
             }
 
             int incomingPackagesQueueLength = this.incomingSyncPackagesQueue.QueueLength;
-            this.cache.Add("incomingPackagesQueueLength", incomingPackagesQueueLength, DateTime.UtcNow.AddSeconds(3));
+            this.cache.Add("incomingPackagesQueueLength", incomingPackagesQueueLength, DateTime.Now.AddSeconds(3));
 
             return incomingPackagesQueueLength;
         }
