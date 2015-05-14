@@ -5,45 +5,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class MultiOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
-        private bool @checked;
+        private readonly MultiOptionQuestionViewModel questionViewModel;
 
-        public event EventHandler<OptionCheckedArgs> BeforeCheckedChanged;
+        public MultiOptionQuestionOptionViewModel(MultiOptionQuestionViewModel questionViewModel)
+        {
+            this.questionViewModel = questionViewModel;
+        }
 
         public decimal Value { get; set; }
         public string Title { get; set; }
-
+        
+        private bool @checked;
         public bool Checked
         {
             get { return @checked; }
             set
             {
-                var args = new OptionCheckedArgs(value);
-                OnBeforeCheckedChanged(args);
-                if (!args.CancelCheck)
-                {
-                    @checked = value;
-                }
-
+                @checked = value;
                 RaisePropertyChanged();
             }
         }
 
-        protected virtual void OnBeforeCheckedChanged(OptionCheckedArgs args)
+        public IMvxCommand CheckAnswerCommand
         {
-            var handler = BeforeCheckedChanged;
-            if (handler != null) handler(this, args);
-        }
-    }
-
-    public class OptionCheckedArgs : EventArgs
-    {
-        public bool NewValue { get; set; }
-
-        public bool CancelCheck { get; set; }
-
-        public OptionCheckedArgs(bool newValue)
-        {
-            NewValue = newValue;
+            get
+            {
+                return new MvxCommand(() => questionViewModel.ToggleAnswer(this));
+            }
         }
     }
 }

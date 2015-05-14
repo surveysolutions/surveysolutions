@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using Chance.MvvmCross.Plugins.UserInteraction;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -25,6 +29,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid userId;
         private int? maxAllowedAnswers;
+        private bool isRosterSizeQuestion;
 
         public MultiOptionQuestionViewModel(
             QuestionHeaderViewModel questionHeaderViewModel,
@@ -65,7 +70,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             var questionModel = (MultiOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
-            maxAllowedAnswers = questionModel.MaxAllowedAnswers;
+            this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
+            this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
 
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
         }
@@ -82,34 +88,34 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model)
         {
-            var result = new MultiOptionQuestionOptionViewModel
+            var result = new MultiOptionQuestionOptionViewModel(this)
             {
                 Value = model.Value,
                 Title = model.Title
             };
-            result.BeforeCheckedChanged += BeforeChecked;
 
             return result;
         }
 
-        void BeforeChecked(object sender, OptionCheckedArgs args)
+        public async Task ToggleAnswer(MultiOptionQuestionOptionViewModel changedModel)
         {
-            var allSelectedOptions = this.Options.Where(x => x.Checked);
-            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count() >= maxAllowedAnswers)
+            var allSelectedOptions = this.Options.Where(x => x.Checked).ToList();
+
+            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count >= maxAllowedAnswers)
             {
-                args.CancelCheck = true;
+                changedModel.Checked = false;
                 return;
             }
 
-            var changedOption = (MultiOptionQuestionOptionViewModel) sender;
-
-            if (args.NewValue)
+            if (this.isRosterSizeQuestion && !changedModel.Checked)
             {
-                allSelectedOptions = allSelectedOptions.Concat(changedOption.ToEnumerable());
-            }
-            else
-            {
-                allSelectedOptions = allSelectedOptions.Except(changedOption.ToEnumerable());
+                var amountOfRostersToRemove = 1;
+                var message = string.Format(UIResources.Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster, amountOfRostersToRemove);
+                if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
+                {
+                    changedModel.Checked = true;
+                    return;
+                }
             }
 
             var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
@@ -129,9 +135,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
             catch (Exception ex)
             {
+                changedModel.Checked = !changedModel.Checked;
                 Validity.ProcessException(ex);
             }
-
         }
     }
 }
