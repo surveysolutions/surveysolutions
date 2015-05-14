@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (!Answer.HasValue) return;
 
-            if (isRosterSizeQuestion && previousAnswer.HasValue && previousAnswer < Answer)
+            if (isRosterSizeQuestion && previousAnswer.HasValue && Answer < previousAnswer)
             {
                 var amountOfRostersToRemove = previousAnswer - Math.Max(Answer.Value, 0);
                 var message = string.Format(UIResources.Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster, amountOfRostersToRemove);
@@ -136,6 +136,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answer: Answer.Value
                     ));
                 Validity.ExecutedWithoutExceptions();
+                
             }
             catch (Exception ex)
             {
@@ -145,8 +146,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(NumericIntegerQuestionAnswered @event)
         {
-            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
+            if (@event.QuestionId != entityIdentity.Id || !@event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
                 return;
+
+            previousAnswer = Answer;
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
