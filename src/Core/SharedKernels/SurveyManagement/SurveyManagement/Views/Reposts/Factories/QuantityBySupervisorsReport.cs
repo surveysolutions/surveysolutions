@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                             u.Roles.Contains(UserRoles.Supervisor)));
 
             var userDetails = users.Query(_ => _.Where(
-                u => u.Roles.Contains(UserRoles.Operator))
+                u => u.Roles.Contains(UserRoles.Supervisor))
                 .OrderBy(u => u.UserName)
                 .Select(u => new { SupervisorId = u.PublicKey, SupervisorName = u.UserName })
                 .Skip((input.Page - 1)*input.PageSize)
