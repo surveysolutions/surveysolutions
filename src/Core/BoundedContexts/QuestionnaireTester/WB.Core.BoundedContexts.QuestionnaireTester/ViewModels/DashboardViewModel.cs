@@ -8,6 +8,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.CommandBus;
@@ -25,17 +26,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly DesignerApiService designerApiService;
 
+        private readonly IQuestionnaireImportService questionnaireImportService;
+
         public DashboardViewModel(
             IPrincipal principal,
             ILogger logger, IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
             DesignerApiService designerApiService, 
-            ICommandService commandService)
+            ICommandService commandService, 
+            IQuestionnaireImportService questionnaireImportService)
             : base(logger)
         {
             this.principal = principal;
             this.questionnairesStorageAccessor = questionnairesStorageAccessor;
             this.designerApiService = designerApiService;
             this.commandService = commandService;
+            this.questionnaireImportService = questionnaireImportService;
         }
 
         public void Init()
@@ -163,12 +168,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 {
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                    this.commandService.Execute(new ImportFromDesigner(
-                        createdBy: this.principal.CurrentUserIdentity.UserId,
-                        source: questionnairePackage.Document,
-                        allowCensusMode: true,
-                        supportingAssembly: questionnairePackage.Assembly));
-
+                    questionnaireImportService.ImportQuestionnaire(questionnairePackage.Document, questionnairePackage.Assembly);
+                    
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
                     var interviewId = Guid.NewGuid();
