@@ -359,18 +359,26 @@ namespace WB.Tests.Unit
             string enablementCondition = null,
             string validationExpression = null,
             bool isMandatory = false,
-            string validationMessage = null)
+            string validationMessage = null,
+            QuestionType questionType = QuestionType.Text,
+            params Answer[] answers)
         {
             return new TextQuestion("Question X")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                QuestionType = QuestionType.Text,
+                QuestionType = questionType,
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                Mandatory = isMandatory
+                Mandatory = isMandatory,
+                Answers = answers.ToList()
             };
+        }
+
+        public static Answer Answer(string answer, decimal value)
+        {
+            return new Answer() {AnswerText = answer, AnswerValue = value.ToString()};
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, bool isMandatory = false,

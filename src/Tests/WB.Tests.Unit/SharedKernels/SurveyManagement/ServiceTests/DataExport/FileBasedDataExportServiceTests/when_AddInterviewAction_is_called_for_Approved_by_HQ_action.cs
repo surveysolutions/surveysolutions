@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
@@ -13,14 +12,13 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.FileBasedDataExportServiceTests
 {
-    internal class when_DeleteInterview_is_called : FileBasedDataExportServiceTestContext
+    internal class when_AddInterviewAction_is_called_for_Approved_by_HQ_action : FileBasedDataExportServiceTestContext
     {
         Establish context = () =>
         {
@@ -39,19 +37,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            fileBasedDataExportRepositoryWriter.DeleteInterview(interviewId);
+            fileBasedDataExportRepositoryWriter.AddInterviewAction(InterviewExportedAction.ApproveByHeadquarter, interviewId, Guid.NewGuid(), DateTime.Now);
 
-        It should_delete_interview_from_IDataExportWriter = () =>
+        It should_pass_InterviewerAssigned_action_to_data_export_writer = () =>
             interviewExportServiceMock.Verify(
-                x => x.DeleteInterviewRecords(interviewId), Times.Once);
+                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.ApproveByHeadquarter), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once);
 
         It should_delete_All_Data_folder = () =>
-         fileSystemAccessorMock.Verify(
-             x => x.DeleteDirectory("AllData"), Times.Once);
+            fileSystemAccessorMock.Verify(
+                x => x.DeleteDirectory("AllData"), Times.Once);
 
-        It should_not_delete_Approved_Data_folder = () =>
+        It should_delete_Approved_Data_folder = () =>
            fileSystemAccessorMock.Verify(
-               x => x.DeleteDirectory("ApprovedData"), Times.Never);
+               x => x.DeleteDirectory("ApprovedData"), Times.Once);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 
