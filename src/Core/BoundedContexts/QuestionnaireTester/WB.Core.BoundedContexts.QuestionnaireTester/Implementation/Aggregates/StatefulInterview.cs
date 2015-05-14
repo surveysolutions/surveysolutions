@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 return true;
 
             var interviewAnswerModel = this.Answers[questionKey];
-            return !interviewAnswerModel.IsInvalid();
+            return interviewAnswerModel.IsValid;
         }
 
         public bool IsEnabled(Identity entityIdentity)
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             if (this.Answers.ContainsKey(entityKey))
             {
                 var answer = this.Answers[entityKey];
-                return !answer.IsDisabled();
+                return answer.IsEnabled;
             }
 
             return true;
@@ -301,7 +301,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x => {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.QuestionState |= QuestionState.Valid;
+                answer.IsValid = true;
             });
         }
 
@@ -310,7 +310,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x => {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.QuestionState &= ~QuestionState.Valid;
+                answer.IsValid = false;
             });
         }
 
@@ -338,7 +338,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x => {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.QuestionState &= ~QuestionState.Enabled;
+                answer.IsEnabled = false;
             });
         }
 
@@ -347,7 +347,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x => {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.QuestionState |= QuestionState.Enabled;
+                answer.IsEnabled = true;
             });
         }
         
