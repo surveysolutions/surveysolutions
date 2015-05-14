@@ -1335,9 +1335,9 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new InterviewRestarted(userId: GetGuidIdByStringId(userId), restartTime: DateTime.Now, comment: null));
         }
 
-        public static IPublishedEvent<InterviewCompleted> InterviewCompletedEvent(string userId = null)
+        public static IPublishedEvent<InterviewCompleted> InterviewCompletedEvent(string userId = null, string comment=null)
         {
-            return ToPublishedEvent(new InterviewCompleted(userId: GetGuidIdByStringId(userId), completeTime: DateTime.Now, comment: null));
+            return ToPublishedEvent(new InterviewCompleted(userId: GetGuidIdByStringId(userId), completeTime: DateTime.Now, comment: comment));
         }
 
         public static IPublishedEvent<InterviewRejected> InterviewRejectedEvent(string userId = null, string comment = null)

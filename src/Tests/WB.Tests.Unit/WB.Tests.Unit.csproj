@@ -394,8 +394,6 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\InterviewStatusChangeHistoryDenormalizerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\when_interview_status_changed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />
@@ -405,10 +403,12 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonFromQuestionnaireRemoved_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\when_interview_deleted_by_synchronization.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_rejected_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_status_changed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\StatusChangeHistoryDenormalizerFunctionalTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_deleted_and_restored_by_synchronization.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_status_changed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_is_locked.cs" />
