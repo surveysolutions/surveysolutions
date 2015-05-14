@@ -6,10 +6,11 @@
   <MvxLinearLayout
       style="@style/Interview_Question">
     <include
-        layout="@layout/interview_question__header" />
+        layout="@layout/interview_question__title" />
     <MvxLinearLayout
         style="@style/Interview_Question_Body"
         local:MvxBind="Visible Enablement.Enabled">
+      <include layout="@layout/interview_question__instructions" />
       <MvxLinearLayout
           style="@style/Interview_Question_Answer">
         
