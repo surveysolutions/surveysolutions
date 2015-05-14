@@ -36,8 +36,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Entities\BaseInterviewAnswer.cs" />
+    <Compile Include="Implementation\Entities\DateTimeAnswer.cs" />
     <Compile Include="Implementation\Entities\GroupsHierarchyModel.cs" />
-    <Compile Include="Implementation\Entities\InterviewQuestion.cs" />
+    <Compile Include="Implementation\Entities\IntegerNumericAnswer.cs" />
+    <Compile Include="Implementation\Entities\InterviewGroup.cs" />
+    <Compile Include="Implementation\Entities\GpsCoordinatesAnswer.cs" />
+    <Compile Include="Implementation\Entities\InterviewRoster.cs" />
+    <Compile Include="Implementation\Entities\LinkedMultiOptionAnswer.cs" />
+    <Compile Include="Implementation\Entities\LinkedSingleOptionAnswer.cs" />
+    <Compile Include="Implementation\Entities\MaskedTextAnswer.cs" />
+    <Compile Include="Implementation\Entities\MultimediaAnswer.cs" />
+    <Compile Include="Implementation\Entities\MultiOptionAnswer.cs" />
+    <Compile Include="Implementation\Entities\QRBarcodeAnswer.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\BaseQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\DateTimeQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\GpsCoordinatesQuestionModel.cs" />
@@ -55,8 +66,11 @@
     <Compile Include="Implementation\Entities\QuestionModels\TextListQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireModel.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireReferenceModel.cs" />
+    <Compile Include="Implementation\Entities\RealNumericAnswer.cs" />
     <Compile Include="Implementation\Entities\RosterModel.cs" />
+    <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
+    <Compile Include="Implementation\Entities\TextListAnswer.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
