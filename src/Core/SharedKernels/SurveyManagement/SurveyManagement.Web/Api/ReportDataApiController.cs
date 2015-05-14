@@ -129,7 +129,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 input.Request.Page = input.Pager.Page;
                 input.Request.PageSize = input.Pager.PageSize;
             }
-
+            if (input.Request.SupervisorId == Guid.Empty)
+            {
+                input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
+            }
             return this.quantityByInterviewersReport.Load(input.Request);
         }
 

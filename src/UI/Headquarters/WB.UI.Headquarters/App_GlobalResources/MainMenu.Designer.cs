@@ -121,6 +121,15 @@ namespace Resources {
             get {
                 return ResourceManager.GetString("Observers", resourceCulture);
             }
+        }        
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        internal static string Quantity {
+            get {
+                return ResourceManager.GetString("Quantity", resourceCulture);
+            }
         }
         
         /// <summary>

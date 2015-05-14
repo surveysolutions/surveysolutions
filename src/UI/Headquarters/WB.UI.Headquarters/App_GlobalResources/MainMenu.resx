@@ -138,6 +138,9 @@
   <data name="Observers" xml:space="preserve">
     <value>Observers</value>
   </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Survey Setup</value>
   </data>
