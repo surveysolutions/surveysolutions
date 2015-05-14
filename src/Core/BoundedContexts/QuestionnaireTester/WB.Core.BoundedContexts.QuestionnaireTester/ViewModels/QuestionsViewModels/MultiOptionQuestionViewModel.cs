@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var allSelectedOptions = this.Options.Where(x => x.Checked).ToList();
 
-            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count >= maxAllowedAnswers)
+            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count > maxAllowedAnswers)
             {
                 changedModel.Checked = false;
                 return;
