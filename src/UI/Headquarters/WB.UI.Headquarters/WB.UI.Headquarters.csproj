@@ -478,11 +478,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\QuantityReport.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuantityReport.resx</DependentUpon>
-    </Compile>
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
@@ -634,10 +629,6 @@
     <Content Include="App_GlobalResources\Interviews.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\QuantityReport.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>QuantityReport.Designer.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

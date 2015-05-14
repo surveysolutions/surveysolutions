@@ -18,7 +18,10 @@
                 <a href="@Url.Action("MapReport", "HQ", new { area = "" })">@MainMenu.MapReport</a>
             </li>
             <li class="@(page == MenuItem.InterviewsChart ? "active" : "")">
-                <a href="@Url.Action("InterviewsChart", "HQ", new { area = "" })">@MainMenu.CumulativeChart</a>
+                <a href="@Url.Action("InterviewsChart", "HQ", new {area = ""})">@MainMenu.CumulativeChart</a>
+            </li>
+            <li class="@(page == MenuItem.NumberOfCompletedInterviews ? "active" : "")">
+                <a href="@Url.Action("BySupervisors", "Quantity", new { area = "" })">@MainMenu.Quantity</a>
             </li>
         </ul>
     </li>
