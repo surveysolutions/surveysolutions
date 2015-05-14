@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
@@ -25,7 +24,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
     {
         protected BaseInterviewAnswer()
         {
-            this.QuestionState = QuestionState.Valid | QuestionState.Enabled;
+            this.IsEnabled = true;
+            this.IsValid = true;
         }
 
         protected BaseInterviewAnswer(Guid id, decimal[] rosterVector)
@@ -40,31 +40,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 
         public List<string> Comments { get; set; }
 
-        public QuestionState QuestionState { get; set; }
-
-        public bool IsInvalid()
-        {
-            return !this.QuestionState.HasFlag(QuestionState.Valid);
-        }
-
-        public bool IsDisabled()
-        {
-            return !this.QuestionState.HasFlag(QuestionState.Enabled);
-        }
-
-        public bool IsAnswered()
-        {
-            return this.QuestionState.HasFlag(QuestionState.Answered);
-        }
+        public bool IsValid { get; set; }
+        public bool IsEnabled { get; set; }
+        public bool IsAnswered { get; set; }
 
         protected void MarkAnswered()
         {
-            this.QuestionState |= QuestionState.Answered;
+            IsAnswered = true;
         }
 
         protected void MarkUnAnswered()
         {
-            this.QuestionState &= ~QuestionState.Answered;
+            IsAnswered = false;
         }
     }
 
