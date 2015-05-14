@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -33,6 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
 
         private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
+        private readonly IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport;
+        private readonly IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -44,7 +47,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IViewFactory<MapReportInputModel, MapReportView> mapReport, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
-            IChartStatisticsViewFactory chartStatisticsViewFactory)
+            IChartStatisticsViewFactory chartStatisticsViewFactory, 
+            IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport)
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
@@ -54,6 +58,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.mapReport = mapReport;
             this.questionInforFactory = questionInforFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
+            this.quantityByInterviewersReport = quantityByInterviewersReport;
+            this.quantityBySupervisorsReport = quantityBySupervisorsReport;
         }
 
         [HttpPost]
@@ -114,6 +120,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public QuestionnaireQuestionInfoView QuestionInfo(QuestionnaireQuestionInfoInputModel input)
         {
             return this.questionInforFactory.Load(input);
+        }
+
+        public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+
+            return this.quantityByInterviewersReport.Load(input.Request);
+        }
+
+        public QuantityByResponsibleReportView QuantityBySupervisors(QuantityBySupervisorsReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+
+            return this.quantityBySupervisorsReport.Load(input.Request);
         }
 
         [HttpPost]

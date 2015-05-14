@@ -15,6 +15,8 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -33,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers
     public class HQController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+        private readonly IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport;
         private readonly Func<ISampleImportService> sampleImportServiceFactory;
         private readonly IUserListViewFactory supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
@@ -51,7 +54,8 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            InterviewHistorySettings interviewHistorySettings)
+            InterviewHistorySettings interviewHistorySettings, 
+            IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -61,6 +65,7 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.interviewHistorySettings = interviewHistorySettings;
+            this.quantityByInterviewersReport = quantityByInterviewersReport;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
             this.supervisorsFactory = supervisorsFactory;
         }
@@ -307,6 +312,22 @@ namespace WB.UI.Headquarters.Controllers
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
             return this.View(usersAndQuestionnaires.Users);
+        }
+
+        public ActionResult QuantityByInterviewers(Guid supervisorId)
+        {
+            this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+            return this.View("QuantityByResponsibles", usersAndQuestionnaires.Questionnaires);
+        }
+
+        public ActionResult QuantityBySupervisors()
+        {
+            this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+            return this.View("QuantityByResponsibles", usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult SupervisorsAndStatuses()
