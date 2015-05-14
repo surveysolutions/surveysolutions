@@ -12,9 +12,9 @@
 
   <dimen name="weight_InterviewEntity_Border">16dp</dimen>
 
-  <dimen name="converted_textsize_12pt">12dp</dimen>
-  <dimen name="converted_textsize_14pt">14dp</dimen>
-  <dimen name="converted_textsize_18pt">18dp</dimen>
-  <dimen name="converted_textsize_20pt">20dp</dimen>
+  <dimen name="converted_textsize_12pt">12sp</dimen>
+  <dimen name="converted_textsize_14pt">14sp</dimen>
+  <dimen name="converted_textsize_18pt">18sp</dimen>
+  <dimen name="converted_textsize_20pt">20sp</dimen>
 
 </resources>
