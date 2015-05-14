@@ -27,7 +27,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
-                { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> }
+                { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
+                { typeof(DateTimeQuestionModel), Load<DateTimeQuestionViewModel> }
             };
 
         private static T Load<T>() where T : class
