@@ -3,9 +3,11 @@
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="Enabled Enablement.Enabled">
   <MvxLinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__header" />
+    <include layout="@layout/interview_question__title" />
     <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible Enablement.Enabled">
-      <MvxLinearLayout style="@style/Interview_Question_Answer">
+      <include layout="@layout/interview_question__instructions" />
+      <MvxLinearLayout style="@style/Interview_Question_Answer"
+                       local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
 
         <MvxLinearLayout
           style="@style/Interview_Question_Answer_Options"

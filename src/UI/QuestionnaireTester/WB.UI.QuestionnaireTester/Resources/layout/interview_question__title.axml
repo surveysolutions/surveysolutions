@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_Question_Header">
+    <TextView
+        style="@style/Interview_Question_Title"
+        local:MvxBind="Text Header.Title; Enabled Enablement.Enabled" />
+</MvxLinearLayout>

@@ -14,7 +14,7 @@
 
   <style name="Interview_Question_Title" parent="Interview_Entity_Title" />
 
-  <style name="Interview_Question_Instruction" parent="VerticalFullWidthWrappingLayout" />
+  <style name="Interview_Question_Instruction" parent="Interview_Question_Header" />
 
   <style name="Interview_Question_Instruction_Title" parent="VerticalFullWidthWrappingLayout">
     <item name="android:fontFamily">Trebuchet</item>

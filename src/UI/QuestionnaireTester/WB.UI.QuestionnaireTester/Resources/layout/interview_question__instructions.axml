@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_Question_Instruction"
+    local:MvxBind="Visible Header.Instruction">
+  <TextView
+      style="@style/Interview_Question_Instruction_Title"
+      local:MvxBind="Text Localization('Interview_Instruction_Title')" />
+  <TextView
+      style="@style/Interview_Question_Instruction_Details"
+      local:MvxBind="Text Header.Instruction" />
+</MvxLinearLayout>

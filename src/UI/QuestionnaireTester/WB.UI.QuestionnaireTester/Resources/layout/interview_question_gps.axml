@@ -3,32 +3,28 @@
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="Enabled Enablement.Enabled">
   <MvxLinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__header" />
+    <include layout="@layout/interview_question__title" />
     <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible Enablement.Enabled">
+      <include layout="@layout/interview_question__instructions" />
       <MvxLinearLayout style="@style/Interview_Question_Answer"
                        local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
 
         <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout"
-              android:layout_marginBottom="28dp"
-              local:MvxBind="Visible HasAnswer">
-            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout"
-                android:background="@drawable/white_border"
-                android:layout_height="250dp">
-              <HttpImageView
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:adjustViewBounds="true"
-                  android:scaleType="centerCrop"
-                  android:layout_margin="2dp"
-                  local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer)" />
+          <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:layout_marginBottom="28dp" local:MvxBind="Visible HasAnswer">
+            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:background="@drawable/white_border" android:layout_height="250dp">
+              <HttpImageView local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer)" 
+                             android:layout_width="match_parent" 
+                             android:layout_height="match_parent" 
+                             android:adjustViewBounds="true" 
+                             android:scaleType="centerCrop"
+                             android:layout_margin="2dp" />
             </MvxLinearLayout>
-            <TextView style="@style/Interview_Question_Gps_Location_Text"
-                android:layout_marginTop="8dp"
-                local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
+            <TextView style="@style/Interview_Question_Gps_Location_Text" 
+                      android:layout_marginTop="8dp" 
+                      local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
           </MvxLinearLayout>
-          <Button style="@style/Interview_Question_Gps_Location_Button"
-              local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_Gps_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
+          <Button style="@style/Interview_Question_Gps_Location_Button" 
+                  local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_Gps_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
         </MvxLinearLayout>
 
       </MvxLinearLayout>

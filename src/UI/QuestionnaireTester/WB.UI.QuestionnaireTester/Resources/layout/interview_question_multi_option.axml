@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_QuestionWithDivider"
-    local:MvxBind="Enabled Enablement.Enabled">
-    <MvxLinearLayout
-        style="@style/Interview_Question">
-        <include
-            layout="@layout/interview_question__header" />
-        <MvxLinearLayout
-            style="@style/Interview_Question_Body"
-            local:MvxBind="Visible Enablement.Enabled">
-            <MvxLinearLayout
-                style="@style/Interview_Question_Answer">
-                <MvxLinearLayout
-                    style="@style/Interview_Question_Answer_Options"
-                    local:MvxBind="ItemsSource Options"
-                    local:MvxItemTemplate="@layout/interview_question_multi_option_item" />
-            </MvxLinearLayout>
-            <include
-                layout="@layout/interview_question__errors" />
-            <include
-                layout="@layout/interview_question__comments" />
-        </MvxLinearLayout>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+  style="@style/Interview_QuestionWithDivider"
+  local:MvxBind="Enabled Enablement.Enabled">
+  <MvxLinearLayout style="@style/Interview_Question">
+    <include layout="@layout/interview_question__title" />
+    <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible Enablement.Enabled">
+      <include layout="@layout/interview_question__instructions" />
+      <MvxLinearLayout style="@style/Interview_Question_Answer"
+                       local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
+
+        <MvxLinearLayout style="@style/Interview_Question_Answer_Options" 
+                         local:MvxBind="ItemsSource Options" 
+                         local:MvxItemTemplate="@layout/interview_question_multi_option_item" />
+
+      </MvxLinearLayout>
+      <include layout="@layout/interview_question__errors" />
+      <include layout="@layout/interview_question__comments" />
     </MvxLinearLayout>
-    <View
-        style="@style/Interview_Question_Divider" />
+  </MvxLinearLayout>
+  <View style="@style/Interview_Question_Divider" />
 </MvxLinearLayout>

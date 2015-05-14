@@ -389,7 +389,7 @@
     <AndroidResource Include="Resources\layout\interview_current_group.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question__header.axml">
+    <AndroidResource Include="Resources\layout\interview_question__title.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__errors.axml">
@@ -405,6 +405,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_real.axml">
       <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question__instructions.axml">
+      <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
