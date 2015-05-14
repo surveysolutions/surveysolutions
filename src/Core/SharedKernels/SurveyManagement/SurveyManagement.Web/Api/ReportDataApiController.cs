@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
         {
-            var input = new SurveysAndStatusesReportInputModel { ViewerId = this.GlobalInfo.GetCurrentUser().Id };
+            var input = new SurveysAndStatusesReportInputModel { TeamLeadId = this.GlobalInfo.GetCurrentUser().Id };
 
             if (data != null)
             {
@@ -130,9 +130,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     input.PageSize = data.Pager.PageSize;
                 }
 
-                if (data.Request != null)
+                if (data.Request != null && data.Request.UserId != input.TeamLeadId)
                 {
-                    input.UserId = data.Request.UserId;
+                    input.ResponsibleId = data.Request.UserId;
                 }
             }
 
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 if (data.Request != null)
                 {
-                    input.UserId = data.Request.UserId;
+                    input.TeamLeadId = data.Request.UserId;
                 }
             }
 
