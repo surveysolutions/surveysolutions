@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Provider;
+using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
@@ -26,7 +27,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(LinearLayout androidControl, LinearLayoutStyle value)
         {
-            UpdateLayoutStyle(androidControl, value);
+            UpdateLayoutStyle(value);
         }
 
         public override MvxBindingMode DefaultMode
@@ -34,25 +35,28 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             get { return MvxBindingMode.OneWay; }
         }
 
-        private void UpdateLayoutStyle(LinearLayout androidControl, LinearLayoutStyle value)
+        private void UpdateLayoutStyle(LinearLayoutStyle value)
         {
             switch (value)
             {
                 case LinearLayoutStyle.Active:
+                    SetBackgroundDrawable(Resource.Drawable.question_background_active);
+                    break;
                 case LinearLayoutStyle.NonAnswered:
-                    androidControl.SetBackgroundDrawable(androidControl.Resources.GetDrawable(Resource.Drawable.active_question_background));
+                    SetBackgroundDrawable(Resource.Drawable.question_background_nonanswered);
                     break;
                 case LinearLayoutStyle.Invalid:
-                    androidControl.SetBackgroundDrawable(androidControl.Resources.GetDrawable(Resource.Drawable.error_question_background));
+                    SetBackgroundDrawable(Resource.Drawable.question_background_error);
                     break;
                 case LinearLayoutStyle.Answered:
-                    Drawable transparentDrawable = new ColorDrawable(Color.Transparent);
-                    androidControl.SetBackgroundDrawable(transparentDrawable);
+                    SetBackgroundDrawable(Resource.Drawable.question_background_answered);
                     break;
-
-                default:
-                    throw new ArgumentException("LinearLayoutStyle");
             }
+        }
+
+        private void SetBackgroundDrawable(int questionBackgroundActive)
+        {
+            Target.SetBackgroundDrawable(Target.Resources.GetDrawable(questionBackgroundActive));
         }
     }
 }

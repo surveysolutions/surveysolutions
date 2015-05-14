@@ -6,11 +6,12 @@
     <include layout="@layout/interview_question__title" />
     <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible Enablement.Enabled">
       <include layout="@layout/interview_question__instructions" />
-      <MvxLinearLayout style="@style/Interview_Question_Answer"
-                       local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
+      <MvxLinearLayout
+        style="@style/Interview_Question_Answer" 
+        local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
 
         <EditText
-          style="@style/Interview_Question_Answer_Editor"
+          style="@style/Interview_Text_Question_Editor"
           local:MvxBind="Text Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); ValueChange ValueChangeCommand;" />
 
       </MvxLinearLayout>
