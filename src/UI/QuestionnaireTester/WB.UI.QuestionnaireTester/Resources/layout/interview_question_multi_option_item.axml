@@ -2,4 +2,4 @@
 <CheckBox xmlns:ndroid="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Answer_Option"
-    local:MvxBind="Text Title; Checked Checked; Bold Checked" />
+    local:MvxBind="Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked" />
