@@ -121,6 +121,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var message = string.Format(UIResources.Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster, amountOfRostersToRemove);
                 if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
                 {
+                    Answer = previousAnswer;
                     return;
                 }
             }
