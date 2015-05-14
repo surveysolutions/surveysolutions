@@ -6,9 +6,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
@@ -17,12 +20,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
 
-        public QuestionnaireImportService(IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository)
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+
+        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+
+        public QuestionnaireImportService(
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository, 
+            IPlainQuestionnaireRepository questionnaireRepository, 
+            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
         {
             this.questionnaireModelRepository = questionnaireModelRepository;
+            this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
         }
 
-        public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument)
+        public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly)
         {
             questionnaireDocument.ConnectChildrenWithParent();
             
@@ -45,6 +57,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
 
             questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
+
+            questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireDocument.PublicKey, 1, supportingAssembly);
+            questionnaireRepository.StoreQuestionnaire(questionnaireDocument.PublicKey, 1, questionnaireDocument);
         }
 
         private GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup)

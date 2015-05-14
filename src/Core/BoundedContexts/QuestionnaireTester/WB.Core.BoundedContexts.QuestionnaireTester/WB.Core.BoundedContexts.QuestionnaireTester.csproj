@@ -36,7 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Implementation\Aggregates\StatefulQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\GroupsHierarchyModel.cs" />
     <Compile Include="Implementation\Entities\InterviewQuestion.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\BaseQuestionModel.cs" />

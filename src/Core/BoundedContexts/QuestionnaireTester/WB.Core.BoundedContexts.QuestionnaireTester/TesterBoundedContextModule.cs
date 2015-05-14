@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester
 {
@@ -19,11 +18,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
             this.Bind<IStatefullInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
-
-            CommandRegistry
-                .Setup<StatefulQuestionnaire>()
-                .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner);
 
             CommandRegistry
                .Setup<StatefulInterview>()
