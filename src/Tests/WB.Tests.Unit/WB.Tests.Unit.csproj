@@ -384,6 +384,8 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_text_list_question_increases_roster_with_nested_fixed_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
@@ -425,6 +427,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_data_records.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called_for_Approved_by_HQ_action.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
@@ -445,7 +448,7 @@
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\SurveysAndStatusesReportTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_interview_exists_in_each_status.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_user.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_responsible.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_viewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedBySupervisor.cs" />
