@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
@@ -24,35 +23,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         private Dictionary<string, List<string>> rosterInstancesIds;
         private Dictionary<Guid, Type> questionIdToQuestionModelTypeMap;
 
-        public string QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
-
-        public Guid Id { get; set; }
-
-        public Dictionary<string, BaseInterviewAnswer> Answers
+        private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
         {
-            get { return this.answers ?? (this.answers = new Dictionary<string, BaseInterviewAnswer>()); }
+            get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
         }
-
-        public Dictionary<string, InterviewGroup> Groups
-        {
-            get { return this.groups ?? (this.groups = new Dictionary<string, InterviewGroup>()); }
-        }
-
-        public Dictionary<string, List<string>> RosterInstancesIds
-        {
-            get { return this.rosterInstancesIds ?? (this.rosterInstancesIds = new Dictionary<string, List<string>>()); }
-        }
-
-        public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap
-        {
-            get { return this.questionIdToQuestionModelTypeMap ?? (this.questionIdToQuestionModelTypeMap = new Dictionary<Guid, Type>()); }
-            set { this.questionIdToQuestionModelTypeMap = value; }
-        }
-
-        public bool HasErrors { get; set; }
-        public bool IsInProgress { get; set; }
-
+      
         private readonly Dictionary<Type, Func<BaseInterviewAnswer>> questionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<BaseInterviewAnswer>>
         {
             { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswer()},
@@ -68,118 +43,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             { typeof(DateTimeQuestionModel), () => new DateTimeAnswer()},
             { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswer()}
         };
-
-        public GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<GpsCoordinatesAnswer>(identity);
-        }
-
-        public DateTimeAnswer GetDateTimeAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<DateTimeAnswer>(identity);
-        }
-
-        public MultimediaAnswer GetMultimediaAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<MultimediaAnswer>(identity);
-        }
-
-        public QRBarcodeAnswer GetQRBarcodeAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<QRBarcodeAnswer>(identity);
-        }
-
-        public TextListAnswer GetTextListAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<TextListAnswer>(identity);
-        }
-
-        public LinkedSingleOptionAnswer GetLinkedSingleOptionAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<LinkedSingleOptionAnswer>(identity);
-        }
-
-        public MultiOptionAnswer GetMultiOptionAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<MultiOptionAnswer>(identity);
-        }
-
-        public LinkedMultiOptionAnswer GetLinkedMultiOptionAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<LinkedMultiOptionAnswer>(identity);
-        }
-
-        public IntegerNumericAnswer GetIntegerNumericAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<IntegerNumericAnswer>(identity);
-        }
-
-        public RealNumericAnswer GetRealNumericAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<RealNumericAnswer>(identity);
-        }
-
-        public MaskedTextAnswer GetTextAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<MaskedTextAnswer>(identity);
-        }
-
-        public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
-        {
-            return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
-        }
-
-        private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
-        {
-            var questionKey = ConversionHelper.ConvertIdentityToString(identity);
-            if (!this.Answers.ContainsKey(questionKey)) return null;
-            return (T)this.Answers[questionKey];
-        }
-
-
-        public bool IsValid(Identity identity)
-        {
-            var questionKey = ConversionHelper.ConvertIdentityToString(identity);
-            if (!this.Answers.ContainsKey(questionKey))
-                return true;
-
-            var interviewAnswerModel = this.Answers[questionKey];
-            return interviewAnswerModel.IsValid;
-        }
-
-        public bool IsEnabled(Identity entityIdentity)
-        {
-            var entityKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-
-            if (this.Groups.ContainsKey(entityKey))
-            {
-                var group = this.Groups[entityKey];
-                return !group.IsDisabled;
-            }
-
-            if (this.Answers.ContainsKey(entityKey))
-            {
-                var answer = this.Answers[entityKey];
-                return answer.IsEnabled;
-            }
-
-            return true;
-        }
-
-        public bool WasAnswered(Identity entityIdentity)
-        {
-            var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            if (!Answers.ContainsKey(questionKey))
-                return false;
-
-            var interviewAnswerModel = Answers[questionKey];
-            return interviewAnswerModel.IsAnswered();
-        }
-
-        private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
-        }
 
         protected new void Apply(InterviewOnClientCreated @event)
         {
@@ -278,7 +141,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var answer = this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(@event);
             answer.SetAnswers(@event.SelectedPropagationVectors);
         }
-       
+
         #endregion
 
         internal new void Apply(AnswerCommented @event)
@@ -299,7 +162,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => {
+            @event.Questions.ForEach(x =>
+            {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
                 answer.IsValid = true;
             });
@@ -308,7 +172,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public override void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => {
+            @event.Questions.ForEach(x =>
+            {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
                 answer.IsValid = false;
             });
@@ -317,7 +182,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public virtual void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
-            @event.Groups.ForEach(x => {
+            @event.Groups.ForEach(x =>
+            {
                 var groupOrRoster = this.GetOrCreateGroupOrRoster(x.Id, x.RosterVector);
                 groupOrRoster.IsDisabled = true;
             });
@@ -336,7 +202,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public virtual void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => {
+            @event.Questions.ForEach(x =>
+            {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
                 answer.IsEnabled = false;
             });
@@ -345,12 +212,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public virtual void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => {
+            @event.Questions.ForEach(x =>
+            {
                 var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
                 answer.IsEnabled = true;
             });
         }
-        
+
         #endregion
 
         #region Roster instances and titles
@@ -429,8 +297,145 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             this.HasErrors = true;
         }
-        
+
         #endregion
+
+        public string QuestionnaireId { get; set; }
+
+        public long QuestionnaireVersion { get; set; }
+
+        public Guid Id { get; set; }
+
+        public Dictionary<string, BaseInterviewAnswer> Answers
+        {
+            get { return this.answers ?? (this.answers = new Dictionary<string, BaseInterviewAnswer>()); }
+        }
+
+        public Dictionary<string, InterviewGroup> Groups
+        {
+            get { return this.groups ?? (this.groups = new Dictionary<string, InterviewGroup>()); }
+        }
+
+        public Dictionary<string, List<string>> RosterInstancesIds
+        {
+            get { return this.rosterInstancesIds ?? (this.rosterInstancesIds = new Dictionary<string, List<string>>()); }
+        }
+
+        public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap
+        {
+            get { return this.questionIdToQuestionModelTypeMap ?? (this.questionIdToQuestionModelTypeMap = new Dictionary<Guid, Type>()); }
+            set { this.questionIdToQuestionModelTypeMap = value; }
+        }
+
+        public bool HasErrors { get; set; }
+
+        public bool IsInProgress { get; set; }
+
+        public GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<GpsCoordinatesAnswer>(identity);
+        }
+
+        public DateTimeAnswer GetDateTimeAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<DateTimeAnswer>(identity);
+        }
+
+        public MultimediaAnswer GetMultimediaAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<MultimediaAnswer>(identity);
+        }
+
+        public QRBarcodeAnswer GetQRBarcodeAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<QRBarcodeAnswer>(identity);
+        }
+
+        public TextListAnswer GetTextListAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<TextListAnswer>(identity);
+        }
+
+        public LinkedSingleOptionAnswer GetLinkedSingleOptionAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<LinkedSingleOptionAnswer>(identity);
+        }
+
+        public MultiOptionAnswer GetMultiOptionAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<MultiOptionAnswer>(identity);
+        }
+
+        public LinkedMultiOptionAnswer GetLinkedMultiOptionAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<LinkedMultiOptionAnswer>(identity);
+        }
+
+        public IntegerNumericAnswer GetIntegerNumericAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<IntegerNumericAnswer>(identity);
+        }
+
+        public RealNumericAnswer GetRealNumericAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<RealNumericAnswer>(identity);
+        }
+
+        public MaskedTextAnswer GetTextAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<MaskedTextAnswer>(identity);
+        }
+
+        public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
+        }
+
+        public bool IsValid(Identity identity)
+        {
+            var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            if (!this.Answers.ContainsKey(questionKey))
+                return true;
+
+            var interviewAnswerModel = this.Answers[questionKey];
+            return interviewAnswerModel.IsValid;
+        }
+
+        public bool IsEnabled(Identity entityIdentity)
+        {
+            var entityKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+
+            if (this.Groups.ContainsKey(entityKey))
+            {
+                var group = this.Groups[entityKey];
+                return !group.IsDisabled;
+            }
+
+            if (this.Answers.ContainsKey(entityKey))
+            {
+                var answer = this.Answers[entityKey];
+                return answer.IsEnabled;
+            }
+
+            return true;
+        }
+
+        public bool WasAnswered(Identity entityIdentity)
+        {
+            var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+            if (!Answers.ContainsKey(questionKey))
+                return false;
+
+            var interviewAnswerModel = Answers[questionKey];
+            return interviewAnswerModel.IsAnswered;
+        }
+
+        private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
+        {
+            var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            if (!this.Answers.ContainsKey(questionKey)) return null;
+            return (T)this.Answers[questionKey];
+        }
 
         private T GetOrCreateAnswer<T>(QuestionActiveEvent @event) where T : BaseInterviewAnswer, new()
         {
