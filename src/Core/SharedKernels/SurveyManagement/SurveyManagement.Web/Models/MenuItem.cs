@@ -17,6 +17,7 @@
         ManageAccount,
         Headquarters,
         Observers,
+        NumberOfCompletedInterviews,
         DataExport
     }
 }
