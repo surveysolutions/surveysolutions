@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+
+  <dimen name="Interview_Entity_margin_horizontal">72dp</dimen>
+  <dimen name="Interview_Entity_margin_vertical">16dp</dimen>
+
+  <dimen name="Interview_Entity_Title_margin_vertical">10dp</dimen>
+
+  <dimen name="Interview_Entity_Element_margin_horizontal">16dp</dimen>
+
+  <dimen name="Interview_Entity_Divider_height">1dp</dimen>
+
+
+  <dimen name="Interview_Sidebar_width">520dp</dimen>
+  <dimen name="Interview_Sidebar_padding">15dp</dimen>
+  
+  <dimen name="Interview_Sidebar_Title_margin_top">5dp</dimen>
+  <dimen name="Interview_Sidebar_Title_margin_left">10dp</dimen>
+  <dimen name="Interview_Sidebar_Title_margin_bottom">10dp</dimen>
+
+  <dimen name="Interview_Sidebar_PrefilledQuestions_margin_horizontal">10dp</dimen>
+
+
+</resources>

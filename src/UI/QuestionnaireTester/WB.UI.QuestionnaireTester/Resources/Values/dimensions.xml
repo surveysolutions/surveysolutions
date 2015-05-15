@@ -2,19 +2,16 @@
 
 <resources>
 
-  <dimen name="margin_Interview_LeftSide">72dp</dimen>
-  <dimen name="margin_Interview_RightSide">72dp</dimen>
-  <dimen name="margin_Interview_Top">16dp</dimen>
-  <dimen name="margin_Interview_Bottom">16dp</dimen>
+  <dimen name="zero">0dp</dimen>
+  
+  <dimen name="textsize_12">12sp</dimen>
+  <dimen name="textsize_14">14sp</dimen>
+  <dimen name="textsize_18">18sp</dimen>
+  <dimen name="textsize_20">20sp</dimen>
 
   <dimen name="height_PQ_QuestionnaireTitleHoler">240dp</dimen>
   <dimen name="height_PQ_StartButtonHoler">110dp</dimen>
 
-  <dimen name="weight_InterviewEntity_Border">16dp</dimen>
-
-  <dimen name="converted_textsize_12pt">12sp</dimen>
-  <dimen name="converted_textsize_14pt">14sp</dimen>
-  <dimen name="converted_textsize_18pt">18sp</dimen>
-  <dimen name="converted_textsize_20pt">20sp</dimen>
+  <dimen name="Toolbar_margin_horizontal">25dp</dimen>
 
 </resources>

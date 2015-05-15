@@ -29,12 +29,12 @@
         </ScrollView>
     </MvxLinearLayout>
     <MvxLinearLayout
-        style="@style/Interview_LeftSidePanel">
+        style="@style/Interview_Sidebar">
         <TextView
-            style="@style/Interview_QuestionnaireTitle"
+            style="@style/Interview_Sidebar_Title"
             local:MvxBind="Text QuestionnaireTitle" />
         <MvxListView
-            style="@style/Interview_PrefilledQuestions_List"
+            style="@style/Interview_Sidebar_PrefilledQuestions"
             local:MvxBind="ItemsSource PrefilledQuestions"
             local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
         <include

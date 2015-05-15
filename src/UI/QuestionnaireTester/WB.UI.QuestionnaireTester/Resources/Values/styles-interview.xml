@@ -2,15 +2,15 @@
 <resources>
 
   <style name="Interview_Entity" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginLeft">@dimen/margin_Interview_LeftSide</item>
-    <item name="android:layout_marginRight">@dimen/margin_Interview_RightSide</item>
-    <item name="android:layout_marginTop">@dimen/margin_Interview_Top</item>
-    <item name="android:layout_marginBottom">@dimen/margin_Interview_Bottom</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_horizontal</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_horizontal</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 
   <style name="Interview_Entity_BasicFont">
     <item name="android:fontFamily">Arial</item>
-    <item name="android:textSize">@dimen/converted_textsize_18pt</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
   </style>
 
   <style name="Interview_Entity_Title" parent="Interview_Entity_BasicFont">
@@ -18,14 +18,13 @@
     <item name="android:textColor">@color/question_title_text</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">10dp</item>
-    <item name="android:layout_marginBottom">10dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
   </style>
 
   <style name="Interview_Entity_Divider" >
     <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">1dp</item>
-    <item name="android:layout_margin">0dp</item>
+    <item name="android:layout_height">@dimen/Interview_Entity_Divider_height</item>
     <item name="android:background">#dadada</item>
   </style>  
 

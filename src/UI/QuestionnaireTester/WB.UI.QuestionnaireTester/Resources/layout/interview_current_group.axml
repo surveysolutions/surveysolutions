@@ -16,8 +16,8 @@
         <Button
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="@dimen/margin_Interview_LeftSide"
-            android:layout_marginRight="@dimen/margin_Interview_RightSide"
+            android:layout_marginLeft="@dimen/Interview_Entity_margin_horizontal"
+            android:layout_marginRight="@dimen/Interview_Entity_margin_horizontal"
             android:layout_centerVertical="true"
             local:MvxBind="Click StartInterviewCommand; Text Localization('PrefilledQuestions_StartInterview')" />
     </MvxRelativeLayout>

@@ -374,6 +374,9 @@
     <AndroidResource Include="Resources\drawable\question_background_answered.xml" />
     <AndroidResource Include="Resources\drawable\question_background_nonanswered.xml" />
     <AndroidResource Include="Resources\drawable\question_text_question.xml" />
+    <AndroidResource Include="Resources\values\dimensions-interview.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -383,7 +386,9 @@
     <AndroidResource Include="Resources\layout\dashboard.axml" />
     <AndroidResource Include="Resources\layout\my_questionnaire_list_item.axml" />
     <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
-    <AndroidResource Include="Resources\layout\interview.axml" />
+    <AndroidResource Include="Resources\layout\interview.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
     <AndroidResource Include="Resources\layout\interview_question_text.axml">
       <SubType>Designer</SubType>
