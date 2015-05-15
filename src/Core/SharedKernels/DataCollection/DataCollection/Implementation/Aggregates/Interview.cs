@@ -778,7 +778,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
-            this.ApplyEvent(new InterviewerAssigned(userId, userId));
+            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
         }
 
@@ -1511,13 +1511,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public void AssignInterviewer(Guid userId, Guid interviewerId)
+        public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
         {
             ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
-            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
+            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
             if (!this.wasCompleted && this.status != InterviewStatus.InterviewerAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
@@ -1599,25 +1599,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
         }
 
-        public void Approve(Guid userId, string comment)
+        public void Approve(Guid userId, string comment, DateTime approveTime)
         {
             ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
                 InterviewStatus.RejectedBySupervisor,
                 InterviewStatus.RejectedByHeadquarters);
 
-            this.ApplyEvent(new InterviewApproved(userId, comment));
+            this.ApplyEvent(new InterviewApproved(userId, comment, approveTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
         }
 
-        public void Reject(Guid userId, string comment)
+        public void Reject(Guid userId, string comment, DateTime rejectTime)
         {
             ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
                 InterviewStatus.ApprovedBySupervisor,
                 InterviewStatus.RejectedByHeadquarters);
 
-            this.ApplyEvent(new InterviewRejected(userId, comment));
+            this.ApplyEvent(new InterviewRejected(userId, comment, rejectTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
@@ -1661,7 +1661,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (interviewerId.HasValue)
             {
-                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value));
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, synchronizationTime));
             }
 
             foreach (var commentedAnswer in commentedAnswers)
