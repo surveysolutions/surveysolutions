@@ -309,7 +309,7 @@ namespace WB.Tests.Unit
 
             public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
             {
-                return new InterviewerAssigned(userId, interviewerId)
+                return new InterviewerAssigned(userId, interviewerId, DateTime.Now)
                         .ToPublishedEvent(eventSourceId: interviewId);
             }
 
@@ -1311,7 +1311,7 @@ namespace WB.Tests.Unit
         {
             return
                 ToPublishedEvent(new InterviewerAssigned(userId: GetGuidIdByStringId(userId),
-                    interviewerId: GetGuidIdByStringId(interviewerId)));
+                    interviewerId: GetGuidIdByStringId(interviewerId), assignTime: DateTime.Now));
         }
 
         public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, string origin = null, Guid? interviewId = null)
@@ -1342,12 +1342,12 @@ namespace WB.Tests.Unit
 
         public static IPublishedEvent<InterviewRejected> InterviewRejectedEvent(string userId = null, string comment = null)
         {
-            return ToPublishedEvent(new InterviewRejected(userId: GetGuidIdByStringId(userId), comment: comment));
+            return ToPublishedEvent(new InterviewRejected(userId: GetGuidIdByStringId(userId), comment: comment, rejectTime: DateTime.Now));
         }
 
         public static IPublishedEvent<InterviewApproved> InterviewApprovedEvent(string userId = null, string comment = null)
         {
-            return ToPublishedEvent(new InterviewApproved(userId: GetGuidIdByStringId(userId), comment: comment));
+            return ToPublishedEvent(new InterviewApproved(userId: GetGuidIdByStringId(userId), comment: comment, approveTime: DateTime.Now));
         }
 
         public static IPublishedEvent<InterviewRejectedByHQ> InterviewRejectedByHQEvent(string userId = null, string comment = null)
