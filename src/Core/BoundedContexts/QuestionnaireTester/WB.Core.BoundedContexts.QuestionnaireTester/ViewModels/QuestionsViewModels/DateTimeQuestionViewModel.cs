@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetDateTimeAnswer(entityIdentity);
-            if (answerModel != null && answerModel.IsAnswered())
+            if (answerModel != null && answerModel.IsAnswered)
             {
                 SetToView(answerModel.Answer);
             }
