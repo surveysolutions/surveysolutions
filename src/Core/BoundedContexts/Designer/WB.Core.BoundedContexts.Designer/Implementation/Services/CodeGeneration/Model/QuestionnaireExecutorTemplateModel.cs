@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> AllRosters { set; get; }
         public string GeneratedClassName { set; get; }
         public Dictionary<string, string> GeneratedScopesTypeNames { set; get; }
-        public Dictionary<string, List<RosterTemplateModel>> RostersGroupedByScope { set; get; }
+        public Dictionary<string, RosterScopeTemplateModel> RostersGroupedByScope { set; get; }
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { set; get; }
         public Dictionary<string, Guid> VariableNames { set; get; }
 

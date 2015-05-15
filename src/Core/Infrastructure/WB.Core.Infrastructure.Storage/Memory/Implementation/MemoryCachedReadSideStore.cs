@@ -11,17 +11,16 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> readSideStorage;
-
-        private const int MaxCountOfCachedEntities = 256;
-        private const int MaxCountOfEntitiesInOneStoreOperation = 128;
+        private readonly ReadSideStoreMemoryCacheSettings settings;
 
         private bool isCacheEnabled = false;
 
         protected readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
 
-        public MemoryCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage)
+        public MemoryCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, ReadSideStoreMemoryCacheSettings settings)
         {
             this.readSideStorage = readSideStorage;
+            this.settings = settings;
         }
 
         public void EnableCache()
@@ -42,10 +41,10 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         public string GetReadableStatus()
         {
             int cachedEntities = this.cache.Count;
-            var storageName = readSideStorage.GetType().Name;
-            return string.Format("{2} cache is {0};    cached {1};",
+            return string.Format("{0}  |  cache {1}  |  cached {2}",
+                this.readSideStorage.GetReadableStatus(),
                 this.isCacheEnabled ? "enabled" : "disabled",
-                cachedEntities, storageName.Remove(storageName.IndexOf('`')));
+                cachedEntities);
         }
 
         public Type ViewType
@@ -130,7 +129,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         private void ReduceCache()
         {
-            var bulk = this.cache.Keys.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
+            var bulk = this.cache.Keys.Take(this.settings.MaxCountOfEntitiesInOneStoreOperation).ToList();
             this.StoreBulkEntitiesToRepository(bulk);
         }
 
@@ -154,7 +153,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         private bool IsCacheLimitReached()
         {
-            return this.cache.Count >= MaxCountOfCachedEntities;
+            return this.cache.Count >= this.settings.MaxCountOfCachedEntities;
         }
     }
 }

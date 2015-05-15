@@ -9,9 +9,11 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using It = Moq.It;
@@ -22,17 +24,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     internal class InterviewHistoryDenormalizerTestContext
     {
         protected static InterviewHistoryDenormalizer CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IReadSideRepositoryWriter<UserDocument> userDocumentWriter=null,
-            QuestionnaireDocument questionnaireDocument = null)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
+            QuestionnaireExportStructure questionnaire = null)
         {
             return new InterviewHistoryDenormalizer(
                 interviewHistoryViewWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewHistoryView>>(),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_=>_.GetById(It.IsAny<string>())==new InterviewSummary()),
+                interviewSummaryWriter ??
+                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
+                    _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
-                        _ =>
-                            _.GetById(It.IsAny<string>()) ==
-                                new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocument ?? new QuestionnaireDocument() }));
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
+                    _ =>
+                        _.GetById(It.IsAny<string>()) == (questionnaire ?? new QuestionnaireExportStructure())));
         }
 
         protected static InterviewHistoryView CreateInterviewHistoryView(Guid? interviewId=null)
@@ -50,11 +53,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return publishableEventMock.Object;
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionId, string variableName)
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid questionId, string variableName)
         {
-            return new QuestionnaireDocument()
+            return new QuestionnaireExportStructure()
             {
-                Children = new List<IComposite>() { new TextQuestion() { PublicKey = questionId, StataExportCaption = variableName } }
+                HeaderToLevelMap =
+                    new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>
+                    {
+                        {
+                            new ValueVector<Guid>(),
+                            new HeaderStructureForLevel()
+                            {
+                                HeaderItems =
+                                    new Dictionary<Guid, ExportedHeaderItem>()
+                                    {
+                                        {questionId, new ExportedHeaderItem() {VariableName = variableName}}
+                                    }
+                            }
+                        }
+                    }
             };
         }
 

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
             Result.IsDeleted.ShouldBeTrue();
 
         private static QuestionnaireListViewItemDenormalizer questionnaireListViewItemDenormalizer;
-        private static TestInMemoryWriter<QuestionnaireListViewItem> questionnaireListViewItemInMemoryWriter = new TestInMemoryWriter<QuestionnaireListViewItem>();
+        private static TestInMemoryWriter<QuestionnaireListViewItem> questionnaireListViewItemInMemoryWriter = Stub.ReadSideRepository<QuestionnaireListViewItem>();
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static QuestionnaireListViewItem Result
         {

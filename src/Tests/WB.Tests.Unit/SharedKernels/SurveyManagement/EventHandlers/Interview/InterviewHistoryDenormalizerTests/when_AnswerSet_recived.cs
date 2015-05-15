@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 new Tuple<decimal, string>[] { new Tuple<decimal, string>(1, "2"), new Tuple<decimal, string>(2, "3") }));
             answerEvents.Add(new QRBarcodeQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, "test"));
             answerEvents.Add(new PictureQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, "my.png"));
-            interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaireDocument: CreateQuestionnaireDocument(questionId, variableName));
+            interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaire: CreateQuestionnaireExportStructure(questionId, variableName));
         };
 
          Because of =

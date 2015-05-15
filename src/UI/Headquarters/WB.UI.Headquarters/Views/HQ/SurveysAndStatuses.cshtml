@@ -51,16 +51,15 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th data-bind='sortby: "QuestionnaireTitle"'>Survey Name</th>
-                <th data-bind='sortby: "CreatedCount"'>Created</th>
-                <th data-bind='sortby: "SupervisorAssignedCount"'>Supervisor assigned</th>
-                <th data-bind='sortby: "InterviewerAssignedCount"'>Interviewer assigned</th>
-                <th data-bind='sortby: "CompletedCount"'>Completed</th>
-                <th data-bind='sortby: "RejectedBySupervisorCount"'>Rejected by supervisor</th>
-                <th data-bind='sortby: "ApprovedBySupervisorCount"'>Approved by supervisor</th>
-                <th data-bind='sortby: "RejectedByHeadquartersCount"'>Rejected by HQ</th>
-                <th data-bind='sortby: "ApprovedByHeadquartersCount"'>Approved by HQ</th>
-                <th data-bind='sortby: "TotalCount"'>Total</th>
+                <th>Survey Name</th>
+                <th>Supervisor assigned</th>
+                <th>Interviewer assigned</th>
+                <th>Completed</th>
+                <th>Rejected by supervisor</th>
+                <th>Approved by supervisor</th>
+                <th>Rejected by HQ</th>
+                <th>Approved by HQ</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -71,7 +70,6 @@
 
                     </a>
                 </td>
-                <td data-bind="template: { name: 'CreatedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'SupervisorAssignedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'CompletedCountTemplate' }"></td>

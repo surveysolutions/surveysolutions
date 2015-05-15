@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
@@ -14,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Moq.It;
@@ -33,18 +31,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary));
-        }
-
-        protected static InterviewSummary CreateInterviewSummary(InterviewStatus[] statuses)
-        {
-            var interviewSummary = new InterviewSummary();
-            interviewSummary.CommentedStatusesHistory=new List<InterviewCommentedStatus>();
-            foreach (var interviewStatus in statuses)
-            {
-                interviewSummary.CommentedStatusesHistory.Add(CreateInterviewCommentedStatus(interviewStatus));
-            }
-            return interviewSummary;
+                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
+                Mock.Of<IReadSideKeyValueStorage<InterviewStatusHistory>>(_ => _.GetById(It.IsAny<string>()) == new InterviewStatusHistory()));
         }
 
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)

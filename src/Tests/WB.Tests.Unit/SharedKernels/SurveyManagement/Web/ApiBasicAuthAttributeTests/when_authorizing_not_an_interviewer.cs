@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using It = Machine.Specifications.It;
@@ -19,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         {
             var userViewFactoryMock = new Mock<IUserViewFactory>();
             userViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<UserViewInputModel>()))
-                .Returns(new UserView() { Roles = new List<UserRoles>(new[] { UserRoles.Supervisor }) });
+                .Returns(new UserView() { Roles = new HashSet<UserRoles>(new[] { UserRoles.Supervisor }) });
 
             attribute = Create((userName, password) => true, userViewFactoryMock.Object);
 

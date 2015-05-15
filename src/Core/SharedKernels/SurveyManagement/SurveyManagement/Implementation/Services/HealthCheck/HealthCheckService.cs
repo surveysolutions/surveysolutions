@@ -7,14 +7,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
 {
     class HealthCheckService : IHealthCheckService
     {
-        private readonly IAtomicHealthCheck<RavenHealthCheckResult> databaseHealthCheck;
         private readonly IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck;
         private readonly IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker;
         private readonly IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker;
         private readonly IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker;
 
         public HealthCheckService(
-            IAtomicHealthCheck<RavenHealthCheckResult> databaseHealthCheck,
             IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck,
             IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker,
             IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker,
@@ -23,7 +21,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             this.folderPermissionChecker = folderPermissionChecker;
             this.numberOfSyncPackagesWithBigSizeChecker = numberOfSyncPackagesWithBigSizeChecker;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
-            this.databaseHealthCheck = databaseHealthCheck;
             this.numberOfUnhandledPackagesChecker = numberOfUnhandledPackagesChecker;
         }
 
@@ -34,28 +31,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
 
         private HealthCheckResults GetHealthCheckModel()
         {
-            var databaseHealthCheckResult = databaseHealthCheck.Check();
             var eventStoreHealthCheckResult = eventStoreHealthCheck.Check();
             var numberOfUnhandledPackages = numberOfUnhandledPackagesChecker.Check();
             var numberOfSyncPackagesWithBigSize = numberOfSyncPackagesWithBigSizeChecker.Check();
             var folderPermissionCheckResult = folderPermissionChecker.Check();
 
-            HealthCheckStatus status = GetGlobalStatus(databaseHealthCheckResult, eventStoreHealthCheckResult,
+            HealthCheckStatus status = GetGlobalStatus(eventStoreHealthCheckResult,
                 numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult);
 
-            return new HealthCheckResults(status, databaseHealthCheckResult, eventStoreHealthCheckResult,
+            return new HealthCheckResults(status, eventStoreHealthCheckResult,
                 numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult);
         }
 
-        private HealthCheckStatus GetGlobalStatus(RavenHealthCheckResult databaseHealthCheckResult, 
-            EventStoreHealthCheckResult eventStoreHealthCheckResult, 
+        private HealthCheckStatus GetGlobalStatus(EventStoreHealthCheckResult eventStoreHealthCheckResult, 
             NumberOfUnhandledPackagesHealthCheckResult numberOfUnhandledPackages, 
             NumberOfSyncPackagesWithBigSizeCheckResult numberOfSyncPackagesWithBigSize, 
             FolderPermissionCheckResult folderPermissionCheckResult)
         {
             HashSet<HealthCheckStatus> statuses = new HashSet<HealthCheckStatus>(
             new[] {
-                    databaseHealthCheckResult.Status,
                     eventStoreHealthCheckResult.Status,
                     folderPermissionCheckResult.Status,
                     numberOfUnhandledPackages.Status,

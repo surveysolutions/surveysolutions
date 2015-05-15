@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
-    internal class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
+    public class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
     {
         private readonly IDocumentStore ravenStore;
         private readonly Assembly[] assembliesWithIndexes;

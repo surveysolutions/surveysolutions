@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
 
         It should_store_once_data_by_level = () =>
-            interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewToExport, Moq.It.IsAny<string>()), Times.Once());
+            interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewToExport, Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once());
 
         It should_not_store_multimedia_file_which_is_answer_on_disabled_question = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(fileName)), data), Times.Never);

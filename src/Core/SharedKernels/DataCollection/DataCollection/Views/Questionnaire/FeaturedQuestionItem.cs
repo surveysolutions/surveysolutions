@@ -4,6 +4,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     public class FeaturedQuestionItem
     {
+        protected FeaturedQuestionItem()
+        {
+        }
+
         public FeaturedQuestionItem(Guid id, string title, string caption)
         {
             Id = id;
@@ -11,8 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             Caption = caption;
         }
 
-        public Guid Id { get; private set; }
-        public string Title { get; private set; }
-        public string Caption { get; private set; }
+        public virtual Guid Id { get; protected set; }
+        public virtual string Title { get; protected set; }
+        public virtual string Caption { get; protected set; }
     }
 }

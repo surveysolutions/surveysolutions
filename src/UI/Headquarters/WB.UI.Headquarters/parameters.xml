@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <parameters>
-   <parameter name="The RavenDB instance address"
-      description="Provide the address for RavenDB instance"
-      defaultValue="http://localhost:8081">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.DocumentStore']/@value" />
+   <parameter name="ReadSide-Web.config Connection String"
+      description="Provide the connection string for PostgreSQL database for read side"
+      defaultValue="Server=127.0.0.1;Port=5432;User Id=postgres;Password=Qwerty1234;Database=SuperHQ-RC-Views;">
    </parameter>
-     <parameter name="Event store IP address"
+   <parameter name="PlainStore-Web.config Connection String"
+      description="Provide the connection string for PostgreSQL database for read side"
+      defaultValue="Server=127.0.0.1;Port=5432;User Id=postgres;Password=Qwerty1234;Database=SuperHQ-Plain;">
+   </parameter>
+
+  
+   <parameter name="Event store IP address"
       defaultValue="127.0.0.1">
    <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile" 
@@ -42,36 +45,7 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='EventStore.Password']/@value" />
    </parameter>
-
-
-   <parameter name="Events database name"
-      description="The database where the events will be stored"
-      defaultValue="HeadquartersEvents">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.Databases.Events']/@value" />
-   </parameter>
-   <parameter name="Views database name"
-      description="The database where the read side will be stored"
-      defaultValue="HeadquartersViews">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.Databases.Views']/@value" />
-   </parameter>
-   <parameter name="Plain storage"
-      description=""
-      defaultValue="HeadquartersPlainStorage">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
-   </parameter>
-   <parameter name="Filesystem name"
-      description=""
-      defaultValue="HeadquartersFileSystem">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.Databases.RavenFileSystemName']/@value" />
-   </parameter>
+   
    <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://solutions.worldbank.org/api/import" tags="">
     <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
@@ -83,13 +57,6 @@
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='SupervisorFunctionsEnabled']/@value" />
-   </parameter>
-   <parameter name="Database replication"
-      description="Turn database failover options"
-      defaultValue="FailImmediately">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.Databases.FailoverBehavior']/@value" />
    </parameter>
    <parameter name="Show control panel"
       defaultValue="false">

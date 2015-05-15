@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    [Obsolete("Remove it when HQ is a separate application")]
     public class QuestionnaireBrowseItemEventHandler : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>,
         IEventHandler<QuestionnaireDisabled>
     {
@@ -26,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Writers
         {
-            get { return new[] { readsideRepositoryWriter }; }
+            get { return new[] { this.readsideRepositoryWriter }; }
         }
 
         private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
@@ -39,8 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            var view = CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
-            readsideRepositoryWriter.AsVersioned().Store(view, evnt.EventSourceId.FormatGuid(), version);
+            var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
+            this.readsideRepositoryWriter.Store(view, view.Id);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -49,25 +48,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            var view = CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
-            readsideRepositoryWriter.AsVersioned().Store(view, evnt.EventSourceId.FormatGuid(), version);
+            var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
+            this.readsideRepositoryWriter.Store(view, view.Id);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            readsideRepositoryWriter.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
+            this.readsideRepositoryWriter.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
         }
-
 
         public void Handle(IPublishedEvent<QuestionnaireDisabled> evnt)
         {
-            var browseItem = this.readsideRepositoryWriter.AsVersioned().Get(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
+            var versionedWrapper = this.readsideRepositoryWriter.AsVersioned();
+            var versionedId = versionedWrapper.GetVersionedId(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
+            var browseItem = this.readsideRepositoryWriter.GetById(versionedId);
             if (browseItem == null)
                 return;
 
             browseItem.Disabled = true;
-
-            this.readsideRepositoryWriter.AsVersioned().Store(browseItem, evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
+            this.readsideRepositoryWriter.Store(browseItem, browseItem.Id);
         }
     }
 }

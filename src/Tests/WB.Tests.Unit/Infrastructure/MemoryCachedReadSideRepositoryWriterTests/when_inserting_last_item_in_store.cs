@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideRepositoryWriterTests
         Establish context = () =>
         {
             batchedWriter = new Mock<IReadSideRepositoryWriter<ReadSideRepositoryEntity>>();
-            memoryWriter = new MemoryCachedReadSideRepositoryWriter<ReadSideRepositoryEntity>(batchedWriter.Object);
+            memoryWriter = new MemoryCachedReadSideRepositoryWriter<ReadSideRepositoryEntity>(batchedWriter.Object, new ReadSideStoreMemoryCacheSettings(256, 128));
 
             memoryWriter.EnableCache();
             for (int i = 0; i < 255; i++)

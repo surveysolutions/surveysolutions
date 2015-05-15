@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
@@ -37,22 +33,14 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             lastSyncedPackageId = interviewSyncPackageMetas[0].PackageId;
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(interviewGroupedQueryIndexName))
-                .Returns(new List<InterviewSyncPackageMeta>
-                                        {
-                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:3, itemType: SyncItemType.Interview, userId:user1Id),
-                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:4, itemType: SyncItemType.DeleteInterview, userId:user1Id),
-                                            CreateInterviewSyncPackageMetaInformation(interviewId, sortIndex:5, itemType: SyncItemType.Interview, userId:userId),
-                                            CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:6, itemType: SyncItemType.Interview, userId:userId)
-                                        }.AsQueryable());
+            var writer = Stub.ReadSideRepository<InterviewSyncPackageMeta>();
+            foreach (var package in interviewSyncPackageMetas)
+            {
+                writer.Store(package, package.PackageId);
+            }
 
-            indexAccessorMock.Setup(x => x.Query<InterviewSyncPackageMeta>(allInterviewQueryIndexName))
-               .Returns(interviewSyncPackageMetas.AsQueryable());
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
+            syncManager = CreateSyncManager(devices: devices, interviewSyncPackageReader: writer);
         };
-
-        
 
         Because of = () =>
             result = syncManager.GetInterviewPackageIdsWithOrder(userId, deviceId, lastSyncedPackageId);
@@ -89,9 +77,6 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static readonly Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid interview1Id = Guid.Parse("44444444444444444444444444444444");
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string interviewGroupedQueryIndexName = typeof(InterviewSyncPackagesGroupedByRoot).Name;
-        private static readonly string allInterviewQueryIndexName = typeof(InterviewSyncPackagesByBriefFields).Name;
         private static List<InterviewSyncPackageMeta> interviewSyncPackageMetas;
     }
 }

@@ -17,23 +17,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
         private Establish context = () =>
         {
             var interviewSummaryViewFactoryMock = new Mock<IInterviewSummaryViewFactory>();
-            interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(new InterviewSummary()
+            var interviewSummary = new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName,
-                CommentedStatusesHistory =
-                    new List<InterviewCommentedStatus>()
-                    {
-                        new InterviewCommentedStatus() {Status = lastStatus, Date = lastStatusDateTime}
-                    }
-            });
+                TeamLeadName = supervisorName
+            };
+            interviewSummary.Status = lastStatus;
+            interviewSummary.UpdateDate =  lastStatusDateTime;
+
+            interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(interviewSummary);
 
             controller = CreateController(interviewSummaryViewFactory: interviewSummaryViewFactoryMock.Object);
         };
 
         Because of = () =>
             viewModel =
-                controller.InterviewSummaryForMapPoint(new InterviewSummaryForMapPointViewModel(){InterviewId = interviewId});
+                controller.InterviewSummaryForMapPoint(new InterviewSummaryForMapPointViewModel() { InterviewId = interviewId });
 
         It should_view_model_not_be_null = () =>
             viewModel.ShouldNotBeNull();
@@ -48,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             viewModel.LastStatus.ShouldEqual(lastStatus.ToLocalizeString());
 
         It should_last_status_date_be_equal_to_lastStatusDate = () =>
-            viewModel.LastCompletedDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
+            viewModel.LastUpdatedDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;

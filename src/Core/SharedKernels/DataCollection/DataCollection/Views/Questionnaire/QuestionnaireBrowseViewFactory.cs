@@ -1,31 +1,30 @@
 ﻿using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
-    public class QuestionnaireBrowseViewFactory : IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>
+    public class QuestionnaireBrowseViewFactory : IQuestionnaireBrowseViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader;
 
-        public QuestionnaireBrowseViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession)
+        public QuestionnaireBrowseViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader)
         {
-            this.documentGroupSession = documentGroupSession;
+            this.reader = reader;
         }
 
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
             // Adjust the model appropriately
-            int count = this.documentGroupSession.Count();
+            int count = this.reader.Count();
             if (count == 0)
             {
                 return new QuestionnaireBrowseView(
-                    input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
+                    input.Page, input.PageSize.GetValueOrDefault(), count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
-            return this.documentGroupSession.Query(queryable =>
+            return this.reader.Query(queryable =>
             {
                 IQueryable<QuestionnaireBrowseItem> query = queryable;
 
@@ -53,18 +52,21 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
                     if (!string.IsNullOrEmpty(input.Filter))
                     {
-#warning ReadLayer: ToList materialization because not supported by Raven
-                        query = query.ToList().AsQueryable().Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+                        query = query.Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
                     }
                 }
 
-#warning ReadLayer: ToList materialization because not supported by Raven
-                var queryResult = query.ToList().AsQueryable().OrderUsingSortExpression(input.Order);
+                var queryResult = query.OrderUsingSortExpression(input.Order);
 
-                var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
+                IQueryable<QuestionnaireBrowseItem> pagedResults = queryResult;
+
+                if (input.PageSize.HasValue)
+                {
+                    pagedResults = queryResult.Skip((input.Page - 1) * input.PageSize.Value).Take(input.PageSize.Value);
+                }
 
 
-                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
+                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), pagedResults.ToList(), input.Order);
             });
         }
     }
