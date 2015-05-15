@@ -51,7 +51,7 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="Interview_Text_Question_Editor" parent="Interview_Question_Answer_Editor">
+  <style name="Interview_Question_Answer_TextEditor" parent="Interview_Question_Answer_Editor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
     <item name="android:focusable">true</item>

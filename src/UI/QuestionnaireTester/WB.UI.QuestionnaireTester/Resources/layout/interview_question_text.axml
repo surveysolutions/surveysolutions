@@ -11,7 +11,7 @@
         local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
 
         <EditText
-          style="@style/Interview_Text_Question_Editor"
+          style="@style/Interview_Question_Answer_TextEditor"
           local:MvxBind="Text Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); ValueChange ValueChangeCommand;" />
 
       </MvxLinearLayout>
