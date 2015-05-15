@@ -361,5 +361,16 @@ namespace WB.UI.Headquarters.Controllers
                     Statuses = statuses
                 };
         }
+
+        public ActionResult DataExport()
+        {
+            this.ViewBag.ActivePage = MenuItem.DataExport;
+            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+
+            return this.View(usersAndQuestionnaires.Questionnaires);
+        }
     }
 }

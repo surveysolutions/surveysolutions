@@ -22,7 +22,9 @@
     </li>
 
     <li class="@(page == MenuItem.Teams ? "active" : "")">
-        <a href="@Url.Action("Index", "Interviewer", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
+        <a href="@Url.Action("Index", "Interviewer", new {area = string.Empty})">
+            <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamAndRoles
+        </a>
     </li>
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
