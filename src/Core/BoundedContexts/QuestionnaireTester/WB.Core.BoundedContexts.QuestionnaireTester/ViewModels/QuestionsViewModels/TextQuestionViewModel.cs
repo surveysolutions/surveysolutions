@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -104,6 +105,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void SendAnswerTextQuestionCommand()
         {
+            Task.Run(() => SendAnswerTextQuestionCommandImpl());
+        }
+
+        private void SendAnswerTextQuestionCommandImpl()
+        {
             try
             {
                 commandService.Execute(new AnswerTextQuestionCommand(
@@ -122,7 +128,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 Validity.ProcessException(ex);
             }
         }
-
 
         private void InitQuestionSettings()
         {

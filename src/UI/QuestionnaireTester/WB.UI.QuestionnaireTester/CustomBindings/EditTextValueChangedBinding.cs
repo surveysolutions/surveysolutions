@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Android.Text;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
@@ -13,9 +15,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
     {
         private IMvxCommand Command;
 
-        private bool isFocused = false;
-        private bool wasFocused = false;
-        private bool isTextChanged = false;
+        private string oldEditTextValue;
 
         protected new EditText Target
         {
@@ -29,30 +29,23 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            Target.AfterTextChanged += AfterTextChanged;
             Target.FocusChange += FocusChange;
         }
 
         private void FocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            this.wasFocused = isFocused && e.HasFocus == false;
-            this.isFocused = e.HasFocus;
-            TrySendAnswerTextQuestionCommand();
-        }
-
-        private void AfterTextChanged(object sender, AfterTextChangedEventArgs e)
-        {
-            this.isTextChanged = true;
-            TrySendAnswerTextQuestionCommand();
+            if (e.HasFocus)
+                oldEditTextValue = Target.Text;
+            else
+                TrySendAnswerTextQuestionCommand();
         }
 
         private void TrySendAnswerTextQuestionCommand()
         {
-            if (!this.wasFocused || !this.isTextChanged)
-                return;
+            var isTextChanged = oldEditTextValue != Target.Text;
 
-            this.isTextChanged = false;
-            this.wasFocused = false;
+            if (!isTextChanged)
+                return;
 
             if (Target == null)
                 return;
@@ -90,7 +83,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             {
                 if (Target != null)
                 {
-                    Target.AfterTextChanged -= AfterTextChanged;
                     Target.FocusChange -= FocusChange;
                 }
             }
