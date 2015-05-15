@@ -27,7 +27,8 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
-            {typeof (QrBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode}
+            {typeof (QrBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
+            {typeof (GroupViewModel), Resource.Layout.interview_group}
         };
 
         public override int GetItemViewType(int position)
