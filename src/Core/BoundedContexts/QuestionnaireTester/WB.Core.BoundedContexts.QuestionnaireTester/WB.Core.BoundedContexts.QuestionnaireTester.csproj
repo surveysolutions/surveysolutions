@@ -71,7 +71,6 @@
     <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
-    <Compile Include="Implementation\Aggregates\StatefulQuestionnaire.cs" />
     <Compile Include="Infrastructure\IQrBarcodeScanService.cs" />
     <Compile Include="Infrastructure\ScanResult.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
