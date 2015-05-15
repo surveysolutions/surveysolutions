@@ -13,8 +13,13 @@
       <include layout="@layout/interview_question__instructions" />
       <MvxLinearLayout
           style="@style/Interview_Question_Answer">
-        
-        
+
+        <EditText
+          android:editable="false"
+          android:focusable="false"
+          style="@style/Interview_Question_Answer_Editor"
+          local:MvxBind="Text Answer; DateChange AnswerCommand" />
+
       </MvxLinearLayout>
       <include
           layout="@layout/interview_question__errors" />

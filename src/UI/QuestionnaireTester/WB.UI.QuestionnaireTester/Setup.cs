@@ -83,6 +83,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
 			registry.RegisterCustomBindingFactory<LinearLayout>("Style", (view) => new LinearLayoutStyleBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
+            registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditDateBinding(editText));
 
             base.FillTargetFactories(registry);
         }

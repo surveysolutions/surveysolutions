@@ -192,6 +192,9 @@
     <Compile Include="Converters\NullableDecimalToStringConverter.cs" />
     <Compile Include="Converters\NullableIntToStringConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
+    <Compile Include="CustomBindings\EditDateBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CustomBindings\LinearLayoutStyleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
@@ -211,6 +214,7 @@
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
     <Compile Include="Views\BaseActivityView.cs" />
+    <Compile Include="Views\CustomControls\EnterTimeView.cs" />
     <Compile Include="Views\CustomControls\HttpImageView.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />
@@ -403,7 +407,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_multi_option.axml" />
-    <AndroidResource Include="Resources\layout\interview_question_multi_option_item.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_multi_option_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_integer.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -414,7 +420,7 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_datetime.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +464,7 @@
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-mdpi\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
