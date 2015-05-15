@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewStatus.RejectedBySupervisor,
-                evnt.EventTimeStamp,
+                evnt.Payload.RejectTime ?? evnt.EventTimeStamp,
                 evnt.Payload.Comment,
                 GetResponsibleIdName(evnt.Payload.UserId)));
 
@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     interviewSummary.TeamLeadId,
                     interviewSummary.ResponsibleId,
                     InterviewStatus.ApprovedBySupervisor,
-                    evnt.EventTimeStamp,
+                    evnt.Payload.ApproveTime ?? evnt.EventTimeStamp,
                     evnt.Payload.Comment,
                     GetResponsibleIdName(evnt.Payload.UserId)));
 
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     interviewSummary.TeamLeadId,
                     evnt.Payload.InterviewerId,
                     InterviewStatus.InterviewerAssigned,
-                    evnt.EventTimeStamp,
+                    evnt.Payload.AssignTime ?? evnt.EventTimeStamp,
                     null,
                     GetResponsibleIdName(evnt.Payload.UserId)));
 
