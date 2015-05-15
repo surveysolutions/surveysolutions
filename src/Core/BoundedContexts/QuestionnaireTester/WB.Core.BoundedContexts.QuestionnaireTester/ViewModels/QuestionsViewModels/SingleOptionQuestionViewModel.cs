@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -27,8 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionHeaderViewModel questionHeaderViewModel,
-            EnablementViewModel enablementViewModel)
+            QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel)
         {
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (principal == null) throw new ArgumentNullException("principal");
@@ -40,24 +40,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
-            this.Header = questionHeaderViewModel;
-            this.Enablement = enablementViewModel;
+            this.QuestionState = questionStateViewModel;
         }
 
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public QuestionHeaderViewModel Header { get; private set; }
-        public EnablementViewModel Enablement { get; private set; }
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
+        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
+
 
         public void Init(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.Header.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
@@ -78,13 +76,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
 
-            this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
-                this.userId,
-                this.questionIdentity.Id,
-                this.questionIdentity.RosterVector,
-                DateTime.UtcNow,
-                selectedOption.Value));
+            try
+            {
+                this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
+                    this.interviewId,
+                    this.userId,
+                    this.questionIdentity.Id,
+                    this.questionIdentity.RosterVector,
+                    DateTime.UtcNow,
+                    selectedOption.Value));
+            }
+            catch (Exception ex)
+            {
+                QuestionState.ProcessAnswerCommandException(ex);
+            }
 
             var optionsToUnselect = this.Options.Where(option => option != selectedOption && option.Selected);
 
@@ -98,7 +103,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var optionViewModel = new SingleOptionQuestionOptionViewModel
             {
-                Enablement = this.Enablement,
+                Enablement = QuestionState.Enablement,
 
                 Value = model.Value,
                 Title = model.Title,
