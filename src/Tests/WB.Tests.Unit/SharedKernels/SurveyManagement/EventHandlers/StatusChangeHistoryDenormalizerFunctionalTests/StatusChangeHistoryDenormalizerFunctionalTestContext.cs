@@ -13,9 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 {
     internal class StatusChangeHistoryDenormalizerFunctionalTestContext
     {
-        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer()
+        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer(IReadSideRepositoryWriter<InterviewStatuses> interviewStatuses=null)
         {
-            return new StatusChangeHistoryDenormalizerFunctional(null, Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
+            return new StatusChangeHistoryDenormalizerFunctional(interviewStatuses?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(), Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()));
         }
