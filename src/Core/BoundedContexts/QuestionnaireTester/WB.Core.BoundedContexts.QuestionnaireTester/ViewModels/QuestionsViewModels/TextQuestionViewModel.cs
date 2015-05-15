@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -27,10 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity entityIdentity;
         private string interviewId;
 
-        public QuestionHeaderViewModel Header { get; private set; }
-        public ValidityViewModel Validity { get; private set; }
-        public EnablementViewModel Enablement { get; private set; }
-        public CommentsViewModel Comments { get; private set; }
+        public QuestionStateViewModel<TextQuestionAnswered> QuestionState { get; private set; }
 
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
@@ -38,21 +36,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionHeaderViewModel questionHeaderViewModel,
-            ValidityViewModel validity,
-            EnablementViewModel enablement,
-            CommentsViewModel comments)
+            QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-
-            this.Header = questionHeaderViewModel;
-            this.Validity = validity;
-            this.Enablement = enablement;
-            this.Comments = comments;
+            this.QuestionState = questionStateViewModel;
         }
 
 
@@ -66,10 +57,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             liteEventRegistry.Subscribe(this);
 
-            this.Header.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Comments.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             InitQuestionSettings();
             UpdateSelfFromModel();
@@ -89,15 +77,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { answer = value; RaisePropertyChanged(); }
         }
 
-        private bool isAnswered;
-        public bool IsAnswered
-        {
-            get { return isAnswered; }
-            set { isAnswered = value; RaisePropertyChanged(); }
-        }
-
         private IMvxCommand valueChangeCommand;
-
         public IMvxCommand ValueChangeCommand
         {
             get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
@@ -121,11 +101,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answer: Answer
                     ));
 
-                Validity.ExecutedWithoutExceptions();
+                QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (Exception ex)
             {
-                Validity.ProcessException(ex);
+                QuestionState.ProcessAnswerCommandException(ex);
             }
         }
 
@@ -150,8 +130,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.Answer = answerModel.Answer;
             }
-
-            IsAnswered = interview.WasAnswered(entityIdentity);
         }
 
         public void Handle(TextQuestionAnswered @event)
