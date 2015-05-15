@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Raven.Client;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Raven.PlainStorage;
@@ -21,11 +22,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
             get { return typeof(TEntity).Name; }
         }
 
-        public TEntity GetById(string id)
+        public TEntity GetById(object id)
         {
             using (IDocumentSession session = this.OpenSession())
             {
-                string ravenId = ToRavenId(id);
+                string ravenId = ToRavenId(id.ToString());
 
                 var entity = session.Load<TEntity>(id: ravenId);
 
@@ -33,11 +34,11 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
             }
         }
 
-        public void Remove(string id)
+        public void Remove(object id)
         {
             using (IDocumentSession session = this.OpenSession())
             {
-                string ravenId = ToRavenId(id);
+                string ravenId = ToRavenId(id.ToString());
 
                 var entity = session.Load<TEntity>(id: ravenId);
 
@@ -49,13 +50,13 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
             }
         }
 
-        public void Store(IEnumerable<Tuple<TEntity, string>> entities)
+        public void Store(IEnumerable<Tuple<TEntity, object>> entities)
         {
             using (IDocumentSession session = this.OpenSession())
             {
                 foreach (var entity in entities)
                 {
-                    string ravenId = ToRavenId(entity.Item2);
+                    string ravenId = ToRavenId(entity.Item2.ToString());
                     session.Store(entity: entity.Item1, id: ravenId);
                 }
                 
@@ -64,15 +65,24 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
 
         }
 
-        public void Store(TEntity entity, string id)
+        public void Store(TEntity entity, object id)
         {
             using (IDocumentSession session = this.OpenSession())
             {
-                string ravenId = ToRavenId(id);
+                string ravenId = ToRavenId(id.ToString());
 
                 session.Store(entity: entity, id: ravenId);
                 session.SaveChanges();
             }
+        }
+
+        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        {
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return query.Invoke(session.Query<TEntity>().Customize(customization => customization.WaitForNonStaleResultsAsOfLastWrite()));
+            }
+
         }
 
         protected IDocumentSession OpenSession()

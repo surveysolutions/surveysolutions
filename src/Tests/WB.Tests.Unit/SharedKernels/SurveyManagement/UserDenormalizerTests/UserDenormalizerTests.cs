@@ -17,15 +17,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserDenormalizerTests
             return new UserDenormalizer(users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
         }
 
-        protected static UserDocument CreateUser(Guid userId, List<DeviceInfo> history = null)
+        protected static UserDocument CreateUser(Guid userId, ISet<DeviceInfo> history = null)
         {
             return new UserDocument
             {
                 PublicKey = userId,
                 UserName = "Vasya",
                 Email = "vasya@the.best",
-                Roles = new List<UserRoles>{ UserRoles.Operator },
-                DeviceChangingHistory = history ?? new List<DeviceInfo>()
+                Roles = new HashSet<UserRoles>{ UserRoles.Operator },
+                DeviceChangingHistory = history ?? new HashSet<DeviceInfo>()
             };
         }
 

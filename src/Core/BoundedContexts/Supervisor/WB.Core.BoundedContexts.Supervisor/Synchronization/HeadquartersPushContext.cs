@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         internal HeadquartersPushContext()
             : base(null) {}
 
-        public HeadquartersPushContext(IPlainStorageAccessor<SynchronizationStatus> statusStorage)
+        public HeadquartersPushContext(IPlainKeyValueStorage<SynchronizationStatus> statusStorage)
             : base(statusStorage) {}
 
         protected override string StorageDocumentId

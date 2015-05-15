@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         public QuestionnaireBrowseInputModel()
         {
             this.Orders = new List<OrderRequestItem>();
-            this.PageSize = 20;
             this.Page = 1;
         }
 
@@ -54,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         /// <summary>
         /// Gets or sets the page size.
         /// </summary>
-        public int PageSize { get; set; }
+        public int? PageSize { get; set; }
 
         /// <summary>
         /// Gets or sets the is admin mode.

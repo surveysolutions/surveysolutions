@@ -1,17 +1,12 @@
-﻿using System.Collections.Generic;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+﻿using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates
 {
     public partial class RosterScopeTemplate
     {
-        public RosterScopeTemplate(
-            KeyValuePair<string, List<RosterTemplateModel>> rosterScope, 
-            QuestionnaireExecutorTemplateModel executorModel)
+        public RosterScopeTemplate(RosterScopeTemplateModel rosterScopeModel)
         {
-            this.Model = new RosterScopeTemplateModel(
-                rosterScope,
-                executorModel);
+            this.Model = rosterScopeModel;
         }
 
         public RosterScopeTemplateModel Model { get; private set; }

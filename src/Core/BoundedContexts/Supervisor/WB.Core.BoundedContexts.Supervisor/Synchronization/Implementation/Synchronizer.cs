@@ -1,47 +1,57 @@
 using System;
 using System.Collections.Generic;
 using Nito.AsyncEx;
-using Quartz;
+using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
-    internal class Synchronizer : ISynchronizer, IJob
+    internal class Synchronizer : ISynchronizer
     {
-        private readonly ILocalFeedStorage localFeedStorage;
+        private readonly ILocalFeedStorage localUsersFeedStorage;
         private readonly ILocalUserFeedProcessor localUserFeedProcessor;
         private readonly IUserChangedFeedReader feedReader;
-
         
         private readonly IInterviewsSynchronizer interviewsSynchronizer;
         private readonly IQuestionnaireSynchronizer questionnaireSynchronizer;
-        
+        private readonly IPlainTransactionManager plainTransactionManager;
+
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
         private bool isSynchronizationRunning;
         private static readonly object LockObject = new object();
+        private readonly ILogger logger;
 
         public Synchronizer(
-            ILocalFeedStorage localFeedStorage,
+            ILocalFeedStorage localUsersFeedStorage,
             IUserChangedFeedReader feedReader,
             ILocalUserFeedProcessor localUserFeedProcessor, 
-            IInterviewsSynchronizer interviewsSynchronizer, IQuestionnaireSynchronizer questionnaireSynchronizer,
+            IInterviewsSynchronizer interviewsSynchronizer, 
+            IQuestionnaireSynchronizer questionnaireSynchronizer,
+            IPlainTransactionManager plainTransactionManager,
             HeadquartersPullContext headquartersPullContext,
-            HeadquartersPushContext headquartersPushContext)
+            HeadquartersPushContext headquartersPushContext,
+            ILogger logger)
         {
-            if (localFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
+            if (localUsersFeedStorage == null) throw new ArgumentNullException("localFeedStorage");
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (localUserFeedProcessor == null) throw new ArgumentNullException("localUserFeedProcessor");
             if (interviewsSynchronizer == null) throw new ArgumentNullException("interviewsSynchronizer");
+            if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
+            if (logger == null) throw new ArgumentNullException("logger");
 
-            this.localFeedStorage = localFeedStorage;
+            this.localUsersFeedStorage = localUsersFeedStorage;
             this.feedReader = feedReader;
             this.localUserFeedProcessor = localUserFeedProcessor;
             this.interviewsSynchronizer = interviewsSynchronizer;
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;
             this.questionnaireSynchronizer = questionnaireSynchronizer;
+            this.plainTransactionManager = plainTransactionManager;
+            this.logger = logger;
         }
 
         public void Pull()
@@ -64,27 +74,39 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             {
                 this.isSynchronizationRunning = true;
                 this.headquartersPullContext.Start();
+                
+                this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                {
+                    var lastStoredFeedEntry = this.localUsersFeedStorage.GetLastEntry();
 
-                var lastStoredFeedEntry = this.localFeedStorage.GetLastEntry();
+                    this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null ? 
+                        string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId, lastStoredFeedEntry.Timestamp) : 
+                        string.Format("Nothing synchronized yet, loading full users event stream"));
 
-                this.headquartersPullContext.PushMessage(lastStoredFeedEntry != null
-                    ? string.Format("Last synchronized userentry id {0}, date {1}", lastStoredFeedEntry.EntryId,
-                        lastStoredFeedEntry.Timestamp)
-                    : string.Format("Nothing synchronized yet, loading full users event stream"));
+                    List<LocalUserChangedFeedEntry> newEvents = AsyncContext.Run(() => this.feedReader.ReadAfterAsync(lastStoredFeedEntry));
 
-                List<LocalUserChangedFeedEntry> newEvents = AsyncContext.Run(() => this.feedReader.ReadAfterAsync(lastStoredFeedEntry));
-
-                this.headquartersPullContext.PushMessage(string.Format("Saving {0} new events to local storage", newEvents.Count));
-                this.localFeedStorage.Store(newEvents);
+                    this.headquartersPullContext.PushMessageFormat("Saving {0} new events to local storage", newEvents.Count);
+                    this.localUsersFeedStorage.Store(newEvents);
+                });
 
                 var supervisorIds = this.localUserFeedProcessor.PullUsersAndReturnListOfSynchronizedSupervisorsId();
 
                 this.questionnaireSynchronizer.Pull();
+
                 this.interviewsSynchronizer.PullInterviewsForSupervisors(supervisorIds);
             }
             catch (ApplicationException e)
             {
                 this.headquartersPullContext.PushError(e.Message);
+            }
+            catch (Exception e)
+            {
+                const string UnexpectedErrorMessage = "Synchronization failed. Please contact Survey Solutions team (support@mysurvey.solutions).";
+
+                this.headquartersPullContext.PushError(UnexpectedErrorMessage);
+                this.logger.Error(UnexpectedErrorMessage, e);
+
+                throw;
             }
             finally
             {
@@ -116,11 +138,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     }
                 }
             }
-        }
-
-        public void Execute(IJobExecutionContext context)
-        {
-            this.Pull();
         }
     }
 }

@@ -1,6 +1,7 @@
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
@@ -10,24 +11,29 @@ namespace WB.Core.Infrastructure.Storage.Esent
 {
     public class EsentReadSideModule : NinjectModule
     {
-        private readonly string dataFolder;
+        private static string dataFolder;
+        private static string plainStoreFolder;
+        private static int memoryCacheSizePerEntity;
 
-        public EsentReadSideModule(string dataFolder)
+        public EsentReadSideModule(string dataFolder, string plainStoreFolder, int memoryCacheSizePerEntity)
         {
-            this.dataFolder = dataFolder;
+            EsentReadSideModule.dataFolder = dataFolder;
+            EsentReadSideModule.plainStoreFolder = plainStoreFolder;
+            EsentReadSideModule.memoryCacheSizePerEntity = memoryCacheSizePerEntity;
         }
 
         public override void Load()
         {
-            this.Kernel.Bind<EsentSettings>().ToConstant(new EsentSettings(dataFolder));
-
-            this.Kernel.Bind(typeof (EsentKeyValueStorage<>)).ToSelf().InSingletonScope();
-
             this.Kernel.Bind(typeof (MemoryCachedKeyValueStorageProvider<>)).ToSelf();
 
             this.Kernel.Bind(typeof (IReadSideKeyValueStorage<>))
                 .ToMethod(GetReadSideKeyValueStorage)
                 .InSingletonScope();
+
+            this.Kernel.Bind(typeof (IPlainKeyValueStorage<>))
+                .To(typeof (EsentKeyValueStorage<>))
+                .InSingletonScope()
+                .WithConstructorArgument(new EsentSettings(plainStoreFolder));
         }
 
         protected object GetReadSideKeyValueStorage(IContext context)
@@ -46,7 +52,11 @@ namespace WB.Core.Infrastructure.Storage.Esent
         {
             protected override IReadSideKeyValueStorage<TEntity> CreateInstance(IContext context)
             {
-                return new MemoryCachedKeyValueStorage<TEntity>(context.Kernel.Get<EsentKeyValueStorage<TEntity>>());
+                var esentKeyValueStorage = new EsentKeyValueStorage<TEntity>(new EsentSettings(dataFolder));
+
+                return new MemoryCachedKeyValueStorage<TEntity>(
+                    esentKeyValueStorage,
+                    new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2));
             }
         }
     }

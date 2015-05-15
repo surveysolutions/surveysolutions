@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
@@ -22,10 +23,13 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
@@ -82,6 +86,7 @@ namespace WB.UI.Designer.App_Start
             var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
 
             var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
+            int ravenCacheSize = WebConfigurationManager.AppSettings["Raven.CacheSize"].ParseIntOrNull() ?? 256;
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
@@ -90,6 +95,9 @@ namespace WB.UI.Designer.App_Start
             }
 
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
+            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
+
+            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -97,10 +105,10 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, ravenCacheSize, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new EsentReadSideModule(esentDataFolder),
+                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
@@ -112,7 +120,11 @@ namespace WB.UI.Designer.App_Start
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
+
+            kernel.Bind<ReadSideService>().ToSelf().InSingletonScope();
+            kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
+            kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
+
             PrepareNcqrsInfrastucture(kernel);
             
             return kernel;
@@ -150,6 +162,7 @@ namespace WB.UI.Designer.App_Start
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
 
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {

@@ -20,6 +20,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -85,13 +86,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Returns(Task<HttpResponseMessage>.Factory.StartNew(() =>
                     new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(positiveResponse) }));
 
-            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
-                => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
+            readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == eventStream);
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<int>()) == eventStream);
 
-            var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
+            var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
@@ -105,8 +106,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
-                readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
-                interviewSummaryRepositoryWriter: interviewSummaryRepositoryWriter,
+                readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
+                interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 jsonUtils: jsonUtils,
                 httpMessageHandler: () => httpMessageHandler);

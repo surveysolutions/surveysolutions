@@ -24,8 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             exception = Catch.Exception(() =>
                 deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
 
-        It should_throw_ArgumentException = () =>
-            exception.ShouldBeOfExactType<ArgumentException>();
+        It should_not_throw_ArgumentException = () =>
+            exception.ShouldBeNull();
 
         private static DeleteQuestionnaireService deleteQuestionnaireService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
