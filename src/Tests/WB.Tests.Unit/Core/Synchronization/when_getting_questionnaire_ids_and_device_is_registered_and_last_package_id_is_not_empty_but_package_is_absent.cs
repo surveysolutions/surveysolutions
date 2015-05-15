@@ -1,17 +1,11 @@
-using System;
-using System.Linq;
-
 using Machine.Specifications;
-
 using Moq;
-
+using System;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization.Documents;
-using WB.Core.Synchronization.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Core.Synchronization
@@ -25,12 +19,7 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             lastSyncedPackageId = "22222222222222222222222222222222_1$2";
 
-            indexAccessorMock = new Mock<IReadSideRepositoryIndexAccessor>();
-
-            indexAccessorMock.Setup(x => x.Query<QuestionnaireSyncPackageMeta>(questionnireQueryIndexName))
-                .Returns(Enumerable.Empty<QuestionnaireSyncPackageMeta>().AsQueryable());
-
-            syncManager = CreateSyncManager(devices: devices, indexAccessor: indexAccessorMock.Object);
+            syncManager = CreateSyncManager(devices: devices);
         };
 
         Because of = () =>
@@ -54,8 +43,5 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static string lastSyncedPackageId = "sync package id";
-
-        private static Mock<IReadSideRepositoryIndexAccessor> indexAccessorMock;
-        private static readonly string questionnireQueryIndexName = typeof(QuestionnaireSyncPackagesByBriefFields).Name;
     }
 }

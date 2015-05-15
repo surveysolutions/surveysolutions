@@ -20,10 +20,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire
             this.EntryId = entryId;
         }
 
-        public Guid QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
-        public QuestionnaireEntryType EntryType { get; set; }
-        public DateTime Timestamp { get; set; }
-        public string EntryId { get; set; }
+        public virtual Guid QuestionnaireId { get; set; }
+        public virtual long QuestionnaireVersion { get; set; }
+        public virtual QuestionnaireEntryType EntryType { get; set; }
+        public virtual DateTime Timestamp { get; set; }
+        public virtual string EntryId { get; set; }
     }
 }

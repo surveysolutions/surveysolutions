@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Main.Core;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Ncqrs.Commanding;
-
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
-using WB.Core.BoundedContexts.Supervisor.Questionnaires;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -24,6 +16,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -43,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IHeadquartersSettings settings;
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
-        private readonly IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
+        private readonly IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
         private readonly IReadSideRepositoryReader<UserDocument> users;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IHeadquartersInterviewReader headquartersInterviewReader;
@@ -51,18 +44,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPushContext headquartersPushContext;
         private readonly IEventStore eventStore;
         private readonly IJsonUtils jsonUtils;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader;
         private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly IArchiveUtils archiver;
+        private readonly IPlainTransactionManager plainTransactionManager;
+        private readonly ITransactionManager cqrsTransactionManager;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
             IHeadquartersSettings settings, 
             ILogger logger,
             ICommandService commandService,
-            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage, 
+            IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage, 
             IQueryableReadSideRepositoryReader<UserDocument> users,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IHeadquartersInterviewReader headquartersInterviewReader,
@@ -70,10 +65,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             HeadquartersPushContext headquartersPushContext,
             IEventStore eventStore,
             IJsonUtils jsonUtils,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader,
             IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader,
-            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
-            IArchiveUtils archiver)
+            Func<HttpMessageHandler> httpMessageHandler,
+            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
+            IArchiveUtils archiver,
+            IPlainTransactionManager plainTransactionManager,
+            ITransactionManager cqrsTransactionManager)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -88,7 +86,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (eventStore == null) throw new ArgumentNullException("eventStore");
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (archiver == null) throw new ArgumentNullException("archiver");
-            if (interviewSummaryRepositoryWriter == null) throw new ArgumentNullException("interviewSummaryRepositoryWriter");
+            if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
+            if (cqrsTransactionManager == null) throw new ArgumentNullException("cqrsTransactionManager");
+            if (interviewSummaryRepositoryReader == null) throw new ArgumentNullException("interviewSummaryRepositoryReader");
             if (readyToSendInterviewsRepositoryReader == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryReader");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
 
@@ -104,81 +104,91 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPushContext = headquartersPushContext;
             this.eventStore = eventStore;
             this.jsonUtils = jsonUtils;
-            this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
+            this.interviewSummaryRepositoryReader = interviewSummaryRepositoryReader;
             this.readyToSendInterviewsRepositoryReader = readyToSendInterviewsRepositoryReader;
             this.httpMessageHandler = httpMessageHandler;
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
             this.archiver = archiver;
+            this.plainTransactionManager = plainTransactionManager;
+            this.cqrsTransactionManager = cqrsTransactionManager;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
         {
-            this.StoreEventsToLocalStorage();
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                this.StoreEventsToLocalStorage();
+            });
 
             foreach (var localSupervisor in supervisorIds)
             {
-                List<LocalInterviewFeedEntry> events = 
-                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed))
-                                     .OrderByDescending(x => x.Timestamp).ToList();
+                List<LocalInterviewFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    this.plainStorage.Query(_ => _
+                        .Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed)
+                        .OrderByDescending(x => x.Timestamp)
+                        .ToList()));
 
                 this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.SynchronizingInterviewsForSupervisor0EventsCount1Format, localSupervisor, events.Count()));
                 
                 foreach (var interviewFeedEntry in events)
                 {
-                    try
+                    this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                     {
-                        if (interviewFeedEntry.Processed) continue;
-
-                        switch (interviewFeedEntry.EntryType)
+                        try
                         {
-                            case EntryType.SupervisorAssigned:
-                                var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
-                                if (!this.IsResponsiblePresent(interviewDetails.UserId))
-                                    continue;
+                            if (interviewFeedEntry.Processed) return;
 
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId);
-                                break;
-                            case EntryType.InterviewUnassigned:
-                                this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
-                                this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
-                                break;
-                            case EntryType.InterviewDeleted:
-                                this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
-                                this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
-                                break;
-                            case EntryType.InterviewRejected:
-                                var rejectedInterview = this.GetInterviewDetails(interviewFeedEntry).Result;
-                                if (!this.IsResponsiblePresent(rejectedInterview.UserId))
-                                    continue;
+                            switch (interviewFeedEntry.EntryType)
+                            {
+                                case EntryType.SupervisorAssigned:
+                                    var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
+                                    if (!this.IsResponsiblePresent(interviewDetails.UserId))
+                                        return;
 
-                                this.RejectInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.SupervisorId, rejectedInterview);
-                                break;
-                            default:
-                                this.logger.Warn(string.Format(
-                                    Resources.InterviewsSynchronizer.Unknowneventoftype0receivedininterviewsfeedItwasskippedandmarkedasprocessedwitherrorEventId1Format,
-                                    interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
-                                break;
+                                    this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId);
+                                    break;
+                                case EntryType.InterviewUnassigned:
+                                    this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                    this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
+                                    break;
+                                case EntryType.InterviewDeleted:
+                                    this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                    this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
+                                    break;
+                                case EntryType.InterviewRejected:
+                                    var rejectedInterview = this.GetInterviewDetails(interviewFeedEntry).Result;
+                                    if (!this.IsResponsiblePresent(rejectedInterview.UserId))
+                                        return;
+
+                                    this.RejectInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.SupervisorId, rejectedInterview);
+                                    break;
+                                default:
+                                    this.logger.Warn(string.Format(
+                                        Resources.InterviewsSynchronizer.Unknowneventoftype0receivedininterviewsfeedItwasskippedandmarkedasprocessedwitherrorEventId1Format,
+                                        interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
+                                    break;
+                            }
+
+                            interviewFeedEntry.Processed = true;
+                            interviewFeedEntry.ProcessedWithError = false;
                         }
-
-                        interviewFeedEntry.Processed = true;
-                        interviewFeedEntry.ProcessedWithError = false;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        foreach (var inner in ex.InnerExceptions)
+                        catch (AggregateException ex)
                         {
-                            this.MarkAsProcessedWithError(interviewFeedEntry, inner);
+                            foreach (var inner in ex.InnerExceptions)
+                            {
+                                this.MarkAsProcessedWithError(interviewFeedEntry, inner);
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        this.MarkAsProcessedWithError(interviewFeedEntry, ex);
-                        this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Interviewssynchronizationerrorinevent0Format, interviewFeedEntry.EntryId), ex);
-                    }
-                    finally
-                    {
-                        this.plainStorage.Store(interviewFeedEntry, interviewFeedEntry.EntryId);
-                    }
+                        catch (Exception ex)
+                        {
+                            this.MarkAsProcessedWithError(interviewFeedEntry, ex);
+                            this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Interviewssynchronizationerrorinevent0Format, interviewFeedEntry.EntryId), ex);
+                        }
+                        finally
+                        {
+                            this.plainStorage.Store(interviewFeedEntry, interviewFeedEntry.EntryId);
+                        }
+                    });
                 }
             }
         }
@@ -216,7 +226,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview0wasrejectedbyHQFormat, interviewId));
 
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            var interviewSummary = this.GetInterviewSummary(Guid.Parse(interviewId));
             if (interviewSummary == null)
 
             {
@@ -234,6 +244,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 DateTime.Now));
         }
 
+        private InterviewSummary GetInterviewSummary(Guid interviewId)
+        {
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.interviewSummaryRepositoryReader.GetById(interviewId));
+        }
+
         public void Push(Guid userId)
         {
             this.PushInterviewData(userId);
@@ -243,7 +259,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void PushInterviewData(Guid userId)
         {
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
-            this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Found0interviewstopushFormat, interviewsToPush.Count));
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
 
             for (int interviewIndex = 0; interviewIndex < interviewsToPush.Count; interviewIndex++)
             {
@@ -251,17 +267,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Pushinginterview01outof2Format, interviewId.FormatGuid(),
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
                         interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
                     this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview0successfullypushedFormat, interviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Failed_to_push_interview__0__to_Headquarters_Format, interviewId.FormatGuid()), exception);
+                    this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
                     this.headquartersPushContext.PushError(string.Format(
-                        Resources.InterviewsSynchronizer.Failed_to_push_interview__0___Error_message___1___Exception_messages___2_Format,
+                        "Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
                         interviewId.FormatGuid(), exception.Message,
                         string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
@@ -270,9 +286,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void PushInterviewFile()
         {
-            this.headquartersPushContext.PushMessage(Resources.InterviewsSynchronizer.Getting_interviews_files_to_be_pushed_);
+            this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
             var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
-            this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Found__0__files_to_push_Format, files.Count));
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
 
             for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
             {
@@ -280,17 +296,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Pushing_file__0__for_interview__1____2__out_of__3_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
                     this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.File__0__for_interview__1__successfully_pushed_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format("File {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Failed_to_push_file__0__for_interview__1__to_Headquarters_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
+                    this.logger.Error(string.Format("Failed to push file {0} for interview {1} to Headquarters.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
                     this.headquartersPushContext.PushError(string.Format(
-                        Resources.InterviewsSynchronizer.Failed_to_push_file__0__for_interview__1___Error_message___2___Exception_messages___3_Format,
+                        "Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}",
                         interviewFile.FileName, interviewFile.InterviewId.FormatGuid(), exception.Message,
                         string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
@@ -304,11 +320,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         }
         private bool IsResponsiblePresent(Guid userId)
         {
-            return users.GetById(userId) != null;
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.users.GetById(userId) != null);
         }
         private bool IsInterviewPresent(Guid interviewId)
         {
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            var interviewSummary = this.GetInterviewSummary(interviewId);
             return interviewSummary != null && !interviewSummary.IsDeleted;
         }
 
@@ -343,7 +360,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
 
-            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            var interviewSummary = this.GetInterviewSummary(interviewIdGuid);
             if (interviewSummary == null)
                 return;
 
@@ -371,16 +388,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 newEvents.Add(feedEntry);
             }
 
-            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, x.EntryId)));
+            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, (object)x.EntryId)));
         }
 
 
         private List<Guid> GetInterviewsToPush()
         {
-            return this.readyToSendInterviewsRepositoryReader
-                .QueryAll()
-                .Select(interview => interview.InterviewId)
-                .ToList();
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() => 
+                this.readyToSendInterviewsRepositoryReader.Query(_ => _.Select(x => x.InterviewId)
+                                                          .ToList()));
         }
 
         private void PushInterview(Guid interviewId, Guid userId)
@@ -395,7 +411,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
             else
             {
-                this.logger.Info(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_not_sent_to_Headquarters_because_there_are_no_events_which_should_be_sent_Format, interviewId.FormatGuid()));
+                this.logger.Info(string.Format("Interview {0} was not sent to Headquarters because there are no events which should be sent.", interviewId.FormatGuid()));
             }
 
             this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
@@ -408,17 +424,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private string GetInterviewDataToBeSentAsString(Guid interviewId, AggregateRootEvent[] eventsToSend)
         {
-            InterviewSummary interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            InterviewSummary interviewSummary = this.GetInterviewSummary(interviewId);
 
-            InterviewCommentedStatus lastInterviewCommentedStatus = interviewSummary.CommentedStatusesHistory.LastOrDefault();
-            string lastComment = lastInterviewCommentedStatus != null ? lastInterviewCommentedStatus.Comment : string.Empty;
-
+            string lastComment = interviewSummary.LastStatusChangeComment ?? string.Empty;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions
                     .Select(
                         featuredQuestion =>
-                            new FeaturedQuestionMeta(featuredQuestion.Key, featuredQuestion.Value.Title, featuredQuestion.Value.Answer)).ToList()
+                            new FeaturedQuestionMeta(featuredQuestion.Questionid, featuredQuestion.Title, featuredQuestion.Answer)).ToList()
                 : null;
 
             var metadata = new InterviewMetaInfo
@@ -506,7 +520,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue).ToList();
+            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue).ToList();
 
             int indexOfLastEventSentToHeadquarters = storedEvents.FindLastIndex(storedEvent => storedEvent.Payload is InterviewSentToHeadquarters);
             int countOfEventsSentToHeadquarters = indexOfLastEventSentToHeadquarters + 1;

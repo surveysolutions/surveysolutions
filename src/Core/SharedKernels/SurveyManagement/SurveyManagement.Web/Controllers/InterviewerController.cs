@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils;
@@ -74,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     Email = user.Email,
                     IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
                     UserName = user.UserName,
-                    DevicesHistory = user.DeviceChangingHistory
+                    DevicesHistory = user.DeviceChangingHistory.ToList()
                 });
         }
 

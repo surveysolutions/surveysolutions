@@ -21,6 +21,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -45,24 +46,20 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
-            var readyToSendInterviewsRepositoryWriter =
-                Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
-                    =>
-                    writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) ==
-                        new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
+            readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == new CommittedEventStream(interviewId, interviewEvent));
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<int>()) == new CommittedEventStream(interviewId, interviewEvent));
 
             InterviewSummary interviewSummary = Create.InterviewSummary();
             interviewSummary.WasCreatedOnClient = true;
-            var answersToFeaturedQuestions = new Dictionary<Guid,QuestionAnswer>();
-            answersToFeaturedQuestions.Add(questionId,
-                new QuestionAnswer() { Answer = questionAnswer, Id = answerId, Title = questionTitle });
-            interviewSummary.AnswersToFeaturedQuestions = answersToFeaturedQuestions; 
+            interviewSummary.AnswersToFeaturedQuestions.Add(
+                new QuestionAnswer { Answer = questionAnswer, Questionid = questionId, Title = questionTitle }
+            );
 
-            var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
+            var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == interviewSummary);
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
@@ -71,21 +68,21 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.Serialize(Moq.It.IsAny<AggregateRootEvent[]>()))
                 .Returns(eventsJson)
-                .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
+                .Callback<object>(entity => events = (AggregateRootEvent[])entity);
 
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.Serialize(Moq.It.IsAny<InterviewMetaInfo>()))
                 .Returns(metadataJson)
-                .Callback<object>(entity => metadata = (InterviewMetaInfo) entity);
+                .Callback<object>(entity => metadata = (InterviewMetaInfo)entity);
 
             Mock.Get(jsonUtils)
                 .Setup(utils => utils.Serialize(Moq.It.IsAny<SyncItem>()))
                 .Returns(syncItemJson)
-                .Callback<object>(entity => syncItem = (SyncItem) entity);
+                .Callback<object>(entity => syncItem = (SyncItem)entity);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
-                readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
-                interviewSummaryRepositoryWriter: interviewSummaryRepositoryWriter,
+                readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
+                interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
                 jsonUtils: jsonUtils,

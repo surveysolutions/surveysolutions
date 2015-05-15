@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Resources;
-using Ionic.Zip;
-using Ionic.Zlib;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -17,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -40,18 +36,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-
-        private readonly FileBasedDataExportRepositorySettings settings;
-        private bool isCacheEnabled = false;
-        private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
+        private readonly IExportedDataAccessor exportedDataAccessor;
 
         public FileBasedDataExportRepositoryWriter(
             IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository, IReadSideKeyValueStorage<InterviewData> interviewDataWriter,
+            IFileSystemAccessor fileSystemAccessor, 
+            ILogger logger, 
+            IPlainInterviewFileStorage plainFileRepository,
+            IReadSideKeyValueStorage<InterviewData> interviewDataWriter,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
-            IExportViewFactory exportViewFactory, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, FileBasedDataExportRepositorySettings settings)
+            IReadSideRepositoryWriter<UserDocument> users,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
+            IExportViewFactory exportViewFactory, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, IExportedDataAccessor exportedDataAccessor)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -64,11 +62,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.settings = settings;
+            this.exportedDataAccessor = exportedDataAccessor;
         }
 
         public void Clear()
         {
+            this.dataExportWriter.Clear();
             this.filebasedExportedDataAccessor.CleanExportDataFolder();
             this.filebasedExportedDataAccessor.CleanExportFileFolder();
         }
@@ -81,19 +80,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void AddExportedDataByInterview(Guid interviewId)
         {
-            if (isCacheEnabled)
-            {
-                var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
-                cacheByInterview.InterviewIds.Add(interviewId);
-                cacheByInterview.InterviewForDeleteIds.Remove(interviewId);
-
-                ReduceCacheIfNeeded(cacheByInterview.PathToDataBase);
-                return;
-            }
-
             var interviewDataExportView = this.CreateInterviewDataExportView(interviewId);
 
-            if (interviewDataExportView==null)
+            if (interviewDataExportView == null)
                 return;
 
             this.AddExportedDataByInterviewImpl(interviewDataExportView);
@@ -101,134 +90,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void AddInterviewAction(InterviewExportedAction action, Guid interviewId, Guid userId, DateTime timestamp)
         {
-            if (isCacheEnabled)
-            {
-                this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId).Actions.Add(new ActionCacheEntity(interviewId, action, userId, timestamp));
-                return;
-            }
-
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
 
             if (interviewSummary == null || interviewSummary.IsDeleted)
                 return;
 
             this.AddInterviewActionImpl(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion,
-                 CreateInterviewAction(action, interviewId, userId, timestamp));
+                CreateInterviewAction(action, interviewId, userId, timestamp));
         }
 
         public void DeleteInterview(Guid interviewId)
         {
-            if (isCacheEnabled)
-            {
-                QuestionnaireExportEntity cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
-                cacheByInterview.InterviewIds.Remove(interviewId);
-                cacheByInterview.InterviewForDeleteIds.Add(interviewId);
-                return;
-            }
-
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
             if (interviewSummary == null)
                 return;
 
-            this.DeleteInterviewImpl(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion, interviewId);
+            this.DeleteInterviewImpl(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion,
+                interviewId);
         }
 
         public void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion)
         {
-            var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                questionnaireVersion);
-
-            if (isCacheEnabled)
-            {
-                cache.Remove(dataFolderForTemplatePath);
-            }
+            var dataFolderForTemplatePath =
+                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                    questionnaireVersion);
 
             this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
 
-            var filesFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaire(questionnaireId,
-                questionnaireVersion);
+            var filesFolderForTemplatePath =
+                this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaire(questionnaireId,
+                    questionnaireVersion);
 
             this.fileSystemAccessor.DeleteDirectory(filesFolderForTemplatePath);
         }
 
-        public void EnableCache()
-        {
-            this.isCacheEnabled = true;
-        }
-
-        public bool IsCacheEnabled { get { return this.isCacheEnabled; } }
-
-        public void DisableCache()
-        {
-            var cachedEntities = this.cache.Keys.ToArray();
-            foreach (var cachedEntity in cachedEntities)
-            {
-                if(cache.ContainsKey(cachedEntity))
-                    ReduceCache(cache[cachedEntity]);
-            }
-            this.isCacheEnabled = false;
-        }
-
-        public string GetReadableStatus()
-        {
-            return string.Format(FileBasedDataExportRepositoryWriterMessages.CacheDescriptionFormat,
-                this.isCacheEnabled ? FileBasedDataExportRepositoryWriterMessages.Enabled : FileBasedDataExportRepositoryWriterMessages.Disabled,
-                cache.Count,
-                cache.Values.Sum(c=>c.InterviewIds.Count),
-                cache.Values.Sum(c => c.InterviewForDeleteIds.Count),
-                cache.Values.Sum(c => c.Actions.Count));
-        }
-
-        public Type ViewType { get { return dataExportWriter.GetType(); } }
-
-        private void ReduceCacheIfNeeded(string entityDbPath)
-        {
-            var entity = cache[entityDbPath];
-            if (this.IsCacheLimitReached(entity))
-            {
-                this.ReduceCache(entity);
-            }
-        }
-
-        private bool IsCacheLimitReached(QuestionnaireExportEntity entity)
-        {
-            return entity.InterviewIds.Count >= this.settings.MaxCountOfCachedEntities;
-        }
-
-        private void ReduceCache(QuestionnaireExportEntity entity)
-        {
-            var exportStructure = questionnaireExportStructureWriter.AsVersioned().Get(entity.QuestionnaireId.FormatGuid(), entity.QuestionnaireVersion);
-            if (exportStructure == null)
-            {
-                return;
-            }
-
-            try
-            {
-                this.dataExportWriter.BatchInsert(entity.PathToDataBase,
-                    entity.InterviewIds.Select(i => CreateInterviewDataExportView(i, exportStructure))
-                        .Where(i => i != null),
-                    entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp))
-                        .Where(a => a != null), entity.InterviewForDeleteIds);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message, e);
-            }
-
-            this.cache.Remove(entity.PathToDataBase);
-        }
-
         private void CreateExportedDataStructure(QuestionnaireExportStructure questionnaireExportStructure)
         {
-            var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.CreateExportDataFolder(questionnaireExportStructure.QuestionnaireId,
+            var dataFolderForTemplatePath =
+                this.filebasedExportedDataAccessor.CreateExportDataFolder(questionnaireExportStructure.QuestionnaireId,
                     questionnaireExportStructure.Version);
-
-            this.dataExportWriter.CreateStructure(questionnaireExportStructure, dataFolderForTemplatePath);
 
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, ExportFileSettings.GetContentFileName(headerStructureForLevel.LevelName), dataFolderForTemplatePath);
+                this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel,
+                    ExportFileSettings.GetContentFileName(headerStructureForLevel.LevelName), dataFolderForTemplatePath);
             }
         }
 
@@ -240,33 +145,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void DeleteInterviewImpl(Guid questionnaireId, long questionnaireVersion, Guid interviewId)
         {
-            var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                questionnaireVersion);
+            this.dataExportWriter.DeleteInterviewRecords(interviewId);
 
-            this.dataExportWriter.DeleteInterviewRecords(dataFolderForTemplatePath, interviewId);
-
-            var filesFolderForInterview = this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaireForInterview(questionnaireId,
-                questionnaireVersion, interviewId);
+            var filesFolderForInterview =
+                this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaireForInterview(questionnaireId,
+                    questionnaireVersion, interviewId);
 
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
+
+            var dataFolderForQuestionnaire =
+                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                    questionnaireVersion);
+
+            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
         }
 
         private void AddExportedDataByInterviewImpl(InterviewDataExportView interviewDataExportView)
         {
-            var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
-
-            this.dataExportWriter.AddOrUpdateInterviewRecords(interviewDataExportView, dataFolderForTemplatePath);
-
-            var filesFolderForInterview = this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaireForInterview(interviewDataExportView.TemplateId,
-                interviewDataExportView.TemplateVersion, interviewDataExportView.InterviewId);
+            this.dataExportWriter.AddOrUpdateInterviewRecords(interviewDataExportView,
+                interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
+             
+            var filesFolderForInterview =
+                this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaireForInterview(
+                    interviewDataExportView.TemplateId,
+                    interviewDataExportView.TemplateVersion, interviewDataExportView.InterviewId);
 
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
 
             fileSystemAccessor.CreateDirectory(filesFolderForInterview);
 
-            var questionsWithAnswersOnMultimediaQuestions = this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
+            var questionsWithAnswersOnMultimediaQuestions =
+                this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
 
             foreach (var questionWithAnswersOnMultimediaQuestions in questionsWithAnswersOnMultimediaQuestions)
             {
@@ -275,19 +186,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 if (fileContent == null || fileContent.Length == 0)
                 {
-                    logger.Error(string.Format(FileBasedDataExportRepositoryWriterMessages.FileContentIsMissingForFileNameAndInterviewFormat, questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
+                    logger.Error(
+                        string.Format(
+                            FileBasedDataExportRepositoryWriterMessages
+                                .FileContentIsMissingForFileNameAndInterviewFormat,
+                            questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
                     continue;
                 }
 
-                this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionWithAnswersOnMultimediaQuestions), fileContent);
+                this.fileSystemAccessor.WriteAllBytes(
+                    this.fileSystemAccessor.CombinePath(filesFolderForInterview,
+                        questionWithAnswersOnMultimediaQuestions), fileContent);
             }
         }
 
-        private void AddInterviewActionImpl(Guid questionnaireId, long questionnaireVersion, InterviewActionExportView action)
+        private void AddInterviewActionImpl(Guid questionnaireId, long questionnaireVersion,
+            InterviewActionExportView action)
         {
-            var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+            this.dataExportWriter.AddActionRecord(action, questionnaireId, questionnaireVersion);
 
-            this.dataExportWriter.AddActionRecord(action, dataFolderForTemplatePath);
+            var dataFolderForQuestionnaire =
+                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                    questionnaireVersion);
+
+            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
+
+            if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
+                fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetApprovedDataFolder(dataFolderForQuestionnaire));
         }
 
         private string[] GetAllMultimediaQuestionFileNames(InterviewDataExportView interviewDataExportView)
@@ -299,49 +224,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                             record.Questions.Where(
                                 question =>
                                     question.QuestionType == QuestionType.Multimedia && question.Answers != null &&
-                                        question.Answers.Length > 0 && !string.IsNullOrEmpty(question.Answers[0]))));
-            
+                                    question.Answers.Length > 0 && !string.IsNullOrEmpty(question.Answers[0]))));
+
             return questionsWithAnswersOnMultimediaQuestions.Select(a => a.Answers[0]).ToArray();
         }
 
-        private QuestionnaireExportEntity GetOrCreateQuestionnaireExportEntityByInterviewId(Guid interviewId)
-        {
-            var interviewSummary = interviewSummaryWriter.GetById(interviewId);
-            if (interviewSummary == null)
-                throw new InterviewDataExportException(
-                    string.Format(FileBasedDataExportRepositoryWriterMessages.InterviewWithIdIsAbsentFormat,
-                        interviewId));
-
-            var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-
-            if (!cache.ContainsKey(dataFolderForTemplatePath))
-            {
-                cache.Add(dataFolderForTemplatePath, 
-                    new QuestionnaireExportEntity(dataFolderForTemplatePath, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
-            }
-
-            return cache[dataFolderForTemplatePath];
-        }
-
-        private InterviewActionExportView CreateInterviewAction(InterviewExportedAction action, Guid interviewId, Guid userId, DateTime timestamp)
+        private InterviewActionExportView CreateInterviewAction(InterviewExportedAction action, Guid interviewId,
+            Guid userId, DateTime timestamp)
         {
             UserDocument responsible = this.users.GetById(userId);
 
             var userName = this.GetUserName(responsible);
 
             return
-                new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp, this.GetUserRole(responsible));
+                new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp,
+                    this.GetUserRole(responsible));
         }
 
-        private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId, QuestionnaireExportStructure questionnaireExportStructure=null)
+        private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId,
+            QuestionnaireExportStructure questionnaireExportStructure = null)
         {
             var interview = interviewDataWriter.GetById(interviewId);
-            if(interview==null  || interview.IsDeleted)
+            if (interview == null || interview.IsDeleted)
                 return null;
 
             if (questionnaireExportStructure == null)
             {
-                questionnaireExportStructure = questionnaireExportStructureWriter.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
+                questionnaireExportStructure =
+                    questionnaireExportStructureWriter.AsVersioned()
+                        .Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
                 if (questionnaireExportStructure == null)
                     return null;
             }
@@ -355,59 +266,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var firstRole = user.Roles.First();
             switch (firstRole)
             {
-                case UserRoles.Operator: return  FileBasedDataExportRepositoryWriterMessages.Interviewer;
-                case UserRoles.Supervisor: return  FileBasedDataExportRepositoryWriterMessages.Supervisor;
-                case UserRoles.Headquarter: return  FileBasedDataExportRepositoryWriterMessages.Headquarter;
+                case UserRoles.Operator:
+                    return FileBasedDataExportRepositoryWriterMessages.Interviewer;
+                case UserRoles.Supervisor:
+                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
+                case UserRoles.Headquarter:
+                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
+                case UserRoles.Administrator:
+                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }
 
         private string GetUserName(UserDocument responsible)
         {
-            var userName = responsible != null ? responsible.UserName : FileBasedDataExportRepositoryWriterMessages.UnknownUser;
+            var userName = responsible != null
+                ? responsible.UserName
+                : FileBasedDataExportRepositoryWriterMessages.UnknownUser;
             return userName;
         }
 
-        #region cache interral classes
-
-        private class ActionCacheEntity
+        public void EnableCache()
         {
-            public ActionCacheEntity(Guid interviewId, InterviewExportedAction action, Guid userId, DateTime timestamp)
-            {
-                this.InterviewId = interviewId;
-                this.Action = action;
-                this.UserId = userId;
-                this.Timestamp = timestamp;
-            }
-
-            public Guid InterviewId { get; private set; }
-            public InterviewExportedAction Action { get; private set; }
-            public Guid UserId { get; private set; }
-            public DateTime Timestamp { get; private set; }
+            dataExportWriter.EnableCache();
         }
 
-        private class QuestionnaireExportEntity
+        public void DisableCache()
         {
-            public QuestionnaireExportEntity(string pathToDataBase, Guid questionnaireId, long questionnaireVersion)
-            {
-                this.PathToDataBase = pathToDataBase;
-                this.QuestionnaireId = questionnaireId;
-                this.QuestionnaireVersion = questionnaireVersion;
-                this.InterviewIds = new HashSet<Guid>();
-                this.InterviewForDeleteIds = new HashSet<Guid>();
-                this.Actions = new List<ActionCacheEntity>();
-            }
-
-            public Guid QuestionnaireId { get; private set; }
-            public long QuestionnaireVersion { get; private set; }
-            public string PathToDataBase { get; private set; }
-            public HashSet<Guid> InterviewIds { get; private set; }
-            public HashSet<Guid> InterviewForDeleteIds { get; private set; }
-            public List<ActionCacheEntity> Actions { get; private set; }
+            dataExportWriter.DisableCache();
         }
 
-        #endregion
+        public bool IsCacheEnabled
+        {
+            get { return dataExportWriter.IsCacheEnabled; }
+        }
 
+        public string GetReadableStatus()
+        {
+            return dataExportWriter.GetReadableStatus();
+        }
+
+        public Type ViewType
+        {
+            get { return dataExportWriter.GetType(); }
+        }
     }
-    
+
 }

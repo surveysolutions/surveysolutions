@@ -33,8 +33,6 @@ namespace WB.Tests.Unit.Applications.Supervisor.HQSyncControllerTests
         It should_return_is_running_flag_provided_by_push_context = () =>
             ShouldExtensionMethods.ShouldEqual(GetDataFromJsonResult(result).IsRunning, isRunning);
 
-        It should_return_status_provided_by_push_context = () =>
-            ShouldExtensionMethods.ShouldEqual(GetDataFromJsonResult(result).Status, status);
 
         It should_return_messages_provided_by_push_context = () =>
             ShouldExtensionMethods.ShouldEqual(GetDataFromJsonResult(result).Messages, messages);

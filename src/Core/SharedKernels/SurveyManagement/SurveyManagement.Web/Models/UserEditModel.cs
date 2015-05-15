@@ -30,11 +30,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [EmailAddress(ErrorMessageResourceName = "EmailErrorMessage",
             ErrorMessageResourceType = typeof (FieldsAndValidations), ErrorMessage = null)]
         [Display(Name = "EmailFieldName", ResourceType = typeof (FieldsAndValidations), Order = 3)]
+        [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = "RequiredEmailErrorMessage")]
         public string Email { get; set; }
 
         [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 4)]
         public bool IsLocked { get; set; }
 
-        public List<DeviceInfo> DevicesHistory { get; set; }
+        public IList<DeviceInfo> DevicesHistory { get; set; }
     }
 }

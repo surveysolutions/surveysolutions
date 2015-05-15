@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Raven.Abstractions.Extensions;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

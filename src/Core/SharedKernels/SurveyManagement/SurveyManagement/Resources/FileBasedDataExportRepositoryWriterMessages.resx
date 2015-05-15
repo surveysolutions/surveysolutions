@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CacheDescriptionFormat" xml:space="preserve">
-    <value>cache {0};    update db: {1}    insert interviews: {2};    delete interviews: {3}    insert actions: {4}</value>
-  </data>
-  <data name="Disabled" xml:space="preserve">
-    <value>disabled</value>
-  </data>
-  <data name="Enabled" xml:space="preserve">
-    <value>enabled</value>
-  </data>
   <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
     <value>File content is missing for file name {0} interview {1}</value>
   </data>
@@ -146,5 +137,8 @@
   </data>
   <data name="UnknownUser" xml:space="preserve">
     <value>&lt;UNKNOWN USER&gt;</value>
+  </data>
+  <data name="Administrator" xml:space="preserve">
+    <value>Administrator</value>
   </data>
 </root>

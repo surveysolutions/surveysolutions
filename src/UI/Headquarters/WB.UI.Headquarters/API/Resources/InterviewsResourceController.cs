@@ -42,10 +42,9 @@ namespace WB.UI.Headquarters.API.Resources
             }
 
             string comments = null;
-            if (interviewSummary != null && interviewSummary.CommentedStatusesHistory != null &&
-                interviewSummary.CommentedStatusesHistory.Any())
+            if (interviewSummary != null)
             {
-                comments = interviewSummary.CommentedStatusesHistory.Last().Comment;
+                comments = interviewSummary.LastStatusChangeComment;
             }
 
             InterviewData document = interviewData;

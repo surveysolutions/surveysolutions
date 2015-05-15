@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<AnswersRemoved>
     {
         private readonly IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewBriefStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage;
 
         public override object[] Writers
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] { interviewBriefStorage, variablesStorage }; }
         }
 
-        public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
+        public AnswersByVariableDenormalizer(IReadSideRepositoryReader<InterviewSummary> interviewBriefStorage,
             IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage,
             IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage)
         {

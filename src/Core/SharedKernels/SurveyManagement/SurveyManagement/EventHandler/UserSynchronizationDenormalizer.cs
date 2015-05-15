@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                           IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                           IsLockedByHQ = evnt.Payload.IsLocked,
                           Supervisor = evnt.Payload.Supervisor,
-                          Roles = new List<UserRoles>(evnt.Payload.Roles)
+                          Roles = evnt.Payload.Roles.ToHashSet()
                       };
             this.SaveUser(doc, evnt.EventTimeStamp);
         }
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId.FormatGuid());
 
             item.Email = evnt.Payload.Email;
-            item.Roles = evnt.Payload.Roles.ToList();
+            item.Roles = evnt.Payload.Roles.ToHashSet();
             item.Password = evnt.Payload.PasswordHash;
 
             this.SaveUser(item, evnt.EventTimeStamp);
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.AllTypes);
+            string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.ObjectsOnly);
 
             var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp);
             

@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
@@ -11,9 +13,17 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
     {
         public QuestionnaireBrowseItem()
         {
+            FeaturedQuestions = new List<FeaturedQuestionItem>();
         }
 
-        protected QuestionnaireBrowseItem(Guid questionnaireId, long version, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic, bool allowCensusMode)
+        protected QuestionnaireBrowseItem(Guid questionnaireId, 
+            long version, 
+            string title, 
+            DateTime creationDate, 
+            DateTime lastEntryDate, 
+            Guid? createdBy, 
+            bool isPublic, 
+            bool allowCensusMode)
         {
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
@@ -31,29 +41,34 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             this.FeaturedQuestions =
                 doc.Find<IQuestion>(q => q.Featured)
                    .Select(q => new FeaturedQuestionItem(q.PublicKey, q.QuestionText, q.StataExportCaption))
-                   .ToArray();
+                   .ToList();
+
+            this.Id = string.Format("{0}${1}", doc.PublicKey.FormatGuid(), version);
         }
 
-        public DateTime CreationDate { get;  set; }
+        public virtual string Id { get; set; }
 
-        public Guid QuestionnaireId { get;  set; }
+        public virtual DateTime CreationDate { get;  set; }
 
-        public long Version { get; set; }
+        public virtual Guid QuestionnaireId { get;  set; }
 
-        public DateTime LastEntryDate { get;  set; }
+        public virtual long Version { get; set; }
 
-        public string Title { get;  set; }
+        public virtual DateTime LastEntryDate { get;  set; }
 
-        public bool IsPublic { get; set; }
+        public virtual string Title { get;  set; }
 
-        public Guid? CreatedBy { get;  set; }
+        public virtual bool IsPublic { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public virtual Guid? CreatedBy { get;  set; }
 
-        public FeaturedQuestionItem[] FeaturedQuestions { get;  set; }
+        public virtual bool IsDeleted { get; set; }
 
-        public bool AllowCensusMode { get; set; }
+        public virtual bool AllowCensusMode { get; set; }
 
-        public bool Disabled { get; set; }
+        public virtual bool Disabled { get; set; }
+
+        [IgnoreDataMember]
+        public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }
     }
 }

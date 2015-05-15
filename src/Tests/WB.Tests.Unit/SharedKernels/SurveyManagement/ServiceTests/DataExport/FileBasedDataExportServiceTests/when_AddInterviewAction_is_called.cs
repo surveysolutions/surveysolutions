@@ -46,8 +46,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
 
         It should_pass_InterviewerAssigned_action_to_data_export_writer = () =>
             interviewExportServiceMock.Verify(
-                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.InterviewerAssigned),
-                    Moq.It.IsAny<string>()), Times.Once);
+                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.InterviewerAssigned), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once);
+
+        It should_delete_All_Data_folder = () =>
+            fileSystemAccessorMock.Verify(
+                x => x.DeleteDirectory("AllData"), Times.Once);
+
+        It should_not_delete_Approved_Data_folder = () =>
+           fileSystemAccessorMock.Verify(
+               x => x.DeleteDirectory("ApprovedData"), Times.Never);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 

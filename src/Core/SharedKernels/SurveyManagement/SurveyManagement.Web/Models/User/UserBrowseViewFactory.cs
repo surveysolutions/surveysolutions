@@ -1,52 +1,57 @@
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     public class UserBrowseViewFactory : IViewFactory<UserBrowseInputModel, UserBrowseView>
     {
-        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> indexAccessor;
 
-        public UserBrowseViewFactory(IReadSideRepositoryIndexAccessor indexAccessor)
+        public UserBrowseViewFactory(IQueryableReadSideRepositoryReader<UserDocument> indexAccessor)
         {
             this.indexAccessor = indexAccessor;
         }
 
         public UserBrowseView Load(UserBrowseInputModel input)
         {
-            var indexName = typeof (UserDocumentsByBriefFields).Name;
-
-            bool anyUserExists = this.indexAccessor.Query<UserDocument>(indexName).Any(x => !x.IsDeleted);
+            bool anyUserExists = this.indexAccessor.Query(_ => _.Any(x => !x.IsDeleted));
             if (!anyUserExists)
             {
                 return new UserBrowseView(input.Page, input.PageSize, 0, new UserBrowseItem[0]);
             }
 
-            var query = this.indexAccessor.Query<UserDocument>(indexName)
-                                          .Where(x => !x.IsDeleted);
+            List<UserDocument> pagedQuery = this.indexAccessor.Query(_ => ApplyPaging(Filter(_, input), input).ToList());
 
-            if (input.Role.HasValue)
-            {
-                query = query.Where(x => x.Roles.Contains(input.Role.Value));
-            }
-
-            var pagedQuery = query.Skip((input.Page - 1) * input.PageSize)
-                                  .Take(input.PageSize);
-                
-            UserBrowseItem[] items = pagedQuery.ToList()
-                                               .Select(x => new UserBrowseItem(x.PublicKey, 
+            IEnumerable<UserBrowseItem> items = pagedQuery.Select(x => new UserBrowseItem(x.PublicKey, 
                                                                                x.UserName, 
                                                                                x.Email, 
                                                                                x.CreationDate, 
                                                                                x.IsLockedBySupervisor, 
                                                                                x.IsLockedByHQ, 
-                                                                               x.Supervisor))
-                                               .ToArray();
+                                                                               x.Supervisor));
 
-            return new UserBrowseView(input.Page, input.PageSize, query.Count(), items);
+            var totalCount = this.indexAccessor.Query(_ => Filter(_, input).Count());
+
+            return new UserBrowseView(input.Page, input.PageSize, totalCount, items);
+        }
+
+        private static IQueryable<UserDocument> ApplyPaging(IQueryable<UserDocument> query, UserBrowseInputModel input)
+        {
+            return query.Skip((input.Page - 1) * input.PageSize)
+                .Take(input.PageSize);
+        }
+
+        private static IQueryable<UserDocument> Filter(IQueryable<UserDocument> _, UserBrowseInputModel input)
+        {
+            var query = _.Where(x => !x.IsDeleted);
+            if (input.Role.HasValue)
+            {
+                query = query.Where(x => x.Roles.Contains(input.Role.Value));
+            }
+            return query;
         }
     }
 }
