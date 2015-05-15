@@ -29,7 +29,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(DateTimeQuestionModel), Load<DateTimeQuestionViewModel> },
-                { typeof(QRBarcodeQuestionModel), Load<QrBarcodeQuestionViewModel> }
+                { typeof(QRBarcodeQuestionModel), Load<QrBarcodeQuestionViewModel> },
+                { typeof(GroupModel), Load<GroupViewModel> }
             };
 
         private static T Load<T>() where T : class
