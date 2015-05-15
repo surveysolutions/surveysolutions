@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.Android.Implementation.Services.Rest;
 using WB.Core.Infrastructure.Android.Implementation.Services.Security;
 using WB.Core.Infrastructure.Android.Implementation.Services.Settings;
 using WB.Core.Infrastructure.Android.Implementation.Services.Storage;
+using WB.Core.Infrastructure.Android.Implementation.Services.Utility;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
@@ -63,6 +64,8 @@ namespace WB.Core.Infrastructure.Android
 
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.plainStorageSettings.StorageFolderPath));
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PlainStorageAccessor<>)).InSingletonScope();
+
+            this.Bind<IQrBarcodeScanService>().To<QrBarcodeScanService>();
         }
     }
 }
