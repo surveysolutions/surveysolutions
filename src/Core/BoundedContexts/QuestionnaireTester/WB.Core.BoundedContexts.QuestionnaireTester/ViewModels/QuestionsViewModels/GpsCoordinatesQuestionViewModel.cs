@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Enablement.Init(interviewId, entityIdentity);
 
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
-            if (answerModel != null)
+            if (answerModel != null && answerModel.IsAnswered())
             {
                 this.Answer = new MvxCoordinates()
                 {
