@@ -348,4 +348,7 @@
   <data name="Interview_Comment_Supervisor_Caption" xml:space="preserve">
     <value>Комментарий супервизора</value>
   </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Нажмите для ввода даты</value>
+  </data>
 </root>

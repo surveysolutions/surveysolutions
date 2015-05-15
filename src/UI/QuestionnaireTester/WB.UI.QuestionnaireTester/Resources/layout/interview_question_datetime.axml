@@ -18,7 +18,7 @@
           android:editable="false"
           android:focusable="false"
           style="@style/Interview_Question_Answer_Editor"
-          local:MvxBind="Text Answer; DateChange AnswerCommand" />
+          local:MvxBind="Text Answer; Hint Localization('DateQuestion_Hint'); DateChange AnswerCommand" />
 
       </MvxLinearLayout>
       <include
