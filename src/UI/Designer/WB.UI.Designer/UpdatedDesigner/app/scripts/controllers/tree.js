@@ -157,7 +157,7 @@
                 if (itemToFind) {
                     var parent = itemToFind.getParentItem();
                     if (parent !== null) {
-                        highlightAndScroll(target);
+                        highlightAndScroll(parent);
                     }
                 }
             };
@@ -204,12 +204,12 @@
                     });
                 }
             };
-            var getScrollPositionInDivFromTop = function (itemId) {
+            var getScrollPositionInDivFromTop = function(itemId) {
                 var positionOfItemFromPageTop = $(itemId).offset().top;
                 var positionOfContainerFromPageTop = $(".question-list").offset().top;
                 var scrollOffset = 10;
                 return Math.max(positionOfItemFromPageTop - positionOfContainerFromPageTop - scrollOffset, 0);
-            }
+            };
             var getItemType = function (item) {
                 switch (item.itemType) {
                     case 'Question': return itemTypes.question;
@@ -219,10 +219,10 @@
                 throw 'unknown item type: ' + item;
             };
 
-            var highlightAndScroll = function (target) {
+            var highlightAndScroll = function(target) {
                 $scope.highlightedId = target.itemId;
                 scrollToElement("#" + target.itemId, scrollMode.makeVisible);
-            }
+            };
 
             var getCurrentItem = function () {
                 if (_.isNull($scope.items) || _.isUndefined($scope.items)) {
