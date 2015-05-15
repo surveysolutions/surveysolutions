@@ -4,5 +4,5 @@
     style="@style/Interview_Question_Header">
     <TextView
         style="@style/Interview_Question_Title"
-        local:MvxBind="Text Header.Title; Enabled Enablement.Enabled" />
+        local:MvxBind="Text QuestionState.Header.Title; Enabled QuestionState.Enablement.Enabled" />
 </MvxLinearLayout>
