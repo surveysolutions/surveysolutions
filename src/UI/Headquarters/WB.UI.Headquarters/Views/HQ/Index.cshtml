@@ -98,67 +98,7 @@
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
-
-                    <!-- ko ifnot:Disabled -->
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                            <i class=" glyphicon glyphicon-download">
-                            </i>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class=" glyphicon glyphicon-download">
-                                    </i> @Dashboard.AllData
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i> @Dashboard.ApprovedData
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() + '&type=1' }">
-                                    <i class=" glyphicon glyphicon-download">
-                                    </i> @Dashboard.AllDataStata
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() + '&type=1' }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i> @Dashboard.ApprovedDataStata
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() + '&type=2'}">
-                                    <i class=" glyphicon glyphicon-download">
-                                    </i> @Dashboard.AllDataSpss
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() + '&type=2' }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i> @Dashboard.ApprovedDataSpss
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i> @Dashboard.BinaryData
-                                </a>
-                                @if (this.ViewBag.EnableInterviewHistory)
-                                {
-                                    <a data-bind="attr: { href: $getExportedHistoryUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                        <i class="glyphicon glyphicon-download">
-                                        </i> @Dashboard.History
-                                    </a>
-                                }
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /ko -->
+                    
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">

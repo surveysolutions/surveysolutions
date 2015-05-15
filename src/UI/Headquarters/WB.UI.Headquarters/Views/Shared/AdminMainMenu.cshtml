@@ -53,7 +53,14 @@
     </li>
 
     <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-        <a href="@Url.Action("Index", "HQ", new { area = "" })"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
+        <a href="@Url.Action("Index", "HQ", new {area = ""})"><i class="glyphicon glyphicon-list-alt">
+        </i> @MainMenu.Questionnaires</a>
+    </li>
+    <li class="@(page == MenuItem.DataExport ? "active" : "")">
+        <a href="@Url.Action("DataExport", "HQ", new {area = ""})">
+            <i class="glyphicon glyphicon-download">
+            </i> @MainMenu.DataExport
+        </a>
     </li>
 </ul>
         <ul class="nav navbar-nav navbar-right" role="menu">
