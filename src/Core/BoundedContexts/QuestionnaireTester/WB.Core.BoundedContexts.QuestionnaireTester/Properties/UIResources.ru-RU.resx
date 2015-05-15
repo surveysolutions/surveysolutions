@@ -351,4 +351,7 @@
   <data name="DateQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода даты</value>
   </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Отсканировать баркод</value>
+  </data>
 </root>

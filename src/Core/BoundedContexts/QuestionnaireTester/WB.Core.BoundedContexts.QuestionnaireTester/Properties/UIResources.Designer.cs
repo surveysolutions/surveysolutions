@@ -440,6 +440,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to take barcode.
+        /// </summary>
+        public static string Interview_Questions_QrBarcode_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_QrBarcode_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modified on:.
         /// </summary>
         public static string LastModifiedDateTitle {

@@ -351,4 +351,7 @@
   <data name="DateQuestion_Hint" xml:space="preserve">
     <value>Tap to enter date</value>
   </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Tap to take barcode</value>
+  </data>
 </root>

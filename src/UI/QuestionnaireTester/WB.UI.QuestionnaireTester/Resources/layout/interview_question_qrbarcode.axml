@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+  style="@style/Interview_QuestionWithDivider"
+  local:MvxBind="Enabled Enablement.Enabled">
+  <MvxLinearLayout style="@style/Interview_Question">
+    <include layout="@layout/interview_question__title" />
+    <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible Enablement.Enabled">
+      <include layout="@layout/interview_question__instructions" />
+      <MvxLinearLayout style="@style/Interview_Question_Answer"
+                       local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
+
+        <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
+         <TextView style="@style/Interview_Question_Answer_Gps_Location_Text"
+                      local:MvxBind="Text Answer" />
+          <Button style="@style/Interview_Question_Answer_Gps_Location_Button"
+                  local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
+        </MvxLinearLayout>
+
+      </MvxLinearLayout>
+      <include layout="@layout/interview_question__errors" />
+      <include layout="@layout/interview_question__comments" />
+    </MvxLinearLayout>
+  </MvxLinearLayout>
+  <View style="@style/Interview_Question_Divider" />
+</MvxLinearLayout>

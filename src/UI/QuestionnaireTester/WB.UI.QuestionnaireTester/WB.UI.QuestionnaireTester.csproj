@@ -146,6 +146,10 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="MWBarcodeScanner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ExternalsMonodroid\MWBarcodeScanner.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
@@ -417,7 +421,10 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__instructions.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_qrbarcode.axml">
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_datetime.axml">
       <SubType>Designer</SubType>

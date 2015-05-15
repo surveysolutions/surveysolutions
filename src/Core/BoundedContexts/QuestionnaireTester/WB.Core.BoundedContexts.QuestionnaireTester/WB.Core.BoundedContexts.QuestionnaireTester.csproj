@@ -71,6 +71,9 @@
     <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
+    <Compile Include="Implementation\Aggregates\StatefulQuestionnaire.cs" />
+    <Compile Include="Infrastructure\IQrBarcodeScanService.cs" />
+    <Compile Include="Infrastructure\ScanResult.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\DateTimeQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\QRBarcodeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IInterviewEntityViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GpsCoordinatesQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\RealQuestionViewModel.cs" />

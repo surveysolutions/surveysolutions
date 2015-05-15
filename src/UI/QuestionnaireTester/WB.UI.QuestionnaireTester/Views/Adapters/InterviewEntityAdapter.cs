@@ -26,7 +26,8 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime}
+            {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
+            {typeof (QrBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode}
         };
 
         public override int GetItemViewType(int position)

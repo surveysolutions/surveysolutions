@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
-using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class QrBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public QuestionHeaderViewModel Header { get; set; }
         public EnablementViewModel Enablement { get; private set; }
@@ -26,18 +23,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { isInProgress = value; RaisePropertyChanged(); }
         }
 
-        private MvxCoordinates answer;
-        public MvxCoordinates Answer
+        private string answer;
+        public string Answer
         {
             get { return answer; }
             set { answer = value; RaisePropertyChanged(); }
-        }
-
-        private bool hasAnswer;
-        public bool HasAnswer
-        {
-            get { return hasAnswer; }
-            set { hasAnswer = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand saveAnswerCommand;
@@ -49,17 +39,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
         private readonly IStatefullInterviewRepository interviewRepository;
-        private readonly IMvxLocationWatcher geoLocationWatcher;
+        private readonly IQrBarcodeScanService qrBarcodeScanService;
         private readonly IUserInteraction userInteraction;
 
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
+        public QrBarcodeQuestionViewModel(ICommandService commandService, 
             IUserIdentity userIdentity,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            IMvxLocationWatcher geoLocationWatcher,
+            IQrBarcodeScanService qrBarcodeScanService,
             IUserInteraction userInteraction,
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel)
@@ -67,7 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.commandService = commandService;
             this.userIdentity = userIdentity;
             this.interviewRepository = interviewRepository;
-            this.geoLocationWatcher = geoLocationWatcher;
+            this.qrBarcodeScanService = qrBarcodeScanService;
             this.userInteraction = userInteraction;
 
             this.Header = questionHeaderViewModel;
@@ -87,62 +76,53 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Header.Init(interviewId, entityIdentity);
             this.Enablement.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
-            if (answerModel != null && answerModel.IsAnswered)
+            var answerModel = interview.GetQrBarcodeAnswer(entityIdentity);
+            if (answerModel != null)
             {
-                this.Answer = new MvxCoordinates()
-                {
-                    Altitude = answerModel.Altitude,
-                    Longitude = answerModel.Longitude,
-                    Latitude = answerModel.Latitude,
-                    Accuracy = answerModel.Accuracy
-                };
-                this.HasAnswer = true;
+                this.Answer = answerModel.Answer;
             }
         }
 
-        private void SaveAnswer()
+        private async void SaveAnswer()
         {
             this.IsInProgress = true;
-            this.geoLocationWatcher.Start(options: new MvxLocationOptions(),
-                success: this.SetGeoLocationAnswer,
-                error: async (error) => { await this.TryGetGeoLocationAgain(); });
+
+            var hasException = false;
+            try
+            {
+                var scanCode = await this.qrBarcodeScanService.ScanAsync();
+
+                this.commandService.Execute(new AnswerQRBarcodeQuestionCommand(
+                    interviewId: this.interviewId,
+                    userId: this.userIdentity.UserId,
+                    questionId: this.questionIdentity.Id,
+                    rosterVector: this.questionIdentity.RosterVector,
+                    answerTime: DateTime.UtcNow,
+                    answer: scanCode.Code));
+
+                this.Answer = scanCode.Code;
+            }
+            catch
+            {
+                hasException = true;
+            }
+
+            if (hasException)
+            {
+                await TryGetQbBarcodeAgainAsync();
+            }
         }
 
-        private async Task TryGetGeoLocationAgain()
+        private async Task TryGetQbBarcodeAgainAsync()
         {
-            this.geoLocationWatcher.Stop();
-            this.IsInProgress = false;
-
             if (await this.userInteraction.ConfirmAsync(
                 message: UIResources.Interview_GeoLocation_Confirm_NoLocation,
-                title: UIResources.ConfirmationText, 
+                title: UIResources.ConfirmationText,
                 okButton: UIResources.ConfirmationTryAgainText,
                 cancelButton: UIResources.ConfirmationCancelText))
             {
                 this.SaveAnswer();
             }
-        }
-
-        private void SetGeoLocationAnswer(MvxGeoLocation location)
-        {
-            this.geoLocationWatcher.Stop();
-            this.IsInProgress = false;
-
-            this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
-                interviewId: interviewId,
-                userId: userIdentity.UserId,
-                questionId: this.questionIdentity.Id,
-                rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
-                accuracy: location.Coordinates.Accuracy ?? 0,
-                altitude: location.Coordinates.Altitude ?? 0,
-                latitude: location.Coordinates.Latitude,
-                longitude: location.Coordinates.Longitude,
-                timestamp: location.Timestamp));
-
-            this.HasAnswer = true;
-            this.Answer = location.Coordinates;
         }
     }
 }
