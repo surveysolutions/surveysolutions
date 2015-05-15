@@ -12,14 +12,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        public QuestionHeaderViewModel Header { get; set; }
-        public EnablementViewModel Enablement { get; private set; }
-
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -56,14 +54,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid interviewId;
 
+        public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
+
         public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
             IUserIdentity userIdentity,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
             IUserInteraction userInteraction,
-            QuestionHeaderViewModel questionHeaderViewModel,
-            EnablementViewModel enablementViewModel)
+            QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -71,8 +70,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.geoLocationWatcher = geoLocationWatcher;
             this.userInteraction = userInteraction;
 
-            this.Header = questionHeaderViewModel;
-            this.Enablement = enablementViewModel;
+            this.QuestionState = questionStateViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -85,8 +83,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Header.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel != null && answerModel.IsAnswered)
@@ -130,17 +127,26 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.geoLocationWatcher.Stop();
             this.IsInProgress = false;
 
-            this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
-                interviewId: interviewId,
-                userId: userIdentity.UserId,
-                questionId: this.questionIdentity.Id,
-                rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
-                accuracy: location.Coordinates.Accuracy ?? 0,
-                altitude: location.Coordinates.Altitude ?? 0,
-                latitude: location.Coordinates.Latitude,
-                longitude: location.Coordinates.Longitude,
-                timestamp: location.Timestamp));
+            try
+            {
+                this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
+                    interviewId: interviewId,
+                    userId: userIdentity.UserId,
+                    questionId: this.questionIdentity.Id,
+                    rosterVector: this.questionIdentity.RosterVector,
+                    answerTime: DateTime.UtcNow,
+                    accuracy: location.Coordinates.Accuracy ?? 0,
+                    altitude: location.Coordinates.Altitude ?? 0,
+                    latitude: location.Coordinates.Latitude,
+                    longitude: location.Coordinates.Longitude,
+                    timestamp: location.Timestamp));
+
+                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+            }
+            catch (Exception ex)
+            {
+                QuestionState.ProcessAnswerCommandException(ex);
+            }
 
             this.HasAnswer = true;
             this.Answer = location.Coordinates;

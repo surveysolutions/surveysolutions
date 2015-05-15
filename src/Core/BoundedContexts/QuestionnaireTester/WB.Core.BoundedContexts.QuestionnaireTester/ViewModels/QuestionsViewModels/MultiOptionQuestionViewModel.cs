@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -31,21 +32,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
 
+        public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
+
+
         public MultiOptionQuestionViewModel(
-            QuestionHeaderViewModel questionHeaderViewModel,
-            EnablementViewModel enablementViewModel,
-            ValidityViewModel validityViewModel,
-            CommentsViewModel comments,
+            QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             ICommandService commandService,
             IStatefullInterviewRepository interviewRepository,
             IPrincipal principal)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
-            this.Header = questionHeaderViewModel;
-            this.Enablement = enablementViewModel;
-            this.Validity = validityViewModel;
-            this.Comments = comments;
+            this.QuestionState = questionStateViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
             this.principal = principal;
@@ -57,10 +55,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.Header.Init(interviewId, entityIdentity);
-            this.Comments.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
 
@@ -75,14 +70,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
         }
-
-        public QuestionHeaderViewModel Header { get; private set; }
-
-        public EnablementViewModel Enablement { get; private set; }
-
-        public ValidityViewModel Validity { get; private set; }
-
-        public CommentsViewModel Comments { get; private set; }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
@@ -131,12 +118,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.commandService.Execute(command);
 
-                Validity.ExecutedWithoutExceptions();
+                QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (Exception ex)
             {
                 changedModel.Checked = !changedModel.Checked;
-                Validity.ProcessException(ex);
+                QuestionState.ProcessAnswerCommandException(ex);
             }
         }
     }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
-  local:MvxBind="Enabled Enablement.Enabled">
+  local:MvxBind="Enabled QuestionState.Enablement.Enabled">
   <MvxLinearLayout style="@style/Interview_Question">
     <include layout="@layout/interview_question__title" />
-    <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible Enablement.Enabled">
+    <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible QuestionState.Enablement.Enabled">
       <include layout="@layout/interview_question__instructions" />
       <MvxLinearLayout
         style="@style/Interview_Question_Answer"
-        local:MvxBind="Style LayoutBackgroundStyle(Validity.IsInvalid, IsAnswered);">
+        local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
 
         <EditText
           android:editable="false"

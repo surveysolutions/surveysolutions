@@ -5,16 +5,17 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class QrBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        public QuestionHeaderViewModel Header { get; set; }
-        public EnablementViewModel Enablement { get; private set; }
+        public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
 
         private bool isInProgress;
         public bool IsInProgress
@@ -50,8 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefullInterviewRepository interviewRepository,
             IQrBarcodeScanService qrBarcodeScanService,
             IUserInteraction userInteraction,
-            QuestionHeaderViewModel questionHeaderViewModel,
-            EnablementViewModel enablementViewModel)
+            QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -59,8 +59,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.userInteraction = userInteraction;
 
-            this.Header = questionHeaderViewModel;
-            this.Enablement = enablementViewModel;
+            this.QuestionState = questionStateViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -73,8 +72,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Header.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             var answerModel = interview.GetQRBarcodeAnswer(entityIdentity);
             if (answerModel != null)

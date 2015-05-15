@@ -21,8 +21,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<NumericIntegerQuestionAnswered>,
-        IDisposable
+        ILiteEventBusEventHandler<NumericIntegerQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
@@ -32,10 +31,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity entityIdentity;
         private string interviewId;
 
-        public QuestionHeaderViewModel Header { get; private set; }
-        public ValidityViewModel Validity { get; private set; }
-        public EnablementViewModel Enablement { get; private set; }
-        public CommentsViewModel Comments { get; private set; }
+        public QuestionStateViewModel<NumericIntegerQuestionAnswered> QuestionState { get; private set; }
 
         public IntegerQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
@@ -43,10 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionHeaderViewModel questionHeaderViewModel,
-            ValidityViewModel validity,
-            EnablementViewModel enablement,
-            CommentsViewModel comments)
+            QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
@@ -54,10 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
-            this.Header = questionHeaderViewModel;
-            this.Validity = validity;
-            this.Enablement = enablement;
-            this.Comments = comments;
+            this.QuestionState = questionStateViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -70,10 +60,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             liteEventRegistry.Subscribe(this);
 
-            this.Header.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Comments.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
@@ -95,13 +82,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get { return answer; }
             private set { answer = value; RaisePropertyChanged(); }
-        }
-
-        private bool isAnswered;
-        public bool IsAnswered
-        {
-            get { return isAnswered; }
-            set { isAnswered = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand valueChangeCommand;
@@ -135,12 +115,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answerTime: DateTime.UtcNow,
                     answer: Answer.Value
                     ));
-                Validity.ExecutedWithoutExceptions();
+                QuestionState.ExecutedAnswerCommandWithoutExceptions();
                 
             }
             catch (Exception ex)
             {
-                Validity.ProcessException(ex);
+                QuestionState.ProcessAnswerCommandException(ex);
             }
         }
 
@@ -154,12 +134,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
             this.Answer = Monads.Maybe(() => answerModel.Answer);
-            this.IsAnswered = interview.WasAnswered(entityIdentity);
-        }
-
-        public void Dispose()
-        {
-            liteEventRegistry.Unsubscribe(this);
         }
     }
 }

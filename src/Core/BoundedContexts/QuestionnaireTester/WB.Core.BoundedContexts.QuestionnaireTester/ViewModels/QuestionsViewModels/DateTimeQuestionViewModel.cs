@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
@@ -26,32 +27,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity entityIdentity;
         private string interviewId;
 
+        public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
+
         public DateTimeQuestionViewModel(ICommandService commandService,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionHeaderViewModel questionHeaderViewModel,
-            ValidityViewModel validity,
-            EnablementViewModel enablement,
-            CommentsViewModel comments)
+            QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel)
         {
             this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
-            this.Header = questionHeaderViewModel;
-            this.Validity = validity;
-            this.Enablement = enablement;
-            this.Comments = comments;
+            this.QuestionState = questionStateViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
         {
-            this.Header.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Comments.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity);
 
             this.entityIdentity = entityIdentity;
             this.interviewId = interviewId;
@@ -63,11 +57,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 SetToView(answerModel.Answer);
             }
         }
-
-        public QuestionHeaderViewModel Header { get; private set; }
-        public ValidityViewModel Validity { get; private set; }
-        public EnablementViewModel Enablement { get; private set; }
-        public CommentsViewModel Comments { get; private set; }
 
         public IMvxCommand AnswerCommand
         {
@@ -86,11 +75,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                             answer: answerValue
                             ));
                         SetToView(answerValue);
-                        Validity.ExecutedWithoutExceptions();
+                        QuestionState.ExecutedAnswerCommandWithoutExceptions();
                     }
                     catch (Exception ex)
                     {
-                        Validity.ProcessException(ex);
+                        QuestionState.ProcessAnswerCommandException(ex);
                     }
                 });
             }
