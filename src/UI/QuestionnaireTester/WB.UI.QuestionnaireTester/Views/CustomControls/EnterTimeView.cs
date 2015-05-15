@@ -24,44 +24,4 @@ namespace WB.UI.QuestionnaireTester.Views.CustomControls
             return dialog;
         }
     }
-
-    //public class EnterTimeView : MvxFragment, DatePickerDialog.IOnDateSetListener
-    //{
-    //    private EditText datePickerText;
-
-    //    public EnterTimeView()
-    //    {
-    //        this.RetainInstance = true;
-    //    }
-
-    //    public override Android.Views.View OnCreateView(Android.Views.LayoutInflater inflater, Android.Views.ViewGroup container, Android.OS.Bundle savedInstanceState)
-    //    {
-    //        this.HasOptionsMenu = true;
-
-    //        base.OnCreateView(inflater, container, savedInstanceState);
-
-    //        var view = inflater.Inflate(Resource.Layout.EnterTimeView, container, false);
-
-    //        datePickerText = view.FindViewById<EditText>(Resource.Id.DatePickerEditText);
-    //        datePickerText.Focusable = false;
-    //        datePickerText.Click += delegate
-    //        {
-    //            var dialog = new DatePickerDialogFragment(Activity, Convert.ToDateTime(datePickerText.Text), this);
-    //            dialog.Show(FragmentManager, "date");
-    //        };
-
-    //        var set = this.CreateBindingSet<EnterTimeView, DateTimeQuestionViewModel>();
-    //        set.Bind(datePickerText).To(vm => vm.Answer);
-    //        set.Apply();
-
-    //        return view;
-    //    }
-
-    //    public void OnDateSet(Android.Widget.DatePicker view, int year, int monthOfYear, int dayOfMonth)
-    //    {
-    //        datePickerText.Text = new DateTime(year, monthOfYear + 1, dayOfMonth).ToString();
-    //    }
-
-
-    //}
 }
