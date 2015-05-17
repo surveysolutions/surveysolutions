@@ -4,12 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <TextView
-        style="@style/Interview_PrefilledQuestion_Question"
+        style="@style/Interview_Sidebar_PrefilledQuestion_Question"
         local:MvxBind="Text Question" />
     <TextView
-        style="@style/Interview_PrefilledQuestion_Question"
+        style="@style/Interview_Sidebar_PrefilledQuestion_Question"
         android:text=":" />
     <TextView
-        style="@style/Interview_PrefilledQuestion_Answer"
+        style="@style/Interview_Sidebar_PrefilledQuestion_Answer"
         local:MvxBind="Text GetAnswer(AnswerModel, InterviewId)" />
 </MvxLinearLayout>

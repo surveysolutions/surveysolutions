@@ -74,7 +74,7 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">sans-serif-thin</item>
-    <item name="android:textSize">36dp</item>
+    <item name="android:textSize">@dimen/PrefilledQuestions_QuestionnaireTitle_textsize</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_horizontal</item>
     <item name="android:layout_centerVertical">true</item>
@@ -101,7 +101,7 @@
     <item name="android:padding">@dimen/Interview_Sidebar_padding</item>
   </style>
 
-  <style name="Interview_PrefilledQuestion_Question" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar_PrefilledQuestion_Question" parent="Theme.Light.Base">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_18</item>
@@ -109,12 +109,12 @@
     <item name="android:textColor">#FF747474</item>
   </style>
 
-  <style name="Interview_PrefilledQuestion_Answer" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar_PrefilledQuestion_Answer" parent="Theme.Light.Base">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textSize">@dimen/textsize_18</item>
-    <item name="android:layout_marginLeft">10dp</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_PrefilledQuestion_Answer_margin_left</item>
   </style>
 
   <style name="Interview_Sidebar_Title" parent="Theme.Light.Base">

@@ -14,12 +14,28 @@
 
   <dimen name="Interview_Sidebar_width">520dp</dimen>
   <dimen name="Interview_Sidebar_padding">15dp</dimen>
-  
+
   <dimen name="Interview_Sidebar_Title_margin_top">5dp</dimen>
   <dimen name="Interview_Sidebar_Title_margin_left">10dp</dimen>
   <dimen name="Interview_Sidebar_Title_margin_bottom">10dp</dimen>
 
   <dimen name="Interview_Sidebar_PrefilledQuestions_margin_horizontal">10dp</dimen>
+  <dimen name="Interview_Sidebar_PrefilledQuestion_Answer_margin_left">10dp</dimen>
+
+
+  <dimen name="Interview_Question_Instruction_Title_margin_top">10dp</dimen>
+
+  <dimen name="Interview_Question_Answer_margin_top">10dp</dimen>
+  <dimen name="Interview_Question_Answer_margin_bottom">16dp</dimen>
+
+
+  <dimen name="Interview_Question_Answer_Option_margin_vertical">1.5dp</dimen>
+  <dimen name="Interview_Question_Answer_Option_margin_horizontal">0dp</dimen>
+
+  <dimen name="Interview_Question_Answer_Option_padding_left">0dp</dimen>
+
+  <dimen name="Interview_Question_Errors_Title_margin_top">10dp</dimen>
+  <dimen name="Interview_Question_Errors_Details_margin_top">10dp</dimen>
 
 
 </resources>

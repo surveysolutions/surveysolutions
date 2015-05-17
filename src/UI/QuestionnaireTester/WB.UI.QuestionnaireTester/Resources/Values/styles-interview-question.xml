@@ -22,7 +22,7 @@
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textColor">#2a81cb</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_Instruction_Title_margin_top</item>
   </style>
 
   <style name="Interview_Question_Instruction_Details" parent="VerticalFullWidthWrappingLayout">
@@ -38,8 +38,8 @@
 
   <style name="Interview_Question_Answer" parent="FullWidthWrappingLayout">
     <item name="android:layout_gravity">center_horizontal</item>
-    <item name="android:layout_marginTop">10dp</item>
-    <item name="android:layout_marginBottom">16dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_margin_bottom</item>
     <item name="android:background">@drawable/question_answer_background</item>
   </style>
 
@@ -64,11 +64,11 @@
   <style name="Interview_Question_Answer_Option" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">1.5dp</item>
-    <item name="android:layout_marginBottom">1.5dp</item>
-    <item name="android:layout_marginLeft">0dp</item>
-    <item name="android:layout_marginRight">0dp</item>
-    <item name="android:paddingLeft">0dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
     <item name="android:textColor">@drawable/question_option_text_color</item>
     <item name="android:background">@drawable/question_option_background</item>
   </style>
@@ -97,7 +97,7 @@
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Title_margin_top</item>
   </style>
 
   <style name="Interview_Question_Errors_Details" parent="FullWidthWrappingLayout">
@@ -105,7 +105,7 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Details_margin_top</item>
   </style>
 
   <style name="Interview_Question_Comments" parent="VerticalFullWidthWrappingLayout">

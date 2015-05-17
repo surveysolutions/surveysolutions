@@ -14,4 +14,6 @@
 
   <dimen name="Toolbar_margin_horizontal">25dp</dimen>
 
+  <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
+
 </resources>
