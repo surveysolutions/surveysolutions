@@ -34,26 +34,26 @@
             android:layout_gravity="center"
             android:gravity="center">
             <ImageView
-                android:layout_width="300dp"
+                android:layout_width="@dimen/Login_Element_width"
                 android:layout_height="wrap_content"
                 android:src="@drawable/loginLogo" />
             <EditText
-                android:layout_width="300dp"
+                android:layout_width="@dimen/Login_Element_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal"
                 android:singleLine="true"
                 local:MvxBind="Text LoginName; Hint Localization('LoginNameHint')" />
             <EditText
-                android:layout_width="300dp"
+                android:layout_width="@dimen/Login_Element_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
                 android:singleLine="true"
                 android:password="true"
                 local:MvxBind="Text Password; Hint Localization('PasswordHint')" />
             <LinearLayout
-                android:layout_width="300dp"
+                android:layout_width="@dimen/Login_Element_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal">
                 <Button
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"

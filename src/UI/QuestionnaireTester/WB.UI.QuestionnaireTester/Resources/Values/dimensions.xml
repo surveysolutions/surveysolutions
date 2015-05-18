@@ -11,6 +11,13 @@
 
   <dimen name="Toolbar_margin_horizontal">25dp</dimen>
 
+  <dimen name="Splash_Logo_size">300dp</dimen>
+  <dimen name="Splash_Logo_padding">100dp</dimen>
+
+  <dimen name="Login_Element_width">300dp</dimen>
+  <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
+  <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+
   <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
   <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
   <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
