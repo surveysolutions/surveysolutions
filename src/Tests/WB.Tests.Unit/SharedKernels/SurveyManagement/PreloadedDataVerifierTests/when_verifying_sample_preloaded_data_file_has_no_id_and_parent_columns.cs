@@ -35,10 +35,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifySample(questionnaireId, 1, CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) );
 
         It should_result_has_no_errors = () =>
-           result.ShouldBeEmpty();
+           result.Errors.ShouldBeEmpty();
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private const string QuestionnaireCsvFileName = "questionnaire.csv";

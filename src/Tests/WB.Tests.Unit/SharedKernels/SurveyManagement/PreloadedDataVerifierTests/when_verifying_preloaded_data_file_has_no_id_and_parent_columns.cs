@@ -35,25 +35,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) });
 
         It should_result_has_1_error = () =>
-           result.Count().ShouldEqual(1);
+           result.Errors.Count().ShouldEqual(1);
 
         It should_return_first_PL0007_error = () =>
-            result.First().Code.ShouldEqual("PL0007");
+            result.Errors.First().Code.ShouldEqual("PL0007");
 
         It should_return_second_PL0007_error = () =>
-            result.Last().Code.ShouldEqual("PL0007");
+            result.Errors.Last().Code.ShouldEqual("PL0007");
 
         It should_return_reference_of_first_error_with_Column_type = () =>
-            result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_return_reference_of_second_error_with_Column_type = () =>
-            result.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            result.Errors.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_firt_error_has_content_with_id = () =>
-            result.First().References.First().Content.ShouldEqual("Id");
+            result.Errors.First().References.First().Content.ShouldEqual("Id");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private const string QuestionnaireCsvFileName = "questionnaire.csv";
