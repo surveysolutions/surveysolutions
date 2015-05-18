@@ -12,8 +12,7 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Native;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -22,8 +21,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests

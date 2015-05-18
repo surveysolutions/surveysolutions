@@ -52,9 +52,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidLoggingModule.cs" />
-    <Compile Include="ExceptionExtension.cs" />
-    <Compile Include="FileLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

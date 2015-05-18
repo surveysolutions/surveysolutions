@@ -1,8 +1,8 @@
 ﻿using System;
-using NLog;
+
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Logging.NLog
+namespace WB.Core.GenericSubdomains.Native.Logging
 {
     internal class DummyLogger : ILogger
     {

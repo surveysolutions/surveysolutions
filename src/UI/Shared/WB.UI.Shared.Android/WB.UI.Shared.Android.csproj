@@ -182,6 +182,7 @@
     <Compile Include="Services\AndroidNetworkService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <AndroidResource Include="Resources\Layout\Details.axml">
@@ -226,9 +227,13 @@
       <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
-      <Project>{f3be22b5-c075-4b9c-a99d-e89b70a0dfcd}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Android\WB.Core.GenericSubdomains.Android.csproj">
+      <Project>{1eb1ebb0-92cf-4339-9f62-4a5ae3ed93a4}</Project>
+      <Name>WB.Core.GenericSubdomains.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

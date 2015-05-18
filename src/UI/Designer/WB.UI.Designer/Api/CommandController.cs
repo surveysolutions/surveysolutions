@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;

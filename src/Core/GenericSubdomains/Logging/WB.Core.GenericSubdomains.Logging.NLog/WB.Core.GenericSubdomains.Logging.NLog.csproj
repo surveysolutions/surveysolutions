@@ -49,10 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DummyLogger.cs" />
-    <Compile Include="NLogLogger.cs" />
-    <Compile Include="DummyLoggingModule.cs" />
-    <Compile Include="NLogLoggingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
