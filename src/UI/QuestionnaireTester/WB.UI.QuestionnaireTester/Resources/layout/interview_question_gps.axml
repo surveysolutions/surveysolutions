@@ -10,17 +10,17 @@
                        local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
 
         <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:layout_marginBottom="28dp" local:MvxBind="Visible HasAnswer">
-            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:background="@drawable/media_question_white_border" android:layout_height="250dp">
+          <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:layout_marginBottom="@dimen/Interview_Question_Answer_MediaBlock_margin_bottom" local:MvxBind="Visible HasAnswer">
+            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:background="@drawable/media_question_white_border" android:layout_height="@dimen/Interview_Question_Answer_Media_height">
               <HttpImageView local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer)" 
                              android:layout_width="match_parent" 
                              android:layout_height="match_parent" 
                              android:adjustViewBounds="true" 
                              android:scaleType="centerCrop"
-                             android:layout_margin="2dp" />
+                             android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin" />
             </MvxLinearLayout>
             <TextView style="@style/Interview_Question_Answer_Gps_Location_Text" 
-                      android:layout_marginTop="8dp" 
+                      android:layout_marginTop="@dimen/Interview_Question_Answer_Media_Caption_margin_top" 
                       local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
           </MvxLinearLayout>
           <Button style="@style/Interview_Question_Answer_Gps_Location_Button" 

@@ -36,8 +36,14 @@
   <dimen name="Interview_Question_Answer_Input_background_padding">15dp</dimen>
   <dimen name="Interview_Question_Answer_Input_background_corners_radius">8dp</dimen>
 
+  <dimen name="Interview_Question_Answer_MediaBlock_margin_bottom">28dp</dimen>
+
   <dimen name="Interview_Question_Answer_Media_background_stroke_width">2dp</dimen>
   <dimen name="Interview_Question_Answer_Media_background_corners_radius">4dp</dimen>
+  <dimen name="Interview_Question_Answer_Media_height">250dp</dimen>
+  
+  <dimen name="Interview_Question_Answer_Media_Image_margin">2dp</dimen>
+  <dimen name="Interview_Question_Answer_Media_Caption_margin_top">8dp</dimen>
 
   <dimen name="Interview_Question_Answer_Option_margin_vertical">1.5dp</dimen>
   <dimen name="Interview_Question_Answer_Option_margin_horizontal">0dp</dimen>
