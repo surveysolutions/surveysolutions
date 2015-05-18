@@ -21,9 +21,9 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 importController.Questionnaire(null));
 
         It should_throw_ArgumentNullException = () =>
-            exception.ShouldBeOfExactType<ArgumentNullException>();
+            exception.ShouldNotBeNull();
 
         private static ImportController importController;
-        private static Exception exception;
+        private static ArgumentNullException exception;
     }
 }
