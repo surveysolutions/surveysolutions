@@ -47,5 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         bool IsEnabled(Identity entityIdentity);
 
         bool WasAnswered(Identity entityIdentity);
+
+        string GetInterviewerAnswerComment(Identity entityIdentity);
     }
 }

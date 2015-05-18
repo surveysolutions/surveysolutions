@@ -345,9 +345,6 @@
   <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
     <value>Your comment</value>
   </data>
-  <data name="Interview_Comment_Supervisor_Caption" xml:space="preserve">
-    <value>Supervisor comment</value>
-  </data>
   <data name="DateQuestion_Hint" xml:space="preserve">
     <value>Tap to enter date</value>
   </data>

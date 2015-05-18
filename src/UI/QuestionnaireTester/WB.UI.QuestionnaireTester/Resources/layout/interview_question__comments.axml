@@ -5,8 +5,8 @@
     local:MvxBind="Visible QuestionState.Comments.HasComments">
     <TextView
         style="@style/Interview_Question_Comments_InterviewerTitle"
-        local:MvxBind="Text Localization('Interviewer_Comment_Caption')" />
-    <TextView
-        style="@style/Interview_Question_Comments_SupervisorTitle"
-        local:MvxBind="Text Localization('Supervisor_Comment_Caption')" />
+        local:MvxBind="Text Localization('Interview_Comment_Interviewer_Caption')" />
+    <EditText
+        style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
+        local:MvxBind="Text InterviewerComment; ValueChange ValueChangeCommand;" />
 </MvxLinearLayout>

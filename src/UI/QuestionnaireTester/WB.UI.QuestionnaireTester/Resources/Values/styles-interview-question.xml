@@ -119,19 +119,23 @@
     <item name="android:textColor">@color/commentInterviewerTextColor</item>
   </style>
 
-  <style name="Interview_Question_Comments_SupervisorTitle" parent="Interview_Question_Comments_InterviewerTitle">
-    <item name="android:textColor">@color/commentSupervisorTextColor</item>
-  </style>
-
-  <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
+   <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/commentDetailsInterviewerTextColor</item>
   </style>
 
-  <style name="Interview_Question_Comments_SupervisorDetails" parent="Interview_Question_Comments_InterviewerDetails">
-    <item name="android:textColor">@color/commentSupervisorTextColor</item>
+  <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Entity_BasicFont">
+    <item name="android:singleLine">false</item>
+    <item name="android:focusable">true</item>
+    <item name="android:focusableInTouchMode">true</item>
+    <item name="android:background">@drawable/question_text_question</item>
+    <item name="android:textColor">#3f3f3f</item>
+    <item name="android:textColorHint">#b2b2b2</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">14dp</item>
   </style>
 
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />

@@ -1,28 +1,37 @@
 using System;
-using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
 {
     public class CommentsViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel,
+        IInterviewEntityViewModel
         ILiteEventHandler<AnswerCommented>
     {
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly ICommandService commandService;
+        private readonly IPrincipal principal;
 
-        public CommentsViewModel(IStatefullInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
+        public CommentsViewModel(
+            IStatefullInterviewRepository interviewRepository, 
+            ILiteEventRegistry eventRegistry, 
+            IPrincipal principal, 
+            ICommandService commandService)
         {
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
+            this.principal = principal;
+            this.commandService = commandService;
         }
 
         private string interviewId;
@@ -35,10 +44,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
+            
+            var interview = this.interviewRepository.Get(interviewId);
+            InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
 
-            HasComments = false;
-
-            this.eventRegistry.Subscribe(this);
+            HasComments = false;// !string.IsNullOrWhiteSpace(InterviewerComment);
         }
 
         private bool hasComments;
@@ -48,15 +58,49 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             private set { this.hasComments = value; this.RaisePropertyChanged(); }
         }
 
-        public void Handle(AnswerCommented @event)
+        private bool isCommentInEditMode;
+        public bool IsCommentInEditMode
         {
-            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
-                return;
+            get { return this.isCommentInEditMode; }
+            private set { this.isCommentInEditMode = value; this.RaisePropertyChanged(); }
         }
 
-        public void Dispose()
+        private string interviewerComment;
+        public string InterviewerComment
         {
-            eventRegistry.Unsubscribe(this);
+            get { return this.interviewerComment; }
+            set { this.interviewerComment = value; this.RaisePropertyChanged(); }
+        }
+
+        private string previousInterviewerComment;
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(this.CommentQuestionCommand)); }
+        }
+
+        private void CommentQuestionCommand()
+        {
+            if (string.IsNullOrWhiteSpace(InterviewerComment) && string.IsNullOrWhiteSpace(previousInterviewerComment)) return;
+
+            commandService.Execute(new CommentAnswerCommand(
+                interviewId: Guid.Parse(interviewId),
+                userId: principal.CurrentUserIdentity.UserId,
+                questionId: this.entityIdentity.Id,
+                rosterVector: this.entityIdentity.RosterVector,
+                commentTime: DateTime.UtcNow,
+                comment: InterviewerComment));
+
+            previousInterviewerComment = InterviewerComment;
+            IsCommentInEditMode = false;
+            HasComments = string.IsNullOrWhiteSpace(InterviewerComment);
+        }
+
+        public void ShowCommentInEditor()
+        {
+            HasComments = true;
+            IsCommentInEditMode = true;
         }
     }
 }

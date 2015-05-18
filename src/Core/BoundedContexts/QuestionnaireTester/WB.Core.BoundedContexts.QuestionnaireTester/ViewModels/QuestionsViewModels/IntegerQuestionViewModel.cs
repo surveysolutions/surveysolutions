@@ -125,6 +125,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
+        private IMvxCommand showCommentEditorCommand;
+        public IMvxCommand ShowCommentEditorCommand
+        {
+            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
+        }
+
+        private void ShowCommentsCommand()
+        {
+            Comments.ShowCommentInEditor();
+        }
+
         public void Handle(NumericIntegerQuestionAnswered @event)
         {
             if (@event.QuestionId != entityIdentity.Id || !@event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))

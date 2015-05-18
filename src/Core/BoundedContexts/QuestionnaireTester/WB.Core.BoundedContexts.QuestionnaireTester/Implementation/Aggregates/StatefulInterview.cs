@@ -432,6 +432,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return interviewAnswerModel.IsAnswered;
         }
 
+        public string GetInterviewerAnswerComment(Identity entityIdentity)
+        {
+            var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+            var answerComment = interviewState.AnswerComments.LastOrDefault(x => x.QuestionKey == questionKey);
+            return answerComment.Comment;
+        }
+
         private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
