@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(NumericRealQuestionAnswered @event)
         {
-            if (@event.QuestionId != entityIdentity.Id || @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
+            if (@event.QuestionId != entityIdentity.Id || !@event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
                 return;
 
             var interview = this.interviewRepository.Get(interviewId);

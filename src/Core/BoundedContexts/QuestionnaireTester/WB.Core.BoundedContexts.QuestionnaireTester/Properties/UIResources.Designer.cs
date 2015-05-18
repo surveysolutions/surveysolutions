@@ -395,15 +395,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor comment.
-        /// </summary>
-        public static string Interview_Comment_Supervisor_Caption {
-            get {
-                return ResourceManager.GetString("Interview_Comment_Supervisor_Caption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Could not locate your position.
         /// </summary>
         public static string Interview_GeoLocation_Confirm_NoLocation {
