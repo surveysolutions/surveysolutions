@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using Moq;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
@@ -13,9 +8,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityByInterviewersReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
 {
-    internal class when_load_quantity_report_by_day_period : QuantityByInterviewersReportTestContext
+    internal class when_load_quantity_report_for_interviewers_by_day_period : QuantityReportFactoryTestContext
     {
         Establish context = () =>
         {
@@ -39,11 +34,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityByInter
                             timestamp: input.From.Date.AddDays(-2))
                     }), "2");
 
-            _quantityReportFactory = CreateQuantityByInterviewersReport(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateQuantityReportFactory(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
-            result = _quantityReportFactory.Load(input);
+            result = quantityReportFactory.Load(input);
 
         It should_return_one_row = () =>
             result.Items.Count().ShouldEqual(1);
@@ -57,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityByInter
         It should_return_first_row_with_0_5_in_Average = () =>
            result.Items.First().Average.ShouldEqual(0.5);
 
-        private static QuantityReportFactory _quantityReportFactory;
+        private static QuantityReportFactory quantityReportFactory;
         private static QuantityByInterviewersReportInputModel input;
         private static QuantityByResponsibleReportView result;
         private static TestInMemoryWriter<UserDocument> userDocuments;
