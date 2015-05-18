@@ -10,15 +10,15 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityByInterviewersReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
 {
-    internal class when_load_quantity_report_by_week_period : QuantityByInterviewersReportTestContext
+    internal class when_load_quantity_report_for_supervisors_by_month_period : QuantityReportFactoryTestContext
     {
         Establish context = () =>
         {
-            input = CreateQuantityByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
+            input = CreateQuantityBySupervisorsReportInputModel(period: "m");
 
-            var user = Create.UserDocument(supervisorId: supervisorId);
+            var user = Create.UserDocument();
             userDocuments = new TestInMemoryWriter<UserDocument>();
             userDocuments.Store(user, "1");
 
@@ -28,19 +28,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityByInter
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
                             timestamp: input.From.Date.AddHours(1)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
                             timestamp: input.From.Date.AddDays(1)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddDays(-15))
+                        Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
+                            timestamp: input.From.Date.AddMonths(-2))
                     }), "2");
 
-            _quantityReportFactory = CreateQuantityByInterviewersReport(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateQuantityReportFactory(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
-            result = _quantityReportFactory.Load(input);
+            result = quantityReportFactory.Load(input);
 
         It should_return_one_row = () =>
             result.Items.Count().ShouldEqual(1);
@@ -54,8 +54,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityByInter
         It should_return_first_row_with_0_5_in_Average = () =>
            result.Items.First().Average.ShouldEqual(0.5);
 
-        private static QuantityReportFactory _quantityReportFactory;
-        private static QuantityByInterviewersReportInputModel input;
+        private static QuantityReportFactory quantityReportFactory;
+        private static QuantityBySupervisorsReportInputModel input;
         private static QuantityByResponsibleReportView result;
         private static TestInMemoryWriter<UserDocument> userDocuments;
         private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;

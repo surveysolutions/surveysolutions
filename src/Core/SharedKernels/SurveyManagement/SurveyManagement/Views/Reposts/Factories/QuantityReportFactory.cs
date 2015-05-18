@@ -118,11 +118,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
             throw new ArgumentException(string.Format("period '{0}' can't be recognized", period));
         }
-    }
 
-    public class UserAndTimestamp
-    {
-        public Guid? UserId { get; set; }
-        public DateTime Timestamp { get; set; }
+        class UserAndTimestamp
+        {
+            public Guid? UserId { get; set; }
+            public DateTime Timestamp { get; set; }
+        }
     }
 }

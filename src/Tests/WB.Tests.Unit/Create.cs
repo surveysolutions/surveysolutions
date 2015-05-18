@@ -1555,6 +1555,10 @@ namespace WB.Tests.Unit
                 user.Roles.Add(UserRoles.Operator);
                 user.Supervisor = new UserLight(supervisorId.Value, "supervisor");
             }
+            else
+            {
+                user.Roles.Add(UserRoles.Supervisor);
+            }
             return user;
         }
 
