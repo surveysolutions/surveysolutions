@@ -199,9 +199,9 @@
     <Compile Include="CustomBindings\EditDateBinding.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomBindings\EditTextFocusChangeTextBinding.cs" />
     <Compile Include="CustomBindings\LinearLayoutStyleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
-    <Compile Include="CustomBindings\EditTextValueChangedBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaskBinding.cs" />

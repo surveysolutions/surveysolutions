@@ -12,7 +12,7 @@
 
         <EditText
           style="@style/Interview_Question_Answer_TextEditor"
-          local:MvxBind="Text Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); ValueChange ValueChangeCommand;" />
+          local:MvxBind="FocusText Answer; Mask Mask; Hint Localization('TextQuestion_Hint');" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />
