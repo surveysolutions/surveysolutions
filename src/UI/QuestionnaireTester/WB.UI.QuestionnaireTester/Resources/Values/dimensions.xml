@@ -9,11 +9,14 @@
   <dimen name="textsize_18">18sp</dimen>
   <dimen name="textsize_20">20sp</dimen>
 
-  <dimen name="height_PQ_QuestionnaireTitleHoler">240dp</dimen>
-  <dimen name="height_PQ_StartButtonHoler">110dp</dimen>
-
   <dimen name="Toolbar_margin_horizontal">25dp</dimen>
 
   <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
+  <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
+  <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
+
+  <dimen name="Questionnaires_Questionnaire_background_stroke_width">1dp</dimen>
+  <dimen name="Questionnaires_Questionnaire_background_padding">1dp</dimen>
+  <dimen name="Questionnaires_Questionnaire_background_corners_radius">2dp</dimen>
 
 </resources>

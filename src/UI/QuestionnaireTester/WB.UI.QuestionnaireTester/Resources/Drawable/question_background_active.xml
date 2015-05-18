@@ -2,8 +2,15 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 
   <solid android:color="#ffffff" />
-  <stroke android:width="1dp" android:color="#D0D0D0"/>
-  <padding android:left="11dp" android:top="11dp" android:right="11dp" android:bottom="11dp"/>
-  <corners android:bottomRightRadius="4.5dp" android:bottomLeftRadius="4.5dp" android:topLeftRadius="4.5dp" android:topRightRadius="4.5dp"/>
+
+  <stroke android:width="@dimen/Interview_Question_Answer_background_stroke_width" android:color="#D0D0D0"/>
+
+  <padding
+    android:left="@dimen/Interview_Question_Answer_background_padding"
+    android:top="@dimen/Interview_Question_Answer_background_padding"
+    android:right="@dimen/Interview_Question_Answer_background_padding"
+    android:bottom="@dimen/Interview_Question_Answer_background_padding"/>
+
+  <corners android:radius="@dimen/Interview_Question_Answer_background_corners_radius"/>
 
 </shape>
