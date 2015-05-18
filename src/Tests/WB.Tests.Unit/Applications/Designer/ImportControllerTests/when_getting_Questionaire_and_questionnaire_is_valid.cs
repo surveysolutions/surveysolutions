@@ -25,36 +25,24 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService = Mock
-                .Of<IMembershipUserService>(
-                    _ =>
-                        _.WebUser ==
-                        Mock
-                            .Of<IMembershipWebUser>(
-                                u =>
-                                    u.UserId == userId));
+            var membershipUserService = Mock.Of<IMembershipUserService>(
+                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
+                    u => u.UserId == userId));
 
-            var questionnaireViewFactory = Mock
-                .Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
-                    _ =>
-                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
+            var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+                _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
-            var expressionsEngineVersionService = Mock
-                .Of<IExpressionsEngineVersionService>(
-                    _ =>
-                        _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
+            var expressionsEngineVersionService = Mock.Of<IExpressionsEngineVersionService>(
+                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
 
-            var questionnaireVerifier = Mock
-                .Of<IQuestionnaireVerifier>(
-                    _ =>
-                        _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationError[0]);
+            var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
+                _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationError[0]);
 
             string generatedAssembly = "test";
-            var expressionProcessorGenerator = Mock
-                .Of<IExpressionProcessorGenerator>(
-                    _ =>
-                        _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
-                            out generatedAssembly) == Create.GenerationResult(true));
+            var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(
+                _ =>
+                    _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
+                        out generatedAssembly) == Create.GenerationResult(true));
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,

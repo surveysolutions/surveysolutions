@@ -25,16 +25,16 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>
-            exception.ShouldBeOfExactType<HttpResponseException>();
+            exception.ShouldNotBeNull();
 
         It should_throw_HttpResponseException_with_StatusCode_NotFound = () =>
-            ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
+            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            (new[] { "questionnaire", "cannot", "found", "shared"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
+            exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "cannot", "found", "shared");
 
         private static ImportController importController;
-        private static Exception exception;
+        private static HttpResponseException exception;
         private static DownloadQuestionnaireRequest request;
     }
 }
