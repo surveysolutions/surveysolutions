@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+
+  <dimen name="Interview_Entity_margin_left">44dp</dimen>
+  <dimen name="Interview_Entity_margin_right">44dp</dimen>
+
+</resources>

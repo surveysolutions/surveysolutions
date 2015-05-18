@@ -20,8 +20,8 @@
   </style>
   
   <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
   </style>
 
   <style name="InterviewToolbarTitle" parent="ToolbarTitle">
@@ -75,8 +75,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">sans-serif-thin</item>
     <item name="android:textSize">@dimen/PrefilledQuestions_QuestionnaireTitle_textsize</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_centerVertical">true</item>
     <item name="android:maxLines">5</item>
     <item name="android:ellipsize">end</item>
@@ -86,8 +86,8 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_centerVertical">true</item>
   </style>
 

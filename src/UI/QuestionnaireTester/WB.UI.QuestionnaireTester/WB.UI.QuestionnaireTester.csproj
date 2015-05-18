@@ -369,7 +369,9 @@
     <AndroidResource Include="Resources\drawable\media_question_white_border.xml" />
     <AndroidResource Include="Resources\drawable\question_background_answered.xml" />
     <AndroidResource Include="Resources\drawable\question_background_nonanswered.xml" />
-    <AndroidResource Include="Resources\drawable\question_text_question.xml" />
+    <AndroidResource Include="Resources\drawable\question_text_question.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\values\dimensions-interview.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -385,6 +387,10 @@
     <AndroidResource Include="Resources\values-small\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\values-large\dimensions-interview.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values-small\dimensions-interview.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

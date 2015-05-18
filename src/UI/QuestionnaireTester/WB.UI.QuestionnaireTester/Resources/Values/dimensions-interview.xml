@@ -2,7 +2,6 @@
 
 <resources>
 
-  <dimen name="Interview_Entity_margin_horizontal">72dp</dimen>
   <dimen name="Interview_Entity_margin_vertical">16dp</dimen>
 
   <dimen name="Interview_Entity_Title_margin_vertical">10dp</dimen>
