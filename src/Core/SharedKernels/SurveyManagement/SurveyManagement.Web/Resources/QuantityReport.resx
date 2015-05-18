@@ -120,6 +120,9 @@
   <data name="Average" xml:space="preserve">
     <value>Average</value>
   </data>
+  <data name="BackToSupervisors" xml:space="preserve">
+    <value> Back to supervisors</value>
+  </data>
   <data name="ColumnCountValidationMessage" xml:space="preserve">
     <value>&lt;strong&gt;"Column count"&lt;/strong&gt; must be greater then zero, but less then 12</value>
   </data>

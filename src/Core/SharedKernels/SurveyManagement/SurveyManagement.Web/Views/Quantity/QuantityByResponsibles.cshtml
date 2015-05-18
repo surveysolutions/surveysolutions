@@ -15,12 +15,21 @@
         function GetInterviewersUrl(supervisorId) {
             var url = new Url(window.location.href);
             return '@Url.Action("ByInterviewers", "Quantity")'
+                    + '?questionnaireId=' + url.query['questionnaireId']
+                    + '&questionnaireVersion=' + url.query['questionnaireVersion']
+                    + '&from=' + url.query['from']
+                    + '&period=' + url.query['period']
+                    + '&columnCount=' + url.query['columnCount']
+                    + '&supervisorId=' + supervisorId;
+        }
+        function GetSupervisorsUrl() {
+            var url = new Url(window.location.href);
+            return '@Url.Action("BySupervisors", "Quantity")'
                 + '?questionnaireId=' + url.query['questionnaireId']
                 + '&questionnaireVersion=' + url.query['questionnaireVersion']
                 + '&from=' + url.query['from']
                 + '&period=' + url.query['period']
-                + '&columnCount=' + url.query['columnCount']
-                + '&supervisorId=' + supervisorId;
+                + '&columnCount=' + url.query['columnCount'];
         }
         $(function () {
             var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.DataAction })');
@@ -37,14 +46,26 @@
 
 @section header
 {
-    <h3>@QuantityReport.NumberOfCompletedInterviews</h3>
+    @if (ViewBag.IsGoBackSupervisorsVisible)
+    {
+
+        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@QuantityReport.BackToSupervisors</a>
+
+    }
+    <h3>
+        @QuantityReport.NumberOfCompletedInterviews
+
+    </h3>
 }
+
 
 @section filters
 {
     <ul class="list-group">
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">@QuantityReport.Questionnaire</h4>
+            <h4 class="list-group-item-heading">
+                @QuantityReport.Questionnaire
+            </h4>
             <p class="list-group-item-text">
                 <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire" class="form-control">
                     @foreach (var item in Model)
@@ -78,7 +99,7 @@
             </p>
             <br />
             <div id="columnCountValidationError" class="bg-danger" data-bind="visible: ShouldShowColumnCountValidationMessage" style="display: none;">
-                @QuantityReport.ColumnCountValidationMessage
+                @Html.Raw(QuantityReport.ColumnCountValidationMessage)
             </div>
         </li>
     </ul>
@@ -104,10 +125,13 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    @if(ViewBag.IsResponsibleNameLink){
-                    <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
-                    }else{
-                    <span data-bind="text: ResponsibleName"></span>
+                    @if (ViewBag.IsResponsibleNameLink)
+                    {
+                        <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
+                    }
+                    else
+                    {
+                        <span data-bind="text: ResponsibleName"></span>
                     }
                 </td>
                 <!-- ko foreach:QuantityByPeriod -->
@@ -119,5 +143,4 @@
             <!-- /ko -->
         </tbody>
     </table>
-
 }
