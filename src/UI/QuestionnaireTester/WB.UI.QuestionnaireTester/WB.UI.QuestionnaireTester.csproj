@@ -367,7 +367,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_background_error.xml" />
     <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
-    <AndroidResource Include="Resources\drawable\white_border.xml" />
+    <AndroidResource Include="Resources\drawable\media_question_white_border.xml" />
     <AndroidResource Include="Resources\drawable\question_answer_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>

@@ -11,7 +11,7 @@
 
         <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
           <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:layout_marginBottom="28dp" local:MvxBind="Visible HasAnswer">
-            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:background="@drawable/white_border" android:layout_height="250dp">
+            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout" android:background="@drawable/media_question_white_border" android:layout_height="250dp">
               <HttpImageView local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer)" 
                              android:layout_width="match_parent" 
                              android:layout_height="match_parent" 
