@@ -6,12 +6,6 @@
   <dimen name="zero">0dp</dimen>
   
 
-  <dimen name="textsize_12">12sp</dimen>
-  <dimen name="textsize_14">14sp</dimen>
-  <dimen name="textsize_18">18sp</dimen>
-  <dimen name="textsize_20">20sp</dimen>
-
-
   <dimen name="Toolbar_margin_horizontal">25dp</dimen>
 
 
