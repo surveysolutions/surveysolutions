@@ -20,39 +20,39 @@
         android:focusable="false"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_marginTop="-7dp"
+        android:layout_marginTop="@dimen/Dashboard_ProgressBar_margin_top"
         android:keepScreenOn="false"
         local:MvxBind="ShowProgress IsInProgress" />
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_height="@dimen/Dashboard_Menu_height"
+        android:layout_marginLeft="@dimen/Dashboard_Menu_margin_horizontal"
+        android:layout_marginRight="@dimen/Dashboard_Menu_margin_horizontal"
+        android:layout_marginTop="@dimen/Dashboard_Menu_margin_vertical"
+        android:layout_marginBottom="@dimen/Dashboard_Menu_margin_vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/myQuestionnairesLink"
-            android:textSize="16dp"
+            android:textSize="@dimen/textsize_18"
             android:gravity="center_vertical"
             local:MvxBind="Text Localization('Dashboard_MyQuestionnairesLinkText'); Click ShowMyQuestionnairesCommand" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/publicQuestionnairesLink"
-            android:textSize="16dp"
-            android:layout_marginLeft="25dp"
+            android:textSize="@dimen/textsize_18"
+            android:layout_marginLeft="@dimen/Dashboard_Menu_Item_margin_horizontal_in_between"
             android:gravity="center_vertical"
             local:MvxBind="Text Localization('Dashboard_PublicQuestionnairesLinkText'); Click ShowPublicQuestionnairesCommand" />
     </LinearLayout>
     <MvxListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingBottom="25dp"
+        android:paddingBottom="@dimen/Dashboard_QuestionnairesList_padding_bottom"
         android:orientation="vertical"
         android:divider="@null"
-        android:dividerHeight="0dp"
+        android:dividerHeight="@dimen/zero"
         android:smoothScrollbar="true"
         android:scrollingCache="false"
         android:animationCache="false"
@@ -61,11 +61,10 @@
     <MvxListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp"
+        android:paddingBottom="@dimen/Dashboard_QuestionnairesList_padding_bottom"
         android:orientation="vertical"
         android:divider="@null"
-        android:dividerHeight="0dp"
+        android:dividerHeight="@dimen/zero"
         android:smoothScrollbar="true"
         android:scrollingCache="false"
         android:animationCache="false"

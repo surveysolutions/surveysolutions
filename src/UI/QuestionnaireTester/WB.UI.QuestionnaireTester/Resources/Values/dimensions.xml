@@ -19,4 +19,14 @@
   <dimen name="Questionnaires_Questionnaire_background_padding">1dp</dimen>
   <dimen name="Questionnaires_Questionnaire_background_corners_radius">2dp</dimen>
 
+  <dimen name="Dashboard_ProgressBar_margin_top">-7dp</dimen>
+
+  <dimen name="Dashboard_Menu_height">80dp</dimen>
+  <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
+  <dimen name="Dashboard_Menu_margin_horizontal">25dp</dimen>
+
+  <dimen name="Dashboard_Menu_Item_margin_horizontal_in_between">@dimen/Dashboard_Menu_margin_horizontal</dimen>
+
+  <dimen name="Dashboard_QuestionnairesList_padding_bottom">25dp</dimen>
+  
 </resources>
