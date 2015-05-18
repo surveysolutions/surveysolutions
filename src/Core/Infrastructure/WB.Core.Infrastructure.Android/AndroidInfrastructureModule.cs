@@ -62,6 +62,8 @@ namespace WB.Core.Infrastructure.Android
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope()
                 .WithConstructorArgument("assemblyStorageDirectory", this.pathToQuestionnaireAssemblies);
 
+            //expires 11 june 2015
+            SiaqodbConfigurator.SetLicense("lIWJIn3Z7lg6cmX7+VUqAFA20IpZ7FMmg8OsOVGylI/Q0F/VW6c7bQ71nRggUKQB");
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.plainStorageSettings.StorageFolderPath));
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PlainStorageAccessor<>)).InSingletonScope();
 
