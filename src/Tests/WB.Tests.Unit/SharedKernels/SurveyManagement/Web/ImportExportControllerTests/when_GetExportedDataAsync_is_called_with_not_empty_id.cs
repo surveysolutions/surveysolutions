@@ -25,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
             controller = CreateImportExportController(dataExportServiceMock.Object);
         };
 
-        Because of = () => ExecuteAsync(controller, () => controller.GetExportedDataAsync(questionnaireId, 1), () =>
+        Because of = () => ExecuteAsync(controller, () => controller.GetAllDataAsync(questionnaireId, 1), () =>
         {
-            result = controller.GetExportedDataCompleted(controller.AsyncManager.Parameters["result"].ToString()) as FilePathResult;
+            result = controller.GetAllDataCompleted(controller.AsyncManager.Parameters["result"].ToString()) as FilePathResult;
         });
 
         It should_DataExportService_be_called_once = () =>
