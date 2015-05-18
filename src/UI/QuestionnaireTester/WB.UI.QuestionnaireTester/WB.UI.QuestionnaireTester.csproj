@@ -349,7 +349,6 @@
     <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
     <AndroidResource Include="Resources\drawable\question_option_background.xml" />
     <AndroidResource Include="Resources\drawable\question_option_text_color.xml" />
-    <AndroidResource Include="Resources\drawable\question_background_active.xml" />
     <AndroidResource Include="Resources\drawable\question_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -365,12 +364,9 @@
     <AndroidResource Include="Resources\values\styles-interview-question.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background_error.xml" />
+    <AndroidResource Include="Resources\drawable\question_background_invalid.xml" />
     <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
     <AndroidResource Include="Resources\drawable\media_question_white_border.xml" />
-    <AndroidResource Include="Resources\drawable\question_answer_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_background_answered.xml" />
     <AndroidResource Include="Resources\drawable\question_background_nonanswered.xml" />
     <AndroidResource Include="Resources\drawable\question_text_question.xml" />

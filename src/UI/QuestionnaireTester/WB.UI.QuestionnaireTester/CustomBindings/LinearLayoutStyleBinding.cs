@@ -12,7 +12,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 {
     public enum LinearLayoutStyle
     {
-        Active,
         Answered,
         Invalid,
         NonAnswered
@@ -39,14 +38,11 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             switch (value)
             {
-                case LinearLayoutStyle.Active:
-                    SetBackgroundDrawable(Resource.Drawable.question_background_active);
-                    break;
                 case LinearLayoutStyle.NonAnswered:
                     SetBackgroundDrawable(Resource.Drawable.question_background_nonanswered);
                     break;
                 case LinearLayoutStyle.Invalid:
-                    SetBackgroundDrawable(Resource.Drawable.question_background_error);
+                    SetBackgroundDrawable(Resource.Drawable.question_background_invalid);
                     break;
                 case LinearLayoutStyle.Answered:
                     SetBackgroundDrawable(Resource.Drawable.question_background_answered);
