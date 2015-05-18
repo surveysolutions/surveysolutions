@@ -26,38 +26,26 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService = Mock
-                .Of<IMembershipUserService>(
-                    _ =>
-                        _.WebUser ==
-                        Mock
-                            .Of<IMembershipWebUser>(
-                                u =>
-                                    u.UserId == userId));
+            var membershipUserService = Mock.Of<IMembershipUserService>(
+                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
+                    u => u.UserId == userId));
 
-            var questionnaireViewFactory = Mock
-                .Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
-                    _ =>
-                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
+            var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+                _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
-            var expressionsEngineVersionService = Mock
-                .Of<IExpressionsEngineVersionService>(
-                    _ =>
-                        _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
+            var expressionsEngineVersionService = Mock.Of<IExpressionsEngineVersionService>(
+                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
 
             string generatedAssembly;
             var expressionProcessorGenerator = new Mock<IExpressionProcessorGenerator>();
 
-            expressionProcessorGenerator
-                .Setup(
-                    x =>
-                        x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generatedAssembly))
+            expressionProcessorGenerator.Setup(
+                x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
+                    out generatedAssembly))
                 .Throws<NullReferenceException>();
 
-            var questionnaireVerifier = Mock
-                .Of<IQuestionnaireVerifier>(
-                    _ =>
-                        _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationError[0]);
+            var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
+                _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationError[0]);
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
@@ -71,16 +59,16 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>
-            exception.ShouldBeOfExactType<HttpResponseException>();
+            exception.ShouldNotBeNull();
 
         It should_throw_HttpResponseException_with_StatusCode_UpgradeRequired = () =>
-            ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
+            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-             (new[] { "questionnaire", "contains", "functionality", "not", "supported", "update"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
+             exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "contains", "functionality", "not", "supported", "update");
 
         private static ImportController importController;
-        private static Exception exception;
+        private static HttpResponseException exception;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static Guid userId = Guid.Parse("33333333333333333333333333333333");
