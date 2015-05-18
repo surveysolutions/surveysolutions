@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
             controller = CreateImportExportController();
         };
 
-        Because of = () => { expectedException = Catch.Exception(() => controller.GetExportedDataAsync(Guid.Empty, 1)) as HttpException; };
+        Because of = () => { expectedException = Catch.Exception(() => controller.GetAllDataAsync(Guid.Empty, 1)) as HttpException; };
 
         It should_throw_HttpException = () =>
             expectedException.ShouldNotBeNull();

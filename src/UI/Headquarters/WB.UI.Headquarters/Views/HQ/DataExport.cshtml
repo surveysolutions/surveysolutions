@@ -9,47 +9,26 @@
 @section scripts
 {
 
-    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js")
-
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", 
+                    "~/Scripts/viewmodels/pages/exportdata.js")
 
     <script type="text/javascript">
 
-        var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
-        var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
-        var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
-        var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
-
-        Supervisor.VM.ExportData = function () {
-            Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
-
-            var self = this;
-            self.Templates = [
-                    @foreach (var item in Model)
-            {
-            <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
-
-            }];
-
-            self.selectedTemplate = ko.observable();
-
-            self.selectedId = ko.computed(function () {
-                return self.selectedTemplate() && self.selectedTemplate().id;
-            });
-
-            self.selectedVersion = ko.computed(function () {
-                return self.selectedTemplate() && self.selectedTemplate().version;
-            });
-
-            self.selectedTitle = ko.computed(function () {
-                return self.selectedTemplate() && self.selectedTemplate().title;
-            });
-        };
-        Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);
+        var $AllDataUrl = '@Url.Action("GetAllData", "ImportExport")';
+        var $ApprovedDataUrl = '@Url.Action("GetApprovedData", "ImportExport")';
+        var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
+        var $HistoryUrl = '@Url.Action("GetHistory", "ImportExport")';
 
         $(function () {
-            var model = new Supervisor.VM.ExportData();
-            ko.applyBindings(model);
+            var templates = [
+                    @foreach (var item in Model)
+                    {
+                        <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
+                    }
+            ];
 
+            var model = new Supervisor.VM.ExportData(templates);
+            ko.applyBindings(model);
         });
 
         $('#umbrella').hide();
@@ -87,23 +66,23 @@
         </tr>
     </thead>
     <tbody>
-        <!-- ko if:selectedTitle() != '' -->
+        <!-- ko if:selectedTemplateTitle() != null -->
         <tr>
             <td>
                 <div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedDataUrl + '/' + selectedId() + '?version=' + selectedVersion() }">
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         Data.tab
                     </a>
 
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedDataUrl + '/' + selectedId() + '?version=' + selectedVersion() + '&type=1' }">
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         Stata.dat
                     </a>
 
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedDataUrl + '/' + selectedId() + '?version=' + selectedVersion() + '&type=2'}">
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2'}">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         SPSS.sav
@@ -111,20 +90,20 @@
                 </div>
             </td>
             <td>
-                <div >
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + selectedId() + '?version=' + selectedVersion() }">
+                <div>
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         Data.tab
                     </a>
-                    
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + selectedId() + '?version=' + selectedVersion() + '&type=1' }">
+
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         Stata.dat
                     </a>
-                    
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + selectedId() + '?version=' + selectedVersion() + '&type=2' }">
+
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2' }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         SPSS.sav
@@ -132,20 +111,20 @@
                 </div>
             </td>
             <td>
-                <div >
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedFilesUrl + '/' + selectedId() + '?version=' + selectedVersion() }">
+                <div>
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $FilesUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                         Binary
                     </a>
                 </div>
-</td>
+            </td>
             @if (this.ViewBag.EnableInterviewHistory)
             {
                 <td>
-                    <div >
+                    <div>
 
-                        <a class="btn btn-default btn-block" data-bind="attr: { href: $getExportedHistoryUrl + '/' + selectedId() + '?version=' + selectedVersion() }">
+                        <a class="btn btn-default btn-block" data-bind="attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                             Data

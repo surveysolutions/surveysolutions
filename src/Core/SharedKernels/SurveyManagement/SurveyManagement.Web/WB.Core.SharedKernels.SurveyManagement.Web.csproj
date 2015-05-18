@@ -594,6 +594,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\quantitybyresponsibles.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

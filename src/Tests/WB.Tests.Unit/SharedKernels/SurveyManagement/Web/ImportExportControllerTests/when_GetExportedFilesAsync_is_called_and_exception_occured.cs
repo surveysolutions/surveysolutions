@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
             controller = CreateImportExportController(dataExportServiceMock.Object);
         };
 
-        Because of = () => ExecuteAsync(controller, () => controller.GetExportedFilesAsync(questionnaireId, 1), () =>
+        Because of = () => ExecuteAsync(controller, () => controller.GetFilesAsync(questionnaireId, 1), () =>
         {
             Result = controller.AsyncManager.Parameters["result"];
         });
