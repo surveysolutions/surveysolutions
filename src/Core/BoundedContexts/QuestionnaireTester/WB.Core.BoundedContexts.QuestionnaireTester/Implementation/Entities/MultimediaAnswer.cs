@@ -17,11 +17,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public void SetAnswer(string answer)
         {
             this.PictureFileName = answer;
+            this.IsAnswered = !this.PictureFileName.IsNullOrEmpty();
+        }
 
-            if (this.PictureFileName.IsNullOrEmpty())
-                this.MarkUnAnswered();
-            else
-                this.MarkAnswered();
+        public override void RemoveAnswer()
+        {
+            this.IsAnswered = false;
+            this.PictureFileName = null;
         }
     }
 }
