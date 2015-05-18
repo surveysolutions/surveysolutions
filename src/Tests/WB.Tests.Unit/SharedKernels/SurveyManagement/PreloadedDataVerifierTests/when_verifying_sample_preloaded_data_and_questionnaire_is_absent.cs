@@ -23,12 +23,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifySample(Guid.NewGuid(), 1, new PreloadedDataByFile("1", "1", new string[0], new string[0][]));
 
         It should_result_has_1_error = () =>
-            result.Count().ShouldEqual(1);
+            result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0001_error = () =>
-            result.First().Code.ShouldEqual("PL0001");
+            result.Errors.First().Code.ShouldEqual("PL0001");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
     }
 }

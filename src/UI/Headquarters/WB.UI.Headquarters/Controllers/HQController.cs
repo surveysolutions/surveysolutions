@@ -174,44 +174,43 @@ namespace WB.UI.Headquarters.Controllers
         {
             var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
             //null is handled inside 
-            var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample).ToList();
+            var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
 
             this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName"}).Items;
 
             //clean up for security reasons
-            if (errors.Any())
+            if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
             }
 
-            return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Sample));
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
+            return this.View(model);
         }
 
         public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
         {
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
-            var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData).ToList();
+            var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
             this.ViewBag.SupervisorList =
               this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName" }).Items;
 
             //clean up for security reasons
-            if (errors.Any())
+            if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
             }
-            
-            return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Panel));
+
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
+
+            return this.View("VerifySample", model);
         }
 
         [ObserverNotAllowed]
-        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
         {
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, null, id, PreloadedContentType.Panel));
-            }
-
             PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
 
@@ -241,14 +240,8 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ObserverNotAllowed]
-        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
         {
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, null, id, PreloadedContentType.Panel));
-            }
-
             PreloadedDataByFile preloadedData = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
             Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
 

@@ -50,45 +50,57 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         }
 
-        public IEnumerable<PreloadedDataVerificationError> VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
+        public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
+            VerificationStatus status = new VerificationStatus(); 
+
             if (data == null)
             {
-                return new[] { new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                status.Errors = new[] { new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                return status;
             }
 
             var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {
-                return new[] { new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
+                status.Errors = new[] { new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
+                return status;
             }
-            var result = new List<PreloadedDataVerificationError>();
+            var errors = new List<PreloadedDataVerificationError>();
 
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
 
-            result.AddRange(
+            errors.AddRange(
                 this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
                         preloadedDataService));
 
-            result.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
-            result.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
-            return result;
+            errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
+            errors.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
+
+            status.Errors = errors;
+
+            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.SupervisorName);
+            status.WasSupervisorProvided = supervisorNameIndex >= 0;
+
+            return status;
         }
 
-        public IEnumerable<PreloadedDataVerificationError> VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
+        public VerificationStatus VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
         {
+            VerificationStatus status = new VerificationStatus();
+
             if (data == null || !data.Any())
             {
-                yield return new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) ;
-                yield break;
+                status.Errors = new[]{ new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                return status;
             }
 
             var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {
-                yield return new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire);
-                yield break;
+                status.Errors = new[]{ new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire)};
+                return status;
             }
 
             var errorsMessagess =
@@ -98,12 +110,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 from error in errors
                 select error;
 
-            foreach (var preloadedDataVerificationError in errorsMessagess)
-            {
-                yield return preloadedDataVerificationError;
-            }
-        }
+            status.Errors = errorsMessagess.ToArray();
 
+            var topLevel = preloadedDataService.GetTopLevelData(data);
+
+            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.SupervisorName);
+            status.WasSupervisorProvided = supervisorNameIndex >= 0;
+
+            return status;
+        }
+        
         private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
         {
             var questionnaire = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
@@ -115,9 +131,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
             }
 
-
             questionnaire.Questionnaire.ConnectChildrenWithParent();
-            return this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+            return this.preloadedDataServiceFactory. CreatePreloadedDataService(questionnaireExportStructure,
                 questionnaireRosterStructure, questionnaire.Questionnaire);
         }
 

@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     public class PreloadedDataRecord
     {
         public PreloadedDataDto PreloadedDataDto {set; get; }
-        public string SupervisorName { set; get; }
+        public Guid? SupervisorId { set; get; }
     }
 }
