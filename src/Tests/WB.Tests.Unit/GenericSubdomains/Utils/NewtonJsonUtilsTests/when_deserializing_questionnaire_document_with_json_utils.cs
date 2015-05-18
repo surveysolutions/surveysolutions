@@ -1,8 +1,6 @@
 ﻿using Machine.Specifications;
-
 using Main.Core.Documents;
-
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.GenericSubdomains.Native;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {

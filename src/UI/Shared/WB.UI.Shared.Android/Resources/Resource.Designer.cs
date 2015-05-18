@@ -323,6 +323,9 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f060004
 			public static int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
+			// aapt resource value: 0x7f060009
+			public static int Hello = 2131099657;
+			
 			// aapt resource value: 0x7f060003
 			public static int No = 2131099651;
 			
@@ -341,8 +344,8 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f060007
 			public static int drawer_open = 2131099655;
 			
-			// aapt resource value: 0x7f060009
-			public static int library_name = 2131099657;
+			// aapt resource value: 0x7f06000a
+			public static int library_name = 2131099658;
 			
 			static String()
 			{

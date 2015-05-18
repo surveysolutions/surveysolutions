@@ -1,21 +1,17 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
-using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.SessionState;
 using Elmah;
-using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Filters;
 
 namespace WB.UI.Supervisor

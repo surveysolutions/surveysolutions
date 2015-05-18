@@ -1,10 +1,11 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Flurl.Http;
 using Flurl.Http.Configuration;
 
-namespace WB.Core.GenericSubdomains.Utils.Rest
+namespace WB.Core.GenericSubdomains.Native.Rest
 {
     internal class RestMessageHandler : FlurlMessageHandler
     {
@@ -18,7 +19,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            return base.SendAsync(request, token == default(CancellationToken) ? cancellationToken : token);
+            return base.SendAsync(request, this.token == default(CancellationToken) ? cancellationToken : this.token);
         }
     }
 }
