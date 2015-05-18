@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
 using Newtonsoft.Json;
+
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Utils.Rest
+namespace WB.Core.GenericSubdomains.Android
 {
     public class NewtonJsonUtils : IJsonUtils
     {
@@ -54,7 +57,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public string Serialize(object item)
         {
-            return Serialize(item, this.jsonUtilsSettings.TypeNameHandling);
+            return this.Serialize(item, this.jsonUtilsSettings.TypeNameHandling);
         }
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
@@ -66,7 +69,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
         {
             var output = new MemoryStream();
             using (var writer = new StreamWriter(output))
-                jsonSerializer.Serialize(writer, payload);
+                this.jsonSerializer.Serialize(writer, payload);
             return output.ToArray();
         }
 
@@ -94,10 +97,17 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
 
         public T Deserialize<T>(byte[] payload)
         {
-            var input = new MemoryStream(payload);
-            using (var reader = new StreamReader(input))
+            try
             {
-                return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+                var input = new MemoryStream(payload);
+                using (var reader = new StreamReader(input))
+                {
+                    return this.jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+                }
+            }
+            catch (JsonReaderException ex)
+            {
+                throw new JsonDeserializationException(ex.Message, ex);
             }
         }
 
@@ -106,7 +116,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             using (var sr = new StreamReader(stream))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
-                return jsonSerializer.Deserialize(jsonTextReader, type);
+                return this.jsonSerializer.Deserialize(jsonTextReader, type);
             }
         }
 
@@ -115,7 +125,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
             using (var writer = new StreamWriter(stream))
             using (var jsonWriter = new JsonTextWriter(writer))
             {
-                jsonSerializer.Serialize(jsonWriter, value, type);
+                this.jsonSerializer.Serialize(jsonWriter, value, type);
             }
         }
     }

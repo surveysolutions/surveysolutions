@@ -7,12 +7,11 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest.Properties;
 using WB.Core.GenericSubdomains.Utils.Services;
 
-namespace WB.Core.GenericSubdomains.Utils.Rest
+namespace WB.Core.GenericSubdomains.Portable.Rest
 {
     public static class RestExtensions
     {
@@ -97,7 +96,7 @@ namespace WB.Core.GenericSubdomains.Utils.Rest
                 {
                     return jsonUtils.Deserialize<T>(responseContent);
                 }
-                catch (JsonReaderException ex)
+                catch (JsonDeserializationException ex)
                 {
                     throw new RestException(message: Resources.UpdateRequired,
                         statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);

@@ -2,11 +2,8 @@ using System;
 using System.IO;
 using Android.App;
 using Android.Content;
-
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils.Services;
-using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Syncronization.Update
 {

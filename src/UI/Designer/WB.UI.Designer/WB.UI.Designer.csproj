@@ -1265,10 +1265,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
-      <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
@@ -1277,9 +1273,9 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj">
-      <Project>{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils.Rest</Name>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj">
+      <Project>{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}</Project>
+      <Name>WB.Core.GenericSubdomains.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
       <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>

@@ -38,6 +38,8 @@ namespace WB.UI.Capi
 			global::MWBarcodeScanner.Resource.Id.zoomButton = global::WB.UI.Capi.Resource.Id.zoomButton;
 			global::MWBarcodeScanner.Resource.Layout.scanner = global::WB.UI.Capi.Resource.Layout.scanner;
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.Capi.Resource.String.library_name;
+			global::WB.Core.GenericSubdomains.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
+			global::WB.Core.GenericSubdomains.Android.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.Attribute.MvxBind = global::WB.UI.Capi.Resource.Attribute.MvxBind;
@@ -117,6 +119,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList = global::WB.UI.Capi.Resource.String.AnswerIsNotPresentInFilteredComboboxOptionsList;
 			global::WB.UI.Shared.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Android.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat = global::WB.UI.Capi.Resource.String.AreYouSureYouWantToRemoveRowFromRosterFormat;
+			global::WB.UI.Shared.Android.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.UI.Shared.Android.Resource.String.No = global::WB.UI.Capi.Resource.String.No;
 			global::WB.UI.Shared.Android.Resource.String.SendingOfInformationPackageIsCanceling = global::WB.UI.Capi.Resource.String.SendingOfInformationPackageIsCanceling;
 			global::WB.UI.Shared.Android.Resource.String.Warning = global::WB.UI.Capi.Resource.String.Warning;

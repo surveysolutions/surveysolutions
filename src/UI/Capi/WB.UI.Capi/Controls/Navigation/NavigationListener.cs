@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Android.Views;
 using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
+
 using WB.Core.GenericSubdomains.Utils.Services;
 
 namespace WB.UI.Capi.Controls.Navigation
