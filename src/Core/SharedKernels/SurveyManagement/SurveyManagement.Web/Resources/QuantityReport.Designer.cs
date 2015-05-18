@@ -70,6 +70,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Back to supervisors.
+        /// </summary>
+        public static string BackToSupervisors {
+            get {
+                return ResourceManager.GetString("BackToSupervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;strong&gt;&quot;Column count&quot;&lt;/strong&gt; must be greater then zero, but less then 12.
         /// </summary>
         public static string ColumnCountValidationMessage {

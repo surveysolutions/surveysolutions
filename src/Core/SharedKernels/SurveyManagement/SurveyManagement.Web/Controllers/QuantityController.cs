@@ -35,6 +35,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
             this.ViewBag.DataAction = "QuantityByInterviewers";
             this.ViewBag.IsResponsibleNameLink = false;
+            this.ViewBag.IsGoBackSupervisorsVisible = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter;
+
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
             return this.View("QuantityByResponsibles", usersAndQuestionnaires.Questionnaires);
@@ -46,6 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
             this.ViewBag.DataAction = "QuantityBySupervisors";
             this.ViewBag.IsResponsibleNameLink = true;
+            this.ViewBag.IsGoBackSupervisorsVisible = false;
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
             return this.View("QuantityByResponsibles", usersAndQuestionnaires.Questionnaires);
