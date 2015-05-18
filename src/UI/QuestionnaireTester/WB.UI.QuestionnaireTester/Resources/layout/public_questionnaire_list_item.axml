@@ -3,19 +3,19 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="25dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="@dimen/Questionnaires_Questionnaire_margin_left"
+    android:layout_marginRight="@dimen/Questionnaires_Questionnaire_margin_right"
+    android:layout_marginTop="@dimen/Questionnaires_Questionnaire_margin_vertical"
+    android:layout_marginBottom="@dimen/Questionnaires_Questionnaire_margin_vertical"
     android:background="@drawable/questionnaire_list_item_border">
     <LinearLayout
-        android:layout_width="10dp"
+        android:layout_width="@dimen/Questionnaires_Questionnaire_LeftIndicator_width"
         android:layout_height="fill_parent"
         android:background="@color/publicQuestionnaireListItemLeftCorner" />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="5dp"
+        android:padding="@dimen/Questionnaires_Questionnaire_Description_padding"
         android:orientation="vertical">
         <TextView
             style="@style/QuestionnaireListItem_Title"
@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/Questionnaires_Questionnaire_Description_margin_horizontal_in_between"
                 local:MvxBind="Text Localization('LastModifiedDateTitle')" />
             <TextView
                 android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/Questionnaires_Questionnaire_Description_margin_horizontal_in_between"
                 local:MvxBind="Text Localization('OwnerNameTitle')" />
             <TextView
                 android:layout_width="wrap_content"

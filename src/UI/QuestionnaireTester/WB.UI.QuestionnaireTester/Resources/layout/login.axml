@@ -20,7 +20,7 @@
         android:focusable="false"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_marginTop="-7dp"
+        android:layout_marginTop="@dimen/Login_ProgressBar_margin_top"
         android:keepScreenOn="false"
         local:MvxBind="ShowProgress IsInProgress" />
     <ScrollView
