@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             var interview = this.interviewRepository.Get(interviewId);
             InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
 
-            HasComments = false;// !string.IsNullOrWhiteSpace(InterviewerComment);
+            HasComments = !string.IsNullOrWhiteSpace(InterviewerComment);
         }
 
         private bool hasComments;
@@ -82,17 +82,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
         private void CommentQuestionCommand()
         {
-            if (string.IsNullOrWhiteSpace(InterviewerComment) && string.IsNullOrWhiteSpace(previousInterviewerComment)) return;
+            if (!(string.IsNullOrWhiteSpace(InterviewerComment) && string.IsNullOrWhiteSpace(previousInterviewerComment)))
+            {
+                commandService.Execute(
+                    new CommentAnswerCommand(
+                        interviewId: Guid.Parse(interviewId),
+                        userId: principal.CurrentUserIdentity.UserId,
+                        questionId: this.entityIdentity.Id,
+                        rosterVector: this.entityIdentity.RosterVector,
+                        commentTime: DateTime.UtcNow,
+                        comment: InterviewerComment));
 
-            commandService.Execute(new CommentAnswerCommand(
-                interviewId: Guid.Parse(interviewId),
-                userId: principal.CurrentUserIdentity.UserId,
-                questionId: this.entityIdentity.Id,
-                rosterVector: this.entityIdentity.RosterVector,
-                commentTime: DateTime.UtcNow,
-                comment: InterviewerComment));
+                previousInterviewerComment = InterviewerComment;
+            }
 
-            previousInterviewerComment = InterviewerComment;
             IsCommentInEditMode = false;
             HasComments = string.IsNullOrWhiteSpace(InterviewerComment);
         }
