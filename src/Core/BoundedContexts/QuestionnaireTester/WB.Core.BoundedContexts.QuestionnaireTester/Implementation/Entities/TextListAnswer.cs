@@ -16,11 +16,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public void SetAnswers(Tuple<decimal, string>[] answer)
         {
             this.Answers = answer;
+            this.IsAnswered = this.Answers.Any();
+        }
 
-            if (this.Answers.Any())
-                this.MarkUnAnswered();
-            else
-                this.MarkAnswered();
+        public override void RemoveAnswer()
+        {
+            this.IsAnswered = false;
+            this.Answers = null;
         }
     }
 }

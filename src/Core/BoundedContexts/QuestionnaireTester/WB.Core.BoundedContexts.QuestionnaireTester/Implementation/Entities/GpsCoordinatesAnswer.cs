@@ -22,7 +22,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
             this.Accuracy = accuracy;
             this.Altitude = altitude;
 
-            this.MarkAnswered();
+            this.IsAnswered = true;
+        }
+
+        public override void RemoveAnswer()
+        {
+            this.Latitude = default(double);
+            this.Longitude = default(double);
+            this.Accuracy = default(double);
+            this.Altitude = default(double);
+
+            this.IsAnswered = false;
         }
     }
 }

@@ -156,7 +156,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public virtual void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
-            @event.Questions.ForEach(x => this.Answers.Remove(ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)));
+            @event.Questions.ForEach(x =>
+                this.Answers[ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)].RemoveAnswer()
+            );
         }
 
         public virtual void Apply(AnswersDeclaredValid @event)

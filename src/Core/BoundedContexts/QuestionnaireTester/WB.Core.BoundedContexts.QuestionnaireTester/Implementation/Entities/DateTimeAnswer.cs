@@ -15,7 +15,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public void SetAnswer(DateTime answer)
         {
             this.Answer = answer;
-            this.MarkAnswered();
+            this.IsAnswered = true;
+        }
+
+        public override void RemoveAnswer()
+        {
+            this.IsAnswered = false;
+            this.Answer = default(DateTime);
         }
     }
 }

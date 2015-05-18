@@ -76,7 +76,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             var interview = this.interviewRepository.Get(this.interviewId);
 
             bool isInvalidAnswer = !interview.IsValid(this.entityIdentity);
-            bool isAnswered = interview.WasAnswered(this.entityIdentity);
             bool wasException = exception != null;
             string errorMessageText = String.Empty;
             string errorCaptionText = String.Empty;
@@ -85,30 +84,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             {
                 var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
                 var questionModel = questionnaireModel.Questions[entityIdentity.Id];
-
-                if (isAnswered)
-                {
-                    errorMessageText = questionModel.ValidationMessage;
-                    errorCaptionText = UIResources.Validity_Answered_Invalid_ErrorCaption;
-                }
-                else if (questionModel.IsMandatory)
-                {
-                    errorCaptionText = UIResources.Validity_Mandatory_ErrorCaption;
-                    errorMessageText = UIResources.Validity_Mandatory_ErrorMessage;
-                }
+                errorMessageText = questionModel.ValidationMessage;
+                errorCaptionText = UIResources.Validity_Answered_Invalid_ErrorCaption;
             }
-            else if (wasException)
+            else if (wasException && exception is InterviewException)
             {
-                if (exception is InterviewException)
-                {
-                    errorCaptionText = UIResources.Validity_InterviewException_ErrorCaption;
-                    errorMessageText = exception.Message;
-                }
-                else
-                {
-                    errorCaptionText = UIResources.Validity_ApplicationException_ErrorCaption;
-                    errorMessageText = UIResources.Validity_ApplicationException_ErrorMessage;
-                }
+                errorCaptionText = UIResources.Validity_ApplicationException_ErrorCaption;
+                errorMessageText = UIResources.Validity_ApplicationException_ErrorMessage;
             }
 
             IsInvalid = isInvalidAnswer || wasException;

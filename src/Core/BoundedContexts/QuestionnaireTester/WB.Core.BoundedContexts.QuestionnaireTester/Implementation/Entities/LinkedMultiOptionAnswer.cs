@@ -13,15 +13,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         {
         }
 
-
         public void SetAnswers(decimal[][] answer)
         {
             this.Answers = answer;
+            this.IsAnswered = this.Answers.Any();
+        }
 
-            if (this.Answers.Any())
-                this.MarkAnswered();
-            else
-                this.MarkUnAnswered();
+        public override void RemoveAnswer()
+        {
+            this.IsAnswered = false;
+            this.Answers = null;
         }
     }
 }

@@ -27,14 +27,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public bool IsEnabled { get; set; }
         public bool IsAnswered { get; set; }
 
-        protected void MarkAnswered()
-        {
-            this.IsAnswered = true;
-        }
-
-        protected void MarkUnAnswered()
-        {
-            this.IsAnswered = false;
-        }
+        public abstract void RemoveAnswer();
     }
 }
