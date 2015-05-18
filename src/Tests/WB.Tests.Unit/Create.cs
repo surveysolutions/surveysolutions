@@ -1546,5 +1546,37 @@ namespace WB.Tests.Unit
         {
             return new ExportedQuestion() {Answers = new string[0]};
         }
+
+        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null)
+        {
+            var user = new UserDocument() {PublicKey = userId ?? Guid.NewGuid()};
+            if (supervisorId.HasValue)
+            {
+                user.Roles.Add(UserRoles.Operator);
+                user.Supervisor = new UserLight(supervisorId.Value, "supervisor");
+            }
+            return user;
+        }
+
+        public static InterviewStatuses InterviewStatuses(Guid? questionnaireId=null, long? questionnaireVersion=null,params InterviewCommentedStatus[] statuses)
+        {
+            return new InterviewStatuses()
+            {
+                InterviewCommentedStatuses = statuses.ToHashSet(),
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1
+            };
+        }
+
+        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null)
+        {
+            return new InterviewCommentedStatus()
+            {
+                Status = InterviewStatus.Completed,
+                Timestamp = timestamp ?? DateTime.Now,
+                InterviewerId = interviewerId??Guid.NewGuid(),
+                SupervisorId = supervisorId??Guid.NewGuid()
+            };
+        }
     }
 }

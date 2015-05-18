@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Linq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -14,22 +19,21 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class QuantityBySupervisorsReport : IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView>
+    public class QuantityReportFactory : 
+        IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView>,
+        IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> statuses;
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public QuantityBySupervisorsReport(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> statuses, 
-            IQueryableReadSideRepositoryReader<UserDocument> users)
+        public QuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> statuses, IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.statuses = statuses;
             this.users = users;
         }
 
-        public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
+        private QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input, Expression<Func<UserDocument, bool>> queryUsers, Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
         {
-            
             var from = input.From.AddDays(1).Date;
             var to = AddPeriod(input.From, input.Period, -input.ColumnCount);
 
@@ -43,19 +47,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
             var usersCount = users.Query(
                 _ =>
-                    _.Count(
-                        u =>
-                            u.Roles.Contains(UserRoles.Supervisor)));
+                    _.Count(queryUsers));
 
-            var userDetails = users.Query(_ => _.Where(
-                u => u.Roles.Contains(UserRoles.Supervisor))
+            var userDetails = users.Query(_ => _.Where(queryUsers)
                 .OrderBy(u => u.UserName)
-                .Select(u => new { SupervisorId = u.PublicKey, SupervisorName = u.UserName })
-                .Skip((input.Page - 1)*input.PageSize)
+                .Select(u => new { UserId = u.PublicKey, UserName = u.UserName })
+                .Skip((input.Page - 1) * input.PageSize)
                 .Take(input.PageSize).ToArray());
 
-            var userIds = userDetails.Select(u => u.SupervisorId).ToArray();
-            
+            var userIds = userDetails.Select(u => u.UserId).ToArray();
+
             var allInterviewsInStatus = statuses.Query(
                 _ =>
                     _.Where(
@@ -65,17 +66,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         .SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(
                             ics =>
-                                ics.Timestamp < from && ics.Timestamp > to.Date
-                                && ics.Status == input.InterviewStatus
-                                && ics.SupervisorId.HasValue
-                                && userIds.Contains(ics.SupervisorId.Value))
-                        .Select(i => new { SupervisorId = i.SupervisorId.Value, i.Timestamp })
+                                ics.Timestamp < from && ics.Timestamp > to.Date && ics.Status == input.InterviewStatus)
+                              .Select(userIdSelector)
+                        .Where(ics => ics.UserId.HasValue
+                                && userIds.Contains(ics.UserId.Value))
+                        .Select(i => new { UserId = i.UserId.Value, i.Timestamp })
                         .ToArray()
                 );
 
             var rows = userDetails.Select(u =>
             {
-                var interviewsForUser = allInterviewsInStatus.Where(i => i.SupervisorId == u.SupervisorId).ToArray();
+                var interviewsForUser = allInterviewsInStatus.Where(i => i.UserId == u.UserId).ToArray();
                 var quantityByPeriod = new List<long>();
 
                 foreach (var dateTimeRange in dateTimeRanges)
@@ -85,11 +86,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                             ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To);
                     quantityByPeriod.Add(count);
                 }
-                return new QuantityByInterviewersReportRow(u.SupervisorId, quantityByPeriod.ToArray(),
-                    u.SupervisorName, interviewsForUser.Count());
+                return new QuantityByInterviewersReportRow(u.UserId, quantityByPeriod.ToArray(),
+                    u.UserName, interviewsForUser.Count());
             }).ToArray();
 
             return new QuantityByResponsibleReportView(rows, dateTimeRanges, usersCount);
+        }
+
+        public QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input)
+        {
+            return Load(input, (u) => u.Roles.Contains(UserRoles.Operator) && u.Supervisor.Id == input.SupervisorId,
+                i => new UserAndTimestamp() {UserId = i.InterviewerId, Timestamp = i.Timestamp});
+        }
+
+        public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
+        {
+            return Load(input, (u) => u.Roles.Contains(UserRoles.Supervisor),
+                i => new UserAndTimestamp() {UserId = i.SupervisorId, Timestamp = i.Timestamp});
         }
 
         private DateTime AddPeriod(DateTime d, string period, int value)
@@ -105,5 +118,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
             throw new ArgumentException(string.Format("period '{0}' can't be recognized", period));
         }
+    }
+
+    public class UserAndTimestamp
+    {
+        public Guid? UserId { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }
