@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
@@ -29,6 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         string GetValidFileNameForTopLevelQuestionnaire();
 
         IQuestion GetQuestionByVariableName(string variableName);
+
+        PreloadedDataByFile GetTopLevelData(PreloadedDataByFile[] allLevels);
 
     }
 }

@@ -237,6 +237,7 @@
     <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReference.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\PreloadedData\VerificationStatus.cs" />
     <Compile Include="ValueObjects\ValueParsingResult.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
