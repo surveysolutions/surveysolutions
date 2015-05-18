@@ -328,8 +328,7 @@
     <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
-    <Compile Include="Views\Reposts\Factories\QuantityByInterviewersReport.cs" />
-    <Compile Include="Views\Reposts\Factories\QuantityBySupervisorsReport.cs" />
+    <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
