@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void ShowCommentsCommand()
         {
-            Comments.ShowCommentInEditor();
+            QuestionState.ShowCommentInEditor();
         }
 
         public void Handle(NumericIntegerQuestionAnswered @event)
