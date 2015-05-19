@@ -10,6 +10,7 @@
 
   <dimen name="Interview_Entity_Divider_height">1dp</dimen>
 
+  <dimen name="Interview_BreadCrumbs_padding_top">20dp</dimen>
 
   <dimen name="Interview_Sidebar_padding">15dp</dimen>
 

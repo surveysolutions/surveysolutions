@@ -26,6 +26,17 @@
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">@dimen/Interview_Entity_Divider_height</item>
     <item name="android:background">#dadada</item>
-  </style>  
+  </style>
 
+  <style name="Interview_BreadCrumbsContainer" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:background">@color/btn_default</item>
+  </style>
+  <style name="Interview_BreadCrumbs" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/colorToolbarText</item>
+    <item name="android:alpha">0.75</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginTop">@dimen/Interview_BreadCrumbs_padding_top</item>
+  </style>
 </resources>

@@ -18,4 +18,5 @@
   
   <color name="editorTextColor">#FF3F3F3F</color>
   <color name="editorHintTextColor">#FFB2B2B2</color>
+  <color name="btn_default">#2a81cb</color>
 </resources>

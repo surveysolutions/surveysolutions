@@ -9,6 +9,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
+        <MvxLinearLayout
+          style="@style/Interview_BreadCrumbsContainer"
+          >
+          <TextView
+            style="@style/Interview_BreadCrumbs"
+            android:text="Household / some values / another values"></TextView>
+        </MvxLinearLayout>
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
