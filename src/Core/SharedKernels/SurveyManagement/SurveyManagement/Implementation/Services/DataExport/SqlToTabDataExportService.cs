@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         string labelName = headerItem.VariableName;
                         if (!varValueLabels.ContainsKey(labelName))
                         {
-                            var items = headerItem.Labels.Values.ToDictionary(item => Double.Parse(item.Caption),item => item.Title);
+                            var items = headerItem.Labels.Values.ToDictionary(item => Double.Parse(item.Caption),item => item.Title ?? string.Empty);
                             varValueLabels.Add(labelName, items);
                         }
                     }
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                     {
                         if (!labels.ContainsKey(headerItem.ColumnNames[i]))
-                            labels.Add(headerItem.ColumnNames[i], headerItem.Titles[i]);
+                            labels.Add(headerItem.ColumnNames[i], headerItem.Titles[i] ?? string.Empty);
                     }
                 }
 
@@ -149,13 +149,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var levelLabelName = headerStructureForLevel.LevelIdColumnName;
                 if (varValueLabels.ContainsKey(levelLabelName)) continue;
                     
-                var labelItems = headerStructureForLevel.LevelLabels.ToDictionary(item => Double.Parse(item.Caption), item => item.Title);
+                var labelItems = headerStructureForLevel.LevelLabels.ToDictionary(item => Double.Parse(item.Caption), item => item.Title ?? String.Empty);
                 varValueLabels.Add(levelLabelName, labelItems);
             }
         }
 
         private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, string basePath, ExportDataType exportType)
         {
+            string currentDataInfo = string.Empty;
             try
             {
                 var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
@@ -181,7 +182,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     var meta = tabReader.GetMetaFromTabFile(tabFile);
                     
                     UpdateMetaWithLabels(meta, varLabels, varValueLabels);
-
+                    currentDataInfo = string.Format("filename: {0}", tabFile);
                     writer.WriteToFile(dataFile, meta, tabReader.GetDataFromTabFile(tabFile));
                     result.Add(dataFile);
                 }
@@ -191,7 +192,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
             catch (Exception exc)
             {
-                logger.Error("Error on data export: ", exc);
+                logger.Error(string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
+                logger.Error(currentDataInfo);
             }
 
             return new string[0];
