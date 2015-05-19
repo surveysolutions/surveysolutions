@@ -29,10 +29,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IUserInteraction userInteraction;
         private Identity entityIdentity;
         private string interviewId;
 
         public QuestionStateViewModel<NumericIntegerQuestionAnswered> QuestionState { get; private set; }
+
+        private bool isRosterSizeQuestion;
+
+        private int? previousAnswer;
+
+        private int? answer;
+        public int? Answer
+        {
+            get { return answer; }
+            private set { answer = value; RaisePropertyChanged(); }
+        }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
+        }
 
         public IntegerQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
@@ -40,7 +58,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel, 
+            IUserInteraction userInteraction)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
@@ -49,6 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
+            this.userInteraction = userInteraction;
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -74,23 +94,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
         }
 
-        private bool isRosterSizeQuestion;
-
-        private int? previousAnswer;
-
-        private int? answer;
-        public int? Answer
-        {
-            get { return answer; }
-            private set { answer = value; RaisePropertyChanged(); }
-        }
-
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
-        }
-
         private async void SendAnswerTextQuestionCommand()
         {
             if (!Answer.HasValue) return;
@@ -98,8 +101,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (isRosterSizeQuestion && previousAnswer.HasValue && Answer < previousAnswer)
             {
                 var amountOfRostersToRemove = previousAnswer - Math.Max(Answer.Value, 0);
-                var message = string.Format(UIResources.Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster, amountOfRostersToRemove);
-                if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
+                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                if (!(await userInteraction.ConfirmAsync(message)))
                 {
                     Answer = previousAnswer;
                     return;
