@@ -217,6 +217,9 @@
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
     <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_and_cache_is_disabled.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="TestEnvironment.cs" />
+    <Compile Include="TesterResourcesTests\TesterResourcesTestsContext.cs" />
+    <Compile Include="TesterResourcesTests\when_getting_xml_based_resources_which_contain_hardcoded_dimensions.cs" />
     <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
