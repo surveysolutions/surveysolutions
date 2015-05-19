@@ -154,8 +154,8 @@
 
   <style name="ButtonTheme_Blue_Light" parent="android:Widget.Button">
     <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
-    <item name="android:minHeight">48dip</item>
-    <item name="android:minWidth">64dip</item>
+    <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+    <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:textColor">#FFFFFF</item>
   </style>
 
@@ -174,19 +174,19 @@
   <style name="ProgressBarTheme_Blue_Light" parent="android:Widget.ProgressBar.Horizontal">
     <item name="android:progressDrawable">@drawable/theme_blue_light_progress_horizontal_holo_light</item>
     <item name="android:indeterminateDrawable">@drawable/theme_blue_light_progress_indeterminate_horizontal_holo_light</item>
-    <item name="android:minHeight">16dip</item>
-    <item name="android:maxHeight">16dip</item>
+    <item name="android:minHeight">@dimen/Theme_ProgressBar_height</item>
+    <item name="android:maxHeight">@dimen/Theme_ProgressBar_height</item>
   </style>
 
   <style name="SeekBarTheme_Blue_Light" parent="android:Widget.SeekBar">
     <item name="android:progressDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
     <item name="android:indeterminateDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
-    <item name="android:minHeight">13dip</item>
-    <item name="android:maxHeight">13dip</item>
+    <item name="android:minHeight">@dimen/Theme_SeekBar_height</item>
+    <item name="android:maxHeight">@dimen/Theme_SeekBar_height</item>
     <item name="android:thumb">@drawable/theme_blue_light_scrubber_control_selector_holo_light</item>
-    <item name="android:thumbOffset">16dip</item>
-    <item name="android:paddingLeft">16dip</item>
-    <item name="android:paddingRight">16dip</item>
+    <item name="android:thumbOffset">@dimen/Theme_SeekBar_padding</item>
+    <item name="android:paddingLeft">@dimen/Theme_SeekBar_padding</item>
+    <item name="android:paddingRight">@dimen/Theme_SeekBar_padding</item>
   </style>
   
 </resources>

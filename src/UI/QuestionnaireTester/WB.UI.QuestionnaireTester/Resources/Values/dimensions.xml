@@ -6,6 +6,13 @@
   <dimen name="zero">0dp</dimen>
   
 
+  <dimen name="Theme_ProgressBar_height">16dip</dimen>
+  <dimen name="Theme_SeekBar_height">13dip</dimen>
+  <dimen name="Theme_SeekBar_padding">16dip</dimen>
+  <dimen name="Theme_Button_min_height">48dip</dimen>
+  <dimen name="Theme_Button_min_width">64dip</dimen>
+
+
   <dimen name="Toolbar_margin_horizontal">25dp</dimen>
 
 
