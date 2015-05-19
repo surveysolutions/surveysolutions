@@ -386,6 +386,8 @@
     </AndroidResource>
     <AndroidResource Include="Resources\values-small\dimensions-interview.xml" />
     <AndroidResource Include="Resources\drawable\group_button_background.xml" />
+    <AndroidResource Include="Resources\values\dimensions-interview.xml" />
+    <AndroidResource Include="Resources\values\dimensions.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
