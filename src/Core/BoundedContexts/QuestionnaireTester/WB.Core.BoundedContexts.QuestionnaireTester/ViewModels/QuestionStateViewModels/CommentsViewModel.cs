@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 {
     public class CommentsViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
-        ILiteEventHandler<AnswerCommented>
     {
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;

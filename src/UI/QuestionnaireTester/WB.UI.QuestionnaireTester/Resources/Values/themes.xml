@@ -4,7 +4,7 @@
 
   <!-- Base theme applied no matter what API -->
   <style name="Theme.Light.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-    <item name="android:windowNoTitle">true</item>
+    <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
     <item name="android:fontFamily">sans-serif</item>

@@ -6,10 +6,4 @@
     <TextView
         style="@style/Interview_Question_Comments_InterviewerTitle"
         local:MvxBind="Text Localization('Interview_Comment_Interviewer_Caption')" />
-    <TextView
-        style="@style/Interview_Question_Comments_InterviewerTitle"
-        local:MvxBind="Text QuestionState.Comments.InterviewerComment;" />
-    <EditText
-        style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
-        local:MvxBind="Text QuestionState.Comments.InterviewerComment; ValueChange ValueChangeCommand; Visible QuestionState.Comments.IsCommentInEditMode" />
 </MvxLinearLayout>
