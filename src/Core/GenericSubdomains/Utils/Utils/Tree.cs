@@ -5,6 +5,11 @@ namespace WB.Core.GenericSubdomains.Utils
 {
     public static class Tree
     {
+        public static IEnumerable<T> TreeToEnumerable<T>(this T root, Func<T, IEnumerable<T>> getChildren)
+        {
+            return new[] { root }.TreeToEnumerable(getChildren);
+        }
+
         public static IEnumerable<T> TreeToEnumerable<T>(this IEnumerable<T> tree, Func<T, IEnumerable<T>> getChildren)
         {
             var itemsStack = new Stack<T>(tree);
