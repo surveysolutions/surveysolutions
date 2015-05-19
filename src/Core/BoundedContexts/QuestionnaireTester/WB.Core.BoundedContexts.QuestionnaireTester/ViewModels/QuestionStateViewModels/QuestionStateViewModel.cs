@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<TAnswerEvent>
+        ILiteEventHandler<TAnswerEvent>
         where TAnswerEvent : QuestionAnswered
     {
         public QuestionHeaderViewModel Header { get; private set; }

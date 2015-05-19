@@ -11,10 +11,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 {
     public class EnablementViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<GroupsEnabled>,
-        ILiteEventBusEventHandler<GroupsDisabled>,
-        ILiteEventBusEventHandler<QuestionsEnabled>,
-        ILiteEventBusEventHandler<QuestionsDisabled>
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>,
+        ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<QuestionsDisabled>
     {
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;

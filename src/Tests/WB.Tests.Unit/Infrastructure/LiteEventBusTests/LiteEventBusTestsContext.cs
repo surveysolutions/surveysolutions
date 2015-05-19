@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
     [Subject(typeof(LiteEventBus))]
     public class LiteEventBusTestsContext
     {
-        public class DumyLiteEventHandlers : ILiteEventBusEventHandler<int>, ILiteEventBusEventHandler<long>, ILiteEventBusEventHandler<string>
+        public class DumyLiteEventHandlers : ILiteEventHandler<int>, ILiteEventHandler<long>, ILiteEventHandler<string>
         {
             public virtual void Handle(int @event) { }
 

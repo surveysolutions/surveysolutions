@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<NumericRealQuestionAnswered>,
+        ILiteEventHandler<NumericRealQuestionAnswered>,
         IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;

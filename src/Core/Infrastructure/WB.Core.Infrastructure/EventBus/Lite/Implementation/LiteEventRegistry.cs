@@ -10,43 +10,46 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventRegistry : ILiteEventRegistry
     {
-        private class Subscription
-        {
-            public ILiteEventBusEventHandler HandlerRef { get; set; }
-
-            public Action<object> HandlerAction { get; set; }
-        }
-
-        private readonly Dictionary<string, List<Subscription>> handlers = new Dictionary<string, List<Subscription>>();
+        private readonly Dictionary<string, List<WeakReference<ILiteEventHandler>>> handlers = new Dictionary<string, List<WeakReference<ILiteEventHandler>>>();
         
         private static readonly object LockObject = new object();
 
-
-        public void Subscribe(ILiteEventBusEventHandler handler)
+        public void Subscribe(ILiteEventHandler handler)
         {
             var eventTypes = GetHandledEventTypes(handler);
             RegisterHandlersForEvents(handler, eventTypes);
         }
 
-
-        public void Unsubscribe(ILiteEventBusEventHandler handler)
+        public void Unsubscribe(ILiteEventHandler handler)
         {
             var eventTypes = GetHandledEventTypes(handler);
-            UnregisterHandlersForEvents(handler, eventTypes);
+            UnregisterHandlerForEvents(eventTypes, handler);
         }
 
-        private void UnregisterHandlersForEvents(ILiteEventBusEventHandler handler, Type[] eventTypes)
+        private void UnregisterHandlerForEvents(Type[] eventTypes, ILiteEventHandler handler)
         {
             foreach (Type eventType in eventTypes)
             {
-                var eventTypeName = eventType.Name;
+                UnregisterHandlerForEvent(eventType, handler);
+            }
+        }
 
-                lock (LockObject)
+        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler = null)
+        {
+            var eventTypeName = eventType.Name;
+
+            lock (LockObject)
+            {
+                if (this.handlers.ContainsKey(eventTypeName))
                 {
-                    if (this.handlers.ContainsKey(eventTypeName))
+                    this.handlers[eventTypeName].RemoveAll(s =>
                     {
-                        this.handlers[eventTypeName].RemoveAll(s => s.HandlerRef == handler);
-                    }
+                        ILiteEventHandler handlerFromWeakReferance;
+                        if (!s.TryGetTarget(out handlerFromWeakReferance))
+                            return true; // remove if handler doesn't exist
+
+                        return handler == handlerFromWeakReferance;
+                    });
                 }
             }
         }
@@ -57,35 +60,64 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
             lock (LockObject)
             {
-                List<Subscription> subscriptionsList;
-                if (handlers.TryGetValue(eventType.Name, out subscriptionsList))
-                    return subscriptionsList.Select(s => s.HandlerAction).ToList();
+                List<WeakReference<ILiteEventHandler>> handlersForEventType;
+                if (handlers.TryGetValue(eventType.Name, out handlersForEventType))
+                {
+                    bool wasNotActualHandlers;
+                    var actualHandlers = FilterActualHandlers(handlersForEventType, out wasNotActualHandlers);
+
+                    if (wasNotActualHandlers)
+                        UnregisterHandlerForEvent(@event.GetType());
+
+                    return actualHandlers.Select(GetActionHandler);
+                }
 
                 return Enumerable.Empty<Action<object>>();
             }
         }
 
-        private void RegisterHandlersForEvents(ILiteEventBusEventHandler handler, Type[] eventTypes)
+        private Action<object> GetActionHandler(ILiteEventHandler handler)
+        {
+            return @event => ((dynamic) handler).Handle((dynamic) @event);
+        }
+
+        private static IEnumerable<ILiteEventHandler> FilterActualHandlers(List<WeakReference<ILiteEventHandler>> weakReferenceHandlers, out bool wasNotActualHandlers)
+        {
+            wasNotActualHandlers = false;
+            List<ILiteEventHandler> handlersForEvent = new List<ILiteEventHandler>();
+
+            foreach (var weakReferance in weakReferenceHandlers)
+            {
+                ILiteEventHandler handlerFromWeakReferance;
+
+                if (weakReferance.TryGetTarget(out handlerFromWeakReferance))
+                    handlersForEvent.Add(handlerFromWeakReferance);
+                else
+                    wasNotActualHandlers = true;
+            }
+
+            return handlersForEvent;
+        }
+
+        private void RegisterHandlersForEvents(ILiteEventHandler handler, Type[] eventTypes)
         {
             foreach (Type eventType in eventTypes)
             {
                 lock (LockObject)
                 {
-                    List<Subscription> handlersList = this.handlers.GetOrAdd(eventType.Name, () => new List<Subscription>());
+                    List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(eventType.Name, () => new List<WeakReference<ILiteEventHandler>>());
 
-                    if (handlersList.Any(h => h.HandlerRef == handler))
+                    ILiteEventHandler handlerFromWeakReferance;
+
+                    if (handlersForEventType.Any(h => h.TryGetTarget(out handlerFromWeakReferance) && handlerFromWeakReferance == handler))
                         throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
 
-                    handlersList.Add(new Subscription
-                    {
-                        HandlerRef = handler,
-                        HandlerAction = @event => ((dynamic)handler).Handle((dynamic)@event)
-                    });
+                    handlersForEventType.Add(new WeakReference<ILiteEventHandler>(handler)); 
                 }
             }
         }
 
-        private static Type[] GetHandledEventTypes(ILiteEventBusEventHandler handler)
+        private static Type[] GetHandledEventTypes(ILiteEventHandler handler)
         {
             return handler
                 .GetType()
@@ -96,14 +128,14 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 .ToArray();
         }
 
-        private static Type GetEventType(Type k)
+        private static Type GetEventType(Type type)
         {
-            return k.GetTypeInfo().GenericTypeArguments.Single();
+            return type.GetTypeInfo().GenericTypeArguments.Single();
         }
 
-        private static bool IsEventHandlerInterface(Type i)
+        private static bool IsEventHandlerInterface(Type type)
         {
-            return i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ILiteEventBusEventHandler<>);
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(ILiteEventHandler<>);
         }
     }
 }

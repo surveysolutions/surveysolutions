@@ -16,10 +16,10 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             var eventRegistry = Create.LiteEventRegistry();
             eventBus = Create.LiteEventBus(eventRegistry);
 
-            sub1Mock = Mock.Of<ILiteEventBusEventHandler<DummyEvent>>();
+            sub1Mock = Mock.Of<ILiteEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(sub1Mock);
 
-            sub2Mock = Mock.Of<ILiteEventBusEventHandler<DummyEvent>>();
+            sub2Mock = Mock.Of<ILiteEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(sub2Mock);
         };
 
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         private static ILiteEventBus eventBus;
         private static DummyEvent dummyEvent;
         private static IAggregateRoot aggregateRoot;
-        private static ILiteEventBusEventHandler<DummyEvent> sub1Mock;
-        private static ILiteEventBusEventHandler<DummyEvent> sub2Mock;
+        private static ILiteEventHandler<DummyEvent> sub1Mock;
+        private static ILiteEventHandler<DummyEvent> sub2Mock;
     }
 }
