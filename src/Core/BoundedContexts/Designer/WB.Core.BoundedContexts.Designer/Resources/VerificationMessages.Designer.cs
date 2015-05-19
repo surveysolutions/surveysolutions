@@ -604,7 +604,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filtered combobox cannot be linked to another question..
+        ///   Looks up a localized string similar to Combo box cannot be linked to another question..
         /// </summary>
         internal static string WB0074_FilteredComboboxIsLinked {
             get {
@@ -721,7 +721,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cicrular references in cascading questions not allowed..
+        ///   Looks up a localized string similar to Circular references in cascading questions not allowed..
         /// </summary>
         internal static string WB0087_CascadingQuestionHasCicularReference {
             get {
@@ -757,7 +757,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading question should not contain enablement condition. .
+        ///   Looks up a localized string similar to Child cascading question should not contain enabling condition. .
         /// </summary>
         internal static string WB0091_CascadingChildQuestionShouldNotContainCondition {
             get {
