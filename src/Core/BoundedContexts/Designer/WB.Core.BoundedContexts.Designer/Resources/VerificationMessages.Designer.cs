@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster where roster size source is question could not have fixed titles..
+        ///   Looks up a localized string similar to Roster where roster size source is question could not have fixed set of items..
         /// </summary>
         internal static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
             get {
@@ -279,7 +279,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have roster size question..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster size question..
         /// </summary>
         internal static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
             get {
@@ -288,7 +288,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have roster title question..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster title question..
         /// </summary>
         internal static string WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion {
             get {
@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have empty titles..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have empty titles..
         /// </summary>
         internal static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
             get {
@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have more than 40 rows..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have more than 40 rows..
         /// </summary>
         internal static string WB0038_RosterFixedTitlesHaveMoreThan40Items {
             get {
