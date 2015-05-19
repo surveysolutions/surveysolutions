@@ -694,7 +694,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in child cascading question should reference only existing option in parent question..
+        ///   Looks up a localized string similar to Options in child cascading combo box question should reference only existing option in parent question..
         /// </summary>
         internal static string WB0084_CascadingOptionsShouldHaveParent {
             get {
@@ -712,7 +712,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading question references missing or supported type question..
+        ///   Looks up a localized string similar to Cascading combo box question references missing or supported type question..
         /// </summary>
         internal static string WB0086_ParentCascadingQuestionShouldExist {
             get {
@@ -721,7 +721,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Circular references in cascading questions not allowed..
+        ///   Looks up a localized string similar to Circular references in cascading combo box questions not allowed..
         /// </summary>
         internal static string WB0087_CascadingQuestionHasCicularReference {
             get {
@@ -730,7 +730,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading question should have less than 10.000 options..
+        ///   Looks up a localized string similar to Cascading combo box question should have less than 10.000 options..
         /// </summary>
         internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -739,7 +739,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading question should have unique value and parent value options list..
+        ///   Looks up a localized string similar to Cascading combo box question should have unique value and parent value options list..
         /// </summary>
         internal static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
             get {
@@ -757,7 +757,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading question should not contain enabling condition. .
+        ///   Looks up a localized string similar to Child cascading combo box question should not contain enabling condition. .
         /// </summary>
         internal static string WB0091_CascadingChildQuestionShouldNotContainCondition {
             get {
@@ -766,7 +766,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading question should not contain validation condition..
+        ///   Looks up a localized string similar to Child cascading combo box question should not contain validation condition..
         /// </summary>
         internal static string WB0092_CascadingChildQuesionShouldNotContainValidation {
             get {
