@@ -163,13 +163,13 @@
     <value>Question with title substitution cannot reference questions from deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Question has options count less than max allowed answers count.</value>
+    <value>Question has options count less than max number of answers.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled.</value>
   </data>
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
-    <value>Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used.</value>
+    <value>Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used.</value>
   </data>
   <data name="WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty" xml:space="preserve">
     <value>Roster upper bound for roster size question cannot be empty.</value>

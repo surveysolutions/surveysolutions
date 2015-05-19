@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has options count less than max allowed answers count..
+        ///   Looks up a localized string similar to Question has options count less than max number of answers..
         /// </summary>
         internal static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used..
+        ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used..
         /// </summary>
         internal static string WB0023_RosterSizeSourceQuestionTypeIsIncorrect {
             get {
