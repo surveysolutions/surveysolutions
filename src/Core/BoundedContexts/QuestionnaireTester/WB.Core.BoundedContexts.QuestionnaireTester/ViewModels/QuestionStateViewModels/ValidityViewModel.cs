@@ -15,8 +15,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 {
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<AnswersDeclaredValid>,
-        ILiteEventBusEventHandler<AnswersDeclaredInvalid>
+        ILiteEventHandler<AnswersDeclaredValid>,
+        ILiteEventHandler<AnswersDeclaredInvalid>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefullInterviewRepository interviewRepository;

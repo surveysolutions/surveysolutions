@@ -15,10 +15,10 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             var eventRegistry = Create.LiteEventRegistry();
             eventBus = Create.LiteEventBus(eventRegistry);
 
-            sub1Mock = Mock.Of<ILiteEventBusEventHandler<int>>();
+            sub1Mock = Mock.Of<ILiteEventHandler<int>>();
             eventRegistry.Subscribe(sub1Mock);
 
-            sub2Mock = Mock.Of<ILiteEventBusEventHandler<long>>();
+            sub2Mock = Mock.Of<ILiteEventHandler<long>>();
             eventRegistry.Subscribe(sub2Mock);
         };
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         private static ILiteEventBus eventBus;
         private static long longValue;
         private static IAggregateRoot aggregateRoot;
-        private static ILiteEventBusEventHandler<int> sub1Mock;
-        private static ILiteEventBusEventHandler<long> sub2Mock;
+        private static ILiteEventHandler<int> sub1Mock;
+        private static ILiteEventHandler<long> sub2Mock;
     }
 }

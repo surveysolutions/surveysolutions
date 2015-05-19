@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<NumericIntegerQuestionAnswered>
+        ILiteEventHandler<NumericIntegerQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;

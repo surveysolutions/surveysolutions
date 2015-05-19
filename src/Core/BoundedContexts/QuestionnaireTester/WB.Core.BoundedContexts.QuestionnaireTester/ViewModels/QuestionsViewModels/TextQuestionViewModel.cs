@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<TextQuestionAnswered>
+        ILiteEventHandler<TextQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly ICommandService commandService;
