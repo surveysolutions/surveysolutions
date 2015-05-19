@@ -2,9 +2,66 @@
 
 <resources>
 
+
+  <dimen name="zero">0dp</dimen>
+
+
   <dimen name="textsize_12">12sp</dimen>
   <dimen name="textsize_14">14sp</dimen>
   <dimen name="textsize_18">18sp</dimen>
   <dimen name="textsize_20">20sp</dimen>
+
+
+  <dimen name="Theme_ProgressBar_height">16dip</dimen>
+  <dimen name="Theme_SeekBar_height">13dip</dimen>
+  <dimen name="Theme_SeekBar_padding">16dip</dimen>
+  <dimen name="Theme_Button_min_height">48dip</dimen>
+  <dimen name="Theme_Button_min_width">64dip</dimen>
+
+
+  <dimen name="Toolbar_margin_horizontal">25dp</dimen>
+
+
+  <dimen name="Splash_Logo_size">300dp</dimen>
+  <dimen name="Splash_Logo_padding">100dp</dimen>
+
+
+  <dimen name="Login_ProgressBar_margin_top">-7dp</dimen>
+
+  <dimen name="Login_Element_width">300dp</dimen>
+  <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
+  <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+
+
+  <dimen name="Dashboard_ProgressBar_margin_top">-7dp</dimen>
+
+  <dimen name="Dashboard_Menu_height">80dp</dimen>
+  <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
+  <dimen name="Dashboard_Menu_margin_horizontal">25dp</dimen>
+
+  <dimen name="Dashboard_Menu_Item_margin_horizontal_in_between">@dimen/Dashboard_Menu_margin_horizontal</dimen>
+
+  <dimen name="Dashboard_QuestionnairesList_padding_bottom">25dp</dimen>
+
+
+  <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
+  <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
+  <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
+
+
+  <dimen name="Questionnaires_Questionnaire_margin_vertical">5dp</dimen>
+  <dimen name="Questionnaires_Questionnaire_margin_left">25dp</dimen>
+  <dimen name="Questionnaires_Questionnaire_margin_right">20dp</dimen>
+
+  <dimen name="Questionnaires_Questionnaire_LeftIndicator_width">10dp</dimen>
+
+  <dimen name="Questionnaires_Questionnaire_background_stroke_width">1dp</dimen>
+  <dimen name="Questionnaires_Questionnaire_background_padding">1dp</dimen>
+  <dimen name="Questionnaires_Questionnaire_background_corners_radius">2dp</dimen>
+
+  <dimen name="Questionnaires_Questionnaire_Description_padding">5dp</dimen>
+
+  <dimen name="Questionnaires_Questionnaire_Description_margin_horizontal_in_between">5dp</dimen>
+
 
 </resources>
