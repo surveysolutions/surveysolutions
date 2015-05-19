@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (this.isRosterSizeQuestion && !changedModel.Checked)
             {
                 var amountOfRostersToRemove = 1;
-                var message = string.Format(UIResources.Interview_Questions_AreYouSureYouWantToRemoveRowFromRoster, amountOfRostersToRemove);
+                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                 if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
                 {
                     changedModel.Checked = true;
