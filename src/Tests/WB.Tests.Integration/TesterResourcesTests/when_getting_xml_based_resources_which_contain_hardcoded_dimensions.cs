@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
         Because of = () =>
             resources = GetXmlResourcesHavingHardcodedDimensions("UI/QuestionnaireTester/WB.UI.QuestionnaireTester/Resources").ToArray();
 
-        It should_return_only_dimensions_from_values_folders  = () =>
+        It should_return_only_dimensions_xmls_from_values_folders = () =>
             resources.ShouldEachConformTo(resource => resource.ToLower().StartsWith("values") && resource.ToLower().Contains("dimensions"));
 
         private static string[] resources;
