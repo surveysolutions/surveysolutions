@@ -6,9 +6,9 @@ namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface ILiteEventRegistry
     {
-        void Subscribe(ILiteEventBusEventHandler handler);
+        void Subscribe(ILiteEventHandler handler);
 
-        void Unsubscribe(ILiteEventBusEventHandler handler);
+        void Unsubscribe(ILiteEventHandler handler);
 
         IEnumerable<Action<object>> GetHandlers(object @event);
     }
