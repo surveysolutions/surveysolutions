@@ -325,31 +325,31 @@
     <value>Question with current type can not be used as roster title.</value>
   </data>
   <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
-    <value>Options in child cascading question should reference only existing option in parent question.</value>
+    <value>Options in child cascading combo box question should reference only existing option in parent question.</value>
   </data>
   <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
     <value>Question should have deeper or the same level as it's parent question.</value>
   </data>
   <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
-    <value>Cascading question references missing or supported type question.</value>
+    <value>Cascading combo box question references missing or supported type question.</value>
   </data>
   <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
-    <value>Circular references in cascading questions not allowed.</value>
+    <value>Circular references in cascading combo box questions not allowed.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>Cascading question should have less than 10.000 options.</value>
+    <value>Cascading combo box question should have less than 10.000 options.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
-    <value>Cascading question should have unique value and parent value options list.</value>
+    <value>Cascading combo box question should have unique value and parent value options list.</value>
   </data>
   <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
     <value>Linked question can be interviewers only.</value>
   </data>
   <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
-    <value>Child cascading question should not contain enabling condition. </value>
+    <value>Child cascading combo box question should not contain enabling condition. </value>
   </data>
   <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
-    <value>Child cascading question should not contain validation condition.</value>
+    <value>Child cascading combo box question should not contain validation condition.</value>
   </data>
   <data name="WB0093_QuestionWithTheSameVariableNameAlreadyExists" xml:space="preserve">
     <value>Question with the same variable name already exists.</value>
