@@ -44,8 +44,8 @@
 
   <style name="Interview_Question_Answer_Editor" parent="Interview_Entity_BasicFont">
     <item name="android:textStyle">bold</item>
-    <item name="android:textColor">#3f3f3f</item>
-    <item name="android:textColorHint">#b2b2b2</item>
+    <item name="android:textColor">@color/editorTextColor</item>
+    <item name="android:textColorHint">@color/editorHintTextColor</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
