@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             base.Apply(@event);
             var answer = this.GetOrCreateAnswer(@event.QuestionId, @event.PropagationVector);
-            answer.Comments.Add(@event.Comment);
+            answer.InterviewerComment = @event.Comment;
         }
 
         #region Group and question status and validity
@@ -435,8 +435,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public string GetInterviewerAnswerComment(Identity entityIdentity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            var answerComment = interviewState.AnswerComments.LastOrDefault(x => x.QuestionKey == questionKey);
-            return answerComment.Comment;
+            if (!Answers.ContainsKey(questionKey))
+                return null;
+
+            var interviewAnswerModel = Answers[questionKey];
+            return interviewAnswerModel.InterviewerComment;
         }
 
         private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
@@ -495,8 +498,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 answer = questionActivator();
                 answer.Id = id;
                 answer.RosterVector = rosterVector;
+                this.Answers[questionKey] = answer;
             }
-            this.Answers[questionKey] = answer;
             return answer;
         }
 

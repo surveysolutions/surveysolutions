@@ -119,10 +119,6 @@
     <item name="android:textColor">@color/commentInterviewerTextColor</item>
   </style>
 
-  <style name="Interview_Question_Comments_SupervisorTitle" parent="Interview_Question_Comments_InterviewerTitle">
-    <item name="android:textColor">@color/commentSupervisorTextColor</item>
-  </style>
-
   <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/textsize_14</item>
@@ -130,9 +126,9 @@
     <item name="android:textColor">@color/commentDetailsInterviewerTextColor</item>
   </style>
 
-  <style name="Interview_Question_Comments_SupervisorDetails" parent="Interview_Question_Comments_InterviewerDetails">
-    <item name="android:textColor">@color/commentSupervisorTextColor</item>
+  <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
   </style>
+  
 
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
 </resources>

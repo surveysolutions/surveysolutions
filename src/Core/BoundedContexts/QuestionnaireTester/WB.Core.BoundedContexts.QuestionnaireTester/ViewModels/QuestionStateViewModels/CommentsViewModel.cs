@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -19,9 +21,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private readonly IPrincipal principal;
 
         public CommentsViewModel(
-            IStatefullInterviewRepository interviewRepository, 
-            ILiteEventRegistry eventRegistry, 
-            IPrincipal principal, 
+            IStatefullInterviewRepository interviewRepository,
+            ILiteEventRegistry eventRegistry,
+            IPrincipal principal,
             ICommandService commandService)
         {
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
@@ -43,7 +45,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
-            
+
             var interview = this.interviewRepository.Get(interviewId);
             InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
 
@@ -61,47 +63,52 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         public bool IsCommentInEditMode
         {
             get { return this.isCommentInEditMode; }
-            private set { this.isCommentInEditMode = value; this.RaisePropertyChanged(); }
+            private set
+            {
+                this.isCommentInEditMode = value;
+                this.HasComments = value || !string.IsNullOrWhiteSpace(this.interviewerComment);
+                this.RaisePropertyChanged();
+            }
         }
 
         private string interviewerComment;
         public string InterviewerComment
         {
             get { return this.interviewerComment; }
-            set { this.interviewerComment = value; this.RaisePropertyChanged(); }
-        }
-
-        private string previousInterviewerComment;
-
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(this.CommentQuestionCommand)); }
-        }
-
-        private void CommentQuestionCommand()
-        {
-            if (!(string.IsNullOrWhiteSpace(InterviewerComment) && string.IsNullOrWhiteSpace(previousInterviewerComment)))
+            set
             {
-                commandService.Execute(
-                    new CommentAnswerCommand(
-                        interviewId: Guid.Parse(interviewId),
-                        userId: principal.CurrentUserIdentity.UserId,
-                        questionId: this.entityIdentity.Id,
-                        rosterVector: this.entityIdentity.RosterVector,
-                        commentTime: DateTime.UtcNow,
-                        comment: InterviewerComment));
+                if (interviewerComment != value)
+                {
+                    interviewerComment = value;
+                    RaisePropertyChanged();
 
-                previousInterviewerComment = InterviewerComment;
+                    SendCommentQuestionCommand();
+                }
             }
+        }
+
+        private void SendCommentQuestionCommand()
+        {
+            Task.Run(() => SendCommentQuestionCommandImpl());
+        }
+
+        private void SendCommentQuestionCommandImpl()
+        {
+            commandService.Execute(
+                new CommentAnswerCommand(
+                    interviewId: Guid.Parse(interviewId),
+                    userId: principal.CurrentUserIdentity.UserId,
+                    questionId: this.entityIdentity.Id,
+                    rosterVector: this.entityIdentity.RosterVector,
+                    commentTime: DateTime.UtcNow,
+                    comment: InterviewerComment));
+           
 
             IsCommentInEditMode = false;
-            HasComments = string.IsNullOrWhiteSpace(InterviewerComment);
         }
 
         public void ShowCommentInEditor()
         {
-            HasComments = true;
             IsCommentInEditMode = true;
         }
     }

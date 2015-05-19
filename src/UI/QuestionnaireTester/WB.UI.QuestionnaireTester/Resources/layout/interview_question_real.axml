@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_QuestionWithDivider"
-  local:MvxBind="Enabled QuestionState.Enablement.Enabled">
-  <MvxLinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__title" />
-    <MvxLinearLayout style="@style/Interview_Question_Body" local:MvxBind="Visible QuestionState.Enablement.Enabled">
-      <include layout="@layout/interview_question__instructions" />
-      <MvxLinearLayout style="@style/Interview_Question_Answer"
-                       local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
-
-        <EditText style="@style/Interview_Question_Answer_Editor" 
-                  android:numeric="integer|signed|decimal" 
-                  local:MvxBind="Text Answer, Converter=NullableDecimalToString; Hint Localization('RealQuestion_Hint'); ValueChange ValueChangeCommand;" />
-
-      </MvxLinearLayout>
-      <include layout="@layout/interview_question__errors" />
-      <include layout="@layout/interview_question__comments" />
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_QuestionWithDivider"
+    local:MvxBind="Enabled QuestionState.Enablement.Enabled">
+    <MvxLinearLayout
+        style="@style/Interview_Question">
+        <include
+            layout="@layout/interview_question__title" />
+        <MvxLinearLayout
+            style="@style/Interview_Question_Body"
+            local:MvxBind="Visible QuestionState.Enablement.Enabled">
+            <include
+                layout="@layout/interview_question__instructions" />
+            <MvxLinearLayout
+                style="@style/Interview_Question_Answer"
+                local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
+                <EditText
+                    style="@style/Interview_Question_Answer_Editor"
+                    android:numeric="integer|signed|decimal"
+                    local:MvxBind="Text Answer, Converter=NullableDecimalToString; Hint Localization('RealQuestion_Hint');" />
+            </MvxLinearLayout>
+            <include
+                layout="@layout/interview_question__errors" />
+            <include
+                layout="@layout/interview_question__comments" />
+        </MvxLinearLayout>
     </MvxLinearLayout>
-  </MvxLinearLayout>
-  <View style="@style/Interview_Question_Divider" />
+    <View
+        style="@style/Interview_Question_Divider" />
 </MvxLinearLayout>
