@@ -3113,7 +3113,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (rosterFixedTitles != null && rosterFixedTitles.Any())
             {
-                throw new QuestionnaireException(string.Format("Roster items list should be empty for roster by question: {0}.",
+                throw new QuestionnaireException(string.Format("Roster fixed items list should be empty for roster by question: {0}.",
                     FormatGroupForException(groupId, this.innerDocument)));
             }
         }
