@@ -145,6 +145,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName)
         {
+            if (dataFile == null)
+                return -1;
+
             return dataFile.Header.ToList().FindIndex(header => string.Equals(header, columnName, StringComparison.InvariantCultureIgnoreCase));
         }
 
