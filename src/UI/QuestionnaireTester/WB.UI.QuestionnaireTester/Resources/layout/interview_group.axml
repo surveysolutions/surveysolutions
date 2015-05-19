@@ -5,10 +5,11 @@
                  local:MvxBind="Enabled Enablement.Enabled">
   <MvxLinearLayout style="@style/Interview_Group">
 
-    <TextView
+    <Button
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      local:MvxBind="Text Title" />
+      style="@style/Interview_GroupButton"
+      local:MvxBind="Text Title; Enabled Enablement.Enabled" />
     
   </MvxLinearLayout>
 </MvxLinearLayout>

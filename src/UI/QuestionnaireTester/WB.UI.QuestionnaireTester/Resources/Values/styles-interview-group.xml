@@ -5,4 +5,8 @@
   <style name="Interview_GroupWithDivider" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@drawable/group_background</item>
   </style>
+
+  <style name="Interview_GroupButton">
+    <item name="android:background">@drawable/group_button_background</item>
+  </style>
 </resources>
