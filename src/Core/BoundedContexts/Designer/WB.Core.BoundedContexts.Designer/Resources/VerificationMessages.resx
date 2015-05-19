@@ -187,13 +187,13 @@
     <value>Prefilled questions cannot be inside of roster.</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
-    <value>Roster where roster size source is question could not have fixed titles.</value>
+    <value>Roster where roster size source is question could not have fixed set of items.</value>
   </data>
   <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
-    <value>Fixed titles roster cannot have roster size question.</value>
+    <value>Fixed set of items roster cannot have roster size question.</value>
   </data>
   <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Fixed titles roster cannot have roster title question.</value>
+    <value>Fixed set of items roster cannot have roster title question.</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
     <value>Roster where roster size source is question has invalid roster title question.</value>
@@ -202,10 +202,10 @@
     <value>Roster where roster size question is categorical multi answers question could not have roster title question.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
-    <value>Fixed titles roster cannot have empty titles.</value>
+    <value>Fixed set of items roster cannot have empty titles.</value>
   </data>
   <data name="WB0038_RosterFixedTitlesHaveMoreThan40Items" xml:space="preserve">
-    <value>Fixed titles roster cannot have more than 40 rows.</value>
+    <value>Fixed set of items roster cannot have more than 40 rows.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
     <value>List question cannot be prefilled.</value>

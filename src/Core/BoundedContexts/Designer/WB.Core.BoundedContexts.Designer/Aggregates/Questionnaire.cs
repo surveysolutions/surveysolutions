@@ -3018,27 +3018,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
             {
-                throw new QuestionnaireException("List of fixed roster titles should not be empty");
+                throw new QuestionnaireException("List of titles for fixed set of items roster should not be empty");
             }
             
             if (rosterFixedTitles.Length > 250)
             {
-                throw new QuestionnaireException("Number of fixed roster titles could not be more than 250");
+                throw new QuestionnaireException("Number of titles for fixed set of items roster could not be more than 250");
             }
 
             if (rosterFixedTitles.Any(item => string.IsNullOrWhiteSpace(item.Title)))
             {
-                throw new QuestionnaireException("Fixed roster titles could not have empty items");
+                throw new QuestionnaireException("Fixed set of items roster title could not have empty titles");
             }
             
             if (rosterSizeQuestionId.HasValue)
             {
-                throw new QuestionnaireException("Roster by fixed titles could not have roster source question");
+                throw new QuestionnaireException("Fixed set of items roster could not have roster source question");
             }
 
             if (rosterTitleQuestionId.HasValue)
             {
-                throw new QuestionnaireException("Roster by fixed titles could not have roster title question");
+                throw new QuestionnaireException("Fixed set of items roster could not have roster title question");
             }
         }
 
