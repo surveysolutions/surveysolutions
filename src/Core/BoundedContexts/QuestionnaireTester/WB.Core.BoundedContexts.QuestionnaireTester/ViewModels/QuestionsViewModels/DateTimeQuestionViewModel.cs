@@ -44,9 +44,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState = questionStateViewModel;
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.QuestionState.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             this.entityIdentity = entityIdentity;
             this.interviewId = interviewId;

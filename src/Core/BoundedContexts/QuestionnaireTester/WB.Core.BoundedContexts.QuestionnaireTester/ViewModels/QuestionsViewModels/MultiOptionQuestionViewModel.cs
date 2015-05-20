@@ -51,12 +51,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.QuestionState.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;
 

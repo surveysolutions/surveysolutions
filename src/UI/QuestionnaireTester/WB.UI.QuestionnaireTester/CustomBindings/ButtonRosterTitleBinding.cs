@@ -14,6 +14,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(Button androidControl, RosterItemViewModel value)
         {
+            if (value == null) return;
+
             var rosterTitle = string.Format("{0} - {1}", value.QuestionnaireRosterTitle, value.InterviewRosterTitle);
 
             var span = new SpannableString(rosterTitle);

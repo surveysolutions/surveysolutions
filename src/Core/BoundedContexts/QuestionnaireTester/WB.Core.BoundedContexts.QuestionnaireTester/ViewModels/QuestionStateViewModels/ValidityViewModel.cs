@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private Identity entityIdentity;
         private SharedKernels.DataCollection.Events.Interview.Dtos.Identity identityForEvents;
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 

@@ -49,9 +49,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             this.interviewRepository = interviewRepository;
         }
 
-        public IList GetEntities(string interviewId, Identity groupIdentity)
+        public IList GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
-            return GenerateViewModels(interviewId, groupIdentity);
+            return GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
 
         public IList GetPrefilledQuestions(string interviewId)
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return GetPrefilledQuestionsImpl(interviewId);
         }
 
-        private IList GenerateViewModels(string interviewId, Identity groupIdentity)
+        private IList GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
@@ -80,7 +80,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     entityId: child.Id, 
                     rosterVector: groupIdentity.RosterVector, 
                     entityModelType: child.ModelType, 
-                    interviewId: interviewId))
+                    interviewId: interviewId,
+                    navigationState: navigationState))
                 .ToList();
 
             return viewModels;
@@ -96,14 +97,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     entityId: question.Id,
                     rosterVector: new decimal[0],
                     entityModelType: question.ModelType,
-                    interviewId: interviewId)).ToList();
+                    interviewId: interviewId,
+                    navigationState: null)).ToList();
         }
 
         private static IInterviewEntityViewModel CreateInterviewEntityViewModel(
             Guid entityId,
             decimal[] rosterVector,
             Type entityModelType,
-            string interviewId)
+            string interviewId,
+            NavigationState navigationState)
         {
             var identity = new Identity(entityId, rosterVector);
 
@@ -119,7 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
 
-            viewModel.Init(interviewId: interviewId, entityIdentity: identity);
+            viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;
         }
 

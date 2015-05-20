@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private string interviewId;
         private Identity rosterIdendity;
+        private NavigationState navigationState;
 
         public RosterViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -45,10 +46,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { items = value; RaisePropertyChanged(); }
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             this.rosterIdendity = entityIdentity;
+            this.navigationState = navigationState;
 
             this.liteEventRegistry.Subscribe(this);
 
@@ -88,6 +90,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var roster = (InterviewRoster)interview.Groups[rosterInstanceId];
 
             var rosterItemViewModel = this.interviewViewModelFactory.GetNew<RosterItemViewModel>();
+
+            rosterItemViewModel.Init(rosterIdentity: new Identity(roster.Id, roster.RosterVector),
+                navigationState: navigationState);
 
             rosterItemViewModel.InterviewRosterTitle = roster.Title;
             rosterItemViewModel.QuestionnaireRosterTitle = questionnaireRosterTitle;
