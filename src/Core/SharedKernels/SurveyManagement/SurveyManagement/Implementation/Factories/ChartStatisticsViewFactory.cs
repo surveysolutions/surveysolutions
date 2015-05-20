@@ -29,44 +29,47 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var minCollectedDate = collectedStatistics.StatisticsByDate.Keys.Min();
             var maxCollectedDate = collectedStatistics.StatisticsByDate.Keys.Max();
 
-            var leftDate = minCollectedDate < input.From ? input.From : minCollectedDate;
-            var rightDate = maxCollectedDate > input.To ? input.To : maxCollectedDate;
+            var leftOrMin = input.From ?? minCollectedDate;
+            var rightOrMax = input.To ?? maxCollectedDate;
+
+            var leftDate = ((input.From.HasValue) && (minCollectedDate < input.From)) ? input.From.Value : minCollectedDate;
+            var rightDate = ((input.To.HasValue) && (maxCollectedDate > input.To)) ? input.To.Value : maxCollectedDate;
 
             var selectedRange = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
 
             if (leftDate > rightDate)
             {
-                if (rightDate < input.From)
+                if (rightDate < leftOrMin)
                 {
                     var lastDay = collectedStatistics.StatisticsByDate.Keys.Max();
                     var statisticsToRepeat = collectedStatistics.StatisticsByDate[lastDay];
-                    RepeatLastStatistics(selectedRange, input.From, input.To, statisticsToRepeat);
+                    RepeatLastStatistics(selectedRange, leftOrMin, rightOrMax, statisticsToRepeat);
 
                     AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
                 }
                 else
                 {
-                    RepeatLastStatistics(selectedRange, input.From, input.To, new QuestionnaireStatisticsForChart());
+                    RepeatLastStatistics(selectedRange, leftOrMin, rightOrMax, new QuestionnaireStatisticsForChart());
                 }
             }
             else
             {
-                if (leftDate > input.From)
+                if (leftDate > leftOrMin)
                 {
-                    RepeatLastStatistics(selectedRange, input.From, leftDate.AddDays(-1), new QuestionnaireStatisticsForChart());
+                    RepeatLastStatistics(selectedRange, leftOrMin, leftDate.AddDays(-1), new QuestionnaireStatisticsForChart());
                 }
 
-                if (rightDate < input.To)
+                if (rightDate < rightOrMax)
                 {
-                    RepeatLastStatistics(selectedRange, rightDate.AddDays(1), input.To, collectedStatistics.StatisticsByDate[rightDate]);
+                    RepeatLastStatistics(selectedRange, rightDate.AddDays(1), rightOrMax, collectedStatistics.StatisticsByDate[rightDate]);
                 }
 
                 AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
             }
 
-           
 
-            return ChartStatisticsView(selectedRange, input.From, input.To);
+
+            return ChartStatisticsView(selectedRange, leftOrMin, rightOrMax);
         }
 
         private static void AddReadlStatistics(StatisticsGroupedByDateAndTemplate collectedStatistics, DateTime leftDate, DateTime maxCollectedDate,
