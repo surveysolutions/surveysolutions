@@ -14,7 +14,7 @@ namespace WB.UI.QuestionnaireTester.Converters
         protected override decimal? ConvertBack(string value, Type targetType, object parameter, CultureInfo culture)
         {
             decimal decimalValue;
-            if (decimal.TryParse(value, out decimalValue))
+            if (Decimal.TryParse(value, NumberStyles.Any, culture, out decimalValue))
             {
                 return decimalValue;
             }
