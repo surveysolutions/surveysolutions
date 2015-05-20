@@ -46,9 +46,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         Because of = () => view = chartStatisticsViewFactory.Load(input);
 
-        It should_have_from_be_equal_to_formated_date_from_input = () => view.From.ShouldEqual(input.From.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+        It should_have_from_be_equal_to_formated_date_from_input = () => view.From.ShouldEqual(input.From.Value.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
 
-        It should_have_to_be_equal_to_formated_date_to_input = () => view.To.ShouldEqual(input.To.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+        It should_have_to_be_equal_to_formated_date_to_input = () => view.To.ShouldEqual(input.To.Value.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
 
         It should_have_7_lines = () => view.Lines.Length.ShouldEqual(7);
 

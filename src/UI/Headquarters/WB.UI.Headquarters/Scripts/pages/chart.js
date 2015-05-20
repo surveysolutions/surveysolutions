@@ -10,8 +10,10 @@
     self.SelectedTemplate = ko.observable('');
     self.Stats = null;
     self.Plot = null;
+
     self.FromDate = ko.observable(null);
     self.ToDate = ko.observable(null);
+
     self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
@@ -20,24 +22,34 @@
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
 
-        var startDate = moment(self.FromDate());
-        var endDate = moment(self.ToDate());
+        var startDate = self.FromDate() != null ? moment(self.FromDate()) : null;
+        var endDate =  moment(self.ToDate());
 
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
-        self.Url.query['from'] = startDate.format(dateFormat);
+
+        if (startDate != null) {
+            self.Url.query['from'] = startDate.format(dateFormat);
+        }
+        
         self.Url.query['to'] = endDate.format(dateFormat);
+        
 
         if (Modernizr.history) {
             window.history.pushState({}, "Charts", self.Url.toString());
+
         }
 
-        self.ShouldShowDateValidationMessage(startDate.isAfter(endDate));
+        if (startDate != null)
+        {
+            self.ShouldShowDateValidationMessage(startDate.isAfter(endDate));
+        }
+
 
         var params = {
             templateId: selectedTemplate.templateId,
             templateVersion: selectedTemplate.version,
-            from: startDate.format(dateFormat),
+            from: startDate != null ? startDate.format(dateFormat): null,
             to: endDate.format(dateFormat)
         };
 
@@ -156,18 +168,23 @@
 
     self.load = function () {
         var today = moment().format(dateFormat);
-        var oneWeekAgo = moment().add("weeks", -1).format(dateFormat);
-
+        
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
-        self.Url.query['from'] = self.QueryString['from'] || moment(oneWeekAgo).format(dateFormat);
+
+        var fromPoint = self.QueryString['from'] || null;
+        if (fromPoint != null) {
+            self.Url.query['from'] = self.QueryString['from'] || null;
+        }
+
         self.Url.query['to'] = self.QueryString['to'] || moment(today).format(dateFormat);
 
         updateTemplateName(self.SelectedTemplate());
 
-        var from = unescape(self.Url.query['from']);
+
+        var from = fromPoint != null ? unescape(fromPoint) : null;
         var to = unescape(self.Url.query['to']);
 
         self.FromDate(from);
