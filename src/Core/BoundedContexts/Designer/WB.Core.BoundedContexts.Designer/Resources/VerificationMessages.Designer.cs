@@ -352,7 +352,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed roster values must be unique..
+        ///   Looks up a localized string similar to Fixed set of items roster values must be unique..
         /// </summary>
         internal static string WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues {
             get {

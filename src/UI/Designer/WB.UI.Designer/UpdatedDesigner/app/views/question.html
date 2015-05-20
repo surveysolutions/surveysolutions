@@ -125,7 +125,7 @@
 
     <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
-                <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" or "Is cascading" while uploading question's details and contained many options, its value is reduced up to 200</div>
+                <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
                     <div ng-if="activeQuestion.useListAsOptionsEditor">
                         <div class="table-holder">
