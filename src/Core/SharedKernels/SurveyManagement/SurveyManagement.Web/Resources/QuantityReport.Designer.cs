@@ -171,9 +171,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to ver..
         /// </summary>
-        public static string Ver {
+        public static string Version {
             get {
-                return ResourceManager.GetString("Ver", resourceCulture);
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
         
