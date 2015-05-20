@@ -72,14 +72,14 @@
         </li>
         <li class="list-group-item">
             <h4 class="list-group-item-heading">From</h4>
-            <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
-                <input id="date-picker-from" type="text" class="form-control" readonly="readonly" data-bind="value: FromDate">
+            <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forceParse: true }">
+                <input id="date-picker-from" placeholder="Beginning" type="text" class="form-control" readonly="readonly" data-bind="value: FromDate ">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
         </li>
         <li class="list-group-item">
             <h4 class="list-group-item-heading">To</h4>
-            <div class="input-group date" data-bind="datepicker: ToDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
+            <div class="input-group date" data-bind="datepicker: ToDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forceParse: false}">
                 <input id="date-picker-to" type="text" class="form-control" readonly="readonly" data-bind="value: ToDate">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
