@@ -5,11 +5,11 @@ using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class when_publish_event_without_subscribers : LiteEventBusTestsContext
+    internal class when_publishing_event_and_bus_does_not_have_any_subscriptions : LiteEventBusTestsContext
     {
         Establish context = () =>
         {
-            aggregateRoot = CreateDummyAggregateRoot();
+            aggregateRoot = SetupAggregateRootWithOneEventReadyForPublishing<DummyEvent>();
 
             eventBus = Create.LiteEventBus();
         };
