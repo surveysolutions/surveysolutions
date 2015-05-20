@@ -1,7 +1,7 @@
 ﻿using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
@@ -12,6 +12,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         public EditTextFocusChangeTextBinding(EditText view)
             : base(view)
         {
+            view.ImeOptions = ImeAction.Done;
         }
 
         protected override void SetValueToView(EditText androidControl, string value)

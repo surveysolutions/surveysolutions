@@ -18,7 +18,7 @@
                 <EditText
                     style="@style/Interview_Question_Answer_Editor"
                     android:numeric="integer|signed|decimal"
-                    local:MvxBind="Text Answer, Converter=NullableDecimalToString; Hint Localization('RealQuestion_Hint');" />
+                    local:MvxBind="FocusText Answer, Converter=NullableDecimalToString; Hint Localization('RealQuestion_Hint');" />
             </MvxLinearLayout>
             <include
                 layout="@layout/interview_question__errors" />
