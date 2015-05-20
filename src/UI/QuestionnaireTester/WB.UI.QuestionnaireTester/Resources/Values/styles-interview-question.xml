@@ -8,8 +8,8 @@
   <style name="Interview_Question" parent="Interview_Entity" />
 
   <style name="Interview_Group"  parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Roster_margin_bottom</item>
   </style>
   

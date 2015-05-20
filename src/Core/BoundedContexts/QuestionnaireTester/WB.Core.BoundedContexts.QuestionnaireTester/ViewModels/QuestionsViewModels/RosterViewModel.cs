@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class RosterViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventBusEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventBusEventHandler<RosterInstancesAdded>,
-        ILiteEventBusEventHandler<RosterInstancesRemoved>
+        ILiteEventHandler<RosterInstancesTitleChanged>,
+        ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
