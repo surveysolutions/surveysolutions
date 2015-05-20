@@ -27,10 +27,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuantityControllerTests
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.NumberOfCompletedInterviews);
 
         It should_responsible_name_be_a_link = () =>
-            ((bool)result.ViewBag.IsResponsibleNameLink).ShouldEqual(true);
+            ((bool)result.ViewBag.CanNavigateToQuantityByTeamMember).ShouldEqual(true);
 
         It should_go_back_to_supervisor_button_be_invisible = () =>
-            ((bool)result.ViewBag.IsGoBackSupervisorsVisible).ShouldEqual(false);
+            ((bool)result.ViewBag.CanNavigateToQuantityBySupervisors).ShouldEqual(false);
 
         It should_DataAction_be_QuantityBySupervisors = () =>
            ((string)result.ViewBag.DataAction).ShouldEqual("QuantityBySupervisors");
