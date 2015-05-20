@@ -4,7 +4,7 @@ using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;

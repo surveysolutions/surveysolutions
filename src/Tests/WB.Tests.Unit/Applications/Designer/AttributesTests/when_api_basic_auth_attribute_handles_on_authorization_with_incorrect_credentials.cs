@@ -8,7 +8,6 @@ using System.Web.Http.Routing;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Designer.Api.Attributes;
 using It = Machine.Specifications.It;
 

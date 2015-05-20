@@ -5,7 +5,6 @@ using Ninject.Activation;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 {

@@ -6,7 +6,8 @@ using Raven.Client;
 using Raven.Client.Connection;
 using Raven.Client.Extensions;
 using Raven.Json.Linq;
-using WB.Core.GenericSubdomains.Utils;
+
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.Infrastructure.Storage.Raven
 {

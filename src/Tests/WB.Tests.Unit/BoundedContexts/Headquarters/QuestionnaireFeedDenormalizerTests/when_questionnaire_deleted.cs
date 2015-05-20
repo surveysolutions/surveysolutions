@@ -5,7 +5,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Tests.Unit.BoundedContexts.Headquarters;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;

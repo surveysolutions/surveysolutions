@@ -7,7 +7,7 @@ using System.Web.SessionState;
 using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;

@@ -4,7 +4,7 @@ using WB.Core.GenericSubdomains.ErrorReporting.Implementation.InfoFileSupplierRe
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting
 {

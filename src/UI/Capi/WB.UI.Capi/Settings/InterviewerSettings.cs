@@ -5,7 +5,7 @@ using Android.Content;
 using Java.Util;
 
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Capi.Properties;
 using WB.UI.Capi.SharedPreferences;
 

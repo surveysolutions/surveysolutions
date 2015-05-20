@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Ncqrs;
-using WB.Core.GenericSubdomains.Utils;
 
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {

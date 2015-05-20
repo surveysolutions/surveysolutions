@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {

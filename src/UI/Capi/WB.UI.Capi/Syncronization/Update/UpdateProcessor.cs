@@ -3,7 +3,7 @@ using System.IO;
 using Android.App;
 using Android.Content;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Capi.Syncronization.Update
 {
