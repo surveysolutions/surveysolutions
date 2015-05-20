@@ -40,13 +40,12 @@
 }
 @section styles
 {
-    @Styles.Render(
-        "~/Content/datepicker3.css")
+    @Styles.Render("~/Content/datepicker3.css")
 }
 
 @section header
 {
-    @if (ViewBag.IsGoBackSupervisorsVisible)
+    @if (ViewBag.CanNavigateToQuantityBySupervisors)
     {
 
         <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@QuantityReport.BackToSupervisors</a>
@@ -70,7 +69,7 @@
                 <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire" class="form-control">
                     @foreach (var item in Model)
                     {
-                        <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@QuantityReport.Ver @item.TemplateVersion) @item.TemplateName</option>
+                        <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@QuantityReport.Version @item.TemplateVersion) @item.TemplateName</option>
                     }
                 </select>
             </p>
@@ -114,7 +113,7 @@
                 <th>Team member</th>
                 <!-- ko foreach:DateTimeRanges -->
                 <th>
-                    <span data-bind="text: moment(To()).format('MM/DD/YYYY')"></span> - <span data-bind="text: moment(From()).format('MM/DD/YYYY')"></span>
+                    <span data-bind="text: $parent.GetPeriodName($data)"></span>
                 </th>
                 <!-- /ko -->
                 <th>@QuantityReport.Average</th>
@@ -125,7 +124,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    @if (ViewBag.IsResponsibleNameLink)
+                    @if (ViewBag.CanNavigateToQuantityByTeamMember)
                     {
                         <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
                     }

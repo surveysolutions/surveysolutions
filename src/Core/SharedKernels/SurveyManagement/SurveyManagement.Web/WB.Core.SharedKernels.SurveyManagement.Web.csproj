@@ -187,6 +187,7 @@
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
+    <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">

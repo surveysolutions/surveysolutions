@@ -17,13 +17,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
     }
-
-    public class QuantityBySupervisorsReportModel : IGridRequest<QuantityBySupervisorsReportInputModel>
-    {
-        public PagerData Pager { get; set; }
-
-        public QuantityBySupervisorsReportInputModel Request { get; set; }
-
-        public IEnumerable<OrderRequestItem> SortOrder { get; set; }
-    }
 }

@@ -14,11 +14,19 @@
 
     self.ColumnCount = ko.observable(null);
 
-    self.ShouldShowColumnCountValidationMessage = ko.observable(false);
-
-    self.QuestionnaireName = ko.observable();
-
     self.DateTimeRanges = ko.observableArray([]);
+
+    self.ShouldShowColumnCountValidationMessage = ko.pureComputed(function() {
+        return self.ColumnCount() <= 0 || self.ColumnCount() > 12;
+    }, this);
+
+    self.GetPeriodName = function (period) {
+        return ko.computed({
+            read: function () {
+                return moment(period.To()).format(dateFormat) + "-" + moment(period.From()).format(dateFormat);
+            }
+        }, this);
+    };
 
     self.load = function () {
         var today = moment().format(dateFormat);
@@ -30,8 +38,6 @@
         self.Url.query['from'] = self.QueryString['from'] || today;
         self.Url.query['period'] = self.QueryString['period'] || "d";
         self.Url.query['columnCount'] = self.QueryString['columnCount'] || "7";
-
-        updateQuestionnaireName(self.SelectedQuestionnaire());
 
         var from = unescape(self.Url.query['from']);
         self.FromDate(from);
@@ -45,7 +51,6 @@
         self.initReport();
 
         self.SelectedQuestionnaire.subscribe(function (value) {
-            updateQuestionnaireName(value);
             self.initReport();
         });
 
@@ -61,10 +66,6 @@
             self.initReport();
         });
     };
-
-    var updateQuestionnaireName = function (value) {
-        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
-    }
 
     self.GetFilterMethod = function () {
         var selectedQuestionnaire = Supervisor.Framework.Objects.isEmpty(self.SelectedQuestionnaire())
@@ -94,9 +95,6 @@
     };
 
     self.initReport = function () {
-
-        self.ShouldShowColumnCountValidationMessage(self.ColumnCount() <= 0 || self.ColumnCount() > 12);
-
         if (self.ShouldShowColumnCountValidationMessage())
             return;
         self.search();
