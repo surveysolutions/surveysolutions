@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var group = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id];
 
             this.Name = group.Title;
-            this.Items = this.interviewViewModelFactory.GetEntities(interviewId: this.navigationState.InterviewId, groupIdentity: newGroupIdentity);
+            this.Items = this.interviewViewModelFactory.GetEntities(interviewId: this.navigationState.InterviewId,
+                groupIdentity: newGroupIdentity, navigationState: this.navigationState);
         }
     }
 }

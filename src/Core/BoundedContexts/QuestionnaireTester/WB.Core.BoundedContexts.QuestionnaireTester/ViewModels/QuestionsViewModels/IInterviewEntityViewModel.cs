@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public interface IInterviewEntityViewModel
     {
-        void Init(string interviewId, Identity entityIdentity);
+        void Init(string interviewId, Identity entityIdentity, NavigationState navigationState);
     }
 }

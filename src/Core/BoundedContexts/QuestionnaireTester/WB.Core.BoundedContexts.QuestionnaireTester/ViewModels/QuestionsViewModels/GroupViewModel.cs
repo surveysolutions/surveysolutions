@@ -23,12 +23,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, entityIdentity, navigationState);
             Title = questionnaire.GroupsWithoutNestedChildren[entityIdentity.Id].Title;
         }
 

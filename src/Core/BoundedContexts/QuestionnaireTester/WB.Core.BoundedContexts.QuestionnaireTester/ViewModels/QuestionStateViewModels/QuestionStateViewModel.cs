@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             Comments = commentsViewModel;
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
@@ -50,9 +50,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             liteEventRegistry.Subscribe(this);
 
             this.Header.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Comments.Init(interviewId, entityIdentity);
-            this.Enablement.Init(interviewId, entityIdentity);
+            this.Validity.Init(interviewId, entityIdentity, navigationState);
+            this.Comments.Init(interviewId, entityIdentity, navigationState);
+            this.Enablement.Init(interviewId, entityIdentity, navigationState);
         }       
         
         private bool isAnswered;
