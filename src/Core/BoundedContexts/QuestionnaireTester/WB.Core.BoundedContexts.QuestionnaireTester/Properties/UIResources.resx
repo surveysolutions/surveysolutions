@@ -351,4 +351,28 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tap to take barcode</value>
   </data>
+  <data name="Interview_Group_CompletedFormat" xml:space="preserve">
+    <value>Completed. {0}  {1}, {2}</value>
+  </data>
+  <data name="Interview_Group_ManyQuestions_Answered" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="Interview_Group_ManySubgroups" xml:space="preserve">
+    <value>subgroups</value>
+  </data>
+  <data name="Interview_Group_NoSubgroups" xml:space="preserve">
+    <value>no subgroups</value>
+  </data>
+  <data name="Interview_Group_NotStarted" xml:space="preserve">
+    <value>Not started</value>
+  </data>
+  <data name="Interview_Group_OneQuestion_Answered" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Interview_Group_OneSubgroup" xml:space="preserve">
+    <value>subgroup</value>
+  </data>
+  <data name="Interview_Group_StartedFormat" xml:space="preserve">
+    <value>Started. {0} {1} answered, {2}</value>
+  </data>
 </root>

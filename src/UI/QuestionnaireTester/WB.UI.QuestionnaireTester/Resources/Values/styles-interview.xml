@@ -23,7 +23,7 @@
   </style>
 
   <style name="Interview_Entity_Divider" >
-    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/Interview_Entity_Divider_height</item>
     <item name="android:background">#dadada</item>
   </style>

@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
     {
         IList GetEntities(string interviewId, Identity groupIdentity);
         IList GetPrefilledQuestions(string interviewId);
+        T GetNew<T>() where T : class;
     }
 }

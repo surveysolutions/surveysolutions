@@ -7,9 +7,11 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using GroupViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels.GroupViewModel;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
@@ -30,7 +32,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(DateTimeQuestionModel), Load<DateTimeQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QrBarcodeQuestionViewModel> },
-                { typeof(GroupModel), Load<GroupViewModel> }
+                { typeof(GroupModel), Load<GroupViewModel> },
+                { typeof(RosterModel), Load<RosterViewModel> }
             };
 
         private static T Load<T>() where T : class
@@ -118,6 +121,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity);
             return viewModel;
+        }
+
+        public T GetNew<T>() where T : class
+        {
+            return Load<T>();
         }
     }
 }

@@ -72,6 +72,7 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("GetAnswer", new GetAnswerConverter());
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
+            registry.AddOrOverwrite("GetRosterInfo", new GetRosterInfoConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -83,6 +84,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<LinearLayout>("Style", (view) => new LinearLayoutStyleBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditDateBinding(editText));
+            registry.RegisterCustomBindingFactory<Button>("RosterTitle", button => new ButtonRosterTitleBinding(button));
 
             base.FillTargetFactories(registry);
         }

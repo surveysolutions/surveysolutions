@@ -3,8 +3,10 @@ using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Android.Content;
 using System;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.UI.QuestionnaireTester.Views.CustomControls;
+using GroupViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels.GroupViewModel;
 
 namespace WB.UI.QuestionnaireTester.Views.Adapters
 {
@@ -28,7 +30,8 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
             {typeof (QrBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
-            {typeof (GroupViewModel), Resource.Layout.interview_group}
+            {typeof (GroupViewModel), Resource.Layout.interview_group},
+            {typeof (RosterViewModel), Resource.Layout.interview_roster},
         };
 
         public override int GetItemViewType(int position)
