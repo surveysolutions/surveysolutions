@@ -384,6 +384,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_text_list_question_increases_roster_with_nested_fixed_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
