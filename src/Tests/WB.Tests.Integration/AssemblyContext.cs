@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using Ncqrs;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Tests.Integration
 {

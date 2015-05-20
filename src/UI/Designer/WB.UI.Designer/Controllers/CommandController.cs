@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;

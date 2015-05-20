@@ -1,10 +1,9 @@
 ﻿using System;
 using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
+
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.Infrastructure.Implementation.CommandBus

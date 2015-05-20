@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using Newtonsoft.Json.Converters;
-using ILogger = WB.Core.GenericSubdomains.Utils.Services.ILogger;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {

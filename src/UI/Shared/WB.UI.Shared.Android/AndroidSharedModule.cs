@@ -2,7 +2,7 @@
 
 using WB.Core.GenericSubdomains.Android.Rest;
 using WB.Core.GenericSubdomains.Portable.Rest;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Android.Services;
 
 namespace WB.UI.Shared.Android

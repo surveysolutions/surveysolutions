@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.UI.Shared.Web.CommandDeserialization

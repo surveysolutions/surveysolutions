@@ -4,7 +4,7 @@ using Moq;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;

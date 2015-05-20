@@ -14,7 +14,9 @@
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>6baed54b</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>10ea3ceb</NuGetPackageImportStamp>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,63 +40,26 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DictionaryExtensions.cs" />
-    <Compile Include="NamedLocker.cs" />
-    <Compile Include="FileSizeUtils.cs" />
-    <Compile Include="IAsyncExecutor.cs" />
-    <Compile Include="Implementation\AsyncExecutor.cs" />
-    <Compile Include="Implementation\JsonCompressor.cs" />
-    <Compile Include="Implementation\RestAttachment.cs" />
-    <Compile Include="Implementation\RestCredentials.cs" />
-    <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="Implementation\RestException.cs" />
-    <Compile Include="Services\JsonUtilsSettings.cs" />
-    <Compile Include="Services\TypeSerializationSettings.cs" />
-    <Compile Include="SyncStatusCode.cs" />
-    <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
-    <Compile Include="Implementation\TopologicalSorter.cs" />
-    <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
-    <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
-    <Compile Include="ITopologicalSorter.cs" />
-    <Compile Include="QueryableExtensions.cs" />
-    <Compile Include="Monads.cs" />
-    <Compile Include="ExceptionExtensions.cs" />
-    <Compile Include="Implementation\Crypto\ArrayExtensions.cs" />
-    <Compile Include="Implementation\Crypto\Converters.cs" />
-    <Compile Include="Implementation\Crypto\Hash.cs" />
-    <Compile Include="Implementation\Crypto\HashBuffer.cs" />
-    <Compile Include="Implementation\Crypto\HashCryptoNotBuildIn.cs" />
-    <Compile Include="Implementation\Crypto\HashResult.cs" />
-    <Compile Include="Implementation\Crypto\IHash.cs" />
-    <Compile Include="Implementation\Crypto\IHashInfo.cs" />
-    <Compile Include="Implementation\Crypto\SHA0.cs" />
-    <Compile Include="Implementation\Crypto\SHA1.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="GuidExtensions.cs" />
-    <Compile Include="Implementation\PasswordHasher.cs" />
-    <Compile Include="IPasswordHasher.cs" />
-    <Compile Include="OrderDirection.cs" />
-    <Compile Include="OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IInfoFileSupplierRegistry.cs" />
-    <Compile Include="Services\IJsonUtils.cs" />
-    <Compile Include="Services\ILogger.cs" />
-    <Compile Include="Services\INetworkService.cs" />
-    <Compile Include="Services\IRestService.cs" />
-    <Compile Include="Services\IRestServiceSettings.cs" />
-    <Compile Include="Services\IStringCompressor.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="Tree.cs" />
-    <Compile Include="TypeExtensions.cs" />
-    <Compile Include="TypeSwitch.cs" />
-    <Compile Include="WhereClouseHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

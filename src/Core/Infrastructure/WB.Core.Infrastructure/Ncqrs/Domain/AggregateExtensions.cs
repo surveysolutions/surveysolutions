@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace Ncqrs.Domain
 {

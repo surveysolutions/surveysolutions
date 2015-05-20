@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire

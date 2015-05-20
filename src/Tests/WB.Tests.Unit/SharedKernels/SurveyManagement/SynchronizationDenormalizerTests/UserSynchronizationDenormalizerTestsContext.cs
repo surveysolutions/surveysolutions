@@ -4,7 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;

@@ -1,5 +1,6 @@
 using System;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.Views

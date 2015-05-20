@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {

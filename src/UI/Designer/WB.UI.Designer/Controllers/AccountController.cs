@@ -1,5 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+﻿using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;

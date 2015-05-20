@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 

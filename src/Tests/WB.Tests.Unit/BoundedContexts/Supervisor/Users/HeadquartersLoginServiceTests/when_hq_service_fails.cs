@@ -7,7 +7,7 @@ using Moq;
 using Moq.Protected;
 
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
