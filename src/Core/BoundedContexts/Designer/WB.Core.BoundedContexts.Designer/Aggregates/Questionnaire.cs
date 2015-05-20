@@ -2813,7 +2813,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 1,
                 exceptionType: DomainExceptionType.MoreThanOneGroupsWithSuchIdExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more group(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format("One or more sub-section(s) with same ID {0} already exist:{1}{2}",
                         groupId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
@@ -3743,19 +3743,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Fixed roster value is required");
+                    "Fixed set of items roster value is required");
             }
 
             if (rosterFixedTitles.Any(x => !x.Value.IsDecimal()))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Fixed roster value should have only number characters");
+                    "Fixed set of items roster value should have only number characters");
             }
 
             if (rosterFixedTitles.Select(x => x.Value).Distinct().Count() != rosterFixedTitles.Length)
             {
-                throw new QuestionnaireException("Fixed roster values must be unique");
+                throw new QuestionnaireException("Fixed set of items roster values must be unique");
             }
 
             return rosterFixedTitles.Select(item => new FixedRosterTitle(decimal.Parse(item.Value), item.Title)).ToArray();                
