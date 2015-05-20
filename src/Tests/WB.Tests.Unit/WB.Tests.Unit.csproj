@@ -348,12 +348,12 @@
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archiving_process_thrown_an_exception.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\NewtonJsonUtilsTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils.cs" />
-    <Compile Include="Infrastructure\LiteEventBusTests\when_publish_event_after_unsubscribe.cs" />
+    <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_handler_was_subscribed_and_unsubscribed.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\LiteEventBusTestsContext.cs" />
-    <Compile Include="Infrastructure\LiteEventBusTests\when_publish_long_event_for_long_and_int_subscribers.cs" />
-    <Compile Include="Infrastructure\LiteEventBusTests\when_publish_event_without_subscribers.cs" />
-    <Compile Include="Infrastructure\LiteEventBusTests\when_publish_event_for_2_event_subscribers_on_this_event.cs" />
-    <Compile Include="Infrastructure\LiteEventBusTests\when_publish_long_event_for_int_long_string_subscribes.cs" />
+    <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_two_handlers_was_subscribed_on_different_events.cs" />
+    <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_and_bus_does_not_have_any_subscriptions.cs" />
+    <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_two_handlers_were_subscribed_on_same_event.cs" />
+    <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_handler_was_subscribed_on_different_event.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideRepositoryWriterTests\when_inserting_last_item_in_store.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
