@@ -1,6 +1,6 @@
 ﻿using Ninject.Modules;
 
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Android.Logging
 {

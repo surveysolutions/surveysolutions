@@ -4,7 +4,7 @@ using Moq;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.GenericSubdomains.Native;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;

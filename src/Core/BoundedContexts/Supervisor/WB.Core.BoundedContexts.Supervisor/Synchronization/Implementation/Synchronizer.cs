@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Nito.AsyncEx;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 

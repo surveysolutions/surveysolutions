@@ -2,7 +2,7 @@ using System;
 
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Capi.ViewModel.Synchronization
 {

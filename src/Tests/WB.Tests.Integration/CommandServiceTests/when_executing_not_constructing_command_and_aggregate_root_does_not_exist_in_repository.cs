@@ -2,7 +2,7 @@ using System;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.CommandBus;

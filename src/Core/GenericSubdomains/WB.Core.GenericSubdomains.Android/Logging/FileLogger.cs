@@ -4,7 +4,7 @@ using System.Threading;
 
 using Java.Lang;
 
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;

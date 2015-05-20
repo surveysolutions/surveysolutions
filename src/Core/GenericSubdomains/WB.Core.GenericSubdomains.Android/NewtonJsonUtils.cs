@@ -5,7 +5,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Android
 {

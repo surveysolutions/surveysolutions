@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using Ninject;
 using Ninject.Modules;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;

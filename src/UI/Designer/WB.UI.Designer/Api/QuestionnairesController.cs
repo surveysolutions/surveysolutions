@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;

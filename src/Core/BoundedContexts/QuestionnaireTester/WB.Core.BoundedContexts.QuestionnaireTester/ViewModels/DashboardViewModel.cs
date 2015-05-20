@@ -10,10 +10,9 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Views;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
