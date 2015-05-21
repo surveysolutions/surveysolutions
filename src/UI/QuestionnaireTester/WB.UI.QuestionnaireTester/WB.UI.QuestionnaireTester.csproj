@@ -285,9 +285,6 @@
     <AndroidResource Include="Resources\values\colors.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\values\themes.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\theme_blue_light_edit_text_holo_light.xml">
@@ -413,6 +410,10 @@
     <AndroidResource Include="Resources\drawable\group_button_background.xml" />
     <AndroidResource Include="Resources\values\dimensions-interview.xml" />
     <AndroidResource Include="Resources\values\dimensions.xml" />
+    <AndroidResource Include="Resources\drawable\selector.xml" />
+    <AndroidResource Include="Resources\drawable\button_pressed_shape.xml" />
+    <AndroidResource Include="Resources\drawable\button_unpressed_shape.xml" />
+    <AndroidResource Include="Resources\drawable-v21\selector.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
