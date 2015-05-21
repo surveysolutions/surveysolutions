@@ -12,9 +12,9 @@ using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    public class MvxActionBarActivity : ActionBarActivity, IMvxEventSourceActivity, IMvxAndroidView
+    public class BaseMvxActivity : AppCompatActivity, IMvxEventSourceActivity, IMvxAndroidView
     {
-        protected MvxActionBarActivity()
+        protected BaseMvxActivity()
         {
             BindingContext = new MvxAndroidBindingContext(this, this);
             this.AddEventListeners();

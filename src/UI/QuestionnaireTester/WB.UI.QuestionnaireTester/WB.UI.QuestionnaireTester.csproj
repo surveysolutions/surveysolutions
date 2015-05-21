@@ -254,7 +254,7 @@
     <Compile Include="Views\InterviewView.cs" />
     <Compile Include="Views\DashboardView.cs" />
     <Compile Include="Views\LoginView.cs" />
-    <Compile Include="Views\MvxActionBarActivity.cs" />
+    <Compile Include="Views\BaseMvxActivity.cs" />
     <Compile Include="Views\PrefilledQuestionsView.cs" />
     <Compile Include="Views\SplashView.cs" />
   </ItemGroup>
