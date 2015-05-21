@@ -32,7 +32,7 @@
                 + '&columnCount=' + url.query['columnCount'];
         }
         $(function () {
-            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.DataAction })');
+            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.WebApiActionName })');
             ko.applyBindings(model);
             model.load();
         });
@@ -45,18 +45,20 @@
 
 @section header
 {
-    @if (ViewBag.CanNavigateToQuantityBySupervisors)
-    {
-
-        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@QuantityReport.BackToSupervisors</a>
-
-    }
+    
     <h3>
         @QuantityReport.NumberOfCompletedInterviews
 
     </h3>
 }
 
+@section actionbar
+{
+    @if (ViewBag.CanNavigateToQuantityBySupervisors)
+    {
+        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@QuantityReport.BackToSupervisors</a>
+    }
+}
 
 @section filters
 {
@@ -94,12 +96,21 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">@QuantityReport.PeriodCount</h4>
             <p class="list-group-item-text">
-                <input type="number" class="form-control" data-bind="value: ColumnCount">
+                <select data-bind="value: ColumnCount" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
             </p>
-            <br />
-            <div id="columnCountValidationError" class="bg-danger" data-bind="visible: ShouldShowColumnCountValidationMessage" style="display: none;">
-                @Html.Raw(QuantityReport.ColumnCountValidationMessage)
-            </div>
         </li>
     </ul>
 }
