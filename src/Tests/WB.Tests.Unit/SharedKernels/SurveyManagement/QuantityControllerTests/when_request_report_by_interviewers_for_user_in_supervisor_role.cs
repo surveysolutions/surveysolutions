@@ -33,8 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuantityControllerTests
         It should_go_back_to_supervisor_button_be_invisible = () =>
             ((bool)result.ViewBag.CanNavigateToQuantityBySupervisors).ShouldEqual(false);
 
-        It should_DataAction_be_QuantityByInterviewers = () =>
-           ((string)result.ViewBag.DataAction).ShouldEqual("QuantityByInterviewers");
+        It should_WebApiActionName_be_QuantityByInterviewers = () =>
+           ((string)result.ViewBag.WebApiActionName).ShouldEqual("QuantityByInterviewers");
             
         private static QuantityController quantityController;
         private static ViewResult result;
