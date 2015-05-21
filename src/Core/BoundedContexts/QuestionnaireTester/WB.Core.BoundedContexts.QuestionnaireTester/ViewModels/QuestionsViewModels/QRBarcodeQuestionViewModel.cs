@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class QrBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
         private bool isInProgress;
         public bool IsInProgress
@@ -52,7 +53,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefullInterviewRepository interviewRepository,
             IQrBarcodeScanService qrBarcodeScanService,
             IUserInteraction userInteraction,
-            QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -61,6 +63,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.userInteraction = userInteraction;
 
             this.QuestionState = questionStateViewModel;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -91,22 +94,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 var scanCode = await this.qrBarcodeScanService.ScanAsync();
 
-                this.commandService.Execute(new AnswerQRBarcodeQuestionCommand(
+                var command = new AnswerQRBarcodeQuestionCommand(
                     interviewId: this.interviewId,
                     userId: this.userIdentity.UserId,
                     questionId: this.questionIdentity.Id,
                     rosterVector: this.questionIdentity.RosterVector,
                     answerTime: DateTime.UtcNow,
-                    answer: scanCode.Code));
+                    answer: scanCode.Code);
 
                 this.Answer = scanCode.Code;
 
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                QuestionState.ProcessAnswerCommandException(ex);
                 hasException = true;
+                QuestionState.ProcessAnswerCommandException(ex);
             }
 
             if (hasException)

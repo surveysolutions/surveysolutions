@@ -25,12 +25,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+
 
         public DateTimeQuestionViewModel(ICommandService commandService,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -38,6 +41,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -57,28 +61,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public IMvxCommand AnswerCommand
         {
-            get
+            get { return new MvxCommand<DateTime>(SendAnswerCommand); }
+        }
+
+        private async void SendAnswerCommand(DateTime answerValue)
+        {
+            try
             {
-                return new MvxCommand<DateTime>(answerValue =>
-                {
-                    try
-                    {
-                        commandService.Execute(new AnswerDateTimeQuestionCommand(
-                            interviewId: Guid.Parse(interviewId),
-                            userId: principal.CurrentUserIdentity.UserId,
-                            questionId: this.questionIdentity.Id,
-                            rosterVector: this.questionIdentity.RosterVector,
-                            answerTime: DateTime.UtcNow,
-                            answer: answerValue
-                            ));
-                        SetToView(answerValue);
-                        QuestionState.ExecutedAnswerCommandWithoutExceptions();
-                    }
-                    catch (InterviewException ex)
-                    {
-                        QuestionState.ProcessAnswerCommandException(ex);
-                    }
-                });
+                var command = new AnswerDateTimeQuestionCommand(
+                    interviewId: Guid.Parse(interviewId),
+                    userId: principal.CurrentUserIdentity.UserId,
+                    questionId: this.questionIdentity.Id,
+                    rosterVector: this.questionIdentity.RosterVector,
+                    answerTime: DateTime.UtcNow,
+                    answer: answerValue
+                    );
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                SetToView(answerValue);
+                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                QuestionState.ProcessAnswerCommandException(ex);
             }
         }
 

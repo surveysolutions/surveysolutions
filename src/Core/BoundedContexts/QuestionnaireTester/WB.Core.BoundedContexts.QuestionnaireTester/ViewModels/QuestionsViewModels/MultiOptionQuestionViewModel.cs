@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private bool isRosterSizeQuestion;
 
         public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
 
         public MultiOptionQuestionViewModel(
@@ -41,7 +42,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             ICommandService commandService,
             IStatefullInterviewRepository interviewRepository,
-            IPrincipal principal)
+            IPrincipal principal,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
             this.QuestionState = questionStateViewModel;
@@ -49,6 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.commandService = commandService;
             this.principal = principal;
             this.interviewRepository = interviewRepository;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -115,10 +118,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     this.questionIdentity.RosterVector,
                     DateTime.UtcNow,
                     selectedValues);
+
             try
             {
-                this.commandService.Execute(command);
-
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

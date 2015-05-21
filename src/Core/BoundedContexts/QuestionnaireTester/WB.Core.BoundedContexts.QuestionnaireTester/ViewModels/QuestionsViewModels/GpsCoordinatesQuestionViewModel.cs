@@ -56,6 +56,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid interviewId;
 
         public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+
 
         public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
             IUserIdentity userIdentity,
@@ -63,7 +65,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefullInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
             IUserInteraction userInteraction,
-            QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -72,6 +75,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.userInteraction = userInteraction;
 
             this.QuestionState = questionStateViewModel;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -123,25 +127,26 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void SetGeoLocationAnswer(MvxGeoLocation location)
+        private async void SetGeoLocationAnswer(MvxGeoLocation location)
         {
             this.geoLocationWatcher.Stop();
             this.IsInProgress = false;
 
+            var command = new AnswerGeoLocationQuestionCommand(
+                interviewId: interviewId,
+                userId: userIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow,
+                accuracy: location.Coordinates.Accuracy ?? 0,
+                altitude: location.Coordinates.Altitude ?? 0,
+                latitude: location.Coordinates.Latitude,
+                longitude: location.Coordinates.Longitude,
+                timestamp: location.Timestamp);
+
             try
             {
-                this.commandService.Execute(new AnswerGeoLocationQuestionCommand(
-                    interviewId: interviewId,
-                    userId: userIdentity.UserId,
-                    questionId: this.questionIdentity.Id,
-                    rosterVector: this.questionIdentity.RosterVector,
-                    answerTime: DateTime.UtcNow,
-                    accuracy: location.Coordinates.Accuracy ?? 0,
-                    altitude: location.Coordinates.Altitude ?? 0,
-                    latitude: location.Coordinates.Latitude,
-                    longitude: location.Coordinates.Longitude,
-                    timestamp: location.Timestamp));
-
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<NumericIntegerQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
         private bool isRosterSizeQuestion;
 
@@ -57,8 +58,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel, 
-            IUserInteraction userInteraction)
+            QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
+            IUserInteraction userInteraction,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
@@ -68,6 +70,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.QuestionState = questionStateViewModel;
             this.userInteraction = userInteraction;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -108,18 +111,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 }
             }
 
+            var command = new AnswerNumericIntegerQuestionCommand(
+                interviewId: Guid.Parse(interviewId),
+                userId: principal.CurrentUserIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow,
+                answer: Answer.Value);
+
             try
             {
-                commandService.Execute(new AnswerNumericIntegerQuestionCommand(
-                    interviewId: Guid.Parse(interviewId),
-                    userId: principal.CurrentUserIdentity.UserId,
-                    questionId: this.questionIdentity.Id,
-                    rosterVector: this.questionIdentity.RosterVector,
-                    answerTime: DateTime.UtcNow,
-                    answer: Answer.Value
-                    ));
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
-                
             }
             catch (InterviewException ex)
             {
