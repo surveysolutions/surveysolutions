@@ -17,7 +17,7 @@
   <dimen name="Interview_Question_Answer_background_padding">14dp</dimen>
   <dimen name="Interview_Question_Answer_background_corners_radius">12dp</dimen>
 
-  <dimen name="Interview_Question_Answer_Input_background_padding">15dp</dimen>
+  <dimen name="Interview_Question_Answer_Input_background_padding">13dp</dimen>
   <dimen name="Interview_Question_Answer_Input_background_corners_radius">8dp</dimen>
 
   <dimen name="Interview_Question_Answer_MediaBlock_margin_bottom">28dp</dimen>

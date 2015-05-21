@@ -31,7 +31,7 @@
 
   <dimen name="Interview_Question_Answer_Media_Image_margin">2dp</dimen>
 
-  <dimen name="Interview_Question_Answer_Option_margin_vertical">1.5dp</dimen>
+  <dimen name="Interview_Question_Answer_Option_margin_vertical">2dp</dimen>
   <dimen name="Interview_Question_Answer_Option_margin_horizontal">0dp</dimen>
 
   <dimen name="Interview_Question_Answer_Option_padding_left">0dp</dimen>
