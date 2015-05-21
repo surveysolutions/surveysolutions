@@ -42,4 +42,6 @@
 
   <dimen name="Interview_Roster_margin_bottom">14dp</dimen>
   <dimen name="Interview_Roster_Item_Body_margin_top">20dp</dimen>
+
+  <dimen name="Interview_Question_Progress_Indicator_height">2dp</dimen>
 </resources>

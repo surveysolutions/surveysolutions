@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
         public RealQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
@@ -37,7 +38,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
@@ -46,6 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -79,20 +82,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
         }
 
-        private void SendAnswerTextQuestionCommand()
+        private async void SendAnswerTextQuestionCommand()
         {
             if (!Answer.HasValue) return;
 
+            var command = new AnswerNumericRealQuestionCommand(
+                interviewId: Guid.Parse(interviewId),
+                userId: principal.CurrentUserIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow,
+                answer: Answer.Value);
+
             try
             {
-                commandService.Execute(new AnswerNumericRealQuestionCommand(
-                    interviewId: Guid.Parse(interviewId),
-                    userId: principal.CurrentUserIdentity.UserId,
-                    questionId: this.questionIdentity.Id,
-                    rosterVector: this.questionIdentity.RosterVector,
-                    answerTime: DateTime.UtcNow,
-                    answer: Answer.Value
-                    ));
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

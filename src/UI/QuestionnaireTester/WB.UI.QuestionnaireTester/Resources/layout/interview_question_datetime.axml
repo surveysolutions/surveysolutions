@@ -27,6 +27,8 @@
                 layout="@layout/interview_question__comments" />
         </MvxLinearLayout>
     </MvxLinearLayout>
-    <View
-        style="@style/Interview_Question_Divider" />
+  <ProgressBar
+    style="@style/Interview_Question_Progress_Indicator"
+    local:MvxBind="ShowProgress SendAnswerViewModel.InProgress" />
+  <View style="@style/Interview_Question_Divider" />
 </MvxLinearLayout>

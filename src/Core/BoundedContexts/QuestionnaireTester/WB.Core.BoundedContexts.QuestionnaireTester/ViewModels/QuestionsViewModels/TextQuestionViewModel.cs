@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class TextQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class TextQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<TextQuestionAnswered>
     {
@@ -30,20 +30,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<TextQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
-            ICommandService commandService, 
+            ICommandService commandService,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.SendAnswerViewModel = sendAnswerViewModel;
             this.QuestionState = questionStateViewModel;
         }
 
@@ -75,7 +78,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string Answer
         {
             get { return answer; }
-            set 
+            set
             {
                 if (Answer != value)
                 {
@@ -87,24 +90,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void SendAnswerTextQuestionCommand()
+        private async void SendAnswerTextQuestionCommand()
         {
-            Task.Run(() => SendAnswerTextQuestionCommandImpl());
-        }
+            var command = new AnswerTextQuestionCommand(
+                interviewId: Guid.Parse(interviewId),
+                userId: principal.CurrentUserIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow,
+                answer: Answer);
 
-        private void SendAnswerTextQuestionCommandImpl()
-        {
             try
             {
-                commandService.Execute(new AnswerTextQuestionCommand(
-                    interviewId: Guid.Parse(interviewId),
-                    userId: principal.CurrentUserIdentity.UserId,
-                    questionId: this.questionIdentity.Id,
-                    rosterVector: this.questionIdentity.RosterVector,
-                    answerTime: DateTime.UtcNow,
-                    answer: Answer
-                    ));
-
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

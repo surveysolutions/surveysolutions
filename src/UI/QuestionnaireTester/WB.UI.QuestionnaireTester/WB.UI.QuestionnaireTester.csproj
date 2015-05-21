@@ -366,7 +366,9 @@
     <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
-    <AndroidResource Include="Resources\drawable\question_option_background.xml" />
+    <AndroidResource Include="Resources\drawable\question_option_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_option_text_color.xml" />
     <AndroidResource Include="Resources\drawable\question_background.xml">
       <SubType>Designer</SubType>
@@ -414,6 +416,20 @@
     <AndroidResource Include="Resources\drawable\button_pressed_shape.xml" />
     <AndroidResource Include="Resources\drawable\button_unpressed_shape.xml" />
     <AndroidResource Include="Resources\drawable-v21\selector.xml" />
+    <AndroidResource Include="Resources\drawable\question_save_answer_progress_bar.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_save_answer_progress_bar_states.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate2.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate3.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate4.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate5.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate6.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate7.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate8.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

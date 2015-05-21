@@ -29,7 +29,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel)
+            QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
+            SendAnswerViewModel sendAnswerViewModel)
         {
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (principal == null) throw new ArgumentNullException("principal");
@@ -42,6 +43,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
+            this.SendAnswerViewModel = sendAnswerViewModel;
         }
 
         private Identity questionIdentity;
@@ -49,6 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
+        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -73,20 +76,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 .ToList();
         }
 
-        private void OptionSelected(object sender, EventArgs eventArgs)
+        private async void OptionSelected(object sender, EventArgs eventArgs)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
 
+            var command = new AnswerSingleOptionQuestionCommand(
+                this.interviewId,
+                this.userId,
+                this.questionIdentity.Id,
+                this.questionIdentity.RosterVector,
+                DateTime.UtcNow,
+                selectedOption.Value);
+
             try
             {
-                this.commandService.Execute(new AnswerSingleOptionQuestionCommand(
-                    this.interviewId,
-                    this.userId,
-                    this.questionIdentity.Id,
-                    this.questionIdentity.RosterVector,
-                    DateTime.UtcNow,
-                    selectedOption.Value));
-
+                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)
