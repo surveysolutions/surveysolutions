@@ -94,11 +94,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 QuestionState.ProcessAnswerCommandException(ex);
             }
 
-            var optionsToUnselect = this.Options.Where(option => option != selectedOption && option.Selected);
+            var optionsToDeselect = this.Options.Where(option => option != selectedOption && option.Selected);
 
-            foreach (var optionToUnselect in optionsToUnselect)
+            foreach (var optionToDeselect in optionsToDeselect)
             {
-                optionToUnselect.Selected = false;
+                optionToDeselect.Selected = false;
             }
         }
 

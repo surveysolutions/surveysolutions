@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
 
-        private Identity entityIdentity;
+        private Identity questionIdentity;
         private string interviewId;
 
         public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
-            this.entityIdentity = entityIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
             var interview = this.interviewRepository.Get(interviewId);
@@ -66,8 +66,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                         commandService.Execute(new AnswerDateTimeQuestionCommand(
                             interviewId: Guid.Parse(interviewId),
                             userId: principal.CurrentUserIdentity.UserId,
-                            questionId: this.entityIdentity.Id,
-                            rosterVector: this.entityIdentity.RosterVector,
+                            questionId: this.questionIdentity.Id,
+                            rosterVector: this.questionIdentity.RosterVector,
                             answerTime: DateTime.UtcNow,
                             answer: answerValue
                             ));

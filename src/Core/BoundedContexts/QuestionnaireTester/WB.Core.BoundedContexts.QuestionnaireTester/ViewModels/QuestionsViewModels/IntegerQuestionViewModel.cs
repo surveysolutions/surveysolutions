@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IUserInteraction userInteraction;
-        private Identity entityIdentity;
+        private Identity questionIdentity;
         private string interviewId;
 
         public QuestionStateViewModel<NumericIntegerQuestionAnswered> QuestionState { get; private set; }
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.entityIdentity = entityIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
             liteEventRegistry.Subscribe(this);
@@ -113,8 +113,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 commandService.Execute(new AnswerNumericIntegerQuestionCommand(
                     interviewId: Guid.Parse(interviewId),
                     userId: principal.CurrentUserIdentity.UserId,
-                    questionId: this.entityIdentity.Id,
-                    rosterVector: this.entityIdentity.RosterVector,
+                    questionId: this.questionIdentity.Id,
+                    rosterVector: this.questionIdentity.RosterVector,
                     answerTime: DateTime.UtcNow,
                     answer: Answer.Value
                     ));
@@ -140,13 +140,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(NumericIntegerQuestionAnswered @event)
         {
-            if (@event.QuestionId != entityIdentity.Id || !@event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
+            if (@event.QuestionId != questionIdentity.Id || !@event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
                 return;
 
             previousAnswer = Answer;
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
+            var answerModel = interview.GetIntegerNumericAnswer(questionIdentity);
             this.Answer = Monads.Maybe(() => answerModel.Answer);
         }
     }

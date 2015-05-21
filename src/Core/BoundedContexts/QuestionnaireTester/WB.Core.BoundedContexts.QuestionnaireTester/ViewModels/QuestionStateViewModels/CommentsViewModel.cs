@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         }
 
         private string interviewId;
-        private Identity entityIdentity;
+        private Identity questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.interviewId = interviewId;
-            this.entityIdentity = entityIdentity;
+            this.questionIdentity = entityIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
             InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
@@ -98,8 +98,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(interviewId),
                     userId: principal.CurrentUserIdentity.UserId,
-                    questionId: this.entityIdentity.Id,
-                    rosterVector: this.entityIdentity.RosterVector,
+                    questionId: this.questionIdentity.Id,
+                    rosterVector: this.questionIdentity.RosterVector,
                     commentTime: DateTime.UtcNow,
                     comment: InterviewerComment));
            
