@@ -16,7 +16,7 @@
                 style="@style/Interview_Question_Answer"
                 local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
                 <EditText
-                    style="@style/Interview_Question_Answer_Editor"
+                    style="@style/Interview_Question_Answer_TextEditor"
                     android:numeric="integer|signed|decimal"
                     local:MvxBind="FocusText Answer, Converter=NullableDecimalToString; Hint Localization('RealQuestion_Hint');" />
             </MvxLinearLayout>

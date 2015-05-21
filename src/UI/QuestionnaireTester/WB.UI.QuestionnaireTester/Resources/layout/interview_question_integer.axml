@@ -14,7 +14,7 @@
                 local:MvxBind="Style LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered);">
                 
               <EditText
-                    style="@style/Interview_Question_Answer_Editor"
+                    style="@style/Interview_Question_Answer_TextEditor"
                     android:numeric="integer|signed"
                     local:MvxBind="FocusText Answer, Converter=NullableIntToString; Hint Localization('IntegerQuestion_Hint');" />
               
