@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Globalization;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -34,15 +34,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private int? previousAnswer;
 
-        private int? answer;
-        public int? Answer
+        private string answerAsString;
+        public string AnswerAsString
         {
-            get { return answer; }
+            get { return answerAsString; }
             private set
             {
-                if (answer != value)
+                if (answerAsString != value)
                 {
-                    answer = value;
+                    answerAsString = value;
                     RaisePropertyChanged();
 
                     this.SendAnswerIntegerQuestionCommand();
@@ -83,22 +83,30 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
 
-            this.Answer = Monads.Maybe(() => answerModel.Answer);
-            this.previousAnswer = Monads.Maybe(() => answerModel.Answer);
+            var answer = answerModel.Answer;
+            this.AnswerAsString = NullableIntToAnswerString(answer);
+            this.previousAnswer = Monads.Maybe(() => answer);
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
         }
 
         private async void SendAnswerIntegerQuestionCommand()
         {
-            if (!Answer.HasValue) return;
+            if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
 
-            if (isRosterSizeQuestion && previousAnswer.HasValue && Answer < previousAnswer)
+            int answer;
+            if (!int.TryParse(AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
             {
-                var amountOfRostersToRemove = previousAnswer - Math.Max(Answer.Value, 0);
+                QuestionState.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_ParsingError);
+                return;
+            }
+
+            if (isRosterSizeQuestion && previousAnswer.HasValue && answer < previousAnswer)
+            {
+                var amountOfRostersToRemove = previousAnswer - Math.Max(answer, 0);
                 var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                 if (!(await userInteraction.ConfirmAsync(message)))
                 {
-                    Answer = previousAnswer;
+                    AnswerAsString = NullableIntToAnswerString(previousAnswer);
                     return;
                 }
             }
@@ -109,19 +117,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: Answer.Value);
+                answer: answer);
 
             try
             {
                 await SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
 
-                previousAnswer = Answer;
+                previousAnswer = answer;
             }
             catch (InterviewException ex)
             {
                 QuestionState.ProcessAnswerCommandException(ex);
             }
+        }
+
+        private static string NullableIntToAnswerString(int? answer)
+        {
+            return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
         }
     }
 }

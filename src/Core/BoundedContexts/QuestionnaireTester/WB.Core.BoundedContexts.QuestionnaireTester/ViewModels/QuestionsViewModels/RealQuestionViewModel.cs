@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -24,15 +24,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
         public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
-        private decimal? answer;
-        public decimal? Answer
+        private string answerAsString;
+        public string AnswerAsString
         {
-            get { return answer; }
+            get { return this.answerAsString; }
             private set
             {
-                if (answer != value)
+                if (this.answerAsString != value)
                 {
-                    answer = value; 
+                    this.answerAsString = value; 
                     RaisePropertyChanged();
 
                     SendAnswerRealQuestionCommand();
@@ -66,12 +66,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
-            this.Answer = Monads.Maybe(() => answerModel.Answer);
+            this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
         }
 
         private async void SendAnswerRealQuestionCommand()
         {
-            if (!Answer.HasValue) return;
+            if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
+
+            decimal answer;
+            if (!Decimal.TryParse(AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
+            {
+                QuestionState.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Real_ParsingError);
+                return;
+            }
 
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(interviewId),
@@ -79,7 +86,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: Answer.Value);
+                answer: answer);
 
             try
             {
@@ -92,10 +99,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        public void Handle(NumericRealQuestionAnswered @event)
+        private static string NullableDecimalToAnswerString(decimal? answer)
         {
-            if (@event.QuestionId != questionIdentity.Id || !@event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
-                return;
+            return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
         }
     }
 }
