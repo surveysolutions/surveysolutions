@@ -128,5 +128,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
             UpdateValidState();
         }
+
+        public void MarkAnswerAsInvalidWithMessage(string errorMessageText)
+        {
+            exception = null;
+            IsInvalid = true;
+            ErrorMessage = errorMessageText;
+        }
     }
 }

@@ -485,6 +485,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
+        /// </summary>
+        public static string Interview_Question_Integer_ParsingError {
+            get {
+                return ResourceManager.GetString("Interview_Question_Integer_ParsingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
+        /// </summary>
+        public static string Interview_Question_Real_ParsingError {
+            get {
+                return ResourceManager.GetString("Interview_Question_Real_ParsingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record GPS.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {

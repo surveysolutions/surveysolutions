@@ -375,4 +375,10 @@
   <data name="Interview_Group_StartedFormat" xml:space="preserve">
     <value>Started. {0} {1} answered, {2}</value>
   </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Entered value can not be parsed as integer value</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Entered value can not be parsed as decimal value</value>
+  </data>
 </root>

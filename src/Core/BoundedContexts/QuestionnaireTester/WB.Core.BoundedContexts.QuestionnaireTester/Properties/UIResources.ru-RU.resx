@@ -351,4 +351,10 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Отсканировать баркод</value>
   </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Введенное значение не может быть интерпретировано как цело число</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Введенное значение не может быть интерпретировано как вещественное число</value>
+  </data>
 </root>

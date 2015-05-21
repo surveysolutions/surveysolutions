@@ -77,5 +77,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             Validity.ProcessException(exception);
         }
+
+        public void MarkAnswerAsInvalidWithMessage(string errorMessage)
+        {
+            Validity.MarkAnswerAsInvalidWithMessage(errorMessage);
+        }
     }
 }

@@ -217,8 +217,6 @@
     <Compile Include="Converters\GetRosterInfoConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="Converters\NullableDecimalToStringConverter.cs" />
-    <Compile Include="Converters\NullableIntToStringConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
     <Compile Include="CustomBindings\EditDateBinding.cs">
       <SubType>Code</SubType>

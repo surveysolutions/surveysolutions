@@ -388,9 +388,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsQuestionMandatory(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return false;
+            //IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            return question.Mandatory;
+            //return question.Mandatory;
         }
 
         public bool IsQuestionInteger(Guid questionId)
