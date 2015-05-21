@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__categorical_could_not_be_roster_title_question__ = () =>
-            new[] { "linked categorical multy answers question could not be used as a roster title question in group(s)" }.ShouldEachConformTo(
+            new[] { "linked categorical multi-select question could not be used as a roster title question in sub-section(s)" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

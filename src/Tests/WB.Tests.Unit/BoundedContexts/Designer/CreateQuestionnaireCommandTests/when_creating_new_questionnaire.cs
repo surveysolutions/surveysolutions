@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CreateQuestionnaireCommandTests
         It should_raise_questionnaire_created_event_with_given_CreatedBy = () =>
             eventContext.ShouldContainEvent<NewQuestionnaireCreated>(e => e.CreatedBy == createdBy);
 
-        It should_raise_new_group_added_event = () => eventContext.ShouldContainEvent<NewGroupAdded>(e => e.ParentGroupPublicKey == null && e.GroupText == "New Chapter");
+        It should_raise_new_group_added_event = () => eventContext.ShouldContainEvent<NewGroupAdded>(e => e.ParentGroupPublicKey == null && e.GroupText == "New Section");
 
 
         static Questionnaire questionnaire;

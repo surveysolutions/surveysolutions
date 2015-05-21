@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__title__contains__self__ = () =>
-            new[] { "title", "contains", "self" }.ShouldEachConformTo(
+            new[] { "text", "contains", "self" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         

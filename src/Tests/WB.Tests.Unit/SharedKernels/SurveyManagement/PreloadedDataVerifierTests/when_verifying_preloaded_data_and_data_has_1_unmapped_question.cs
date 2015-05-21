@@ -36,16 +36,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_result_has_1_error = () =>
-            result.Count().ShouldEqual(1);
+            result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0003_error = () =>
-            result.First().Code.ShouldEqual("PL0003");
+            result.Errors.First().Code.ShouldEqual("PL0003");
 
         It should_return_reference_with_Column_type = () =>
-            result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFile;

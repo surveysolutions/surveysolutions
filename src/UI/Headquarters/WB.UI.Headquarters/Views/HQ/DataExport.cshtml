@@ -1,0 +1,139 @@
+﻿@using System.Web.Optimization
+@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.TemplateViewItem>
+
+@{
+    ViewBag.Title = "Data Export";
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+}
+
+@section scripts
+{
+
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", 
+                    "~/Scripts/viewmodels/pages/exportdata.js")
+
+    <script type="text/javascript">
+
+        var $AllDataUrl = '@Url.Action("GetAllData", "ImportExport")';
+        var $ApprovedDataUrl = '@Url.Action("GetApprovedData", "ImportExport")';
+        var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
+        var $HistoryUrl = '@Url.Action("GetHistory", "ImportExport")';
+
+        $(function () {
+            var templates = [
+                    @foreach (var item in Model)
+                    {
+                        <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
+                    }
+            ];
+
+            var model = new Supervisor.VM.ExportData(templates);
+            ko.applyBindings(model);
+        });
+
+        $('#umbrella').hide();
+    </script>
+}
+
+
+@section header
+{
+    <h3 class="sinle-line-header">Select type and format of data to export</h3>
+}
+
+@section filters
+{
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Template</h4>
+            <p class="list-group-item-text">
+                <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="form-control"></select>
+            </p>
+        </li>
+    </ul>
+}
+
+<table class="table table-striped table-bordered table-condensed table-hover">
+    <thead>
+        <tr>
+            <th>All Data</th>
+            <th>Approved Data</th>
+            <th>Binary Data</th>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <th>Para Data</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <!-- ko if:selectedTemplateTitle() != null -->
+        <tr>
+            <td>
+                <div>
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        Data.tab
+                    </a>
+
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        Stata.dat
+                    </a>
+
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2'}">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        SPSS.sav
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        Data.tab
+                    </a>
+
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        Stata.dat
+                    </a>
+
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2' }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        SPSS.sav
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $FilesUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                        Binary
+                    </a>
+                </div>
+            </td>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <td>
+                    <div>
+
+                        <a class="btn btn-default btn-block" data-bind="attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                            <i class="glyphicon glyphicon-download">
+                            </i>
+                            Data
+                        </a>
+
+                    </div>
+                </td>
+            }
+        </tr>
+        <!-- /ko  -->
+    </tbody>
+</table>

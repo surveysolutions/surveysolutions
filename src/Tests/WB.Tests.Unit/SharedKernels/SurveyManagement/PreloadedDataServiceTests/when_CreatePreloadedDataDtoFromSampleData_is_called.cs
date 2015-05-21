@@ -36,7 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Because of =
             () =>
                 result =
-                    preloadedDataService.CreatePreloadedDataDtoFromSampleData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[] { new[] { "1", "2" } }, "some file name"));
+                    preloadedDataService.CreatePreloadedDataDtoFromSampleData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, 
+                    new[] { new[] { "1", "2" } }, 
+                    "some file name"));
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
@@ -46,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static PreloadedDataDto[] result;
+        private static PreloadedDataRecord[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
     }
 }

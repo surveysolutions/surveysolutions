@@ -91,41 +91,41 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
            result.Length.ShouldEqual(2);
 
         It should_first_result_has_data_for_4_levels_1_top_1_roster_and_2_nested = () =>
-           result[0].Data.Length.ShouldEqual(4);
+           result[0].PreloadedDataDto.Data.Length.ShouldEqual(4);
 
         It should_first_result_first_data_record_has_empty_roster_vector = () =>
-          result[0].Data[0].RosterVector.SequenceEqual(new decimal[0]).ShouldBeTrue();
+          result[0].PreloadedDataDto.Data[0].RosterVector.SequenceEqual(new decimal[0]).ShouldBeTrue();
 
         It should_first_result_second_data_record_has_1_roster_vector = () =>
-          result[0].Data[1].RosterVector.SequenceEqual(new decimal[]{1}).ShouldBeTrue();
+          result[0].PreloadedDataDto.Data[1].RosterVector.SequenceEqual(new decimal[] { 1 }).ShouldBeTrue();
 
         It should_first_result_thirdt_data_record_has_1_1_roster_vector = () =>
-          result[0].Data[2].RosterVector.SequenceEqual(new decimal[] { 1,1 }).ShouldBeTrue();
+          result[0].PreloadedDataDto.Data[2].RosterVector.SequenceEqual(new decimal[] { 1, 1 }).ShouldBeTrue();
 
         It should_first_result_fourth_data_record_has_1_2_roster_vector = () =>
-         result[0].Data[3].RosterVector.SequenceEqual(new decimal[] { 1, 2 }).ShouldBeTrue();
+         result[0].PreloadedDataDto.Data[3].RosterVector.SequenceEqual(new decimal[] { 1, 2 }).ShouldBeTrue();
 
         It should_second_result_has_data_for_5_levels_1_top_2_roster_and_2_nested = () =>
-          result[1].Data.Length.ShouldEqual(5);
+          result[1].PreloadedDataDto.Data.Length.ShouldEqual(5);
 
         It should_second_result_first_data_record_has_empty_roster_vector = () =>
-          result[1].Data[0].RosterVector.SequenceEqual(new decimal[0]).ShouldBeTrue();
+          result[1].PreloadedDataDto.Data[0].RosterVector.SequenceEqual(new decimal[0]).ShouldBeTrue();
 
         It should_second_result_second_data_record_has_1_roster_vector = () =>
-          result[1].Data[1].RosterVector.SequenceEqual(new decimal[] { 1 }).ShouldBeTrue();
+          result[1].PreloadedDataDto.Data[1].RosterVector.SequenceEqual(new decimal[] { 1 }).ShouldBeTrue();
 
         It should_second_result_thirdt_data_record_has_1_1_roster_vector = () =>
-          result[1].Data[2].RosterVector.SequenceEqual(new decimal[] { 1, 1 }).ShouldBeTrue();
+          result[1].PreloadedDataDto.Data[2].RosterVector.SequenceEqual(new decimal[] { 1, 1 }).ShouldBeTrue();
 
         It should_second_result_fourth_data_record_has_2_roster_vector = () =>
-          result[1].Data[3].RosterVector.SequenceEqual(new decimal[] { 2 }).ShouldBeTrue();
+          result[1].PreloadedDataDto.Data[3].RosterVector.SequenceEqual(new decimal[] { 2 }).ShouldBeTrue();
 
         It should_second_result_fifth_data_record_has_2_2_roster_vector = () =>
-          result[1].Data[4].RosterVector.SequenceEqual(new decimal[] { 2, 2 }).ShouldBeTrue();
+          result[1].PreloadedDataDto.Data[4].RosterVector.SequenceEqual(new decimal[] { 2, 2 }).ShouldBeTrue();
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static PreloadedDataDto[] result;
+        private static PreloadedDataRecord[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
         private static Guid nestedRosterId = Guid.NewGuid();
     }

@@ -40,21 +40,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__fixed__ = () =>
-            exception.Message.ToLower().ShouldContain("fixed");
 
-        It should_throw_exception_with_message_containting__titles__ = () =>
-            exception.Message.ToLower().ShouldContain("titles");
-
-        It should_throw_exception_with_message_containting__should__ = () =>
-            exception.Message.ToLower().ShouldContain("should");
-
-        It should_throw_exception_with_message_containting__be__ = () =>
-            exception.Message.ToLower().ShouldContain("be");
-
-        It should_throw_exception_with_message_containting__empty__ = () =>
-            exception.Message.ToLower().ShouldContain("empty");
-
+        It should_throw_exception_with_message = () =>
+            new[] { "roster", "fixed", "items", "list", "should", "be", "empty" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+        
         private static Exception exception;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
