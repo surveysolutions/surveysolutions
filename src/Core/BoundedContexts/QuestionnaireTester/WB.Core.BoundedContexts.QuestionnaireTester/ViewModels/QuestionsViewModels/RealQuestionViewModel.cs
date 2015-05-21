@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -17,14 +14,9 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel,
-        ILiteEventHandler<NumericRealQuestionAnswered>,
-        IDisposable
+        IInterviewEntityViewModel
     {
-        private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
         private Identity questionIdentity;
         private string interviewId;
@@ -32,19 +24,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
         public SendAnswerViewModel SendAnswerViewModel { get; private set; }
 
+        private decimal? answer;
+        public decimal? Answer
+        {
+            get { return answer; }
+            private set
+            {
+                if (answer != value)
+                {
+                    answer = value; 
+                    RaisePropertyChanged();
+
+                    SendAnswerRealQuestionCommand();
+                }
+            }
+        }
+
         public RealQuestionViewModel(
-            ILiteEventRegistry liteEventRegistry,
-            ICommandService commandService, 
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
             SendAnswerViewModel sendAnswerViewModel)
         {
-            this.liteEventRegistry = liteEventRegistry;
-            this.commandService = commandService;
             this.principal = principal;
-            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
@@ -59,8 +61,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
-            liteEventRegistry.Subscribe(this);
-
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
@@ -69,20 +69,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Answer = Monads.Maybe(() => answerModel.Answer);
         }
 
-        private decimal? answer;
-        public decimal? Answer
-        {
-            get { return answer; }
-            private set { answer = value; RaisePropertyChanged(); }
-        }
-
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
-        }
-
-        private async void SendAnswerTextQuestionCommand()
+        private async void SendAnswerRealQuestionCommand()
         {
             if (!Answer.HasValue) return;
 
@@ -109,15 +96,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (@event.QuestionId != questionIdentity.Id || !@event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
                 return;
-
-            var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetRealNumericAnswer(questionIdentity);
-            this.Answer = Monads.Maybe(() => answerModel.Answer);
-        }
-
-        public void Dispose()
-        {
-            liteEventRegistry.Unsubscribe(this);
         }
     }
 }

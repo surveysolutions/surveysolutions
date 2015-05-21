@@ -13,6 +13,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             : base(view)
         {
             view.ImeOptions = ImeAction.Done;
+            view.EditorAction += HandleEditorAction;
         }
 
         protected override void SetValueToView(EditText androidControl, string value)
@@ -37,6 +38,21 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
             editText.FocusChange += HandleFocusChange;
             subscribed = true;
+        }
+
+        private void HandleEditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            e.Handled = false;
+
+            if (e.ActionId != ImeAction.Done) return;
+
+            e.Handled = true;
+
+            var editText = this.Target;
+            if (editText == null)
+                return;
+
+            FireValueChanged(editText.Text);
         }
 
         private void HandleFocusChange(object sender, View.FocusChangeEventArgs e)
