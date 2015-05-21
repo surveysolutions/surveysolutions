@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed Titles.
+        ///   Looks up a localized string similar to Fixed set of items.
         /// </summary>
         internal static string RosterType_Fixed {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer to list question.
+        ///   Looks up a localized string similar to List question.
         /// </summary>
         internal static string RosterType_List {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer to Multi Option.
+        ///   Looks up a localized string similar to Multi-select question.
         /// </summary>
         internal static string RosterType_Multi {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer to numeric question.
+        ///   Looks up a localized string similar to Numeric question.
         /// </summary>
         internal static string RosterType_Numeric {
             get {

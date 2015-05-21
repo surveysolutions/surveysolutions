@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -30,7 +31,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
-            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, new QuestionDataParser());
+
+            var userViewFactory = new Mock<IUserViewFactory>();
+            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument,
+                new QuestionDataParser(), userViewFactory.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__answer_title_cannot_be_empty__ = () =>
-            new[] { "cascading questions can't have condition expression" }.ShouldEachConformTo(
+            new[] { "cascading questions can't have enabling condition" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

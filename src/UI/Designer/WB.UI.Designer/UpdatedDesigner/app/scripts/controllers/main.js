@@ -55,7 +55,7 @@ angular.module('designerApp')
             if (hotkeys.get(openChaptersPane) === false) {
                 hotkeys.del(openChaptersPane);
             }
-            hotkeys.add(openChaptersPane, 'Open chapters', function (event) {
+            hotkeys.add(openChaptersPane, 'Open section', function (event) {
                     event.preventDefault();
                     $scope.$broadcast("openChaptersList", "");
                 });

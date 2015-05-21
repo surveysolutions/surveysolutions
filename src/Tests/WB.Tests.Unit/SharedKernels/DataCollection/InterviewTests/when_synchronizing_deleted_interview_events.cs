@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
             interview = new Interview();
-            interview.Apply(new InterviewerAssigned(userId, userId));
+            interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, ""));
         };
 

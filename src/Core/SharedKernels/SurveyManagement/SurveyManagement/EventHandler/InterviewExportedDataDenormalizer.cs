@@ -44,20 +44,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
-        private readonly IReadSideKeyValueStorage<InterviewStatusHistory> interviewHistoryReader;
+        private readonly IReadSideRepositoryWriter<InterviewStatuses> statuses;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter, 
             IReadSideRepositoryWriter<UserDocument> userDocumentWriter, 
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
-            IReadSideKeyValueStorage<InterviewStatusHistory> interviewHistoryReader)
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, IReadSideRepositoryWriter<InterviewStatuses> statuses)
         {
             this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
             this.users = userDocumentWriter;
             this.interviewSummaryStorage = interviewSummaryStorage;
-            this.interviewHistoryReader = interviewHistoryReader;
+            this.statuses = statuses;
         }
 
         public override object[] Writers
@@ -73,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { users, interviewSummaryStorage, interviewHistoryReader }; }
+            get { return new object[] { users, interviewSummaryStorage, statuses }; }
         }
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
@@ -227,19 +226,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            var interviewStatusHistory = this.interviewHistoryReader.GetById(evnt.EventSourceId);
+            var interviewStatusHistory = this.statuses.GetById(evnt.EventSourceId);
             if (interviewStatusHistory == null)
             {
                 throw new NullReferenceException(string.Format("Missing interview status changes history for interview {0}", evnt.EventSourceId));
             }
 
-            foreach (var interviewCommentedStatus in interviewStatusHistory.StatusChangeHistory)
+            foreach (var interviewCommentedStatus in interviewStatusHistory.InterviewCommentedStatuses)
             {
                 var action = this.GetInterviewExportedAction(interviewCommentedStatus.Status);
                 if (!action.HasValue)
                     continue;
 
-                this.dataExportWriter.AddInterviewAction(action.Value, evnt.EventSourceId, interviewCommentedStatus.ResponsibleId, interviewCommentedStatus.Date);
+                this.dataExportWriter.AddInterviewAction(action.Value, evnt.EventSourceId, interviewCommentedStatus.StatusChangeOriginatorId, interviewCommentedStatus.Timestamp);
             }
         }
 

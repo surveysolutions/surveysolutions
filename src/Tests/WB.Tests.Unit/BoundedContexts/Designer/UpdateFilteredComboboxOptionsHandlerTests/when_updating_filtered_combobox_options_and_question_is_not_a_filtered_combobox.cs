@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__not_filtered_combobox__ = () =>
-            new[] { "not", "filtered combobox" }.ShouldEachConformTo(
+            new[] { "not", "combo box" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 
