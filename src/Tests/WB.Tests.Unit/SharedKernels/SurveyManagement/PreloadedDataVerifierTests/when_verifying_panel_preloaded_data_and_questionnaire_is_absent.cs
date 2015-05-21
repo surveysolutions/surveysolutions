@@ -20,12 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         Because of = () => result = preloadedDataVerifier.VerifyPanel(Guid.NewGuid(), 1, new PreloadedDataByFile[0]);
 
         It should_result_has_1_error = () =>
-            result.Count().ShouldEqual(1);
+            result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0001_error = () =>
-            result.First().Code.ShouldEqual("PL0024");
+            result.Errors.First().Code.ShouldEqual("PL0024");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
     }
 }

@@ -18,7 +18,10 @@
                 <a href="@Url.Action("MapReport", "HQ", new { area = "" })">@MainMenu.MapReport</a>
             </li>
             <li class="@(page == MenuItem.InterviewsChart ? "active" : "")">
-                <a href="@Url.Action("InterviewsChart", "HQ", new { area = "" })">@MainMenu.CumulativeChart</a>
+                <a href="@Url.Action("InterviewsChart", "HQ", new {area = ""})">@MainMenu.CumulativeChart</a>
+            </li>
+            <li class="@(page == MenuItem.NumberOfCompletedInterviews ? "active" : "")">
+                <a href="@Url.Action("BySupervisors", "Quantity", new { area = "" })">@MainMenu.Quantity</a>
             </li>
         </ul>
     </li>
@@ -31,7 +34,7 @@
 
     <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-user"></i> @MainMenu.Users <b class="caret"></b>
+            <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamsAndRoles <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
             <li class="@(page == MenuItem.Teams ? "active" : "")">
@@ -53,7 +56,14 @@
     </li>
 
     <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-        <a href="@Url.Action("Index", "HQ", new { area = "" })"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
+        <a href="@Url.Action("Index", "HQ", new {area = ""})"><i class="glyphicon glyphicon-list-alt">
+        </i> @MainMenu.Questionnaires</a>
+    </li>
+    <li class="@(page == MenuItem.DataExport ? "active" : "")">
+        <a href="@Url.Action("DataExport", "HQ", new {area = ""})">
+            <i class="glyphicon glyphicon-download">
+            </i> @MainMenu.DataExport
+        </a>
     </li>
 </ul>
         <ul class="nav navbar-nav navbar-right" role="menu">

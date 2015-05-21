@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ = () =>
-             new[] { "title", "contains", "substitution", "illegal", "type" }.ShouldEachConformTo(
+             new[] { "text", "contains", "substitution", "illegal", "type" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
         
