@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class InterviewsStatisticsViewModel
+    public class InterviewsStatisticsInputModel
     {
         public Guid TemplateId { get; set; }
         public long TemplateVersion { get; set; }

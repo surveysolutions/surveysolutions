@@ -395,6 +395,8 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request__on_day_before_and_null_to.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_null_from_and_on_day_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />

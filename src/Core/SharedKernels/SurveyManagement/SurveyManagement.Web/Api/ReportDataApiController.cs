@@ -218,7 +218,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public ChartStatisticsView ChartStatistics(InterviewsStatisticsViewModel data)
+        public ChartStatisticsView ChartStatistics(InterviewsStatisticsInputModel data)
         {
             var input = new ChartStatisticsInputModel
             {
