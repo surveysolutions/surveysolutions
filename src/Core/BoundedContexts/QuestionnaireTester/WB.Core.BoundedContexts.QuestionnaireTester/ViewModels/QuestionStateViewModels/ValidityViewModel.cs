@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         }
 
         private string interviewId;
-        private Identity entityIdentity;
+        private Identity questionIdentity;
         private SharedKernels.DataCollection.Events.Interview.Dtos.Identity identityForEvents;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.interviewId = interviewId;
-            this.entityIdentity = entityIdentity;
+            this.questionIdentity = entityIdentity;
             this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
             liteEventRegistry.Subscribe(this);
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            bool isInvalidAnswer = !interview.IsValid(this.entityIdentity);
+            bool isInvalidAnswer = !interview.IsValid(this.questionIdentity);
             bool wasException = exception != null;
             string errorMessageText = String.Empty;
             string errorCaptionText = String.Empty;
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             if (isInvalidAnswer)
             {
                 var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
-                var questionModel = questionnaireModel.Questions[entityIdentity.Id];
+                var questionModel = questionnaireModel.Questions[questionIdentity.Id];
                 errorMessageText = questionModel.ValidationMessage;
                 errorCaptionText = UIResources.Validity_Answered_Invalid_ErrorCaption;
             }

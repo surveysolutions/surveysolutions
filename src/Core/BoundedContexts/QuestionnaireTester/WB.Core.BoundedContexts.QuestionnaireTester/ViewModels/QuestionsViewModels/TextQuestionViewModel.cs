@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
-        private Identity entityIdentity;
+        private Identity questionIdentity;
         private string interviewId;
 
         public QuestionStateViewModel<TextQuestionAnswered> QuestionState { get; private set; }
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.entityIdentity = entityIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
             liteEventRegistry.Subscribe(this);
@@ -99,8 +99,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 commandService.Execute(new AnswerTextQuestionCommand(
                     interviewId: Guid.Parse(interviewId),
                     userId: principal.CurrentUserIdentity.UserId,
-                    questionId: this.entityIdentity.Id,
-                    rosterVector: this.entityIdentity.RosterVector,
+                    questionId: this.questionIdentity.Id,
+                    rosterVector: this.questionIdentity.RosterVector,
                     answerTime: DateTime.UtcNow,
                     answer: Answer
                     ));
@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var textQuestionModel = questionnaire.Questions[entityIdentity.Id] as MaskedTextQuestionModel;
+            var textQuestionModel = questionnaire.Questions[questionIdentity.Id] as MaskedTextQuestionModel;
             if (textQuestionModel != null)
             {
                 this.Mask = textQuestionModel.Mask;
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var interview = this.interviewRepository.Get(interviewId);
 
-            var answerModel = interview.GetTextAnswer(entityIdentity);
+            var answerModel = interview.GetTextAnswer(questionIdentity);
             if (answerModel != null)
             {
                 this.Answer = answerModel.Answer;
@@ -149,8 +149,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId == entityIdentity.Id &&
-                @event.PropagationVector.SequenceEqual(entityIdentity.RosterVector))
+            if (@event.QuestionId == questionIdentity.Id &&
+                @event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
             {
                 UpdateSelfFromModel();
             }

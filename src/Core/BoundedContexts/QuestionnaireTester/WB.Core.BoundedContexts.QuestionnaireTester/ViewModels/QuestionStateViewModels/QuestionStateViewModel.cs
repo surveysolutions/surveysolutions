@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefullInterviewRepository interviewRepository;
-        private Identity entityIdentity;
+        private Identity questionIdentity;
         private string interviewId;
 
         public QuestionStateViewModel(
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.entityIdentity = entityIdentity;
+            this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
             liteEventRegistry.Subscribe(this);
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         public void Handle(TAnswerEvent @event)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            IsAnswered = interview.WasAnswered(entityIdentity);
+            IsAnswered = interview.WasAnswered(questionIdentity);
         }
 
         public void ExecutedAnswerCommandWithoutExceptions()
