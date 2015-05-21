@@ -16,10 +16,6 @@
 
     self.DateTimeRanges = ko.observableArray([]);
 
-    self.ShouldShowColumnCountValidationMessage = ko.pureComputed(function() {
-        return self.ColumnCount() <= 0 || self.ColumnCount() > 12;
-    }, this);
-
     self.GetPeriodName = function (period) {
         return ko.computed({
             read: function () {
@@ -95,8 +91,6 @@
     };
 
     self.initReport = function () {
-        if (self.ShouldShowColumnCountValidationMessage())
-            return;
         self.search();
     };
 };

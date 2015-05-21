@@ -79,15 +79,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;&quot;Column count&quot;&lt;/strong&gt; must be greater then zero, but less then 12.
-        /// </summary>
-        public static string ColumnCountValidationMessage {
-            get {
-                return ResourceManager.GetString("ColumnCountValidationMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Day.
         /// </summary>
         public static string Day {
