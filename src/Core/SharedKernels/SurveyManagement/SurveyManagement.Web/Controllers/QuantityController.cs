@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult ByInterviewers(Guid? supervisorId)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
-            this.ViewBag.DataAction = "QuantityByInterviewers";
+            this.ViewBag.WebApiActionName = "QuantityByInterviewers";
             this.ViewBag.CanNavigateToQuantityByTeamMember = false;
             this.ViewBag.CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter;
 
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult BySupervisors()
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
-            this.ViewBag.DataAction = "QuantityBySupervisors";
+            this.ViewBag.WebApiActionName = "QuantityBySupervisors";
             this.ViewBag.CanNavigateToQuantityByTeamMember = true;
             this.ViewBag.CanNavigateToQuantityBySupervisors = false;
             AllUsersAndQuestionnairesView usersAndQuestionnaires =

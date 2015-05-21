@@ -32,7 +32,7 @@
                 + '&columnCount=' + url.query['columnCount'];
         }
         $(function () {
-            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.DataAction })');
+            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.WebApiActionName })');
             ko.applyBindings(model);
             model.load();
         });
