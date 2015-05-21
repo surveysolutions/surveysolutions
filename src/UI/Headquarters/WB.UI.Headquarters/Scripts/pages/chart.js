@@ -129,7 +129,8 @@
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,
-                        min: self.Stats.from,
+                        min: self.Stats.Lines[0][0][0],
+                        max: self.Stats.Lines[0][self.Stats.Lines[0].length - 1][0],
                         drawMajorGridlines: false
                     },
                     yaxis: {
