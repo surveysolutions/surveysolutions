@@ -61,10 +61,7 @@ namespace WB.UI.QuestionnaireTester
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
         {
             base.FillValueConverters(registry);
-
-            registry.AddOrOverwrite("NullableIntToString", new NullableIntToStringConverter());
-            registry.AddOrOverwrite("NullableDecimalToString", new NullableDecimalToStringConverter());
-
+            
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
 
