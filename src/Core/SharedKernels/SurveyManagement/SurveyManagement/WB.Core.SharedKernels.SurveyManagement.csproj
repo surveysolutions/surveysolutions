@@ -110,10 +110,12 @@
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
     <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
+    <Compile Include="Mappings\InterviewCommentedStatusMap.cs" />
     <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
     <Compile Include="Mappings\InterviewHistoryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
+    <Compile Include="Mappings\InterviewStatusesMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\QuestionnaireFeedEntryMap.cs" />
@@ -301,6 +303,7 @@
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
+    <Compile Include="Views\Interview\InterviewStatuses.cs" />
     <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />

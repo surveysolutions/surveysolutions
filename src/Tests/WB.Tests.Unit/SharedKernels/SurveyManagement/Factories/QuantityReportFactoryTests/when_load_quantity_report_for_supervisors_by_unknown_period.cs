@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
             exception.ShouldNotBeNull();
 
         private static QuantityReportFactory quantityReportFactory;
-        private static QuantityBySupervisorsReportInputModel input;
+        private static QuantityByInterviewersReportInputModel input;
         private static ArgumentException exception;
         private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
