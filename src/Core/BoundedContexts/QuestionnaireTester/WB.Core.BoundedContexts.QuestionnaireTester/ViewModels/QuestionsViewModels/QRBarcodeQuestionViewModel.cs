@@ -130,16 +130,5 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.SaveAnswer();
             }
         }
-
-        private IMvxCommand showCommentEditorCommand;
-        public IMvxCommand ShowCommentEditorCommand
-        {
-            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
-        }
-
-        private void ShowCommentsCommand()
-        {
-            QuestionState.ShowCommentInEditor();
-        }
     }
 }

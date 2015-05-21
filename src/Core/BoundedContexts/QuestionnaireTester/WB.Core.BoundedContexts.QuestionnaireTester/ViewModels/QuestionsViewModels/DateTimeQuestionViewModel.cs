@@ -86,17 +86,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private IMvxCommand showCommentEditorCommand;
-        public IMvxCommand ShowCommentEditorCommand
-        {
-            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
-        }
-
-        private void ShowCommentsCommand()
-        {
-            QuestionState.ShowCommentInEditor();
-        }
-
         private void SetToView(DateTime answerValue)
         {
             Answer = answerValue.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);

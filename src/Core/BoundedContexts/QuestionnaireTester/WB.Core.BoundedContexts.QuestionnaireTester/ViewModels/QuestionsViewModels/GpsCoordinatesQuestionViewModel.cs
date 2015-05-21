@@ -157,16 +157,5 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.HasAnswer = true;
             this.Answer = location.Coordinates;
         }
-
-        private IMvxCommand showCommentEditorCommand;
-        public IMvxCommand ShowCommentEditorCommand
-        {
-            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
-        }
-
-        private void ShowCommentsCommand()
-        {
-            QuestionState.ShowCommentInEditor();
-        }
     }
 }
