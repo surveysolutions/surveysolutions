@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -85,6 +84,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                     SendCommentQuestionCommand();
                 }
             }
+        }
+
+        private IMvxCommand showCommentEditorCommand;
+        public IMvxCommand ShowCommentEditorCommand
+        {
+            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
+        }
+
+        private void ShowCommentsCommand()
+        {
+            ShowCommentInEditor();
         }
 
         private void SendCommentQuestionCommand()
