@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
-  <solid android:color="#ffffff" />
+  <solid android:color="@android:color/white" />
 
   <stroke
     android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
     android:color="#D0D0D0"/>
 
   <padding
-    android:left="@dimen/zero"
+    android:left="@dimen/Interview_Question_Answer_Input_background_padding"
     android:top="@dimen/Interview_Question_Answer_Input_background_padding"
     android:right="@dimen/Interview_Question_Answer_Input_background_padding"
     android:bottom="@dimen/Interview_Question_Answer_Input_background_padding"/>

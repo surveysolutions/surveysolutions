@@ -15,56 +15,74 @@
 
   <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="android:windowBackground">@color/applicationBackground</item>
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    
     <!-- Customize your theme here. -->
-    <item name="android:checkboxStyle">@style/CheckBoxTheme</item>
+    <item name="colorPrimary">@android:color/darker_gray</item>
+    <item name="colorPrimaryDark">@android:color/white</item>
+    <item name="colorAccent">@android:color/holo_blue_bright</item>
+    <item name="android:buttonStyle">@style/ButtonAppTheme</item>
+    <item name="android:checkboxStyle">@style/CheckBoxTheme </item>
     <item name="android:editTextStyle">@style/EditTextTheme</item>
     <item name="android:radioButtonStyle">@style/RadioButtonTheme</item>
-    <item name="android:button">@style/ButtonAppTheme</item>
     <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme</item>
     <item name="android:spinnerStyle">@style/SpinnerTheme</item>
     <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
     <item name="android:dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
   </style>
 
-  <style name="ButtonAppTheme" parent="android:Widget.Button">
-    <item name="android:textAllCaps">true</item>
-    <item name="android:background">@drawable/selector</item>
-    <item name="background">@drawable/selector</item>
-    <item name="android:minHeight">48dip</item>
-    <item name="android:minWidth">88dip</item>
-    <item name="android:gravity">center_vertical|center_horizontal</item>
-    <item name="android:layout_margin">3dp</item>
-    <item name="android:padding">0dp</item>
+  <style name="GrayAppTheme" parent="AppTheme">
+    <item name="colorPrimary">#FF666666</item>
+    <item name="android:textColorHighlight">#9936aee5</item>
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+    <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
   </style>
 
-  <style name="CheckBoxTheme" parent="android:Widget.CompoundButton.CheckBox">
+  <style name="ButtonAppTheme" parent="android:Widget.Material.Button">
+    <item name="android:background">@drawable/selector</item>
+    <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+    <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
+    <item name="android:gravity">center_vertical|center_horizontal</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="CheckBoxTheme"  parent="android:Widget.Material.Light.CompoundButton.CheckBox">
     <item name="android:button">@drawable/theme_blue_light_btn_check_holo_light</item>
   </style>
 
-  <style name="RadioButtonTheme" parent="android:style/Widget.CompoundButton.RadioButton">
+  <style name="RadioButtonTheme" parent="android:Widget.Material.Light.CompoundButton.RadioButton">
     <item name="android:button">@drawable/theme_blue_light_btn_radio_holo_light</item>
   </style>
 
   <style name="EditTextTheme" parent="android:Widget.EditText">
     <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
-    <item name="android:textColor">#000000</item>
+    <item name="android:textColor">@android:color/black</item>
   </style>
 
   <style name="AutoCompleteTextViewTheme" parent="EditTextTheme"/>
 
-  <style name="SpinnerTheme" parent="android:Widget.Holo.Light.Spinner">
+  <style name="SpinnerTheme" parent="android:Widget.Material.Spinner">
     <item name="android:background">@drawable/theme_blue_light_spinner_background_holo_light</item>
     <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
+    <item name="android:dropDownVerticalOffset">0dp</item>
+    <item name="android:dropDownHorizontalOffset">0dp</item>
   </style>
 
-  <style name="SpinnerDropDownItemTheme" parent="android:Widget.Holo.Light.DropDownItem.Spinner">
+  <style name="SpinnerDropDownItemTheme" parent="android:Widget.Material.DropDownItem.Spinner">
     <item name="android:checkMark">@drawable/theme_blue_light_btn_radio_holo_light</item>
-  </style>
-
-  <style name="DropDownListViewStyleTheme" parent="android:Widget.ListView">
     <item name="android:divider">@android:color/transparent</item>
     <item name="android:dividerHeight">0dp</item>
-    <item name="android:listSelector">@android:color/transparent</item>
   </style>
 
+  <style name="DropDownListViewStyleTheme" parent="android:Widget.Material.ListView.DropDown">
+    <item name="android:divider">@android:color/transparent</item>
+    <item name="android:dividerHeight">0dp</item>
+  </style>
+  
+  
 </resources>

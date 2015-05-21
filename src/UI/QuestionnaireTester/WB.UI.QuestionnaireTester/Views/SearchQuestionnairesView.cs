@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(Label = "", Theme = "@style/Theme.Gray.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Label = "", Theme = "@style/GrayAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
     public class SearchQuestionnairesView : BaseActivityView<SearchQuestionnairesViewModel>
     {
         protected override int ViewResourceId

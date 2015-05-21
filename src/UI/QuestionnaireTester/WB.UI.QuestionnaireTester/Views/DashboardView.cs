@@ -8,7 +8,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(Label = "", Theme = "@style/Theme.Gray.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Label = "", Theme = "@style/GrayAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
     public class DashboardView : BaseActivityView<DashboardViewModel>
     {
         protected override int ViewResourceId

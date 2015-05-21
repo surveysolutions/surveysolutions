@@ -10,7 +10,7 @@
     <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="QuestionnaireListItem_Title" parent="Theme.Light.Base">
+  <style name="QuestionnaireListItem_Title" parent="AppTheme">
     <item name="android:textStyle">bold</item>
     <item name="android:maxLines">4</item>
     <item name="android:ellipsize">end</item>
@@ -31,7 +31,7 @@
     <item name="android:layout_marginRight">@dimen/zero</item>
   </style>
 
-  <style name="ToolbarTitle" parent="Theme.Light.Base">
+  <style name="ToolbarTitle" parent="AppTheme">
     <item name="android:textColor">@color/colorToolbarText</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textSize">@dimen/textsize_20</item>
@@ -42,7 +42,7 @@
     <item name="android:layout_marginRight">@dimen/Toolbar_margin_horizontal</item>
   </style>
 
-  <style name="Interview_List" parent="Theme.Light.Base">
+  <style name="Interview_List" parent="AppTheme">
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">fill_parent</item>
     <item name="android:orientation">vertical</item>
@@ -51,7 +51,7 @@
     <item name="android:animationCache">false</item>
   </style>
 
-  <style name="Interview_Sidebar_PrefilledQuestions" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar_PrefilledQuestions" parent="AppTheme">
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">fill_parent</item>
     <item name="android:orientation">vertical</item>
@@ -61,7 +61,7 @@
     <item name="android:layout_marginRight">@dimen/Interview_Sidebar_PrefilledQuestions_margin_horizontal</item>
   </style>
 
-  <style name="PrefilledQuestions_List" parent="Theme.Light.Base">
+  <style name="PrefilledQuestions_List" parent="AppTheme">
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">vertical</item>
@@ -70,7 +70,7 @@
     <item name="android:animationCache">false</item>
   </style>
 
-  <style name="PrefilledQuestions_QuestionnaireTitle" parent="Theme.Light.Base">
+  <style name="PrefilledQuestions_QuestionnaireTitle" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">sans-serif-thin</item>
@@ -82,7 +82,7 @@
     <item name="android:ellipsize">end</item>
   </style>
 
-  <style name="PrefilledQuestions_StartButton" parent="Theme.Light.Base">
+  <style name="PrefilledQuestions_StartButton" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAllCaps">true</item>
@@ -91,7 +91,7 @@
     <item name="android:layout_centerVertical">true</item>
   </style>
 
-  <style name="Interview_Sidebar" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar" parent="AppTheme">
     <item name="android:layout_width">@dimen/Interview_Sidebar_width</item>
     <item name="android:layout_height">match_parent</item>
     <item name="android:layout_gravity">left|start</item>
@@ -101,7 +101,7 @@
     <item name="android:padding">@dimen/Interview_Sidebar_padding</item>
   </style>
 
-  <style name="Interview_Sidebar_PrefilledQuestion_Question" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar_PrefilledQuestion_Question" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_18</item>
@@ -109,7 +109,7 @@
     <item name="android:textColor">#FF747474</item>
   </style>
 
-  <style name="Interview_Sidebar_PrefilledQuestion_Answer" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar_PrefilledQuestion_Answer" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textStyle">bold</item>
@@ -117,7 +117,7 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_PrefilledQuestion_Answer_margin_left</item>
   </style>
 
-  <style name="Interview_Sidebar_Title" parent="Theme.Light.Base">
+  <style name="Interview_Sidebar_Title" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textStyle">bold</item>
@@ -133,44 +133,41 @@
     <item name="color">@android:color/white</item>
   </style>
 
-  <style name="EditTextTheme_Blue_Light" parent="android:Widget.EditText">
+  <!--<style name="EditTextTheme_Blue_Light" parent="android:Widget.EditText">
     <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
     <item name="android:textColor">#000000</item>
-  </style>
+  </style>-->
 
-  <style name="AutoCompleteTextViewTheme_Blue_Light" parent="android:Widget.AutoCompleteTextView">
+  <!--<style name="AutoCompleteTextViewTheme_Blue_Light" parent="android:Widget.AutoCompleteTextView">
     <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
     <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
     <item name="android:textColor">#000000</item>
-  </style>
+  </style>-->
 
-  <style name="CheckBoxTheme_Blue_Light" parent="android:Widget.CompoundButton.CheckBox">
+  <!--<style name="CheckBoxTheme_Blue_Light" parent="android:Widget.CompoundButton.CheckBox">
     <item name="android:button">@drawable/theme_blue_light_btn_check_holo_light</item>
-  </style>
+  </style>-->
 
-  <style name="RadioButtonTheme_Blue_Light" parent="android:Widget.CompoundButton.RadioButton">
+  <!--<style name="RadioButtonTheme_Blue_Light" parent="android:Widget.CompoundButton.RadioButton">
     <item name="android:button">@drawable/theme_blue_light_btn_radio_holo_light</item>
-  </style>
+  </style>-->
 
-  <style name="ButtonTheme_Blue_Light" parent="android:Widget.Button">
+  <!--<style name="ButtonTheme_Blue_Light" parent="android:Widget.Button">
     <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
     <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
     <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
-    <item name="android:textColor">#FFFFFF</item>
-  </style>
+  </style>-->
 
-  <style name="ImageButtonTheme_Blue_Light" parent="android:Widget.ImageButton">
-    <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
-  </style>
+  
 
-  <style name="SpinnerTheme_Blue_Light" parent="android:Widget.Spinner">
+  <!--<style name="SpinnerTheme_Blue_Light" parent="android:Widget.Spinner">
     <item name="android:background">@drawable/theme_blue_light_spinner_background_holo_light</item>
     <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
-  </style>
+  </style>-->
 
-  <style name="SpinnerDropDownItemTheme_Blue_Light" parent="android:Widget.DropDownItem.Spinner">
+  <!--<style name="SpinnerDropDownItemTheme_Blue_Light" parent="android:Widget.DropDownItem.Spinner">
     <item name="android:checkMark">@drawable/theme_blue_light_btn_radio_holo_light</item>
-  </style>
+  </style>-->
   <style name="ProgressBarTheme_Blue_Light" parent="android:Widget.ProgressBar.Horizontal">
     <item name="android:progressDrawable">@drawable/theme_blue_light_progress_horizontal_holo_light</item>
     <item name="android:indeterminateDrawable">@drawable/theme_blue_light_progress_indeterminate_horizontal_holo_light</item>
@@ -189,7 +186,9 @@
     <item name="android:paddingRight">@dimen/Theme_SeekBar_padding</item>
   </style>
 
-
+  <style name="ImageButtonTheme_Blue_Light" parent="android:Widget.ImageButton">
+    <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
+  </style>
 
 
   <!-- =========== -->
@@ -197,7 +196,7 @@
 
 
   <!-- Base theme applied no matter what API -->
-  <style name="Theme.Light.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+  <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
@@ -205,37 +204,22 @@
     <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
   </style>
 
-  <style name="Theme.Gray.Light" parent="Theme.Light.Base">
+  <style name="Theme.Gray.Light" parent="AppTheme">
     <item name="colorPrimary">#FF666666</item>
     <item name="android:editTextStyle">@style/EditTextTheme_Blue_Light</item>
     <item name="android:textColorHighlight">#9936aee5</item>
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme_Blue_Light</item>
-    <item name="android:checkboxStyle">@style/CheckBoxTheme_Blue_Light</item>
-    <item name="android:radioButtonStyle">@style/RadioButtonTheme_Blue_Light</item>
-    <item name="android:buttonStyle">@style/ButtonTheme_Blue_Light</item>
     <item name="android:imageButtonStyle">@style/ImageButtonTheme_Blue_Light</item>
     <item name="android:spinnerStyle">@style/SpinnerTheme_Blue_Light</item>
-    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme_Blue_Light</item>
     <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
     <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
-  </style>
+  </style>-->
 
-  <style name="Theme.Blue.Light" parent="Theme.Light.Base">
+  <style name="Theme.Blue.Light" parent="AppTheme">
     <item name="colorPrimary">@color/colorBlueThemePrimary</item>
-    <item name="android:editTextStyle">@style/EditTextTheme_Blue_Light</item>
     <item name="android:textColorHighlight">#9936aee5</item>
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme_Blue_Light</item>
-    <item name="android:checkboxStyle">@style/CheckBoxTheme_Blue_Light</item>
-    <item name="android:radioButtonStyle">@style/RadioButtonTheme_Blue_Light</item>
-    <item name="android:buttonStyle">@style/ButtonTheme_Blue_Light</item>
     <item name="android:imageButtonStyle">@style/ImageButtonTheme_Blue_Light</item>
-    <item name="android:spinnerStyle">@style/SpinnerTheme_Blue_Light</item>
-    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme_Blue_Light</item>
     <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
     <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
-  </style>
-
-  <style name="Theme.Splash" parent="Theme.Light.Base">
   </style>
 
   <!-- THEME END -->
@@ -247,26 +231,37 @@
 
   <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="android:windowBackground">@color/applicationBackground</item>
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>    
+    
     <!-- Customize your theme here. -->
     <item name="android:checkboxStyle">@style/CheckBoxTheme</item>
     <item name="android:editTextStyle">@style/EditTextTheme</item>
     <item name="android:radioButtonStyle">@style/RadioButtonTheme</item>
-    <item name="android:button">@style/ButtonAppTheme</item>
+    <item name="android:buttonStyle">@style/ButtonAppTheme</item>
     <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme</item>
     <item name="android:spinnerStyle">@style/SpinnerTheme</item>
     <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
     <item name="android:dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
   </style>
+  
+  <style name="GrayAppTheme" parent="AppTheme">
+    <item name="colorPrimary">#FF666666</item>
+    <item name="android:textColorHighlight">#9936aee5</item>
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+    <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
+  </style>
 
   <style name="ButtonAppTheme" parent="android:Widget.Button">
-    <item name="android:textAllCaps">true</item>
     <item name="android:background">@drawable/selector</item>
-    <item name="background">@drawable/selector</item>
-    <item name="android:minHeight">48dip</item>
-    <item name="android:minWidth">88dip</item>
+    <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+    <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:gravity">center_vertical|center_horizontal</item>
-    <item name="android:layout_margin">3dp</item>
-    <item name="android:padding">0dp</item>
+    <item name="android:textColor">@android:color/white</item>
   </style>
 
   <style name="CheckBoxTheme" parent="android:Widget.CompoundButton.CheckBox">
@@ -279,7 +274,7 @@
 
   <style name="EditTextTheme" parent="android:Widget.EditText">
     <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
-    <item name="android:textColor">#000000</item>
+    <item name="android:textColor">@android:color/black</item>
   </style>
 
   <style name="AutoCompleteTextViewTheme" parent="EditTextTheme"/>
