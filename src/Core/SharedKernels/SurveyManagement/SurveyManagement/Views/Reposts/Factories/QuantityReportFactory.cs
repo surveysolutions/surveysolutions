@@ -32,46 +32,45 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             this.users = users;
         }
 
-        private QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input, Expression<Func<UserDocument, bool>> queryUsers, Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
+        private QuantityByResponsibleReportView Load(
+            DateTime reportStartDate,
+            string period,
+            int columnCount,
+            int page,
+            int pageSize,
+            Guid questionnaireId,
+            long questionnaireVersion,
+            InterviewStatus status,
+            Expression<Func<UserDocument, bool>> queryUsers, 
+            Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
         {
-            var from = input.From.AddDays(1).Date;
-            var to = AddPeriod(input.From, input.Period, -input.ColumnCount);
+            var to = reportStartDate.Date;
+            var from = AddPeriod(to, period, -columnCount);
 
             var dateTimeRanges =
-                Enumerable.Range(0, input.ColumnCount)
-                    .Select(
-                        i =>
-                            new DateTimeRange(AddPeriod(from, input.Period, -(i + 1)).Date.AddSeconds(-1),
-                                AddPeriod(from, input.Period, -i).Date.AddSeconds(-1)))
+                Enumerable.Range(0, columnCount)
+                    .Select(i => new DateTimeRange(AddPeriod(to, period, -(i + 1)).Date, AddPeriod(to, period, -i).Date))
                     .ToArray();
 
-            var usersCount = users.Query(
-                _ =>
-                    _.Count(queryUsers));
+            var usersCount = users.Query(_ => _.Count(queryUsers));
 
-            var userDetails = users.Query(_ => _.Where(queryUsers)
-                .OrderBy(u => u.UserName)
-                .Select(u => new { UserId = u.PublicKey, UserName = u.UserName })
-                .Skip((input.Page - 1) * input.PageSize)
-                .Take(input.PageSize).ToArray());
+            var userDetails = users.Query(
+                _ => _.Where(queryUsers)
+                    .OrderBy(u => u.UserName)
+                    .Select(u => new {UserId = u.PublicKey, UserName = u.UserName})
+                    .Skip((page - 1)*pageSize)
+                    .Take(pageSize).ToArray());
 
-            var userIds = userDetails.Select(u => u.UserId).ToArray();
+            var userIds = userDetails.Select(u => u.UserId).ToHashSet();
 
-            var allInterviewsInStatus = statuses.Query(
-                _ =>
-                    _.Where(
-                        x =>
-                            x.QuestionnaireId == input.QuestionnaireId &&
-                            x.QuestionnaireVersion == input.QuestionnaireVersion)
-                        .SelectMany(x => x.InterviewCommentedStatuses)
-                        .Where(
-                            ics =>
-                                ics.Timestamp < from && ics.Timestamp > to.Date && ics.Status == input.InterviewStatus)
-                              .Select(userIdSelector)
-                        .Where(ics => ics.UserId.HasValue
-                                && userIds.Contains(ics.UserId.Value))
-                        .Select(i => new { UserId = i.UserId.Value, i.Timestamp })
-                        .ToArray()
+            var allInterviewsInStatus = statuses.Query(_ =>
+                _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                    .SelectMany(x => x.InterviewCommentedStatuses)
+                    .Where(ics => ics.Timestamp.Date > from && ics.Timestamp.Date <= to.Date && ics.Status == status)
+                    .Select(userIdSelector)
+                    .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
+                    .Select(i => new {UserId = i.UserId.Value, i.Timestamp})
+                    .ToArray()
                 );
 
             var rows = userDetails.Select(u =>
@@ -83,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 {
                     var count =
                         interviewsForUser.Count(
-                            ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To);
+                            ics => ics.Timestamp.Date > dateTimeRange.From && ics.Timestamp.Date <= dateTimeRange.To);
                     quantityByPeriod.Add(count);
                 }
                 return new QuantityByInterviewersReportRow(u.UserId, quantityByPeriod.ToArray(),
@@ -95,13 +94,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         public QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input)
         {
-            return Load(input, (u) => u.Roles.Contains(UserRoles.Operator) && u.Supervisor.Id == input.SupervisorId,
+            return Load(
+                input.From,
+                input.Period,
+                input.ColumnCount,
+                input.Page,
+                input.PageSize,
+                input.QuestionnaireId,
+                input.QuestionnaireVersion,
+                input.InterviewStatus,
+                u => u.Roles.Contains(UserRoles.Operator) && u.Supervisor.Id == input.SupervisorId,
                 i => new UserAndTimestamp() {UserId = i.InterviewerId, Timestamp = i.Timestamp});
         }
 
         public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
         {
-            return Load(input, (u) => u.Roles.Contains(UserRoles.Supervisor),
+            return Load(
+                input.From,
+                input.Period,
+                input.ColumnCount,
+                input.Page,
+                input.PageSize,
+                input.QuestionnaireId,
+                input.QuestionnaireVersion,
+                input.InterviewStatus,
+                u => u.Roles.Contains(UserRoles.Supervisor),
                 i => new UserAndTimestamp() {UserId = i.SupervisorId, Timestamp = i.Timestamp});
         }
 
