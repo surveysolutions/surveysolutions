@@ -11,10 +11,8 @@
         android:orientation="vertical">
         <MvxLinearLayout
           style="@style/Interview_BreadCrumbsContainer"
-          >
-          <TextView
-            style="@style/Interview_BreadCrumbs"
-            android:text="Household / some values / another values"></TextView>
+          local:MvxBind="ItemsSource Breadcrumbs.Items"
+          local:MvxItemTemplate="@layout/interview_breadcrumb_item">
         </MvxLinearLayout>
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

@@ -30,6 +30,7 @@
 
   <style name="Interview_BreadCrumbsContainer" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@color/btn_default</item>
+    <item name="android:orientation">horizontal</item>
   </style>
   <style name="Interview_BreadCrumbs" parent="VerticalFullWidthWrappingLayout">
     <item name="android:textSize">@dimen/textsize_14</item>
