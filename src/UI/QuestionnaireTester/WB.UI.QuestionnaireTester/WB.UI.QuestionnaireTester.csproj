@@ -261,6 +261,7 @@
     <AndroidResource Include="Resources\layout\interview_question_gps.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\values\Attrs.xml" />
     <AndroidResource Include="Resources\values\Strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -414,7 +415,6 @@
     <AndroidResource Include="Resources\values\dimensions-interview.xml" />
     <AndroidResource Include="Resources\values\dimensions.xml" />
     <AndroidResource Include="Resources\drawable\selector.xml" />
-    <AndroidResource Include="Resources\values\Attrs.xml" />
     <AndroidResource Include="Resources\drawable\button_pressed_shape.xml" />
     <AndroidResource Include="Resources\drawable\button_unpressed_shape.xml" />
     <AndroidResource Include="Resources\drawable-v21\selector.xml" />
@@ -499,7 +499,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_breadcrumb_item.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>

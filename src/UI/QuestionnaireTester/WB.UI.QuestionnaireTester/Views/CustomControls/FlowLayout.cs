@@ -1,12 +1,18 @@
 using System;
+using System.Collections;
+using System.Collections.Specialized;
 using Android.Content;
 using Android.Graphics;
 using Android.Util;
 using Android.Views;
+using Cirrious.MvvmCross.Binding;
+using Cirrious.MvvmCross.Binding.Attributes;
+using Cirrious.MvvmCross.Binding.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.Views;
 
 namespace WB.UI.QuestionnaireTester.Views.CustomControls
 {
-    class FlowLayout : ViewGroup
+    class FlowLayout : ViewGroup, IMvxWithChangeAdapter
     {
         public static int Horizontal = 0;
         public static int Vertical = 1;
@@ -17,21 +23,27 @@ namespace WB.UI.QuestionnaireTester.Views.CustomControls
         public bool DebugDraw = false;
 
         public FlowLayout(Context context)
-            : base(context)
+            : this(context, null)
         {
             ReadStyleParameters(context, null);
         }
 
         public FlowLayout(Context context, IAttributeSet attributeSet)
-            : base(context)
+            : this(context, attributeSet, new MvxAdapterWithChangedEvent(context))
         {
             ReadStyleParameters(context, attributeSet);
         }
 
-        public FlowLayout(Context context, IAttributeSet attributeSet, int defStyle)
-            : base(context, attributeSet, defStyle)
+        public FlowLayout(Context context, IAttributeSet attrs, IMvxAdapterWithChangedEvent adapter)
+            : base(context, attrs)
         {
-            ReadStyleParameters(context, attributeSet);
+            int num = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
+            if (adapter != null)
+            {
+                this.Adapter = adapter;
+                this.Adapter.ItemTemplateId = num;
+            }
+            this.ChildViewRemoved += new EventHandler<ViewGroup.ChildViewRemovedEventArgs>(this.OnChildViewRemoved);
         }
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -213,6 +225,75 @@ namespace WB.UI.QuestionnaireTester.Views.CustomControls
             return new LayoutParams(Context, attributeSet);
         }
 
+        private IMvxAdapterWithChangedEvent _adapter;
+
+        public IMvxAdapterWithChangedEvent Adapter
+        {
+            get
+            {
+                return this._adapter;
+            }
+            protected set
+            {
+                IMvxAdapterWithChangedEvent withChangedEvent = this._adapter;
+                if (withChangedEvent == value)
+                    return;
+                if (withChangedEvent != null)
+                {
+                    withChangedEvent.DataSetChanged -= new EventHandler<NotifyCollectionChangedEventArgs>(this.AdapterOnDataSetChanged);
+                    if (value != null)
+                    {
+                        value.ItemsSource = withChangedEvent.ItemsSource;
+                        value.ItemTemplateId = withChangedEvent.ItemTemplateId;
+                    }
+                }
+                this._adapter = value;
+                if (this._adapter != null)
+                    this._adapter.DataSetChanged += new EventHandler<NotifyCollectionChangedEventArgs>(this.AdapterOnDataSetChanged);
+                if (this._adapter != null)
+                    return;
+                MvxBindingTrace.Warning("Setting Adapter to null is not recommended - you amy lose ItemsSource binding when doing this");
+            }
+        }
+
+        [MvxSetToNullAfterBinding]
+        public IEnumerable ItemsSource
+        {
+            get
+            {
+                return this.Adapter.ItemsSource;
+            }
+            set
+            {
+                this.Adapter.ItemsSource = value;
+            }
+        }
+
+        public int ItemTemplateId
+        {
+            get
+            {
+                return this.Adapter.ItemTemplateId;
+            }
+            set
+            {
+                this.Adapter.ItemTemplateId = value;
+            }
+        }
+
+        public void AdapterOnDataSetChanged(object sender, NotifyCollectionChangedEventArgs eventArgs)
+        {
+            this.UpdateDataSetFromChange(sender, eventArgs);
+        }
+
+        private void OnChildViewRemoved(object sender, ViewGroup.ChildViewRemovedEventArgs childViewRemovedEventArgs)
+        {
+            IMvxBindingContextOwner owner = childViewRemovedEventArgs.Child as IMvxBindingContextOwner;
+            if (owner == null)
+                return;
+            MvxBindingContextOwnerExtensions.ClearAllBindings(owner);
+        }
+
         protected override ViewGroup.LayoutParams GenerateLayoutParams(ViewGroup.LayoutParams p)
         {
             return new LayoutParams(p);
@@ -303,8 +384,8 @@ namespace WB.UI.QuestionnaireTester.Views.CustomControls
         {
             var paint = new Paint
                             {
-                                AntiAlias = true, 
-                                Color = color, 
+                                AntiAlias = true,
+                                Color = color,
                                 StrokeWidth = 2.0f
                             };
             return paint;

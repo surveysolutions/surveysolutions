@@ -9,11 +9,16 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
-        <MvxLinearLayout
-          style="@style/Interview_BreadCrumbsContainer"
+      <LinearLayout style="@style/Interview_BreadCrumbsContainer">
+        <FlowLayout
+                    orienation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
           local:MvxBind="ItemsSource Breadcrumbs.Items"
           local:MvxItemTemplate="@layout/interview_breadcrumb_item">
-        </MvxLinearLayout>
+        </FlowLayout>
+        
+      </LinearLayout>
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
