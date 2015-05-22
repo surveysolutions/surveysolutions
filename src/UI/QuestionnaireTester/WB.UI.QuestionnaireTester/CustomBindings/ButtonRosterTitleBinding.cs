@@ -16,11 +16,11 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             if (value == null) return;
 
-            var rosterTitle = string.Format("{0} - {1}", value.QuestionnaireRosterTitle, value.InterviewRosterTitle);
+            var rosterTitle = string.Format("{0} - {1}", value.GroupState.Title, value.RosterTitle);
 
             var span = new SpannableString(rosterTitle);
 
-            span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.QuestionnaireRosterTitle.Length, rosterTitle.Length, SpanTypes.ExclusiveExclusive);
+            span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.GroupState.Title.Length, rosterTitle.Length, SpanTypes.ExclusiveExclusive);
 
             androidControl.TextFormatted = span;
         }

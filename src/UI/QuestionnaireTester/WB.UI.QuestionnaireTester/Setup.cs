@@ -70,7 +70,6 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("GetAnswer", new GetAnswerConverter());
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
-            registry.AddOrOverwrite("GetRosterInfo", new GetRosterInfoConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackgroud", new QuestionLayoutStyleBackgroudConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackgroud", new QuestionEditorStyleBackgroudConverter());
             registry.AddOrOverwrite("GetGroupInfo", new GetGroupInfoConverter());

@@ -8,16 +8,15 @@
     <MvxLinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      local:MvxBind="Style LayoutBackgroundStyle(false, If(IsStarted, true, false))">
-      <Button style="@style/Interview_Group_Title"
+      <Button style="@style/Interview_Group_Button"
               local:MvxBind="Click NavigateToGroupCommand; Text Title; BackgroundColor GetGroupColorByStatus(Status, Enablement.Enabled); Enabled Enablement.Enabled"/>
     </MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
-              local:MvxBind="TextColor GetGroupInfoTextColorByStatus(Status); Text GetGroupInfo(.)"/>
+              local:MvxBind="Visible Enablement.Enabled; TextColor GetGroupInfoTextColorByStatus(Status); Text GetGroupInfo(.)"/>
   </MvxLinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"
                 android:layout_height="match_parent">
   </LinearLayout>
-  <View style="@style/Interview_Question_Divider"
-        android:layout_gravity="bottom"/>
+  <View style="@style/Interview_Question_Divider" android:layout_gravity="bottom"/>
 </FrameLayout>

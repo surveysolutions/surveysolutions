@@ -225,10 +225,9 @@
     <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="Converters\GetGroupInfoTextColorByStatusConverter.cs" />
     <Compile Include="Converters\GetGroupInfoConverter.cs" />
-    <Compile Include="Converters\GetRosterInfoConverter.cs" />
-    <Compile Include="Converters\GetGroupColorByStatus.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroudConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroudConverter.cs" />
+    <Compile Include="Converters\GetGroupColorByStatusConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
@@ -406,7 +405,9 @@
     <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
     <AndroidResource Include="Resources\drawable\media_question_white_border.xml" />
     <AndroidResource Include="Resources\drawable\question_background_answered.xml" />
-    <AndroidResource Include="Resources\drawable\question_background_nonanswered.xml" />
+    <AndroidResource Include="Resources\drawable\question_background_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_text_question.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
