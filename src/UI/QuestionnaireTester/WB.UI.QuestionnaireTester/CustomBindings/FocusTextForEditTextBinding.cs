@@ -5,11 +5,11 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class EditTextFocusChangeTextBinding : BindingWrapper<EditText, string>
+    public class FocusTextForEditTextBinding : BindingWrapper<EditText, string>
     {
         private bool subscribed;
 
-        public EditTextFocusChangeTextBinding(EditText view)
+        public FocusTextForEditTextBinding(EditText view)
             : base(view)
         {
             view.ImeOptions = ImeAction.Done;

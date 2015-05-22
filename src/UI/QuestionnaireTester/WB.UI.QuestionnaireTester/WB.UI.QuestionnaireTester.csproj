@@ -234,7 +234,8 @@
     <Compile Include="CustomBindings\EditDateBinding.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomBindings\EditTextFocusChangeTextBinding.cs" />
+    <Compile Include="CustomBindings\SetFocusForEditTextBinding.cs" />
+    <Compile Include="CustomBindings\FocusTextForEditTextBinding.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="CustomBindings\BackgroundDrawableBinding.cs" />
     <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />

@@ -81,7 +81,8 @@ namespace WB.UI.QuestionnaireTester
         {
             registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText));
-            registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new EditTextFocusChangeTextBinding(editText));
+            registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new FocusTextForEditTextBinding(editText));
+            registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new SetFocusForEditTextBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroudStyle", (view) => new BackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));

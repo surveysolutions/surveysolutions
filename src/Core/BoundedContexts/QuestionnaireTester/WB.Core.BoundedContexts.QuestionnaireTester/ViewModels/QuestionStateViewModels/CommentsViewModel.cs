@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
@@ -15,21 +14,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         IInterviewEntityViewModel
     {
         private readonly IStatefullInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
+
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
         public CommentsViewModel(
             IStatefullInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry,
             IPrincipal principal,
             ICommandService commandService)
         {
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.interviewRepository = interviewRepository;
-            this.eventRegistry = eventRegistry;
             this.principal = principal;
             this.commandService = commandService;
         }
@@ -82,6 +78,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                     RaisePropertyChanged();
 
                     SendCommentQuestionCommand();
+                }
+                else
+                {
+                    IsCommentInEditMode = false;
                 }
             }
         }
