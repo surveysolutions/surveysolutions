@@ -42,11 +42,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 ItemId = new Identity(x.Id, new decimal[] {}),
                 Text = questionnaire.GroupsWithoutNestedChildren[x.Id].Title + " / "
             }).ToList();
-
+            breadCrumbs.Reverse();
             breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
             {
                 ItemId = newGroupIdentity,
-                Text = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id].Title
+                Text = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id].Title + " / "
             });
 
             this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(breadCrumbs);
