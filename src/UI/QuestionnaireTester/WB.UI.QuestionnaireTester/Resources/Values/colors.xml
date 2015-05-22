@@ -10,6 +10,7 @@
   <color name="commentSupervisorTextColor">#FFF6D6D0</color>
 
   <color name="colorToolbarText">#FFFFFFFF</color>
+  <color name="colorToolbarTransp">#BFFFFFFF</color>
 
   <color name="myQuestionnaireListItemLeftCorner">#FFE9E9E9</color>
   <color name="myQuestionnairesLink">#FF6D6D6D</color>

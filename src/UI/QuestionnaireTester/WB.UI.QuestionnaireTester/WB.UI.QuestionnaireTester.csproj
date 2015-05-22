@@ -453,6 +453,7 @@
     <AndroidResource Include="Resources\drawable\question_text_question_nonanswered.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

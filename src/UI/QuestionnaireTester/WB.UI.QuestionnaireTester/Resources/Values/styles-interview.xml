@@ -38,8 +38,7 @@
   </style>
   <style name="Interview_BreadCrumbs" parent="VerticalFullWidthWrappingLayout">
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:textColor">@color/colorToolbarText</item>
-    <item name="android:alpha">0.75</item>
+    <item name="android:textColor">@color/bread_crumb_transparency</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
