@@ -563,7 +563,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.SupervisorName);
 
                 if (supervisorNameIndex < 0)
-                    yield break;
+                    continue;
 
                 var supervisorCache = new Dictionary<string, Tuple<bool, bool>>();
 
