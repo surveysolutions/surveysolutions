@@ -101,8 +101,32 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+    <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:textColor">@drawable/question_option_text_color</item>
     <item name="android:background">@drawable/question_option_background</item>
+  </style>
+
+  <style name="Interview_Question_Answer_Option_Background">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+    <item name="android:background">@drawable/question_option_background</item>
+  </style>
+
+  <style name="Interview_Question_Answer_Option_Input" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+    <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:textColor">@drawable/question_option_text_color</item>
   </style>
 
   <style name="Interview_Question_Answer_Gps_Location_Text" parent="Interview_Question_Instruction_Details">

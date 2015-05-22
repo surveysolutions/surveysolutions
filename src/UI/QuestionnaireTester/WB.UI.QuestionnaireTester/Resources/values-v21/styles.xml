@@ -69,19 +69,19 @@
   <style name="SpinnerTheme" parent="android:Widget.Material.Spinner">
     <item name="android:background">@drawable/theme_blue_light_spinner_background_holo_light</item>
     <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
-    <item name="android:dropDownVerticalOffset">0dp</item>
-    <item name="android:dropDownHorizontalOffset">0dp</item>
+    <item name="android:dropDownVerticalOffset">@dimen/zero</item>
+    <item name="android:dropDownHorizontalOffset">@dimen/zero</item>
   </style>
 
   <style name="SpinnerDropDownItemTheme" parent="android:Widget.Material.DropDownItem.Spinner">
     <item name="android:checkMark">@drawable/theme_blue_light_btn_radio_holo_light</item>
     <item name="android:divider">@android:color/transparent</item>
-    <item name="android:dividerHeight">0dp</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
   </style>
 
   <style name="DropDownListViewStyleTheme" parent="android:Widget.Material.ListView.DropDown">
     <item name="android:divider">@android:color/transparent</item>
-    <item name="android:dividerHeight">0dp</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
   </style>
   
   

@@ -7,4 +7,6 @@
   <dimen name="textsize_18">12sp</dimen>
   <dimen name="textsize_20">14sp</dimen>
 
+  <dimen name="button_corners_radius">6dp</dimen>
+
 </resources>

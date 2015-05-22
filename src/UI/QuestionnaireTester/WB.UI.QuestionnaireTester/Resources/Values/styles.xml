@@ -290,7 +290,7 @@
 
   <style name="DropDownListViewStyleTheme" parent="android:Widget.ListView">
     <item name="android:divider">@android:color/transparent</item>
-    <item name="android:dividerHeight">0dp</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
     <item name="android:listSelector">@android:color/transparent</item>
   </style>
 

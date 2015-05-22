@@ -6,8 +6,6 @@
 
   <dimen name="Interview_Entity_Title_margin_vertical">10dp</dimen>
 
-  <dimen name="Interview_Entity_Element_margin_horizontal">16dp</dimen>
-
   <dimen name="Interview_Entity_Divider_height">1dp</dimen>
 
   <dimen name="Interview_BreadCrumbs_padding_top">20dp</dimen>
@@ -25,6 +23,7 @@
   <dimen name="Interview_Question_Answer_background_stroke_width">1dp</dimen>
 
   <dimen name="Interview_Question_Answer_Input_background_stroke_width">1dp</dimen>
+  <dimen name="Interview_Question_Answer_Input_background_corners_radius">@dimen/button_corners_radius</dimen>
 
   <dimen name="Interview_Question_Answer_Media_background_stroke_width">2dp</dimen>
   <dimen name="Interview_Question_Answer_Media_background_corners_radius">4dp</dimen>
@@ -34,7 +33,7 @@
   <dimen name="Interview_Question_Answer_Option_margin_vertical">2dp</dimen>
   <dimen name="Interview_Question_Answer_Option_margin_horizontal">0dp</dimen>
 
-  <dimen name="Interview_Question_Answer_Option_padding_left">0dp</dimen>
+  <dimen name="Interview_Question_Answer_Option_padding_left">9dp</dimen>
 
 
   <dimen name="Interview_Question_Errors_Title_margin_top">10dp</dimen>
