@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
-    internal class when_interview_interview_is_created : StatusChangeHistoryDenormalizerFunctionalTestContext
+    internal class when_interview_is_created : StatusChangeHistoryDenormalizerFunctionalTestContext
     {
         Establish context = () =>
         {
