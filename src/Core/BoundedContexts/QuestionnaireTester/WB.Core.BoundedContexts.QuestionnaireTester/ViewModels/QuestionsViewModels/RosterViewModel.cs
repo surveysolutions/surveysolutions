@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -20,24 +20,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         ILiteEventHandler<RosterInstancesRemoved>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private string interviewId;
-        private Identity rosterIdendity;
+        private Identity groupIdendity;
         private NavigationState navigationState;
-
-        public RosterViewModel(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository, 
-            ILiteEventRegistry liteEventRegistry, 
-            IInterviewViewModelFactory interviewViewModelFactory)
-        {
-            this.liteEventRegistry = liteEventRegistry;
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewRepository = interviewRepository;
-            this.interviewViewModelFactory = interviewViewModelFactory;
-        }
+        public EnablementViewModel Enablement { get; private set; }
 
         private IList items;
         public IList Items
@@ -46,11 +34,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { items = value; RaisePropertyChanged(); }
         }
 
+        public RosterViewModel(
+            IStatefullInterviewRepository interviewRepository, 
+            ILiteEventRegistry liteEventRegistry, 
+            IInterviewViewModelFactory interviewViewModelFactory,
+            EnablementViewModel enablement)
+        {
+            this.Enablement = enablement;
+            this.liteEventRegistry = liteEventRegistry;
+            this.interviewRepository = interviewRepository;
+            this.interviewViewModelFactory = interviewViewModelFactory;
+        }
+
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.rosterIdendity = entityIdentity;
+            this.groupIdendity = entityIdentity;
             this.navigationState = navigationState;
+
+            this.Enablement.Init(interviewId, entityIdentity, navigationState);
 
             this.liteEventRegistry.Subscribe(this);
 
@@ -75,30 +77,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private void ReadRosterInstancesFromModel()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var questionnaireRosterTitle = questionnaire.GroupsWithoutNestedChildren[this.rosterIdendity.Id].Title;
+            var rosterInstances = interview.RosterInstancesIds[ConversionHelper.ConvertIdAndRosterVectorToString(this.groupIdendity.Id, this.groupIdendity.RosterVector)];
+            var rosterItemViewModels = rosterInstances.Select(RosterModelToViewModel);
 
-            var rosterItems = interview.RosterInstancesIds[ConversionHelper.ConvertIdAndRosterVectorToString(this.rosterIdendity.Id, this.rosterIdendity.RosterVector)];
-            var rosterItemViewModels = rosterItems.Select(rosterInstanceId => RosterModelToViewModel(rosterInstanceId, questionnaireRosterTitle, interview));
-
-            this.Items = new ObservableCollection<RosterItemViewModel>(rosterItemViewModels);
+            this.Items = new List<RosterStateViewModel>(rosterItemViewModels);
         }
 
-        private RosterItemViewModel RosterModelToViewModel(string rosterInstanceId, string questionnaireRosterTitle, IStatefulInterview interview)
+        private RosterStateViewModel RosterModelToViewModel(Identity rosterIdentity)
         {
-            var roster = (InterviewRoster)interview.Groups[rosterInstanceId];
+            var rosterItemViewModel = this.interviewViewModelFactory.GetNew<RosterStateViewModel>();
 
-            var rosterItemViewModel = this.interviewViewModelFactory.GetNew<RosterItemViewModel>();
-
-            rosterItemViewModel.Init(rosterIdentity: new Identity(roster.Id, roster.RosterVector),
-                navigationState: navigationState);
-
-            rosterItemViewModel.InterviewRosterTitle = roster.Title;
-            rosterItemViewModel.QuestionnaireRosterTitle = questionnaireRosterTitle;
-            rosterItemViewModel.AnsweredQuestionsCount = roster.AnsweredQuestionsCount;
-            rosterItemViewModel.QuestionsCount = roster.QuestionsCount;
-            rosterItemViewModel.SubgroupsCount = roster.SubgroupsCount;
+            rosterItemViewModel.Init(interviewId: this.interviewId, rosterIdentity: rosterIdentity, navigationState: navigationState);
 
             return rosterItemViewModel;
         }

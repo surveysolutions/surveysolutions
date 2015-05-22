@@ -70,6 +70,9 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("GetRosterInfo", new GetRosterInfoConverter());
+            registry.AddOrOverwrite("GetGroupInfo", new GetGroupInfoConverter());
+            registry.AddOrOverwrite("GetGroupInfoTextColorByStatus", new GetGroupInfoTextColorByStatusConverter());
+            registry.AddOrOverwrite("GetGroupColorByStatus", new GetGroupColorByStatusConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

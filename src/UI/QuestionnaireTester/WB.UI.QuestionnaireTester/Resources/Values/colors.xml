@@ -19,10 +19,13 @@
   <color name="editorTextColor">#FF3F3F3F</color>
   <color name="editorHintTextColor">#FFB2B2B2</color>
   <color name="btn_default">#2a81cb</color>
-
-
   <color name="button_pressed">#0d6dbf</color>
   <color name="button_unpressed">#2a81cb</color>
-
   
+  <color name="group_title_text">#FFFFFFFF</color>
+
+  <color name="group_not_started">#C6C6C6</color>
+  <color name="group_started">#2A81CB</color>
+  <color name="group_completed">#38AC14</color>
+  <color name="group_with_invalid_answers">#F05A26</color>
 </resources>

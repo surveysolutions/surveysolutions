@@ -2,14 +2,13 @@
 
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
-                 style="@style/Interview_Roster_Item_Body"
-                 local:MvxBind="Style LayoutBackgroundStyle(false, AnsweredQuestionsCount > 0);">
-
-  <Button android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          local:MvxBind="Click NavigateToRosterCommand; RosterTitle ."/>
-  <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            local:MvxBind="Text GetRosterInfo(.)"/>
-
+                 style="@style/Interview_Roster_Item">
+  <MvxLinearLayout android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   local:MvxBind="Style LayoutBackgroundStyle(false, If(IsStarted, true, false))">
+    <Button style="@style/Interview_Group_Title"
+            local:MvxBind="Click NavigateToRosterCommand; BackgroundColor GetGroupColorByStatus(Status); Enabled Enablement.Enabled; RosterTitle ."/>
+  </MvxLinearLayout>
+  <TextView style="@style/Interview_Group_Description"
+            local:MvxBind="TextColor GetGroupInfoTextColorByStatus(Status); Text GetRosterInfo(.)"/>
 </MvxLinearLayout>

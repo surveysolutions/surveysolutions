@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-                 xmlns:local="http://schemas.android.com/apk/res-auto"
-                 style="@style/Interview_GroupWithDivider"
-                 local:MvxBind="Enabled Enablement.Enabled">
-  <MvxLinearLayout style="@style/Interview_Group">
 
-    <Button
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      style="@style/Interview_GroupButton"
-      local:MvxBind="Text Title; Enabled Enablement.Enabled" />
-    
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:local="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+  <MvxLinearLayout style="@style/Interview_Group">
+    <MvxLinearLayout android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     local:MvxBind="Style LayoutBackgroundStyle(false, If(IsStarted, true, false))">
+      <Button style="@style/Interview_Group_Title"
+              local:MvxBind="Click NavigateToGroupCommand; Text Title; BackgroundColor GetGroupColorByStatus(Status, Enablement.Enabled); Enabled Enablement.Enabled"/>
+    </MvxLinearLayout>
+    <TextView style="@style/Interview_Group_Description"
+              local:MvxBind="TextColor GetGroupInfoTextColorByStatus(Status); Text GetGroupInfo(.)"/>
   </MvxLinearLayout>
-</MvxLinearLayout>
+  <LinearLayout style="@style/Interview_GroupWithDivider"
+                local:MvxBind="Enabled Enablement.Enabled"
+                android:layout_height="match_parent">
+  </LinearLayout>
+  <View style="@style/Interview_Question_Divider"
+        android:layout_gravity="bottom"/>
+</FrameLayout>

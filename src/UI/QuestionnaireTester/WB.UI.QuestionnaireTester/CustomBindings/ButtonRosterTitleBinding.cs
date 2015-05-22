@@ -6,13 +6,13 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ButtonRosterTitleBinding : BindingWrapper<Button, RosterItemViewModel>
+    public class ButtonRosterTitleBinding : BindingWrapper<Button, RosterStateViewModel>
     {
         public ButtonRosterTitleBinding(Button androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(Button androidControl, RosterItemViewModel value)
+        protected override void SetValueToView(Button androidControl, RosterStateViewModel value)
         {
             if (value == null) return;
 

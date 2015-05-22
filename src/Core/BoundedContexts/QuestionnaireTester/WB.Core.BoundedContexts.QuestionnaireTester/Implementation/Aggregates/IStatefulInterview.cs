@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         Guid Id { get; set; }
         Dictionary<string, BaseInterviewAnswer> Answers { get; }
         Dictionary<string, InterviewGroup> Groups { get; }
-        Dictionary<string, List<string>> RosterInstancesIds { get; }
+        Dictionary<string, List<Identity>> RosterInstancesIds { get; }
         
         bool HasErrors { get; set; }
         bool IsInProgress { get; set; }

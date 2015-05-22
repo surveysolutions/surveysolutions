@@ -8,15 +8,36 @@
   <style name="Interview_Question" parent="Interview_Entity" />
 
   <style name="Interview_Group"  parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Roster_margin_bottom</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Group_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Group_margin_bottom</item>
   </style>
   
-  <style name="Interview_Roster_Item_Body" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginTop">@dimen/Interview_Roster_Item_Body_margin_top</item>
+  <style name="Interview_Roster" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Group_margin_bottom</item>
   </style>
-  
+
+  <style name="Interview_Roster_Item" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginTop">@dimen/Interview_Group_margin_top</item>
+  </style>
+
+  <style name="Interview_Group_Title" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/group_title_text</item>
+  </style>
+
+  <style name="Interview_Group_Description">
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">bold</item>
+  </style>
 
   <style name="Interview_Question_Header" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>

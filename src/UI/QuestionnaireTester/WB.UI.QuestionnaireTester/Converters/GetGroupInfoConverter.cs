@@ -6,9 +6,9 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 
 namespace WB.UI.QuestionnaireTester.Converters
 {
-    public class GetRosterInfoConverter : MvxValueConverter<RosterStateViewModel, string>
+    public class GetGroupInfoConverter : MvxValueConverter<GroupViewModel, string>
     {
-        protected override string Convert(RosterStateViewModel value, Type targetType, object parameter, CultureInfo culture)
+        protected override string Convert(GroupViewModel value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value.AnsweredQuestionsCount == 0)
                 return UIResources.Interview_Group_NotStarted;
