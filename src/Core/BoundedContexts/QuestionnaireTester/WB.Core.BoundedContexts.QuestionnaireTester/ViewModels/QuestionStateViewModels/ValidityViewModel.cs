@@ -89,8 +89,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             }
             else if (wasException && exception is InterviewException)
             {
-                errorCaptionText = UIResources.Validity_ApplicationException_ErrorCaption;
-                errorMessageText = UIResources.Validity_ApplicationException_ErrorMessage;
+                errorCaptionText = UIResources.Validity_InterviewException_ErrorCaption;
+                errorMessageText = exception.Message;
             }
 
             IsInvalid = isInvalidAnswer || wasException;
