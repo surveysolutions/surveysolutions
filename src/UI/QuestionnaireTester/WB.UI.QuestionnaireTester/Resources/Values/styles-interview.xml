@@ -31,7 +31,8 @@
   <style name="Interview_BreadCrumbsContainer" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@color/btn_default</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:paddingLeft">@dimen/Interview_Entity_margin_left</item>-->
+    <item name="android:paddingLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:paddingRight">@dimen/Interview_Entity_margin_left</item>
     <item name="android:paddingTop">@dimen/Interview_BreadCrumbs_padding_top</item>
 
   </style>
