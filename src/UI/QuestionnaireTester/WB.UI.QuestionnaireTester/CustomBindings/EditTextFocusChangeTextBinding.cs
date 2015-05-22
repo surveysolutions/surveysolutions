@@ -13,7 +13,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             : base(view)
         {
             view.ImeOptions = ImeAction.Done;
-            view.EditorAction += HandleEditorAction;
         }
 
         protected override void SetValueToView(EditText androidControl, string value)
@@ -37,6 +36,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                 return;
 
             editText.FocusChange += HandleFocusChange;
+            editText.EditorAction += HandleEditorAction;
             subscribed = true;
         }
 
@@ -48,21 +48,14 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
             e.Handled = true;
 
-            var editText = this.Target;
-            if (editText == null)
-                return;
-
-            FireValueChanged(editText.Text);
+            TriggerValueChanging();
         }
 
         private void HandleFocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            var editText = Target;
-            if (editText == null)
-                return;
+            if (e.HasFocus) return;
 
-            if (!e.HasFocus)
-                FireValueChanged(editText.Text);
+            TriggerValueChanging();
         }
 
         protected override void Dispose(bool isDisposing)
@@ -73,10 +66,22 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                 if (editText != null && subscribed)
                 {
                     editText.FocusChange -= HandleFocusChange;
+                    editText.EditorAction -= HandleEditorAction;
                     subscribed = false;
                 }
             }
             base.Dispose(isDisposing);
+        }
+
+        private void TriggerValueChanging()
+        {
+            var editText = this.Target;
+            if (editText == null)
+            {
+                return;
+            }
+
+            this.FireValueChanged(editText.Text);
         }
     }
 }
