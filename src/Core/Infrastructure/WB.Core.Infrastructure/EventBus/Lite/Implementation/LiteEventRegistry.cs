@@ -16,40 +16,20 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
         public void Subscribe(ILiteEventHandler handler)
         {
             var eventTypes = GetHandledEventTypes(handler);
-            RegisterHandlersForEvents(handler, eventTypes);
+
+            foreach (Type eventType in eventTypes)
+            {
+                RegisterHandlerForEvent(handler, eventType);
+            }
         }
 
         public void Unsubscribe(ILiteEventHandler handler)
         {
             var eventTypes = GetHandledEventTypes(handler);
-            UnregisterHandlerForEvents(eventTypes, handler);
-        }
 
-        private void UnregisterHandlerForEvents(Type[] eventTypes, ILiteEventHandler handler)
-        {
             foreach (Type eventType in eventTypes)
             {
                 UnregisterHandlerForEvent(eventType, handler);
-            }
-        }
-
-        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler = null)
-        {
-            var eventTypeName = eventType.Name;
-
-            lock (LockObject)
-            {
-                if (this.handlers.ContainsKey(eventTypeName))
-                {
-                    this.handlers[eventTypeName].RemoveAll(s =>
-                    {
-                        ILiteEventHandler handlerFromWeakReferance;
-                        if (!s.TryGetTarget(out handlerFromWeakReferance))
-                            return true; // remove if handler doesn't exist
-
-                        return handler == handlerFromWeakReferance;
-                    });
-                }
             }
         }
 
@@ -60,60 +40,76 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             lock (LockObject)
             {
                 List<WeakReference<ILiteEventHandler>> handlersForEventType;
-                if (handlers.TryGetValue(eventType.Name, out handlersForEventType))
-                {
-                    bool wasNotActualHandlers;
-                    var actualHandlers = FilterActualHandlers(handlersForEventType, out wasNotActualHandlers);
+                if (!handlers.TryGetValue(eventType.Name, out handlersForEventType))
+                    return Enumerable.Empty<Action<object>>();
 
-                    if (wasNotActualHandlers)
-                        UnregisterHandlerForEvent(@event.GetType());
+                var actualHandlers = GetExistingHandlers(@event, handlersForEventType);
 
-                    return actualHandlers.Select(GetActionHandler);
-                }
-
-                return Enumerable.Empty<Action<object>>();
+                return actualHandlers.Select(GetActionHandler);
             }
         }
 
-        private Action<object> GetActionHandler(ILiteEventHandler handler)
+        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType)
         {
-            return @event => ((dynamic) handler).Handle((dynamic) @event);
+            lock (LockObject)
+            {
+                List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(eventType.Name, () => new List<WeakReference<ILiteEventHandler>>());
+
+                if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
+                    throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
+
+                handlersForEventType.Add(new WeakReference<ILiteEventHandler>(handler));
+            }
         }
 
-        private static IEnumerable<ILiteEventHandler> FilterActualHandlers(List<WeakReference<ILiteEventHandler>> weakReferenceHandlers, out bool wasNotActualHandlers)
+        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler = null)
         {
-            wasNotActualHandlers = false;
-            List<ILiteEventHandler> handlersForEvent = new List<ILiteEventHandler>();
+            lock (LockObject)
+            {
+                if (this.handlers.ContainsKey(eventType.Name))
+                {
+                    this.handlers[eventType.Name].RemoveAll(registeredHandler => ShouldRemoveHandler(registeredHandler, handler));
+                }
+            }
+        }
 
-            foreach (var weakReferance in weakReferenceHandlers)
+        private static bool ShouldRemoveHandler(WeakReference<ILiteEventHandler> handlerWeakReference, ILiteEventHandler unregisteringHandler)
+        {
+            ILiteEventHandler handlerFromWeakReference;
+            var handlerNoLongerExists = !handlerWeakReference.TryGetTarget(out handlerFromWeakReference);
+
+            return handlerNoLongerExists || unregisteringHandler == handlerFromWeakReference;
+        }
+
+        private IEnumerable<ILiteEventHandler> GetExistingHandlers(object @event, List<WeakReference<ILiteEventHandler>> handlersForEventType)
+        {
+            var registeredHandlers = handlersForEventType.ToList();
+
+            foreach (var weakReference in registeredHandlers)
             {
                 ILiteEventHandler handlerFromWeakReferance;
 
-                if (weakReferance.TryGetTarget(out handlerFromWeakReferance))
-                    handlersForEvent.Add(handlerFromWeakReferance);
-                else
-                    wasNotActualHandlers = true;
-            }
-
-            return handlersForEvent;
-        }
-
-        private void RegisterHandlersForEvents(ILiteEventHandler handler, Type[] eventTypes)
-        {
-            foreach (Type eventType in eventTypes)
-            {
-                lock (LockObject)
+                if (weakReference.TryGetTarget(out handlerFromWeakReferance))
                 {
-                    List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(eventType.Name, () => new List<WeakReference<ILiteEventHandler>>());
-
-                    ILiteEventHandler handlerFromWeakReferance;
-
-                    if (handlersForEventType.Any(h => h.TryGetTarget(out handlerFromWeakReferance) && handlerFromWeakReferance == handler))
-                        throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
-
-                    handlersForEventType.Add(new WeakReference<ILiteEventHandler>(handler)); 
+                    yield return handlerFromWeakReferance;
+                }
+                else
+                {
+                    this.handlers[@event.GetType().Name].Remove(weakReference);
                 }
             }
+        }
+
+        private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, List<WeakReference<ILiteEventHandler>> handlersForEventType)
+        {
+            ILiteEventHandler handlerFromWeakReferance;
+
+            return handlersForEventType.Any(h => h.TryGetTarget(out handlerFromWeakReferance) && handlerFromWeakReferance == handler);
+        }
+
+        private static Action<object> GetActionHandler(ILiteEventHandler handler)
+        {
+            return @event => ((dynamic) handler).Handle((dynamic) @event);
         }
 
         private static Type[] GetHandledEventTypes(ILiteEventHandler handler)
