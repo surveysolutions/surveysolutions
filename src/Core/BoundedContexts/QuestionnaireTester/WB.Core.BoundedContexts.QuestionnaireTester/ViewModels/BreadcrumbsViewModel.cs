@@ -22,15 +22,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 new BreadCrumbItemViewModel
                 {
-                    Text =  "Group 1 bla bla"
+                    Text =  "section C: consumption of food over pst week / "
                 },
                 new BreadCrumbItemViewModel
                 {
-                    Text = "Lorem ipsum groupu"
+                    Text = "Cereals and cereals products / "
                 },
                 new BreadCrumbItemViewModel
                 {
-                    Text = "Some long long "
+                    Text = "rice (paddy) / "
+                }, new BreadCrumbItemViewModel
+                {
+                    Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit / "
                 },
             });
         }
