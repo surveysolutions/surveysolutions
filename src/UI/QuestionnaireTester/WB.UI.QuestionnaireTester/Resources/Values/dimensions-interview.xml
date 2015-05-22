@@ -43,4 +43,8 @@
 
   <dimen name="Interview_Group_margin_bottom">14dp</dimen>
   <dimen name="Interview_Group_margin_top">20dp</dimen>
+
+  <dimen name="Interview_Comments_Title_margin_bottom">14dp</dimen>
+  <dimen name="Interview_Comments_Details_margin_bottom">16dp</dimen>
+  
 </resources>

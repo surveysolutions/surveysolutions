@@ -142,6 +142,7 @@
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">@color/commentInterviewerTextColor</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Title_margin_bottom</item>
   </style>
 
   <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
@@ -149,9 +150,11 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/commentDetailsInterviewerTextColor</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
   </style>
 
   <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
+    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
   </style>
   
 

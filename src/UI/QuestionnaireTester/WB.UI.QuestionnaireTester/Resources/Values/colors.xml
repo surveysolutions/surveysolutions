@@ -5,7 +5,7 @@
   
   <color name="errorTextColor">#FFE32102</color>
   
-  <color name="commentInterviewerTextColor">#FFA3A3A3</color>
+  <color name="commentInterviewerTextColor">#FF747474</color>
   <color name="commentDetailsInterviewerTextColor">#FF000000</color>
   <color name="commentSupervisorTextColor">#FFF6D6D0</color>
 
