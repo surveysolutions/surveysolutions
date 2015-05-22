@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -25,9 +24,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public int QuestionsCount { get; private set; }
         public int InvalidAnswersCount { get; private set; }
         public GroupStatus Status { get; private set; }
-        public bool IsStarted { get { return this.Status == GroupStatus.Started; } }
+
+        public bool IsStarted
+        {
+            get { return this.Status == GroupStatus.Started; }
+        }
 
         private IMvxCommand navigateToGroupCommand;
+
         public IMvxCommand NavigateToGroupCommand
         {
             get { return navigateToGroupCommand ?? (navigateToGroupCommand = new MvxCommand(NavigateToGroup)); }
@@ -47,7 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            
+
             this.navigationState = navigationState;
             this.groupIdentity = entityIdentity;
 
@@ -55,22 +59,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Title = questionnaire.GroupsWithoutNestedChildren[entityIdentity.Id].Title;
 
             var groupEntities = questionnaire.GroupsWithoutNestedChildren[entityIdentity.Id].Children;
-            var groupQuestions = groupEntities.Where(x => x.ModelType == typeof(BaseQuestionModel));
+
+            var groupModelTypes = new[] {typeof (GroupModel), typeof (RosterModel)};
+            var nonQuestionModelTypes = groupModelTypes.Concat(new[] {typeof (StaticTextModel)});
+
+            var groupQuestions = groupEntities.Where(x => !nonQuestionModelTypes.Contains(x.ModelType));
 
             this.QuestionsCount = groupQuestions.Count();
-            this.SubgroupsCount = groupEntities.Count(x => x.ModelType == typeof(GroupModel) || x.ModelType == typeof(RosterModel));
+            this.SubgroupsCount = groupEntities.Count(x => groupModelTypes.Contains(x.ModelType));
             this.AnsweredQuestionsCount = interview.Answers.Values.Count(x => groupQuestions.Any(y => y.Id == x.Id) &&
-                                                                              x.RosterVector.SequenceEqual(entityIdentity.RosterVector) && x.IsAnswered);
+                                                                              x.RosterVector.SequenceEqual(
+                                                                                  entityIdentity.RosterVector) &&
+                                                                              x.IsAnswered);
 
-            this.InvalidAnswersCount = 5;
+            this.InvalidAnswersCount = 0;
 
             this.InitStatus();
         }
 
         private void InitStatus()
         {
-            if (this.InvalidAnswersCount > 0)
-                this.Status = GroupStatus.HasInvlidAnswers;
+            this.Status = GroupStatus.NotStarted;
 
             if (this.AnsweredQuestionsCount > 0)
                 this.Status = GroupStatus.Started;
@@ -78,7 +87,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (this.QuestionsCount == this.AnsweredQuestionsCount)
                 this.Status = GroupStatus.Completed;
 
-            this.Status = GroupStatus.NotStarted;
+            if (this.InvalidAnswersCount > 0)
+                this.Status = GroupStatus.HasInvlidAnswers;
         }
 
         private void NavigateToGroup()
