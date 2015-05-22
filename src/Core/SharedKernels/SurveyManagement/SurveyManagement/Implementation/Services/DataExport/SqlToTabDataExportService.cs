@@ -108,12 +108,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata);
+            var dataFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath); 
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, dataFiles);
         }
         
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss);
+            var dataFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath);
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
         }
 
         private void CollectLabels(QuestionnaireExportStructure structure, out Dictionary<string, string> labels, out Dictionary<string, Dictionary<double, string>> varValueLabels)
@@ -154,13 +156,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, string basePath, ExportDataType exportType)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, string basePath, ExportDataType exportType, string[] dataFiles)
         {
             string currentDataInfo = string.Empty;
             try
             {
-                var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
-
                 var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
                 if (structure == null)
@@ -183,7 +183,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     
                     UpdateMetaWithLabels(meta, varLabels, varValueLabels);
                     currentDataInfo = string.Format("filename: {0}", tabFile);
-                    writer.WriteToFile(dataFile, meta, tabReader.GetDataFromTabFile(tabFile));
+                    var data = tabReader.GetDataFromTabFile(tabFile);
+                    writer.WriteToFile(dataFile, meta, data);
                     result.Add(dataFile);
                 }
 
@@ -222,13 +223,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string[] CreateAndGetStataDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata);
+            var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, dataFiles);
         }
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss);
+            var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
         }
 
         public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
