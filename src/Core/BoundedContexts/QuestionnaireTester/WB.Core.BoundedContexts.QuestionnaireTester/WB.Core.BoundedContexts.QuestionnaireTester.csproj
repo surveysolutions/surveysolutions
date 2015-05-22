@@ -117,6 +117,7 @@
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\QuestionStateViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\DateTimeQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\GroupStatus.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\QRBarcodeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IInterviewEntityViewModel.cs" />
@@ -125,7 +126,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\IntegerQuestionViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\RosterItemViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\RosterStateViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\RosterViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\TextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />

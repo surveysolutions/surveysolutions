@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
     {
         private Dictionary<string, BaseInterviewAnswer> answers;
         private Dictionary<string, InterviewGroup> groups;
-        private Dictionary<string, List<string>> rosterInstancesIds;
+        private Dictionary<string, List<Identity>> rosterInstancesIds;
         private Dictionary<Guid, Type> questionIdToQuestionModelTypeMap;
 
         private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
@@ -242,20 +242,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
             foreach (var rosterInstance in @event.Instances)
             {
-                var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
+                var rosterIdentity = new Identity(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
+
+                var rosterKey = ConversionHelper.ConvertIdentityToString(rosterIdentity);
                 var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
 
                 this.Groups[rosterKey] = new InterviewRoster
                 {
-                    Id = rosterInstance.GroupId,
-                    RosterVector = GetFullRosterVector(rosterInstance),
+                    Id = rosterIdentity.Id,
+                    RosterVector = rosterIdentity.RosterVector,
                     ParentRosterVector = rosterInstance.OuterRosterVector,
                     RowCode = rosterInstance.RosterInstanceId
                 };
                 if (!this.RosterInstancesIds.ContainsKey(rosterParentKey))
-                    this.RosterInstancesIds.Add(rosterParentKey, new List<string>());
+                    this.RosterInstancesIds.Add(rosterParentKey, new List<Identity>());
 
-                this.RosterInstancesIds[rosterParentKey].Add(rosterKey);
+                this.RosterInstancesIds[rosterParentKey].Add(rosterIdentity);
             }
         }
 
@@ -264,11 +266,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             foreach (var rosterInstance in @event.Instances)
             {
-                var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
+                var fullRosterVector = GetFullRosterVector(rosterInstance);
+
+                var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, fullRosterVector);
                 var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
 
+                var rosterIdentity = this.RosterInstancesIds[rosterParentKey].Find(roster => roster.Id == rosterInstance.GroupId &&
+                                                                                             roster.RosterVector.SequenceEqual(fullRosterVector));
+
                 this.Groups.Remove(rosterKey);
-                this.RosterInstancesIds[rosterParentKey].Remove(rosterKey);
+                this.RosterInstancesIds[rosterParentKey].Remove(rosterIdentity);
             }
         }
 
@@ -318,9 +325,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             get { return this.groups ?? (this.groups = new Dictionary<string, InterviewGroup>()); }
         }
 
-        public Dictionary<string, List<string>> RosterInstancesIds
+        public Dictionary<string, List<Identity>> RosterInstancesIds
         {
-            get { return this.rosterInstancesIds ?? (this.rosterInstancesIds = new Dictionary<string, List<string>>()); }
+            get { return this.rosterInstancesIds ?? (this.rosterInstancesIds = new Dictionary<string, List<Identity>>()); }
         }
 
         public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap
