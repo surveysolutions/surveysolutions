@@ -4,6 +4,7 @@ using System.Reflection;
 using Android.Content;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
+using Android.Views;
 using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
@@ -70,6 +71,8 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("GetRosterInfo", new GetRosterInfoConverter());
+            registry.AddOrOverwrite("QuestionLayoutStyleBackgroud", new QuestionLayoutStyleBackgroudConverter());
+            registry.AddOrOverwrite("QuestionEditorStyleBackgroud", new QuestionEditorStyleBackgroudConverter());
             registry.AddOrOverwrite("GetGroupInfo", new GetGroupInfoConverter());
             registry.AddOrOverwrite("GetGroupInfoTextColorByStatus", new GetGroupInfoTextColorByStatusConverter());
             registry.AddOrOverwrite("GetGroupColorByStatus", new GetGroupColorByStatusConverter());
@@ -81,7 +84,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new EditTextFocusChangeTextBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
-            registry.RegisterCustomBindingFactory<LinearLayout>("Style", (view) => new LinearLayoutStyleBinding(view));
+            registry.RegisterCustomBindingFactory<View>("BackgroudStyle", (view) => new BackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("RosterTitle", button => new ButtonRosterTitleBinding(button));

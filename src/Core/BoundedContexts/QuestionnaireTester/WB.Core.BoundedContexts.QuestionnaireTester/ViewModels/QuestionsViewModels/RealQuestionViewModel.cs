@@ -63,10 +63,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
+
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
-            this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
+            if (answerModel != null)
+            {
+                this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
+            }
         }
 
         private async void SendAnswerRealQuestionCommand()

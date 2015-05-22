@@ -83,9 +83,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
 
-            var answer = answerModel.Answer;
-            this.AnswerAsString = NullableIntToAnswerString(answer);
-            this.previousAnswer = Monads.Maybe(() => answer);
+            if (answerModel != null)
+            {
+                var answer = answerModel.Answer;
+                this.AnswerAsString = NullableIntToAnswerString(answer);
+                this.previousAnswer = Monads.Maybe(() => answer);
+            }
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
         }
 

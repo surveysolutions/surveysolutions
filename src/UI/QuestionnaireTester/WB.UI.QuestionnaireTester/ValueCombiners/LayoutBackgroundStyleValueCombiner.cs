@@ -7,6 +7,7 @@ using Cirrious.CrossCore.Converters;
 using Cirrious.MvvmCross.Binding.Bindings.SourceSteps;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.ExtensionMethods;
+using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
 
 namespace WB.UI.QuestionnaireTester.ValueCombiners
@@ -15,7 +16,7 @@ namespace WB.UI.QuestionnaireTester.ValueCombiners
     {
         public override Type SourceType(IEnumerable<IMvxSourceStep> steps)
         {
-            return typeof(LinearLayoutStyle);
+            return typeof(QuestionStateStyle);
         }
 
         public override bool TryGetValue(IEnumerable<IMvxSourceStep> steps, out Object value)
@@ -47,15 +48,15 @@ namespace WB.UI.QuestionnaireTester.ValueCombiners
 
             if (isInvalid)
             {
-                value = LinearLayoutStyle.Invalid;
+                value = QuestionStateStyle.Invalid;
             }
             else if (isAnswered)
             {
-                value = LinearLayoutStyle.Answered;
+                value = QuestionStateStyle.Answered;
             }
             else
             {
-                value = LinearLayoutStyle.NonAnswered;
+                value = QuestionStateStyle.NonAnswered;
             }
 
             return true;

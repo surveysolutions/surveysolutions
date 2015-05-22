@@ -227,6 +227,8 @@
     <Compile Include="Converters\GetGroupInfoConverter.cs" />
     <Compile Include="Converters\GetRosterInfoConverter.cs" />
     <Compile Include="Converters\GetGroupColorByStatus.cs" />
+    <Compile Include="Converters\QuestionLayoutStyleBackgroudConverter.cs" />
+    <Compile Include="Converters\QuestionEditorStyleBackgroudConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
@@ -234,7 +236,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CustomBindings\EditTextFocusChangeTextBinding.cs" />
-    <Compile Include="CustomBindings\LinearLayoutStyleBinding.cs" />
+    <Compile Include="Converters\QuestionStateStyle.cs" />
+    <Compile Include="CustomBindings\BackgroundDrawableBinding.cs" />
     <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
@@ -444,6 +447,12 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate6.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate7.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate8.png" />
+    <AndroidResource Include="Resources\drawable\question_text_question_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_text_question_nonanswered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
