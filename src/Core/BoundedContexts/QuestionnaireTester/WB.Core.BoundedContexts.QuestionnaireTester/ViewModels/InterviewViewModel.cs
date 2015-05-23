@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 })
                 .ToList();
 
-            this.Breadcrumbs.Init(this.navigationState);
+            this.Breadcrumbs.Init(interviewId, this.navigationState);
             this.Chapters.Init(this.navigationState);
             this.CurrentGroup.Init(this.navigationState);
 

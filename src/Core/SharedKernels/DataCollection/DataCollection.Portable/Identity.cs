@@ -44,6 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection
             this.RosterVector = rosterVector;
         }
 
+        public override string ToString()
+        {
+            return ConversionHelper.ConvertIdentityToString(this);
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
