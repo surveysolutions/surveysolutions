@@ -109,26 +109,26 @@ namespace WB.Core.Infrastructure.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040005
-			public static int AcceptUnsignedSslCertificate = 2130968581;
-			
-			// aapt resource value: 0x7f040001
-			public static int ApplicationName = 2130968577;
-			
-			// aapt resource value: 0x7f040004
-			public static int BufferSize = 2130968580;
-			
-			// aapt resource value: 0x7f040006
-			public static int DesignerEndpoint = 2130968582;
+			// aapt resource value: 0x7f040003
+			public static int AcceptUnsignedSslCertificate = 2130968579;
 			
 			// aapt resource value: 0x7f040000
-			public static int Hello = 2130968576;
-			
-			// aapt resource value: 0x7f040003
-			public static int HttpResponseTimeout = 2130968579;
+			public static int ApplicationName = 2130968576;
 			
 			// aapt resource value: 0x7f040002
-			public static int library_name = 2130968578;
+			public static int BufferSize = 2130968578;
+			
+			// aapt resource value: 0x7f040004
+			public static int DesignerEndpoint = 2130968580;
+			
+			// aapt resource value: 0x7f040005
+			public static int Hello = 2130968581;
+			
+			// aapt resource value: 0x7f040001
+			public static int HttpResponseTimeout = 2130968577;
+			
+			// aapt resource value: 0x7f040006
+			public static int library_name = 2130968582;
 			
 			static String()
 			{
