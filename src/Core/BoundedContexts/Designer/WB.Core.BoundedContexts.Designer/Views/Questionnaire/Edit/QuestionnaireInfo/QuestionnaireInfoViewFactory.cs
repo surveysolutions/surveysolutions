@@ -29,6 +29,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
             QuestionnaireInfoView questionnaireInfoView = this.questionnaireStorage.GetById(questionnaireId);
 
+            if (questionnaireInfoView == null)
+                return null;
+
             QuestionnaireSharedPersons questionnaireSharedPersons = sharedPersons.GetById(questionnaireId);
             if (questionnaireSharedPersons != null)
             {
