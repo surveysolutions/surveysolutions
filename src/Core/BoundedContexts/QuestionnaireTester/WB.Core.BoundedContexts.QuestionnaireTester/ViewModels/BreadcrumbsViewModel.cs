@@ -43,6 +43,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             List<QuestionnaireReferenceModel> parentItems = new List<QuestionnaireReferenceModel>(questionnaire.GroupParents[newGroupIdentity.Id]);
             parentItems.Reverse();
+            parentItems.Add(new QuestionnaireReferenceModel
+            {
+                Id = newGroupIdentity.Id,
+                ModelType = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id].GetType()
+            });
 
             var breadCrumbs = new List<BreadCrumbItemViewModel>();
             int metRosters = 0;
@@ -55,9 +60,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     metRosters++;
                     var itemRosterVector = newGroupIdentity.RosterVector.Take(metRosters).ToArray();
                     var itemIdentity = new Identity(reference.Id, itemRosterVector);
-                    var itemRosterInstanceId = ConversionHelper.ConvertIdAndRosterVectorToString(reference.Id, itemRosterVector);
 
-                    var rosterInstance = (InterviewRoster) interview.Groups[itemRosterInstanceId];
+                    var rosterInstance = (InterviewRoster) interview.Groups[ConversionHelper.ConvertIdAndRosterVectorToString(reference.Id, itemRosterVector)];
                     var title = string.Format("{0} - {1} / ", groupTitle, rosterInstance.Title);
                     breadCrumbs.Add(new BreadCrumbItemViewModel(navigationState)
                     {
@@ -74,31 +78,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     });
                 }
             }
-
-            GroupModel newGroup = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id];
-            var lastGroupTitle = newGroup.Title;
-            if (newGroup is RosterModel)
-            {
-                var itemRosterInstanceId = ConversionHelper.ConvertIdAndRosterVectorToString(newGroupIdentity.Id,
-                    newGroupIdentity.RosterVector);
-
-                var rosterInstance = (InterviewRoster) interview.Groups[itemRosterInstanceId];
-                breadCrumbs.Add(new BreadCrumbItemViewModel(navigationState)
-                {
-                    Text = string.Format("{0} - {1} / ", lastGroupTitle, rosterInstance.Title),
-                    ItemId = newGroupIdentity
-                });
-            }
-            else
-            {
-                breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
-                {
-                    ItemId = newGroupIdentity,
-                    Text = lastGroupTitle + " / "
-                });
-            }
-
-            Debug.WriteLine(" BreadCrumbs - {0}", string.Join(" | ", breadCrumbs.Select(x => x.ItemId + " * " + x.Text)));
 
             this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(breadCrumbs);
         }
