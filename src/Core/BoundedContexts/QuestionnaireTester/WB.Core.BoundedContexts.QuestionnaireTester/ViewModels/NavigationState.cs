@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public event GroupChanged OnGroupChanged;
         public string InterviewId { get; private set; }
         public string QuestionnaireId { get; private set; }
+        public Identity CurrentGroup { get; private set; }
 
         private readonly Stack<Identity> navigationQueue = new Stack<Identity>();
 
@@ -21,6 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public void NavigateTo(Identity groupIdentity)
         {
             this.navigationQueue.Push(groupIdentity);
+            this.CurrentGroup = groupIdentity;
 
             if (OnGroupChanged != null)
                 OnGroupChanged(groupIdentity);
