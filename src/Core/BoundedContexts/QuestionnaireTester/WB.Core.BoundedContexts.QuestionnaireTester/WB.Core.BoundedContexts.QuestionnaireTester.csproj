@@ -105,6 +105,7 @@
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BreadCrumbItemViewModel.cs" />
     <Compile Include="ViewModels\BreadcrumbsViewModel.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\CommentsViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
