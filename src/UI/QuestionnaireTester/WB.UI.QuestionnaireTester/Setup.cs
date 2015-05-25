@@ -72,9 +72,6 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
-            registry.AddOrOverwrite("GetGroupInfo", new GetGroupInfoConverter());
-            registry.AddOrOverwrite("GetGroupInfoTextColorByStatus", new GetGroupInfoTextColorByStatusConverter());
-            registry.AddOrOverwrite("GetGroupColorByStatus", new GetGroupColorByStatusConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

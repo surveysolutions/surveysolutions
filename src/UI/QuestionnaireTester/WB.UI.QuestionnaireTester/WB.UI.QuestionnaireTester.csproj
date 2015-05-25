@@ -223,11 +223,8 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\GetAnswerConverter.cs" />
-    <Compile Include="Converters\GetGroupInfoTextColorByStatusConverter.cs" />
-    <Compile Include="Converters\GetGroupInfoConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\GetGroupColorByStatusConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
