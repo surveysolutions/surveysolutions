@@ -264,6 +264,7 @@
     <Compile Include="Views\CustomControls\MvxRecyclerView.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="Views\CustomControls\MvxRecyclerViewViewHolder.cs" />
+    <Compile Include="Views\PrefsActivity.cs" />
     <Compile Include="Views\SearchQuestionnairesView.cs" />
     <Compile Include="Views\InterviewView.cs" />
     <Compile Include="Views\DashboardView.cs" />
@@ -458,6 +459,8 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
+    <AndroidResource Include="Resources\xml\preferences.xml" />
+    <AndroidResource Include="Resources\menu\login.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
