@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.Res;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -83,7 +84,8 @@ namespace WB.UI.QuestionnaireTester.Views
                     this.ViewModel.ChangeLanguageCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
-                    this.ViewModel.ShowSettingsCommand.Execute();
+                    Intent intent = new Intent(this, typeof(PrefsActivity));
+                    StartActivity(intent);
                     break;
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();

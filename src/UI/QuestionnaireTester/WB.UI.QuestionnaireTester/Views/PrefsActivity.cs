@@ -5,7 +5,7 @@ using Android.Preferences;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(Label = "Preferences activity")]
+    [Activity(Label = "Preferences activity", NoHistory = false)]
     public class PrefsActivity : PreferenceActivity
     {
         protected override void OnCreate(Bundle bundle)

@@ -1,14 +1,16 @@
 using Android.App;
+using Android.Content;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(Label = "", Theme = "@style/GrayAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Label = "", 
+        Theme = "@style/GrayAppTheme", 
+        HardwareAccelerated = true, 
+        WindowSoftInputMode = SoftInput.StateHidden)]
     public class DashboardView : BaseActivityView<DashboardViewModel>
     {
         protected override int ViewResourceId
@@ -40,7 +42,8 @@ namespace WB.UI.QuestionnaireTester.Views
                     this.ViewModel.SearchQuestionnairesCommand.Execute();
                     break;
                 case Resource.Id.dashboard_settings:
-                    this.ViewModel.ShowSettingsCommand.Execute();
+                    Intent intent = new Intent(this, typeof(PrefsActivity));
+                    StartActivity(intent);
                     break;
                 case Resource.Id.dashboard_about:
                     this.ViewModel.ShowAboutCommand.Execute();

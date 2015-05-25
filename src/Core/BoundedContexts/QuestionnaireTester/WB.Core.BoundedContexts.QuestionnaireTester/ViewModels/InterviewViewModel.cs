@@ -104,12 +104,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }
         }
 
-        private IMvxCommand showSettingsCommand;
-        public IMvxCommand ShowSettingsCommand
-        {
-            get { return showSettingsCommand ?? (showSettingsCommand = new MvxCommand(() => this.ShowViewModel<SettingsViewModel>())); }
-        }
-
         private void SignOut()
         {
             this.principal.SignOut();

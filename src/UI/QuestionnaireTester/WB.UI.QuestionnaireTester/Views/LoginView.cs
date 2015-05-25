@@ -5,11 +5,11 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.UI.QuestionnaireTester.Views.Fragments;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(NoHistory = true, WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme", LaunchMode = LaunchMode.SingleTask)]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+        Theme = "@style/GrayAppTheme")]
     public class LoginView : BaseActivityView<LoginViewModel>
     {
 
@@ -17,7 +17,6 @@ namespace WB.UI.QuestionnaireTester.Views
         {
             base.OnCreate(bundle);
 
-            
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));
         }
 
