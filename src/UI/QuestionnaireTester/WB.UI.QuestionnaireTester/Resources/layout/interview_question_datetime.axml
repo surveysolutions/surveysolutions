@@ -14,7 +14,7 @@
                 layout="@layout/interview_question__instructions" />
             <MvxLinearLayout
                 style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroudStyle QuestionLayoutStyleBackgroud(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
                 <EditText
                     android:editable="false"

@@ -225,8 +225,8 @@
     <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="Converters\GetGroupInfoTextColorByStatusConverter.cs" />
     <Compile Include="Converters\GetGroupInfoConverter.cs" />
-    <Compile Include="Converters\QuestionLayoutStyleBackgroudConverter.cs" />
-    <Compile Include="Converters\QuestionEditorStyleBackgroudConverter.cs" />
+    <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\GetGroupColorByStatusConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
@@ -429,7 +429,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\values-small\dimensions-interview.xml" />
     <AndroidResource Include="Resources\drawable\group_button_background.xml" />
-    <AndroidResource Include="Resources\values\dimensions-interview.xml" />
+    <AndroidResource Include="Resources\values\dimensions-interview.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\values\dimensions.xml" />
     <AndroidResource Include="Resources\drawable\selector.xml" />
     <AndroidResource Include="Resources\drawable\button_pressed_shape.xml" />

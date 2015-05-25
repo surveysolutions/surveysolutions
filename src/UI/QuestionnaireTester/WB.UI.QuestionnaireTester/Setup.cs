@@ -70,8 +70,8 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("GetAnswer", new GetAnswerConverter());
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
-            registry.AddOrOverwrite("QuestionLayoutStyleBackgroud", new QuestionLayoutStyleBackgroudConverter());
-            registry.AddOrOverwrite("QuestionEditorStyleBackgroud", new QuestionEditorStyleBackgroudConverter());
+            registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
+            registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
             registry.AddOrOverwrite("GetGroupInfo", new GetGroupInfoConverter());
             registry.AddOrOverwrite("GetGroupInfoTextColorByStatus", new GetGroupInfoTextColorByStatusConverter());
             registry.AddOrOverwrite("GetGroupColorByStatus", new GetGroupColorByStatusConverter());
@@ -84,7 +84,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new FocusTextForEditTextBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new SetFocusForEditTextBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
-            registry.RegisterCustomBindingFactory<View>("BackgroudStyle", (view) => new BackgroundDrawableBinding(view));
+            registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new BackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("RosterTitle", button => new ButtonRosterTitleBinding(button));
