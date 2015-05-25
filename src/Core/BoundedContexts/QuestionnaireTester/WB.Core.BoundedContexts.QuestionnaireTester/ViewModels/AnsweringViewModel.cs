@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -8,6 +9,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class AnsweringViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
+        private int inProgressDeep = 0;
 
         public AnsweringViewModel(ICommandService commandService)
         {
@@ -18,18 +20,41 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public bool InProgress
         {
             get { return inProgress; }
-            private set { inProgress = value; RaisePropertyChanged(); }
+            private set
+            {
+                if (value != InProgress)
+                {
+                    inProgress = value;
+                    RaisePropertyChanged();
+                }
+            }
         }
 
         public async Task SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
         {
             try
             {
-                this.InProgress = true;
+                StartInProgressIndicator();
 
                 await this.commandService.ExecuteAsync(answerCommand);
             }
             finally
+            {
+                FinishInProgressIndicator();
+            }
+        }
+
+        private void StartInProgressIndicator()
+        {
+            Interlocked.Increment(ref inProgressDeep);
+            this.InProgress = true;
+        }
+
+        private void FinishInProgressIndicator()
+        {
+            Interlocked.Decrement(ref inProgressDeep);
+
+            if (inProgressDeep == 0)
             {
                 this.InProgress = false;
             }

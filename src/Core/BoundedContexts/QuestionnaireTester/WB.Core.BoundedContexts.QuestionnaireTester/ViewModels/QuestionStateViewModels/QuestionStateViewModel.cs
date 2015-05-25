@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
 {
@@ -64,8 +66,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
         public void Handle(TAnswerEvent @event)
         {
-            var interview = this.interviewRepository.Get(interviewId);
-            IsAnswered = interview.WasAnswered(questionIdentity);
+            if (@event.QuestionId == questionIdentity.Id &&
+                @event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
+            {
+                var interview = this.interviewRepository.Get(interviewId);
+                IsAnswered = interview.WasAnswered(questionIdentity);
+            }
         }
 
         public void ExecutedAnswerCommandWithoutExceptions()
