@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure
         public void Load(IIocRegistry registry)
         {
             registry.BindAsSingleton<IAggregateRootRepository, AggregateRootRepositoryWithCache>();
-            registry.Bind<ICommandService, CommandService>();
+            registry.BindAsSingleton<ICommandService, SequentialCommandService>();
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<ISnapshottingPolicy, NoSnapshottingPolicy>();
