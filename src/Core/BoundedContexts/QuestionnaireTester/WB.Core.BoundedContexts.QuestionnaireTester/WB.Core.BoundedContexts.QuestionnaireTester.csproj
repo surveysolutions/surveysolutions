@@ -104,6 +104,8 @@
     <Compile Include="Repositories\IStatefullInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\GroupStatisticsViewModel.cs" />
+    <Compile Include="ViewModels\PreviousGroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BreadCrumbItemViewModel.cs" />
     <Compile Include="ViewModels\BreadcrumbsViewModel.cs" />

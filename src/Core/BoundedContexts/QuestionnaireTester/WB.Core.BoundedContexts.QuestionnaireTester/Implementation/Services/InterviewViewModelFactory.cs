@@ -84,6 +84,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     navigationState: navigationState))
                 .ToList();
 
+            var previousGroupNavigationViewModel = Load<PreviousGroupNavigationViewModel>();
+            previousGroupNavigationViewModel.Init(interviewId, groupIdentity, navigationState);
+            viewModels.Add(previousGroupNavigationViewModel);
+
             return viewModels;
         }
 
