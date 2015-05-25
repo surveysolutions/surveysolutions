@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 this.Answer = scanCode.Code;
 
-                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

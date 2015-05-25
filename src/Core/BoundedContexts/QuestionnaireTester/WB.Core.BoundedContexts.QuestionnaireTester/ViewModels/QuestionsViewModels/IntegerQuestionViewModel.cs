@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
 
                 previousAnswer = answer;

@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answerTime: DateTime.UtcNow,
                     answer: answerValue
                     );
-                await SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                SendAnswerViewModel.SendAnswerQuestionCommand(command);
                 SetToView(answerValue);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }

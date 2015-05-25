@@ -21,12 +21,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             private set { inProgress = value; RaisePropertyChanged(); }
         }
 
-        public async Task SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
-        {
-            await Task.Run(() => SendAnswerTextQuestionCommandImpl(answerCommand));
-        }
-
-        private void SendAnswerTextQuestionCommandImpl(AnswerQuestionCommand answerCommand)
+        public void SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
         {
             try
             {
