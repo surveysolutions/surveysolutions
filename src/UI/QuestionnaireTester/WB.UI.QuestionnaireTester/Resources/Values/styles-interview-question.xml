@@ -165,14 +165,9 @@
     <item name="android:layout_height">@dimen/Interview_Question_Progress_Indicator_height</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:keepScreenOn">false</item>    
-    <item name="android:layout_marginTop">@dimen/Dashboard_ProgressBar_margin_top</item>
-
     <item name="android:progressDrawable">@drawable/question_save_answer_progress_bar_states</item>
     <item name="android:indeterminateDrawable">@drawable/question_save_answer_progress_bar</item>
-
     <item name="android:minHeight">@dimen/Interview_Question_Progress_Indicator_height</item>
     <item name="android:maxHeight">@dimen/Interview_Question_Progress_Indicator_height</item>
-    
-
   </style>
 </resources>
