@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             return Task.Run(() => this.Execute(command, origin));
         }
 
-        public void Execute(ICommand command, string origin)
+        public virtual void Execute(ICommand command, string origin)
         {
             if (command == null) throw new ArgumentNullException("command");
 
