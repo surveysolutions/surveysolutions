@@ -5,11 +5,11 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class SendAnswerViewModel : MvxNotifyPropertyChanged
+    public class AnsweringViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
 
-        public SendAnswerViewModel(ICommandService commandService)
+        public AnsweringViewModel(ICommandService commandService)
         {
             this.commandService = commandService;
         }
@@ -21,17 +21,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             private set { inProgress = value; RaisePropertyChanged(); }
         }
 
-        public void SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
+        public async Task SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
         {
             try
             {
-                InProgress = true;
+                this.InProgress = true;
 
-                commandService.Execute(answerCommand);
+                await this.commandService.ExecuteAsync(answerCommand);
             }
             finally
             {
-                InProgress = false;
+                this.InProgress = false;
             }
         }
     }

@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
 
         public DateTimeQuestionViewModel(ICommandService commandService,
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     answerTime: DateTime.UtcNow,
                     answer: answerValue
                     );
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 SetToView(answerValue);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }

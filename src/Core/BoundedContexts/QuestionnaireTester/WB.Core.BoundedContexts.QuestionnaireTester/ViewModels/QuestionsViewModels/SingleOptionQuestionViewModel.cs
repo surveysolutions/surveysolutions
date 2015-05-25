@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             if (commandService == null) throw new ArgumentNullException("commandService");
             if (principal == null) throw new ArgumentNullException("principal");
@@ -43,7 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
         }
 
         private Identity questionIdentity;
@@ -51,7 +52,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -90,7 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

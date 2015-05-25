@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
         private string answerAsString;
         public string AnswerAsString
@@ -44,13 +44,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPrincipal principal,
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

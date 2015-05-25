@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<NumericIntegerQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
         private bool isRosterSizeQuestion;
 
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
             IUserInteraction userInteraction,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.QuestionState = questionStateViewModel;
             this.userInteraction = userInteraction;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
 
                 previousAnswer = answer;

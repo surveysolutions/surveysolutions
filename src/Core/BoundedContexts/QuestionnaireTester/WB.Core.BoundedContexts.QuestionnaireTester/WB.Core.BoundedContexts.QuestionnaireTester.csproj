@@ -137,7 +137,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\StaticTextViewModel.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\ValidityViewModel.cs" />
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
-    <Compile Include="ViewModels\SendAnswerViewModel.cs" />
+    <Compile Include="ViewModels\AnsweringViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />

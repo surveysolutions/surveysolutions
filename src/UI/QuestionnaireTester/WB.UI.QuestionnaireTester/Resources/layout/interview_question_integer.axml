@@ -13,7 +13,7 @@
                 style="@style/Interview_Question_Answer"
                 local:MvxBind="BackgroudStyle QuestionLayoutStyleBackgroud(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
                 
-              <EditText
+                <EditText
                     style="@style/Interview_Question_Answer_TextEditor"
                     android:numeric="integer|signed"
                     local:MvxBind="FocusText AnswerAsString; Hint Localization('IntegerQuestion_Hint'); BackgroudStyle QuestionEditorStyleBackgroud(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
@@ -25,6 +25,6 @@
     </MvxLinearLayout>
   <ProgressBar
     style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress SendAnswerViewModel.InProgress" />
+    local:MvxBind="ShowProgress Answering.InProgress" />
   <View style="@style/Interview_Question_Divider" />
 </MvxLinearLayout>

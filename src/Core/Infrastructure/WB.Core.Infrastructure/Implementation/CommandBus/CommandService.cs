@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Ncqrs.Domain.Storage;
 
 using WB.Core.GenericSubdomains.Portable;
@@ -19,6 +20,11 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.repository = repository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
+        }
+
+        public Task ExecuteAsync(ICommand command, string origin)
+        {
+            return Task.Run(() => this.Execute(command, origin));
         }
 
         public void Execute(ICommand command, string origin)

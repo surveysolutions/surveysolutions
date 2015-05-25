@@ -15,11 +15,13 @@
             <MvxLinearLayout
                 style="@style/Interview_Question_Answer"
                 local:MvxBind="BackgroudStyle QuestionLayoutStyleBackgroud(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+
                 <EditText
                     android:editable="false"
                     android:focusable="false"
                     style="@style/Interview_Question_Answer_Editor"
                     local:MvxBind="Text Answer; Hint Localization('DateQuestion_Hint'); DateChange AnswerCommand" />
+
             </MvxLinearLayout>
             <include
                 layout="@layout/interview_question__errors" />
@@ -29,6 +31,6 @@
     </MvxLinearLayout>
   <ProgressBar
     style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress SendAnswerViewModel.InProgress" />
+    local:MvxBind="ShowProgress Answering.InProgress" />
   <View style="@style/Interview_Question_Divider" />
 </MvxLinearLayout>
