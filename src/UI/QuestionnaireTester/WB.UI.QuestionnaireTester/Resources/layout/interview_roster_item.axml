@@ -7,7 +7,7 @@
   <MvxLinearLayout style="@style/Interview_Group">
     <MvxLinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     local:MvxBind="BackgroudStyle QuestionLayoutStyleBackgroud(LayoutBackgroundStyle(false, If(GroupState.IsStarted, true, false)));">
+                     local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(GroupState.IsStarted, true, false)));">
       <Button style="@style/Interview_Group_Button"
               local:MvxBind="Click GroupState.NavigateToGroupCommand; ButtonGroupStyle GroupState; Enabled GroupState.Enablement.Enabled; RosterTitle ."/>
     </MvxLinearLayout>
