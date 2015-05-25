@@ -80,6 +80,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
+            var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
@@ -91,19 +92,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
+                if (previousOption != null)
+                {
+                    previousOption.Selected = false;
+                }
+
                 await this.Answering.SendAnswerQuestionCommand(command);
+
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)
             {
+                selectedOption.Selected = false;
+
+                if (previousOption != null)
+                {
+                    previousOption.Selected = true;
+                }
+
                 QuestionState.ProcessAnswerCommandException(ex);
-            }
-
-            var optionsToDeselect = this.Options.Where(option => option != selectedOption && option.Selected);
-
-            foreach (var optionToDeselect in optionsToDeselect)
-            {
-                optionToDeselect.Selected = false;
             }
         }
 
