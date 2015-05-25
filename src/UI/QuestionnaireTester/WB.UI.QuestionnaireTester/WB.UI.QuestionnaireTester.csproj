@@ -231,6 +231,8 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BindingWrapper.cs" />
+    <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
     <Compile Include="CustomBindings\EditDateBinding.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -406,7 +408,9 @@
     <AndroidResource Include="Resources\values\styles-interview-question.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background_invalid.xml" />
+    <AndroidResource Include="Resources\drawable\question_background_invalid.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
     <AndroidResource Include="Resources\drawable\media_question_white_border.xml" />
     <AndroidResource Include="Resources\drawable\question_background_answered.xml" />
@@ -437,10 +441,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values\dimensions.xml" />
-    <AndroidResource Include="Resources\drawable\selector.xml" />
-    <AndroidResource Include="Resources\drawable\button_pressed_shape.xml" />
-    <AndroidResource Include="Resources\drawable\button_unpressed_shape.xml" />
-    <AndroidResource Include="Resources\drawable-v21\selector.xml" />
+    <AndroidResource Include="Resources\drawable\group_started.xml" />
+    <AndroidResource Include="Resources\drawable\group_started_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\group_started_unpressed.xml" />
     <AndroidResource Include="Resources\drawable\question_save_answer_progress_bar.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -464,6 +467,16 @@
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
     <AndroidResource Include="Resources\xml\preferences.xml" />
     <AndroidResource Include="Resources\menu\login.xml" />
+    <AndroidResource Include="Resources\drawable\group_completed.xml" />
+    <AndroidResource Include="Resources\drawable\group_completed_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\group_completed_unpressed.xml" />
+    <AndroidResource Include="Resources\drawable\group_with_invalid_answers.xml" />
+    <AndroidResource Include="Resources\drawable\group_with_invalid_answers_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\group_with_invalid_answers_unpressed.xml" />
+    <AndroidResource Include="Resources\drawable-v21\group_completed.xml" />
+    <AndroidResource Include="Resources\drawable-v21\group_started.xml" />
+    <AndroidResource Include="Resources\drawable-v21\group_with_invalid_answers.xml" />
+    <AndroidResource Include="Resources\drawable\group_disabled.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -522,7 +535,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_group.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_roster.axml">
       <SubType>Designer</SubType>

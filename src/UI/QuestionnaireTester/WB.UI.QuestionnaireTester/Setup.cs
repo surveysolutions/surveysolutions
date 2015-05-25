@@ -88,6 +88,8 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("RosterTitle", button => new ButtonRosterTitleBinding(button));
+            registry.RegisterCustomBindingFactory<TextView>("GroupInfo", textView => new TextViewGroupInfoBinding(textView));
+            registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
 
             base.FillTargetFactories(registry);
         }

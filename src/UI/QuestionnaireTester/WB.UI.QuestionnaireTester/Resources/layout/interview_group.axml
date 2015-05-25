@@ -7,12 +7,12 @@
   <MvxLinearLayout style="@style/Interview_Group">
     <MvxLinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     local:MvxBind="Style LayoutBackgroundStyle(false, If(IsStarted, true, false))">
+                     local:MvxBind="BackgroudStyle QuestionLayoutStyleBackgroud(LayoutBackgroundStyle(false, If(IsStarted, true, false)))">
       <Button style="@style/Interview_Group_Button"
-              local:MvxBind="Click NavigateToGroupCommand; Text Title; BackgroundColor GetGroupColorByStatus(Status, Enablement.Enabled); Enabled Enablement.Enabled"/>
+              local:MvxBind="Click NavigateToGroupCommand; Text Title; ButtonGroupStyle .; Enabled Enablement.Enabled; "/>
     </MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
-              local:MvxBind="Visible Enablement.Enabled; TextColor GetGroupInfoTextColorByStatus(Status); Text GetGroupInfo(.)"/>
+              local:MvxBind="Visible Enablement.Enabled; GroupInfo ."/>
   </MvxLinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"

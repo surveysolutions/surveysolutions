@@ -413,6 +413,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to errors.
+        /// </summary>
+        public static string Interview_Group_ManyInvalidAnswers {
+            get {
+                return ResourceManager.GetString("Interview_Group_ManyInvalidAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questions.
         /// </summary>
         public static string Interview_Group_ManyQuestions_Answered {
@@ -445,6 +454,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string Interview_Group_NotStarted {
             get {
                 return ResourceManager.GetString("Interview_Group_NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to error.
+        /// </summary>
+        public static string Interview_Group_OneInvalidAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Group_OneInvalidAnswer", resourceCulture);
             }
         }
         

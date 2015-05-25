@@ -4,10 +4,6 @@
     <item name="android:background">@drawable/group_background</item>
   </style>
 
-  <style name="Interview_GroupButton">
-    <item name="android:background">@drawable/group_button_background</item>
-  </style>
-
   <style name="Interview_Group"  parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
@@ -33,7 +29,5 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:textColor">@color/group_title_text</item>
-    <item name="android:layout_centerVertical">true</item>
   </style>
 </resources>

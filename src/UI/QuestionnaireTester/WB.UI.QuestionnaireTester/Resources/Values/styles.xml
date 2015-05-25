@@ -257,7 +257,7 @@
   </style>
 
   <style name="ButtonAppTheme" parent="android:Widget.Button">
-    <item name="android:background">@drawable/selector</item>
+    <item name="android:background">@drawable/group_started</item>
     <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
     <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:gravity">center_vertical|center_horizontal</item>

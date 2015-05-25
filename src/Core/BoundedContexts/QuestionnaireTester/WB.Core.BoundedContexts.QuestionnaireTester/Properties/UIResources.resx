@@ -381,4 +381,10 @@
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
     <value>Entered value can not be parsed as decimal value</value>
   </data>
+  <data name="Interview_Group_ManyInvalidAnswers" xml:space="preserve">
+    <value>errors</value>
+  </data>
+  <data name="Interview_Group_OneInvalidAnswer" xml:space="preserve">
+    <value>error</value>
+  </data>
 </root>

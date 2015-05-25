@@ -27,6 +27,9 @@
 
   <color name="group_not_started">#C6C6C6</color>
   <color name="group_started">#2A81CB</color>
+  <color name="group_started_pressed">#0D6DBF</color>
   <color name="group_completed">#38AC14</color>
+  <color name="group_completed_pressed">#309211</color>
   <color name="group_with_invalid_answers">#F05A26</color>
+  <color name="group_with_invalid_answers_pressed">#CC4D20</color>
 </resources>
