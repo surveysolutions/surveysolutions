@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public bool IsStarted
         {
-            get { return this.Status == GroupStatus.Started; }
+            get { return this.Status > GroupStatus.NotStarted; }
         }
 
         private IMvxCommand navigateToGroupCommand;
@@ -67,14 +68,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.QuestionsCount = groupQuestions.Count();
             this.SubgroupsCount = groupEntities.Count(x => groupModelTypes.Contains(x.ModelType));
-            this.AnsweredQuestionsCount = interview.Answers.Values.Count(x => groupQuestions.Any(y => y.Id == x.Id) &&
-                                                                              x.RosterVector.SequenceEqual(
-                                                                                  entityIdentity.RosterVector) &&
-                                                                              x.IsAnswered);
-
-            this.InvalidAnswersCount = 0;
+            this.AnsweredQuestionsCount = interview.Answers.Values.Count(answerViewModel => IsQuestionAnswered(entityIdentity, groupQuestions, answerViewModel));
+            this.InvalidAnswersCount = interview.Answers.Values.Count(answerViewModel => IsQuestionAnswered(entityIdentity, groupQuestions, answerViewModel) && !answerViewModel.IsValid);
 
             this.InitStatus();
+        }
+
+        private static bool IsQuestionAnswered(Identity entityIdentity, IEnumerable<QuestionnaireReferenceModel> groupQuestions, BaseInterviewAnswer answerViewModel)
+        {
+            return ContainsInGroup(entityIdentity, groupQuestions, answerViewModel) && answerViewModel.IsAnswered;
+        }
+
+        private static bool ContainsInGroup(Identity entityIdentity, IEnumerable<QuestionnaireReferenceModel> groupQuestions, BaseInterviewAnswer answerViewModel)
+        {
+            return groupQuestions.Any(question => question.Id == answerViewModel.Id) && answerViewModel.RosterVector.SequenceEqual(entityIdentity.RosterVector);
         }
 
         private void InitStatus()
@@ -88,7 +95,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.Status = GroupStatus.Completed;
 
             if (this.InvalidAnswersCount > 0)
-                this.Status = GroupStatus.HasInvlidAnswers;
+                this.Status = GroupStatus.StartedInvalid;
+
+            if (this.InvalidAnswersCount > 0 && this.QuestionsCount == this.AnsweredQuestionsCount)
+                this.Status = GroupStatus.CompletedInvalid;
         }
 
         private void NavigateToGroup()

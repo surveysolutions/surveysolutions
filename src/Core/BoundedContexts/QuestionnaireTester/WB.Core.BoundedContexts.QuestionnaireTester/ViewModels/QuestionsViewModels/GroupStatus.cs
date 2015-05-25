@@ -5,7 +5,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         Disabled = 1,
         NotStarted,
         Started,
+        StartedInvalid,
         Completed,
-        HasInvlidAnswers
+        CompletedInvalid
     }
 }
