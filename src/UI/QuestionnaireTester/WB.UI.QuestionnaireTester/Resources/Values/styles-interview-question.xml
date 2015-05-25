@@ -170,4 +170,12 @@
     <item name="android:minHeight">@dimen/Interview_Question_Progress_Indicator_height</item>
     <item name="android:maxHeight">@dimen/Interview_Question_Progress_Indicator_height</item>
   </style>
+
+
+  <style name="Interview_Previous_Group_Navigation_Layout">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+  </style>
 </resources>

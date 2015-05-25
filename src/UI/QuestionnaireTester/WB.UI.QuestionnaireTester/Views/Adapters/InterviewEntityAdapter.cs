@@ -32,6 +32,7 @@ namespace WB.UI.QuestionnaireTester.Views.Adapters
             {typeof (QrBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (RosterViewModel), Resource.Layout.interview_roster},
+            {typeof (PreviousGroupNavigationViewModel), Resource.Layout.interview__previous_group_navigation},
         };
 
         public override int GetItemViewType(int position)
