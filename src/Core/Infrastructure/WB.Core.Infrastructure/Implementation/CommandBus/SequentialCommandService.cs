@@ -22,8 +22,8 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             public string Origin { get; private set; }
         }
 
-        private readonly ConcurrentQueue<CommandDescriptor> commandsQueue = new ConcurrentQueue<CommandDescriptor>();
-        private static readonly object LockObject = new object();
+        private readonly ConcurrentQueue<CommandDescriptor> queue = new ConcurrentQueue<CommandDescriptor>();
+        private readonly object lockObject = new object();
 
         public SequentialCommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
             : base(repository, eventBus, snapshooter) {}
@@ -32,27 +32,50 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         {
             var commandDescriptor = new CommandDescriptor(command, origin);
 
-            this.commandsQueue.Enqueue(commandDescriptor);
+            this.AddToQueue(commandDescriptor);
 
-            lock (LockObject)
+            while (this.IsInQueue(commandDescriptor))
             {
-                this.RunCommandsFromQueueUntil(commandDescriptor);
+                lock (this.lockObject)
+                {
+                    if (!this.IsOnTopOfQueue(commandDescriptor))
+                        continue;
+
+                    this.RemoveFromTopOfQueue(commandDescriptor);
+
+                    base.Execute(commandDescriptor.Command, commandDescriptor.Origin);
+                }
             }
         }
 
-        private void RunCommandsFromQueueUntil(CommandDescriptor expectedCommandDescriptor)
+        private void AddToQueue(CommandDescriptor commandDescriptor)
         {
-            if (!this.commandsQueue.Contains(expectedCommandDescriptor))
-                return;
+            this.queue.Enqueue(commandDescriptor);
+        }
 
-            CommandDescriptor commandDescriptor;
-            while (this.commandsQueue.TryDequeue(out commandDescriptor))
-            {
-                base.Execute(commandDescriptor.Command, commandDescriptor.Origin);
+        private bool IsInQueue(CommandDescriptor commandDescriptor)
+        {
+            return this.queue.ToArray().Contains(commandDescriptor);
+        }
 
-                if (commandDescriptor == expectedCommandDescriptor)
-                    return;
-            }
+        private bool IsOnTopOfQueue(CommandDescriptor commandDescriptor)
+        {
+            CommandDescriptor topDescriptor;
+
+            return this.queue.TryPeek(out topDescriptor) && topDescriptor == commandDescriptor;
+        }
+
+        private void RemoveFromTopOfQueue(CommandDescriptor commandDescriptor)
+        {
+            CommandDescriptor removedDescriptor;
+
+            var removeSucceeded = this.queue.TryDequeue(out removedDescriptor);
+
+            if (!removeSucceeded)
+                throw new CommandServiceException("Failed to remove top command from queue because queue is empty.");
+
+            if (removedDescriptor != commandDescriptor)
+                throw new CommandServiceException("Failed to remove top command from queue because not expected command was removed.");
         }
     }
 }
