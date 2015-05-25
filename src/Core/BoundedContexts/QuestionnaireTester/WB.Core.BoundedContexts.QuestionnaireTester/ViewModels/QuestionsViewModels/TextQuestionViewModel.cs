@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
 
         public QuestionStateViewModel<TextQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
@@ -39,14 +39,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
             this.QuestionState = questionStateViewModel;
         }
 
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid interviewId;
 
         public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
 
         public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IMvxLocationWatcher geoLocationWatcher,
             IUserInteraction userInteraction,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.userInteraction = userInteraction;
 
             this.QuestionState = questionStateViewModel;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             try
             {
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)

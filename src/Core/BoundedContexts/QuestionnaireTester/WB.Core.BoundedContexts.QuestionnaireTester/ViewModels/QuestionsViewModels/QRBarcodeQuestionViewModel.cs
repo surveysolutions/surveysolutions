@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class QrBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
-        public SendAnswerViewModel SendAnswerViewModel { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
 
         private bool isInProgress;
         public bool IsInProgress
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IQrBarcodeScanService qrBarcodeScanService,
             IUserInteraction userInteraction,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
-            SendAnswerViewModel sendAnswerViewModel)
+            AnsweringViewModel answering)
         {
             this.commandService = commandService;
             this.userIdentity = userIdentity;
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.userInteraction = userInteraction;
 
             this.QuestionState = questionStateViewModel;
-            this.SendAnswerViewModel = sendAnswerViewModel;
+            this.Answering = answering;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 this.Answer = scanCode.Code;
 
-                SendAnswerViewModel.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommand(command);
                 QuestionState.ExecutedAnswerCommandWithoutExceptions();
             }
             catch (InterviewException ex)
