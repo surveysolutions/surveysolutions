@@ -97,6 +97,19 @@
     <item name="android:textColor">@drawable/question_option_text_color</item>
   </style>
 
+  <style name="Interview_Question_ExternalData_Container">
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_MediaBlock_margin_bottom</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Interview_Question_Multimedia_Picture">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:background">@drawable/media_question_white_border</item>
+    <item name="android:layout_height">@dimen/Interview_Question_Answer_Media_height</item>
+  </style>
+
+
   <style name="Interview_Question_Answer_Gps_Location_Text" parent="Interview_Question_Instruction_Details">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>

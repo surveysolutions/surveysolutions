@@ -47,7 +47,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-
         public GpsCoordinatesQuestionViewModel(
             IUserIdentity userIdentity,
             IStatefullInterviewRepository interviewRepository,

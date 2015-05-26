@@ -137,6 +137,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Network.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Network.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Visibility">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.dll</HintPath>
     </Reference>
@@ -218,6 +226,7 @@
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
     <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
@@ -480,7 +489,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\login.axml" />
     <AndroidResource Include="Resources\layout\dashboard.axml" />
@@ -544,6 +555,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_breadcrumb_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_multimedia.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_left_side_panel.axml">

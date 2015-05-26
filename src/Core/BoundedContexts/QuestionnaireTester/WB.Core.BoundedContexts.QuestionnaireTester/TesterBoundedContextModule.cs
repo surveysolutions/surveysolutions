@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using Cirrious.CrossCore;
+using Cirrious.MvvmCross.Plugins.PictureChooser;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;

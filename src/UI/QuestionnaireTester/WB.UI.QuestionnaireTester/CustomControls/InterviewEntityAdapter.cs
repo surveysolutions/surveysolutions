@@ -25,6 +25,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
             {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
+            {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
