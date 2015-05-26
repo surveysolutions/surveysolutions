@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation expression has syntax error (only few first questions are shown)..
+        ///   Looks up a localized string similar to Validation condition has syntax error (only few first questions are shown)..
         /// </summary>
         internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression has syntax error (only few first questions/groups are shown)..
+        ///   Looks up a localized string similar to Enabling condition has syntax error (only few first questions/sub-sections/rosters are shown)..
         /// </summary>
         internal static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation expression references nonexistent question..
+        ///   Looks up a localized string similar to Validation condition references nonexistent question..
         /// </summary>
         internal static string WB0004_CustomValidationExpressionReferencesNotExistingQuestion {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression references nonexistent question..
+        ///   Looks up a localized string similar to Enabling condition references nonexistent question..
         /// </summary>
         internal static string WB0005_CustomEnablementConditionReferencesNotExistingQuestion {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references question not under roster group..
+        ///   Looks up a localized string similar to Linked question references question not under roster..
         /// </summary>
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has validation expression referencing question from deeper roster level..
+        ///   Looks up a localized string similar to Question has validation condition referencing question from deeper roster level..
         /// </summary>
         internal static string WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has options count less than max allowed answers count..
+        ///   Looks up a localized string similar to Question has options count less than max number of answers..
         /// </summary>
         internal static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used..
+        ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used..
         /// </summary>
         internal static string WB0023_RosterSizeSourceQuestionTypeIsIncorrect {
             get {
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is question could not have fixed titles..
+        ///   Looks up a localized string similar to Roster where roster size source is question could not have fixed set of items..
         /// </summary>
         internal static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
             get {
@@ -279,7 +279,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have roster size question..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster size question..
         /// </summary>
         internal static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
             get {
@@ -288,7 +288,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have roster title question..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster title question..
         /// </summary>
         internal static string WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion {
             get {
@@ -297,7 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size source is question has invalid roster title question..
+        ///   Looks up a localized string similar to Roster where roster size source is question has invalid roster title question..
         /// </summary>
         internal static string WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion {
             get {
@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group where roster size question is categorical multi answers question could not have roster title question..
+        ///   Looks up a localized string similar to Roster where roster size question is categorical multi answers question could not have roster title question..
         /// </summary>
         internal static string WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion {
             get {
@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have empty titles..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have empty titles..
         /// </summary>
         internal static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
             get {
@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed titles roster cannot have more than 40 rows..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have more than 40 rows..
         /// </summary>
         internal static string WB0038_RosterFixedTitlesHaveMoreThan40Items {
             get {
@@ -352,7 +352,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed roster values must be unique..
+        ///   Looks up a localized string similar to Fixed set of items roster values must be unique..
         /// </summary>
         internal static string WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues {
             get {
@@ -379,7 +379,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression cannot refer to a question from a deeper roster level..
+        ///   Looks up a localized string similar to Enabling condition cannot refer to a question from a deeper roster level..
         /// </summary>
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
@@ -388,7 +388,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question cannot be filled by supervisor..
+        ///   Looks up a localized string similar to Barcode question cannot be filled by supervisor..
         /// </summary>
         internal static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
             get {
@@ -397,7 +397,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QR Barcode question cannot be prefilled..
+        ///   Looks up a localized string similar to Barcode question cannot be prefilled..
         /// </summary>
         internal static string WB0050_QRBarcodeQuestionIsPreFilledQuestion {
             get {
@@ -406,7 +406,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Groups cannot have condition expression referencing child question..
+        ///   Looks up a localized string similar to Sub-sections cannot have enabling condition referencing child question..
         /// </summary>
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
@@ -496,7 +496,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation expressions..
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition..
         /// </summary>
         internal static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
             get {
@@ -505,7 +505,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in condition expressions..
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in enabling condition..
         /// </summary>
         internal static string WB0064_CategoricalLinkedQuestionUsedInEnablementCondition {
             get {
@@ -514,7 +514,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation message is required if question has validation expression..
+        ///   Looks up a localized string similar to Error message is required if question has validation condition..
         /// </summary>
         internal static string WB0065_QuestionHasValidationExpressionWithoutValidationMessage {
             get {
@@ -577,7 +577,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chapter cannot contain more than 500 child items..
+        ///   Looks up a localized string similar to Section cannot contain more than 500 child items..
         /// </summary>
         internal static string WB0072_ChapterItemsLimit {
             get {
@@ -604,7 +604,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filtered combobox cannot be linked to another question..
+        ///   Looks up a localized string similar to Combo box cannot be linked to another question..
         /// </summary>
         internal static string WB0074_FilteredComboboxIsLinked {
             get {
@@ -640,7 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia question can be interviewers only..
+        ///   Looks up a localized string similar to Picture question can be interviewers only..
         /// </summary>
         internal static string WB0078_MultimediaQuestionIsInterviewersOnly {
             get {
@@ -649,7 +649,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia question cannot have a validation expression..
+        ///   Looks up a localized string similar to Picture question cannot have a validation condition..
         /// </summary>
         internal static string WB0079_MultimediaShouldNotHaveValidationExpression {
             get {
@@ -658,7 +658,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia questions cannot be used in validation expression..
+        ///   Looks up a localized string similar to Picture questions cannot be used in validation condition..
         /// </summary>
         internal static string WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression {
             get {
@@ -667,7 +667,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia questions cannot be used in group&apos;s condition expression..
+        ///   Looks up a localized string similar to Picture questions cannot be used in sub-section&apos;s enabling condition..
         /// </summary>
         internal static string WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition {
             get {
@@ -676,7 +676,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia questions cannot be used in question&apos;s condition expression..
+        ///   Looks up a localized string similar to Picture questions cannot be used in question&apos;s enabling condition..
         /// </summary>
         internal static string WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition {
             get {
@@ -694,7 +694,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in child cascading question should reference only existing option in parent question..
+        ///   Looks up a localized string similar to Options in child cascading combo box question should reference only existing option in parent question..
         /// </summary>
         internal static string WB0084_CascadingOptionsShouldHaveParent {
             get {
@@ -712,7 +712,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading question references missing or supported type question..
+        ///   Looks up a localized string similar to Cascading combo box question references missing or supported type question..
         /// </summary>
         internal static string WB0086_ParentCascadingQuestionShouldExist {
             get {
@@ -721,7 +721,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cicrular references in cascading questions not allowed..
+        ///   Looks up a localized string similar to Circular references in cascading combo box questions not allowed..
         /// </summary>
         internal static string WB0087_CascadingQuestionHasCicularReference {
             get {
@@ -730,7 +730,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading question should have less than 10.000 options..
+        ///   Looks up a localized string similar to Cascading combo box question should have less than 10.000 options..
         /// </summary>
         internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -739,7 +739,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading question should have unique value and parent value options list..
+        ///   Looks up a localized string similar to Cascading combo box question should have unique value and parent value options list..
         /// </summary>
         internal static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
             get {
@@ -757,7 +757,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading question should not contain enablement condition. .
+        ///   Looks up a localized string similar to Child cascading combo box question should not contain enabling condition. .
         /// </summary>
         internal static string WB0091_CascadingChildQuestionShouldNotContainCondition {
             get {
@@ -766,7 +766,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading question should not contain validation expression..
+        ///   Looks up a localized string similar to Child cascading combo box question should not contain validation condition..
         /// </summary>
         internal static string WB0092_CascadingChildQuesionShouldNotContainValidation {
             get {
@@ -784,7 +784,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression has length more than 10000 characters..
+        ///   Looks up a localized string similar to Enabling condition has length more than 10000 characters..
         /// </summary>
         internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -793,7 +793,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation expression has length more than 10000 characters..
+        ///   Looks up a localized string similar to Validation condition has length more than 10000 characters..
         /// </summary>
         internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
             get {

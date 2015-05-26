@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFile)).Returns(0);
             preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFile)).Returns(new []{1});
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
-
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
@@ -41,19 +41,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
         It should_result_has_1_error = () =>
-            result.Count().ShouldEqual(1);
+            result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0006_error = () =>
-            result.First().Code.ShouldEqual("PL0006");
+            result.Errors.First().Code.ShouldEqual("PL0006");
 
         It should_return_reference_with_Cell_type = () =>
-            result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_has_content_empty_string = () =>
-            result.First().References.First().Content.ShouldEqual("");
+            result.Errors.First().References.First().Content.ShouldEqual("");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFile;

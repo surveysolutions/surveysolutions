@@ -32,6 +32,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                 interviewCommand.UserId = globalInfo.GetCurrentUser().Id;
             }
 
+            var rejectCommand = command as RejectInterviewCommand;
+            if (rejectCommand != null)
+            {
+                rejectCommand.RejectTime = DateTime.UtcNow;
+            }
+
+            var assignCommand = command as AssignInterviewerCommand;
+            if (assignCommand != null)
+            {
+                assignCommand.AssignTime = DateTime.UtcNow;
+            }
+
+            var approveCommand = command as ApproveInterviewCommand;
+            if (approveCommand != null)
+            {
+                approveCommand.ApproveTime = DateTime.UtcNow;
+            }
+
             return command;
         }
 

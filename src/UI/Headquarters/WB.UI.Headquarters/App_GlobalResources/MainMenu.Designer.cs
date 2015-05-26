@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Export.
+        /// </summary>
+        internal static string DataExport {
+            get {
+                return ResourceManager.GetString("DataExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Headquarters.
         /// </summary>
         internal static string Headquarters {
@@ -112,10 +121,19 @@ namespace Resources {
             get {
                 return ResourceManager.GetString("Observers", resourceCulture);
             }
+        }        
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        internal static string Quantity {
+            get {
+                return ResourceManager.GetString("Quantity", resourceCulture);
+            }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
+        ///   Looks up a localized string similar to Survey Setup.
         /// </summary>
         internal static string Questionnaires {
             get {
@@ -156,6 +174,24 @@ namespace Resources {
         internal static string SurveysAndStatuses {
             get {
                 return ResourceManager.GetString("SurveysAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team and Roles.
+        /// </summary>
+        internal static string TeamAndRoles {
+            get {
+                return ResourceManager.GetString("TeamAndRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teams and Roles.
+        /// </summary>
+        internal static string TeamsAndRoles {
+            get {
+                return ResourceManager.GetString("TeamsAndRoles", resourceCulture);
             }
         }
         

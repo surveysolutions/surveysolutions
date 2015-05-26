@@ -25,26 +25,17 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService = Mock
-                .Of<IMembershipUserService>(
-                    _ =>
-                        _.WebUser ==
-                        Mock
-                            .Of<IMembershipWebUser>(
-                                u =>
-                                    u.UserId == userId));
+            var membershipUserService = Mock.Of<IMembershipUserService>(
+                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
+                    u => u.UserId == userId));
 
-            var questionnaireViewFactory = Mock
-                .Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
-                    _ =>
-                        _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
-                        Create.QuestionnaireView(questionnaireOwnerId));
+            var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
+                _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
+                     Create.QuestionnaireView(questionnaireOwnerId));
 
-            var sharedPersonsViewFactory = Mock
-                .Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(
-                    _ =>
-                        _.Load(Moq.It.IsAny<QuestionnaireSharedPersonsInputModel>()) ==
-                        Create.QuestionnaireSharedPersons(questionnaireId));
+            var sharedPersonsViewFactory = Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(
+                    _ => _.Load(Moq.It.IsAny<QuestionnaireSharedPersonsInputModel>()) ==
+                         Create.QuestionnaireSharedPersons(questionnaireId));
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory, sharedPersonsViewFactory: sharedPersonsViewFactory);
@@ -55,16 +46,16 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 importController.Questionnaire(request));
 
         It should_throw_HttpResponseException = () =>
-            exception.ShouldBeOfExactType<HttpResponseException>();
+            exception.ShouldNotBeNull();
 
         It should_throw_HttpResponseException_with_StatusCode_Forbidden = () =>
-            ((HttpResponseException)exception).Response.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
+            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-             (new[] { "user", "not", "authorized", "check"}).Each(x => ((HttpResponseException)exception).Response.ReasonPhrase.ToLower().ShouldContain(x));
+            exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("user", "not", "authorized", "check");
 
         private static ImportController importController;
-        private static Exception exception;
+        private static HttpResponseException exception;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static Guid questionnaireOwnerId = Guid.Parse("11111111111111111111111111111111");

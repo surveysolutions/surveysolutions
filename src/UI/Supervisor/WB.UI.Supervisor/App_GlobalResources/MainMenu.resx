@@ -120,6 +120,9 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Number of synchronized interviews, but unprocessed yet</value>
   </data>
