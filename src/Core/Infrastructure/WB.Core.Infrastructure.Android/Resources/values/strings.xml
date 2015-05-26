@@ -12,4 +12,12 @@
   <!--<string name="DesignerEndpoint">http://192.168.56.1/designer/api/v1</string>-->
   <!--via hosted network-->
   <!--<string name="DesignerEndpoint">https://192.168.73.1/designer/api/v1</string>-->
+
+  <string name="Prefs_VersionTitle">Application version</string>
+  <string name="Prefs_VersionSummaryFormat">Version: {0}{1}Engine version: {2}</string>
+  <string name="Prefs_ConnectionSettings">Connection settings</string>
+  <string name="Prefs_DesignerEndPointTitle">Designer URL</string>
+  <string name="Prefs_DesignerEndPointSummary">URL that is used to communicate with designer application</string>
+  <string name="Prefs_AcceptUnsignedTitle">Accept all SSL certificates</string>
+  <string name="Prefs_AcceptUnsignedSummary">Disable SSL certificate validation</string>
 </resources>

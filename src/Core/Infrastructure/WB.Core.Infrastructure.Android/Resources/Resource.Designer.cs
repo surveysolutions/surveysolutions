@@ -150,11 +150,32 @@ namespace WB.Core.Infrastructure.Android
 			// aapt resource value: 0x7f040001
 			public static int DesignerEndpoint = 2130968577;
 			
-			// aapt resource value: 0x7f040002
-			public static int Hello = 2130968578;
+			// aapt resource value: 0x7f040009
+			public static int Hello = 2130968585;
+			
+			// aapt resource value: 0x7f040008
+			public static int Prefs_AcceptUnsignedSummary = 2130968584;
+			
+			// aapt resource value: 0x7f040007
+			public static int Prefs_AcceptUnsignedTitle = 2130968583;
+			
+			// aapt resource value: 0x7f040004
+			public static int Prefs_ConnectionSettings = 2130968580;
+			
+			// aapt resource value: 0x7f040006
+			public static int Prefs_DesignerEndPointSummary = 2130968582;
+			
+			// aapt resource value: 0x7f040005
+			public static int Prefs_DesignerEndPointTitle = 2130968581;
 			
 			// aapt resource value: 0x7f040003
-			public static int library_name = 2130968579;
+			public static int Prefs_VersionSummaryFormat = 2130968579;
+			
+			// aapt resource value: 0x7f040002
+			public static int Prefs_VersionTitle = 2130968578;
+			
+			// aapt resource value: 0x7f04000a
+			public static int library_name = 2130968586;
 			
 			static String()
 			{

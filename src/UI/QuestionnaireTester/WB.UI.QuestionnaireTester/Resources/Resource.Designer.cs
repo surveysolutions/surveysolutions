@@ -60,6 +60,13 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.Core.Infrastructure.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.Core.Infrastructure.Android.Resource.String.DesignerEndpoint = global::WB.UI.QuestionnaireTester.Resource.String.DesignerEndpoint;
 			global::WB.Core.Infrastructure.Android.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_AcceptUnsignedSummary = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_AcceptUnsignedSummary;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_AcceptUnsignedTitle = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_AcceptUnsignedTitle;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_ConnectionSettings = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_ConnectionSettings;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_DesignerEndPointSummary = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_DesignerEndPointSummary;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_DesignerEndPointTitle = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_DesignerEndPointTitle;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionSummaryFormat = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_VersionSummaryFormat;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionTitle = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_VersionTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.library_name = global::WB.UI.QuestionnaireTester.Resource.String.library_name;
 		}
 		
@@ -2626,8 +2633,29 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f090012
 			public const int DesignerEndpoint = 2131296274;
 			
+			// aapt resource value: 0x7f09001a
+			public const int Hello = 2131296282;
+			
+			// aapt resource value: 0x7f090019
+			public const int Prefs_AcceptUnsignedSummary = 2131296281;
+			
+			// aapt resource value: 0x7f090018
+			public const int Prefs_AcceptUnsignedTitle = 2131296280;
+			
+			// aapt resource value: 0x7f090015
+			public const int Prefs_ConnectionSettings = 2131296277;
+			
+			// aapt resource value: 0x7f090017
+			public const int Prefs_DesignerEndPointSummary = 2131296279;
+			
+			// aapt resource value: 0x7f090016
+			public const int Prefs_DesignerEndPointTitle = 2131296278;
+			
+			// aapt resource value: 0x7f090014
+			public const int Prefs_VersionSummaryFormat = 2131296276;
+			
 			// aapt resource value: 0x7f090013
-			public const int Hello = 2131296275;
+			public const int Prefs_VersionTitle = 2131296275;
 			
 			// aapt resource value: 0x7f090001
 			public const int abc_action_bar_home_description = 2131296257;
@@ -2680,8 +2708,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f090011
 			public const int abc_toolbar_collapse_description = 2131296273;
 			
-			// aapt resource value: 0x7f090014
-			public const int library_name = 2131296276;
+			// aapt resource value: 0x7f09001b
+			public const int library_name = 2131296283;
 			
 			static String()
 			{
