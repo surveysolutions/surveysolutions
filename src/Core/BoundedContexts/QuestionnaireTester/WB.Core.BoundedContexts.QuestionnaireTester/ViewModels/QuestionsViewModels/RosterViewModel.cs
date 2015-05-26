@@ -78,9 +78,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            var rosterInstances = interview.RosterInstancesIds[ConversionHelper.ConvertIdAndRosterVectorToString(this.groupIdendity.Id, this.groupIdendity.RosterVector)];
-            var rosterItemViewModels = rosterInstances.Select(RosterModelToViewModel);
+            var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(this.groupIdendity.Id, this.groupIdendity.RosterVector);
 
+            if (!interview.RosterInstancesIds.ContainsKey(rosterKey))
+            {
+                this.Items = new List<RosterStateViewModel>();
+                return;
+            }
+
+            var rosterInstances = interview.RosterInstancesIds[rosterKey];
+            var rosterItemViewModels = rosterInstances.Select(this.RosterModelToViewModel);
             this.Items = new List<RosterStateViewModel>(rosterItemViewModels);
         }
 
