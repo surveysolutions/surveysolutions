@@ -1,19 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <!--
-        Base application theme for API 21+. This theme replaces
-        MyTheme from res/values/styles.xml on API 21+ devices.
-    -->
-  <!--<style name="Theme.Light" parent="Theme.Light.Base">
-    <item name="android:windowContentTransitions">true</item>
-    <item name="android:windowAllowEnterTransitionOverlap">true</item>
-    <item name="android:windowAllowReturnTransitionOverlap">true</item>
-    <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
-    <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-  </style>-->
 
 
-  <!-- Base application theme. -->
+  <!-- application theme -->
+
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
     <item name="windowNoTitle">true</item>
@@ -22,10 +12,11 @@
     <item name="android:fontFamily">sans-serif</item>
     <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     
-    <!-- Customize your theme here. -->
     <item name="colorPrimary">@android:color/darker_gray</item>
     <item name="colorPrimaryDark">@android:color/white</item>
     <item name="colorAccent">@android:color/holo_blue_bright</item>
+
+    <!-- elements -->
     <item name="android:buttonStyle">@style/ButtonAppTheme</item>
     <item name="android:checkboxStyle">@style/CheckBoxTheme </item>
     <item name="android:editTextStyle">@style/EditTextTheme</item>
@@ -34,6 +25,7 @@
     <item name="android:spinnerStyle">@style/SpinnerTheme</item>
     <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
     <item name="android:dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
+
   </style>
 
   <style name="GrayAppTheme" parent="AppTheme">
@@ -83,6 +75,5 @@
     <item name="android:divider">@android:color/transparent</item>
     <item name="android:dividerHeight">@dimen/zero</item>
   </style>
-  
-  
+
 </resources>

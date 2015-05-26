@@ -9,7 +9,7 @@ using WB.UI.QuestionnaireTester.Views.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.Views
 {
-    [Activity(Label = "", Theme = "@style/Theme.Blue.Light", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
     public class PrefilledQuestionsView : BaseActivityView<PrefilledQuestionsViewModel>
     {
         protected override int ViewResourceId
