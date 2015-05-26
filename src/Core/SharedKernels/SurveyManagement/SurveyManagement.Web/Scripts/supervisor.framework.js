@@ -85,6 +85,6 @@ Supervisor.Config.QuestionType = {
     DateTime: "DateTime",
     Text: "Text",
     AutoPropagate: "AutoPropagate",
-    GpsCoordinates: "Geo Location",
+    GpsCoordinates: "GPS",
     TextList: "TextList"
 };

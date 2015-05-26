@@ -1,14 +1,43 @@
 using System;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     public class InterviewCommentedStatus
     {
-        public virtual string Comment { get; set; }
-        public virtual DateTime Date { get; set; }
+        public InterviewCommentedStatus()
+        {
+        }
+
+        public InterviewCommentedStatus(
+            Guid statusChangeOriginatorId, 
+            Guid? supervisorId,
+            Guid? interviewerId, 
+            InterviewStatus status, 
+            DateTime timestamp, 
+            string comment, 
+            string statusChangeOriginatorName)
+        {
+            StatusChangeOriginatorId = statusChangeOriginatorId;
+            SupervisorId = supervisorId;
+            InterviewerId = interviewerId;
+            Status = status;
+            Timestamp = timestamp;
+            Comment = comment;
+            StatusChangeOriginatorName = statusChangeOriginatorName;
+        }
+        public virtual int Id { get; set; }
+        public virtual Guid? SupervisorId { get; set; }
+        public virtual Guid? InterviewerId { get; set; }
+        public virtual Guid StatusChangeOriginatorId { get; set; }
+        public virtual string StatusChangeOriginatorName { get; set; }
+
         public virtual InterviewStatus Status { get; set; }
-        public virtual string Responsible { get; set; }
-        public virtual Guid ResponsibleId { get; set; }
+        public virtual DateTime Timestamp { get; set; }
+
+        public virtual string Comment { get; set; }
+
+        public virtual InterviewStatuses InterviewStatuses { get; set; }
     }
 }

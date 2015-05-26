@@ -167,5 +167,10 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 return;
             File.Copy(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
         }
+
+        public string ChangeExtension(string path1, string newExtension)
+        {
+            return Path.ChangeExtension(path1, newExtension);
+        }
     }
 }

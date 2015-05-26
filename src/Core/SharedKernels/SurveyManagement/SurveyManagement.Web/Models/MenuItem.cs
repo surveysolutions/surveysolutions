@@ -16,6 +16,8 @@
         InterviewsChart,
         ManageAccount,
         Headquarters,
-        Observers
+        Observers,
+        NumberOfCompletedInterviews,
+        DataExport
     }
 }

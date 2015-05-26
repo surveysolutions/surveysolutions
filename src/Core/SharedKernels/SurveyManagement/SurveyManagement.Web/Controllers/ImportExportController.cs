@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
+        public void GetAllDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
         {
             if (id == Guid.Empty)
             {
@@ -96,13 +96,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 });
         }
 
-        public ActionResult GetExportedDataCompleted(string result)
+        public ActionResult GetAllDataCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedApprovedDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
+        public void GetApprovedDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
         {
             if (id == Guid.Empty)
             {
@@ -129,14 +129,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 });
         }
 
-        public ActionResult GetExportedApprovedDataCompleted(string result)
+        public ActionResult GetApprovedDataCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
 
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetExportedFilesAsync(Guid id, long version)
+        public void GetFilesAsync(Guid id, long version)
         {
             AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
@@ -154,12 +154,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 });
         }
 
-        public ActionResult GetExportedFilesCompleted(string result)
+        public ActionResult GetFilesCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
 
-        public void GetExportedHistoyAsync(Guid id, long version)
+        public void GetHistoryAsync(Guid id, long version)
         {
             AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
@@ -177,38 +177,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 });
         }
 
-        public ActionResult GetExportedHistoyCompleted(string result)
+        public ActionResult GetHistoryCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
-        }
-
-        public void BackupAsync(Guid syncKey)
-        {
-            AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager,
-                () =>
-                    {
-                        try
-                        {
-                            ZipFileData data = this.backupManager.Backup();
-                            this.AsyncManager.Parameters["result"] = ZipHelper.Compress(data);
-                        }
-                        catch (Exception e)
-                        {
-                            this.AsyncManager.Parameters["result"] = null;
-                            this.logger.Fatal("Error on export " + e.Message, e);
-                            if (e.InnerException != null)
-                            {
-                                this.logger.Fatal("Error on export (Inner Exception)", e.InnerException);
-                            }
-                        }
-                    });
-        }
-
-        public ActionResult BackupCompleted(byte[] result)
-        {
-            return this.File(result, "application/zip",
-                             string.Format("backup_{0}.zip", DateTime.UtcNow.ToString("yyyyMMddhhnnss")));
         }
     }
 }

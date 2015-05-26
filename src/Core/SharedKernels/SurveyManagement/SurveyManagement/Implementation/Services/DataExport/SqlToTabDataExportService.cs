@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using StatData.Readers;
+using StatData.Core;
 using StatData.Writers;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
@@ -34,6 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IJsonUtils jsonUtils;
+        private readonly ITabFileReader tabReader;
+        private readonly IDatasetWriterFactory datasetWriterFactory;
 
         public SqlToTabDataExportService(
             IFileSystemAccessor fileSystemAccessor,
@@ -44,7 +46,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage, 
             IJsonUtils jsonUtils, 
             ITransactionManagerProvider transactionManager,
-            ILogger logger)
+            ILogger logger,
+            ITabFileReader tabReader,
+            IDatasetWriterFactory datasetWriterFactory)
         {
             this.csvWriterFactory = csvWriterFactory;
             this.exportedDataAccessor = exportedDataAccessor;
@@ -57,6 +61,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+
+            this.tabReader = tabReader;
+            this.datasetWriterFactory = datasetWriterFactory;
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string targetFolder)
@@ -79,7 +86,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        private string DataFileNameExtension { get { return "tab"; } }
+        private string DataFileNameExtension { get { return ".tab"; } }
+        private string StataFileNameExtension { get { return ".dta"; } }
+        private string SpssFileNameExtension { get { return ".sav"; } }
 
         public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
@@ -94,21 +103,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
 
             return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath)
-                .Where(fileName => fileName.EndsWith("." + DataFileNameExtension)).ToArray();
+                .Where(fileName => fileName.EndsWith(DataFileNameExtension)).ToArray();
         }
 
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            var tabFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath);
-
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, tabFiles, new StataWriter(), ".dta");
+            var dataFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath); 
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, dataFiles);
         }
         
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            var tabFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath);
-
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, tabFiles, new SpssWriter(), ".sav");
+            var dataFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath);
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
         }
 
         private void CollectLabels(QuestionnaireExportStructure structure, out Dictionary<string, string> labels, out Dictionary<string, Dictionary<double, string>> varValueLabels)
@@ -120,35 +127,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 foreach (ExportedHeaderItem headerItem in headerStructureForLevel.HeaderItems.Values)
                 {
-                    bool hasLabels = headerItem.Labels.Count > 0;
-
-                    string labelName = headerItem.VariableName;
-
+                    bool hasLabels = headerItem.Labels != null && headerItem.Labels.Count > 0;
+                    
                     if (hasLabels)
                     {
-                        var items = headerItem.Labels.Values.ToDictionary(item => Double.Parse(item.Caption), item => item.Title);
-                        varValueLabels.Add(labelName, items);
+                        string labelName = headerItem.VariableName;
+                        if (!varValueLabels.ContainsKey(labelName))
+                        {
+                            var items = headerItem.Labels.Values.ToDictionary(item => Double.Parse(item.Caption),item => item.Title ?? string.Empty);
+                            varValueLabels.Add(labelName, items);
+                        }
                     }
 
                     for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                     {
-                        labels.Add(headerItem.ColumnNames[i], headerItem.Titles[i]);
+                        if (!labels.ContainsKey(headerItem.ColumnNames[i]))
+                            labels.Add(headerItem.ColumnNames[i], headerItem.Titles[i] ?? string.Empty);
                     }
                 }
 
-                if (headerStructureForLevel.LevelLabels != null)
-                {
-                    var levelLabelName = headerStructureForLevel.LevelIdColumnName;
-
-                    var items = headerStructureForLevel.LevelLabels.ToDictionary(item => Double.Parse(item.Caption), item => item.Title);
-                    varValueLabels.Add(levelLabelName, items);
-                }
-
+                if (headerStructureForLevel.LevelLabels == null) continue;
+                
+                var levelLabelName = headerStructureForLevel.LevelIdColumnName;
+                if (varValueLabels.ContainsKey(levelLabelName)) continue;
+                    
+                var labelItems = headerStructureForLevel.LevelLabels.ToDictionary(item => Double.Parse(item.Caption), item => item.Title ?? String.Empty);
+                varValueLabels.Add(levelLabelName, labelItems);
             }
         }
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, string[] dataFiles, IDatasetWriter writer, string fileExtention)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, string basePath, ExportDataType exportType, string[] dataFiles)
         {
+            string currentDataInfo = string.Empty;
             try
             {
                 var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
@@ -162,31 +172,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 CollectLabels(structure, out varLabels, out varValueLabels);
 
                 var result = new List<string>();
+                string fileExtention = exportType == ExportDataType.Stata
+                    ? StataFileNameExtension
+                    : SpssFileNameExtension;
+                var writer = datasetWriterFactory.CreateDatasetWriter(exportType);
                 foreach (var tabFile in dataFiles)
                 {
-                    string dataFile = tabFile + fileExtention; //fix it
-
-                    var meta = TabReader.GetMeta(tabFile);
+                    string dataFile = fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
+                    var meta = tabReader.GetMetaFromTabFile(tabFile);
                     
-                    foreach (var datasetVariable in meta.Variables)
-                    {
-                        if (varLabels.ContainsKey(datasetVariable.VarName))
-                            datasetVariable.VarLabel = varLabels[datasetVariable.VarName];
-
-                        if (varValueLabels.ContainsKey(datasetVariable.VarName))
-                        {
-                            var valueSet = new StatData.Core.ValueSet();
-                            foreach (var variable in varValueLabels[datasetVariable.VarName])
-                            {
-                                valueSet.Add(variable.Key, variable.Value);
-                            }
-
-                            meta.AssociateValueSet(datasetVariable.VarName, valueSet);
-                        }
-                    }
-                    
-                    var tabReader = new TabReader();
-                    writer.WriteToFile(dataFile, meta, tabReader.GetData(tabFile));
+                    UpdateMetaWithLabels(meta, varLabels, varValueLabels);
+                    currentDataInfo = string.Format("filename: {0}", tabFile);
+                    var data = tabReader.GetDataFromTabFile(tabFile);
+                    writer.WriteToFile(dataFile, meta, data);
                     result.Add(dataFile);
                 }
 
@@ -195,26 +193,45 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
             catch (Exception exc)
             {
-                logger.Error("Error on data export", exc);
+                logger.Error(string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
+                logger.Error(currentDataInfo);
             }
 
             return new string[0];
         }
 
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> varLabels, Dictionary<string, Dictionary<double, string>> varValueLabels)
+        {
+            foreach (var datasetVariable in meta.Variables)
+            {
+                if (varLabels.ContainsKey(datasetVariable.VarName))
+                    datasetVariable.VarLabel = varLabels[datasetVariable.VarName];
+
+                if (varValueLabels.ContainsKey(datasetVariable.VarName))
+                {
+                    var valueSet = new StatData.Core.ValueSet();
+                    foreach (var variable in varValueLabels[datasetVariable.VarName])
+                    {
+                        valueSet.Add(variable.Key, variable.Value);
+                    }
+
+                    meta.AssociateValueSet(datasetVariable.VarName, valueSet);
+                }
+            }
+        }
+
         public string[] CreateAndGetStataDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
-            var tabFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
-
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, tabFiles, new StataWriter(), ".dta");
+            var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, dataFiles);
         }
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
-            var tabFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
-
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, tabFiles, new SpssWriter(), ".sav");
+            var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
         }
 
         public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
@@ -230,7 +247,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
 
             return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath)
-                .Where(fileName => fileName.EndsWith("." + DataFileNameExtension)).ToArray();
+                .Where(fileName => fileName.EndsWith(DataFileNameExtension)).ToArray();
         }
 
         private void CreateHeaderForActionFile(ICsvWriterService fileWriter)

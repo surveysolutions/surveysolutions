@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("become");
 
         It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
+            exception.Message.ToLower().ShouldContain("sub-section");
 
         It should_throw_exception_with_message_containting__contains__ = () =>
             exception.Message.ToLower().ShouldContain("contains");

@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
             preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel)).Returns(new[] { 1 });
-
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(Moq.It.IsAny<PreloadedDataByFile>(), Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel());
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
                 .Returns(new HeaderStructureForLevel() { LevelScopeVector = new ValueVector<Guid>(new[] { rosterId }) });
@@ -74,6 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileNestedRosterLevel, Moq.It.IsAny<ValueVector<Guid>>(), new[] { "5", "1" }))
                 .Returns(new decimal[] { 10 });
 
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
@@ -83,10 +84,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, files);
 
         It should_result_has_0_errors = () =>
-            result.Count().ShouldEqual(0);
+            result.Errors.Count().ShouldEqual(0);
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFileTopLevel;

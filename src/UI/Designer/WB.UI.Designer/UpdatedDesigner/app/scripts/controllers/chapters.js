@@ -9,7 +9,7 @@
             if (hotkeys.get(hideChaptersPane) !== false) {
                 hotkeys.del(hideChaptersPane);
             }
-            hotkeys.add(hideChaptersPane, 'Close chapters', function (event) {
+            hotkeys.add(hideChaptersPane, 'Close sections', function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -43,7 +43,7 @@
                 var newId = utilityService.guid();
 
                 var newChapter = {
-                    title: 'New Chapter',
+                    title: 'New Section',
                     itemId: newId
                 };
 
