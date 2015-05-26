@@ -37,6 +37,22 @@ namespace WB.Core.Infrastructure.Android
 			}
 		}
 		
+		public partial class Boolean
+		{
+			
+			// aapt resource value: 0x7f060000
+			public static int AcceptUnsignedSslCertificate = 2131099648;
+			
+			static Boolean()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Boolean()
+			{
+			}
+		}
+		
 		public partial class Drawable
 		{
 			
@@ -65,20 +81,20 @@ namespace WB.Core.Infrastructure.Android
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050000
-			public static int RelativeLayout1 = 2131034112;
+			// aapt resource value: 0x7f070000
+			public static int RelativeLayout1 = 2131165184;
 			
-			// aapt resource value: 0x7f050003
-			public static int flashButton = 2131034115;
+			// aapt resource value: 0x7f070003
+			public static int flashButton = 2131165187;
 			
-			// aapt resource value: 0x7f050002
-			public static int overlayImage = 2131034114;
+			// aapt resource value: 0x7f070002
+			public static int overlayImage = 2131165186;
 			
-			// aapt resource value: 0x7f050001
-			public static int preview_view = 2131034113;
+			// aapt resource value: 0x7f070001
+			public static int preview_view = 2131165185;
 			
-			// aapt resource value: 0x7f050004
-			public static int zoomButton = 2131034116;
+			// aapt resource value: 0x7f070004
+			public static int zoomButton = 2131165188;
 			
 			static Id()
 			{
@@ -86,6 +102,25 @@ namespace WB.Core.Infrastructure.Android
 			}
 			
 			private Id()
+			{
+			}
+		}
+		
+		public partial class Integer
+		{
+			
+			// aapt resource value: 0x7f050001
+			public static int BufferSize = 2131034113;
+			
+			// aapt resource value: 0x7f050000
+			public static int HttpResponseTimeout = 2131034112;
+			
+			static Integer()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Integer()
 			{
 			}
 		}
@@ -109,26 +144,17 @@ namespace WB.Core.Infrastructure.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040003
-			public static int AcceptUnsignedSslCertificate = 2130968579;
-			
 			// aapt resource value: 0x7f040000
 			public static int ApplicationName = 2130968576;
 			
-			// aapt resource value: 0x7f040002
-			public static int BufferSize = 2130968578;
-			
-			// aapt resource value: 0x7f040004
-			public static int DesignerEndpoint = 2130968580;
-			
-			// aapt resource value: 0x7f040005
-			public static int Hello = 2130968581;
-			
 			// aapt resource value: 0x7f040001
-			public static int HttpResponseTimeout = 2130968577;
+			public static int DesignerEndpoint = 2130968577;
 			
-			// aapt resource value: 0x7f040006
-			public static int library_name = 2130968582;
+			// aapt resource value: 0x7f040002
+			public static int Hello = 2130968578;
+			
+			// aapt resource value: 0x7f040003
+			public static int library_name = 2130968579;
 			
 			static String()
 			{

@@ -7,20 +7,20 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Network
     internal class NetworkService : INetworkService
     {
         private readonly IMvxReachability mvxReachability;
-        private readonly RestServiceSettings restServiceSettings;
+        private readonly ISettingsProvider settingsProvider;
 
-        public NetworkService(IMvxReachability mvxReachability, RestServiceSettings restServiceSettings)
+        public NetworkService(IMvxReachability mvxReachability, ISettingsProvider settingsProvider)
         {
             if(mvxReachability == null) throw new ArgumentNullException("mvxReachability");
-            if(restServiceSettings == null) throw new ArgumentNullException("restServiceSettings");
+            if(settingsProvider == null) throw new ArgumentNullException("settingsProvider");
 
             this.mvxReachability = mvxReachability;
-            this.restServiceSettings = restServiceSettings;
+            this.settingsProvider = settingsProvider;
         }
 
         public bool IsNetworkEnabled()
         {
-            return this.mvxReachability.IsHostReachable(this.restServiceSettings.Endpoint);
+            return this.mvxReachability.IsHostReachable(this.settingsProvider.Endpoint);
         }
     }
 }
