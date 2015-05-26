@@ -21,11 +21,6 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             get { return ServiceLocator.Current.GetInstance<Compressor>(); }
         }
 
-        private static RestServiceSettings RestServiceSettings
-        {
-            get { return ServiceLocator.Current.GetInstance<RestServiceSettings>(); }
-        }
-
         private static NewtonJsonSerializer JsonUtils
         {
             get { return ServiceLocator.Current.GetInstance<NewtonJsonSerializer>(); }
@@ -53,7 +48,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
                     token.ThrowIfCancellationRequested();
                 }
 
-                var buffer = new byte[RestServiceSettings.BufferSize];
+                var buffer = new byte[ServiceLocator.Current.GetInstance<ISettingsProvider>().BufferSize];
                 using (var ms = new MemoryStream())
                 {
                     int read;

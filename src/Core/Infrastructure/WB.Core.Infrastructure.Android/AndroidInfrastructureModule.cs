@@ -1,3 +1,4 @@
+using System.Security.Policy;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Modules;
@@ -45,17 +46,7 @@ namespace WB.Core.Infrastructure.Android
             this.Bind<IRestService>().To<RestService>().InSingletonScope();
 
             this.Bind<IExpressionsEngineVersionService>().To<ExpressionsEngineVersionService>().InSingletonScope();
-            this.Bind<ApplicationSettings>().ToSelf().InSingletonScope();
-
-            var applicationSettings = this.Kernel.Get<ApplicationSettings>();
-
-            this.Bind<RestServiceSettings>().ToConstant(new RestServiceSettings()
-            {
-                AcceptUnsignedSslCertificate = applicationSettings.AcceptUnsignedSslCertificate,
-                BufferSize = applicationSettings.BufferSize,
-                Endpoint = applicationSettings.DesignerEndpoint,
-                Timeout = applicationSettings.HttpResponseTimeout
-            });
+            this.Bind<ISettingsProvider>().To<ApplicationSettings>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
             this.Bind<IQuestionnaireAssemblyFileAccessor>()

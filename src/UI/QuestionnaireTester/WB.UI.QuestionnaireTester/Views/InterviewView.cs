@@ -40,12 +40,11 @@ namespace WB.UI.QuestionnaireTester.Views
 
             drawerLayout.SetDrawerListener(this.drawerToggle);
 
-            var layoutManager = new LinearLayoutManager(this);
+            var layoutManager = new LinearLayoutManager(this);;
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
             listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)BindingContext);
         }
-
 
         protected override void OnPostCreate(Bundle savedInstanceState)
         {

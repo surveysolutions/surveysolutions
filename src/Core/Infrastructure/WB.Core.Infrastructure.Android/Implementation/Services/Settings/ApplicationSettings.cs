@@ -2,18 +2,18 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Preferences;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
 {
-    internal class ApplicationSettings
+    internal class ApplicationSettings : ISettingsProvider
     {
         private const string ApplicationNameParameterName = "ApplicationName";
         private const string DesignerEndpointParameterName = "DesignerEndpoint";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
-
         private readonly IExpressionsEngineVersionService versionService;
 
         public ApplicationSettings(IExpressionsEngineVersionService versionService)
@@ -21,49 +21,39 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
             this.versionService = versionService;
         }
 
-        private static ISharedPreferences sharedPreferences
+        private static ISharedPreferences SharedPreferences
         {
             get
             {
-                return Application.Context.GetSharedPreferences(Application.Context.Resources.GetString(Resource.String.ApplicationName),
-                        FileCreationMode.Private);
+                return PreferenceManager.GetDefaultSharedPreferences(Application.Context);
             }
         }
 
-        private static void SavePreferenceValue(string preferenceParameterName, string value)
+        public string Endpoint
         {
-            ISharedPreferencesEditor prefEditor = sharedPreferences.Edit();
-            prefEditor.PutString(preferenceParameterName, value);
-            prefEditor.Commit();
+            get
+            {
+                var defaultValue = Application.Context.Resources.GetString(Resource.String.DesignerEndpoint);
+                var endpoint = SharedPreferences.GetString(DesignerEndpointParameterName, defaultValue);
+                return endpoint;
+            }
         }
 
-        private static string GetPreferenceString(string preferenceParameterName, int preferenceResourceId)
+        public TimeSpan RequestTimeout
         {
-            return sharedPreferences.GetString(preferenceParameterName, Application.Context.Resources.GetString(preferenceResourceId));
-        }
-
-        public string DesignerEndpoint
-        {
-            get { return GetPreferenceString(DesignerEndpointParameterName, Resource.String.DesignerEndpoint); }
-            set { SavePreferenceValue(DesignerEndpointParameterName, value); }
-        }
-
-        public TimeSpan HttpResponseTimeout
-        {
-            get { return new TimeSpan(0, 0, int.Parse(GetPreferenceString(HttpResponseTimeoutParameterName, Resource.String.HttpResponseTimeout))); }
-            set { SavePreferenceValue(HttpResponseTimeoutParameterName, value.Seconds.ToString()); }
+            get { return new TimeSpan(0, 0, SharedPreferences.GetInt(HttpResponseTimeoutParameterName,
+                                            Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout))); }
         }
 
         public int BufferSize
         {
-            get { return int.Parse(GetPreferenceString(BufferSizeParameterName, Resource.String.BufferSize)); }
-            set { SavePreferenceValue(BufferSizeParameterName, value.ToString()); }
+            get { return SharedPreferences.GetInt(BufferSizeParameterName, Application.Context.Resources.GetInteger(Resource.Integer.BufferSize)); }
         }
 
         public bool AcceptUnsignedSslCertificate
         {
-            get { return bool.Parse(GetPreferenceString(AcceptUnsignedSslCertificateParameterName, Resource.String.AcceptUnsignedSslCertificate)); }
-            set { SavePreferenceValue(BufferSizeParameterName, value.ToString()); }
+            get { return SharedPreferences.GetBoolean(AcceptUnsignedSslCertificateParameterName, 
+                Application.Context.Resources.GetBoolean(Resource.Boolean.AcceptUnsignedSslCertificate)); }
         }
 
         public string ApplicationVersion
@@ -86,7 +76,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
 
         public string ApplicationName
         {
-            get { return GetPreferenceString(ApplicationNameParameterName, Resource.String.ApplicationName); }
+            get { return SharedPreferences.GetString(ApplicationNameParameterName, Application.Context.Resources.GetString(Resource.String.ApplicationName)); }
         }
     }
 }

@@ -17,15 +17,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         private readonly ILogger logger;
         private readonly IRestService restService;
-        private readonly RestServiceSettings restServiceSettings;
+        private readonly ISettingsProvider settingsProvider;
         private readonly IUserIdentity userIdentity;
         private readonly IUserInteraction userInteraction;
 
-        public DesignerApiService(ILogger logger, IRestService restService, RestServiceSettings restServiceSettings, IUserIdentity userIdentity, IUserInteraction userInteraction)
+        public DesignerApiService(ILogger logger, 
+            IRestService restService, 
+            ISettingsProvider settingsProvider, 
+            IUserIdentity userIdentity, 
+            IUserInteraction userInteraction)
         {
             this.logger = logger;
             this.restService = restService;
-            this.restServiceSettings = restServiceSettings;
+            this.settingsProvider = settingsProvider;
             this.userIdentity = userIdentity;
             this.userInteraction = userInteraction;
         }
@@ -117,16 +121,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     {
                         case HttpStatusCode.Forbidden:
                             errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
-                                GetDomainName(this.restServiceSettings.Endpoint), selectedQuestionnaire.Id,
+                                GetDomainName(this.settingsProvider.Endpoint), selectedQuestionnaire.Id,
                                 selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName);
                             break;
                         case HttpStatusCode.PreconditionFailed:
                             errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                GetDomainName(this.restServiceSettings.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
+                                GetDomainName(this.settingsProvider.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
                             break;
                         case HttpStatusCode.NotFound:
                             errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                                GetDomainName(this.restServiceSettings.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
+                                GetDomainName(this.settingsProvider.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
                             break;
                     }
                 }

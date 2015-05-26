@@ -1,47 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <CheckBoxPreference
+      android:key="pref_dev"
+      android:title="I'm a developer"
+      android:summary="Enable developer settings"
+      android:defaultValue="false" />
 
-  <PreferenceCategory android:title="Inline Preferences">
-    <CheckBoxPreference android:key="checkbox_preference"
-                        android:title="Checkbox Preference Title"
-                        android:summary="Checkbox Preference Summary" />
 
-  </PreferenceCategory>
-
-  <PreferenceCategory android:title="Dialog Based Preferences">
-
-    <EditTextPreference android:key="edittext_preference"
-                        android:title="EditText Preference Title"
-                        android:summary="EditText Preference Summary"
-                        android:dialogTitle="Edit Text Preferrence Dialog Title" />
-
-  </PreferenceCategory>
-
-  <PreferenceCategory android:title="Launch Preferences">
-
-    <!-- This PreferenceScreen tag serves as a screen break (similar to page break
-             in word processing). Like for other preference types, we assign a key
-             here so it is able to save and restore its instance state. -->
-    <PreferenceScreen android:key="screen_preference"
-                      android:title="Title Screen Preferences"
-                      android:summary="Summary Screen Preferences">
-
-      <!-- You can place more preferences here that will be shown on the next screen. -->
-
-      <CheckBoxPreference android:key="next_screen_checkbox_preference"
-                          android:title="Next Screen Toggle Preference Title"
-                          android:summary="Next Screen Toggle Preference Summary" />
-
-    </PreferenceScreen>
-
-    <PreferenceScreen android:title="Intent Preference Title"
-                      android:summary="Intent Preference Summary">
-
-      <intent android:action="android.intent.action.VIEW"
-              android:data="http://www.android.com" />
-
-    </PreferenceScreen>
+  <PreferenceCategory android:title="Connection settings"
+                      >
+    <EditTextPreference android:key="DesignerEndpoint"
+           android:summary="Designer URL"
+            android:dependency="pref_dev"
+           android:title="URL that is used to communicate with designer application"
+           android:defaultValue="@string/DesignerEndpoint"/>
+    <CheckBoxPreference android:key="AcceptUnsignedSslCertificate"
+                         android:dependency="pref_dev"
+      android:title="Accept unsigned certificate"
+      android:defaultValue="@bool/AcceptUnsignedSslCertificate" />
 
   </PreferenceCategory>
+
 
 </PreferenceScreen>

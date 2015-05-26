@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
@@ -11,22 +13,20 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
 {
     internal class RestService : IRestService
     {
-        private readonly RestServiceSettings restServiceSettings;
+        private readonly ISettingsProvider settingsProvider;
         private readonly ILogger logger;
         private readonly INetworkService networkService;
+        private static RemoteCertificateValidationCallback defautCallback = null;
 
-        public RestService(RestServiceSettings restServiceSettings, ILogger logger, INetworkService networkService)
+        public RestService(ISettingsProvider settingsProvider, ILogger logger, INetworkService networkService)
         {
-            if(restServiceSettings == null) throw new ArgumentNullException("restServiceSettings");
+            if (settingsProvider == null) throw new ArgumentNullException("settingsProvider");
             if(logger == null) throw new ArgumentNullException("logger");
             if(networkService == null) throw  new ArgumentNullException("networkService");
 
-            this.restServiceSettings = restServiceSettings;
+            this.settingsProvider = settingsProvider;
             this.logger = logger;
             this.networkService = networkService;
-
-            if (this.restServiceSettings.AcceptUnsignedSslCertificate)
-                AcceptUnsignedSslCertificate();
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url, Func<FlurlClient, Task<HttpResponseMessage>> request, CancellationToken token,
@@ -36,14 +36,15 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             {
                 throw new RestException("No network");
             }
+            AcceptUnsignedSslCertificate();
 
-            var fullUrl = this.restServiceSettings.Endpoint
+            var fullUrl = this.settingsProvider.Endpoint
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
 
             var restClient = fullUrl
                 .ConfigureHttpClient(http => new HttpClient(new RestMessageHandler(token)))
-                .WithTimeout(this.restServiceSettings.Timeout)
+                .WithTimeout(this.settingsProvider.RequestTimeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
             if (credentials != null)
@@ -74,9 +75,20 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             }
         }
 
-        private static void AcceptUnsignedSslCertificate()
+        private void AcceptUnsignedSslCertificate()
         {
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            if (ServicePointManager.ServerCertificateValidationCallback != AcceptAnyCertificateValidationCallback)
+            {
+                defautCallback = ServicePointManager.ServerCertificateValidationCallback;
+            }
+
+            ServicePointManager.ServerCertificateValidationCallback =
+                this.settingsProvider.AcceptUnsignedSslCertificate ? AcceptAnyCertificateValidationCallback : defautCallback;
+        }
+
+        private static bool AcceptAnyCertificateValidationCallback(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
         }
 
         public async Task<T> GetAsync<T>(string url, object queryString = null, RestCredentials credentials = null)
