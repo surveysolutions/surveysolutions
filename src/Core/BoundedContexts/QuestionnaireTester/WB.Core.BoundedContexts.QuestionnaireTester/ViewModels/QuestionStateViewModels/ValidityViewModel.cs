@@ -18,6 +18,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         ILiteEventHandler<AnswersDeclaredValid>,
         ILiteEventHandler<AnswersDeclaredInvalid>
     {
+        public class ErrorMessageViewModel: MvxNotifyPropertyChanged
+        {
+            public ErrorMessageViewModel(string errorCaptionText, string errorMessageText)
+            {
+                ErrorMessage = errorMessageText;
+                ErrorCaption = errorCaptionText;
+            }
+
+            private string errorMessage;
+            public string ErrorMessage
+            {
+                get { return errorMessage; }
+                private set { errorMessage = value; RaisePropertyChanged(); }
+            }
+
+            private string errorCaption;
+            public string ErrorCaption
+            {
+                get { return errorCaption; }
+                private set { errorCaption = value; RaisePropertyChanged(); }
+            }
+        }
+
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
@@ -55,20 +78,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             get { return isInvalid; }
             private set { isInvalid = value; RaisePropertyChanged(); }
-        }        
-        
-        private string errorMessage;
-        public string ErrorMessage
+        }
+
+        private ErrorMessageViewModel error;
+        public ErrorMessageViewModel Error
         {
-            get { return errorMessage; }
-            private set { errorMessage = value; RaisePropertyChanged(); }
-        }        
-        
-        private string errorCaption;
-        public string ErrorCaption
-        {
-            get { return errorCaption; }
-            private set { errorCaption = value; RaisePropertyChanged(); }
+            get { return this.error; }
+            private set { this.error = value; RaisePropertyChanged(); }
         }
 
         private void UpdateValidState()
@@ -94,8 +110,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             }
 
             IsInvalid = isInvalidAnswer || wasException;
-            ErrorMessage = errorMessageText;
-            ErrorCaption = errorCaptionText;
+            this.Error = new ErrorMessageViewModel(errorCaptionText, errorMessageText);
         }
 
 
@@ -133,7 +148,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             exception = null;
             IsInvalid = true;
-            ErrorMessage = errorMessageText;
+            this.Error = new ErrorMessageViewModel(string.Empty, errorMessageText);
         }
     }
 }
