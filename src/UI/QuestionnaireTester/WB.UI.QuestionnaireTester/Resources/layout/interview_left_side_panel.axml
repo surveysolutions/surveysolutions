@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:local="http://schemas.android.com/apk/res-auto"
+                 style="@style/Interview_Sidebar_Body">
+  <TextView style="@style/Interview_Sidebar_Title"
+            local:MvxBind="Text QuestionnaireTitle" />
+  <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
+               local:MvxBind="ItemsSource PrefilledQuestions"
+               local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
+  <include layout="@layout/interview_chapters" />
+</MvxLinearLayout>

@@ -52,19 +52,15 @@
   </style>
 
   <style name="Interview_Sidebar_PrefilledQuestions" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
     <item name="android:orientation">vertical</item>
     <item name="android:divider">@null</item>
     <item name="android:dividerHeight">@dimen/zero</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_PrefilledQuestions_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Sidebar_PrefilledQuestions_margin_horizontal</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_PrefilledQuestions_margin_top</item>
   </style>
 
-  <style name="PrefilledQuestions_List" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:orientation">vertical</item>
+  <style name="PrefilledQuestions_List" parent="VerticalFullWidthWrappingLayout">
     <item name="android:smoothScrollbar">true</item>
     <item name="android:scrollingCache">false</item>
     <item name="android:animationCache">false</item>
@@ -92,19 +88,29 @@
   </style>
 
   <style name="Interview_Sidebar" parent="AppTheme">
-    <item name="android:layout_width">@dimen/Interview_Sidebar_width</item>
+    <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>
     <item name="android:layout_gravity">left|start</item>
     <item name="android:fitsSystemWindows">true</item>
     <item name="android:background">#FFFFFFFF</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:padding">@dimen/Interview_Sidebar_padding</item>
+    <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
+  </style>
+  
+  <style name="Interview_Sidebar_Body" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginRight">@dimen/Interview_Sidebar_Body_margin_right</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_Body_margin_left</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_Body_margin_top</item>
+  </style>
+  
+  <style name="Interview_Sidebar_Chapters" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_Chapters_margin_top</item>
   </style>
 
   <style name="Interview_Sidebar_PrefilledQuestion_Question" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">#FF747474</item>
   </style>
@@ -113,18 +119,15 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_PrefilledQuestion_Answer_margin_left</item>
   </style>
 
   <style name="Interview_Sidebar_Title" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textSize">@dimen/textsize_18</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_Title_margin_top</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_Title_margin_left</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Sidebar_Title_margin_bottom</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:singleLine">false</item>
   </style>
 

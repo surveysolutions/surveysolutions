@@ -1,53 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-    <MvxLinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
-      <LinearLayout style="@style/Interview_BreadCrumbsContainer">
-        <FlowLayout
-                    orienation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-          local:MvxBind="ItemsSource Breadcrumbs.Items"
-          local:MvxItemTemplate="@layout/interview_breadcrumb_item">
-        </FlowLayout>
-        
-      </LinearLayout>
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-            <TextView
-                style="@style/InterviewToolbarTitle"
+                                        xmlns:local="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/drawer_layout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fitsSystemWindows="true">
+  <MvxLinearLayout android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="vertical">
+    <LinearLayout style="@style/Interview_BreadCrumbsContainer">
+      <FlowLayout orienation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  local:MvxBind="ItemsSource Breadcrumbs.Items"
+                  local:MvxItemTemplate="@layout/interview_breadcrumb_item">
+      </FlowLayout>
+
+    </LinearLayout>
+    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:background="?attr/colorPrimary"
+                                       local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+      <TextView style="@style/InterviewToolbarTitle"
                 local:MvxBind="Text CurrentGroup.Name" />
-        </android.support.v7.widget.Toolbar>
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:fillViewport="true">
-            <include
-                layout="@layout/interview_current_group" />
-        </ScrollView>
-    </MvxLinearLayout>
-    <MvxLinearLayout
-        style="@style/Interview_Sidebar">
-        <TextView
-            style="@style/Interview_Sidebar_Title"
-            local:MvxBind="Text QuestionnaireTitle" />
-        <MvxListView
-            style="@style/Interview_Sidebar_PrefilledQuestions"
-            local:MvxBind="ItemsSource PrefilledQuestions"
-            local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
-        <include
-            layout="@layout/interview_chapters" />
-    </MvxLinearLayout>
+    </android.support.v7.widget.Toolbar>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+      <include layout="@layout/interview_current_group" />
+    </ScrollView>
+  </MvxLinearLayout>
+  <MvxLinearLayout style="@style/Interview_Sidebar">
+    <include layout="@layout/interview_left_side_panel" />
+  </MvxLinearLayout>
 </android.support.v4.widget.DrawerLayout>

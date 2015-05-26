@@ -7,10 +7,6 @@
 
   <dimen name="Interview_Entity_Element_margin_horizontal">14dp</dimen>
 
-
-  <dimen name="Interview_Sidebar_width">520dp</dimen>
-
-
   <dimen name="Interview_Question_Instruction_Title_margin_top">10dp</dimen>
 
   <dimen name="Interview_Question_Answer_margin_top">10dp</dimen>
