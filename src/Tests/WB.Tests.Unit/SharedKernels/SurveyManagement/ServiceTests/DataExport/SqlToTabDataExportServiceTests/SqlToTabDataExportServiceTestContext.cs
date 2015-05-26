@@ -24,9 +24,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
     [Subject(typeof (SqlToTabDataExportService))]
     internal class SqlToTabDataExportServiceTestContext
     {
-        protected static SqlToTabDataExportService CreateSqlToTabDataExportService(ICsvWriterService csvWriterService = null, QuestionnaireExportStructure questionnaireExportStructure=null)
+        protected static SqlToTabDataExportService CreateSqlToTabDataExportService(ICsvWriterService csvWriterService = null, 
+            QuestionnaireExportStructure questionnaireExportStructure = null,
+            IExportedDataAccessor exportedDataAccessor = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            ITabFileReader tabFileReader = null,
+            IDatasetWriterFactory datasetWriterFactory = null)
         {
-            return new SqlToTabDataExportService(Mock.Of<IFileSystemAccessor>(),
+            return new SqlToTabDataExportService(
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
                 Mock.Of<IExportedDataAccessor>(),
@@ -35,7 +41,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewExportedDataRecord>>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewHistory>>(), Mock.Of<IJsonUtils>(),
                 Mock.Of<ITransactionManagerProvider>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(),
+                tabFileReader ?? Mock.Of<ITabFileReader>(),
+                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
@@ -58,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
         protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames = null)
         {
-            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, QuestionType = type };
+            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type };
         }
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)

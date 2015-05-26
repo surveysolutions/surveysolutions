@@ -432,6 +432,7 @@
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
+    <Content Include="Views\HQ\DataExport.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

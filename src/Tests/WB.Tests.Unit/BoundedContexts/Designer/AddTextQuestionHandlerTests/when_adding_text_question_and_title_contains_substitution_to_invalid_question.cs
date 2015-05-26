@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__title___not_existing_variable_name__as__substitution__ = () =>
-            new[] { "title", "contains", "unknown", "substitution" }.ShouldEachConformTo(
+            new[] { "text", "contains", "unknown", "substitution" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

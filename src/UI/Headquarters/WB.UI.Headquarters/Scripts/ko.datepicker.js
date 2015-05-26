@@ -11,7 +11,7 @@
             var observable = valueAccessor();
             // hack to prevent toggling selected day error https://github.com/eternicode/bootstrap-datepicker/issues/775
             if (e.date === undefined) {
-                observable(previousValue);
+                observable(previousValue instanceof Date && isFinite(previousValue) ? previousValue : null);
             } else {
                 var date = $el.datepicker("getDate");
                 previousValue = date;
