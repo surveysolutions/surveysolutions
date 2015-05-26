@@ -31,7 +31,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                     break;
             }
 
-            androidControl.SetBackgroundDrawable(androidControl.Resources.GetDrawable(groupBackgroundResourceId));
+            androidControl.SetBackgroundResource(groupBackgroundResourceId);
         }
     }
 }
