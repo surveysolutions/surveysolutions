@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 {
     public interface IStatefulInterview
     {

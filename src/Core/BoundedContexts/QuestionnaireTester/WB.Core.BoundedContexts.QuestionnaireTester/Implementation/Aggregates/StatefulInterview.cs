@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -19,39 +16,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 {
     public class StatefulInterview : Interview, IStatefulInterview
     {
-        private Dictionary<string, BaseInterviewAnswer> answers;
-        private Dictionary<string, InterviewGroup> groups;
-        private Dictionary<string, List<Identity>> rosterInstancesIds;
-        private Dictionary<Guid, Type> questionIdToQuestionModelTypeMap;
+        private readonly Dictionary<string, BaseInterviewAnswer> answers;
+        private readonly Dictionary<string, InterviewGroup> groups;
+        private readonly Dictionary<string, List<Identity>> rosterInstancesIds;
+        private readonly Dictionary<string, bool> untypedQuestionsValidityStatus;
+        private readonly Dictionary<string, bool> untypedQuestionsEnablementStatus;
+        private readonly Dictionary<string, string> untypedQuestionsInterviewerComments;
 
         public StatefulInterview()
         {
             this.answers = new Dictionary<string, BaseInterviewAnswer>();
             this.groups = new Dictionary<string, InterviewGroup>();
             this.rosterInstancesIds = new Dictionary<string, List<Identity>>();
-            this.questionIdToQuestionModelTypeMap = new Dictionary<Guid, Type>();
+            this.untypedQuestionsValidityStatus = new Dictionary<string, bool>();
+            this.untypedQuestionsEnablementStatus = new Dictionary<string, bool>();
+            this.untypedQuestionsInterviewerComments = new Dictionary<string, string>();
         }
-
-        private static IPlainKeyValueStorage<QuestionnaireModel> QuestionnaireModelRepository
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireModel>>(); }
-        }
-      
-        private readonly Dictionary<Type, Func<BaseInterviewAnswer>> questionModelTypeToAnswerModelActivatorMap = new Dictionary<Type, Func<BaseInterviewAnswer>>
-        {
-            { typeof(SingleOptionQuestionModel), () => new SingleOptionAnswer()},
-            { typeof(LinkedSingleOptionQuestionModel), () => new LinkedSingleOptionAnswer()},
-            { typeof(MultiOptionQuestionModel), () => new MultiOptionAnswer()},
-            { typeof(LinkedMultiOptionQuestionModel), () => new LinkedMultiOptionAnswer()},
-            { typeof(IntegerNumericQuestionModel), () => new IntegerNumericAnswer()},
-            { typeof(RealNumericQuestionModel), () => new RealNumericAnswer()},
-            { typeof(MaskedTextQuestionModel), () => new MaskedTextAnswer()},
-            { typeof(TextListQuestionModel), () => new TextListAnswer()},
-            { typeof(QRBarcodeQuestionModel), () => new QRBarcodeAnswer()},
-            { typeof(MultimediaQuestionModel), () => new MultimediaAnswer()},
-            { typeof(DateTimeQuestionModel), () => new DateTimeAnswer()},
-            { typeof(GpsCoordinatesQuestionModel), () => new GpsCoordinatesAnswer()}
-        };
 
         protected new void Apply(InterviewOnClientCreated @event)
         {
@@ -60,9 +40,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             this.Id = this.EventSourceId;
             this.QuestionnaireId = @event.QuestionnaireId.FormatGuid();
             this.QuestionnaireVersion = @event.QuestionnaireVersion;
-
-            var questionnaire = QuestionnaireModelRepository.GetById(this.questionnaireId.FormatGuid());
-            this.QuestionIdToQuestionModelTypeMap = questionnaire.Questions.ToDictionary(x => x.Key, x => x.Value.GetType());
         }
 
         #region Applying answers
@@ -156,8 +133,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         internal new void Apply(AnswerCommented @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer(@event.QuestionId, @event.PropagationVector);
-            answer.InterviewerComment = @event.Comment;
+            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+            if (answer != null) 
+                answer.InterviewerComment = @event.Comment;
+            else
+            {
+                untypedQuestionsInterviewerComments[questionKey] = @event.Comment;
+            }
         }
 
         #region Group and question status and validity
@@ -175,8 +158,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x =>
             {
-                var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.IsValid = true;
+                var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
+                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+                if (answer != null)
+                    answer.IsValid = true;
+                else
+                {
+                    untypedQuestionsValidityStatus[questionKey] = true;
+                }
             });
         }
 
@@ -185,8 +174,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x =>
             {
-                var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.IsValid = false;
+                var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
+                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+                if (answer != null) 
+                    answer.IsValid = false;
+                else
+                {
+                    untypedQuestionsValidityStatus[questionKey] = false;
+                }
             });
         }
 
@@ -215,8 +210,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x =>
             {
-                var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.IsEnabled = false;
+                var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
+                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+                if (answer != null) 
+                    answer.IsEnabled = false;
+                else
+                {
+                    untypedQuestionsEnablementStatus[questionKey] = false;
+                }
             });
         }
 
@@ -225,8 +226,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             base.Apply(@event);
             @event.Questions.ForEach(x =>
             {
-                var answer = this.GetOrCreateAnswer(x.Id, x.RosterVector);
-                answer.IsEnabled = true;
+                var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
+                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+                if (answer != null) 
+                    answer.IsEnabled = true;
+                else
+                {
+                    untypedQuestionsEnablementStatus[questionKey] = true;
+                }
             });
         }
 
@@ -348,12 +355,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public Dictionary<Guid, Type> QuestionIdToQuestionModelTypeMap
-        {
-            get { return this.questionIdToQuestionModelTypeMap ?? (this.questionIdToQuestionModelTypeMap = new Dictionary<Guid, Type>()); }
-            set { this.questionIdToQuestionModelTypeMap = value; }
-        }
-
         public bool HasErrors { get; set; }
 
         public bool IsInProgress { get; set; }
@@ -422,7 +423,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
             if (!this.Answers.ContainsKey(questionKey))
-                return true;
+            {
+                return !this.untypedQuestionsValidityStatus.ContainsKey(questionKey) || this.untypedQuestionsValidityStatus[questionKey];
+            }
 
             var interviewAnswerModel = this.Answers[questionKey];
             return interviewAnswerModel.IsValid;
@@ -444,6 +447,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 return answer.IsEnabled;
             }
 
+            if (this.untypedQuestionsEnablementStatus.ContainsKey(entityKey))
+            {
+                return this.untypedQuestionsEnablementStatus[entityKey];
+            }
+
             return true;
         }
 
@@ -461,26 +469,78 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
             if (!Answers.ContainsKey(questionKey))
-                return null;
+            {
+                return this.untypedQuestionsInterviewerComments.ContainsKey(questionKey) 
+                    ? this.untypedQuestionsInterviewerComments[questionKey] 
+                    : null;
+            }
 
             var interviewAnswerModel = Answers[questionKey];
             return interviewAnswerModel.InterviewerComment;
         }
 
-        private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer
+        private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer, new()
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
-            if (!this.Answers.ContainsKey(questionKey)) return null;
-            return (T)this.Answers[questionKey];
+            if (this.Answers.ContainsKey(questionKey))
+            {
+                return (T)this.Answers[questionKey];
+            }
+
+            if (!this.untypedQuestionsEnablementStatus.ContainsKey(questionKey)
+                && !this.untypedQuestionsInterviewerComments.ContainsKey(questionKey)
+                && !this.untypedQuestionsValidityStatus.ContainsKey(questionKey))
+            {
+                return null;
+            }
+
+            var interviewerComment = this.untypedQuestionsInterviewerComments.ContainsKey(questionKey)
+                ? this.untypedQuestionsInterviewerComments[questionKey]
+                : null;
+
+            var isEnabled = !this.untypedQuestionsEnablementStatus.ContainsKey(questionKey) || this.untypedQuestionsEnablementStatus[questionKey];
+            var isValid = !this.untypedQuestionsValidityStatus.ContainsKey(questionKey) || this.untypedQuestionsValidityStatus[questionKey];
+
+            var answer = new T
+            {
+                InterviewerComment = interviewerComment,
+                IsEnabled = isEnabled,
+                IsValid = isValid
+            };
+
+            return answer;
         }
 
         private T GetOrCreateAnswer<T>(QuestionActiveEvent @event) where T : BaseInterviewAnswer, new()
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
-            var question = (this.Answers.ContainsKey(questionKey))
-                ? (T)this.Answers[questionKey]
-                : new T { Id = @event.QuestionId, RosterVector = @event.PropagationVector };
+            T question;
+            if (this.Answers.ContainsKey(questionKey))
+            {
+                question = (T)this.Answers[questionKey];
+            }
+            else
+            {
+                question = new T { Id = @event.QuestionId, RosterVector = @event.PropagationVector };
+                if (untypedQuestionsEnablementStatus.ContainsKey(questionKey))
+                {
+                    question.IsEnabled = untypedQuestionsEnablementStatus[questionKey];
+                    untypedQuestionsEnablementStatus.Remove(questionKey);
+                }
+
+                if (untypedQuestionsValidityStatus.ContainsKey(questionKey))
+                {
+                    question.IsValid = untypedQuestionsValidityStatus[questionKey];
+                    untypedQuestionsValidityStatus.Remove(questionKey);
+                }
+
+                if (untypedQuestionsInterviewerComments.ContainsKey(questionKey))
+                {
+                    question.InterviewerComment = untypedQuestionsInterviewerComments[questionKey];
+                    untypedQuestionsInterviewerComments.Remove(questionKey);
+                }
+            }
 
             this.answers[questionKey] = question;
             return question;
@@ -505,27 +565,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
             this.groups[groupKey] = groupOrRoster;
             return groupOrRoster;
-        }
-
-        private BaseInterviewAnswer GetOrCreateAnswer(Guid id, decimal[] rosterVector)
-        {
-            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
-
-            BaseInterviewAnswer answer;
-            if (this.Answers.ContainsKey(questionKey))
-            {
-                answer = this.Answers[questionKey];
-            }
-            else
-            {
-                var questionModelType = this.QuestionIdToQuestionModelTypeMap[id];
-                var questionActivator = this.questionModelTypeToAnswerModelActivatorMap[questionModelType];
-                answer = questionActivator();
-                answer.Id = id;
-                answer.RosterVector = rosterVector;
-                this.answers[questionKey] = answer;
-            }
-            return answer;
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)
