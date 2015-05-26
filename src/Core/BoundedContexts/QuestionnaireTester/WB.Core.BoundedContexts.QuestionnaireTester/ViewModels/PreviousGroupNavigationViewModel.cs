@@ -1,6 +1,8 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
@@ -9,6 +11,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -34,30 +37,40 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private NavigationState navigationState;
 
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly GroupStatisticsViewModel groupStatisticsViewModel;
 
         public PreviousGroupNavigationViewModel(
             ILiteEventRegistry liteEventRegistry,
-            IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository, 
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
             IStatefullInterviewRepository interviewRepository,
             GroupStatisticsViewModel groupStatisticsViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.groupStatisticsViewModel = groupStatisticsViewModel;
         }
 
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.entityIdentity = entityIdentity;
+            this.entityIdentity = groupIdentity;
             this.navigationState = navigationState;
 
-            liteEventRegistry.Subscribe(this);
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var patents = questionnaire.GroupParents[groupIdentity.Id];
+            IsExistsParent = patents.Count > 0;
+
+            if (IsExistsParent)
+            {
+                liteEventRegistry.Subscribe(this);
+            }
+
+            ButtonText = UIResources.Interview_PreviousGroupNavigation_ButtonText;
 
             UpdateSelfFromModel();
         }
@@ -69,11 +82,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { buttonText = value; RaisePropertyChanged(); }
         }
 
-        private string note;
-        public string Note
+        private GroupStatistics statistics;
+        public GroupStatistics Statistics
         {
-            get { return note; }
-            set { note = value; RaisePropertyChanged(); }
+            get { return statistics; }
+            set { statistics = value; RaisePropertyChanged(); }
+        }        
+        
+        private bool isExistsParent;
+        public bool IsExistsParent
+        {
+            get { return this.isExistsParent; }
+            set { this.isExistsParent = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand navigateToRosterCommand;
@@ -89,13 +109,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void UpdateSelfFromModel()
         {
-            var statistics = groupStatisticsViewModel.GetStatistics(interviewId, entityIdentity);
-
-            ButtonText = "Back to&#10;parent group";
-
-            Note = statistics.UnansweredQuestionsCount > 0
-                ? "Note: {0} questions is unanswered".FormatString(statistics.UnansweredQuestionsCount)
-                : "All {0} questions answered".FormatString(statistics.AnsweredQuestionsCount);
+            Statistics = groupStatisticsViewModel.GetStatistics(interviewId, entityIdentity);
         }
 
         #region Handle All Answers events

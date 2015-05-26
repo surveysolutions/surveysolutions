@@ -503,6 +503,34 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All {0} questions answered.
+        /// </summary>
+        public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
+            get {
+                return ResourceManager.GetString("Interview_PreviousGroupNavigation_AnsweredQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to
+        ///parent group.
+        /// </summary>
+        public static string Interview_PreviousGroupNavigation_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_PreviousGroupNavigation_ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: {0} questions is unanswered.
+        /// </summary>
+        public static string Interview_PreviousGroupNavigation_UnansweredQuestions {
+            get {
+                return ResourceManager.GetString("Interview_PreviousGroupNavigation_UnansweredQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
         /// </summary>
         public static string Interview_Question_Integer_ParsingError {

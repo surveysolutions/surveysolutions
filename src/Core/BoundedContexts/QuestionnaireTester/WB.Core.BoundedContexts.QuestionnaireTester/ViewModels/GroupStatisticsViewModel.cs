@@ -7,18 +7,18 @@ using WB.Core.SharedKernels.DataCollection;
 
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
-{
+{     
+    public class GroupStatistics
+    {
+        public int QuestionsCount { get; set; }
+        public int SubgroupsCount { get; set; }
+        public int AnsweredQuestionsCount { get; set; }
+        public int UnansweredQuestionsCount { get; set; }
+        public int InvalidAnswersCount { get; set; }
+    }
+
     public class GroupStatisticsViewModel
     {
-        public class GroupStatistics
-        {
-            public int QuestionsCount { get; set; }
-            public int SubgroupsCount { get; set; }
-            public int AnsweredQuestionsCount { get; set; }
-            public int UnansweredQuestionsCount { get; set; }
-            public int InvalidAnswersCount { get; set; }
-        }
-
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
 
@@ -29,12 +29,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewRepository = interviewRepository;
         }
 
-        public GroupStatistics GetStatistics(string interviewId, Identity entityIdentity)
+        public GroupStatistics GetStatistics(string interviewId, Identity groupIdentity)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var groupEntities = questionnaire.GroupsWithoutNestedChildren[entityIdentity.Id].Children;
+            var groupModel = questionnaire.GroupsWithoutNestedChildren[groupIdentity.Id];
+            var groupEntities = groupModel.Children;
 
             var groupModelTypes = new[] { typeof(GroupModel), typeof(RosterModel) };
             var nonQuestionModelTypes = groupModelTypes.Concat(new[] { typeof(StaticTextModel) });
@@ -43,12 +44,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             var questionsCount = groupQuestions.Count();
             var subgroupsCount = groupEntities.Count(x => groupModelTypes.Contains(x.ModelType));
-            /*var answeredQuestionsCount = interview.Answers.Values.Count(x => 
-                groupQuestions.Any(y => y.Id == x.Id) 
-                && x.RosterVector.SequenceEqual(entityIdentity.RosterVector) 
-                && x.IsAnswered); */
             var answeredQuestionsCount = groupQuestions.Count(question =>
-                interview.WasAnswered(new Identity(question.Id, entityIdentity.RosterVector)));
+                interview.WasAnswered(new Identity(question.Id, groupIdentity.RosterVector)));
 
             var invalidAnswersCount = 0;
             var unansweredQuestionsCount = questionsCount - answeredQuestionsCount;

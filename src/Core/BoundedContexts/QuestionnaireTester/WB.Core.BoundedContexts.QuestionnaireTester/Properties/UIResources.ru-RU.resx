@@ -357,4 +357,14 @@
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как вещественное число</value>
   </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>Все ({0}) вопросы отвеченны</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_ButtonText" xml:space="preserve">
+    <value>Поднятся на
+уровень выше</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>Внимание: неотвеченных вопросов - {0}</value>
+  </data>
 </root>
