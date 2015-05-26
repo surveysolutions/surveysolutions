@@ -387,4 +387,7 @@
   <data name="Interview_Group_OneInvalidAnswer" xml:space="preserve">
     <value>error</value>
   </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Tap to take photo</value>
+  </data>
 </root>
