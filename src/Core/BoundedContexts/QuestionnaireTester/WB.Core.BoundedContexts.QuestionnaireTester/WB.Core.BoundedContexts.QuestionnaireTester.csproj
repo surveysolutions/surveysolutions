@@ -73,6 +73,7 @@
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
     <Compile Include="Infrastructure\IQrBarcodeScanService.cs" />
+    <Compile Include="Infrastructure\ISettingsProvider.cs" />
     <Compile Include="Infrastructure\ScanResult.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
@@ -93,7 +94,6 @@
     <Compile Include="Infrastructure\PlainStorageSettings.cs" />
     <Compile Include="Infrastructure\RestCredentials.cs" />
     <Compile Include="Infrastructure\RestException.cs" />
-    <Compile Include="Infrastructure\RestServiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
