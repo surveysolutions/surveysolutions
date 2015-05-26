@@ -36,4 +36,7 @@
   <color name="question_input_button_pressed">#FAFAFA</color>
   <color name="question_input_button_unpressed">@android:color/white</color>
   
+  <color name="previous_group_navigation_answered">#7AC16B</color>
+  <color name="previous_group_navigation_unanswered">#2A81CB</color>
+  
 </resources>

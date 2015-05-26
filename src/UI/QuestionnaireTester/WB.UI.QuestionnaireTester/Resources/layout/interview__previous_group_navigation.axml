@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
-                 style="@style/Interview_Previous_Group_Navigation_Layout">
-  <MvxLinearLayout android:layout_width="wrap_content"
-                   android:layout_height="wrap_content">
-    <Button android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="10dp"
-      android:layout_marginRight="10dp"
-      local:MvxBind="Click NavigateToRosterCommand; Text ButtonText;"/>
-  </MvxLinearLayout>
-  <TextView
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    local:MvxBind="Text Note"/>
+                 style="@style/Interview_Previous_Group_Navigation_Layout"
+                 local:MvxBind="Visible IsExistsParent">
+  <Button style="@style/Interview_Previous_Group_Navigation_Button"
+    local:MvxBind="Click NavigateToRosterCommand; Text ButtonText;"/>
+  <TextView style="@style/Interview_Previous_Group_Navigation_Note"
+    local:MvxBind="GroupStatus Statistics"/>
 </MvxLinearLayout>

@@ -205,5 +205,21 @@
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Previous_Group_Navigation_Layout_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Previous_Group_Navigation_Layout_margin_bottom</item>
+  </style>
+
+  <style name="Interview_Previous_Group_Navigation_Button">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:paddingRight">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+    <item name="android:paddingLeft">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+  </style>
+
+  <style name="Interview_Previous_Group_Navigation_Note">
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Previous_Group_Navigation_Note_margin_left</item>
+    <item name="android:gravity">center_vertical</item>
   </style>
 </resources>
