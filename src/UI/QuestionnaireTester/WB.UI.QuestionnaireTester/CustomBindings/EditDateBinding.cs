@@ -33,8 +33,11 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         private void InputClick(object sender, EventArgs args)
         {
-            DateTime parsedDate = DateTime.Now;
-            DateTime.TryParse(Target.Text, out parsedDate);
+            DateTime parsedDate;
+            if (!DateTime.TryParse(Target.Text, out parsedDate))
+            {
+                parsedDate = DateTime.Now;
+            };
 
             var dialog = new DatePickerDialogFragment(Target.Context, parsedDate, OnDateSet);
             Activity act = (Activity) Target.Context;
