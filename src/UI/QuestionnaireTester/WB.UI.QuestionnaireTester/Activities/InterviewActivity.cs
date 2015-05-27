@@ -12,7 +12,7 @@ using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.Activities
 {
-    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateAlwaysHidden)]
     public class InterviewActivity : BaseActivity<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
