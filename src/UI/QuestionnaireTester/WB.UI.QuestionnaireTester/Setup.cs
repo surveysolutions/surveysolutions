@@ -76,17 +76,17 @@ namespace WB.UI.QuestionnaireTester
         {
             registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("Mask", (editText) => new EditTextMaskBinding(editText));
-            registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new FocusTextForEditTextBinding(editText));
-            registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new SetFocusForEditTextBinding(editText));
+            registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new EditTextFocusTextBinding(editText));
+            registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
-            registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new BackgroundDrawableBinding(view));
+            registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
-            registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditDateBinding(editText));
+            registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
             registry.RegisterCustomBindingFactory<Button>("RosterTitle", button => new ButtonRosterTitleBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupInfo", textView => new TextViewGroupInfoBinding(textView));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
-            registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new HideKeyboardOnClickViewBinding(view));
+            registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));
 
             base.FillTargetFactories(registry);
         }

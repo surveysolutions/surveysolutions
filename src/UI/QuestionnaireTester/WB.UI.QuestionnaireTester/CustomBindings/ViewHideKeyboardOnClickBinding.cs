@@ -10,9 +10,9 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class HideKeyboardOnClickViewBinding : BaseBinding<View, object>
+    public class ViewHideKeyboardOnClickBinding : BaseBinding<View, object>
     {
-        public HideKeyboardOnClickViewBinding(View view)
+        public ViewHideKeyboardOnClickBinding(View view)
             : base(view) {}
 
         public override MvxBindingMode DefaultMode

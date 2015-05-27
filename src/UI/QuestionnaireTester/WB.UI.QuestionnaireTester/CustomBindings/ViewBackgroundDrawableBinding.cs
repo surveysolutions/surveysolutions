@@ -4,9 +4,9 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class BackgroundDrawableBinding : BaseBinding<View, int?>
+    public class ViewBackgroundDrawableBinding : BaseBinding<View, int?>
     {
-        public BackgroundDrawableBinding(View androidControl)
+        public ViewBackgroundDrawableBinding(View androidControl)
             : base(androidControl)
         {
         }

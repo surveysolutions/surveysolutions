@@ -12,7 +12,7 @@ using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class EditDateBinding : MvxAndroidTargetBinding
+    public class EditTextDateBinding : MvxAndroidTargetBinding
     {
         private IMvxCommand Command;
 
@@ -21,7 +21,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             get { return (EditText)base.Target; }
         }
 
-        public EditDateBinding(EditText androidControl) : base(androidControl)
+        public EditTextDateBinding(EditText androidControl) : base(androidControl)
         {
             Target.Click += InputClick;
         }

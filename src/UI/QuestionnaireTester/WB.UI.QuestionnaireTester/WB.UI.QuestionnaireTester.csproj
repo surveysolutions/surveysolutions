@@ -240,15 +240,15 @@
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
-    <Compile Include="CustomBindings\HideKeyboardOnClickViewBinding.cs" />
+    <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
-    <Compile Include="CustomBindings\EditDateBinding.cs">
+    <Compile Include="CustomBindings\EditTextDateBinding.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomBindings\SetFocusForEditTextBinding.cs" />
-    <Compile Include="CustomBindings\FocusTextForEditTextBinding.cs" />
+    <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
+    <Compile Include="CustomBindings\EditTextFocusTextBinding.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
-    <Compile Include="CustomBindings\BackgroundDrawableBinding.cs" />
+    <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
     <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />

@@ -5,9 +5,9 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class FocusTextForEditTextBinding : BaseBinding<EditText, string>
+    public class EditTextFocusTextBinding : BaseBinding<EditText, string>
     {
-        public FocusTextForEditTextBinding(EditText view)
+        public EditTextFocusTextBinding(EditText view)
             : base(view)
         {
             view.ImeOptions = ImeAction.Done;

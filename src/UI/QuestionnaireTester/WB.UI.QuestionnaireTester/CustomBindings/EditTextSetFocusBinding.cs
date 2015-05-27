@@ -5,11 +5,11 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class SetFocusForEditTextBinding : BaseBinding<EditText, bool>
+    public class EditTextSetFocusBinding : BaseBinding<EditText, bool>
     {
         private bool subscribed;
 
-        public SetFocusForEditTextBinding(EditText editText)
+        public EditTextSetFocusBinding(EditText editText)
             : base(editText)
         {
             editText.ShowSoftInputOnFocus = true;
