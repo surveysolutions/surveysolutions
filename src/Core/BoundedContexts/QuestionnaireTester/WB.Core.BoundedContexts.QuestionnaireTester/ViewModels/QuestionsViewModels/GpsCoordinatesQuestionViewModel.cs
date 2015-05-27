@@ -3,13 +3,10 @@ using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -33,20 +30,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { answer = value; RaisePropertyChanged(); }
         }
 
-        private bool hasAnswer;
-        public bool HasAnswer
-        {
-            get { return hasAnswer; }
-            set { hasAnswer = value; RaisePropertyChanged(); }
-        }
-
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
             get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer, () => !this.IsInProgress)); }
         }
 
-        private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IMvxLocationWatcher geoLocationWatcher;
@@ -59,16 +48,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public AnsweringViewModel Answering { get; private set; }
 
 
-        public GpsCoordinatesQuestionViewModel(ICommandService commandService, 
+        public GpsCoordinatesQuestionViewModel(
             IUserIdentity userIdentity,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             IMvxLocationWatcher geoLocationWatcher,
             IUserInteraction userInteraction,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
-            this.commandService = commandService;
             this.userIdentity = userIdentity;
             this.interviewRepository = interviewRepository;
             this.geoLocationWatcher = geoLocationWatcher;
@@ -100,13 +87,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     Latitude = answerModel.Latitude,
                     Accuracy = answerModel.Accuracy
                 };
-                this.HasAnswer = true;
             }
         }
 
         private void SaveAnswer()
         {
             this.IsInProgress = true;
+
+            if (this.geoLocationWatcher.Started) return;
+
             this.geoLocationWatcher.Start(options: new MvxLocationOptions(),
                 success: this.SetGeoLocationAnswer,
                 error: async (error) => { await this.TryGetGeoLocationAgain(); });
@@ -154,7 +143,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 QuestionState.ProcessAnswerCommandException(ex);
             }
 
-            this.HasAnswer = true;
             this.Answer = location.Coordinates;
         }
     }

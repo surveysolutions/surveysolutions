@@ -243,6 +243,7 @@
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaskBinding.cs" />
+    <Compile Include="CustomControls\DynamicImageView.cs" />
     <Compile Include="CustomControls\EnterTimeView.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
     <Compile Include="CustomControls\HttpImageView.cs" />
@@ -473,6 +474,9 @@
     <AndroidResource Include="Resources\drawable-v21\group_started.xml" />
     <AndroidResource Include="Resources\drawable-v21\group_with_invalid_answers.xml" />
     <AndroidResource Include="Resources\drawable\group_disabled.xml" />
+    <AndroidResource Include="Resources\drawable\question_input_button.xml" />
+    <AndroidResource Include="Resources\drawable\question_input_button_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\question_input_button_unpressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

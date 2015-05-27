@@ -22,7 +22,7 @@
                         style="@style/Interview_Question_Answer_Gps_Location_Text"
                         local:MvxBind="Text Answer" />
                     <Button
-                        style="@style/Interview_Question_Answer_Gps_Location_Button"
+                        style="@style/Interview_Question_InputButton"
                         local:MvxBind="Click SaveAnswerCommand; Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
                 </MvxLinearLayout>
 
