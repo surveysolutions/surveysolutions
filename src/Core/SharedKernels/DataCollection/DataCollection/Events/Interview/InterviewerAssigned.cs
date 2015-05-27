@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public Guid InterviewerId { get; private set; }
         public DateTime? AssignTime { get; private set; }
-        public InterviewerAssigned(Guid userId, Guid interviewerId, DateTime assignTime)
+        public InterviewerAssigned(Guid userId, Guid interviewerId, DateTime? assignTime)
             : base(userId)
         {
             this.InterviewerId = interviewerId;
