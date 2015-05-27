@@ -486,6 +486,7 @@
     <AndroidResource Include="Resources\drawable\question_input_button.xml" />
     <AndroidResource Include="Resources\drawable\question_input_button_pressed.xml" />
     <AndroidResource Include="Resources\drawable\question_input_button_unpressed.xml" />
+    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
