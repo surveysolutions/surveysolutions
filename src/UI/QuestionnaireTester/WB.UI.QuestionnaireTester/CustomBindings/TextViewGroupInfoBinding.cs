@@ -25,18 +25,18 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
             string groupInformationText;
 
-            if (value.AnsweredQuestionsCount == 0)
+            if (value.Status == GroupStatus.NotStarted)
             {
                 groupInformationText = UIResources.Interview_Group_NotStarted;
             }
-            else if (value.InvalidAnswersCount == 0)
-            {
-                groupInformationText = GetInformationByQuestionsAndAnswers(value);
-            }
-            else
+            else if (value.Status == GroupStatus.StartedInvalid || value.Status == GroupStatus.CompletedInvalid)
             {
                 groupInformationText = string.Format("{0}, {1}", GetInformationByQuestionsAndAnswers(value),
                     GetInformationByInvalidAnswers(value));
+            }
+            else
+            {
+                groupInformationText = GetInformationByQuestionsAndAnswers(value);
             }
 
             var spannableText = new SpannableString(groupInformationText);
@@ -44,7 +44,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             var groupColorByStatus = GetGroupColorByStatus(value);
             spannableText.SetSpan(new ForegroundColorSpan(groupColorByStatus), 0, spannableText.Length(), SpanTypes.ExclusiveExclusive);
 
-            if (value.InvalidAnswersCount > 0)
+            if (value.Status == GroupStatus.StartedInvalid || value.Status == GroupStatus.CompletedInvalid)
             {
                 var groupWithInvalidAnswersColor = this.GetColorFromResources(Resource.Color.group_with_invalid_answers);
 
