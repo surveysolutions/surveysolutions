@@ -73,6 +73,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
 
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
+
+            var existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
+            if (existingAnswer != null && existingAnswer.IsAnswered)
+            {
+                foreach (var answer in existingAnswer.Answers)
+                {
+                    this.Options.First(x => x.Value == answer).Checked = true;
+                }
+            }
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
