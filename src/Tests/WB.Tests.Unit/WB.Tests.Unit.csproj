@@ -2035,10 +2035,6 @@
       <Project>{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}</Project>
       <Name>WB.Core.GenericSubdomains.ErrorReporting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj">
       <Project>{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}</Project>
       <Name>WB.Core.GenericSubdomains.Native</Name>
