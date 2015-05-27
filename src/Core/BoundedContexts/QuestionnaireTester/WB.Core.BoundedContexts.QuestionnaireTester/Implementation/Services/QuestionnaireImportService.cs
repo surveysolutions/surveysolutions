@@ -234,6 +234,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionModel.IsPrefilled = question.Featured;
             questionModel.ValidationMessage = question.ValidationMessage;
             questionModel.Instructions = question.Instructions;
+            questionModel.Variable = question.StataExportCaption;
 
             return questionModel;
         }
