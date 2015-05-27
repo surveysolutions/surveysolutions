@@ -1,16 +1,17 @@
-﻿using Android.Views;
+﻿using Android.Graphics.Drawables;
+using Android.Views;
 using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class BackgroundDrawableBinding : BindingWrapper<View, int>
+    public class BackgroundDrawableBinding : BindingWrapper<View, int?>
     {
         public BackgroundDrawableBinding(View androidControl)
             : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(View androidControl, int drawableBackgroundId)
+        protected override void SetValueToView(View androidControl, int? drawableBackgroundId)
         {
             SetBackgroundDrawable(androidControl, drawableBackgroundId);
         }
@@ -20,9 +21,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             get { return MvxBindingMode.OneWay; }
         }
 
-        private void SetBackgroundDrawable(View androidControl, int questionBackgroundActive)
+        private void SetBackgroundDrawable(View androidControl, int? backgroundId)
         {
-            androidControl.SetBackgroundDrawable(androidControl.Resources.GetDrawable(questionBackgroundActive));
+            if (backgroundId.HasValue)
+            {
+                var backgroundDrawable = androidControl.Resources.GetDrawable(backgroundId.Value);
+                androidControl.SetBackgroundDrawable(backgroundDrawable);
+            }
         }
     }
 }

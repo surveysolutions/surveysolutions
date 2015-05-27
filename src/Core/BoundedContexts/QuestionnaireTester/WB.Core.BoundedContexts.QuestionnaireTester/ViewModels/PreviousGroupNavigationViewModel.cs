@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -33,7 +35,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
     {
         private string interviewId;
-        private Identity entityIdentity;
+        private Identity groupIdentity;
         private NavigationState navigationState;
 
         private readonly ILiteEventRegistry liteEventRegistry;
@@ -57,13 +59,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.entityIdentity = groupIdentity;
+            this.groupIdentity = groupIdentity;
             this.navigationState = navigationState;
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var patents = questionnaire.GroupParents[groupIdentity.Id];
-            IsExistsParent = patents.Count > 0;
+            var parents = questionnaire.GroupParents[groupIdentity.Id];
+            IsExistsParent = parents.Count > 0;
 
             if (IsExistsParent)
             {
@@ -104,12 +106,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void SendAnswerTextQuestionCommand()
         {
-            navigationState.NavigateBack(() => { });
+            var parentIdentity = GetParentIdentity();
+            navigationState.NavigateTo(parentIdentity);
+        }
+
+        private Identity GetParentIdentity()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+
+            var parents = questionnaire.GroupParents[groupIdentity.Id];
+            var parent = parents.Last();
+            int rosterLevelOfParent = parents.Count(p => p.IsRoster);
+            decimal[] parentRosterVector = groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
+            return new Identity(parent.Id, parentRosterVector);
         }
 
         private void UpdateSelfFromModel()
         {
-            Statistics = groupStatisticsViewModel.GetStatistics(interviewId, entityIdentity);
+            Statistics = groupStatisticsViewModel.GetStatistics(interviewId, this.groupIdentity);
         }
 
         #region Handle All Answers events
