@@ -6,13 +6,13 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ButtonRosterTitleBinding : BindingWrapper<Button, RosterStateViewModel>
+    public class ButtonRosterTitleBinding : BaseBinding<Button, RosterStateViewModel>
     {
         public ButtonRosterTitleBinding(Button androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(Button androidControl, RosterStateViewModel value)
+        protected override void SetValueToView(Button control, RosterStateViewModel value)
         {
             if (value == null) return;
 
@@ -22,7 +22,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
             span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.GroupState.Title.Length, rosterTitle.Length, SpanTypes.ExclusiveExclusive);
 
-            androidControl.TextFormatted = span;
+            control.TextFormatted = span;
         }
     }
 }

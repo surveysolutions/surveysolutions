@@ -5,7 +5,7 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class SetFocusForEditTextBinding : BindingWrapper<EditText, bool>
+    public class SetFocusForEditTextBinding : BaseBinding<EditText, bool>
     {
         private bool subscribed;
 
@@ -15,9 +15,9 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             editText.ShowSoftInputOnFocus = true;
         }
 
-        protected override void SetValueToView(EditText androidControl, bool value)
+        protected override void SetValueToView(EditText control, bool value)
         {
-            var editText = androidControl;
+            var editText = control;
             if (editText == null)
                 return;
 

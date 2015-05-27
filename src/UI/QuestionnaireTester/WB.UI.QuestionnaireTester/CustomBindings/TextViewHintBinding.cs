@@ -8,7 +8,7 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class TextViewHintBinding : BindingWrapper<TextView, string>
+    public class TextViewHintBinding : BaseBinding<TextView, string>
     {
         private bool subscribed;
 

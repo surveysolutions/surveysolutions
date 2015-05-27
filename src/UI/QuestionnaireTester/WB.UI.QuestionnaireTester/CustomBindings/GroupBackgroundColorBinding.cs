@@ -3,13 +3,13 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ButtonGroupStyleBinding : BindingWrapper<Button, GroupViewModel>
+    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupViewModel>
     {
         public ButtonGroupStyleBinding(Button androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(Button androidControl, GroupViewModel value)
+        protected override void SetValueToView(Button control, GroupViewModel value)
         {
             if (value == null) return;
 
@@ -31,7 +31,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                     break;
             }
 
-            androidControl.SetBackgroundResource(groupBackgroundResourceId);
+            control.SetBackgroundResource(groupBackgroundResourceId);
         }
     }
 }

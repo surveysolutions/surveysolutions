@@ -3,7 +3,7 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ProgressBarIndeterminateBinding : BindingWrapper<ProgressBar, bool>
+    public class ProgressBarIndeterminateBinding : BaseBinding<ProgressBar, bool>
     {
         public ProgressBarIndeterminateBinding(ProgressBar target)
             : base(target)

@@ -13,7 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class TextViewGroupStatusBinding : BindingWrapper<TextView, GroupStatistics>
+    public class TextViewGroupStatusBinding : BaseBinding<TextView, GroupStatistics>
     {
         public TextViewGroupStatusBinding(TextView androidControl)
             : base(androidControl)
@@ -25,7 +25,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             get { return MvxBindingMode.OneWay; }
         } 
 
-        protected override void SetValueToView(TextView androidControl, GroupStatistics value)
+        protected override void SetValueToView(TextView control, GroupStatistics value)
         {
             if (value == null) return;
 
@@ -33,7 +33,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                 ? this.GetSpannableStringForAnsweredState(value) 
                 : this.GetSpannableStringForUnansweredState(value);
 
-            androidControl.TextFormatted = spannableText;
+            control.TextFormatted = spannableText;
         }
 
         private SpannableString GetSpannableStringForUnansweredState(GroupStatistics statistics)

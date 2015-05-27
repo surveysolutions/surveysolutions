@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class EditTextMaskBinding : BindingWrapper<EditText, string>
+    public class EditTextMaskBinding : BaseBinding<EditText, string>
     {
         private class MaskedWatcher : Java.Lang.Object, ITextWatcher
         {

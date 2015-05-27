@@ -5,7 +5,7 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class FocusTextForEditTextBinding : BindingWrapper<EditText, string>
+    public class FocusTextForEditTextBinding : BaseBinding<EditText, string>
     {
         public FocusTextForEditTextBinding(EditText view)
             : base(view)

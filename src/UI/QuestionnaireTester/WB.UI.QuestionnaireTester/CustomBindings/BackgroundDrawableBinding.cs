@@ -4,16 +4,16 @@ using Cirrious.MvvmCross.Binding;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class BackgroundDrawableBinding : BindingWrapper<View, int?>
+    public class BackgroundDrawableBinding : BaseBinding<View, int?>
     {
         public BackgroundDrawableBinding(View androidControl)
             : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(View androidControl, int? drawableBackgroundId)
+        protected override void SetValueToView(View control, int? drawableBackgroundId)
         {
-            SetBackgroundDrawable(androidControl, drawableBackgroundId);
+            SetBackgroundDrawable(control, drawableBackgroundId);
         }
 
         public override MvxBindingMode DefaultMode

@@ -237,7 +237,7 @@
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="CustomBindings\BindingWrapper.cs" />
+    <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\HideKeyboardOnClickViewBinding.cs" />

@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class TextViewGroupInfoBinding : BindingWrapper<TextView, GroupViewModel>
+    public class TextViewGroupInfoBinding : BaseBinding<TextView, GroupViewModel>
     {
         private IMvxAndroidCurrentTopActivity CurrentTopActivity
         {
@@ -19,7 +19,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
         }
 
-        protected override void SetValueToView(TextView androidControl, GroupViewModel value)
+        protected override void SetValueToView(TextView control, GroupViewModel value)
         {
             if (value == null) return;
 
@@ -53,7 +53,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             }
                 
 
-            androidControl.TextFormatted = spannableText;
+            control.TextFormatted = spannableText;
         }
 
         private Color GetGroupColorByStatus(GroupViewModel value)
