@@ -42,12 +42,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             var groupQuestions = groupEntities.Where(x => !nonQuestionModelTypes.Contains(x.ModelType)).ToList();
 
-            var questionsCount = groupQuestions.Count();
             var subgroupsCount = groupEntities.Count(x => groupModelTypes.Contains(x.ModelType));
             var answeredQuestionsCount = groupQuestions.Count(question =>
-                interview.WasAnswered(new Identity(question.Id, groupIdentity.RosterVector)));
+                interview.WasAnswered(new Identity(question.Id, groupIdentity.RosterVector))
+                && interview.IsEnabled(new Identity(question.Id, groupIdentity.RosterVector)));
+
+            var disabledQuestionsCount = groupQuestions.Count(question =>
+                !interview.IsEnabled(new Identity(question.Id, groupIdentity.RosterVector)));
 
             var invalidAnswersCount = 0;
+            var questionsCount = groupQuestions.Count() - disabledQuestionsCount;
             var unansweredQuestionsCount = questionsCount - answeredQuestionsCount;
 
             return new GroupStatistics()
