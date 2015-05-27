@@ -51,6 +51,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
             liteEventRegistry.Subscribe(this);
 
+            var interview = this.interviewRepository.Get(interviewId);
+            this.IsAnswered = interview.WasAnswered(entityIdentity);
+
             this.Header.Init(interviewId, entityIdentity);
             this.Validity.Init(interviewId, entityIdentity, navigationState);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
