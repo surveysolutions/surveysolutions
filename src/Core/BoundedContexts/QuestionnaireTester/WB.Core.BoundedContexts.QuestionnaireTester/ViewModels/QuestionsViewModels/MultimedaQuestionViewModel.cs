@@ -3,6 +3,7 @@ using System.IO;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.PictureChooser;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -57,15 +58,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.questionIdentity = entityIdentity;
-            var statefulInterview = this.interviewRepository.Get(interviewId);
 
-            this.interviewId = statefulInterview.Id;
+            IStatefulInterview interview = this.interviewRepository.Get(interviewId);
+            this.interviewId = interview.Id;
 
-            var questionnaire = this.questionnaireStorage.GetById(statefulInterview.QuestionnaireId);
+            QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
             this.variableName = questionnaire.Questions[entityIdentity.Id].Variable;
-
-            QuestionState.Init(interviewId, entityIdentity, navigationState);
+            MultimediaAnswer multimediaAnswer = interview.GetMultimediaAnswer(entityIdentity);
+            if (multimediaAnswer != null && multimediaAnswer.IsAnswered)
+            {
+                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.PictureFileName);
+            }
         }
 
         public IMvxCommand RequestAnswerCommand
@@ -93,7 +98,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                         try
                         {
                             await this.Answering.SendAnswerQuestionCommand(command);
-
                             this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
                             QuestionState.ExecutedAnswerCommandWithoutExceptions();
                         }
