@@ -7,17 +7,19 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 {
     public class FocusTextForEditTextBinding : BindingWrapper<EditText, string>
     {
-        private bool subscribed;
-
         public FocusTextForEditTextBinding(EditText view)
             : base(view)
         {
             view.ImeOptions = ImeAction.Done;
         }
 
-        protected override void SetValueToView(EditText androidControl, string value)
+        private EditText EditText
         {
-            var editText = androidControl;
+            get { return this.Target; }
+        }
+
+        protected override void SetValueToView(EditText editText, string value)
+        {
             if (editText == null)
                 return;
 
@@ -31,13 +33,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            var editText = Target;
-            if (editText == null)
+            base.SubscribeToEvents();
+
+            if (this.EditText == null)
                 return;
 
-            editText.FocusChange += HandleFocusChange;
-            editText.EditorAction += HandleEditorAction;
-            subscribed = true;
+            this.EditText.FocusChange += this.HandleFocusChange;
+            this.EditText.EditorAction += this.HandleEditorAction;
         }
 
         private void HandleEditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -62,12 +64,10 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             if (isDisposing)
             {
-                var editText = Target;
-                if (editText != null && subscribed)
+                if (this.EditText != null)
                 {
-                    editText.FocusChange -= HandleFocusChange;
-                    editText.EditorAction -= HandleEditorAction;
-                    subscribed = false;
+                    this.EditText.FocusChange -= this.HandleFocusChange;
+                    this.EditText.EditorAction -= this.HandleEditorAction;
                 }
             }
             base.Dispose(isDisposing);
@@ -75,13 +75,10 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         private void TriggerValueChanging()
         {
-            var editText = this.Target;
-            if (editText == null)
-            {
+            if (this.EditText == null)
                 return;
-            }
 
-            this.FireValueChanged(editText.Text);
+            this.FireValueChanged(this.EditText.Text);
         }
     }
 }

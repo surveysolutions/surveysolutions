@@ -86,6 +86,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<TextView>("GroupInfo", textView => new TextViewGroupInfoBinding(textView));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
+            registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new HideKeyboardOnClickViewBinding(view));
 
             base.FillTargetFactories(registry);
         }
