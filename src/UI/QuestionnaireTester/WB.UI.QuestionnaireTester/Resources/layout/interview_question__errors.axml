@@ -5,8 +5,8 @@
     local:MvxBind="Visible QuestionState.Validity.IsInvalid">
     <TextView
         style="@style/Interview_Question_Errors_Title"
-        local:MvxBind="Text QuestionState.Validity.Error.ErrorCaption" />
+        local:MvxBind="Text QuestionState.Validity.Error.Caption" />
     <TextView
         style="@style/Interview_Question_Errors_Details"
-        local:MvxBind="Text QuestionState.Validity.Error.ErrorMessage" />
+        local:MvxBind="Text QuestionState.Validity.Error.Message" />
 </MvxLinearLayout>
