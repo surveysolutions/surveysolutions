@@ -1,28 +1,26 @@
 using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
-        Theme = "@style/GrayAppTheme")]
-    public class LoginView : BaseActivityView<LoginViewModel>
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
+    public class LoginActivity : BaseActivity<LoginViewModel>
     {
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));
+            this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            MenuInflater.Inflate(Resource.Menu.login, menu);
+            this.MenuInflater.Inflate(Resource.Menu.login, menu);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -32,7 +30,7 @@ namespace WB.UI.QuestionnaireTester.Views
             {
                 case Resource.Id.login_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
-                    StartActivity(intent);
+                    this.StartActivity(intent);
                     break;
                 default: break;
             }

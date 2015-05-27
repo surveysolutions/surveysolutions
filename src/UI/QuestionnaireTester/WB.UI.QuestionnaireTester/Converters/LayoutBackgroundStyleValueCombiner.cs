@@ -10,7 +10,7 @@ using Cirrious.MvvmCross.Binding.ExtensionMethods;
 using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
 
-namespace WB.UI.QuestionnaireTester.ValueCombiners
+namespace WB.UI.QuestionnaireTester.Converters
 {
     public class LayoutBackgroundStyleValueCombiner: MvxValueCombiner
     {

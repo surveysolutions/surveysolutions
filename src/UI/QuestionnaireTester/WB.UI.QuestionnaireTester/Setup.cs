@@ -9,18 +9,17 @@ using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross.Binding.Binders;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.UI.QuestionnaireTester.Activities;
 using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
+using WB.UI.QuestionnaireTester.CustomControls;
 using WB.UI.QuestionnaireTester.Ninject;
-using WB.UI.QuestionnaireTester.Views;
-using WB.UI.QuestionnaireTester.Views.CustomControls;
 using Xamarin;
 
 
@@ -47,12 +46,11 @@ namespace WB.UI.QuestionnaireTester
         {
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof (SplashViewModel), typeof (SplashView)},
-                {typeof (LoginViewModel), typeof (LoginView)},
-                {typeof (InterviewViewModel), typeof (InterviewView)},
-                {typeof (DashboardViewModel), typeof (DashboardView)},
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsView)},
-                {typeof (SearchQuestionnairesViewModel), typeof (SearchQuestionnairesView)}
+                {typeof (SplashViewModel), typeof (SplashActivity)},
+                {typeof (LoginViewModel), typeof (LoginActivity)},
+                {typeof (InterviewViewModel), typeof (InterviewActivity)},
+                {typeof (DashboardViewModel), typeof (DashboardActivity)},
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

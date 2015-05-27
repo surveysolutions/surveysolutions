@@ -5,13 +5,10 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Activities
 {
-    [Activity(Label = "", 
-        Theme = "@style/GrayAppTheme", 
-        HardwareAccelerated = true, 
-        WindowSoftInputMode = SoftInput.StateHidden)]
-    public class DashboardView : BaseActivityView<DashboardViewModel>
+    [Activity(Label = "", Theme = "@style/GrayAppTheme", WindowSoftInputMode = SoftInput.StateHidden)]
+    public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
         protected override int ViewResourceId
         {
@@ -23,12 +20,12 @@ namespace WB.UI.QuestionnaireTester.Views
         {
             base.OnCreate(bundle);
 
-            SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));
+            this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            MenuInflater.Inflate(Resource.Menu.dashboard, menu);
+            this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -43,7 +40,7 @@ namespace WB.UI.QuestionnaireTester.Views
                     break;
                 case Resource.Id.dashboard_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
-                    StartActivity(intent);
+                    this.StartActivity(intent);
                     break;
                 case Resource.Id.dashboard_about:
                     this.ViewModel.ShowAboutCommand.Execute();

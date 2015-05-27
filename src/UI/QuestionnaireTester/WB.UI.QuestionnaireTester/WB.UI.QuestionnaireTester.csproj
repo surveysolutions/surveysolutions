@@ -223,6 +223,7 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\GetAnswerConverter.cs" />
+    <Compile Include="Converters\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
@@ -242,6 +243,15 @@
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaskBinding.cs" />
+    <Compile Include="CustomControls\EnterTimeView.cs" />
+    <Compile Include="CustomControls\FlowLayout.cs" />
+    <Compile Include="CustomControls\HttpImageView.cs" />
+    <Compile Include="CustomControls\IMvxRecyclerViewAdapter.cs" />
+    <Compile Include="CustomControls\IMvxRecyclerViewViewHolder.cs" />
+    <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
+    <Compile Include="CustomControls\MvxRecyclerView.cs" />
+    <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
+    <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\DataCollectionModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />
@@ -252,25 +262,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
-    <Compile Include="Views\Adapters\InterviewEntityAdapter.cs" />
-    <Compile Include="Views\BaseActivityView.cs" />
-    <Compile Include="Views\CustomControls\EnterTimeView.cs" />
-    <Compile Include="Views\CustomControls\FlowLayout.cs" />
-    <Compile Include="Views\CustomControls\HttpImageView.cs" />
-    <Compile Include="Views\CustomControls\IMvxRecyclerViewAdapter.cs" />
-    <Compile Include="Views\CustomControls\IMvxRecyclerViewViewHolder.cs" />
-    <Compile Include="Views\CustomControls\MvxRecyclerView.cs" />
-    <Compile Include="Views\CustomControls\MvxRecyclerViewAdapter.cs" />
-    <Compile Include="Views\CustomControls\MvxRecyclerViewViewHolder.cs" />
-    <Compile Include="Views\PrefsActivity.cs" />
-    <Compile Include="Views\SearchQuestionnairesView.cs" />
-    <Compile Include="Views\InterviewView.cs" />
-    <Compile Include="Views\DashboardView.cs" />
-    <Compile Include="Views\LoginView.cs" />
-    <Compile Include="Views\BaseMvxActivity.cs" />
-    <Compile Include="Views\PrefilledQuestionsView.cs" />
-    <Compile Include="Views\SplashView.cs" />
+    <Compile Include="Activities\BaseActivity.cs" />
+    <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\BaseMvxActivity.cs" />
+    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
+    <Compile Include="Activities\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_question_gps.axml">
@@ -592,7 +591,6 @@
   <ItemGroup>
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-mdpi\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -1,21 +1,19 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.Res;
-using Android.Views;
-using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
-using WB.UI.QuestionnaireTester.Views.Adapters;
-using WB.UI.QuestionnaireTester.Views.CustomControls;
+using Android.Views;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.UI.QuestionnaireTester.CustomControls;
 
-
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Activities
 {
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
-    public class InterviewView : BaseActivityView<InterviewViewModel>
+    public class InterviewActivity : BaseActivity<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
 
@@ -30,7 +28,7 @@ namespace WB.UI.QuestionnaireTester.Views
 
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             var drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
-            var listOfInterviewQuestionsAndGroups = FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
+            var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
 
             this.SetSupportActionBar(toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
@@ -43,7 +41,7 @@ namespace WB.UI.QuestionnaireTester.Views
             var layoutManager = new LinearLayoutManager(this);;
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
-            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)BindingContext);
+            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
@@ -60,7 +58,7 @@ namespace WB.UI.QuestionnaireTester.Views
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            MenuInflater.Inflate(Resource.Menu.interview, menu);
+            this.MenuInflater.Inflate(Resource.Menu.interview, menu);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -84,7 +82,7 @@ namespace WB.UI.QuestionnaireTester.Views
                     break;
                 case Resource.Id.interview_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
-                    StartActivity(intent);
+                    this.StartActivity(intent);
                     break;
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();

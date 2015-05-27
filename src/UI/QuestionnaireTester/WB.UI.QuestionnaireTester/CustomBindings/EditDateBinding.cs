@@ -8,7 +8,7 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Binding.Bindings.Target;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
-using WB.UI.QuestionnaireTester.Views.CustomControls;
+using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {

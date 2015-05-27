@@ -1,10 +1,8 @@
-using Android.OS;
-using Cirrious.MvvmCross.Droid.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Views
+namespace WB.UI.QuestionnaireTester.Activities
 {
-    public abstract class BaseActivityView<TViewModel> : BaseMvxActivity where TViewModel : BaseViewModel
+    public abstract class BaseActivity<TViewModel> : BaseMvxActivity where TViewModel : BaseViewModel
     {
         protected abstract int ViewResourceId { get; }
 
@@ -17,7 +15,7 @@ namespace WB.UI.QuestionnaireTester.Views
         protected override void OnViewModelSet()
         {
             base.OnViewModelSet();
-            this.SetContentView(ViewResourceId);
+            this.SetContentView(this.ViewResourceId);
         }
 
         public override void OnBackPressed()
