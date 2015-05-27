@@ -117,6 +117,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 await TryGetQbBarcodeAgainAsync();
             }
+
+            this.IsInProgress = false;
         }
 
         private async Task TryGetQbBarcodeAgainAsync()
