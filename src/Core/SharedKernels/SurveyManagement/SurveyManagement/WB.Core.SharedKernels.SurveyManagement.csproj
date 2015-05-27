@@ -333,8 +333,11 @@
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
     <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
+    <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquartersTeamsAndStatusesReport.cs" />
@@ -350,8 +353,10 @@
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
-    <Compile Include="Views\Reposts\Views\QuantityByInterviewersReportRow.cs" />
+    <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
+    <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportRow.cs" />
+    <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportView.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />

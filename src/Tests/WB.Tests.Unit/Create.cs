@@ -1572,14 +1572,15 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null)
+        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus=null)
         {
             return new InterviewCommentedStatus()
             {
                 Status = InterviewStatus.Completed,
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId??Guid.NewGuid(),
-                SupervisorId = supervisorId??Guid.NewGuid()
+                SupervisorId = supervisorId??Guid.NewGuid(),
+                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
             };
         }
     }
