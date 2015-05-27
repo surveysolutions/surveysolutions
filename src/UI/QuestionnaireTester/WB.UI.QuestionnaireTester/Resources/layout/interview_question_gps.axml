@@ -26,7 +26,7 @@
                                       android:scaleType="centerCrop"
                                       android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin" />
                   </MvxLinearLayout>
-                  <TextView style="@style/Interview_Question_Answer_Gps_Location_Text"
+                  <TextView style="@style/Interview_Question_TextAnswer"
                             android:layout_marginTop="@dimen/Interview_Question_Answer_Media_Caption_margin_top"
                             local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
                 </MvxLinearLayout>

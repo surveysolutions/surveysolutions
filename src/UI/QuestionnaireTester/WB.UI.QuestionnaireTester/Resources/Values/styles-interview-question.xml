@@ -110,11 +110,11 @@
   </style>
 
 
-  <style name="Interview_Question_Answer_Gps_Location_Text" parent="Interview_Question_Instruction_Details">
+  <style name="Interview_Question_TextAnswer" parent="Interview_Question_Instruction_Details">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Gps_Text_margin_top</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_Gps_Text_margin_bottom</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_TextAnswer_margin_bottom</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">#2a81cb</item>
     <item name="android:textSize">@dimen/textsize_14</item>

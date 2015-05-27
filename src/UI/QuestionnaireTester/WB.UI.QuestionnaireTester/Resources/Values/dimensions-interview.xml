@@ -49,7 +49,7 @@
   <dimen name="Interview_Comments_Title_margin_bottom">14dp</dimen>
   <dimen name="Interview_Comments_Details_margin_bottom">16dp</dimen>
 
-  <dimen name="Interview_Question_Gps_Text_margin_top">8dp</dimen>
-  <dimen name="Interview_Question_Gps_Text_margin_bottom">28dp</dimen>
+  <dimen name="Interview_Question_TextAnswer_margin_top">8dp</dimen>
+  <dimen name="Interview_Question_TextAnswer_margin_bottom">28dp</dimen>
 
 </resources>
