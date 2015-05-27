@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                             ics => ics.Timestamp.Date > dateTimeRange.From && ics.Timestamp.Date <= dateTimeRange.To).ToArray();
                     if (interviewsInPeriod.Any())
                     {
-                        speedByPeriod.Add(Math.Round(interviewsInPeriod.Select(i => i.Timespan.Minutes).Average(), 2));
+                        speedByPeriod.Add(Math.Round(interviewsInPeriod.Select(i => i.Timespan.TotalMinutes).Average(), 2));
                     }
                     else
                     {
@@ -93,8 +93,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     responsibleId: u.UserId,
                     periods: speedByPeriod.ToArray(),
                     responsibleName: u.UserName,
-                    average: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => i.Timespan.Minutes).Average(), 2) : (double?)null,
-                    total: interviewsForUser.Any()? interviewsForUser.Select(i => i.Timespan.Minutes).Sum() : (double?) null);
+                    average: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => i.Timespan.TotalMinutes).Average(), 2) : (double?)null,
+                    total: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => i.Timespan.TotalMinutes).Sum(), 2) : (double?)null);
             }).ToArray();
 
             return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount);
