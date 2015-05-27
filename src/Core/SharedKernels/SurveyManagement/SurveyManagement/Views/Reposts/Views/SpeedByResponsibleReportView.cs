@@ -1,12 +1,15 @@
+﻿using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 {
-    public class QuantityByResponsibleReportView : IListView<QuantityByResponsibleReportRow>
+    public class SpeedByResponsibleReportView : IListView<SpeedByResponsibleReportRow>
     {
-        public QuantityByResponsibleReportView(
-            QuantityByResponsibleReportRow[] items,
+        public SpeedByResponsibleReportView(
+            SpeedByResponsibleReportRow[] items,
             DateTimeRange[] dateTimeRanges, int totalCount)
         {
             Items = items;
@@ -16,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 
         public int TotalCount { get; set; }
 
-        public IEnumerable<QuantityByResponsibleReportRow> Items { get; set; }
+        public IEnumerable<SpeedByResponsibleReportRow> Items { get; set; }
 
         public DateTimeRange[] DateTimeRanges { get; private set; }
     }

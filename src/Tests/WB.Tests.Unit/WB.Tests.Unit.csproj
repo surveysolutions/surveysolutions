@@ -416,9 +416,15 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\QuantityReportFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_by_day_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_by_month_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_week_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_supervisors_by_unknown_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_supervisors_by_month_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_month_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_by_week_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_supervisors_by_month_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_supervisors_by_unknown_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\SpeedReportFactoryTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_day_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_is_locked.cs" />

@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 {
-    public class QuantityByInterviewersReportRow
+    public class QuantityByResponsibleReportRow
     {
-        public QuantityByInterviewersReportRow(Guid responsibleId, long[] periods, string responsibleName, int total)
+        public QuantityByResponsibleReportRow(Guid responsibleId, long[] periods, string responsibleName, int total)
         {
             ResponsibleId = responsibleId;
             QuantityByPeriod = periods;

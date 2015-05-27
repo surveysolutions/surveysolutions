@@ -17,7 +17,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             InterviewStatus status, 
             DateTime timestamp, 
             string comment, 
-            string statusChangeOriginatorName)
+            string statusChangeOriginatorName,
+            TimeSpan? timeSpanWithPreviousStatus)
         {
             StatusChangeOriginatorId = statusChangeOriginatorId;
             SupervisorId = supervisorId;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             Timestamp = timestamp;
             Comment = comment;
             StatusChangeOriginatorName = statusChangeOriginatorName;
+            TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus;
         }
         public virtual int Id { get; set; }
         public virtual Guid? SupervisorId { get; set; }
@@ -35,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public virtual InterviewStatus Status { get; set; }
         public virtual DateTime Timestamp { get; set; }
-
+        public virtual TimeSpan? TimeSpanWithPreviousStatus { get; set; }
         public virtual string Comment { get; set; }
 
         public virtual InterviewStatuses InterviewStatuses { get; set; }
