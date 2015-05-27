@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +28,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public DashboardViewModel(
             IPrincipal principal,
-            ILogger logger, IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor, 
+            ILogger logger,
+            IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor,
             DesignerApiService designerApiService, 
             ICommandService commandService, 
             IQuestionnaireImportService questionnaireImportService)
@@ -47,18 +47,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.BindQuestionnairesFromStorage();
         }
 
-        private ObservableCollection<QuestionnaireListItem> myQuestionnaires = new ObservableCollection<QuestionnaireListItem>();
-        public ObservableCollection<QuestionnaireListItem> MyQuestionnaires
+        private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
+        public IList<QuestionnaireListItem> Questionnaires
         {
-            get { return myQuestionnaires; }
-            set { myQuestionnaires = value; RaisePropertyChanged(); }
-        }
-
-        private ObservableCollection<QuestionnaireListItem> publicQuestionnaires = new ObservableCollection<QuestionnaireListItem>();
-        public ObservableCollection<QuestionnaireListItem> PublicQuestionnaires
-        {
-            get { return publicQuestionnaires; }
-            set { publicQuestionnaires = value; RaisePropertyChanged(); }
+            get { return this.questionnaires; }
+            set { this.questionnaires = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
@@ -82,34 +75,36 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { progressIndicator = value; RaisePropertyChanged(); }
         }
 
+        private int myQuestionnairesCount;
+        public int MyQuestionnairesCount
+        {
+            get { return myQuestionnairesCount; }
+            set { myQuestionnairesCount = value; RaisePropertyChanged(); }
+        }
+
+        private int publicQuestionnairesCount;
+        public int PublicQuestionnairesCount
+        {
+            get { return publicQuestionnairesCount; }
+            set { publicQuestionnairesCount = value; RaisePropertyChanged(); }
+        }
+
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
             get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }
         }
 
-        private IMvxCommand showAboutCommand;
-        public IMvxCommand ShowAboutCommand
-        {
-            get { return showAboutCommand ?? (showAboutCommand = new MvxCommand(() => this.ShowViewModel<AboutViewModel>())); }
-        }
-
         private IMvxCommand loadQuestionnaireCommand;
         public IMvxCommand LoadQuestionnaireCommand
         {
-            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire)=> await this.LoadQuestionnaire(questionnaire))); }
+            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaire(questionnaire))); }
         }
 
         private IMvxCommand refreshQuestionnairesCommand;
         public IMvxCommand RefreshQuestionnairesCommand
         {
             get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async () => await this.GetServerQuestionnaires(), () => !this.IsInProgress)); }
-        }
-
-        private IMvxCommand searchQuestionnairesCommand;
-        public IMvxCommand SearchQuestionnairesCommand
-        {
-            get { return searchQuestionnairesCommand ?? (searchQuestionnairesCommand = new MvxCommand(() => this.ShowViewModel<SearchQuestionnairesViewModel>())); }
         }
 
         private IMvxCommand showMyQuestionnairesCommand;
@@ -124,6 +119,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             get { return showPublicQuestionnairesCommand ?? (showPublicQuestionnairesCommand = new MvxCommand(this.ShowPublicQuestionnaires)); }
         }
 
+        private IList<QuestionnaireListItem> myQuestionnaires;
+        private IList<QuestionnaireListItem> publicQuestionnaires;
+
         private void SignOut()
         {
             this.principal.SignOut();
@@ -132,16 +130,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void ShowPublicQuestionnaires()
         {
-            this.IsPublicShowed = true;
+            this.Questionnaires = publicQuestionnaires;
         }
 
         private void ShowMyQuestionnaires()
         {
-            this.IsPublicShowed = false;
+            this.Questionnaires = myQuestionnaires;
         }
 
         private async Task LoadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
         {
+            if (this.IsInProgress) return;
+
             this.IsInProgress = true;
 
             this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
@@ -186,14 +186,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private async void BindQuestionnairesFromStorage()
         {
-            var userQuestionnaires = this.questionnairesStorageAccessor.Query(
-                _ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name).ToArray());
-            if (userQuestionnaires.Any())
+            this.publicQuestionnaires = this.questionnairesStorageAccessor.Query(
+                query => query.Where(questionnaire => questionnaire.IsPublic).ToList());
+
+            this.myQuestionnaires = this.questionnairesStorageAccessor.Query(
+                query => query.Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name && !questionnaire.IsPublic).ToList());
+
+            if (this.myQuestionnaires.Any())
             {
-                this.MyQuestionnaires =
-                    new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => !qli.IsPublic));
-                this.PublicQuestionnaires =
-                    new ObservableCollection<QuestionnaireListItem>(userQuestionnaires.Where(qli => qli.IsPublic));
+                this.MyQuestionnairesCount = this.myQuestionnaires.Count;
+                this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
+                this.ShowMyQuestionnaires();
             }
             else
             {
@@ -204,6 +207,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public async Task GetServerQuestionnaires()
         {
             this.IsInProgress = true;
+
             this.ClearQuestionnaires();
 
             try
@@ -213,8 +217,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     onPageReceived: async (batchOfServerQuestionnaires) =>
                     {
                         await this.questionnairesStorageAccessor.StoreAsync(batchOfServerQuestionnaires);
-                        this.InvokeOnMainThread(() => this.AppendToQuestionnaires(batchOfServerQuestionnaires));
                     });
+
+                this.BindQuestionnairesFromStorage();
             }
             finally
             {
@@ -224,21 +229,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private async void ClearQuestionnaires()
         {
-            var userQuestionnaires = this.questionnairesStorageAccessor.Query(_ => _.Where(storageModel => storageModel.OwnerName == this.principal.CurrentUserIdentity.Name));
-            await this.questionnairesStorageAccessor.RemoveAsync(userQuestionnaires);
-            this.MyQuestionnaires.Clear();
-            this.PublicQuestionnaires.Clear();
-        }
-
-        private void AppendToQuestionnaires(IEnumerable<QuestionnaireListItem> questionnaires)
-        {
-            foreach (var questionnaireListItem in questionnaires)
-            {
-                if (questionnaireListItem.IsPublic)
-                    this.PublicQuestionnaires.Add(questionnaireListItem);
-                else
-                    this.MyQuestionnaires.Add(questionnaireListItem);
-            }
+            await this.questionnairesStorageAccessor.RemoveAsync(myQuestionnaires);
+            await this.questionnairesStorageAccessor.RemoveAsync(publicQuestionnaires);
+            this.Questionnaires.Clear();
         }
 
         public override void NavigateToPreviousViewModel()
