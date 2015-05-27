@@ -118,7 +118,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private async void SetGeoLocationAnswer(MvxGeoLocation location)
         {
             this.geoLocationWatcher.Stop();
-            this.IsInProgress = false;
 
             var command = new AnswerGeoLocationQuestionCommand(
                 interviewId: interviewId,
@@ -143,6 +142,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             this.Answer = location.Coordinates;
+            this.IsInProgress = false;
         }
     }
 }
