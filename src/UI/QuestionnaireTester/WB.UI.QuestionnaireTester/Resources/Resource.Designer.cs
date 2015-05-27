@@ -1196,17 +1196,17 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f070014
 			public const int Interview_Question_Errors_Title_margin_top = 2131165204;
 			
-			// aapt resource value: 0x7f07001c
-			public const int Interview_Question_Gps_Text_margin_bottom = 2131165212;
-			
-			// aapt resource value: 0x7f07001b
-			public const int Interview_Question_Gps_Text_margin_top = 2131165211;
-			
 			// aapt resource value: 0x7f070020
 			public const int Interview_Question_Instruction_Title_margin_top = 2131165216;
 			
 			// aapt resource value: 0x7f070016
 			public const int Interview_Question_Progress_Indicator_height = 2131165206;
+			
+			// aapt resource value: 0x7f07001c
+			public const int Interview_Question_TextAnswer_margin_bottom = 2131165212;
+			
+			// aapt resource value: 0x7f07001b
+			public const int Interview_Question_TextAnswer_margin_top = 2131165211;
 			
 			// aapt resource value: 0x7f070006
 			public const int Interview_Sidebar_Body_margin_left = 2131165190;
@@ -3231,9 +3231,6 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0a000e
 			public const int Interview_Question_Answer_Editor = 2131361806;
 			
-			// aapt resource value: 0x7f0a0016
-			public const int Interview_Question_Answer_Gps_Location_Text = 2131361814;
-			
 			// aapt resource value: 0x7f0a0011
 			public const int Interview_Question_Answer_Option = 2131361809;
 			
@@ -3299,6 +3296,9 @@ namespace WB.UI.QuestionnaireTester
 			
 			// aapt resource value: 0x7f0a0020
 			public const int Interview_Question_Progress_Indicator = 2131361824;
+			
+			// aapt resource value: 0x7f0a0016
+			public const int Interview_Question_TextAnswer = 2131361814;
 			
 			// aapt resource value: 0x7f0a0008
 			public const int Interview_Question_Title = 2131361800;

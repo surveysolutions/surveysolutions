@@ -15,7 +15,9 @@ namespace WB.UI.QuestionnaireTester.Activities
         {
             base.OnCreate(bundle);
 
-            this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            toolbar.Title = "";
+            this.SetSupportActionBar(toolbar);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

@@ -11,9 +11,9 @@
         android:background="?attr/colorPrimary"
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-        <!--<TextView
+        <TextView
             style="@style/ToolbarTitle"
-            local:MvxBind="Text Localization('LoginTitleText')" />-->
+            local:MvxBind="Text Localization('LoginTitleText')" />
     </android.support.v7.widget.Toolbar>
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
