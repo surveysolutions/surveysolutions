@@ -1,4 +1,7 @@
-﻿using Android.Views;
+﻿using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
@@ -51,6 +54,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             e.Handled = true;
 
             TriggerValueChanging();
+
+            HideKeyboard();
         }
 
         private void HandleFocusChange(object sender, View.FocusChangeEventArgs e)
@@ -79,6 +84,16 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                 return;
 
             this.FireValueChanged(this.EditText.Text);
+        }
+
+
+        private void HideKeyboard()
+        {
+            var activity = (Activity)EditText.Context;
+            var windowToken = EditText.WindowToken;
+
+            var inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
+            inputMethodManager.HideSoftInputFromWindow(windowToken, 0);
         }
     }
 }
