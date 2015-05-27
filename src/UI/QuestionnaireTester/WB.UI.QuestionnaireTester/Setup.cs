@@ -70,6 +70,7 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
+            registry.AddOrOverwrite("IsPublicQuestionnaireToColor", new IsPublicQuestionnaireToColorConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

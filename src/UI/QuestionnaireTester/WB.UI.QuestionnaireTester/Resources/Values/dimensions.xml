@@ -31,23 +31,26 @@
 
   <dimen name="Dashboard_Menu_height">80dp</dimen>
   <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
-  <dimen name="Dashboard_Menu_margin_horizontal">25dp</dimen>
+  <dimen name="Dashboard_Menu_margin_horizontal">32dp</dimen>
 
   <dimen name="Dashboard_Menu_Item_margin_horizontal_in_between">@dimen/Dashboard_Menu_margin_horizontal</dimen>
-
-  <dimen name="Dashboard_QuestionnairesList_padding_bottom">25dp</dimen>
-
+  <dimen name="Dashboard_Questionnaire_MyQuestionnaireLink_margin_top">42dp</dimen>
+  <dimen name="Dashboard_Questionnaire_MyQuestionnaireLink_margin_bottom">32dp</dimen>
 
   <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
   <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
   <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
 
+  <dimen name="Dashboard_QuestionnairesListItem_LeftIndicator_width">14dp</dimen>
+  
+  <dimen name="Dashboard_QuestionnairesListItem_Body_padding">12dp</dimen>
 
-  <dimen name="Questionnaires_Questionnaire_margin_vertical">5dp</dimen>
-  <dimen name="Questionnaires_Questionnaire_margin_left">25dp</dimen>
-  <dimen name="Questionnaires_Questionnaire_margin_right">20dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Title_margin_right">24dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Title_margin_left">14dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Title_width">0dp</dimen>
 
-  <dimen name="Questionnaires_Questionnaire_LeftIndicator_width">10dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_ModifiedDate_margin_top">4dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_ModifiedDate_width">128dp</dimen>
 
   <dimen name="Questionnaires_Questionnaire_background_stroke_width">1dp</dimen>
   <dimen name="Questionnaires_Questionnaire_background_padding">1dp</dimen>

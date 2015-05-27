@@ -35,15 +35,9 @@ namespace WB.UI.QuestionnaireTester.Activities
                 case Resource.Id.dashboard_refresh:
                     this.ViewModel.RefreshQuestionnairesCommand.Execute();
                     break;
-                case Resource.Id.dashboard_search:
-                    this.ViewModel.SearchQuestionnairesCommand.Execute();
-                    break;
                 case Resource.Id.dashboard_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
-                    break;
-                case Resource.Id.dashboard_about:
-                    this.ViewModel.ShowAboutCommand.Execute();
                     break;
                 case Resource.Id.dashboard_signout:
                     this.ViewModel.SignOutCommand.Execute();

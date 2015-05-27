@@ -14,10 +14,6 @@
       local:showAsAction="never"
       android:title="Settings" />
   <item
-      android:id="@+id/dashboard_about"
-      local:showAsAction="never"
-      android:title="About" />
-  <item
       android:id="@+id/dashboard_signout"
       local:showAsAction="never"
       android:title="Sign out" />

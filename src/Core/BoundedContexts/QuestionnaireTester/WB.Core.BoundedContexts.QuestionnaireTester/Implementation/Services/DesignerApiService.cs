@@ -120,17 +120,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     switch (ex.StatusCode)
                     {
                         case HttpStatusCode.Forbidden:
-                            errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden,
-                                GetDomainName(this.settingsProvider.Endpoint), selectedQuestionnaire.Id,
-                                selectedQuestionnaire.Title, selectedQuestionnaire.OwnerName);
+                            errorMessage = UIResources.ImportQuestionnaire_Error_Forbidden;
                             break;
                         case HttpStatusCode.PreconditionFailed:
-                            errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed,
-                                GetDomainName(this.settingsProvider.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
+                            errorMessage = UIResources.ImportQuestionnaire_Error_PreconditionFailed;
                             break;
                         case HttpStatusCode.NotFound:
-                            errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_NotFound,
-                                GetDomainName(this.settingsProvider.Endpoint), selectedQuestionnaire.Id, selectedQuestionnaire.Title);
+                            errorMessage = UIResources.ImportQuestionnaire_Error_NotFound;
                             break;
                     }
                 }
@@ -166,7 +162,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 Id = questionnaireListItem.Id,
                 Title = questionnaireListItem.Title,
                 LastEntryDate = questionnaireListItem.LastEntryDate,
-                IsPublic = questionnaireListItem.IsPublic,
+                IsPublic = false,
                 OwnerName = this.userIdentity.Name
             }).ToArray();
         }

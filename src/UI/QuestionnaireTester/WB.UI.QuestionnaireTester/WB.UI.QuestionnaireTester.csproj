@@ -232,6 +232,7 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\GetAnswerConverter.cs" />
+    <Compile Include="Converters\IsPublicQuestionnaireToColorConverter.cs" />
     <Compile Include="Converters\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
@@ -309,10 +310,10 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\drawable\questionnaire_list_item_border.xml" />
+    <AndroidResource Include="Resources\drawable\questionnaire_list_item_border.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\menu\dashboard.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
     <AndroidResource Include="Resources\values\colors.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -400,7 +401,9 @@
     <AndroidResource Include="Resources\drawable\question_option_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_option_text_color.xml" />
+    <AndroidResource Include="Resources\drawable\question_option_text_color.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -448,7 +451,9 @@
     <AndroidResource Include="Resources\values\dimensions-interview.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\values\dimensions.xml" />
+    <AndroidResource Include="Resources\values\dimensions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\group_started.xml" />
     <AndroidResource Include="Resources\drawable\group_started_pressed.xml" />
     <AndroidResource Include="Resources\drawable\group_started_unpressed.xml" />
@@ -489,6 +494,14 @@
     <AndroidResource Include="Resources\drawable\question_input_button_pressed.xml" />
     <AndroidResource Include="Resources\drawable\question_input_button_unpressed.xml" />
     <AndroidResource Include="Resources\drawable-v21\question_input_button.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
+    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
+    <AndroidResource Include="Resources\drawable\dashboard_questionnaire_list.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\questionnaire_list_border.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -497,9 +510,12 @@
     </None>
     <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\login.axml" />
-    <AndroidResource Include="Resources\layout\dashboard.axml" />
-    <AndroidResource Include="Resources\layout\my_questionnaire_list_item.axml" />
-    <AndroidResource Include="Resources\layout\public_questionnaire_list_item.axml" />
+    <AndroidResource Include="Resources\layout\dashboard.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\questionnaire_list_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -513,7 +529,6 @@
     <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\search_questionnaires.axml" />
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
     <AndroidResource Include="Resources\layout\interview_question_single_option_item.axml" />
     <AndroidResource Include="Resources\layout\interview_question_single_option.axml" />

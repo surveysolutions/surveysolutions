@@ -184,16 +184,16 @@
     <value>Downloading questionnaire -  {0}%</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>You don't have permissions to look this &lt;a href="{0}/Designer/app/open/{1}"&gt;{2}&lt;/a&gt; questionnaire.  Most likely the author(&lt;font color="black"&gt;"{3}"&lt;/font&gt;) of the questionnaire removed you from the list of shared persons by that questionnaire</value>
+    <value>You don't have permissions to look this questionnaire</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Requested questionnaire &lt;a href="{0}/Designer/app/open/{1}"&gt;{2}&lt;/a&gt; is no longer available</value>
+    <value>Requested questionnaire is no longer available</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Requested questionnaire &lt;font color="black"&gt;{2}&lt;/font&gt; has errors. &lt;br/&gt; Please verify the questionnaire in the &lt;br/&gt; &lt;a href="{0}/Designer/app/open/{1}"&gt;Questionnaire Editor&lt;/a&gt;</value>
+    <value>Requested questionnaire has errors.  Please verify the questionnaire in designer of questionnaires and try again</value>
   </data>
   <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Your version of application does not support of this questionnaire &lt;br/&gt;&lt;br/&gt; &lt;a href="market://details?id=org.worldbank.solutions.Vtester"&gt;Update application&lt;/a&gt;</value>
+    <value>Your version of application does not support of this questionnaire. Please, update application</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
     <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>

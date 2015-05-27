@@ -10,15 +10,62 @@
     <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="QuestionnaireListItem_Title" parent="AppTheme">
-    <item name="android:textStyle">bold</item>
-    <item name="android:maxLines">4</item>
-    <item name="android:ellipsize">end</item>
-    <item name="android:singleLine">false</item>
+  <style name="Dashboard_MyQuestionnairesLink" parent="AppTheme">
+    <item name="android:textColor">@color/myQuestionnairesLink</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_Questionnaire_MyQuestionnaireLink_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Questionnaire_MyQuestionnaireLink_margin_bottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Menu_Item_margin_horizontal_in_between</item>
+    <item name="android:gravity">center_vertical</item>
+  </style>
+
+  <style name="Dashboard_PublicQuestionnairesLink" parent="Dashboard_MyQuestionnairesLink">
+    <item name="android:textColor">@color/publicQuestionnairesLink</item>
+  </style>
+    
+  <style name="Dashboard_QuestionnairesList" parent="AppTheme">
+    <item name="android:background">@drawable/questionnaire_list_border</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:divider">@null</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
+    <item name="android:smoothScrollbar">true</item>
+    <item name="android:scrollingCache">false</item>
+    <item name="android:animationCache">false</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Dashboard_QuestionnaireListItem_Body" parent="FullWidthWrappingLayout">
+    <item name="android:paddingBottom">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
+    <item name="android:paddingTop">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
+  </style>
+
+  <style name="Dashboard_QuestionnaireListItem_Title" parent="AppTheme">
+    <item name="android:singleLine">false</item>
+    <item name="android:layout_width">@dimen/Dashboard_QuestionnairesListItem_Title_width</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:textColor">@color/dashboard_questionnaire_list_item_title</item>
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_QuestionnairesListItem_Title_margin_right</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_QuestionnairesListItem_Title_margin_left</item>
   </style>
   
+  <style name="Dashboard_QuestionnaireListItem_ModifiedDate" parent="AppTheme">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">@dimen/Dashboard_QuestionnairesListItem_ModifiedDate_width</item>
+    <item name="android:textColor">@color/dashboard_questionnaire_list_item_modified_date</item>
+    <item name="android:fontFamily">Georgia</item>
+    <item name="android:textStyle">italic</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <!--<item name="android:layout_marginTop">@dimen/Dashboard_QuestionnairesListItem_ModifiedDate_margin_top</item>-->
+  </style>
+
   <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
@@ -96,13 +143,13 @@
     <item name="android:orientation">vertical</item>
     <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
   </style>
-  
+
   <style name="Interview_Sidebar_Body" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginRight">@dimen/Interview_Sidebar_Body_margin_right</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_Body_margin_left</item>
     <item name="android:layout_marginTop">@dimen/Interview_Sidebar_Body_margin_top</item>
   </style>
-  
+
   <style name="Interview_Sidebar_Chapters" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginTop">@dimen/Interview_Sidebar_Chapters_margin_top</item>
   </style>
@@ -160,19 +207,19 @@
   </style>
 
 
-  
-  
+
+
 
   <!-- application theme -->
 
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-    
+
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
     <item name="android:fontFamily">sans-serif</item>
-    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>    
-    
+    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
     <!-- elements -->
     <item name="android:checkboxStyle">@style/CheckBoxTheme</item>
     <item name="android:editTextStyle">@style/EditTextTheme</item>
@@ -184,7 +231,7 @@
     <item name="android:dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
 
   </style>
-  
+
   <style name="GrayAppTheme" parent="AppTheme">
     <item name="colorPrimary">#FF666666</item>
     <item name="android:textColorHighlight">#9936aee5</item>

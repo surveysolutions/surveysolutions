@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:background="@drawable/questionnaire_list_item_border"
+              style="@style/FullWidthWrappingLayout">
+    <MvxLinearLayout android:layout_width="@dimen/Dashboard_QuestionnairesListItem_LeftIndicator_width"
+                     android:layout_height="match_parent"
+                     local:MvxBind="BackgroundColor IsPublicQuestionnaireToColor(IsPublic)" />
+    <LinearLayout style="@style/Dashboard_QuestionnaireListItem_Body">
+      <TextView style="@style/Dashboard_QuestionnaireListItem_Title" local:MvxBind="Text Title"/>
+      <TextView style="@style/Dashboard_QuestionnaireListItem_ModifiedDate"
+                local:MvxBind="Text Format('{0:dd MMM yyyy mm:ss}', LastEntryDate)"/>
+    </LinearLayout>
+</LinearLayout>
