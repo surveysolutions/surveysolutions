@@ -88,10 +88,6 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>

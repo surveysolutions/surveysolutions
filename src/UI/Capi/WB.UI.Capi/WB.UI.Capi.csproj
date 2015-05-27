@@ -405,10 +405,6 @@
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
       <Name>WB.UI.Shared.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
