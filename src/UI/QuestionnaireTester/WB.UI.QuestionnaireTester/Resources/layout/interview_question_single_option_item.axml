@@ -3,5 +3,5 @@
   style="@style/Interview_Question_Answer_Option_Background">
   <RadioButton
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="Text Title; Checked Selected; Bold Selected" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Selected; Bold Selected" />
 </LinearLayout>

@@ -9,7 +9,7 @@
                      android:layout_height="wrap_content"
                      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(GroupState.IsStarted, true, false)));">
       <Button style="@style/Interview_Group_Button"
-              local:MvxBind="Click GroupState.NavigateToGroupCommand; ButtonGroupStyle GroupState; Enabled GroupState.Enablement.Enabled; RosterTitle ."/>
+              local:MvxBind="HideKeyboardOnClick .; Click GroupState.NavigateToGroupCommand; ButtonGroupStyle GroupState; Enabled GroupState.Enablement.Enabled; RosterTitle ."/>
     </MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
               local:MvxBind="Visible GroupState.Enablement.Enabled; GroupInfo GroupState"/>

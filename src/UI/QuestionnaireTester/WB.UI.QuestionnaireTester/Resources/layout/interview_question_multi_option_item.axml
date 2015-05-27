@@ -4,5 +4,5 @@
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked; HideKeyboardOnClick ." />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked" />
 </LinearLayout>

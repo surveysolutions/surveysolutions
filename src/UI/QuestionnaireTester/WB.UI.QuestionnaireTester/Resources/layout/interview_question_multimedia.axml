@@ -30,7 +30,7 @@
             </MvxLinearLayout>
           </MvxLinearLayout>
           <Button style="@style/Interview_Question_InputButton"
-                  local:MvxBind="Click RequestAnswerCommand; Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');" />
+                  local:MvxBind="HideKeyboardOnClick .; Click RequestAnswerCommand; Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');" />
         </MvxLinearLayout>
 
       </MvxLinearLayout>

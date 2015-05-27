@@ -9,7 +9,7 @@
                      android:layout_height="wrap_content"
                      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(IsStarted, true, false)))">
       <Button style="@style/Interview_Group_Button"
-              local:MvxBind="Click NavigateToGroupCommand; Text Title; ButtonGroupStyle .; Enabled Enablement.Enabled; "/>
+              local:MvxBind="HideKeyboardOnClick .; Click NavigateToGroupCommand; Text Title; ButtonGroupStyle .; Enabled Enablement.Enabled; "/>
     </MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
               local:MvxBind="Visible Enablement.Enabled; GroupInfo ."/>
