@@ -3,47 +3,43 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
     local:MvxBind="Enabled QuestionState.Enablement.Enabled; LongClick QuestionState.Comments.ShowCommentEditorCommand">
-  <MvxLinearLayout
-      style="@style/Interview_Question">
-    <include
-        layout="@layout/interview_question__title" />
-    <MvxLinearLayout
-        style="@style/Interview_Question_Body"
-        local:MvxBind="Visible QuestionState.Enablement.Enabled">
-      <include
-          layout="@layout/interview_question__instructions" />
-            <MvxLinearLayout
-              style="@style/Interview_Question_Answer"
-              local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+  <MvxLinearLayout style="@style/Interview_Question">
+    <include layout="@layout/interview_question__title" />
+    <MvxLinearLayout style="@style/Interview_Question_Body"
+                     local:MvxBind="Visible QuestionState.Enablement.Enabled">
+      <include layout="@layout/interview_question__instructions" />
+      <MvxLinearLayout style="@style/Interview_Question_Answer"
+                       local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-              <MvxLinearLayout
-                style="@style/Interview_Question_ExternalData_Container"
-                local:MvxBind="Visible QuestionState.IsAnswered">
-                <MvxLinearLayout
-                  style="@style/Interview_Question_Multimedia_Picture"
-                  >
+        <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
+          <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout"
+                           android:layout_marginBottom="@dimen/Interview_Question_Answer_MediaBlock_margin_bottom"
+                           local:MvxBind="Visible QuestionState.IsAnswered">
+            <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout"
+                             android:background="@drawable/media_question_white_border"
+                             android:layout_height="@dimen/Interview_Question_Answer_Media_height">
+
                   <ImageView
-                    android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    local:MvxBind="Bitmap Answer,Converter=InMemoryImage"/>
-                </MvxLinearLayout>
-                 
-              </MvxLinearLayout>
-              <Button
-                style="@style/Interview_Question_Answer_Gps_Location_Button"
-                local:MvxBind="Click RequestAnswerCommand; Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');" />
-              
+                     android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent" 
+                     android:scaleType="centerCrop" 
+                     android:adjustViewBounds="true"
+                     local:MvxBind="Bitmap Answer,Converter=InMemoryImage"/>
+             
             </MvxLinearLayout>
-            <include
-                layout="@layout/interview_question__errors" />
-            <include
-                layout="@layout/interview_question__comments" />
+          </MvxLinearLayout>
+          <Button style="@style/Interview_Question_InputButton"
+                  local:MvxBind="Click RequestAnswerCommand; Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');" />
         </MvxLinearLayout>
+
+      </MvxLinearLayout>
+      <include layout="@layout/interview_question__errors" />
+      <include layout="@layout/interview_question__comments" />
     </MvxLinearLayout>
-  <ProgressBar
-    style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
+  </MvxLinearLayout>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               local:MvxBind="ShowProgress IsInProgress" />
   <View style="@style/Interview_Question_Divider" />
+
 </MvxLinearLayout>
-      
