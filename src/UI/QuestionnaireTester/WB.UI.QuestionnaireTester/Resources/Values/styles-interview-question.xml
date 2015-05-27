@@ -99,8 +99,8 @@
 
   <style name="Interview_Question_ExternalData_Container">
     <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_MediaBlock_margin_bottom</item>
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
   </style>
 
   <style name="Interview_Question_Multimedia_Picture">

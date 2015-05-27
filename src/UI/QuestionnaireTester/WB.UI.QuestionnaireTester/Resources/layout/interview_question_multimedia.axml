@@ -22,13 +22,11 @@
                 <MvxLinearLayout
                   style="@style/Interview_Question_Multimedia_Picture"
                   >
-                  <HttpImageView
-                        
+                  <ImageView
+                    android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin" />
+                    android:layout_height="wrap_content"
+                    local:MvxBind="Bitmap Answer,Converter=InMemoryImage"/>
                 </MvxLinearLayout>
                  
               </MvxLinearLayout>

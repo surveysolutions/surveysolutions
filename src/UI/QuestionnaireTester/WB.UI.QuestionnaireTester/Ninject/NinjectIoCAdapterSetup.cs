@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
 using WB.Core.BoundedContexts.QuestionnaireTester;
@@ -11,13 +13,17 @@ namespace WB.UI.QuestionnaireTester.Ninject
     {
         public static IMvxIoCProvider CreateIocProvider()
         {
+            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
+               ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
+               : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+
             return new NinjectMvxIocProvider(
                 new AndroidInfrastructureModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries"),
                     plainStorageSettings: new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
                 new ApplicationModule(),
                 new PlainStorageInfrastructureModule(),
                 new TesterBoundedContextModule(),
-                new DataCollectionModule(),
+                new DataCollectionModule(basePath),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
         }
 

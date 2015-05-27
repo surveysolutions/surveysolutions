@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Qu
         public string Instructions { get; set; }
         public bool IsMandatory { get; set; }
         public string ValidationMessage { get; set; }
+        public string Variable { get; set; }
     }
 }
