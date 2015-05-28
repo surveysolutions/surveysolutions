@@ -13,11 +13,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
     public class DesignerApiService
     {
-        private const int PageSize = 20;
-
         private readonly ILogger logger;
         private readonly IRestService restService;
-        private readonly ISettingsProvider settingsProvider;
         private readonly IUserIdentity userIdentity;
         private readonly IUserInteraction userInteraction;
 
@@ -29,7 +26,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         {
             this.logger = logger;
             this.restService = restService;
-            this.settingsProvider = settingsProvider;
             this.userIdentity = userIdentity;
             this.userInteraction = userInteraction;
         }
@@ -155,7 +151,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         Login = this.userIdentity.Name,
                         Password = this.userIdentity.Password
                     },
-                queryString: new { pageIndex = pageIndex });
+                queryString: new { pageIndex = pageIndex, isPublic = isPublic });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()
             {

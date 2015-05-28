@@ -159,12 +159,6 @@
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
-  <data name="EmptyQuestionnaireListBySearchText" xml:space="preserve">
-    <value>Questionnaires not found by your request</value>
-  </data>
-  <data name="EmptyQuestionnaireListText" xml:space="preserve">
-    <value>No questionnaires found. &lt;br/&gt; Pull down to refresh list</value>
-  </data>
   <data name="EndpointText" xml:space="preserve">
     <value>Web Service Endpoint:</value>
   </data>
@@ -399,5 +393,10 @@ parent group</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Note: {0} questions is unanswered</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>No questionnaires yet
+
+You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
 </root>

@@ -170,6 +170,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No questionnaires yet
+        ///
+        ///You can create or edit your questionnaires in Survey Solutions Designer.
+        /// </summary>
+        public static string Dashboard_EmptyQuestionnairesList {
+            get {
+                return ResourceManager.GetString("Dashboard_EmptyQuestionnairesList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My questionnaires.
         /// </summary>
         public static string Dashboard_MyQuestionnairesLinkText {
@@ -211,24 +222,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static string DateQuestion_Hint {
             get {
                 return ResourceManager.GetString("DateQuestion_Hint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Questionnaires not found by your request.
-        /// </summary>
-        public static string EmptyQuestionnaireListBySearchText {
-            get {
-                return ResourceManager.GetString("EmptyQuestionnaireListBySearchText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No questionnaires found. &lt;br/&gt; Pull down to refresh list.
-        /// </summary>
-        public static string EmptyQuestionnaireListText {
-            get {
-                return ResourceManager.GetString("EmptyQuestionnaireListText", resourceCulture);
             }
         }
         
