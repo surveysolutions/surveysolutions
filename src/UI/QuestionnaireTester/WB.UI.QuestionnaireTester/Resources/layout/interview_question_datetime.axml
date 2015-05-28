@@ -2,7 +2,8 @@
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="Enabled QuestionState.Enablement.Enabled; LongClick QuestionState.Comments.ShowCommentEditorCommand">
-  <MvxLinearLayout style="@style/Interview_Question">
+  <MvxLinearLayout style="@style/Interview_Question"
+    local:MvxBind="HideKeyboardOnClick .">
     <include layout="@layout/interview_question__title" />
     <MvxLinearLayout style="@style/Interview_Question_Body" 
       local:MvxBind="Visible QuestionState.Enablement.Enabled">
