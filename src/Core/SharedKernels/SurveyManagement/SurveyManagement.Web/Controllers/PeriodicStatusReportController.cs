@@ -46,7 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Quantity",
-                ReportTitle = QuantityReport.NumberOfCompletedInterviews
+                ReportTitle = PeriodicStatusReport.NumberOfCompletedInterviews,
+                ResponsibleColumnName = PeriodicStatusReport.TeamMember
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -67,7 +68,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Quantity",
-                ReportTitle = QuantityReport.NumberOfCompletedInterviews
+                ReportTitle = PeriodicStatusReport.NumberOfCompletedInterviews,
+                ResponsibleColumnName = PeriodicStatusReport.Team
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -86,7 +88,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
-                ReportTitle = QuantityReport.TimeSpentToCompleteInterviewInMinutes
+                ReportTitle = PeriodicStatusReport.TimeSpentToCompleteInterviewInHours,
+                ResponsibleColumnName = PeriodicStatusReport.TeamMember
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -107,7 +110,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
-                ReportTitle = QuantityReport.TimeSpentToCompleteInterviewInMinutes
+                ReportTitle = PeriodicStatusReport.TimeSpentToCompleteInterviewInHours,
+                ResponsibleColumnName = PeriodicStatusReport.Team
             };
 
             return this.View("PeriodicStatusReport", model);

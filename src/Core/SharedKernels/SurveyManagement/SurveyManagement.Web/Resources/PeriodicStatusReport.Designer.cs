@@ -22,14 +22,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class QuantityReport {
+    public class PeriodicStatusReport {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal QuantityReport() {
+        internal PeriodicStatusReport() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.SurveyManagement.Web.Resources.QuantityReport", typeof(QuantityReport).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.SurveyManagement.Web.Resources.PeriodicStatusReport", typeof(PeriodicStatusReport).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -133,6 +133,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string Team {
+            get {
+                return ResourceManager.GetString("Team", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team member.
         /// </summary>
         public static string TeamMember {
@@ -142,20 +151,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teams.
+        ///   Looks up a localized string similar to Average time spent to complete an interview(in hours).
         /// </summary>
-        public static string Teams {
+        public static string TimeSpentToCompleteInterviewInHours {
             get {
-                return ResourceManager.GetString("Teams", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Time spent to complete interview(in minutes).
-        /// </summary>
-        public static string TimeSpentToCompleteInterviewInMinutes {
-            get {
-                return ResourceManager.GetString("TimeSpentToCompleteInterviewInMinutes", resourceCulture);
+                return ResourceManager.GetString("TimeSpentToCompleteInterviewInHours", resourceCulture);
             }
         }
         
