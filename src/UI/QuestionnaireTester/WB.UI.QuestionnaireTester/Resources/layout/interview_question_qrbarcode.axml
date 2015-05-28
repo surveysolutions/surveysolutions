@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_QuestionWithDivider"
-    local:MvxBind="Enabled QuestionState.Enablement.Enabled; LongClick QuestionState.Comments.ShowCommentEditorCommand">
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+  style="@style/Interview_QuestionWithDivider"
+  local:MvxBind="Enabled QuestionState.Enablement.Enabled; LongClick QuestionState.Comments.ShowCommentEditorCommand">
   <MvxLinearLayout style="@style/Interview_Question">
     <include layout="@layout/interview_question__title" />
     <MvxLinearLayout style="@style/Interview_Question_Body"
-                     local:MvxBind="Visible QuestionState.Enablement.Enabled">
+      local:MvxBind="Visible QuestionState.Enablement.Enabled">
       <include layout="@layout/interview_question__instructions" />
       <MvxLinearLayout style="@style/Interview_Question_Answer"
-                       local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
         <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <TextView style="@style/Interview_Question_TextAnswer" local:MvxBind="Text Answer" /> />
+          <TextView style="@style/Interview_Question_TextAnswer"
+            local:MvxBind="Text Answer" /> />
           <Button style="@style/Interview_Question_InputButton"
-                  local:MvxBind="HideKeyboardOnClick .; Click SaveAnswerCommand; Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
+            local:MvxBind="HideKeyboardOnClick .; Click SaveAnswerCommand; Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
         </MvxLinearLayout>
 
       </MvxLinearLayout>
@@ -24,7 +23,6 @@
     </MvxLinearLayout>
   </MvxLinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress IsInProgress" />
+    local:MvxBind="ShowProgress IsInProgress" />
   <View style="@style/Interview_Question_Divider" />
-
 </MvxLinearLayout>
