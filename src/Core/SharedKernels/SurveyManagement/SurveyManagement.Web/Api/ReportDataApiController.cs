@@ -34,8 +34,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
 
         private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
+  
         private readonly IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport;
         private readonly IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport;
+
+        private readonly IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport;
+        private readonly IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -48,7 +52,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IViewFactory<MapReportInputModel, MapReportView> mapReport, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
-            IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport)
+            IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, 
+            IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport, 
+            IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport, 
+            IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport)
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
@@ -60,6 +67,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityByInterviewersReport = quantityByInterviewersReport;
             this.quantityBySupervisorsReport = quantityBySupervisorsReport;
+            this.speedByInterviewersReport = speedByInterviewersReport;
+            this.speedBySupervisorsReport = speedBySupervisorsReport;
         }
 
         [HttpPost]
@@ -145,6 +154,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
 
             return this.quantityBySupervisorsReport.Load(input.Request);
+        }
+
+        public SpeedByResponsibleReportView SpeedByInterviewers(SpeedByInterviewersReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+            if (input.Request.SupervisorId == Guid.Empty)
+            {
+                input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
+            }
+            return this.speedByInterviewersReport.Load(input.Request);
+        }
+
+        public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+
+            return this.speedBySupervisorsReport.Load(input.Request);
         }
 
         [HttpPost]

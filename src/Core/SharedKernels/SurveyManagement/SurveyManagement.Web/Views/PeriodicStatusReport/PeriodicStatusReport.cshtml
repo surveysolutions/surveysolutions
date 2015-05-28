@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.SharedKernels.SurveyManagement.Web.Resources
-@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.TemplateViewItem>
+@model WB.Core.SharedKernels.SurveyManagement.Views.Reposts.PeriodicStatusReportModel
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
@@ -10,11 +10,11 @@
     @Scripts.Render(
     "~/Scripts/bootstrap-datepicker.js",
     "~/Scripts/ko.datepicker.js",
-            "~/Scripts/viewmodels/pages/quantitybyresponsibles.js")
+                    "~/Scripts/viewmodels/pages/periodicstatusreport.js")
     <script type="text/javascript">
         function GetInterviewersUrl(supervisorId) {
             var url = new Url(window.location.href);
-            return '@Url.Action("ByInterviewers", "Quantity")'
+            return '@Url.Action(Model.ReportName + "ByInterviewers", "PeriodicStatusReport")'
                     + '?questionnaireId=' + url.query['questionnaireId']
                     + '&questionnaireVersion=' + url.query['questionnaireVersion']
                     + '&from=' + url.query['from']
@@ -24,7 +24,7 @@
         }
         function GetSupervisorsUrl() {
             var url = new Url(window.location.href);
-            return '@Url.Action("BySupervisors", "Quantity")'
+            return '@Url.Action(Model.ReportName + "BySupervisors", "PeriodicStatusReport")'
                 + '?questionnaireId=' + url.query['questionnaireId']
                 + '&questionnaireVersion=' + url.query['questionnaireVersion']
                 + '&from=' + url.query['from']
@@ -32,7 +32,7 @@
                 + '&columnCount=' + url.query['columnCount'];
         }
         $(function () {
-            var model = new Supervisor.VM.QuantityByResponsibles('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = this.ViewBag.WebApiActionName })');
+            var model = new Supervisor.VM.PeriodicStatusReport('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = Model.ReportName + Model.WebApiActionName })');
             ko.applyBindings(model);
             model.load();
         });
@@ -47,14 +47,13 @@
 {
     
     <h3>
-        @QuantityReport.NumberOfCompletedInterviews
-
+        @Model.ReportTitle
     </h3>
 }
 
 @section actionbar
 {
-    @if (ViewBag.CanNavigateToQuantityBySupervisors)
+    @if (Model.CanNavigateToQuantityBySupervisors)
     {
         <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@QuantityReport.BackToSupervisors</a>
     }
@@ -69,7 +68,7 @@
             </h4>
             <p class="list-group-item-text">
                 <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire" class="form-control">
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Questionnaires)
                     {
                         <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@QuantityReport.Version @item.TemplateVersion) @item.TemplateName</option>
                     }
@@ -97,18 +96,10 @@
             <h4 class="list-group-item-heading">@QuantityReport.PeriodCount</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: ColumnCount" class="form-control">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
                 </select>
             </p>
         </li>
@@ -135,7 +126,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    @if (ViewBag.CanNavigateToQuantityByTeamMember)
+                    @if (Model.CanNavigateToQuantityByTeamMember)
                     {
                         <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
                     }
@@ -144,11 +135,11 @@
                         <span data-bind="text: ResponsibleName"></span>
                     }
                 </td>
-                <!-- ko foreach:QuantityByPeriod -->
-                <td><span data-bind="text: $data"></span></td>
+                <!-- ko foreach:@(Model.ReportName + "ByPeriod") -->
+                <td><span data-bind="text: $data==null?'-':$data"></span></td>
                 <!-- /ko -->
-                <td><span data-bind="text: Average"></span></td>
-                <td><span data-bind="text: Total"></span></td>
+                <td><span data-bind="text: $parent.FormatDataByPeriod(Average())"></span></td>
+                <td><span data-bind="text: $parent.FormatDataByPeriod(Total())"></span></td>
             </tr>
             <!-- /ko -->
         </tbody>

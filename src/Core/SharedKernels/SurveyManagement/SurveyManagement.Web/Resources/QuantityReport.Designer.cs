@@ -151,6 +151,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time spent to complete interview(in minutes).
+        /// </summary>
+        public static string TimeSpentToCompleteInterviewInMinutes {
+            get {
+                return ResourceManager.GetString("TimeSpentToCompleteInterviewInMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
         public static string Total {

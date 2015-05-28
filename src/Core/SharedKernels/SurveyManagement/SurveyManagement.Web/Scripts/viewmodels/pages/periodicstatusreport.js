@@ -1,5 +1,5 @@
-﻿Supervisor.VM.QuantityByResponsibles = function (listViewUrl) {
-    Supervisor.VM.QuantityByResponsibles.superclass.constructor.apply(this, arguments);
+﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl) {
+    Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
     var dateFormat = "MM/DD/YYYY";
@@ -20,6 +20,16 @@
         return ko.computed({
             read: function () {
                 return moment(period.To()).format(dateFormat) + "-" + moment(period.From()).format(dateFormat);
+            }
+        }, this);
+    };
+
+    self.FormatDataByPeriod = function (date) {
+        return ko.computed({
+            read: function () {
+                if (date === null)
+                    return "-";
+                return date;
             }
         }, this);
     };
@@ -94,4 +104,4 @@
         self.search();
     };
 };
-Supervisor.Framework.Classes.inherit(Supervisor.VM.QuantityByResponsibles, Supervisor.VM.ListView);
+Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);

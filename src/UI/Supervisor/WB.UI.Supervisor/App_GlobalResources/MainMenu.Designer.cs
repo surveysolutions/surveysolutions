@@ -86,5 +86,14 @@ namespace Resources {
                 return ResourceManager.GetString("QueueSizeTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed.
+        /// </summary>
+        internal static string Speed {
+            get {
+                return ResourceManager.GetString("Speed", resourceCulture);
+            }
+        }
     }
 }
