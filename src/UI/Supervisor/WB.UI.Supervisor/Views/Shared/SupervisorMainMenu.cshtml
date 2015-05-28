@@ -16,7 +16,10 @@
                 <a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a>
             </li>
             <li class="@(page == MenuItem.NumberOfCompletedInterviews ? "active" : "")">
-                <a href="@Url.Action("ByInterviewers", "Quantity", new { area = "" })">@MainMenu.Quantity</a>
+                <a href="@Url.Action("QuantityByInterviewers", "PeriodicStatusReport", new {area = ""})">@MainMenu.Quantity</a>
+            </li>
+            <li class="@(page == MenuItem.SpeedOfCompletingInterviews ? "active" : "")">
+                <a href="@Url.Action("SpeedByInterviewers", "PeriodicStatusReport", new { area = "" })">@MainMenu.Speed</a>
             </li>
         </ul>
     </li>

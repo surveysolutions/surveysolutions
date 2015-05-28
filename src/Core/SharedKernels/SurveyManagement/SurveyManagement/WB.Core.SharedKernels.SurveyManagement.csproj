@@ -352,6 +352,7 @@
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\PeriodicStatusReportModel.cs" />
     <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
