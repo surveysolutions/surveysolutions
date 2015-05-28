@@ -217,7 +217,6 @@
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
-    <item name="android:fontFamily">sans-serif</item>
     <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
     <!-- elements -->
