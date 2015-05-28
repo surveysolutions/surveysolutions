@@ -8,13 +8,15 @@
     </shape>
   </item>
 
-  <item android:bottom="-2dp" android:right="-2dp" android:left="-2dp">
+  <item android:bottom="@dimen/Dashboard_QuestionnairesList_Border_hack" 
+        android:right="@dimen/Dashboard_QuestionnairesList_Border_hack" 
+        android:left="@dimen/Dashboard_QuestionnairesList_Border_hack">
     <shape>
       <solid android:color="@android:color/transparent" />
       <stroke
           android:width="@dimen/Questionnaires_Questionnaire_background_stroke_width"
-          android:color="#6d757a" />
-      <padding android:top="1dp" />
+          android:color="@color/dashboard_questionnairelist_border_top" />
+      <padding android:top="@dimen/Dashboard_QuestionnairesList_padding_top" />
     </shape>
   </item>
 

@@ -51,6 +51,9 @@
 
   <dimen name="Dashboard_QuestionnairesListItem_ModifiedDate_margin_top">4dp</dimen>
   <dimen name="Dashboard_QuestionnairesListItem_ModifiedDate_width">128dp</dimen>
+  
+  <dimen name="Dashboard_QuestionnairesList_padding_top">1dp</dimen>
+  <dimen name="Dashboard_QuestionnairesList_Border_hack">-2dp</dimen>
 
   <dimen name="Questionnaires_Questionnaire_background_stroke_width">1dp</dimen>
   <dimen name="Questionnaires_Questionnaire_background_padding">1dp</dimen>

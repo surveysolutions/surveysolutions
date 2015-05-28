@@ -41,7 +41,11 @@
 
   <color name="dashboard_my_questionnaire">#e8e8e8</color>
   <color name="dashboard_public_questionnaire">@color/colorBlueThemePrimary</color>
-  
+
+  <color name="dashboard_questionnairelist_border_top">#6d757a</color>
+
+  <color name="dashboard_questionnairelistitem_border_bottom">#e2e3e4</color>
+
   <color name="previous_group_navigation_answered">#7AC16B</color>
   <color name="previous_group_navigation_unanswered">#2A81CB</color>
   
