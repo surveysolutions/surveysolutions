@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
@@ -53,7 +54,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            commandService.Execute(new Initialize(), null);
+            commandService.Execute(new Initialize(), null, CancellationToken.None);
 
         It should_publish_result_aggregate_root_event_to_event_bus = () =>
             publishedEvents.Single().Payload.ShouldBeOfExactType<Initialized>();

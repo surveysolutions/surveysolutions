@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="CommandServiceTests\when_canceling_3_commands_in_500ms_after_their_execution_in_parallel_and_each_command_takes_1_second_to_execute.cs" />
     <Compile Include="CommandServiceTests\when_executing_10_commands_in_parallel_each_taking_1_second_to_execute.cs" />
     <Compile Include="CommandServiceTests\when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository.cs" />
@@ -191,7 +192,8 @@
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
     <Compile Include="RavenMockUtils.cs" />
-    <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_asynchronously_and_in_parallel_each_taking_1_second_to_execute.cs" />
+    <Compile Include="SequentialCommandServiceTests\when_canceling_3_commands_in_500ms_after_their_execution_in_parallel_and_each_command_takes_1_second_to_execute.cs" />
+    <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_in_parallel_each_taking_1_second_to_execute.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />

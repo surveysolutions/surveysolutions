@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Ncqrs.Domain.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -12,14 +13,16 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
     {
         private class CommandDescriptor
         {
-            public CommandDescriptor(ICommand command, string origin)
+            public CommandDescriptor(ICommand command, string origin, CancellationToken cancellationToken)
             {
-                Command = command;
-                Origin = origin;
+                this.Command = command;
+                this.Origin = origin;
+                this.CancellationToken = cancellationToken;
             }
 
             public ICommand Command { get; private set; }
             public string Origin { get; private set; }
+            public CancellationToken CancellationToken { get; private set; }
         }
 
         private readonly ConcurrentQueue<CommandDescriptor> queue = new ConcurrentQueue<CommandDescriptor>();
@@ -28,9 +31,9 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         public SequentialCommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
             : base(repository, eventBus, snapshooter) {}
 
-        public override void Execute(ICommand command, string origin)
+        public override void Execute(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            var commandDescriptor = new CommandDescriptor(command, origin);
+            var commandDescriptor = new CommandDescriptor(command, origin, cancellationToken);
 
             this.AddToQueue(commandDescriptor);
 
@@ -43,7 +46,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
                     this.RemoveFromTopOfQueue(commandDescriptor);
 
-                    base.Execute(commandDescriptor.Command, commandDescriptor.Origin);
+                    base.Execute(commandDescriptor.Command, commandDescriptor.Origin, commandDescriptor.CancellationToken);
                 }
             }
         }
