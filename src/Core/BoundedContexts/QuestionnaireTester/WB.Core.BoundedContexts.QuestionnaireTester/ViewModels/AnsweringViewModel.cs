@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class AnsweringViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
-        private int inProgressDeep = 0;
+        private int inProgressDepth = 0;
 
         public AnsweringViewModel(ICommandService commandService)
         {
@@ -19,14 +19,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private bool inProgress;
         public bool InProgress
         {
-            get { return inProgress; }
+            get { return this.inProgress; }
+
             private set
             {
-                if (value != InProgress)
-                {
-                    inProgress = value;
-                    RaisePropertyChanged();
-                }
+                if (value == this.inProgress) return;
+
+                this.inProgress = value;
+                this.RaisePropertyChanged();
             }
         }
 
@@ -34,30 +34,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             try
             {
-                StartInProgressIndicator();
+                this.StartInProgressIndicator();
 
                 await this.commandService.ExecuteAsync(answerCommand);
             }
             finally
             {
-                FinishInProgressIndicator();
+                this.FinishInProgressIndicator();
             }
         }
 
         private void StartInProgressIndicator()
         {
-            Interlocked.Increment(ref inProgressDeep);
-            this.InProgress = true;
+            Interlocked.Increment(ref this.inProgressDepth);
+            this.UpdateInProgressFlag();
         }
 
         private void FinishInProgressIndicator()
         {
-            Interlocked.Decrement(ref inProgressDeep);
+            Interlocked.Decrement(ref this.inProgressDepth);
+            this.UpdateInProgressFlag();
+        }
 
-            if (inProgressDeep == 0)
-            {
-                this.InProgress = false;
-            }
+        private void UpdateInProgressFlag()
+        {
+            this.InProgress = this.inProgressDepth > 0;
         }
     }
 }
