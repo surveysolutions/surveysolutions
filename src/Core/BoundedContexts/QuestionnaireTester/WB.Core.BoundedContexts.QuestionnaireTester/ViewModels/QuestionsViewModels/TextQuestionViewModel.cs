@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Questi
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -22,7 +21,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         ILiteEventHandler<TextQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
@@ -34,7 +32,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public TextQuestionViewModel(
             ILiteEventRegistry liteEventRegistry,
-            ICommandService commandService,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
@@ -42,7 +39,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             AnsweringViewModel answering)
         {
             this.liteEventRegistry = liteEventRegistry;
-            this.commandService = commandService;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;

@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class QrBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
@@ -39,7 +38,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer, () => !this.IsInProgress)); }
         }
 
-        private readonly ICommandService commandService;
         private readonly IUserIdentity userIdentity;
         private readonly IStatefullInterviewRepository interviewRepository;
         private readonly IQrBarcodeScanService qrBarcodeScanService;
@@ -48,7 +46,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid interviewId;
 
-        public QrBarcodeQuestionViewModel(ICommandService commandService, 
+        public QRBarcodeQuestionViewModel(
             IUserIdentity userIdentity,
             IStatefullInterviewRepository interviewRepository,
             IQrBarcodeScanService qrBarcodeScanService,
@@ -56,7 +54,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
-            this.commandService = commandService;
             this.userIdentity = userIdentity;
             this.interviewRepository = interviewRepository;
             this.qrBarcodeScanService = qrBarcodeScanService;

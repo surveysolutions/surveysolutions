@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -20,25 +19,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        private readonly ICommandService commandService;
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
 
         public SingleOptionQuestionViewModel(
-            ICommandService commandService,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
-            if (commandService == null) throw new ArgumentNullException("commandService");
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
 
-            this.commandService = commandService;
             this.userId = principal.CurrentUserIdentity.UserId;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
