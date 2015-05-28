@@ -131,11 +131,11 @@
     <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
     <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:gravity">center_vertical|center_horizontal</item>
-    <item name="android:layout_marginLeft">2dp</item>
-    <item name="android:paddingRight">16dp</item>
-    <item name="android:paddingLeft">16dp</item>
-    <item name="android:layout_marginRight">2dp</item>
-    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:paddingRight">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_InputButton_margin_Bottom</item>
   </style>
 
   <style name="Interview_Question_Errors" parent="VerticalFullWidthWrappingLayout">

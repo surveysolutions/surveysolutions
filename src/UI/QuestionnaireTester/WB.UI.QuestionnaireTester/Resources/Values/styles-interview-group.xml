@@ -29,8 +29,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:layout_marginBottom">8dp</item>
-    <item name="android:layout_marginRight">2dp</item>
-    <item name="android:layout_marginLeft">2dp</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Question_InputButton_margin_Bottom</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>
 </resources>
