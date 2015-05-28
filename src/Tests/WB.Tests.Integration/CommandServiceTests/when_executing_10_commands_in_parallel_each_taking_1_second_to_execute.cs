@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_executing_10_commands_asynchronously_and_in_parallel_each_taking_1_second_to_execute
+    internal class when_executing_10_commands_in_parallel_each_taking_1_second_to_execute
     {
         private class WorkFor1Second : ICommand { public Guid CommandIdentifier { get; private set; } }
 
@@ -29,10 +29,8 @@ namespace WB.Tests.Integration.CommandServiceTests
                 .Setup<Aggregate>()
                 .Handles<WorkFor1Second>(_ => aggregateId, aggregate => aggregate.WorkFor1Second);
 
-            aggregateFromRepository = new Aggregate();
-
             var repository = Mock.Of<IAggregateRootRepository>(_
-                => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
+                => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = Create.CommandService(repository: repository);
         };
@@ -42,16 +40,16 @@ namespace WB.Tests.Integration.CommandServiceTests
             var startTime = DateTime.Now;
 
             Task.WaitAll(
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null),
-                commandService.ExecuteAsync(new WorkFor1Second(), null));
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
+                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None));
 
             timeSpent = DateTime.Now - startTime;
         };
@@ -61,7 +59,6 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
-        private static Aggregate aggregateFromRepository;
         private static TimeSpan timeSpent;
     }
 }

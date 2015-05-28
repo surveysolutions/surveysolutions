@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
@@ -29,7 +30,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         Because of = () =>
             exception = Catch.Only<CommandServiceException>(() =>
-                commandService.Execute(new NotConstructingCommand(), null));
+                commandService.Execute(new NotConstructingCommand(), null, CancellationToken.None));
 
         It should_throw_exception_with_message_containing__unable____constructing__ = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("unable", "constructing");
