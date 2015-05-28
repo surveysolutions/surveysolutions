@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
                 { typeof(DateTimeQuestionModel), Load<DateTimeQuestionViewModel> },
-                { typeof(QRBarcodeQuestionModel), Load<QrBarcodeQuestionViewModel> },
+                { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
                 { typeof(GroupModel), Load<GroupViewModel> },
                 { typeof(RosterModel), Load<RosterViewModel> }
             };
