@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain.Storage;
 
@@ -22,14 +23,16 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.snapshooter = snapshooter;
         }
 
-        public Task ExecuteAsync(ICommand command, string origin)
+        public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.Execute(command, origin));
+            return Task.Run(() => this.Execute(command, origin, cancellationToken));
         }
 
-        public virtual void Execute(ICommand command, string origin)
+        public virtual void Execute(ICommand command, string origin, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException("command");
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (!CommandRegistry.Contains(command))
                 throw new CommandServiceException(string.Format("Unable to execute command {0} because it is not registered.", command.GetType().Name));
@@ -43,6 +46,8 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -51,6 +56,8 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
                 aggregate = constructor.Invoke();
                 aggregate.SetId(aggregateId);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             commandHandler.Invoke(command, aggregate);
 
