@@ -416,5 +416,13 @@ namespace WB.Tests.Integration
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>());
         }
+
+        public static SequentialCommandService SequentialCommandService(IAggregateRootRepository repository = null, IEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        {
+            return new SequentialCommandService(
+                repository ?? Mock.Of<IAggregateRootRepository>(),
+                eventBus ?? Mock.Of<IEventBus>(),
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>());
+        }
     }
 }
