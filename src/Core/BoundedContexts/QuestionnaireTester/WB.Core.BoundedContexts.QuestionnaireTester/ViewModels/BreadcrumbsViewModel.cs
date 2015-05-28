@@ -5,10 +5,13 @@ using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -17,14 +20,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly ILiteEventRegistry eventRegistry;
         private NavigationState navigationState;
         private string interviewId;
 
         public BreadcrumbsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository)
+            IStatefullInterviewRepository interviewRepository,
+            ILiteEventRegistry eventRegistry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.eventRegistry = eventRegistry;
         }
 
         public void Init(string interviewId, NavigationState navigationState)
@@ -35,19 +41,41 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState = navigationState;
             this.interviewId = interviewId;
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
+            this.eventRegistry.Subscribe(this);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            this.BuldBreadCrumbs(this.navigationState.CurrentGroup);
+            var interview = this.interviewRepository.Get(this.interviewId);
+            var questionnaire = questionnaireRepository.GetById(interview.QuestionnaireId);
+
+            var lastBreadCrumb = Items.Last();
+            foreach (var changedRosterInstance in @event.ChangedInstances)
+            {
+                var changedRosterInstanceIdentity = GetChangedRosterIdentity(changedRosterInstance);
+                if (changedRosterInstanceIdentity.Equals(lastBreadCrumb.ItemId))
+                {
+                    var groupTitle = questionnaire.GroupsWithoutNestedChildren[lastBreadCrumb.ItemId.Id].Title;
+                    lastBreadCrumb.Text = GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
+                    break;
+                }
+            }
+        }
+
+        private static Identity GetChangedRosterIdentity(ChangedRosterInstanceTitleDto changedRosterInstance)
+        {
+            var changedRosterInstanceIdentity = new Identity(changedRosterInstance.RosterInstance.GroupId,
+                changedRosterInstance.RosterInstance.OuterRosterVector.Concat(
+                    changedRosterInstance.RosterInstance.RosterInstanceId.ToEnumerable()).ToArray());
+            return changedRosterInstanceIdentity;
         }
 
         void navigationState_OnGroupChanged(Identity newGroupIdentity)
         {
-            this.BuldBreadCrumbs(newGroupIdentity);
+            this.BuildBreadCrumbs(newGroupIdentity);
         }
 
-        private void BuldBreadCrumbs(Identity newGroupIdentity)
+        private void BuildBreadCrumbs(Identity newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = questionnaireRepository.GetById(interview.QuestionnaireId);
@@ -69,7 +97,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     var rosterInstance =
                         (InterviewRoster)
                             interview.Groups[ConversionHelper.ConvertIdAndRosterVectorToString(reference.Id, itemRosterVector)];
-                    var title = string.Format("{0} - {1} / ", groupTitle, rosterInstance.Title);
+                    var title = GenerateRosterTitle(groupTitle, rosterInstance.Title);
                     breadCrumbs.Add(new BreadCrumbItemViewModel(navigationState)
                     {
                         Text = title,
@@ -104,8 +132,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             return parentItems;
         }
 
-        private ReadOnlyCollection<BreadCrumbItemViewModel> items;
+        private static string GenerateRosterTitle(string groupTitle, string changedRosterInstanceIdentity)
+        {
+            return string.Format("{0} - {1} / ", groupTitle, changedRosterInstanceIdentity);
+        }
 
+        private ReadOnlyCollection<BreadCrumbItemViewModel> items;
         public ReadOnlyCollection<BreadCrumbItemViewModel> Items
         {
             get { return items; }

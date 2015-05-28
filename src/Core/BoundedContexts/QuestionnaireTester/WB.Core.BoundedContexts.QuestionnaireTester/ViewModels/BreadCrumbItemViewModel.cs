@@ -3,16 +3,22 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class BreadCrumbItemViewModel
+    public class BreadCrumbItemViewModel : MvxNotifyPropertyChanged
     {
         private readonly NavigationState navigationState;
+        private string text;
 
         public BreadCrumbItemViewModel(NavigationState navigationState)
         {
             this.navigationState = navigationState;
         }
 
-        public string Text { get; set; }
+        public string Text
+        {
+            get { return this.text; }
+            set { this.text = value; this.RaisePropertyChanged(); }
+        }
+
         public Identity ItemId { get; set; }
 
         public IMvxCommand NavigateCommand
