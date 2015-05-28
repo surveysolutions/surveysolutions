@@ -21,6 +21,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls
         private static readonly Dictionary<Type, int> QuestionTemplates = new Dictionary<Type, int>
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
+            {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},

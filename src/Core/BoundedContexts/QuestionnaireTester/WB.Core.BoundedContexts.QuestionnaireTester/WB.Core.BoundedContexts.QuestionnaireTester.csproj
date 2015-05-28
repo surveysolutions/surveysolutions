@@ -121,6 +121,7 @@
     <Compile Include="ViewModels\QuestionStateViewModels\QuestionStateViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\DateTimeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupStatus.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\TextListQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultimedaQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\QRBarcodeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupViewModel.cs" />
