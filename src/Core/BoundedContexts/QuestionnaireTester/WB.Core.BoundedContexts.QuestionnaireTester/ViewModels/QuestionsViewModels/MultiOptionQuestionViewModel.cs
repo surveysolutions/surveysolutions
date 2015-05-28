@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
@@ -60,34 +61,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
 
             this.userId = principal.CurrentUserIdentity.UserId;
-            var interview = this.interviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             var questionModel = (MultiOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
             this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
 
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(this.ToViewModel).ToList());
-
-            var existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
-            if (existingAnswer != null && existingAnswer.IsAnswered)
-            {
-                foreach (var answer in existingAnswer.Answers)
-                {
-                    this.Options.First(x => x.Value == answer).Checked = true;
-                }
-            }
+            MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
+            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(x => ToViewModel(x, existingAnswer)).ToList());
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model)
+        private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model, MultiOptionAnswer multiOptionAnswer)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
                 Value = model.Value,
-                Title = model.Title
+                Title = model.Title,
+                Checked = multiOptionAnswer != null && 
+                          multiOptionAnswer.IsAnswered && 
+                          multiOptionAnswer.Answers.Any(x => model.Value == x)
             };
 
             return result;
