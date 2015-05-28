@@ -141,14 +141,14 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
+  <data name="Team" xml:space="preserve">
+    <value>Team</value>
+  </data>
   <data name="TeamMember" xml:space="preserve">
     <value>Team member</value>
   </data>
-  <data name="Teams" xml:space="preserve">
-    <value>Teams</value>
-  </data>
-  <data name="TimeSpentToCompleteInterviewInMinutes" xml:space="preserve">
-    <value>Time spent to complete interview(in minutes)</value>
+  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+    <value>Average time spent to complete an interview(in hours)</value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>

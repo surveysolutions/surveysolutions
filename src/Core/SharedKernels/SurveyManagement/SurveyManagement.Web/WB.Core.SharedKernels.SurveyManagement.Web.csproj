@@ -202,10 +202,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Interviews.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\QuantityReport.Designer.cs">
+    <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QuantityReport.resx</DependentUpon>
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
@@ -349,9 +349,9 @@
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuantityReport.resx">
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuantityReport.Designer.cs</LastGenOutput>
+      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />

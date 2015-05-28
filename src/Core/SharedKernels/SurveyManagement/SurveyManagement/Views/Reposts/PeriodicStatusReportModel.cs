@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
         public TemplateViewItem[] Questionnaires { get; set; }
         public string ReportTitle { get; set; }
         public string ReportName { get; set; }
+        public string ResponsibleColumnName { get; set; }
     }
 }

@@ -55,7 +55,7 @@
 {
     @if (Model.CanNavigateToQuantityBySupervisors)
     {
-        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@QuantityReport.BackToSupervisors</a>
+        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
     }
 }
 
@@ -64,13 +64,13 @@
     <ul class="list-group">
         <li class="list-group-item">
             <h4 class="list-group-item-heading">
-                @QuantityReport.Questionnaire
+                @PeriodicStatusReport.Questionnaire
             </h4>
             <p class="list-group-item-text">
                 <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire" class="form-control">
                     @foreach (var item in Model.Questionnaires)
                     {
-                        <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@QuantityReport.Version @item.TemplateVersion) @item.TemplateName</option>
+                        <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
                     }
                 </select>
             </p>
@@ -83,17 +83,17 @@
             </div>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">@QuantityReport.Period</h4>
+            <h4 class="list-group-item-heading">@PeriodicStatusReport.Period</h4>
             <p class="list-group-item-text">
                 <select id="periodSelector" class="form-control" data-bind="value: Period">
-                    <option value='d'>@QuantityReport.Day</option>
-                    <option value='w'>@QuantityReport.Week</option>
-                    <option value='m'>@QuantityReport.Month</option>
+                    <option value='d'>@PeriodicStatusReport.Day</option>
+                    <option value='w'>@PeriodicStatusReport.Week</option>
+                    <option value='m'>@PeriodicStatusReport.Month</option>
                 </select>
             </p>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">@QuantityReport.PeriodCount</h4>
+            <h4 class="list-group-item-heading">@PeriodicStatusReport.PeriodCount</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: ColumnCount" class="form-control">
                     @for (int i = 1; i <= 12; i++)
@@ -112,14 +112,14 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th>Team member</th>
+                <th>@Model.ResponsibleColumnName</th>
                 <!-- ko foreach:DateTimeRanges -->
                 <th>
                     <span data-bind="text: $parent.GetPeriodName($data)"></span>
                 </th>
                 <!-- /ko -->
-                <th>@QuantityReport.Average</th>
-                <th>@QuantityReport.Total</th>
+                <th>@PeriodicStatusReport.Average</th>
+                <th>@PeriodicStatusReport.Total</th>
             </tr>
         </thead>
         <tbody>
