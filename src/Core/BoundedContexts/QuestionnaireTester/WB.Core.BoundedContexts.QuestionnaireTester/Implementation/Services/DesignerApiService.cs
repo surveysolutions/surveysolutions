@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return isUserAuthrizedOnServer;
         }
 
-        public async Task GetQuestionnairesAsync(Action<QuestionnaireListItem[]> onPageReceived, CancellationToken token)
+        public async Task GetQuestionnairesAsync(bool isPublic, Action<QuestionnaireListItem[]> onPageReceived, CancellationToken token)
         {
             var pageIndex = 1;
 
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 QuestionnaireListItem[] batchOfServerQuestionnaires;
                 do
                 {
-                    batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(pageIndex: pageIndex++, pageSize: PageSize, token: token);
+                    batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(isPublic: isPublic, pageIndex: pageIndex++, token: token);
                     if (onPageReceived != null)
                     {
                         onPageReceived(batchOfServerQuestionnaires);
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return downloadedQuestionnaire;
         }
 
-        private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, int pageSize, CancellationToken token)
+        private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(bool isPublic, int pageIndex, CancellationToken token)
         {
             var  batchOfServerQuestionnaires= await this.restService.GetAsync<SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
@@ -155,14 +155,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         Login = this.userIdentity.Name,
                         Password = this.userIdentity.Password
                     },
-                queryString: new { pageIndex = pageIndex, pageSize = pageSize });
+                queryString: new { pageIndex = pageIndex });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()
             {
                 Id = questionnaireListItem.Id,
                 Title = questionnaireListItem.Title,
                 LastEntryDate = questionnaireListItem.LastEntryDate,
-                IsPublic = false,
+                IsPublic = isPublic,
                 OwnerName = this.userIdentity.Name
             }).ToArray();
         }
@@ -192,17 +192,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             }
 
             return errorMessage;
-        }
-
-        private static string GetDomainName(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
-            Uri uri;
-
-            if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
-                throw new ArgumentException("invalid url string");
-
-            return uri.ToString().Replace(uri.PathAndQuery, "");
         }
     }
 }

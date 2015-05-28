@@ -90,12 +90,13 @@ namespace WB.UI.Designer.Api
         }
 
         [Route("")]
-        public IEnumerable<QuestionnaireListItem> Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128, [FromUri]string sortBy = "", [FromUri]string filter = "")
+        public IEnumerable<QuestionnaireListItem> Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128, [FromUri]string sortBy = "", [FromUri]string filter = "", [FromUri]bool isPublic = false)
         {
             var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
             {
                 ViewerId = this.userHelper.WebUser.UserId,
                 IsAdminMode = this.userHelper.WebUser.IsAdmin,
+                IsPublic = isPublic,
                 Page = pageIndex,
                 PageSize = pageSize,
                 Order = sortBy,
@@ -106,11 +107,9 @@ namespace WB.UI.Designer.Api
             {
                 Id = questionnaire.PublicId.FormatGuid(),
                 Title = questionnaire.Title,
-                LastEntryDate = questionnaire.LastEntryDate,
-                IsPublic = questionnaire.IsPublic
+                LastEntryDate = questionnaire.LastEntryDate
             });
         }
-
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
