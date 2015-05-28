@@ -213,6 +213,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             try
             {
                 await this.designerApiService.GetQuestionnairesAsync(
+                    isPublic: false,
+                    token: tokenSource.Token,
+                    onPageReceived: async (batchOfServerQuestionnaires) =>
+                    {
+                        await this.questionnairesStorageAccessor.StoreAsync(batchOfServerQuestionnaires);
+                    });
+
+                await this.designerApiService.GetQuestionnairesAsync(
+                    isPublic: true,
                     token: tokenSource.Token,
                     onPageReceived: async (batchOfServerQuestionnaires) =>
                     {
@@ -231,7 +240,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await this.questionnairesStorageAccessor.RemoveAsync(myQuestionnaires);
             await this.questionnairesStorageAccessor.RemoveAsync(publicQuestionnaires);
-            this.Questionnaires.Clear();
+            this.Questionnaires = null;
+            this.MyQuestionnairesCount = 0;
+            this.PublicQuestionnairesCount = 0;
         }
 
         public override void NavigateToPreviousViewModel()
