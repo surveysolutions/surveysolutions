@@ -26,7 +26,6 @@
   </style>
     
   <style name="Dashboard_QuestionnairesList" parent="AppTheme">
-    <item name="android:background">@drawable/questionnaire_list_border</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>
     <item name="android:orientation">vertical</item>
@@ -37,6 +36,21 @@
     <item name="android:animationCache">false</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Dashboard_Questionnaires_Header" parent="FullWidthWrappingLayout">
+        <item name="android:background">@drawable/questionnaire_list_border</item>
+  </style>
+  
+  <style name="Dashboard_EmptyQuestionnaireListText" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_left</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_top</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_right</item>
+    <item name="android:textColor">@color/dashboard_questionnairelist_empty_text</item>
+    <item name="android:textSize">@dimen/textsize_28</item>
+    <item name="android:fontFamily">sans-serif-thin</item>
   </style>
 
   <style name="Dashboard_QuestionnaireListItem_Body" parent="FullWidthWrappingLayout">

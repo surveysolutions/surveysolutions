@@ -8,7 +8,7 @@
     </shape>
   </item>
 
-  <item android:bottom="@dimen/Dashboard_QuestionnairesList_Border_hack" 
+  <item android:top="@dimen/Dashboard_QuestionnairesList_Border_hack" 
         android:right="@dimen/Dashboard_QuestionnairesList_Border_hack" 
         android:left="@dimen/Dashboard_QuestionnairesList_Border_hack">
     <shape>

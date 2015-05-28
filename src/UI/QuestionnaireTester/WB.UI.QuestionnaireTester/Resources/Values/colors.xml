@@ -44,6 +44,8 @@
 
   <color name="dashboard_questionnairelist_border_top">#6d757a</color>
 
+  <color name="dashboard_questionnairelist_empty_text">#a3a3a3</color>
+
   <color name="dashboard_questionnairelistitem_border_bottom">#e2e3e4</color>
 
   <color name="previous_group_navigation_answered">#7AC16B</color>

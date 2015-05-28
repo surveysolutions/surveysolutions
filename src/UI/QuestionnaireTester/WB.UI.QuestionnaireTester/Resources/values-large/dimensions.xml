@@ -6,6 +6,7 @@
   <dimen name="textsize_14">14sp</dimen>
   <dimen name="textsize_18">18sp</dimen>
   <dimen name="textsize_20">20sp</dimen>
+  <dimen name="textsize_28">28sp</dimen>
 
   <dimen name="button_corners_radius">8dp</dimen>
 

@@ -42,9 +42,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.questionnaireImportService = questionnaireImportService;
         }
 
-        public void Init()
+        public async void Init()
         {
-            this.BindQuestionnairesFromStorage();
+            var questionnaires = this.questionnairesStorageAccessor.Query(
+                query => query.Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic).ToList());
+
+            this.BindQuestionnaires(questionnaires);
+
+            if (!this.myQuestionnaires.Any() && !this.publicQuestionnaires.Any())
+                await this.GetServerQuestionnaires();
         }
 
         private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
@@ -184,40 +190,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private async void BindQuestionnairesFromStorage()
+        private void BindQuestionnaires(IEnumerable<QuestionnaireListItem> questionnaires)
         {
-            this.publicQuestionnaires = this.questionnairesStorageAccessor.Query(
-                query => query.Where(questionnaire => questionnaire.IsPublic).ToList());
+            this.myQuestionnaires = questionnaires.Where(
+                    qustionnaire => qustionnaire.OwnerName == this.principal.CurrentUserIdentity.Name && !qustionnaire.IsPublic)
+                    .ToList();
+            this.publicQuestionnaires = questionnaires.Where(questionnaire => questionnaire.IsPublic).ToList();
 
-            this.myQuestionnaires = this.questionnairesStorageAccessor.Query(
-                query => query.Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name && !questionnaire.IsPublic).ToList());
-
-            if (this.myQuestionnaires.Any())
-            {
-                this.MyQuestionnairesCount = this.myQuestionnaires.Count;
-                this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
-                this.ShowMyQuestionnaires();
-            }
-            else
-            {
-                await this.GetServerQuestionnaires();
-            }
+            this.MyQuestionnairesCount = this.myQuestionnaires.Count;
+            this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
+            this.ShowMyQuestionnaires();
         }
 
         public async Task GetServerQuestionnaires()
         {
             this.IsInProgress = true;
 
-            this.ClearQuestionnaires();
-
             try
             {
+                var questionnaires = new List<QuestionnaireListItem>();
+
                 await this.designerApiService.GetQuestionnairesAsync(
                     isPublic: false,
                     token: tokenSource.Token,
                     onPageReceived: async (batchOfServerQuestionnaires) =>
                     {
-                        await this.questionnairesStorageAccessor.StoreAsync(batchOfServerQuestionnaires);
+                        questionnaires.AddRange(batchOfServerQuestionnaires);
                     });
 
                 await this.designerApiService.GetQuestionnairesAsync(
@@ -225,24 +223,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     token: tokenSource.Token,
                     onPageReceived: async (batchOfServerQuestionnaires) =>
                     {
-                        await this.questionnairesStorageAccessor.StoreAsync(batchOfServerQuestionnaires);
+                        questionnaires.AddRange(batchOfServerQuestionnaires);
                     });
 
-                this.BindQuestionnairesFromStorage();
+                await this.questionnairesStorageAccessor.RemoveAsync(this.publicQuestionnaires);
+                await this.questionnairesStorageAccessor.RemoveAsync(this.myQuestionnaires);
+                await this.questionnairesStorageAccessor.StoreAsync(questionnaires);
+
+                this.BindQuestionnaires(questionnaires);
             }
             finally
             {
                 this.IsInProgress = false;
             }
-        }
-
-        private async void ClearQuestionnaires()
-        {
-            await this.questionnairesStorageAccessor.RemoveAsync(myQuestionnaires);
-            await this.questionnairesStorageAccessor.RemoveAsync(publicQuestionnaires);
-            this.Questionnaires = null;
-            this.MyQuestionnairesCount = 0;
-            this.PublicQuestionnairesCount = 0;
         }
 
         public override void NavigateToPreviousViewModel()

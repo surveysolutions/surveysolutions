@@ -1,9 +1,11 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
+using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.QuestionnaireTester.Activities
 {
@@ -21,6 +23,9 @@ namespace WB.UI.QuestionnaireTester.Activities
             base.OnCreate(bundle);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+
+            var questionnairesList = this.FindViewById<MvxListView>(Resource.Id.questionnairesList);
+            questionnairesList.EmptyView = this.FindViewById<LinearLayout>(Resource.Id.emptyView);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
