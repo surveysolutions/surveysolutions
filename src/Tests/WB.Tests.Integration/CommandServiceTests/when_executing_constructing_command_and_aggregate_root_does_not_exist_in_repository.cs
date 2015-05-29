@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            commandService.Execute(new Initialize(), null, CancellationToken.None);
+            commandService.Execute(new Initialize(), null);
 
         It should_publish_result_aggregate_root_event_to_event_bus = () =>
             publishedEvents.Single().Payload.ShouldBeOfExactType<Initialized>();

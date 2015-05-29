@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         Because of = () =>
             exception = Catch.Only<CommandServiceException>(() =>
-                commandService.Execute(new NotRegisteredCommand(), null, CancellationToken.None));
+                commandService.Execute(new NotRegisteredCommand(), null));
 
         It should_throw_exception_with_message_containing__not____registered__ = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("not", "registered");
