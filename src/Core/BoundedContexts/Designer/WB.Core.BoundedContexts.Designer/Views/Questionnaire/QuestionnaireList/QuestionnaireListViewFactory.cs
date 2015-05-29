@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 

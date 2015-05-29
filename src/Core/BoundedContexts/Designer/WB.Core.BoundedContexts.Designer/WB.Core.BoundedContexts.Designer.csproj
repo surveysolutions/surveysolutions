@@ -82,14 +82,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -390,9 +382,6 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
-    <Compile Include="Views\Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Pdf\Extensions.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfAnswerView.cs">
       <SubType>Code</SubType>
