@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Extensions\LinkExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
     <Compile Include="Filters\PreventDoubleSubmitAttribute.cs" />
     <Compile Include="Filters\EnforceHttpsHandler.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
+    <Compile Include="Filters\TransactionFilter.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountRepository.cs" />
     <Compile Include="MembershipProvider\Accounts\IMembershipAccount.cs" />

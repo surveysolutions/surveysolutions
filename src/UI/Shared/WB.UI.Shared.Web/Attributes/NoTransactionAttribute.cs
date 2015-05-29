@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.UI.Shared.Web.Attributes
 {
     public class NoTransactionAttribute : Attribute
     {

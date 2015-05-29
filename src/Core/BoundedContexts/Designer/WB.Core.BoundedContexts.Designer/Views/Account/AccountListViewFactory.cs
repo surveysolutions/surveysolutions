@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IQueryableReadSideRepositoryReader<AccountDocument> _accounts;
+        private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         /// </param>
         public AccountListViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
-            this._accounts = accounts;
+            this.accounts = accounts;
         }
 
         #endregion
@@ -41,9 +41,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             IEnumerable<AccountListItem> retVal = new AccountListItem[0];
 
             var count =
-                this._accounts.Query(_ => this.FilterAccounts(_, input).Count());
+                this.accounts.Query(_ => this.FilterAccounts(_, input).Count());
 
-            var queryResult = this._accounts.Query(_ => this.FilterAccounts(_, input).OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
+            var queryResult = this.accounts.Query(_ => this.FilterAccounts(_, input).OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
 
             retVal = queryResult
                               .Select(x => new AccountListItem()
@@ -69,9 +69,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return new AccountListView(input.Page, input.PageSize, count, retVal, input.Order);
         }
 
-        private IQueryable<AccountDocument> FilterAccounts(IQueryable<AccountDocument> accounts, AccountListViewInputModel input)
+        private IQueryable<AccountDocument> FilterAccounts(IQueryable<AccountDocument> _, AccountListViewInputModel input)
         {
-            IQueryable<AccountDocument> result = accounts;
+            IQueryable<AccountDocument> result = _;
             bool hasName = !string.IsNullOrEmpty(input.Name);
             bool hasEmail = !string.IsNullOrEmpty(input.Email);
             bool hasRole = input.Role != SimpleRoleEnum.Undefined;
@@ -100,6 +100,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             {
                 result = result.Where( (x) => x.Email == input.Email);
             }
+
+            if (!string.IsNullOrEmpty(input.Filter))
+                result = result.Where(x => x.UserName.Contains(input.Filter) || x.Email.Contains(input.Filter));
+            
             return result;
         }
     }

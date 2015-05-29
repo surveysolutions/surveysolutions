@@ -1,8 +1,8 @@
-﻿using System.Web.Http.Controllers;
+using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WB.Core.Infrastructure.Transactions;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.UI.Shared.Web.Filters
 {
     public class ApiTransactionFilter : ActionFilterAttribute, IActionFilter
     {
