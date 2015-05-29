@@ -803,6 +803,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to enter new item.
+        /// </summary>
+        public static string TextListQuestion_Hint {
+            get {
+                return ResourceManager.GetString("TextListQuestion_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to enter text.
         /// </summary>
         public static string TextQuestion_Hint {
