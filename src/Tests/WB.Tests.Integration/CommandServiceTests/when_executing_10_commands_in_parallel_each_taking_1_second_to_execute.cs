@@ -54,8 +54,8 @@ namespace WB.Tests.Integration.CommandServiceTests
             timeSpent = DateTime.Now - startTime;
         };
 
-        It should_take_less_than_5_seconds_to_execute = () =>
-            timeSpent.TotalMilliseconds.ShouldBeLessThan(5000);
+        It should_take_less_than_9_seconds_to_execute = () =>
+            timeSpent.TotalMilliseconds.ShouldBeLessThan(9000);
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
