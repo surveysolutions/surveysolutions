@@ -76,20 +76,5 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                 IsAnswered = interview.WasAnswered(questionIdentity);
             }
         }
-
-        public void ExecutedAnswerCommandWithoutExceptions()
-        {
-            Validity.ExecutedWithoutExceptions();
-        }
-
-        public void ProcessAnswerCommandException(Exception exception)
-        {
-            Validity.ProcessException(exception);
-        }
-
-        public void MarkAnswerAsInvalidWithMessage(string errorMessage)
-        {
-            Validity.MarkAnswerAsInvalidWithMessage(errorMessage);
-        }
     }
 }

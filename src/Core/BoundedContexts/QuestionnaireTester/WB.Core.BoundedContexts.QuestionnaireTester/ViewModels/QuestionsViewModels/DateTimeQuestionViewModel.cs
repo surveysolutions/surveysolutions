@@ -66,20 +66,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             try
             {
                 var command = new AnswerDateTimeQuestionCommand(
-                    interviewId: Guid.Parse(interviewId),
-                    userId: principal.CurrentUserIdentity.UserId,
+                    interviewId: Guid.Parse(this.interviewId),
+                    userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.questionIdentity.Id,
                     rosterVector: this.questionIdentity.RosterVector,
                     answerTime: DateTime.UtcNow,
                     answer: answerValue
                     );
                 await this.Answering.SendAnswerQuestionCommand(command);
-                SetToView(answerValue);
-                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+                this.SetToView(answerValue);
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                QuestionState.ProcessAnswerCommandException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

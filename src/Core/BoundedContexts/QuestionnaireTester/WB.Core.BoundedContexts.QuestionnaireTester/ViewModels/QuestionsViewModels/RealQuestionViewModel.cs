@@ -78,9 +78,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
 
             decimal answer;
-            if (!Decimal.TryParse(AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
+            if (!Decimal.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
             {
-                QuestionState.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Real_ParsingError);
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Real_ParsingError);
                 return;
             }
 
@@ -95,11 +95,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             try
             {
                 await this.Answering.SendAnswerQuestionCommand(command);
-                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                QuestionState.ProcessAnswerCommandException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

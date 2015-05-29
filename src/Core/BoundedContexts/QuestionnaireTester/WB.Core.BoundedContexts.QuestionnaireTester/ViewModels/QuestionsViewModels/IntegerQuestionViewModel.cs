@@ -97,9 +97,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
 
             int answer;
-            if (!int.TryParse(AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
+            if (!int.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
             {
-                QuestionState.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_ParsingError);
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_ParsingError);
                 return;
             }
 
@@ -125,13 +125,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             try
             {
                 await this.Answering.SendAnswerQuestionCommand(command);
-                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                previousAnswer = answer;
+                this.previousAnswer = answer;
             }
             catch (InterviewException ex)
             {
-                QuestionState.ProcessAnswerCommandException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
