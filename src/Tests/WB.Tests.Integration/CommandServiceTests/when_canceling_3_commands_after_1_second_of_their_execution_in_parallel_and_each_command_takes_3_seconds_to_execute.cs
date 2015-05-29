@@ -10,13 +10,13 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.CommandBus;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Integration.SequentialCommandServiceTests
+namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_canceling_3_commands_in_300ms_after_their_execution_in_parallel_and_each_command_takes_3_seconds_to_execute
+    internal class when_canceling_3_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_3_seconds_to_execute
     {
-        private class StoreNameFor3Seconds : ICommand
+        private class SaveNameFor3Seconds : ICommand
         {
-            public StoreNameFor3Seconds(string name)
+            public SaveNameFor3Seconds(string name)
             {
                 this.Name = name;
             }
@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
 
         private class Aggregate : AggregateRoot
         {
-            public void StoreNameFor3Seconds(StoreNameFor3Seconds command)
+            public void SaveNameFor3Seconds(SaveNameFor3Seconds command)
             {
                 Thread.Sleep(3000);
                 executedCommands.Add(command.Name);
@@ -38,35 +38,35 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .Handles<StoreNameFor3Seconds>(_ => aggregateId, aggregate => aggregate.StoreNameFor3Seconds);
+                .Handles<SaveNameFor3Seconds>(_ => aggregateId, aggregate => aggregate.SaveNameFor3Seconds);
 
             var repository = Mock.Of<IAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
-            commandService = Create.SequentialCommandService(repository: repository);
+            commandService = Create.CommandService(repository: repository);
         };
 
         Because of = () =>
         {
             var cancellationTokenSource = new CancellationTokenSource();
 
-            cancellationTokenSource.CancelAfter(300);
+            cancellationTokenSource.CancelAfter(1000);
 
             try
             {
                 Task.WaitAll(
-                    commandService.ExecuteAsync(new StoreNameFor3Seconds("first"), null, cancellationTokenSource.Token),
-                    commandService.ExecuteAsync(new StoreNameFor3Seconds("second"), null, cancellationTokenSource.Token),
-                    commandService.ExecuteAsync(new StoreNameFor3Seconds("third"), null, cancellationTokenSource.Token));
+                    commandService.ExecuteAsync(new SaveNameFor3Seconds("first"), null, cancellationTokenSource.Token),
+                    commandService.ExecuteAsync(new SaveNameFor3Seconds("second"), null, cancellationTokenSource.Token),
+                    commandService.ExecuteAsync(new SaveNameFor3Seconds("third"), null, cancellationTokenSource.Token));
             }
             catch (AggregateException) { }
         };
 
-        It should_execute_only_first_command = () =>
-            executedCommands.ShouldContainOnly("first");
+        It should_execute_all_3_commands = () =>
+            executedCommands.ShouldContainOnly("first", "second", "third");
 
         private static List<string> executedCommands = new List<string>();
-        private static SequentialCommandService commandService;
+        private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
     }
 }
