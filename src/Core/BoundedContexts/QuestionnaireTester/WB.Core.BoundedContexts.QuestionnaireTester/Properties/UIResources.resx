@@ -399,4 +399,7 @@ parent group</value>
 
 You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter new item</value>
+  </data>
 </root>

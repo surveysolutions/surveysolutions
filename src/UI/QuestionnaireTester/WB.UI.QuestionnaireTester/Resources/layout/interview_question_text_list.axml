@@ -3,28 +3,37 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
     local:MvxBind="Enabled QuestionState.Enablement.Enabled; LongClick QuestionState.Comments.ShowCommentEditorCommand">
-    <MvxLinearLayout
-        style="@style/Interview_Question">
-        <include
-            layout="@layout/interview_question__title" />
+    <MvxLinearLayout style="@style/Interview_Question">
+        <include layout="@layout/interview_question__title" />
         <MvxLinearLayout
             style="@style/Interview_Question_Body"
             local:MvxBind="Visible QuestionState.Enablement.Enabled">
-            <include
-                layout="@layout/interview_question__instructions" />
+          
+            <include layout="@layout/interview_question__instructions" />
             <MvxLinearLayout
-                style="@style/Interview_Question_Answer"
+                style="@style/VerticalFullWidthWrappingLayout"
                 local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-                <EditText
-                    style="@style/Interview_Question_Answer_TextEditor"
-                    local:MvxBind="FocusText Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+              <MvxLinearLayout
+                   style="@style/VerticalFullWidthWrappingLayout"
+                   local:MvxBind="ItemsSource Answers"
+                   local:MvxItemTemplate="@layout/interview_question_text_list_item" />
 
+              <EditText
+                  style="@style/Interview_Question_Answer_List_NewItem_Editor"
+                  local:MvxBind="FocusText NewListItem; Hint Localization('TextListQuestion_Hint');" />
+              
             </MvxLinearLayout>
-            <include
-                layout="@layout/interview_question__errors" />
-            <include
-                layout="@layout/interview_question__comments" />
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="12" />
+
+          <include layout="@layout/interview_question__errors" />
+          <include layout="@layout/interview_question__comments" />
         </MvxLinearLayout>
     </MvxLinearLayout>
     <ProgressBar

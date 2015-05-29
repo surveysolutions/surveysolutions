@@ -318,7 +318,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml" />
+    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_edit_text_holo_light.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -502,6 +504,15 @@
     <AndroidResource Include="Resources\drawable\questionnaire_list_border.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\delete_button.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_list_item_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_list_item_editor_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -584,6 +595,7 @@
     <AndroidResource Include="Resources\layout\interview_question_text_list.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

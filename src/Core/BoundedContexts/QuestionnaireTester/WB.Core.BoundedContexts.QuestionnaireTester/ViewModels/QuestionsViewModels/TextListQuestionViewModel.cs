@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Questi
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,47 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class TextListItemViewModel : MvxNotifyPropertyChanged
-    {
-        public event EventHandler BeforeItemEdited;
-
-        public EnablementViewModel Enablement { get; set; }
-
-        public decimal Value { get; set; }
-
-        private string title;
-        public string Title
-        {
-            get
-            {
-                return this.title;
-            }
-            set
-            {
-                try
-                {
-                    if (this.title == value)
-                    {
-                        return;
-                    }
-
-                    this.OnBeforeItemEdited();
-                    this.title = value;
-                }
-                finally
-                {
-                    this.RaisePropertyChanged();
-                }
-            }
-        }
-
-        private void OnBeforeItemEdited()
-        {
-            if (this.BeforeItemEdited != null) this.BeforeItemEdited.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class TextListQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
     {
         private readonly IPrincipal principal;
@@ -71,24 +33,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private bool isRosterSizeQuestion;
 
-        public IList<TextListItemViewModel> Answers { get; private set; }
+        public ObservableCollection<TextListItemViewModel> Answers { get; set; }
 
-        private string newListItem;
+        private string newListItem = string.Empty;
         public string NewListItem
         {
             get
             {
-                return this.newListItem;
+                return newListItem;
             }
             set
             {
-                if (this.newListItem == value)
+                newListItem = value;
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    return;
+                    this.AddNewItemAndSaveAnswers(value.Trim());
                 }
-
-                this.newListItem = value;
-                
                 this.RaisePropertyChanged();
             }
         }
@@ -108,6 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState = questionStateViewModel;
             this.userInteraction = userInteraction;
             this.Answering = answering;
+            this.Answers = new ObservableCollection<TextListItemViewModel>();
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -126,7 +87,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (TextListQuestionModel)questionnaire.Questions[entityIdentity.Id];
 
-            this.Answers = (answerModel.Answers ?? new Tuple<decimal, string>[0]).Select(this.ToViewModel).ToList();
+            if (answerModel != null && answerModel.Answers != null)
+            {
+                answerModel.Answers.Select(this.ToViewModel).ForEach(x => this.Answers.Add(x));
+            }
+
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
         }
 
@@ -161,6 +126,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 QuestionState.ProcessAnswerCommandException(ex);
             }
+        }
+
+        private void AddNewItemAndSaveAnswers(string value)
+        {
+            var maxValue = Answers.Count == 0 ? 0 : Answers.Max(x => x.Value) + 1;
+
+            Answers.Add(new TextListItemViewModel
+            {
+                Value = maxValue,
+                Title = value
+            });
+
+            NewListItem = string.Empty;
         }
 
         private TextListItemViewModel ToViewModel(Tuple<decimal, string> model)

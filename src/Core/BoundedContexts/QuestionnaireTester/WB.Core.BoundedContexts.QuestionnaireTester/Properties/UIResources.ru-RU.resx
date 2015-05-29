@@ -367,4 +367,7 @@
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Внимание: неотвеченных вопросов - {0}</value>
   </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Нажмите для добавления нового элемента</value>
+  </data>
 </root>
