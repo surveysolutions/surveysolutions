@@ -1286,17 +1286,23 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080065
 			public const int Interview_Question_Instruction_Title_margin_top = 2131230821;
 			
-			// aapt resource value: 0x7f08009e
-			public const int Interview_Question_List_DeleteButton_height = 2131230878;
+			// aapt resource value: 0x7f0800a0
+			public const int Interview_Question_List_DeleteButton_height = 2131230880;
 			
-			// aapt resource value: 0x7f08009d
-			public const int Interview_Question_List_DeleteButton_width = 2131230877;
+			// aapt resource value: 0x7f08009f
+			public const int Interview_Question_List_DeleteButton_width = 2131230879;
+			
+			// aapt resource value: 0x7f08009e
+			public const int Interview_Question_List_Editor_border = 2131230878;
 			
 			// aapt resource value: 0x7f08009b
 			public const int Interview_Question_List_Editor_margin_left = 2131230875;
 			
 			// aapt resource value: 0x7f08009a
 			public const int Interview_Question_List_Editor_margin_right = 2131230874;
+			
+			// aapt resource value: 0x7f08009d
+			public const int Interview_Question_List_Editor_padding = 2131230877;
 			
 			// aapt resource value: 0x7f08009c
 			public const int Interview_Question_List_Editor_width = 2131230876;
@@ -1571,8 +1577,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f08003b
 			public const int abc_text_size_title_material_toolbar = 2131230779;
 			
-			// aapt resource value: 0x7f0800a4
-			public const int button_corners_radius = 2131230884;
+			// aapt resource value: 0x7f0800a6
+			public const int button_corners_radius = 2131230886;
 			
 			// aapt resource value: 0x7f08003c
 			public const int dialog_fixed_height_major = 2131230780;
@@ -1592,20 +1598,20 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f080041
 			public const int disabled_alpha_material_light = 2131230785;
 			
-			// aapt resource value: 0x7f08009f
-			public const int textsize_12 = 2131230879;
-			
-			// aapt resource value: 0x7f0800a0
-			public const int textsize_14 = 2131230880;
-			
 			// aapt resource value: 0x7f0800a1
-			public const int textsize_18 = 2131230881;
+			public const int textsize_12 = 2131230881;
 			
 			// aapt resource value: 0x7f0800a2
-			public const int textsize_20 = 2131230882;
+			public const int textsize_14 = 2131230882;
 			
 			// aapt resource value: 0x7f0800a3
-			public const int textsize_28 = 2131230883;
+			public const int textsize_18 = 2131230883;
+			
+			// aapt resource value: 0x7f0800a4
+			public const int textsize_20 = 2131230884;
+			
+			// aapt resource value: 0x7f0800a5
+			public const int textsize_28 = 2131230885;
 			
 			// aapt resource value: 0x7f080072
 			public const int zero = 2131230834;

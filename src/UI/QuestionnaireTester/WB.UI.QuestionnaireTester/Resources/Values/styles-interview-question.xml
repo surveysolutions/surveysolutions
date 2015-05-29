@@ -116,7 +116,6 @@
     <item name="android:focusable">true</item>
     <item name="android:focusableInTouchMode">true</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:background">@drawable/question_text_question</item>
     <item name="android:textCursorDrawable">@null</item>
     <item name="android:background">@drawable/question_list_item_editor_background</item>
   </style>

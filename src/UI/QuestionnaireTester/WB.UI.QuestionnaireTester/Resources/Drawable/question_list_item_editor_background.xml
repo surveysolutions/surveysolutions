@@ -3,8 +3,12 @@
 
   <solid android:color="@android:color/transparent"  />
 
-  <stroke android:width="0dp" />
+  <stroke android:width="@dimen/Interview_Question_List_Editor_border" />
 
-  <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp"/>
+  <padding 
+    android:left="@dimen/Interview_Question_List_Editor_padding" 
+    android:top="@dimen/Interview_Question_List_Editor_padding" 
+    android:right="@dimen/Interview_Question_List_Editor_padding" 
+    android:bottom="@dimen/Interview_Question_List_Editor_padding"/>
 
 </shape>

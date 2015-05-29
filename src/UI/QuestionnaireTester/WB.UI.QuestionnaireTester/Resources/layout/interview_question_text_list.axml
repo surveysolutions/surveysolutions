@@ -25,13 +25,6 @@
               
             </MvxLinearLayout>
 
-          <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="13" />
-
           <include layout="@layout/interview_question__errors" />
           <include layout="@layout/interview_question__comments" />
         </MvxLinearLayout>
