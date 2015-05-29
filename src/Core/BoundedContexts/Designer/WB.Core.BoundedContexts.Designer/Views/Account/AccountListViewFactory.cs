@@ -102,8 +102,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
 
             if (!string.IsNullOrEmpty(input.Filter))
-                result = result.Where(x => x.UserName.Contains(input.Filter) || x.Email.Contains(input.Filter));
-            
+            {
+                var filterLowerCase = input.Filter.Trim().ToLower();
+                result = result.Where(x => x.UserName.ToLower().Contains(filterLowerCase) || x.Email.ToLower().Contains(filterLowerCase));
+            }
+
             return result;
         }
     }

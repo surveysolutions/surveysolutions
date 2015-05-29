@@ -257,15 +257,6 @@ namespace WB.UI.Designer.Controllers
                 PageSize = GlobalHelper.GridPageItemsCount,
                 Order = sb ?? string.Empty,
             });
-          /*  IEnumerable<MembershipUser> users =
-                Membership.GetAllUsers()
-                          .OfType<MembershipUser>()
-                          .Where(
-                              x =>
-                              (!string.IsNullOrEmpty(f) && (x.UserName.Contains(f) || x.Email.Contains(f)))
-                              || string.IsNullOrEmpty(f))
-                          .AsQueryable()
-                          .OrderUsingSortExpression(sb ?? string.Empty);*/
 
             Func<AccountListItem, bool> editAction =
                 (user) => !Roles.GetRolesForUser(user.UserName).Contains(this.UserHelper.ADMINROLENAME);
@@ -279,8 +270,8 @@ namespace WB.UI.Designer.Controllers
                                  Id = x.ProviderUserKey.AsGuid(), 
                                  UserName = x.UserName, 
                                  Email = x.Email, 
-                                 CreationDate = x.CreatedAt, 
-                                 IsApproved = true, 
+                                 CreationDate = x.CreatedAt,
+                                 IsApproved = x.IsConfirmed, 
                                  IsLockedOut = x.IsLockedOut, 
                                  CanEdit = editAction(x), 
                                  CanOpen = false,
