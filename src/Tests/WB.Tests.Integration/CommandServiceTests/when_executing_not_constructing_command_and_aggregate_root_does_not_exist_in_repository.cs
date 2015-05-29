@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         Because of = () =>
             exception = Catch.Only<CommandServiceException>(() =>
-                commandService.Execute(new NotConstructingCommand(), null, CancellationToken.None));
+                commandService.Execute(new NotConstructingCommand(), null));
 
         It should_throw_exception_with_message_containing__unable____constructing__ = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("unable", "constructing");

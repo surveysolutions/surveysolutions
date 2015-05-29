@@ -25,10 +25,15 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.Execute(command, origin, cancellationToken));
+            return Task.Run(() => this.ExecuteImpl(command, origin, cancellationToken));
         }
 
-        public virtual void Execute(ICommand command, string origin, CancellationToken cancellationToken)
+        public void Execute(ICommand command, string origin)
+        {
+            this.ExecuteImpl(command, origin, CancellationToken.None);
+        }
+
+        protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException("command");
 
