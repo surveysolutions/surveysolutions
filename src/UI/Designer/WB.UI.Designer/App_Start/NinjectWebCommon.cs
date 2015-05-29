@@ -14,7 +14,6 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.GenericSubdomains.Utils;
@@ -74,6 +73,7 @@ namespace WB.UI.Designer.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             var ravenSettings = new RavenConnectionSettings(
@@ -87,9 +87,6 @@ namespace WB.UI.Designer.App_Start
                 ravenFileSystemName: AppSettings.Instance.RavenFileSystemName);
 
             var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
-
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
-            int ravenCacheSize = WebConfigurationManager.AppSettings["Raven.CacheSize"].ParseIntOrNull() ?? 256;
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
