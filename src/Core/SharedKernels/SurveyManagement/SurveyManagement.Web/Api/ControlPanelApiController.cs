@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.Models;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 

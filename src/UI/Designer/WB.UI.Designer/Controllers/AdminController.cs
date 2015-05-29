@@ -12,6 +12,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -34,6 +35,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
         private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
         public AdminController(
@@ -44,7 +46,7 @@ namespace WB.UI.Designer.Controllers
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IExpressionsEngineVersionService expressionsEngineVersionService, 
-            IJsonUtils jsonUtils)
+            IJsonUtils jsonUtils, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -54,6 +56,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
+            this.accountListViewFactory = accountListViewFactory;
         }
 
         [HttpGet]
@@ -247,8 +250,14 @@ namespace WB.UI.Designer.Controllers
             {
                 sb = string.Format("{0} Desc", sb);
             }
-
-            IEnumerable<MembershipUser> users =
+            var users = accountListViewFactory.Load(new AccountListViewInputModel()
+            {
+                Filter = f,
+                Page = page,
+                PageSize = GlobalHelper.GridPageItemsCount,
+                Order = sb ?? string.Empty,
+            });
+          /*  IEnumerable<MembershipUser> users =
                 Membership.GetAllUsers()
                           .OfType<MembershipUser>()
                           .Where(
@@ -256,14 +265,13 @@ namespace WB.UI.Designer.Controllers
                               (!string.IsNullOrEmpty(f) && (x.UserName.Contains(f) || x.Email.Contains(f)))
                               || string.IsNullOrEmpty(f))
                           .AsQueryable()
-                          .OrderUsingSortExpression(sb ?? string.Empty);
+                          .OrderUsingSortExpression(sb ?? string.Empty);*/
 
-            Func<MembershipUser, bool> editAction =
+            Func<AccountListItem, bool> editAction =
                 (user) => !Roles.GetRolesForUser(user.UserName).Contains(this.UserHelper.ADMINROLENAME);
 
             IEnumerable<AccountListViewItemModel> retVal =
-                users.Skip((page - 1) * GlobalHelper.GridPageItemsCount)
-                     .Take(GlobalHelper.GridPageItemsCount)
+                users.Items
                      .Select(
                          x =>
                          new AccountListViewItemModel
@@ -271,15 +279,15 @@ namespace WB.UI.Designer.Controllers
                                  Id = x.ProviderUserKey.AsGuid(), 
                                  UserName = x.UserName, 
                                  Email = x.Email, 
-                                 CreationDate = x.CreationDate, 
-                                 IsApproved = x.IsApproved, 
+                                 CreationDate = x.CreatedAt, 
+                                 IsApproved = true, 
                                  IsLockedOut = x.IsLockedOut, 
                                  CanEdit = editAction(x), 
                                  CanOpen = false,
                                  CanDelete = false, 
                                  CanPreview = editAction(x)
                              });
-            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
+            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount));
         }
 
         private MembershipUser GetUser(Guid id)

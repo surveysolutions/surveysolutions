@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
+using System.Web.Mvc;
 using WB.Core.Infrastructure.Transactions;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.UI.Shared.Web.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
     {

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
 using Microsoft.Practices.ServiceLocation;
@@ -27,6 +29,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Esent;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Transactions;
@@ -99,13 +102,16 @@ namespace WB.UI.Designer.App_Start
 
             int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
 
+            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly }; 
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, ravenCacheSize, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
                 new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
