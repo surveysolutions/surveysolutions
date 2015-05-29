@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
-    internal class when_canceling_3_commands_in_500ms_after_their_execution_in_parallel_and_each_command_takes_1_second_to_execute
+    internal class when_canceling_3_commands_in_300ms_after_their_execution_in_parallel_and_each_command_takes_1_second_to_execute
     {
         private class StoreNameFor1Second : ICommand
         {
@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
         {
             var cancellationTokenSource = new CancellationTokenSource();
 
-            cancellationTokenSource.CancelAfter(500);
+            cancellationTokenSource.CancelAfter(300);
 
             try
             {
