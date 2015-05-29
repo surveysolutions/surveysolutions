@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
         {
             public void WorkAbout1Second(WorkAbout1Second command)
             {
-                Thread.Sleep(1000);
+                Task.Delay(1000).Wait();
             }
         }
 
