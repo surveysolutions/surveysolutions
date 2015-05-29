@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,6 +18,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         private bool inProgress;
+        private readonly object cancellationLockObject = new object();
+        private CancellationTokenSource currentCancellationTokenSource;
+
         public bool InProgress
         {
             get { return this.inProgress; }
@@ -32,15 +36,51 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async Task SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             try
             {
                 this.StartInProgressIndicator();
 
-                await this.commandService.ExecuteAsync(answerCommand);
+                lock (this.cancellationLockObject)
+                {
+                    this.TryCancelLastExecutedCommand();
+                    this.RegisterCancellationTokenOfCurrentCommand(cancellationTokenSource);
+                }
+
+                await this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token);
             }
+            catch (OperationCanceledException) { }
             finally
             {
+                lock (this.cancellationLockObject)
+                {
+                    this.ForgetCancellationToken(cancellationTokenSource);
+                }
+
                 this.FinishInProgressIndicator();
+            }
+        }
+
+        private void TryCancelLastExecutedCommand()
+        {
+            if (this.currentCancellationTokenSource == null)
+                return;
+
+            this.currentCancellationTokenSource.Cancel();
+            this.currentCancellationTokenSource = null;
+        }
+
+        private void RegisterCancellationTokenOfCurrentCommand(CancellationTokenSource cancellationTokenSource)
+        {
+            this.currentCancellationTokenSource = cancellationTokenSource;
+        }
+
+        private void ForgetCancellationToken(CancellationTokenSource cancellationTokenSource)
+        {
+            if (this.currentCancellationTokenSource == cancellationTokenSource)
+            {
+                this.currentCancellationTokenSource = null;
             }
         }
 
