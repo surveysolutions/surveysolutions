@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
         protected static void WaitRebuildReadsideFinish(ReadSideService readSideService)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
 
             while (readSideService.AreViewsBeingRebuiltNow())
             {
