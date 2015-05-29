@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
                     this.RemoveFromTopOfQueue(commandDescriptor);
 
-                    base.Execute(commandDescriptor.Command, commandDescriptor.Origin, commandDescriptor.CancellationToken);
+                    base.ExecuteImpl(commandDescriptor.Command, commandDescriptor.Origin, commandDescriptor.CancellationToken);
                 }
             }
         }
