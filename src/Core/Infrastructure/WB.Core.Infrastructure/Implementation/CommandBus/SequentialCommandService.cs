@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         public SequentialCommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
             : base(repository, eventBus, snapshooter) {}
 
-        public override void Execute(ICommand command, string origin, CancellationToken cancellationToken)
+        protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
             var commandDescriptor = new CommandDescriptor(command, origin, cancellationToken);
 
