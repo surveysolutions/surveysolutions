@@ -1,4 +1,6 @@
-﻿using WB.Core.GenericSubdomains.Utils;
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.Transactions;
 
 namespace WB.UI.Designer
 {
@@ -19,6 +21,11 @@ namespace WB.UI.Designer
         /// The _user service.
         /// </summary>
         private readonly IMembershipUserService userService;
+
+        private ITransactionManagerProvider TransactionManagerProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
+        }
 
         #endregion
 
@@ -48,6 +55,9 @@ namespace WB.UI.Designer
         public void OnAuthorization(AuthorizationContext filterContext)
         {
             bool isInvalidUser = false;
+
+            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            
             MembershipUser user = this.userService.WebUser.MembershipUser;
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
@@ -91,6 +101,8 @@ namespace WB.UI.Designer
                     new RedirectToRouteResult(
                         new RouteValueDictionary(new { controller = "Account", action = "Login" }));
             }
+
+            this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
         }
 
         #endregion

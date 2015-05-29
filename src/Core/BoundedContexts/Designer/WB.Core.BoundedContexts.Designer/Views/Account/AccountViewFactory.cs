@@ -15,63 +15,61 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public AccountView Load(AccountViewInputModel input)
         {
-            IQueryable<AccountDocument> users = Enumerable.Empty<AccountDocument>().AsQueryable();
+            AccountDocument user = null;
             if (input.ProviderUserKey != null)
             {
-                users = accounts.Query(_ => _.Where((x) => x.ProviderUserKey== input.ProviderUserKey));
+                user = accounts.Query(_ => _.FirstOrDefault((x) => x.ProviderUserKey == input.ProviderUserKey));
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {
                 var normalizedAccountName = NormalizeAccountName(input.AccountName);
-                users = accounts.Query(_ => _.Where((x) => x.UserName == normalizedAccountName));
+                user = accounts.Query(_ => _.FirstOrDefault((x) => x.UserName == normalizedAccountName));
             }
             else if (!string.IsNullOrEmpty(input.AccountEmail))
             {
-                users = accounts.Query(_ => _.Where((x) => x.Email == input.AccountEmail));
+                user = accounts.Query(_ => _.FirstOrDefault((x) => x.Email == input.AccountEmail));
             }
             else if (!string.IsNullOrEmpty(input.ConfirmationToken))
             {
-                users = accounts.Query(_ => _.Where((x) => x.ConfirmationToken == input.ConfirmationToken));
+                user = accounts.Query(_ => _.FirstOrDefault((x) => x.ConfirmationToken == input.ConfirmationToken));
             }
             else if (!string.IsNullOrEmpty(input.ResetPasswordToken))
             {
-                users = accounts.Query(_ => _.Where((x) => x.PasswordResetToken == input.ResetPasswordToken));
+                user = accounts.Query(_ => _.FirstOrDefault((x) => x.PasswordResetToken == input.ResetPasswordToken));
             }
 
-            return
-                users
-                    .Select(
-                        x =>
-                            new AccountView
-                            {
-                                ApplicationName = x.ApplicationName,
-                                ProviderUserKey = x.ProviderUserKey,
-                                UserName = x.UserName,
-                                Comment = x.Comment,
-                                ConfirmationToken = x.ConfirmationToken,
-                                CreatedAt = x.CreatedAt,
-                                Email = x.Email,
-                                FailedPasswordAnswerWindowAttemptCount =
-                                    x.FailedPasswordAnswerWindowAttemptCount,
-                                FailedPasswordAnswerWindowStartedAt = x.FailedPasswordAnswerWindowStartedAt,
-                                FailedPasswordWindowAttemptCount = x.FailedPasswordWindowAttemptCount,
-                                FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt,
-                                IsConfirmed = x.IsConfirmed,
-                                IsLockedOut = x.IsLockedOut,
-                                IsOnline = x.IsOnline,
-                                LastActivityAt = x.LastActivityAt,
-                                LastLockedOutAt = x.LastLockedOutAt,
-                                LastLoginAt = x.LastLoginAt,
-                                LastPasswordChangeAt = x.LastPasswordChangeAt,
-                                Password = x.Password,
-                                PasswordSalt = x.PasswordSalt,
-                                PasswordQuestion = x.PasswordQuestion,
-                                PasswordAnswer = x.PasswordAnswer,
-                                PasswordResetToken = x.PasswordResetToken,
-                                PasswordResetExpirationDate = x.PasswordResetExpirationDate,
-                                SimpleRoles = x.SimpleRoles
-                            })
-                    .FirstOrDefault();
+            if (user == null)
+                return null;
+            
+            return new AccountView
+            {
+                ApplicationName = user.ApplicationName,
+                ProviderUserKey = user.ProviderUserKey,
+                UserName = user.UserName,
+                Comment = user.Comment,
+                ConfirmationToken = user.ConfirmationToken,
+                CreatedAt = user.CreatedAt,
+                Email = user.Email,
+                FailedPasswordAnswerWindowAttemptCount =
+                    user.FailedPasswordAnswerWindowAttemptCount,
+                FailedPasswordAnswerWindowStartedAt = user.FailedPasswordAnswerWindowStartedAt,
+                FailedPasswordWindowAttemptCount = user.FailedPasswordWindowAttemptCount,
+                FailedPasswordWindowStartedAt = user.FailedPasswordWindowStartedAt,
+                IsConfirmed = user.IsConfirmed,
+                IsLockedOut = user.IsLockedOut,
+                IsOnline = user.IsOnline,
+                LastActivityAt = user.LastActivityAt,
+                LastLockedOutAt = user.LastLockedOutAt,
+                LastLoginAt = user.LastLoginAt,
+                LastPasswordChangeAt = user.LastPasswordChangeAt,
+                Password = user.Password,
+                PasswordSalt = user.PasswordSalt,
+                PasswordQuestion = user.PasswordQuestion,
+                PasswordAnswer = user.PasswordAnswer,
+                PasswordResetToken = user.PasswordResetToken,
+                PasswordResetExpirationDate = user.PasswordResetExpirationDate,
+                SimpleRoles = user.SimpleRoles
+            };
         }
 
         private string NormalizeAccountName(string accountName)
