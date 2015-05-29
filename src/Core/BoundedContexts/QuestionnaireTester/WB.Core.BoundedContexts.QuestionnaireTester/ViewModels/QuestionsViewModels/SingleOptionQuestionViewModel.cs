@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 await this.Answering.SendAnswerQuestionCommand(command);
 
-                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     previousOption.Selected = true;
                 }
 
-                QuestionState.ProcessAnswerCommandException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

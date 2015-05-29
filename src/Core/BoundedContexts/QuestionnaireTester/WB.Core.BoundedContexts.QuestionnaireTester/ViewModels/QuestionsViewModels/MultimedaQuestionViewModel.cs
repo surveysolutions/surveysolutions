@@ -88,8 +88,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                         this.StorePictureFile(pictureStream, pictureFileName);
 
                         var command = new AnswerPictureQuestionCommand(
-                            interviewId,
-                            userIdentity.UserId,
+                            this.interviewId,
+                            this.userIdentity.UserId,
                             this.questionIdentity.Id,
                             this.questionIdentity.RosterVector,
                             DateTime.UtcNow,
@@ -99,12 +99,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                         {
                             await this.Answering.SendAnswerQuestionCommand(command);
                             this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
-                            QuestionState.ExecutedAnswerCommandWithoutExceptions();
+                            this.QuestionState.Validity.ExecutedWithoutExceptions();
                         }
                         catch (InterviewException ex)
                         {
                             this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                            QuestionState.ProcessAnswerCommandException(ex);
+                            this.QuestionState.Validity.ProcessException(ex);
                         }
                     }
                 });
