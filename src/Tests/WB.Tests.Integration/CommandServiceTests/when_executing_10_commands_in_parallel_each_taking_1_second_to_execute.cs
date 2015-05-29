@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             public void WorkFor1Second(WorkFor1Second command)
             {
-                Thread.Sleep(1000);
+                Task.Delay(1000).Wait();
             }
         }
 

@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
         {
             public void StoreNameFor3Seconds(StoreNameFor3Seconds command)
             {
-                Thread.Sleep(3000);
+                Task.Delay(3000).Wait();
                 executedCommands.Add(command.Name);
             }
         }
