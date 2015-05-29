@@ -120,11 +120,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             try
             {
                 await this.Answering.SendAnswerQuestionCommand(command);
-                QuestionState.ExecutedAnswerCommandWithoutExceptions();
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                QuestionState.ProcessAnswerCommandException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
