@@ -26,17 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     .Take(input.PageSize)
                     .ToList());
             records.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "you" : x.CreatorName);
-         /*    this.indexAccessor.Query<QuestionnaireListViewItemSearchable, List<QuestionnaireListViewItem>>(indexName, queryable =>
-            {
-                var queryResult =
-                    FilterQuestionnaires(input).OrderUsingSortExpression(input.Order)
-                        .Skip((input.Page - 1)*input.PageSize)
-                        .Take(input.PageSize)
-                        .ToList();
-                queryResult.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "you" : x.CreatorName);
-                return queryResult;
-
-            });*/
            return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
                   items: records,
                   order: input.Order);
@@ -48,9 +37,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             var result = _.Where(x => x.IsDeleted == false);
             if (!string.IsNullOrEmpty(input.Filter))
             {
+                var filterLowerCase = input.Filter.Trim().ToLower();
                 result =
                     result.Where(
-                        x => x.Title.StartsWith(input.Filter) || x.CreatorName.StartsWith(input.Filter));
+                        x => x.Title.ToLower().Contains(filterLowerCase) || x.CreatorName.ToLower().Contains(filterLowerCase));
             }
 
             if (input.IsAdminMode)
