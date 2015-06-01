@@ -10,6 +10,7 @@
     @Scripts.Render(
     "~/Scripts/bootstrap-datepicker.js",
     "~/Scripts/ko.datepicker.js",
+    "~/Scripts/components/moment-duration-format.js",
                     "~/Scripts/viewmodels/pages/periodicstatusreport.js")
     <script type="text/javascript">
         function GetInterviewersUrl(supervisorId) {
@@ -45,14 +46,14 @@
 
 @section header
 {
-    
-    <h3>
-        @Model.ReportTitle
-    </h3>
+
+<h3 class="sinle-line-header" data-bind="text: QuestionnaireName"></h3>
 }
 
 @section actionbar
 {
+
+<h3>@Model.ReportTitle</h3>
     @if (Model.CanNavigateToQuantityBySupervisors)
     {
         <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
@@ -115,7 +116,7 @@
                 <th>@Model.ResponsibleColumnName</th>
                 <!-- ko foreach:DateTimeRanges -->
                 <th>
-                    <span data-bind="text: $parent.GetPeriodName($data)"></span>
+                    <span data-bind="text: $root.GetPeriodName($data)"></span>
                 </th>
                 <!-- /ko -->
                 <th>@PeriodicStatusReport.Average</th>
@@ -136,10 +137,10 @@
                     }
                 </td>
                 <!-- ko foreach:@(Model.ReportName + "ByPeriod") -->
-                <td><span data-bind="text: $data==null?'-':$data"></span></td>
+                <td><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
                 <!-- /ko -->
-                <td><span data-bind="text: $parent.FormatDataByPeriod(Average())"></span></td>
-                <td><span data-bind="text: $parent.FormatDataByPeriod(Total())"></span></td>
+                <td><span data-bind="text: $root.Format@(Model.ReportName)Period(Average())"></span></td>
+                <td><span data-bind="text: $root.Format@(Model.ReportName)Period(Total())"></span></td>
             </tr>
             <!-- /ko -->
         </tbody>

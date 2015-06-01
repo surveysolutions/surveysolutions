@@ -16,6 +16,8 @@
 
     self.DateTimeRanges = ko.observableArray([]);
 
+    this.QuestionnaireName = ko.observable();
+
     self.GetPeriodName = function (period) {
         return ko.computed({
             read: function () {
@@ -24,16 +26,15 @@
         }, this);
     };
 
-    self.FormatDataByPeriod = function (date) {
-        return ko.computed({
-            read: function () {
-                if (date === null)
-                    return "-";
-                return date;
-            }
-        }, this);
+    self.FormatSpeedPeriod = function(data) {
+        if (data === null)
+            return "-";
+        return moment.duration(data, "minutes").format("D[d] H[h] mm[m]");
     };
 
+    self.FormatQuantityPeriod = function (data) {
+        return data;
+    };
     self.load = function () {
         var today = moment().format(dateFormat);
 
@@ -44,6 +45,8 @@
         self.Url.query['from'] = self.QueryString['from'] || today;
         self.Url.query['period'] = self.QueryString['period'] || "d";
         self.Url.query['columnCount'] = self.QueryString['columnCount'] || "7";
+
+        updateQuestionnaireName(self.SelectedQuestionnaire());
 
         var from = unescape(self.Url.query['from']);
         self.FromDate(from);
@@ -57,6 +60,7 @@
         self.initReport();
 
         self.SelectedQuestionnaire.subscribe(function (value) {
+            updateQuestionnaireName(self.SelectedQuestionnaire());
             self.initReport();
         });
 
@@ -103,5 +107,8 @@
     self.initReport = function () {
         self.search();
     };
+    var updateQuestionnaireName = function (value) {
+        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);

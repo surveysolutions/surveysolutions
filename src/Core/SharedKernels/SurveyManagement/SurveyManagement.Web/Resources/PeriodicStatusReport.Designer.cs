@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average time spent to complete an interview(in hours).
+        ///   Looks up a localized string similar to Average time spent to complete an interview.
         /// </summary>
         public static string TimeSpentToCompleteInterviewInHours {
             get {
