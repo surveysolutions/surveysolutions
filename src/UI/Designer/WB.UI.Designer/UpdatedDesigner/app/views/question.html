@@ -92,11 +92,11 @@
 
         <div class="form-group">
             <div class="row">
-                <div class="form-group col-xs-5">
-                    <input id="mandatory-question" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" />
-                    <label for="mandatory-question"><span></span>Mandatory question</label>
+                <div class="form-group col-xs-5" >
+                    <input id="mandatory-question" type="checkbox" class="wb-checkbox" ng-disabled="!activeQuestion.isMandatory" ng-model="activeQuestion.isMandatory" />
+                    <label for="mandatory-question"><span></span>Mandatory question </label> <help key="mandatory" />
                 </div>
-                <div class="form-group col-xs-7" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.type == 'GpsCoordinates' || activeQuestion.isCascade == true || activeQuestion.isLinked == true">
+                <div class="form-group col-xs-7 pull-right" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.type == 'GpsCoordinates' || activeQuestion.isCascade == true || activeQuestion.isLinked == true">
                     <label for="Question-scope">Question scope&nbsp;</label>
                     <div class="btn-group dropup" dropdown>
                         <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
