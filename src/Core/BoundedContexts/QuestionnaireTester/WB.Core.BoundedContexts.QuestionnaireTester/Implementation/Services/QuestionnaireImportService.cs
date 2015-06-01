@@ -215,7 +215,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     questionModel = new MaskedTextQuestionModel { Mask = (question as TextQuestion).Mask };
                     break;
                 case QuestionType.TextList:
-                    questionModel = new TextListQuestionModel{ IsRosterSizeQuestion = isRosterSizeQuestion};
+                    var listQuestion = question as TextListQuestion;
+                    questionModel = new TextListQuestionModel
+                                    {
+                                        IsRosterSizeQuestion = isRosterSizeQuestion,
+                                        MaxAnswerCount = listQuestion.MaxAnswerCount
+                                    };
                     break;
                 case QuestionType.QRBarcode:
                     questionModel = new QRBarcodeQuestionModel();

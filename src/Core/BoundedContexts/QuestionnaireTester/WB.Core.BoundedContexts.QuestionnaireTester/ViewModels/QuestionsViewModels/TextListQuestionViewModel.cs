@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Chance.MvvmCross.Plugins.UserInteraction;
@@ -7,6 +6,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -33,9 +33,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private bool isRosterSizeQuestion;
 
+        private int? maxAnswerCount;
+
         public ObservableCollection<TextListItemViewModel> Answers { get; set; }
 
+        public bool IsAddNewItemVisible
+        {
+            get { return this.isAddNewItemVisible; }
+            set { this.isAddNewItemVisible = value; this.RaisePropertyChanged(); }
+        }
+
         private string newListItem = string.Empty;
+
+        private bool isAddNewItemVisible;
+
         public string NewListItem
         {
             get
@@ -89,23 +100,58 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             if (answerModel != null && answerModel.Answers != null)
             {
-                answerModel.Answers.Select(this.ToViewModel).ForEach(x => this.Answers.Add(x));
+                answerModel.Answers.Select(x => this.CreateListItemViewModel(x.Item1, x.Item2)).ForEach(x => this.Answers.Add(x));
             }
 
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
+            this.maxAnswerCount = questionModel.MaxAnswerCount;
+
+            this.IsAddNewItemVisible = !this.maxAnswerCount.HasValue || this.Answers.Count < this.maxAnswerCount.Value;
         }
 
-        private async void ListItemEdited(object sender, EventArgs eventArgs)
+        private async void ListItemDeleted(object sender, EventArgs eventArgs)
         {
-            //if (isRosterSizeQuestion && previousAnswer.HasValue && answer < previousAnswer)
-            //{
-            //    var amountOfRostersToRemove = previousAnswer - Math.Max(answer, 0);
-            //    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-            //    if (!(await userInteraction.ConfirmAsync(message)))
-            //    {
-            //        return;
-            //    }
-            //}
+            var listItem = sender as TextListItemViewModel;
+
+            if (listItem == null)
+                return;
+
+            if (this.isRosterSizeQuestion )
+            {
+                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, 1);
+                if (!(await this.userInteraction.ConfirmAsync(message)))
+                {
+                    return;
+                }
+            }
+
+            Answers.Remove(listItem);
+
+            SaveAnswers();
+        }
+
+        private void ListItemEdited(object sender, EventArgs eventArgs)
+        {
+            SaveAnswers();
+        }
+
+        private void AddNewItemAndSaveAnswers(string title)
+        {
+            var maxValue = Answers.Count == 0 ? -1 : Answers.Max(x => x.Value) + 1;
+
+            Answers.Add(this.CreateListItemViewModel(maxValue, title));
+
+            SaveAnswers();
+            
+            NewListItem = string.Empty;
+        }
+
+        private async void SaveAnswers()
+        {
+            if (maxAnswerCount.HasValue)
+            {
+                IsAddNewItemVisible = Answers.Count < maxAnswerCount.Value;
+            }
 
             var answers = this.Answers.Select(x => new Tuple<decimal, string>(x.Value, x.Title)).ToArray();
 
@@ -128,30 +174,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void AddNewItemAndSaveAnswers(string value)
-        {
-            var maxValue = Answers.Count == 0 ? 0 : Answers.Max(x => x.Value) + 1;
-
-            Answers.Add(new TextListItemViewModel
-            {
-                Value = maxValue,
-                Title = value
-            });
-
-            NewListItem = string.Empty;
-        }
-
-        private TextListItemViewModel ToViewModel(Tuple<decimal, string> model)
+        private TextListItemViewModel CreateListItemViewModel(decimal value, string title)
         {
             var optionViewModel = new TextListItemViewModel
             {
                 Enablement = QuestionState.Enablement,
 
-                Value = model.Item1,
-                Title = model.Item2
+                Value = value,
+                Title = title
             };
 
-            optionViewModel.BeforeItemEdited += ListItemEdited;
+            optionViewModel.ItemEdited += ListItemEdited;
+            optionViewModel.ItemDeleted += ListItemDeleted;
 
             return optionViewModel;
         }
