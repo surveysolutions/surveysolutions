@@ -38,35 +38,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public AccountListView Load(AccountListViewInputModel input)
         {
-            IEnumerable<AccountListItem> retVal = new AccountListItem[0];
-
             var count =
                 this.accounts.Query(_ => this.FilterAccounts(_, input).Count());
 
-            var queryResult = this.accounts.Query(_ => this.FilterAccounts(_, input).OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
+            var result =
+                this.accounts.Query(
+                    _ =>
+                        this.FilterAccounts(_, input)
+                            .OrderUsingSortExpression(input.Order)
+                            .Skip((input.Page - 1)*input.PageSize)
+                            .Take(input.PageSize)
+                            .Select(x => new AccountListItem()
+                            {
+                                ApplicationName = x.ApplicationName,
+                                ProviderUserKey = x.ProviderUserKey,
+                                UserName = x.UserName,
+                                Comment = x.Comment,
+                                CreatedAt = x.CreatedAt,
+                                Email = x.Email,
+                                FailedPasswordAnswerWindowAttemptCount = x.FailedPasswordAnswerWindowAttemptCount,
+                                FailedPasswordAnswerWindowStartedAt = x.FailedPasswordAnswerWindowStartedAt,
+                                FailedPasswordWindowAttemptCount = x.FailedPasswordWindowAttemptCount,
+                                FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt,
+                                IsConfirmed = x.IsConfirmed,
+                                IsLockedOut = x.IsLockedOut,
+                                LastActivityAt = x.LastActivityAt,
+                                LastLockedOutAt = x.LastLockedOutAt,
+                                LastLoginAt = x.LastLoginAt,
+                                LastPasswordChangeAt = x.LastPasswordChangeAt
+                            }).ToArray());
 
-            retVal = queryResult
-                              .Select(x => new AccountListItem()
-                                  {
-                                      ApplicationName = x.ApplicationName,
-                                      ProviderUserKey = x.ProviderUserKey,
-                                      UserName = x.UserName,
-                                      Comment = x.Comment,
-                                      CreatedAt = x.CreatedAt,
-                                      Email = x.Email,
-                                      FailedPasswordAnswerWindowAttemptCount = x.FailedPasswordAnswerWindowAttemptCount,
-                                      FailedPasswordAnswerWindowStartedAt = x.FailedPasswordAnswerWindowStartedAt,
-                                      FailedPasswordWindowAttemptCount = x.FailedPasswordWindowAttemptCount,
-                                      FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt,
-                                      IsConfirmed = x.IsConfirmed,
-                                      IsLockedOut = x.IsLockedOut,
-                                      LastActivityAt = x.LastActivityAt,
-                                      LastLockedOutAt = x.LastLockedOutAt,
-                                      LastLoginAt = x.LastLoginAt,
-                                      LastPasswordChangeAt = x.LastPasswordChangeAt
-                                  });
-
-            return new AccountListView(input.Page, input.PageSize, count, retVal, input.Order);
+            return new AccountListView(input.Page, input.PageSize, count, result, input.Order);
         }
 
         private IQueryable<AccountDocument> FilterAccounts(IQueryable<AccountDocument> _, AccountListViewInputModel input)

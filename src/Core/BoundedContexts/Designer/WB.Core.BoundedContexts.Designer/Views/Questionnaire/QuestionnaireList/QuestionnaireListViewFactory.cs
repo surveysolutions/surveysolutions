@@ -19,15 +19,29 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             var count = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input).Count());
 
             var records = questionnaireListViewItemStorage.Query(_ =>
-                FilterQuestionnaires(_, input)
+                FilterQuestionnaires(_, input).Select(x => new QuestionnaireListViewItem()
+                {
+                    CreatedBy = x.CreatedBy,
+                    CreationDate = x.CreationDate,
+                    CreatorName = x.CreatorName,
+                    IsDeleted = x.IsDeleted,
+                    IsPublic = x.IsPublic,
+                    LastEntryDate = x.LastEntryDate,
+                    Owner = x.Owner,
+                    PublicId = x.PublicId,
+                    QuestionnaireId = x.QuestionnaireId,
+                    Title = x.Title,
+                    SharedPersons = x.SharedPersons
+                })
                     .OrderUsingSortExpression(input.Order)
                     .Skip((input.Page - 1)*input.PageSize)
                     .Take(input.PageSize)
                     .ToList());
+
             records.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "you" : x.CreatorName);
-           return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
-                  items: records,
-                  order: input.Order);
+            return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
+                items: records,
+                order: input.Order);
         }
 
         private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> _,

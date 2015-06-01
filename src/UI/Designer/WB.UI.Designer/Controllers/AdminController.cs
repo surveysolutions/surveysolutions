@@ -22,6 +22,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
@@ -36,7 +37,6 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -45,7 +45,6 @@ namespace WB.UI.Designer.Controllers
             IStringCompressor zipUtils,
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory)
             : base(userHelper)
         {
@@ -54,7 +53,6 @@ namespace WB.UI.Designer.Controllers
             this.zipUtils = zipUtils;
             this.commandService = commandService;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
             this.accountListViewFactory = accountListViewFactory;
         }
@@ -152,7 +150,8 @@ namespace WB.UI.Designer.Controllers
         {
             MembershipUser account = this.GetUser(id);
 
-            var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id);
+            var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id,
+                    isAdmin: this.UserHelper.WebUser.IsAdmin);
             questionnaires.ToList().ForEach(
                 x =>
                     {
@@ -259,7 +258,7 @@ namespace WB.UI.Designer.Controllers
             });
 
             Func<AccountListItem, bool> editAction =
-                (user) => !Roles.GetRolesForUser(user.UserName).Contains(this.UserHelper.ADMINROLENAME);
+                (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
 
             IEnumerable<AccountListViewItemModel> retVal =
                 users.Items
