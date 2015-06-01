@@ -28,15 +28,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     {
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddHours(1), 
-                            timeSpanWithPreviousStatus: TimeSpan.FromHours(35)),
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddHours(1), 
-                            timeSpanWithPreviousStatus: TimeSpan.FromHours(15)),
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddDays(1)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddDays(-1),
-                            timeSpanWithPreviousStatus: TimeSpan.FromHours(10))
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(10))
                     }), "2");
 
             speedReportFactory = CreateSpeedReportFactory(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
