@@ -16,12 +16,14 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 {
     public class TextListQuestionViewModelTestContext
     {
-        protected static TextListQuestionViewModel CreateTextListQuestionViewModel(IPrincipal principal = null,
+        protected static TextListQuestionViewModel CreateTextListQuestionViewModel(
+            QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
+            AnsweringViewModel answering,
+            IPrincipal principal = null,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             IStatefullInterviewRepository interviewRepository = null,
-            QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel = null,
-            IUserInteraction userInteraction = null,
-            AnsweringViewModel answering = null)
+            
+            IUserInteraction userInteraction = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
