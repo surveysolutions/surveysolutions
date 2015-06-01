@@ -5,6 +5,7 @@
   <EditText style="@style/Interview_Question_Answer_List_Editor"
     local:MvxBind="FocusText Title;" />
 
-  <ImageButton style="@style/Interview_Question_Answer_List_DeleteButton" />
+  <ImageButton style="@style/Interview_Question_Answer_List_DeleteButton"
+    local:MvxBind="Click DeleteListItemCommand;"/>
   
 </LinearLayout>

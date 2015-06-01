@@ -1,14 +1,14 @@
 ﻿using System;
-
 using Cirrious.MvvmCross.ViewModels;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class TextListItemViewModel : MvxNotifyPropertyChanged
     {
-        public event EventHandler BeforeItemEdited;
+        public event EventHandler ItemEdited;
+
+        public event EventHandler ItemDeleted;
 
         public EnablementViewModel Enablement { get; set; }
 
@@ -23,14 +23,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
             set
             {
-                this.title = value;
-                this.RaisePropertyChanged();
+                try
+                {
+                    this.title = value;
+                    this.OnItemEdited();
+                }
+                finally
+                {
+                    this.RaisePropertyChanged();
+                }
             }
         }
 
-        private void OnBeforeItemEdited()
+        public IMvxCommand DeleteListItemCommand
         {
-            if (this.BeforeItemEdited != null) this.BeforeItemEdited.Invoke(this, EventArgs.Empty);
+            get { return new MvxCommand(this.DeleteListItem); }
+        }
+
+        private void DeleteListItem()
+        {
+            if (this.ItemDeleted != null) this.ItemDeleted.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnItemEdited()
+        {
+            if (this.ItemEdited != null) this.ItemEdited.Invoke(this, EventArgs.Empty);
         }
     }
 }
