@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private Identity questionIdentity;
         private string interviewId;
 
+        public QuestionStateViewModel() { }
+
         public QuestionStateViewModel(
             ILiteEventRegistry liteEventRegistry,
             IStatefullInterviewRepository interviewRepository,
