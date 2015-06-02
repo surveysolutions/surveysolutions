@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
@@ -417,6 +418,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
         {
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
+        }
+
+        public BaseInterviewAnswer GetAnswer(Guid questionId, decimal[] targetRosterVector) // todo Add test
+        {
+            for (int i = targetRosterVector.Length; i >= 0; i--)
+            {
+                Identity identity = new Identity(questionId, targetRosterVector.Take(i).ToArray());
+                var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+
+                if (this.Answers.ContainsKey(questionKey))
+                {
+                    return this.Answers[questionKey];
+                }
+            }
+
+            return null;
         }
 
         public bool IsValid(Identity identity)
