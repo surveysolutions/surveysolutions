@@ -44,7 +44,7 @@
                 <#= question.GeneratedMandatoryMethodName #> ,                                               
                 <# }#>
                 <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
-                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
+                    () => <#=question.GeneratedValidationsMethodName#>() , 
                 <# }#>
             });             
             <# }#>
