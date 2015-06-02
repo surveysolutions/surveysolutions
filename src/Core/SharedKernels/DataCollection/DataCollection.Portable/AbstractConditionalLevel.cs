@@ -433,7 +433,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 catch (Exception ex)
                 {
                     // failed to execute are treated as valid
-                    questionsToBeInvalid.Add(validationExpression.Key);
+                    questionsToBeValid.Add(validationExpression.Key);
                 }
 #pragma warning restore
             }
