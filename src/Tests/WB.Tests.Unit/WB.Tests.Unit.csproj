@@ -330,8 +330,13 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\StatefulInterviewTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\when_creating_list_view_model.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\QuestionHeaderViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_substitution_title_changed.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_entityIdentity.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="Core\Synchronization\SyncManagerTestContext.cs" />

@@ -49,5 +49,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         bool WasAnswered(Identity entityIdentity);
 
         string GetInterviewerAnswerComment(Identity entityIdentity);
+
+        /// <summary>
+        /// Gets string representation of an answer. 
+        /// </summary>
+        /// <returns>null if question is not answered yet.</returns>
+        BaseInterviewAnswer GetAnswer(Guid questionId, decimal[] targetRosterVector);
     }
 }
