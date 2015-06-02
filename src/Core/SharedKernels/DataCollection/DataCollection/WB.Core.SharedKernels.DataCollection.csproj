@@ -64,6 +64,7 @@
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
+    <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />

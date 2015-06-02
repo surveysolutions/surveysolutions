@@ -310,6 +310,11 @@ namespace WB.Tests.Unit
                 return new InterviewHardDeleted(userId)
                         .ToPublishedEvent(eventSourceId: interviewId);
             }
+
+            public static TextQuestionAnswered TextQuestionAnswered(Guid questionId, decimal[] rosterVector, string answer)
+            {
+                return new TextQuestionAnswered(Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answer);
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -1455,6 +1460,11 @@ namespace WB.Tests.Unit
             var eventReg = liteEventRegistry ?? Mock.Of<ILiteEventRegistry>();
             var eventSt = eventStore ?? Mock.Of<IEventStore>();
             return new LiteEventBus(eventReg, eventSt);
+        }
+
+        public static UncommittedEvent UncommittedEvent(object payload)
+        {
+            return new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, payload);
         }
     }
 }
