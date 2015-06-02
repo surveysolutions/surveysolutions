@@ -12,6 +12,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ICommandService commandService;
         private int inProgressDepth = 0;
 
+        protected AnsweringViewModel() { }
+
         public AnsweringViewModel(ICommandService commandService)
         {
             this.commandService = commandService;

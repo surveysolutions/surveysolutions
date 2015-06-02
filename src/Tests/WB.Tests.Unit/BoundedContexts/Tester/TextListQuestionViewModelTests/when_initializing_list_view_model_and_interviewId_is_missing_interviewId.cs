@@ -10,7 +10,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 {
-    [Ignore("KP-5155")]
     public class when_initializing_list_view_model_and_interviewId_is_missing_interviewId : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
