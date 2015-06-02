@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
-        IUpdateHandler<InterviewHistoryView, InterviewStatusChanged>,
+        IUpdateHandler<InterviewHistoryView, InterviewCompleted>,
+        IUpdateHandler<InterviewHistoryView, InterviewRestarted>,
         IUpdateHandler<InterviewHistoryView, InterviewApproved>,
         IUpdateHandler<InterviewHistoryView, InterviewRejected>,
         IUpdateHandler<InterviewHistoryView, InterviewRestored>,
@@ -98,27 +99,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, evnt.Payload.UserId, evnt.Payload.AssignTime ?? evnt.EventTimeStamp,
                 new Dictionary<string, string> { { "responsible", evnt.Payload.InterviewerId.FormatGuid() } });
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewStatusChanged> evnt)
-        {
-            var newStatus = evnt.Payload.Status;
-            if (newStatus != InterviewStatus.Completed && newStatus != InterviewStatus.Restarted)
-                return view;
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> evnt){
 
-            InterviewHistoricalAction interviewHistoricalAction = newStatus == InterviewStatus.Completed ? InterviewHistoricalAction.Completed : InterviewHistoricalAction.Restarted;
-            AddHistoricalRecord(view, interviewHistoricalAction, Guid.Empty, evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty, evnt.Payload.CompleteTime??evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
+
+            return view;
+        }
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestarted> evnt)
+        {
+            AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, Guid.Empty, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
         }
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApproved> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, evnt.Payload.UserId, evnt.Payload.ApproveTime ?? evnt.EventTimeStamp,
               CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
@@ -126,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejected> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, evnt.Payload.UserId, evnt.Payload.RejectTime ?? evnt.EventTimeStamp,
               CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
