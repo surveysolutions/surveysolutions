@@ -5,7 +5,7 @@
       defaultValue="Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=Views;">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
-      match="/configuration/connectionStrings/add[@key='ReadSide']/@value" />
+      match="/configuration/connectionStrings/add[@name='ReadSide']/@connectionString" />
    </parameter>
 
   <parameter name="Event store IP address"
