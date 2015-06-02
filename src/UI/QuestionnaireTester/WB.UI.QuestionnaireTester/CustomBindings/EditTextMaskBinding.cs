@@ -1,8 +1,11 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
+using Android.Provider;
 using Android.Text;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
+using Java.Lang;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
+using String = System.String;
 
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
@@ -50,6 +53,34 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             public void OnTextChanged(Java.Lang.ICharSequence s, int start, int before, int count) { }
         }
 
+        public class MaskInputFilter : Java.Lang.Object, IInputFilter
+        {
+            private Regex mPattern;
+
+            public MaskInputFilter(string pattern)
+            {
+                mPattern =  new Regex(pattern, RegexOptions.Compiled);  
+            } 
+
+            public ICharSequence FilterFormatted (ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
+            //public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
+            {
+                string textToCheck = dest.SubSequence(0, dstart)
+                    + source.SubSequence(start, end) 
+                    + dest.SubSequence(dend, dest.Length());
+
+                Match match = mPattern.Match(textToCheck);
+
+                // Entered text does not match the pattern  
+                if (!match.Success)
+                {
+                    return new Java.Lang.String("");
+                }
+
+                return null;
+            }
+         }
+
         public EditTextMaskBinding(EditText target)
             : base(target)
         {
@@ -61,8 +92,10 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
             if (isInputMasked)
             {
-                var maskedWatcher = new MaskedWatcher(value, Target);
-                Target.AddTextChangedListener(maskedWatcher);
+                view.SetFilters(new IInputFilter[] { new MaskInputFilter(value) });
+                //arget.TextChanged += TargetOnTextChanged;
+                //var maskedWatcher = new MaskedWatcher(value, Target);
+                //Target.AddTextChangedListener(maskedWatcher);
                 //Target.InputType = InputTypes.TextVariationVisiblePassword; //fix for samsung 
             }
         }
