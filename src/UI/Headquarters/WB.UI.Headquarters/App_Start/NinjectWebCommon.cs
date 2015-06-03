@@ -156,13 +156,17 @@ namespace WB.UI.Headquarters
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
+            var interviewCountLimit = WebConfigurationManager.AppSettings["Limits.InterviewCountLimit"];
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
-                    LegacyOptions.SupervisorFunctionsEnabled));
+                    new InterviewHistorySettings(basePath,
+                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
+                    LegacyOptions.SupervisorFunctionsEnabled,
+                    string.IsNullOrEmpty(interviewCountLimit) ? (long?) null : long.Parse(interviewCountLimit)));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();

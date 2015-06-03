@@ -108,6 +108,7 @@
     <Compile Include="Implementation\Services\DataExport\TabFileReader.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="Implementation\Services\LimitedInterviewPreconditionsService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
     <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
     <Compile Include="Mappings\InterviewCommentedStatusMap.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\Export\ExportDataType.cs" />
+    <Compile Include="Services\ILimitedInterviewService.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
