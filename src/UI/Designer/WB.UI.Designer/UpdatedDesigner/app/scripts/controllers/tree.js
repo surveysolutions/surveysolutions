@@ -58,7 +58,7 @@
             }
             hotkeys.add({
                 combo: focusSearchField,
-                description: 'Search for groups and questions in chapter',
+                description: 'Search for sub-sections and questions in section',
                 callback: function (event) {
                     event.preventDefault();
                     $scope.showSearch();
@@ -157,7 +157,7 @@
                 if (itemToFind) {
                     var parent = itemToFind.getParentItem();
                     if (parent !== null) {
-                        highlightAndScroll(target);
+                        highlightAndScroll(parent);
                     }
                 }
             };
@@ -204,12 +204,12 @@
                     });
                 }
             };
-            var getScrollPositionInDivFromTop = function (itemId) {
+            var getScrollPositionInDivFromTop = function(itemId) {
                 var positionOfItemFromPageTop = $(itemId).offset().top;
                 var positionOfContainerFromPageTop = $(".question-list").offset().top;
                 var scrollOffset = 10;
                 return Math.max(positionOfItemFromPageTop - positionOfContainerFromPageTop - scrollOffset, 0);
-            }
+            };
             var getItemType = function (item) {
                 switch (item.itemType) {
                     case 'Question': return itemTypes.question;
@@ -219,10 +219,10 @@
                 throw 'unknown item type: ' + item;
             };
 
-            var highlightAndScroll = function (target) {
+            var highlightAndScroll = function(target) {
                 $scope.highlightedId = target.itemId;
                 scrollToElement("#" + target.itemId, scrollMode.makeVisible);
-            }
+            };
 
             var getCurrentItem = function () {
                 if (_.isNull($scope.items) || _.isUndefined($scope.items)) {
@@ -442,7 +442,7 @@
 
                                     notificationService.notify({
                                         title: 'Depended items might be broken',
-                                        text: '<div class="broken-links"><p>One or more questions/groups depend on<p>' + links + '</div>',
+                                        text: '<div class="broken-links"><p>One or more questions/sub-sections depend on<p>' + links + '</div>',
                                         hide: false,
                                         confirm: { confirm: true },
                                         history: { history: false },

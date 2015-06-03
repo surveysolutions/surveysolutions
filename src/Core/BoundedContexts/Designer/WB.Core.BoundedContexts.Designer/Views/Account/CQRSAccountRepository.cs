@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             var account = new AccountView
                               {
-                                  ProviderUserKey = providerUserKey, 
+                                  ProviderUserKey = Guid.Parse(providerUserKey.ToString()), 
                                   ApplicationName = applicationName, 
                                   UserName = username, 
                                   Email = email
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountView account = this.GetUser(accountName: username);
 
-            this.commandService.Execute(new DeleteAccountCommand(account.GetPublicKey()));
+            this.commandService.Execute(new DeleteAccountCommand(account.ProviderUserKey));
 
             return this.GetUser(accountName: username) == null;
         }
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                 throw new ArgumentNullException("id");
             }
 
-            return this.accountViewFactory.Load(new AccountViewInputModel(id));
+            return this.accountViewFactory.Load(new AccountViewInputModel(Guid.Parse(id.ToString())));
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                     applicationName: account.ApplicationName, 
                     userName: account.UserName, 
                     email: account.Email, 
-                    accountId: Guid.Parse(account.ProviderUserKey.ToString()), 
+                    accountId: account.ProviderUserKey, 
                     password: account.Password, 
                     passwordSalt: account.PasswordSalt, 
                     isConfirmed: account.IsConfirmed, 
@@ -347,7 +347,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         /// </param>
         public void Update(IMembershipAccount account, MembershipEventType eventType)
         {
-            var accountPublicKey = Guid.Parse(account.ProviderUserKey.ToString());
+            var accountPublicKey = account.ProviderUserKey;
 
             ICommand command = null;
 

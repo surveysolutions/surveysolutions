@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
             var user = this.GetUser(username);
-            this.commandService.Execute(new RemoveRoleFromAccountCommand(accountId: user.GetPublicKey(),
+            this.commandService.Execute(new RemoveRoleFromAccountCommand(accountId: user.ProviderUserKey,
                                                                      role: this.GetRoleByRoleName(roleName)));
         }
 

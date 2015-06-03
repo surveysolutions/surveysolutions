@@ -106,8 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         ApplicationName = @event.Payload.ApplicationName, 
                         CreatedAt = @event.Payload.CreatedDate, 
                         FailedPasswordAnswerWindowAttemptCount = 0, 
-                        FailedPasswordWindowAttemptCount = 0, 
-                        SimpleRoles = new List<SimpleRoleEnum>()
+                        FailedPasswordWindowAttemptCount = 0
                     }, 
                 @event.EventSourceId);
         }

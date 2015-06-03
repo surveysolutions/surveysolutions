@@ -28,16 +28,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { CreatePreloadedDataByFile() });
         
         It should_result_has_1_error = () =>
-           result.Count().ShouldEqual(1);
+           result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0004_error = () =>
-            result.First().Code.ShouldEqual("PL0004");
+            result.Errors.First().Code.ShouldEqual("PL0004");
 
         It should_return_reference_with_File_type = () =>
-            result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
+            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
     }

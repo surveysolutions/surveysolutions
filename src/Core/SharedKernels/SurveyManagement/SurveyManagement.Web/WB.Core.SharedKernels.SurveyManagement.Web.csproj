@@ -87,6 +87,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="StatData">
+      <HintPath>..\..\..\..\..\Externals\StatData.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -94,9 +97,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
@@ -107,9 +110,9 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -162,17 +165,15 @@
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\PlainApiTransactionFilter.cs" />
-    <Compile Include="Code\ApiTransactionFilter.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
-    <Compile Include="Code\NoTransactionAttribute.cs" />
     <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Security\IdentityExtentions.cs" />
     <Compile Include="Code\Security\PrincipalReplacer.cs" />
-    <Compile Include="Code\TransactionFilter.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
@@ -183,8 +184,12 @@
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
+    <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
+    <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
+    <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
+    <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -194,6 +199,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Interviews.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
@@ -297,6 +307,7 @@
     <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
+    <Compile Include="Utils\InterviewLimits.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
     <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
@@ -335,6 +346,12 @@
     <EmbeddedResource Include="Resources\Interviews.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
@@ -475,6 +492,7 @@
     <EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
+    <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
@@ -574,6 +592,12 @@
     <EmbeddedResource Include="Scripts\jquery-2.1.0.intellisense.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.0.js" />
     <EmbeddedResource Include="Scripts\jquery-2.1.0.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -13,10 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public IQuestionnaireItem Load(string questionnaireId, string groupId)
         {
-            return
-                this.readSideReader.GetById(questionnaireId)
-                                   .Items
-                                   .Find(chapter => chapter.ItemId == groupId);
+            var questionnaire = this.readSideReader.GetById(questionnaireId);
+
+            return questionnaire != null ? questionnaire.Items.Find(chapter => chapter.ItemId == groupId) : null;
         }
     }
 }

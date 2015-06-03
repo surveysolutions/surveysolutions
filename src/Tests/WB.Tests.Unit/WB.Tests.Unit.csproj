@@ -151,6 +151,10 @@
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StatData, Version=1.0.5592.33611, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Externals\StatData.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -166,9 +170,10 @@
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
@@ -188,9 +193,9 @@
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -246,14 +251,14 @@
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\ImportControllerTestContext.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_and_questionnaire_is_valid.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_and_questionnaire_view_is_absent.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_and_request_parameter_is_null.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_client_version_is_not_supported.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_questionnaire_cant_be_compiled.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_questionnaire_cant_be_verified.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_questionnaire_compilation_throw_exception.cs" />
-    <Compile Include="Applications\Designer\ImportControllerTests\when_call_Questionnaire_method_but_user_dont_have_access_rights_to use_the_questionnaire.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_is_valid.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_view_is_absent.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_request_parameter_is_null.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_client_version_is_not_supported.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_cant_be_compiled.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_cant_be_verified.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_compilation_throw_exception.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_user_dont_have_access_rights_to_use_the_questionnaire.cs" />
     <Compile Include="Applications\Designer\MessageHandlerTests\MessageHandlerTestContext.cs" />
     <Compile Include="Applications\Designer\MessageHandlerTests\when_https_verifier_reseives_https_request.cs" />
     <Compile Include="Applications\Designer\MessageHandlerTests\when_https_verifier_reseives_non_https_request.cs" />
@@ -317,6 +322,7 @@
     <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
     <Compile Include="BoundedContexts\Capi\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_5_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_lower_then_5.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
@@ -326,6 +332,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_by_fixed_values_and_fixed_titles_have_dublicates.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_condition_expression.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
@@ -402,8 +410,13 @@
     <Compile Include="Infrastructure\TransactionManagerProviderTests\when_getting_transaction_manager_and_rebuild_read_side_transaction_manager_was_pinned_but_then_unpinned.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_question_used_in_substitutions.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_substuting_question_title_inside_roster_with_reference_to_roster_size_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_text_list_question_increases_roster_with_nested_fixed_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />
@@ -412,8 +425,8 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\InterviewStatusChangeHistoryDenormalizerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\when_interview_status_changed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request__on_day_before_and_null_to.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_null_from_and_on_day_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />
@@ -423,10 +436,25 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonFromQuestionnaireRemoved_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusChangeHistoryTests\when_interview_deleted_by_synchronization.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_rejected_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_status_changed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\StatusChangeHistoryDenormalizerFunctionalTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_deleted_and_restored_by_synchronization.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_is_created.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_status_changed.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\QuantityReportFactoryTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_by_day_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_by_month_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_week_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_supervisors_by_unknown_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_supervisors_by_month_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_month_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_by_week_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_supervisors_by_month_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_supervisors_by_unknown_period.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\SpeedReportFactoryTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_day_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_is_locked.cs" />
@@ -436,6 +464,25 @@
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_without_filter.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewsToDeleteFactoryTests\when_questionnaireId_and_version_provided.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_hq_role.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_supervisor_role.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_non_supervisor_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_locked_supervisor_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_non_existing_supervisor_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_empty_supervisor_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\PeriodicStatusReportControllerTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_hq_role.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_supervisor_role.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\ReadSideRepositoryDataExportWriterTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_action.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_data_records.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called_for_Approved_by_HQ_action.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
@@ -454,7 +501,7 @@
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\SurveysAndStatusesReportTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_interview_exists_in_each_status.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_user.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_responsible.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_viewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedByHeadquarters.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_ApprovedBySupervisor.cs" />
@@ -1870,7 +1917,6 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_sample_preloaded_data_and_questionnaire_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_sample_preloaded_data_file_has_no_id_and_parent_columns.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\PreloadingTemplateServiceTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\when_archive_were_build_before_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\when_questionnaire_has_2_levels_and_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\when_questionnaire_is_missing_and_GetFilePathToPreloadingTemplate_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\QuestionDataParserTestContext.cs" />
@@ -1918,7 +1964,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\FileBasedDataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_enabled.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_directory_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_interview_is_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called_and_interview_is_deleted.cs" />
@@ -1927,21 +1972,11 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteInterview_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteInterview_is_called_and_interview_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_method_clear_with_one_file_and_one_dir_present.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_not_empty_cache_is_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\FilebasedExportedDataAccessorTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_all_data_and_archive_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_all_data_and_archive_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_approved_data_and_archive_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_approved_data_and_archive_is_present.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\SqlDataExportWriterTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_add_action_record_called_for_interview_with_approve_by_hq_action.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_add_action_record_called_for_interview_with_complete_action.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_add_records_method_is_called_for_main_level_of_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_add_records_method_is_called_for_nested_roster_level_of_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_create_header_is_called_for_main_level_of_the_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_create_header_is_called_for_nested_roster_level_of_the_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_create_interview_action_header_is_called_for_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlDataExportWriterTests\when_delete_interview_method_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />

@@ -85,8 +85,8 @@
             self.processedEvents(data.EventPublishingDetails.ProcessedEvents);
             self.failedEvents(data.EventPublishingDetails.FailedEvents);
             self.speed(data.EventPublishingDetails.Speed);
-            self.timeSpent(moment.duration(data.EventPublishingDetails.TimeSpent).format("HH:mm:ss"));
-            self.estimatedTime(moment.duration(data.EventPublishingDetails.EstimatedTime).format("HH:mm:ss"));
+            self.timeSpent(moment.duration(data.EventPublishingDetails.TimeSpent).format("HH:mm:ss", {trim: false}));
+            self.estimatedTime(moment.duration(data.EventPublishingDetails.EstimatedTime).format("HH:mm:ss", { trim: false }));
 
             self.reloadRepositoryWritersList(data.StatusByRepositoryWriters);
             self.reloadDenormalizerStatistics(data.ReadSideDenormalizerStatistics);
@@ -131,7 +131,7 @@
 
         //update all writers
         _.each(newList, function (denormalizer) {
-            denormalizer.timeSpentDescription = moment.duration(denormalizer.TimeSpent).format("HH:mm:ss");
+            denormalizer.timeSpentDescription = moment.duration(denormalizer.TimeSpent).format("HH:mm:ss", { trim: false });
             denormalizer.timeSpentInPersentDescription = denormalizer.Percent+"%";
             self.rebuildDenormalizerStatistic.push(denormalizer);
         });

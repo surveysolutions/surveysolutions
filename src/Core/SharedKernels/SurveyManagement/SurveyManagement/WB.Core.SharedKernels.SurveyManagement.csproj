@@ -48,9 +48,6 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\..\..\..\..\packages\Dapper.1.37\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -76,12 +73,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="StatData">
+      <HintPath>..\..\..\..\..\Externals\StatData.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.96.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\lib\net451\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,10 +101,22 @@
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Implementation\Services\DataExport\DatasetWriterFactory.cs" />
+    <Compile Include="Implementation\Services\DataExport\IDatasetWriterFactory.cs" />
+    <Compile Include="Implementation\Services\DataExport\ITabFileReader.cs" />
+    <Compile Include="Implementation\Services\DataExport\ReadSideRepositoryDataExportWriter.cs" />
+    <Compile Include="Implementation\Services\DataExport\TabFileReader.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="Implementation\Services\LimitedInterviewPreconditionsService.cs" />
+    <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
+    <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
+    <Compile Include="Mappings\InterviewCommentedStatusMap.cs" />
+    <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
+    <Compile Include="Mappings\InterviewHistoryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
+    <Compile Include="Mappings\InterviewStatusesMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\QuestionnaireFeedEntryMap.cs" />
@@ -123,6 +131,8 @@
     <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
+    <Compile Include="Services\Export\ExportDataType.cs" />
+    <Compile Include="Services\ILimitedInterviewService.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
@@ -156,12 +166,7 @@
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlToTabDataExportService.cs" />
-    <Compile Include="Implementation\Services\Sql\DataRow.cs" />
-    <Compile Include="Implementation\Services\Sql\SqlDataAccessor.cs" />
-    <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
-    <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
@@ -200,6 +205,7 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthCheck.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
+    <Compile Include="Services\Sql\IExportedDataAccessor.cs" />
     <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
     <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
@@ -220,9 +226,6 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
-    <Compile Include="Services\Sql\ISqlDataAccessor.cs" />
-    <Compile Include="Services\Sql\ISqlService.cs" />
-    <Compile Include="Services\Sql\ISqlServiceFactory.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
     <Compile Include="Synchronization\IBrokenSyncPackagesStorage.cs" />
@@ -238,6 +241,7 @@
     <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReference.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\PreloadedData\VerificationStatus.cs" />
     <Compile Include="ValueObjects\ValueParsingResult.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
@@ -246,11 +250,14 @@
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewAction.cs" />
     <Compile Include="Views\DataExport\InterviewActionExportView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewHistory.cs" />
     <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
@@ -298,7 +305,7 @@
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
-    <Compile Include="Views\Interview\InterviewStatusHistory.cs" />
+    <Compile Include="Views\Interview\InterviewStatuses.cs" />
     <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
@@ -312,7 +319,6 @@
     <Compile Include="Views\Interview\InterviewQuestionView.cs" />
     <Compile Include="Views\Interview\InterviewSummary.cs" />
     <Compile Include="Views\Interview\QuestionAnswer.cs" />
-    <Compile Include="Views\Interview\QuestionOptions.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByDateAndTemplate.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
@@ -328,6 +334,12 @@
     <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
+    <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
+    <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
+    <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquartersTeamsAndStatusesReport.cs" />
@@ -342,6 +354,12 @@
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\PeriodicStatusReportModel.cs" />
+    <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
+    <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportRow.cs" />
+    <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
+    <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportRow.cs" />
+    <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportView.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
@@ -457,12 +475,8 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\..\..\packages\System.Data.SQLite.Core.1.0.96.0\build\net451\System.Data.SQLite.Core.targets')" />
-  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

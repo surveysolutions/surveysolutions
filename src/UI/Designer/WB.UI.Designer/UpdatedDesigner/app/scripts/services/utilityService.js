@@ -51,7 +51,7 @@
                     var newId = utilityService.guid();
                     var emptyGroup = {
                         "itemId": newId,
-                        "title": "New group",
+                        "title": "New sub-section",
                         "items": [],
                         itemType: 'Group',
                         getParentItem: function () { return parent; }

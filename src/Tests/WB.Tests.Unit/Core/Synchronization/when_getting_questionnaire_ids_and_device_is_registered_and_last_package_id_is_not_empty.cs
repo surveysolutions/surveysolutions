@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Core.Synchronization
             lastSyncedPackageId = questionnaireSyncPackageMetas[0].PackageId;
 
 
-            var writer = new TestInMemoryWriter<QuestionnaireSyncPackageMeta>();
+            var writer = Stub.ReadSideRepository<QuestionnaireSyncPackageMeta>();
             foreach (var package in questionnaireSyncPackageMetas)
             {
                 writer.Store(package, package.PackageId);

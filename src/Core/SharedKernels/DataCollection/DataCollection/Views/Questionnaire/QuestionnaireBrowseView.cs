@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
         private string _order = string.Empty;
 
         public QuestionnaireBrowseView(
-            int page, int pageSize, int totalCount, IEnumerable<QuestionnaireBrowseItem> items, string order)
+            int page, int? pageSize, int totalCount, IEnumerable<QuestionnaireBrowseItem> items, string order)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
 
         public int Page { get; private set; }
 
-        public int PageSize { get; private set; }
+        public int? PageSize { get; private set; }
 
         public int TotalCount { get; private set; }
     }

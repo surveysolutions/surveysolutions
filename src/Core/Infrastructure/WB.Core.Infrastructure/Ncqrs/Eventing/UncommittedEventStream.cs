@@ -92,7 +92,7 @@ namespace Ncqrs.Eventing
             }
         }
 
-        public long InitialVersion
+        public int InitialVersion
         {
             get
             {
@@ -104,7 +104,7 @@ namespace Ncqrs.Eventing
             }
         }
 
-        public long CurrentVersion 
+        public int CurrentVersion 
         {
             get
             {

@@ -87,6 +87,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
             if (archiver == null) throw new ArgumentNullException("archiver");
             if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
+            if (cqrsTransactionManager == null) throw new ArgumentNullException("cqrsTransactionManager");
             if (interviewSummaryRepositoryReader == null) throw new ArgumentNullException("interviewSummaryRepositoryReader");
             if (readyToSendInterviewsRepositoryReader == null) throw new ArgumentNullException("readyToSendInterviewsRepositoryReader");
             if (httpMessageHandler == null) throw new ArgumentNullException("httpMessageHandler");
@@ -258,7 +259,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void PushInterviewData(Guid userId)
         {
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
-            this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Found0interviewstopushFormat, interviewsToPush.Count));
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
 
             for (int interviewIndex = 0; interviewIndex < interviewsToPush.Count; interviewIndex++)
             {
@@ -266,17 +267,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Pushinginterview01outof2Format, interviewId.FormatGuid(),
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
                         interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
                     this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Interview0successfullypushedFormat, interviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Failed_to_push_interview__0__to_Headquarters_Format, interviewId.FormatGuid()), exception);
+                    this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
                     this.headquartersPushContext.PushError(string.Format(
-                        Resources.InterviewsSynchronizer.Failed_to_push_interview__0___Error_message___1___Exception_messages___2_Format,
+                        "Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
                         interviewId.FormatGuid(), exception.Message,
                         string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
@@ -285,9 +286,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void PushInterviewFile()
         {
-            this.headquartersPushContext.PushMessage(Resources.InterviewsSynchronizer.Getting_interviews_files_to_be_pushed_);
+            this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
             var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
-            this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Found__0__files_to_push_Format, files.Count));
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
 
             for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
             {
@@ -295,17 +296,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.Pushing_file__0__for_interview__1____2__out_of__3_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
                     this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
-                    this.headquartersPushContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.File__0__for_interview__1__successfully_pushed_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format("File {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error(string.Format(Resources.InterviewsSynchronizer.Failed_to_push_file__0__for_interview__1__to_Headquarters_Format, interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
+                    this.logger.Error(string.Format("Failed to push file {0} for interview {1} to Headquarters.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
                     this.headquartersPushContext.PushError(string.Format(
-                        Resources.InterviewsSynchronizer.Failed_to_push_file__0__for_interview__1___Error_message___2___Exception_messages___3_Format,
+                        "Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}",
                         interviewFile.FileName, interviewFile.InterviewId.FormatGuid(), exception.Message,
                         string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
@@ -393,11 +394,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private List<Guid> GetInterviewsToPush()
         {
-            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
-                this.readyToSendInterviewsRepositoryReader
-                    .QueryAll()
-                    .Select(interview => interview.InterviewId)
-                    .ToList());
+            return this.cqrsTransactionManager.ExecuteInQueryTransaction(() => 
+                this.readyToSendInterviewsRepositoryReader.Query(_ => _.Select(x => x.InterviewId)
+                                                          .ToList()));
         }
 
         private void PushInterview(Guid interviewId, Guid userId)
@@ -412,7 +411,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
             else
             {
-                this.logger.Info(string.Format(Resources.InterviewsSynchronizer.Interview__0__was_not_sent_to_Headquarters_because_there_are_no_events_which_should_be_sent_Format, interviewId.FormatGuid()));
+                this.logger.Info(string.Format("Interview {0} was not sent to Headquarters because there are no events which should be sent.", interviewId.FormatGuid()));
             }
 
             this.MarkInterviewAsSentToHeadquarters(interviewId, userId);
@@ -521,7 +520,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue).ToList();
+            List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue).ToList();
 
             int indexOfLastEventSentToHeadquarters = storedEvents.FindLastIndex(storedEvent => storedEvent.Payload is InterviewSentToHeadquarters);
             int countOfEventsSentToHeadquarters = indexOfLastEventSentToHeadquarters + 1;

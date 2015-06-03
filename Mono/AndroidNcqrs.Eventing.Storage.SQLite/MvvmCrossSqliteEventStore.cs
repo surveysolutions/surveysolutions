@@ -55,7 +55,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             WrapConnection(eventStream.SourceId, connection => connection.InsertAll(eventStream.Select(x => x.ToStoredEvent())));
         }
 
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
             IEnumerable<CommittedEvent> events = Enumerable.Empty<CommittedEvent>();
             
