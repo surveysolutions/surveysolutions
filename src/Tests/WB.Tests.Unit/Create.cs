@@ -1042,7 +1042,7 @@ namespace WB.Tests.Unit
         }
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string mask = null)
+            string mask = null, string text = null)
         {
             return new TextQuestion("Question T")
             {
@@ -1050,6 +1050,7 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 Mask = mask,
+                QuestionText = text
             };
         }
 

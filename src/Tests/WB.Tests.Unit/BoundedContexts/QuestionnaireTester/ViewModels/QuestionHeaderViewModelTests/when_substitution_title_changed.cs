@@ -29,19 +29,27 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
 
             var answer = new MaskedTextAnswer();
             answer.SetAnswer("new value");
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetAnswer(substitedQuestionId, Empty.RosterVector) == answer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitedQuestionId, Empty.RosterVector) == answer);
 
-            var questionnaire = new QuestionnaireModel { Questions = new Dictionary<Guid, BaseQuestionModel>() };
-            questionnaire.Questions[substitutionTargetQuestionId] = new MaskedTextQuestionModel
+            var questionnaire = new QuestionnaireModel
+            {
+                Questions = new Dictionary<Guid, BaseQuestionModel>(),
+                QuestionsByVariableNames = new Dictionary<string, BaseQuestionModel>()
+            };
+            var substTargetModel = new MaskedTextQuestionModel
             {
                 Title = "Old title %substitute%",
                 Id = substitutionTargetQuestionId
             };
-            questionnaire.Questions[substitedQuestionId] = new MaskedTextQuestionModel
+            var substitutedModel = new MaskedTextQuestionModel
             {
                 Id = substitedQuestionId,
                 Variable = "substitute"
             };
+            questionnaire.Questions[substitutionTargetQuestionId] = substTargetModel;
+            questionnaire.Questions[substitedQuestionId] = substitutedModel;
+            questionnaire.QuestionsByVariableNames["blah"] = substTargetModel;
+            questionnaire.QuestionsByVariableNames[substitutedModel.Variable] = substitutedModel;
 
             var interviewRepository = Mock.Of<IStatefullInterviewRepository>(x => x.Get(interviewId) == interview);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaire);

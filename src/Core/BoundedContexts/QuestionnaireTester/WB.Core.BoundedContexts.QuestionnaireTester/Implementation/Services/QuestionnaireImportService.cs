@@ -55,6 +55,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
             questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, x => this.BuildParentsList(x, questionnaireDocument.PublicKey));
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
+            questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => CreateQuestionModel(x, questionnaireDocument));
 
             questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
 

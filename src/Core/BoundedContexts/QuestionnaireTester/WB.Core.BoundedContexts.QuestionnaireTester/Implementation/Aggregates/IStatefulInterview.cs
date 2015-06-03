@@ -54,6 +54,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         /// Gets string representation of an answer. 
         /// </summary>
         /// <returns>null if question is not answered yet.</returns>
-        BaseInterviewAnswer GetAnswer(Guid questionId, decimal[] targetRosterVector);
+        BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector);
     }
 }
