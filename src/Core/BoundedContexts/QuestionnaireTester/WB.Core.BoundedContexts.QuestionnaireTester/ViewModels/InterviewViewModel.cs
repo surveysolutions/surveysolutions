@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IStatefullInterviewRepository interviewRepository,
             ChaptersViewModel chaptersViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
-            GroupViewModel groupViewModel, 
+            ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState)
         {
             this.principal = principal;
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         public BreadcrumbsViewModel Breadcrumbs { get; set; }
-        public GroupViewModel CurrentGroup { get; set; }
+        public ActiveGroupViewModel CurrentGroup { get; set; }
         public ChaptersViewModel Chapters { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable PrefilledQuestions { get; set; } 
