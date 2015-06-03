@@ -677,7 +677,7 @@ if(question.IsMandatory)
             
             #line default
             #line hidden
-            this.Write("()\r\n        {\r\n            return !this.IsAnswerEmpty(");
+            this.Write("()\r\n        {\r\n            return this.IsAnswered(");
             
             #line 153 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
