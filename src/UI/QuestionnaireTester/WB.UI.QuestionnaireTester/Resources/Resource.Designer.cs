@@ -2635,7 +2635,7 @@ namespace WB.UI.QuestionnaireTester
 			public const int interview_breadcrumb_item = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int interview_chapters = 2130903069;
+			public const int interview_chapter_item = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
 			public const int interview_current_group = 2130903070;

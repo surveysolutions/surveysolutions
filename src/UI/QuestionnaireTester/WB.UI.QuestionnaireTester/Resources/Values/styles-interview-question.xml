@@ -111,10 +111,10 @@
   <style name="Interview_Question_Answer_List_Editor" >
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
-    <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_weight">1</item>
     <item name="android:focusable">true</item>
+    <item name="android:layout_width">@dimen/Interview_Question_List_Editor_width</item>
     <item name="android:focusableInTouchMode">true</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textCursorDrawable">@null</item>

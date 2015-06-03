@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .ToList();
 
             this.Breadcrumbs.Init(interviewId, this.navigationState);
-            this.Chapters.Init(this.navigationState);
+            this.Chapters.Init(interviewId, questionnaire.Id.FormatGuid(), this.navigationState);
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
