@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 {
@@ -8,11 +10,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
      */
     public class RawText
     {
-        private string text;
+        public readonly char EmptyChar = '\0';
 
-        public RawText()
+        private char[] text;
+
+        public RawText(int count)
         {
-            this.text = "";
+            this.text = new char[count];
         }
 
         /**
@@ -21,18 +25,10 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
           */
         public void SubtractFromString(Range range)
         {
-            String firstPart = "";
-            String lastPart = "";
-
-            if (range.Start > 0 && range.Start <= this.text.Length)
+            for (int i = range.Start; i <= range.End; i++)
             {
-                firstPart = this.text.Substring(0, range.Start);
+                text[i] = EmptyChar;
             }
-            if (range.End >= 0 && range.End < this.text.Length)
-            {
-                lastPart = this.text.Substring(range.End, this.text.Length - range.End);
-            }
-            this.text = firstPart + lastPart;
         }
 
         /**
@@ -44,44 +40,30 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
          */
         public int AddToString(string newString, int start, int maxLength)
         {
-            String firstPart = "";
-            String lastPart = "";
-
-            if (newString == null || newString.Equals(""))
+            for (int i = 0; i < newString.Length; i++)
             {
-                return 0;
-            }
-            else if (start < 0)
-            {
-                throw new ArgumentException("Start position must be non-negative");
-            }
-            else if (start > this.text.Length)
-            {
-                throw new ArgumentException("Start position must be less than the actual text length");
+                var index = start + i;
+                if (index < text.Length)
+                {
+                    this.text[index] = newString[i];
+                }
+                else
+                {
+                    return i;
+                }
             }
 
-            int count = newString.Length;
-
-            if (start > 0)
-            {
-                firstPart = this.text.Substring(0, start);
-            }
-            if (start >= 0 && start < this.text.Length)
-            {
-                lastPart = this.text.Substring(start, this.text.Length - start);
-            }
-            if (this.text.Length + newString.Length > maxLength)
-            {
-                count = maxLength - this.text.Length;
-                newString = newString.Substring(0, count);
-            }
-            this.text = firstPart + newString + lastPart;
-            return count;
+            return newString.Length;
         }
 
         public int Length
         {
             get { return this.text.Length; }
+        }
+
+        public bool HasAnyText
+        {
+            get { return text.Any(c => c != EmptyChar); }
         }
 
         public char CharAt(int position)

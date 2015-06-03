@@ -22,8 +22,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
         private readonly char[] charRepresentationArray = { AnythingKey, DigitKey, CharacterKey };
 
-        private String mask;
-        private char maskFill;
+        private String mask = String.Empty;
+        private char maskFill = '_';
         //private char charRepresentation;
         private int[] rawToMask;
         private RawText rawText;
@@ -49,36 +49,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
         {
             this.Init();
 
-
-
-/*
-            TypedArray attributes = context.ObtainStyledAttributes(attrs, Resource.Styleable.MaskedEditText);
-            mask = attributes.GetString(Resource.Styleable.MaskedEditText_mask);
-
-            String maskFill = attributes.GetString(Resource.Styleable.MaskedEditText_mask_fill);
-            this.maskFill = !string.IsNullOrEmpty(maskFill) ? maskFill[0] : ' ';
-
-            String representation = attributes.GetString(Resource.Styleable.MaskedEditText_char_representation);
-*/
-
-        
-        
-            this.mask = "";
-        
-            this.maskFill = '_';
-
-            /*String representation = "8";
-        
-
-            if(representation == null) 
-            {
-                this.charRepresentation = '*';
-            }
-            else 
-            {
-                this.charRepresentation = representation[0];
-            }*/
-        
             this.CleanUp();
 
             // Ignoring enter key presses
@@ -103,8 +73,9 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             this.initialized = false;
         
             this.GeneratePositionArrays();
-        
-            this.rawText = new RawText();
+
+            this.maxRawLength = this.maskToRaw[this.PreviousValidPosition(this.mask.Length - 1)] + 1;
+            this.rawText = new RawText(maxRawLength);
             this.selection = this.rawToMask[0];
 
             this.editingBefore = true;
@@ -113,22 +84,18 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
             if(this.HasHint) 
             {
-                this.SetText((string)null, BufferType.Normal);
+                this.EditableText.Clear();
             }
             else 
             {
-                this.SetText(
-                    this.mask.Replace(DigitKey, this.maskFill)
-                        .Replace(CharacterKey, this.maskFill)
-                        .Replace(AnythingKey, this.maskFill), 
-                    BufferType.Normal);
+                this.EditableText.Clear();
+                this.EditableText.Append(ReplaceCharRepresentation(this.mask, this.maskFill));
             }
 
             this.editingBefore = false;
             this.editingOnChanged = false;
             this.editingAfter = false;
         
-            this.maxRawLength = this.maskToRaw[this.PreviousValidPosition(this.mask.Length - 1)] + 1;
             this.lastValidMaskPosition = this.FindLastValidMaskPosition();
             this.initialized = true;
 
@@ -138,8 +105,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                 {
                     this.focusChangeListener.OnFocusChange((View)sender, this.HasFocus);
                 }
-                    
-                if(args.HasFocus && (this.rawText.Length > 0 || !this.HasHint)) 
+
+                if (args.HasFocus && (this.rawText.HasAnyText || !this.HasHint)) 
                 {
                     this.selectionChanged = false;
                     this.SetSelection(this.LastValidPosition());
@@ -179,17 +146,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
         }
 
-/*        public char CharRepresentation
-        {
-            get { return this.charRepresentation; }
-            set
-            {
-                this.charRepresentation = value;
-                this.CleanUp();
-            }
-        }*/
-    
-  
         private void GeneratePositionArrays() 
         {
             int[] aux = new int[this.mask.Length];
@@ -276,11 +232,16 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
             char[] filterArray = new char[source.Length()];
 
+            var indexInMask = dstart;
+
             for (int i = 0; i < source.Length(); i++)
             {
                 var currentChar = source.CharAt(i);
 
-                var indexInMask = i + dstart;
+                indexInMask = NextValidPosition(indexInMask);
+                if (indexInMask >= mask.Length)
+                    continue;
+
                 var maskChar = mask[indexInMask];
 
                 switch (maskChar)
@@ -322,12 +283,15 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                 }
 
                 int rangeStart = start;
+                int rangeEnd = start + count;
+
                 if (after == 0)
                 {
                     rangeStart = this.ErasingStart(start);
+                    rangeEnd = start + after;
                 }
 
-                Range range = this.CalculateRange(rangeStart, start + count);
+                Range range = this.CalculateRange(rangeStart, rangeEnd);
                 if (range.Start != -1)
                 {
                     this.rawText.SubtractFromString(range);
@@ -378,11 +342,10 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             if(!this.editingAfter && this.editingBefore && this.editingOnChanged) 
             {
                 this.editingAfter = true;
-                if(this.rawText.Length == 0 && this.HasHint) 
+                if (!this.rawText.HasAnyText && this.HasHint) 
                 {
                     this.selection = 0;
                     this.EditableText.Clear(); 
-                    //this.EditableText.Append((string) null);
                 }
                 else 
                 {
@@ -414,7 +377,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             {
                 if(!this.selectionChanged) 
                 {
-                    if(this.rawText.Length == 0 && this.HasHint) 
+                    if (!this.rawText.HasAnyText && this.HasHint) 
                     {
                         selStart = 0;
                         selEnd = 0;
@@ -499,16 +462,15 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
     
         private String MakeMaskedText() 
         {
-            char[] maskedText = this.mask.Replace(DigitKey, ' ')
-                .Replace(CharacterKey, ' ')
-                .Replace(AnythingKey, ' ')
-                .ToCharArray();
+            char[] maskedText = ReplaceCharRepresentation(this.mask, ' ').ToCharArray();
 
-            for(int i = 0; i < this.rawToMask.Length; i++) 
+            for(int i = 0; i < this.rawToMask.Length; i++)
             {
-                if(i < this.rawText.Length) 
+                var rawTextChar = this.rawText.CharAt(i);
+
+                if (rawTextChar != rawText.EmptyChar)
                 {
-                    maskedText[this.rawToMask[i]] = this.rawText.CharAt(i);
+                    maskedText[this.rawToMask[i]] = rawTextChar;
                 }
                 else
                 {
@@ -538,26 +500,22 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                 range.End = this.rawText.Length;
             }
 
-            if(range.Start == range.End && start < end) 
-            {
-                int newStart = this.PreviousValidPosition(range.Start - 1);
-                if(newStart < range.Start) 
-                {
-                    range.Start = newStart;
-                }
-            }
             return range;
         }
     
         private String Clear(String str) 
         {
-            /*foreach (char c in this.charsInMask) 
-            {
-                str = str.Replace(Character.ToString(c), "");
-            }*/
-            str = str.Replace(Character.ToString(maskFill), "");
+            str = str.Replace(Character.ToString(maskFill), String.Empty);
 
             return str;
+        }
+
+        private string ReplaceCharRepresentation(string originalString, char replaceChar)
+        {
+            return this.charRepresentationArray.Aggregate(
+                originalString, 
+                (current, charRepresentation) => current.Replace(charRepresentation, replaceChar)
+                );
         }
     }
 }
