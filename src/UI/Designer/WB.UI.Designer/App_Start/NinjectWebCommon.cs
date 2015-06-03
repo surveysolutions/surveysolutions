@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -11,7 +13,6 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Native.Logging;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -24,8 +25,8 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Esent;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
@@ -68,6 +69,7 @@ namespace WB.UI.Designer.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             var ravenSettings = new RavenConnectionSettings(
@@ -82,9 +84,6 @@ namespace WB.UI.Designer.App_Start
 
             var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
 
-            var ravenReadSideRepositoryWriterSettings = new RavenReadSideRepositoryWriterSettings(int.Parse(WebConfigurationManager.AppSettings["Raven.Readside.BulkInsertBatchSize"]));
-            int ravenCacheSize = WebConfigurationManager.AppSettings["Raven.CacheSize"].ParseIntOrNull() ?? 256;
-
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
@@ -96,13 +95,16 @@ namespace WB.UI.Designer.App_Start
 
             int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
 
+            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly }; 
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new RavenReadSideInfrastructureModule(ravenSettings, ravenReadSideRepositoryWriterSettings, ravenCacheSize, typeof(DesignerReportQuestionnaireListViewItem).Assembly),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
                 new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),

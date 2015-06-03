@@ -120,7 +120,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
         /// <remarks>
         /// Should be an id in your system (for instance in your database)
         /// </remarks>
-        object ProviderUserKey { get; set; }
+        Guid ProviderUserKey { get; set; }
 
         /// <summary>
         /// Gets or sets username

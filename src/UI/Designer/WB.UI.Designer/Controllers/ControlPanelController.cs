@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
@@ -23,7 +24,7 @@ namespace WB.UI.Designer.Controllers
         {
             return this.View();
         }
-
+        [NoTransaction]
         public ActionResult ReadSide()
         {
             return this.View();

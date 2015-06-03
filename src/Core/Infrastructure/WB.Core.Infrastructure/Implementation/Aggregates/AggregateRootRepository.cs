@@ -22,13 +22,13 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public virtual IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
         {
-            Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, long.MaxValue);
+            Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
 
-            long minVersion = snapshot != null
+            int minVersion = snapshot != null
                 ? snapshot.Version + 1
-                : long.MinValue;
+                : int.MinValue;
 
-            CommittedEventStream eventStream = this.eventStore.ReadFrom(aggregateId, minVersion, long.MaxValue);
+            CommittedEventStream eventStream = this.eventStore.ReadFrom(aggregateId, minVersion, int.MaxValue);
 
             return this.repository.Load(aggregateType, snapshot, eventStream);
         }

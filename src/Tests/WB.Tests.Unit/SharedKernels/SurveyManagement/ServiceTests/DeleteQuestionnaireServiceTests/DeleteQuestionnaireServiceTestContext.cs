@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
@@ -21,9 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         protected static DeleteQuestionnaireService CreateDeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory = null,
            ICommandService commandService = null, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null, IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
         {
+            Func<IInterviewsToDeleteFactory> factory = () => (interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>());
             return
                 new DeleteQuestionnaireService(
-                    interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>(),
+                    factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     questionnaireBrowseItemStorage ?? Mock.Of<IReadSideRepositoryReader<QuestionnaireBrowseItem>>(),
                     plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());

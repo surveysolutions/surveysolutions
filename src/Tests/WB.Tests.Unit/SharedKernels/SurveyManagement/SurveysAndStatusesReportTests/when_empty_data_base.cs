@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
     {
         Establish context = () =>
         {
-            reportFactory = CreateSurveysAndStatusesReport(new TestInMemoryWriter<InterviewSummary>());
+            reportFactory = CreateSurveysAndStatusesReport(Stub.ReadSideRepository<InterviewSummary>());
         };
 
         Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel());

@@ -162,7 +162,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 }
             }
 
-            item.SharedPersons.AddRange(document.SharedPersons);
+            foreach (var sharedPerson in document.SharedPersons)
+            {
+                item.SharedPersons.Add(sharedPerson);
+            }
 
             if (shouldPreserveSharedPersons)
             {

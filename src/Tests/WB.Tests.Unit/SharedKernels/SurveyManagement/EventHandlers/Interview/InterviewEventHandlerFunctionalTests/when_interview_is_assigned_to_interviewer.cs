@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             viewState.Status = InterviewStatus.ReadyForInterview;
 
             interviewerId = Guid.NewGuid();
-            interviewerAssignedEvent = CreatePublishableEvent(new InterviewerAssigned(Guid.NewGuid(), interviewerId));
+            interviewerAssignedEvent = CreatePublishableEvent(new InterviewerAssigned(Guid.NewGuid(), interviewerId, DateTime.Now));
         };
 
         Because of = () => interviewEventHandlerFunctional.Update(viewState, interviewerAssignedEvent);
