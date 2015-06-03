@@ -1,4 +1,5 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -62,8 +63,8 @@
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new {area = string.Empty}, null)</li>
-            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new {area = string.Empty}, null)</li>
+            <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
+            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>
     <li>
@@ -71,4 +72,21 @@
             <i class="glyphicon glyphicon-question-sign"></i>
         </a>
     </li>
+    @if (InterviewLimits.LimitsEnabled)
+    {
+        <li class='dropdown active @(InterviewLimits.PayAttention ? "open" : "")'>
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style='background:@(InterviewLimits.PayAttention ? "red" : "#ffa500")'>
+                <i class="glyphicon glyphicon-warning-sign"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#"><b>You are in TESTING MODE</b></a>
+                </li>
+                <li>
+                    <a href="#">You can create new @InterviewLimits.InterviewsLeft interview(s)</a>
+                </li>
+            </ul>
+        </li>
+    }
 </ul>
+
