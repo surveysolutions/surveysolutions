@@ -17,32 +17,53 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
     {
         Establish context = () =>
         {
+            substitutedQuesiton = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            substitutionTargetId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var maskedTextQuestionModel = new MaskedTextQuestionModel
+            {
+                Title = "title with %subst%",
+                Id = substitutionTargetId
+            };
             QuestionnaireModel questionnaireModel = new QuestionnaireModel
             {
                 Questions = new Dictionary<Guid, BaseQuestionModel>
                 {
-                    { Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new MaskedTextQuestionModel { Title = "title with %subst%" }},
-                    { Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), new MaskedTextQuestionModel { Variable = "subst" }},
+                    { substitutionTargetId, maskedTextQuestionModel }
+                },
+                QuestionsByVariableNames = new Dictionary<string, BaseQuestionModel>
+                {
+                    {
+                        "blah", maskedTextQuestionModel
+                    },
+                    {
+                        "subst", new MaskedTextQuestionModel
+                        {
+                            Variable = "subst",
+                            Id = substitutedQuesiton
+                        }
+                    },
                 }
             };
 
-            var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>(); 
+            var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireRepository.SetReturnsDefault(questionnaireModel);
 
             var answer = new MaskedTextAnswer();
             answer.SetAnswer("answer");
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetAnswer(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Empty.RosterVector) == answer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuesiton, Empty.RosterVector) == answer);
 
             var interviewRepository = new Mock<IStatefullInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object);
         };
 
-        Because of = () => viewModel.Init("interview", new Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector));
+        Because of = () => viewModel.Init("interview", new Identity(substitutionTargetId, Empty.RosterVector));
 
         It should_substitute_question_titles = () => viewModel.Title.ShouldEqual("title with answer");
 
         static QuestionHeaderViewModel viewModel;
+        private static Guid substitutionTargetId;
+        private static Guid substitutedQuesiton;
     }
 }
 

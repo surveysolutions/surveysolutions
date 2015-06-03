@@ -401,7 +401,9 @@
     <Compile Include="Infrastructure\TransactionManagerProviderTests\when_getting_transaction_manager_and_rebuild_read_side_transaction_manager_was_pinned.cs" />
     <Compile Include="Infrastructure\TransactionManagerProviderTests\when_getting_transaction_manager_and_rebuild_read_side_transaction_manager_was_pinned_but_then_unpinned.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_question_used_in_substitutions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_substuting_question_title_inside_roster_with_reference_to_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_created_on_client_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_deleted_interview_events.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events.cs" />

@@ -87,10 +87,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             string questionTitle = questionModel.Title;
             foreach (var variable in variablesToReplace)
             {
-                var substitutedQuestionModel = questionnaire.Questions.Single(x => x.Value.Variable == variable);
+                BaseQuestionModel substitutedQuestionModel = questionnaire.QuestionsByVariableNames[variable];
 
-                var baseInterviewAnswer = interview.GetAnswer(substitutedQuestionModel.Key, this.questionIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToString(substitutedQuestionModel.Value, baseInterviewAnswer) : null;
+                var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionModel.Id, this.questionIdentity.RosterVector);
+                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToString(substitutedQuestionModel, baseInterviewAnswer) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
                     questionTitle, variable, answerString ?? substitutionService.DefaultSubstitutionText);

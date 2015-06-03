@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 
         public Dictionary<Guid, List<QuestionnaireReferenceModel>> GroupParents { get; set; }
 
+        public Dictionary<string, BaseQuestionModel> QuestionsByVariableNames { get; set; }
+
         public List<GroupsHierarchyModel> GroupsHierarchy { get; set; }
     }
 }

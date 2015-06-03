@@ -6,6 +6,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -420,20 +421,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
         }
 
-        public BaseInterviewAnswer GetAnswer(Guid questionId, decimal[] targetRosterVector) // todo Add test
+        public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
         {
-            for (int i = targetRosterVector.Length; i >= 0; i--)
-            {
-                Identity identity = new Identity(questionId, targetRosterVector.Take(i).ToArray());
-                var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
-                if (this.Answers.ContainsKey(questionKey))
-                {
-                    return this.Answers[questionKey];
-                }
-            }
+            int questionRosterLevel = questionnaire.GetRosterLevelForQuestion(questionId);
+            var rosterVector = this.ShrinkRosterVector(targetRosterVector, questionRosterLevel);
+            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
 
-            return null;
+            return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
         public bool IsValid(Identity identity)
