@@ -11,7 +11,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 {
-    [Ignore("KP-5155")]
     public class when_creating_list_view_model : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
