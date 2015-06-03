@@ -1,4 +1,5 @@
 using System;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Transactions
@@ -7,19 +8,12 @@ namespace WB.Core.Infrastructure.Transactions
     {
         public static void ExecuteInPlainTransaction(this IPlainTransactionManager transactionManager, Action action)
         {
-            try
-            {
-                transactionManager.BeginTransaction();
-                
-                action.Invoke();
-                
-                transactionManager.CommitTransaction();
-            }
-            catch
-            {
-                transactionManager.RollbackTransaction();
-                throw;
-            }
+            transactionManager.ExecuteInPlainTransaction(action.ToFunc());
+        }
+
+        public static void ExecuteInQueryTransaction(this ITransactionManager transactionManager, Action action)
+        {
+            transactionManager.ExecuteInQueryTransaction(action.ToFunc());
         }
 
         public static T ExecuteInPlainTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
@@ -41,31 +35,25 @@ namespace WB.Core.Infrastructure.Transactions
             }
         }
 
-        public static void ExecuteInQueryTransaction(this ITransactionManager transactionManager, Action action)
-        {
-            try
-            {
-                transactionManager.BeginQueryTransaction();
-                
-                action.Invoke();
-            }
-            finally
-            {
-                transactionManager.RollbackQueryTransaction();
-            }
-        }
-
         public static T ExecuteInQueryTransaction<T>(this ITransactionManager transactionManager, Func<T> func)
         {
+            bool shouldStartTransaction = !transactionManager.IsQueryTransactionStarted;
             try
             {
-                transactionManager.BeginQueryTransaction();
+
+                if (shouldStartTransaction)
+                {
+                    transactionManager.BeginQueryTransaction();
+                }
 
                 return func.Invoke();
             }
             finally
             {
-                transactionManager.RollbackQueryTransaction();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.RollbackQueryTransaction();
+                }
             }
         }
     }

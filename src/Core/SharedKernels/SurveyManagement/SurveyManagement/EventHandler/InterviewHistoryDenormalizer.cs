@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
-        IUpdateHandler<InterviewHistoryView, InterviewStatusChanged>,
+        IUpdateHandler<InterviewHistoryView, InterviewCompleted>,
+        IUpdateHandler<InterviewHistoryView, InterviewRestarted>,
         IUpdateHandler<InterviewHistoryView, InterviewApproved>,
         IUpdateHandler<InterviewHistoryView, InterviewRejected>,
         IUpdateHandler<InterviewHistoryView, InterviewRestored>,
@@ -55,13 +56,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>
     {
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader;
-
-        public InterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireReader)
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        public InterviewHistoryDenormalizer(
+            IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
+            IReadSideRepositoryWriter<UserDocument> userReader,
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
             : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;
@@ -97,27 +99,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, evnt.Payload.UserId, evnt.Payload.AssignTime ?? evnt.EventTimeStamp,
                 new Dictionary<string, string> { { "responsible", evnt.Payload.InterviewerId.FormatGuid() } });
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewStatusChanged> evnt)
-        {
-            var newStatus = evnt.Payload.Status;
-            if (newStatus != InterviewStatus.Completed && newStatus != InterviewStatus.Restarted)
-                return view;
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> evnt){
 
-            InterviewHistoricalAction interviewHistoricalAction = newStatus == InterviewStatus.Completed ? InterviewHistoricalAction.Completed : InterviewHistoricalAction.Restarted;
-            AddHistoricalRecord(view, interviewHistoricalAction, Guid.Empty, evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty, evnt.Payload.CompleteTime??evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
+
+            return view;
+        }
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestarted> evnt)
+        {
+            AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, Guid.Empty, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
         }
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApproved> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, evnt.Payload.UserId, evnt.Payload.ApproveTime ?? evnt.EventTimeStamp,
               CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
@@ -125,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejected> evnt)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, evnt.Payload.UserId, evnt.EventTimeStamp,
+            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, evnt.Payload.UserId, evnt.Payload.RejectTime ?? evnt.EventTimeStamp,
               CreateCommentParameters(evnt.Payload.Comment));
 
             return view;
@@ -293,7 +296,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, Guid? userId,
-            DateTime? timestamp, Dictionary<string, string> parameters, QuestionnaireDocument questionnaire)
+            DateTime? timestamp, Dictionary<string, string> parameters, QuestionnaireExportStructure questionnaire)
         {
             string userName = string.Empty;
             string userRole = string.Empty;
@@ -313,11 +316,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var newParameters = new Dictionary<string, string>();
                 if (parameters.ContainsKey("questionId"))
                 {
-                    var questionId = parameters["questionId"];
-                    var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == Guid.Parse(questionId));
-                    if (question != null)
+                    var questionId = Guid.Parse(parameters["questionId"]);
+                    var question = questionnaire.HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).FirstOrDefault(q => q.Key == questionId);
+                    if (!question.Equals(new KeyValuePair<Guid, ExportedHeaderItem>()))
                     {
-                        newParameters["question"] = question.StataExportCaption;
+                        newParameters["question"] = question.Value.VariableName;
                         if (action == InterviewHistoricalAction.CommentSet)
                         {
                             newParameters["comment"] = parameters["comment"];
@@ -388,11 +391,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if(view ==null)
                 return;
 
-            var questionnaireWithVersion = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
-            if (questionnaireWithVersion == null || questionnaireWithVersion.Questionnaire == null)
+            var questionnaire = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
+            if (questionnaire == null)
                 return;
-
-            var questionnaire = questionnaireWithVersion.Questionnaire;
 
             var record = CreateInterviewHistoricalRecordView(action, userId, timestamp, parameters ?? new Dictionary<string, string>(),
                 questionnaire);

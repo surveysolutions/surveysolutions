@@ -7,26 +7,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
 {
     public class ChangeStatusFactory : IViewFactory<ChangeStatusInputModel, ChangeStatusView>
     {
-        private readonly IReadSideKeyValueStorage<InterviewStatusHistory> interviews;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviews;
 
-        public ChangeStatusFactory(IReadSideKeyValueStorage<InterviewStatusHistory> interviews)
+        public ChangeStatusFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviews)
         {
             this.interviews = interviews;
         }
 
         public ChangeStatusView Load(ChangeStatusInputModel input)
         {
-            var interviewSummary = this.interviews.GetById(input.InterviewId);
-            if (interviewSummary == null)
-                return null;
+            var interviewStatusChangeHistory = this.interviews.GetById(input.InterviewId);
 
             return new ChangeStatusView {
-                    StatusHistory = interviewSummary.StatusChangeHistory
+                StatusHistory = interviewStatusChangeHistory.InterviewCommentedStatuses
                                                     .Select(x => new CommentedStatusHistroyView {
                                                         Comment = x.Comment,
-                                                        Date = x.Date,
+                                                        Date = x.Timestamp,
                                                         Status = x.Status,
-                                                        Responsible = x.Responsible
+                                                        Responsible = x.StatusChangeOriginatorName
                                                     }).ToList()
                 };
         }

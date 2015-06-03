@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
             committedEvent = new CommittedEvent(Guid.NewGuid(), "test", Guid.NewGuid(), eventSourceId , 1, DateTime.Now, new object());
             streamableEventStoreMock = new Mock<IStreamableEventStore>();
-            streamableEventStoreMock.Setup(x => x.ReadFrom(eventSourceId, 0, long.MaxValue))
+            streamableEventStoreMock.Setup(x => x.ReadFrom(eventSourceId, 0, int.MaxValue))
                 .Returns(new CommittedEventStream(eventSourceId, new[] { committedEvent }));
 
             transactionManagerProviderManagerMock = Mock.Get(Mock.Of<ITransactionManagerProviderManager>(_

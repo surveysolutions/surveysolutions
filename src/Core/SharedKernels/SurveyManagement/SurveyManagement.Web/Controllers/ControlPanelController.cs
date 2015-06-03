@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 

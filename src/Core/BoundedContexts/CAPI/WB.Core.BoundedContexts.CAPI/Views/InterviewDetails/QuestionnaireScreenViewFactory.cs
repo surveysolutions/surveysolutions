@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void RestoreFromEventStream(Guid publicKey)
         {
-            var eventsAfterSnapshot = this.eventStore.ReadFrom(publicKey, 0, long.MaxValue);
+            var eventsAfterSnapshot = this.eventStore.ReadFrom(publicKey, 0, int.MaxValue);
             try
             {
                 foreach (CommittedEvent committedEvent in eventsAfterSnapshot)

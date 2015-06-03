@@ -44,7 +44,7 @@
                 <#= question.GeneratedMandatoryMethodName #> ,                                               
                 <# }#>
                 <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
-                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
+                    () => <#=question.GeneratedValidationsMethodName#>() , 
                 <# }#>
             });             
             <# }#>
@@ -63,7 +63,7 @@
     
         private <#= Model.ParentTypeName#> @_parent;		
 
-        <#foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop()) 
+        <#foreach (var parentQuestion in Model.AllParentsQuestionsToTop) 
         {#>
         public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
@@ -87,7 +87,7 @@
         }
 		<# }#>
 
-		<#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
+		<#foreach (var parentRoster in Model.AllParentsRostersToTop) 
 		{#>
 			public <#=Model.RosterType#><<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
 		<#}#>
@@ -216,10 +216,7 @@
              
         public void SetParent(IExpressionExecutable parentLevel)            
         {
-        <#if(Model.ParentScope != null)
-        {#>
             this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
-        <# }#>
         }
 
         public IExpressionExecutable GetParent()

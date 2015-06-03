@@ -14,7 +14,7 @@
 @if (this.Model.GetQuestionsWithConditions().Any())
 {
     <h1>
-        Conditions
+        Enabling conditions
     </h1>
     foreach (var question in this.Model.GetQuestionsWithConditions()) {
         <p id="@("c" + question.ItemNumber)">
@@ -25,7 +25,7 @@
 
 @if (this.Model.GetQuestionsWithValidation().Any())
 {
-    <h1>Validation expressions</h1>
+    <h1>Validation conditions</h1>
     foreach (var question in this.Model.GetQuestionsWithValidation()) {
         <p id="@("v" + question.ItemNumber)">
             <a href="#@("vq" + question.ItemNumber)">[v @(question.ItemNumber)]</a>: @question.GetReadableValidationExpression()

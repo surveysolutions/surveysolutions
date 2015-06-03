@@ -45,12 +45,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = "SingleOption",
-                Text = "Categorical: one answer"
+                Text = "Categorical: Single-select"
             },
             new SelectOption
             {
                 Value = "MultyOption",
-                Text = "Categorical: multiple answers"
+                Text = "Categorical: Multi-select"
             },
             new SelectOption
             {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = "GpsCoordinates",
-                Text = "Geo Location"
+                Text = "GPS"
             }
             ,
             new SelectOption
@@ -81,12 +81,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = "QRBarcode",
-                Text = "QR Barcode"
+                Text = "Barcode"
             },
             new SelectOption
             {
                 Value = "Multimedia",
-                Text = "Multimedia"
+                Text = "Picture"
             }
         };
 

@@ -1,4 +1,6 @@
 using Moq;
+using WB.Core.SharedKernels.SurveySolutions;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit
 {
@@ -9,5 +11,13 @@ namespace WB.Tests.Unit
         {
             get { return new Mock<T> { DefaultValue = DefaultValue.Mock }.Object; }
         }
+    }
+
+    internal class Stub
+    {
+        public static TestInMemoryWriter<TEntity> ReadSideRepository<TEntity>() where TEntity : class, IReadSideRepositoryEntity
+        {
+            return new TestInMemoryWriter<TEntity>();
+        }  
     }
 }

@@ -4,10 +4,12 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
 {
+    [NoTransaction]
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
@@ -22,7 +24,7 @@ namespace WB.UI.Designer.Api
         {
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
-
+        [NoTransaction]
         public ReadSideStatus GetReadSideStatus()
         {
             return this.readSideAdministrationService.GetRebuildStatus();

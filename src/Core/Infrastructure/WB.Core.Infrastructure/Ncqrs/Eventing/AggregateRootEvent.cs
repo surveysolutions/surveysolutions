@@ -26,7 +26,7 @@ namespace Main.Core.Events
 
         public Guid EventIdentifier { get; set; }
 
-        public long EventSequence { get; set; }
+        public int EventSequence { get; set; }
 
         public Guid EventSourceId { get; set; }
 
@@ -34,7 +34,7 @@ namespace Main.Core.Events
 
         public object Payload { get; set; }
         
-        public UncommittedEvent CreateUncommitedEvent(long eventSequence, long initialVersionOfEventSource,
+        public UncommittedEvent CreateUncommitedEvent(int eventSequence, int initialVersionOfEventSource,
                                                       DateTime? eventTimestamp = null)
         {
             return new UncommittedEvent(

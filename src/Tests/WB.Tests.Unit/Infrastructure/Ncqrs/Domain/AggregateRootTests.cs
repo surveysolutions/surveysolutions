@@ -206,7 +206,7 @@ namespace Ncqrs.Tests.Domain
         public void Initiazling_from_wrong_history_with_wrong_sequence_should_throw_exception()
         {
             var theAggregate = new MyAggregateRoot();
-            const long wrongSequence = 3;
+            const int wrongSequence = 3;
             var stream = new CommittedEventStream(theAggregate.EventSourceId,
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, new HandledEvent()));
 

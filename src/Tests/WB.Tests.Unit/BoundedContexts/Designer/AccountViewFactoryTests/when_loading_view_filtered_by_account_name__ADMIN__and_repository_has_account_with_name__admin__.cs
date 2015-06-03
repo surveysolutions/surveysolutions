@@ -17,11 +17,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AccountViewFactoryTests
 
             var accountsRepositoryMock = new Mock<IQueryableReadSideRepositoryReader<AccountDocument>>();
 
-            var repositoryDocuments = new[] { CreateAccountDocument(userName: "admin") }.AsQueryable();
-
             accountsRepositoryMock
-                .Setup(x => x.Query<IQueryable<AccountDocument>>(it.IsAny<Func<IQueryable<AccountDocument>, IQueryable<AccountDocument>>>()))
-                .Returns(repositoryDocuments);
+                .Setup(x => x.Query<AccountDocument>(it.IsAny<Func<IQueryable<AccountDocument>, AccountDocument>>()))
+                .Returns(CreateAccountDocument(userName: "admin"));
 
             accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepositoryMock.Object);
         };

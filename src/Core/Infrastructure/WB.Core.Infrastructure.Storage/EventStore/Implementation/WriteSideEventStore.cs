@@ -34,8 +34,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         private bool disposed;
         private readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
 
-        internal static readonly string AllEventsStream = "$ce-" + EventsCategory;
-
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
@@ -62,10 +60,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
         }
 
-        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+        public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
-            int normalMin = minVersion > 0 ? (int)Math.Max(0, minVersion - 1) : 0;
-            int normalMax = (int)Math.Min(int.MaxValue, maxVersion - 1);
+            int normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
+            int normalMax = Math.Min(int.MaxValue, maxVersion - 1);
             if (minVersion > maxVersion)
             {
                 return new CommittedEventStream(id);
@@ -79,7 +77,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                currentSlice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false));
+                currentSlice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), nextSliceStart, batchSize, false));
 
                 nextSliceStart = currentSlice.NextEventNumber;
 
@@ -118,21 +116,25 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            int expectedStreamVersion = (int) (eventStream.InitialVersion - 1);
-            using (EventStoreTransaction transaction = this.RunWithDefaultTimeout(this.connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId.FormatGuid(), expectedStreamVersion)))
+            if (eventStream.IsNotEmpty)
             {
-                using (var transactionTimeout = new CancellationTokenSource()) 
-                {
-                    transactionTimeout.CancelAfter(this.defaultTimeout);
-                    transaction.WriteAsync(eventStream.Select(BuildEventData)).WaitAndUnwrapException(transactionTimeout.Token);
-                }
+                int expectedStreamVersion = eventStream.InitialVersion - 1;
+                var stream = GetStreamName(eventStream.SourceId);
+                var events = eventStream.Select(BuildEventData).ToList();
 
-                using (var commitTimeout = new CancellationTokenSource()) 
+                using (var writeTimeout = new CancellationTokenSource())
                 {
-                    commitTimeout.CancelAfter(this.defaultTimeout);
-                    transaction.CommitAsync().WaitAndUnwrapException(commitTimeout.Token);
+                    writeTimeout.CancelAfter(this.defaultTimeout);
+
+                    this.connection.AppendToStreamAsync(stream, expectedStreamVersion, events)
+                        .WaitAndUnwrapException(writeTimeout.Token);
                 }
             }
+        }
+
+        private static string GetStreamName(Guid eventSourceId)
+        {
+            return EventsPrefix + eventSourceId.FormatGuid();
         }
 
         public int CountOfAllEvents()
@@ -151,7 +153,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false));
+            StreamEventsSlice slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), 0, 1, false));
             return slice.LastEventNumber + 1;
         }
 

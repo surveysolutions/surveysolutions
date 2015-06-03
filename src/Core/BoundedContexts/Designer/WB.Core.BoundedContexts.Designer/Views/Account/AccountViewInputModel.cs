@@ -1,8 +1,10 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Views.Account
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
     public class AccountViewInputModel
     {
-        public AccountViewInputModel(object providerUserKey)
+        public AccountViewInputModel(Guid providerUserKey)
         {
             this.ProviderUserKey = providerUserKey;
         }
@@ -22,7 +24,7 @@
 
         public string ConfirmationToken { get; protected set; }
 
-        public object ProviderUserKey { get; protected set; }
+        public Guid? ProviderUserKey { get; protected set; }
 
         public string ResetPasswordToken { get; protected set; }
     }

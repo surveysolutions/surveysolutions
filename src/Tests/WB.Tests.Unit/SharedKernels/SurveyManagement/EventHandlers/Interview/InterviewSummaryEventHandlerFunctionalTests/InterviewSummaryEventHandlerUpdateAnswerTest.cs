@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -36,9 +37,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                         Questionid = questionId,
                     });
 
-            savedInterviewSummary.QuestionOptions.Add(new QuestionOptions() {  QuestionId = questionId, Value = 1, Text = answerText });
+            var interviewSummaryEventHandler =
+                CreateInterviewSummaryEventHandlerFunctional(
+                    Create.QuestionnaireDocument(children:
+                        Create.Question(questionId: questionId, answers: Create.Answer(answerText, 1))));
 
-            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
@@ -52,11 +55,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             ()
         {
             var questionId = Guid.Parse("10000000000000000000000000000000");
-            var options = new HashSet<QuestionOptions>();
-            for (int i = 0; i < 10; i++)
-            {
-                options.Add(new QuestionOptions() { QuestionId =  questionId, Value = i, Text = i.ToString() });
-            }
 
             var savedInterviewSummary =
                 CreateInterviewSummaryQuestions(
@@ -64,12 +62,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     {
                         Questionid = questionId,
                     });
-            foreach (var option in options)
-            {
-                savedInterviewSummary.QuestionOptions.Add(option);
-            }
 
-            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
+            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(Create.QuestionnaireDocument(children:
+                        Create.Question(questionId: questionId, answers: new[] { Create.Answer("1", 1), Create.Answer("3", 3), Create.Answer("8", 8) })));
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
@@ -175,11 +170,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return publishableEventMock.Object;
         }
 
-        protected static InterviewSummaryEventHandlerFunctional CreateInterviewSummaryEventHandlerFunctional()
+        protected static InterviewSummaryEventHandlerFunctional CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire=null)
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             return new InterviewSummaryEventHandlerFunctional(mockOfInterviewSummary.Object,
-                new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>().Object,
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(_ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire }),
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object);
         }
 

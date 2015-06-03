@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatuse
                 Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
             };
 
-            var repository = new TestInMemoryWriter<InterviewSummary>();
+            var repository = Stub.ReadSideRepository<InterviewSummary>();
             interviews.ForEach(x => repository.Store(x, Guid.NewGuid().FormatGuid()));
 
             reportFactory = CreateTeamsAndStatusesReport(repository);

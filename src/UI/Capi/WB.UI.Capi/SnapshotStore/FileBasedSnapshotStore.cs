@@ -90,7 +90,7 @@ namespace WB.UI.Capi.SnapshotStore
             return Path.Combine(this.basePath, fileName);
         }
 
-        public Snapshot TryGetSnapshot(Guid eventSourceId, long maxVersion)
+        public Snapshot TryGetSnapshot(Guid eventSourceId, int maxVersion)
         {
             Snapshot snapshot = null;
             if (this.snapshots.ContainsKey(eventSourceId))
@@ -110,7 +110,7 @@ namespace WB.UI.Capi.SnapshotStore
                 : snapshot;
         }
 
-        public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
+        public Snapshot GetSnapshot(Guid eventSourceId, int maxVersion)
         {
             return this.TryGetSnapshot(eventSourceId, maxVersion);
         }

@@ -80,43 +80,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}.
-        /// </summary>
-        internal static string Failed_to_push_file__0__for_interview__1___Error_message___2___Exception_messages___3_Format {
-            get {
-                return ResourceManager.GetString("Failed_to_push_file__0__for_interview__1___Error_message___2___Exception_messages" +
-                        "___3_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to push file {0} for interview {1} to Headquarters..
-        /// </summary>
-        internal static string Failed_to_push_file__0__for_interview__1__to_Headquarters_Format {
-            get {
-                return ResourceManager.GetString("Failed_to_push_file__0__for_interview__1__to_Headquarters_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to push interview {0}. Error message: {1}. Exception messages: {2}.
-        /// </summary>
-        internal static string Failed_to_push_interview__0___Error_message___1___Exception_messages___2_Format {
-            get {
-                return ResourceManager.GetString("Failed_to_push_interview__0___Error_message___1___Exception_messages___2_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to push interview {0} to Headquarters..
-        /// </summary>
-        internal static string Failed_to_push_interview__0__to_Headquarters_Format {
-            get {
-                return ResourceManager.GetString("Failed_to_push_interview__0__to_Headquarters_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Failed to read server response while sending interview {0}. Server response: {1}.
         /// </summary>
         internal static string Failed_to_read_server_response_while_sending_interview__0___Server_response___1_Format {
@@ -154,42 +117,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File {0} for interview {1} successfully pushed..
-        /// </summary>
-        internal static string File__0__for_interview__1__successfully_pushed_Format {
-            get {
-                return ResourceManager.GetString("File__0__for_interview__1__successfully_pushed_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Found {0} files to push..
-        /// </summary>
-        internal static string Found__0__files_to_push_Format {
-            get {
-                return ResourceManager.GetString("Found__0__files_to_push_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Found {0} interviews to push..
-        /// </summary>
-        internal static string Found0interviewstopushFormat {
-            get {
-                return ResourceManager.GetString("Found0interviewstopushFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Getting interviews files to be pushed..
-        /// </summary>
-        internal static string Getting_interviews_files_to_be_pushed_ {
-            get {
-                return ResourceManager.GetString("Getting_interviews_files_to_be_pushed_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Interview {0} was assigned by HQ for supervisor {1}.
         /// </summary>
         internal static string Interview__0__was_assigned_by_HQ_for_supervisor__1_Format {
@@ -217,25 +144,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} was not sent to Headquarters because there are no events which should be sent..
-        /// </summary>
-        internal static string Interview__0__was_not_sent_to_Headquarters_because_there_are_no_events_which_should_be_sent_Format {
-            get {
-                return ResourceManager.GetString("Interview__0__was_not_sent_to_Headquarters_because_there_are_no_events_which_shou" +
-                        "ld_be_sent_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interview {0} successfully pushed..
-        /// </summary>
-        internal static string Interview0successfullypushedFormat {
-            get {
-                return ResourceManager.GetString("Interview0successfullypushedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Interview {0} was rejected by HQ.
         /// </summary>
         internal static string Interview0wasrejectedbyHQFormat {
@@ -259,24 +167,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Resources {
         internal static string Loadinginterviewusing0URLFormat {
             get {
                 return ResourceManager.GetString("Loadinginterviewusing0URLFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pushing file {0} for interview {1} ({2} out of {3})..
-        /// </summary>
-        internal static string Pushing_file__0__for_interview__1____2__out_of__3_Format {
-            get {
-                return ResourceManager.GetString("Pushing_file__0__for_interview__1____2__out_of__3_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pushing interview {0} ({1} out of {2})..
-        /// </summary>
-        internal static string Pushinginterview01outof2Format {
-            get {
-                return ResourceManager.GetString("Pushinginterview01outof2Format", resourceCulture);
             }
         }
         

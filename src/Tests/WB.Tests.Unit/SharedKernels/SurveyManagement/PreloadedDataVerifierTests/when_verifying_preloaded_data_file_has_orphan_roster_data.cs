@@ -41,6 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
             preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel)).Returns(new []{1});
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileRosterLevel, Moq.It.IsAny<string>())).Returns(-1);
+            
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel());
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
                 .Returns(new HeaderStructureForLevel() { LevelScopeVector = new ValueVector<Guid>(new[] { rosterId }) });
@@ -49,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileTopLevel, Moq.It.IsAny<ValueVector<Guid>>(), new []{"1"}))
                 .Returns((decimal[])null);
-
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
@@ -59,25 +61,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, files);
 
         It should_result_has_1_error = () =>
-            result.Count().ShouldEqual(1);
+            result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0008_error = () =>
-            result.First().Code.ShouldEqual("PL0008");
+            result.Errors.First().Code.ShouldEqual("PL0008");
 
         It should_return_reference_with_Cell_type = () =>
-            result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_PositionX_be_equal_to_1 = () =>
-          result.First().References.First().PositionX.ShouldEqual(1);
+          result.Errors.First().References.First().PositionX.ShouldEqual(1);
 
         It should_error_PositionY_be_equal_to_0 = () =>
-          result.First().References.First().PositionY.ShouldEqual(0);
+          result.Errors.First().References.First().PositionY.ShouldEqual(0);
 
         It should_error_has_content_id_of_orphan_record = () =>
-            result.First().References.First().Content.ShouldEqual("1");
+            result.Errors.First().References.First().Content.ShouldEqual("1");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
-        private static IEnumerable<PreloadedDataVerificationError> result;
+        private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static PreloadedDataByFile preloadedDataByFileTopLevel;

@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading;
 using Machine.Specifications;
@@ -18,8 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
     {
         Establish context = () =>
         {
-            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
-                => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == Enumerable.Empty<ReadyToSendToHeadquartersInterview>());
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
