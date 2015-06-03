@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { password = value; RaisePropertyChanged(); }
         }
 
-        private string mask = @"***./88***7";
+        private string mask = @"***.###.~~~!";
         public string Mask
         {
             get { return mask; }
