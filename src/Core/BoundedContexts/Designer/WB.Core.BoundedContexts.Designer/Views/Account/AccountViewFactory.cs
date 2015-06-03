@@ -22,12 +22,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {
-                var normalizedAccountName = NormalizeAccountName(input.AccountName);
+                var normalizedAccountName = NormalizeStringQueryParameter(input.AccountName);
                 user = accounts.Query(_ => _.FirstOrDefault((x) => x.UserName == normalizedAccountName));
             }
             else if (!string.IsNullOrEmpty(input.AccountEmail))
             {
-                user = accounts.Query(_ => _.FirstOrDefault((x) => x.Email == input.AccountEmail));
+                var normalizedAccountEmail = NormalizeStringQueryParameter(input.AccountEmail);
+                user = accounts.Query(_ => _.FirstOrDefault((x) => x.Email.ToLower() == normalizedAccountEmail));
             }
             else if (!string.IsNullOrEmpty(input.ConfirmationToken))
             {
@@ -72,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             };
         }
 
-        private string NormalizeAccountName(string accountName)
+        private string NormalizeStringQueryParameter(string accountName)
         {
             return accountName.ToLower();
         }
