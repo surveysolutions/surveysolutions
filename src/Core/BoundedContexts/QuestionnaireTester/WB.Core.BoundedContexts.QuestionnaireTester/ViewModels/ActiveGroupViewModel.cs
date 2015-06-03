@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged
+    public class ActiveGroupViewModel : MvxNotifyPropertyChanged
     {
         private string name;
         public string Name
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private NavigationState navigationState;
 
-        public GroupViewModel(IInterviewViewModelFactory interviewViewModelFactory,
+        public ActiveGroupViewModel(IInterviewViewModelFactory interviewViewModelFactory,
              IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;

@@ -116,7 +116,7 @@
     <Compile Include="ViewModels\QuestionStateViewModels\EnablementViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\ChaptersViewModel.cs" />
-    <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\ActiveGroupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
