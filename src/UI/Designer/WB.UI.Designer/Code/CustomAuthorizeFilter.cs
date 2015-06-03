@@ -57,52 +57,57 @@ namespace WB.UI.Designer
             bool isInvalidUser = false;
 
             this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-            
-            MembershipUser user = this.userService.WebUser.MembershipUser;
-
-            if (filterContext.HttpContext.User.Identity.IsAuthenticated)
+            try
             {
-                isInvalidUser = user == null || user.IsLockedOut || !user.IsApproved;
+                MembershipUser user = this.userService.WebUser.MembershipUser;
 
-                if (user != null)
+                if (filterContext.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    var baseController = filterContext.Controller as BaseController;
-                    if (baseController != null)
+                    isInvalidUser = user == null || user.IsLockedOut || !user.IsApproved;
+
+                    if (user != null)
                     {
-                        if (!user.IsApproved)
+                        var baseController = filterContext.Controller as BaseController;
+                        if (baseController != null)
                         {
-                            baseController.Error(
-                                string.Format(
-                                    "Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it? <a href='{1}'>Request another one.</a>", 
-                                    user.Email, 
-                                    GlobalHelper.GenerateUrl(
-                                        "ResendConfirmation", "Account", new { id = user.UserName })));
+                            if (!user.IsApproved)
+                            {
+                                baseController.Error(
+                                    string.Format(
+                                        "Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it? <a href='{1}'>Request another one.</a>",
+                                        user.Email,
+                                        GlobalHelper.GenerateUrl(
+                                            "ResendConfirmation", "Account", new {id = user.UserName})));
+                            }
+                            else if (user.IsLockedOut)
+                            {
+                                baseController.Error(
+                                    "Your account is blocked. Contact the administrator to unblock your account");
+                            }
                         }
-                        else if (user.IsLockedOut)
-                        {
-                            baseController.Error(
-                                "Your account is blocked. Contact the administrator to unblock your account");
-                        }
+                    }
+
+                    if (!isInvalidUser && filterContext.Controller is AccountController &&
+                        filterContext.ActionDescriptor.ActionName.NotIn(new[] {"logoff", "manage", "findbyemail"}))
+                    {
+                        filterContext.Result =
+                            new RedirectToRouteResult(
+                                new RouteValueDictionary(new {controller = "Questionnaire", action = "Index"}));
                     }
                 }
 
-                if (!isInvalidUser && filterContext.Controller is AccountController && filterContext.ActionDescriptor.ActionName.NotIn(new[] { "logoff", "manage", "findbyemail" }))
+                if (isInvalidUser)
                 {
+                    this.userService.Logout();
                     filterContext.Result =
                         new RedirectToRouteResult(
-                            new RouteValueDictionary(new { controller = "Questionnaire", action = "Index" }));
+                            new RouteValueDictionary(new {controller = "Account", action = "Login"}));
                 }
             }
-
-            if (isInvalidUser)
+            finally
             {
-                this.userService.Logout();
-                filterContext.Result =
-                    new RedirectToRouteResult(
-                        new RouteValueDictionary(new { controller = "Account", action = "Login" }));
+                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
             }
-
-            this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
         }
 
         #endregion
