@@ -33,7 +33,7 @@
                 + '&columnCount=' + url.query['columnCount'];
         }
         $(function () {
-            var model = new Supervisor.VM.PeriodicStatusReport('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = Model.ReportName + Model.WebApiActionName })');
+            var model = new Supervisor.VM.PeriodicStatusReport('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = Model.ReportName + Model.WebApiActionName.ToString() })');
             ko.applyBindings(model);
             model.load();
         });
