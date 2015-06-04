@@ -239,7 +239,7 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\Masked\EditTextMaskBindingNew.cs" />
+    <Compile Include="CustomBindings\EditTextMaskedTextBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\Masked\EditTextMaskWrapper.cs" />
     <Compile Include="CustomBindings\Masked\MaskedEditText.cs" />

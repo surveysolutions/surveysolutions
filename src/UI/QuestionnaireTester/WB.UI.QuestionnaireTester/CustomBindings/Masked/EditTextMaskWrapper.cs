@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Android.Text;
-using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using String = System.String;
@@ -24,20 +22,20 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
         private char maskFill = '_';
 
         private readonly EditText editText;
-
-        private int[] rawToMask;
         private RawText rawText;
+        private int[] rawToMask;
+        private int[] maskToRaw;
+        private char[] charsInMask;
+        private int maxRawLength;
+
+        private int selection;
+        private int lastValidMaskPosition;
         private bool editingBefore;
         private bool editingOnChanged;
         private bool editingAfter;
-        private int[] maskToRaw;
-        private char[] charsInMask;
-        private int selection;
+        private bool selectionChanged;
         private bool initialized;
         private bool ignore;
-        private int maxRawLength;
-        private int lastValidMaskPosition;
-        private bool selectionChanged;
 
 
         public EditTextMaskWrapper(EditText editText)
@@ -47,12 +45,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             this.Init();
 
             this.CleanUp();
-
-            // Ignoring enter key presses
-            editText.EditorAction += (sender, args) =>
-            {
-                args.Handled = args.ActionId != ImeAction.Next;
-            };
         }
 
         private void CleanUp()
@@ -116,6 +108,11 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
         }
 
+        public bool IsAnswered
+        {
+            get { return rawText.IsAnswered; }
+        }
+
         private void GeneratePositionArrays()
         {
             int[] aux = new int[this.mask.Length];
@@ -162,11 +159,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
         {
             this.editText.SetFilters(new IInputFilter[] { this });
             this.editText.AddTextChangedListener(this);
-            //this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
-            //this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
-            //this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
-
-            //this.editText.selec
 
             this.editText.SetRawInputType(InputTypes.TextFlagNoSuggestions);
         }
@@ -183,11 +175,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
         void ITextWatcher.OnTextChanged(ICharSequence s, int start, int before, int count)
         {
-            /*                this.OnTextChanged(s, start, before, count);
-                        }
-
-                        protected override void OnTextChanged(ICharSequence s, int start, int before, int count)
-                        {*/
             OnTextChangedHandle(s.ToString(), start, before, count);
         }
 
@@ -276,7 +263,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
         }
 
-        protected void OnTextChangedHandle(string s, int start, int before, int count)
+        void OnTextChangedHandle(string s, int start, int before, int count)
         {
             if (this.mask.IsNullOrEmpty())
                 return;
@@ -334,52 +321,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                 this.ignore = false;
             }
         }
-
-        /*protected override void OnSelectionChanged(int selStart, int selEnd)
-        {
-            // On Android 4+ this method is being called more than 1 time if there is a hint in the EditText, what moves the cursor to left
-            // Using the bool var selectionChanged to limit to one execution
-            if (this.mask.IsNullOrEmpty())
-            {
-                base.OnSelectionChanged(selStart, selEnd);
-                return;
-            }
-
-            if (this.initialized)
-            {
-                if (!this.selectionChanged)
-                {
-                    if (!this.rawText.HasAnyText && this.HasHint)
-                    {
-                        selStart = 0;
-                        selEnd = 0;
-                    }
-                    else
-                    {
-                        selStart = this.FixSelection(selStart);
-                        selEnd = this.FixSelection(selEnd);
-                    }
-
-                    if (this.editText.Text.Length > selStart && this.editText.Text.Length > selEnd)
-                    {
-                        this.editText.SetSelection(selStart, selEnd);
-                        this.selectionChanged = true;
-                    }
-                }
-                else  //check to see if the current selection is outside the already entered text
-                {
-                    if (!(this.HasHint && this.rawText.Length == 0)
-                        && selStart > this.rawText.Length - 1)
-                    {
-                        this.editText.SetSelection(this.FixSelection(selStart), this.FixSelection(selEnd));
-                    }
-                }
-            }
-
-            base.OnSelectionChanged(selStart, selEnd);
-        }*/
-
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -401,14 +343,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
 
             return start;
-        }
-
-        private int FixSelection(int selectionPosition)
-        {
-            if (selectionPosition > this.LastValidPosition())
-                return this.LastValidPosition();
-
-            return this.NextValidPosition(selectionPosition);
         }
 
         private int NextValidPosition(int currentPosition)
@@ -435,14 +369,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
 
             return currentPosition;
-        }
-
-        private int LastValidPosition()
-        {
-            if (this.rawText.Length == this.maxRawLength)
-                return this.rawToMask[this.rawText.Length - 1] + 1;
-
-            return this.NextValidPosition(this.rawToMask[this.rawText.Length]);
         }
 
         private String MakeMaskedText()

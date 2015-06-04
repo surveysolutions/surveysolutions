@@ -1,28 +1,22 @@
 ﻿using Android.Widget;
-using Cirrious.MvvmCross.Binding;
 using WB.UI.QuestionnaireTester.CustomBindings.Masked;
 
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class EditTextMaskBindingNew : BaseBinding<EditText, string>
+    public class EditTextMaskedTextBinding : EditTextFocusTextBinding
     {
         private readonly EditTextMaskWrapper editTextMaskWrapper;
 
-        public EditTextMaskBindingNew(EditText target)
+        public EditTextMaskedTextBinding(MaskedEditText target)
             : base(target)
         {
             this.editTextMaskWrapper = new EditTextMaskWrapper(target);
         }
 
-        protected override void SetValueToView(EditText view, string value)
+        protected override bool IsAllowFireEvent()
         {
-            this.editTextMaskWrapper.Mask = value;
-        }
-
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.TwoWay; }
+            return editTextMaskWrapper.IsAnswered;
         }
 
         protected override void Dispose(bool isDisposing)

@@ -24,7 +24,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
         private String mask = String.Empty;
         private char maskFill = '_';
-        //private char charRepresentation;
+
         private int[] rawToMask;
         private RawText rawText;
         private bool editingBefore;
@@ -125,18 +125,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             throw new RuntimeException("Mask contains only the representation char");
         }
 
-        private bool HasHint
-        {
-            get { return this.Hint != null; }
-        }
-
         public MaskedEditText(Context context, IAttributeSet attrs, int defStyle)
             :base(context, attrs, defStyle)
         {
             this.Init();
         }
 
-        public string Mask2
+        public string Mask
         {
             get { return this.mask; }
             set
@@ -144,6 +139,16 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                 this.mask = value;
                 this.CleanUp();
             }
+        }
+
+        public bool IsAnswered
+        {
+            get { return rawText.IsAnswered; }
+        }
+
+        private bool HasHint
+        {
+            get { return this.Hint != null; }
         }
 
         private void GeneratePositionArrays() 

@@ -66,6 +66,11 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             get { return text.Any(c => c != EmptyChar); }
         }
 
+        public bool IsAnswered
+        {
+            get { return text.All(c => c != EmptyChar); }
+        }
+
         public char CharAt(int position)
         {
             return this.text[position];

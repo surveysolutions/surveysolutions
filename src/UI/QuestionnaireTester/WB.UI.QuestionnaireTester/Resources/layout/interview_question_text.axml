@@ -11,7 +11,7 @@
       <MvxLinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-        <EditText
+        <MaskedEditText
           style="@style/Interview_Question_Answer_TextEditor"
           local:MvxBind="FocusText Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 

@@ -80,10 +80,15 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         private void TriggerValueChanging()
         {
-            if (this.EditText == null)
+            if (this.EditText == null || !IsAllowFireEvent())
                 return;
 
             this.FireValueChanged(this.EditText.Text);
+        }
+
+        protected virtual bool IsAllowFireEvent()
+        {
+            return true;
         }
 
 
