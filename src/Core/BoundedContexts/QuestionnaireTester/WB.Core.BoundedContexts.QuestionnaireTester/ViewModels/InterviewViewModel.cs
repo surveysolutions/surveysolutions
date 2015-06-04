@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefullInterviewRepository interviewRepository,
-            ChaptersViewModel chaptersViewModel, 
+            SectionsViewModel sectionsViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState)
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.Breadcrumbs = breadcrumbsViewModel;
             this.CurrentGroup = groupViewModel;
-            this.Chapters = chaptersViewModel;
+            this.Sections = sectionsViewModel;
         }
 
         public void Init(string interviewId)
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .ToList();
 
             this.Breadcrumbs.Init(interviewId, this.navigationState);
-            this.Chapters.Init(interviewId, questionnaire.Id.FormatGuid(), this.navigationState);
+            this.Sections.Init(interviewId, questionnaire.Id.FormatGuid(), this.navigationState);
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public BreadcrumbsViewModel Breadcrumbs { get; set; }
         public ActiveGroupViewModel CurrentGroup { get; set; }
-        public ChaptersViewModel Chapters { get; set; }
+        public SectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable PrefilledQuestions { get; set; } 
 
