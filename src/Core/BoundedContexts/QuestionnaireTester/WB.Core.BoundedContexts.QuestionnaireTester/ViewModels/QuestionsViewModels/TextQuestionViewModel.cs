@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -71,12 +72,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { mask = value; RaisePropertyChanged(); }
         }
 
-        private bool isQuestionAnswered;
-        public bool IsQuestionAnswered
-        {
-            get { return isQuestionAnswered; }
-            private set { isQuestionAnswered = value; RaisePropertyChanged(); }
-        }
+        public bool IsMaskedQuestionAnswered { get; private set; }
 
         private string answer;
         public string Answer
@@ -96,7 +92,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async void SendAnswerTextQuestionCommand()
         {
-            if (IsQuestionAnswered)
+            if (!Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
                 this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_ParsingError);
                 return;

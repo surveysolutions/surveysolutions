@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
@@ -141,9 +142,24 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
         }
 
-        public bool IsAnswered
+        public event EventHandler<bool> IsMaskedFormAnsweredChanged; 
+
+        private bool isMaskedFormAnswered;
+        public bool IsMaskedFormAnswered
         {
-            get { return rawText.IsAnswered; }
+            get { return this.isMaskedFormAnswered; }
+            private set
+            {
+                if (this.isMaskedFormAnswered != value)
+                {
+                    this.isMaskedFormAnswered = value;
+
+                    if (this.IsMaskedFormAnsweredChanged != null)
+                    {
+                        this.IsMaskedFormAnsweredChanged.Invoke(this, this.isMaskedFormAnswered);
+                    }
+                }
+            }
         }
 
         private bool HasHint
@@ -357,6 +373,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                     this.EditableText.Clear();
                     this.EditableText.Append(this.MakeMaskedText());
                 }
+
+                this.IsMaskedFormAnswered = rawText.IsAnswered;
             
                 this.selectionChanged = false;
                 this.SetSelection(this.selection);

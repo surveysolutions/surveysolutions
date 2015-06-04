@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Activities;
 using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
+using WB.UI.QuestionnaireTester.CustomBindings.Masked;
 using WB.UI.QuestionnaireTester.CustomControls;
 using WB.UI.QuestionnaireTester.Ninject;
 using Xamarin;
@@ -76,7 +77,7 @@ namespace WB.UI.QuestionnaireTester
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
-            //registry.RegisterCustomBindingFactory<EditText>("MaskedText", (editText) => new EditTextMaskedTextBinding(editText));
+            registry.RegisterCustomBindingFactory<MaskedEditText>("IsMaskedQuestionAnswered", (editText) => new MaskedEditTextIsMaskedQuestionAnsweredBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("FocusText", (editText) => new EditTextFocusTextBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));

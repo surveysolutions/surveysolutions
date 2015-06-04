@@ -13,7 +13,7 @@
 
         <MaskedEditText
           style="@style/Interview_Question_Answer_TextEditor"
-          local:MvxBind="FocusText Answer; Mask Mask; Hint Localization('TextQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+          local:MvxBind="FocusText Answer; Mask Mask; IsQuestionAnswered IsQuestionAnswered;Hint Localization('TextQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />

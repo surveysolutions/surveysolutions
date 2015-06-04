@@ -25,7 +25,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
           */
         public void SubtractFromString(Range range)
         {
-            for (int i = range.Start; i <= range.End; i++)
+            for (int i = range.Start; i <= range.End && i < text.Length; i++)
             {
                 text[i] = EmptyChar;
             }
