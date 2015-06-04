@@ -39,14 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         Cleanup stuff = () =>
         {
-            eventContext.Dispose();
-            eventContext = null;
             SetupInstanceToMockedServiceLocator<IInterviewPreconditionsService>(Mock.Of<IInterviewPreconditionsService>());
         };
 
         private static Guid questionnaireId;
         private static long maxNumberOfInterviews = 1;
-        private static EventContext eventContext;
         private static InterviewException exception;
     }
 }
