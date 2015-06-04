@@ -86,7 +86,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             BaseQuestionModel questionModel = questionnaire.Questions[this.questionIdentity.Id];
 
-            string questionTitle = rosterTitleSubstitutionService.Substitute(questionModel.Title, this.questionIdentity, this.interviewId);
+            string questionTitle = questionModel.Title;
+            if (substitutionService.ContainsRosterTitle(questionTitle))
+            {
+                questionTitle = rosterTitleSubstitutionService.Substitute(questionModel.Title,
+                    this.questionIdentity, this.interviewId);
+            }
             string[] variablesToReplace = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
 
             foreach (var variable in variablesToReplace)
