@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -417,6 +419,28 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
         {
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
+        }
+
+        public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+
+            int questionRosterLevel = questionnaire.GetRosterLevelForQuestion(questionId);
+            var rosterVector = this.ShrinkRosterVector(targetRosterVector, questionRosterLevel);
+            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
+
+            return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+        }
+
+        public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+
+            int grosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
+            var rosterVector = this.ShrinkRosterVector(targetRosterVector, grosterLevel);
+            var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
+
+            return this.Groups.ContainsKey(rosterKey) ? this.Groups[rosterKey] as InterviewRoster : null;
         }
 
         public bool IsValid(Identity identity)

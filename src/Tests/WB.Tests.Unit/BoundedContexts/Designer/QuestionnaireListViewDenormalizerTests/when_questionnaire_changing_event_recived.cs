@@ -100,7 +100,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
         private static QuestionnaireListViewItemDenormalizer questionnaireListViewItemDenormalizer;
 
         private static TestInMemoryWriter<QuestionnaireListViewItem> questionnaireListViewItemInMemoryWriter =
-            new TestInMemoryWriter<QuestionnaireListViewItem>();
+            Stub.ReadSideRepository<QuestionnaireListViewItem>();
 
         private static Dictionary<CommittedEvent, DateTime?> eventAndResultView =
             new Dictionary<CommittedEvent, DateTime?>();

@@ -34,12 +34,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         => _.HasQuestion(questionWhichDecreasesRosterSizeId) == true
                                                         && _.GetQuestionType(questionWhichDecreasesRosterSizeId) == QuestionType.Numeric
                                                         && _.IsQuestionInteger(questionWhichDecreasesRosterSizeId) == true
-                                                        && _.IsQuestionInteger(questionWhichDecreasesRosterSizeId) == true
                                                         && _.GetRosterGroupsByRosterSizeQuestion(questionWhichDecreasesRosterSizeId) == new Guid[] { rosterGroupId }
 
                                                         && _.HasGroup(rosterGroupId) == true
                                                         && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterGroupId) == new Guid[] { rosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

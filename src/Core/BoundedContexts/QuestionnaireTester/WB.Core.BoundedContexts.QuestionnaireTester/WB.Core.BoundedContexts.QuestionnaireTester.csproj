@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Entities\BaseInterviewAnswer.cs" />
     <Compile Include="Implementation\Entities\DateTimeAnswer.cs" />
     <Compile Include="Implementation\Entities\GroupsHierarchyModel.cs" />
@@ -72,11 +73,14 @@
     <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
+    <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Infrastructure\IQrBarcodeScanService.cs" />
     <Compile Include="Infrastructure\ISettingsProvider.cs" />
     <Compile Include="Infrastructure\ScanResult.cs" />
+    <Compile Include="Services\IAnswerToStringService.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
+    <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Implementation\Aggregates\IStatefulInterview.cs" />
@@ -114,13 +118,15 @@
     <Compile Include="ViewModels\QuestionStateViewModels\EnablementViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\ChaptersViewModel.cs" />
-    <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\ActiveGroupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\QuestionStateViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\DateTimeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupStatus.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\TextListItemViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\TextListQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultimedaQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\QRBarcodeQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupViewModel.cs" />

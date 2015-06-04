@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-
+        public bool IsFiltered { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -62,6 +62,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
             var selectedValue = Monads.Maybe(() => answerModel.Answer);
+
+            this.IsFiltered = questionModel.IsFiltered;
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;

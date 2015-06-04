@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Core.Synchronization
                                    CreateUserSyncPackage(userId, sortIndex:3)
                                };
 
-            var writer = new TestInMemoryWriter<UserSyncPackageMeta>();
+            var writer = Stub.ReadSideRepository<UserSyncPackageMeta>();
             foreach (var package in userSyncPackages)
             {
                 writer.Store(package, package.PackageId);

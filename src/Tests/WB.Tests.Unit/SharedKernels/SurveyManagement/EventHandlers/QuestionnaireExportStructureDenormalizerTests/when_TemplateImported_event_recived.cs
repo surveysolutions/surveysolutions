@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         private static Mock<IDataExportRepositoryWriter> dataExportServiceMock;
         private static Mock<IExportViewFactory> exportViewFactory;
         private static Guid questionnaireId;
-        private const long QuestionnaireVersion = 2;
+        private const int QuestionnaireVersion = 2;
         private static QuestionnaireDocument questionnaireDocument;
     }
 }

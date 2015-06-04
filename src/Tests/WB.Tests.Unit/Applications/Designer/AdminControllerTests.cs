@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -134,8 +135,8 @@ namespace WB.Tests.Unit.Applications.Designer
                 zipUtils ?? ZipUtilsMock.Object,
                 commandService ?? CommandServiceMock.Object,
                 questionnaireViewFactory ?? questionnaireViewFactoryMock.Object,
-                Mock.Of<IExpressionsEngineVersionService>(),
-                Mock.Of<IJsonUtils>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""));
+                Mock.Of<IJsonUtils>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""),
+                Mock.Of<IViewFactory<AccountListViewInputModel, AccountListView>>());
         }
 
         protected Mock<ICommandService> CommandServiceMock;

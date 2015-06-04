@@ -845,7 +845,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(
                 new NewGroupAdded
                 {
-                    GroupText = "New Chapter",
+                    GroupText = "New Section",
                     PublicKey = Guid.NewGuid()
                 }
             );
@@ -1052,7 +1052,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             if ((numberOfCopiedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
             {
-                throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} elements", MaxChapterItemsCount));
+                throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
             }
 
             var parentGroupId = sourceGroup.GetParent() == null ? (Guid?)null : sourceGroup.GetParent().PublicKey;
@@ -1391,7 +1391,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
                     {
-                        throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} elements", MaxChapterItemsCount));
+                        throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
                     }
                 }
             }
@@ -2229,7 +2229,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var chapter = this.innerDocument.GetChapterOfItemById(itemId);
             if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
-                throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} child items", MaxChapterItemsCount));
+                throw new QuestionnaireException(string.Format("Section cannot have more than {0} child items", MaxChapterItemsCount));
             }
         }
 
@@ -2250,7 +2250,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (targetIndex < 0 || maxAcceptableIndex < targetIndex)
                 throw new QuestionnaireException(
                    string.Format(
-                       "You can't move to group {0}  because it position {1} in not acceptable",
+                       "You can't move to sub-section {0} because it position {1} in not acceptable",
                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
         }
 
@@ -2266,7 +2266,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can't move {0} group to another group because it contains linked source question(s): {1}",
+                        "You can't move sub-section {0} to another sub-section because it contains linked source question(s): {1}",
                         FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
                             linkedQuestionSourcesInGroup.Select(
@@ -2285,7 +2285,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can't move group {0} to roster {1} because it contains roster source question(s): {2}",
+                        "You can't move sub-section {0} to roster {1} because it contains roster source question(s): {2}",
                         FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
                         FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
@@ -2309,7 +2309,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             Func<Guid, IEnumerable<IGroup>, string> getWarningMessage = (rosterTitleQuestionId, invalidGroups) =>
             {
-                return string.Format("Question {0} used as roster title question in group(s):{1}{2}",
+                return string.Format("Question {0} used as roster title question in sub-section(s):{1}{2}",
                     this.FormatQuestionForException(rosterTitleQuestionId, this.innerDocument), Environment.NewLine,
                     string.Join(Environment.NewLine,
                         invalidGroups.Select(group => FormatGroupForException(@group.PublicKey, this.innerDocument))));
@@ -2339,7 +2339,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     string.Join(
                         string.Format(
-                            "Group {0} could not be moved to group {1} because contains some questions that used as roster title questions in groups which have roster size question not the same as have target {1} group: ",
+                            "Sub-section {0} could not be moved to sub-section {1} because contains some questions that used as roster title questions in groups which have roster size question not the same as have target {1} group: ",
                             FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
                             FormatGroupForException(targetGroup.PublicKey, this.innerDocument)), Environment.NewLine,
                         string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
@@ -2354,7 +2354,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 throw new QuestionnaireException(
                     string.Join(
-                        string.Format("Group {0} could not be moved to group {1} because: ",
+                        string.Format("Sub-section {0} could not be moved to sub-section {1} because: ",
                             FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
                             FormatGroupForException(targetGroup.PublicKey, this.innerDocument)),
                         Environment.NewLine,
@@ -2365,7 +2365,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
             if (isPrefilled && IsRosterOrInsideRoster(parentGroup))
-                throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
+                throw new QuestionnaireException("Question inside roster sub-section can not be pre-filled.");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)
@@ -2374,14 +2374,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupTitleRequired,
-                    "The titles of groups and chapters can not be empty or contains whitespace only");
+                    "The titles of sections and sub-sections can not be empty or contains whitespace only");
             }
 
             if (title.Length > MaxTitleLength)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.TitleIsTooLarge,
-                    string.Format("The titles of groups and chapters can't have more than {0} symbols", MaxTitleLength));
+                    string.Format("The titles of sections and sub-sections can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
@@ -2430,19 +2430,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupNotFound,
-                    string.Format("group with public key {0} can't be found", groupPublicKey));
+                    string.Format("sub-section with public key {0} can't be found", groupPublicKey));
             }
         }
 
         private void ThrowDomainExceptionIfTitleIsEmptyOrTooLong(string title)
         {
             if (string.IsNullOrEmpty(title))
-                throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
+                throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question text can't be empty");
 
             if (title.Length > MaxTitleLength)
             {
-                throw new QuestionnaireException(DomainExceptionType.TitleIsTooLarge, 
-                    string.Format("Question's title can't have more than {0} symbols", MaxTitleLength));
+                throw new QuestionnaireException(DomainExceptionType.TitleIsTooLarge,
+                    string.Format("Question text can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
@@ -2562,7 +2562,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CategoricalSingleOptionHasMoreThan200Options,
-                    "Categorical one answer question contains more than 200 options");
+                    "Categorical single-select question contains more than 200 options");
             }
         }
 
@@ -2578,7 +2578,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (rosterTitleQuestionGroups.Any())
             {
                 throw new QuestionnaireException(
-                    string.Format("Linked categorical multy answers question could not be used as a roster title question in group(s): {0}",
+                    string.Format("Linked categorical multi-select question could not be used as a roster title question in sub-section(s): {0}",
                         string.Join(Environment.NewLine,
                             rosterTitleQuestionGroups.Select(groupId => FormatGroupForException(groupId, this.innerDocument)))));
             }
@@ -2739,7 +2739,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 0,
                 exceptionType: DomainExceptionType.GroupWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more group(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format("One or more sub-section(s) with same ID {0} already exist:{1}{2}",
                         groupId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
@@ -2788,21 +2788,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, MaxCountOfDecimalPlaces));
+                    string.Format("Number of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, MaxCountOfDecimalPlaces));
             }
 
             if (countOfDecimalPlaces.Value < 0)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("Count of decimal places cant be negative."));
+                    string.Format("Number of decimal places cant be negative."));
             }
 
             if (countOfDecimalPlaces.Value == 0)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("If you want Count of decimal places equals to 0 please select integer."));
+                    string.Format("If you want number of decimal places equals to 0 please select integer."));
             }
         }
 
@@ -2813,7 +2813,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 1,
                 exceptionType: DomainExceptionType.MoreThanOneGroupsWithSuchIdExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more group(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format("One or more sub-section(s) with same ID {0} already exist:{1}{2}",
                         groupId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
@@ -2891,12 +2891,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isFeatured)
                 throw new QuestionnaireException(
                     DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "Pre-filled question title contains substitution references. It's illegal");
+                    "Pre-filled question text contains substitution references. It's illegal");
 
             if (substitutionReferences.Contains(alias))
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
-                    "Question title contains illegal substitution references to self");
+                    "Question text contains illegal substitution references to self");
 
             List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope;
 
@@ -2908,18 +2908,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (unknownReferences.Count > 0)
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
-                    "Question title contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
+                    "Question text contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
 
             if (questionsIncorrectTypeOfReferenced.Count > 0)
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
-                    "Question title contains substitution references to questions of illegal type: " +
+                    "Question text contains substitution references to questions of illegal type: " +
                         String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
 
             if (questionsIllegalPropagationScope.Count > 0)
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question title contains illegal substitution references to questions: " +
+                    "Question text contains illegal substitution references to questions: " +
                         String.Join(", ", questionsIllegalPropagationScope.ToArray()));
         }
 
@@ -2933,7 +2933,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 0,
                 exceptionType: DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
                 getExceptionDescription:
-                    groupsAndQuestions => string.Format("One or more questions/groups depend on {0}:{1}{2}",
+                    groupsAndQuestions => string.Format("One or more questions/sub-sections depend on {0}:{1}{2}",
                         question.QuestionText,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, GetTitleList(groupsAndQuestions))));
@@ -2949,7 +2949,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (referencedQuestions.Values.Count(x => x.Any()) > 0)
             {
                 throw new QuestionnaireException(DomainExceptionType.QuestionUsedAsRosterTitleOfOtherGroup, string.Join(Environment.NewLine,
-                    referencedQuestions.Select(x => string.Format("Question {0} used as roster title question in group(s):{1}{2}",
+                    referencedQuestions.Select(x => string.Format("Question {0} used as roster title question in sub-section(s):{1}{2}",
                         FormatQuestionForException(x.Key, this.innerDocument),
                         Environment.NewLine,
                         string.Join(Environment.NewLine, x.Value)))));
@@ -2971,7 +2971,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 targetRoster.RosterSizeQuestionId.HasValue && sourceRoster.RosterSizeQuestionId != targetRoster.RosterSizeQuestionId))
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can move a roster title question {0} only to a roster group that has a roster source question {1}",
+                        "You can move a roster title question {0} only to a roster that has a roster source question {1}",
                         this.FormatQuestionForException(question.PublicKey, this.innerDocument),
                         this.FormatQuestionForException(sourceRoster.RosterSizeQuestionId.Value, this.innerDocument)));
         }
@@ -3018,27 +3018,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
             {
-                throw new QuestionnaireException("List of fixed roster titles should not be empty");
+                throw new QuestionnaireException("List of titles for fixed set of items roster should not be empty");
             }
             
             if (rosterFixedTitles.Length > 250)
             {
-                throw new QuestionnaireException("Number of fixed roster titles could not be more than 250");
+                throw new QuestionnaireException("Number of titles for fixed set of items roster could not be more than 250");
             }
 
             if (rosterFixedTitles.Any(item => string.IsNullOrWhiteSpace(item.Title)))
             {
-                throw new QuestionnaireException("Fixed roster titles could not have empty titles");
+                throw new QuestionnaireException("Fixed set of items roster title could not have empty titles");
             }
             
             if (rosterSizeQuestionId.HasValue)
             {
-                throw new QuestionnaireException("Roster by fixed titles could not have roster source question");
+                throw new QuestionnaireException("Fixed set of items roster could not have roster source question");
             }
 
             if (rosterTitleQuestionId.HasValue)
             {
-                throw new QuestionnaireException("Roster by fixed titles could not have roster title question");
+                throw new QuestionnaireException("Fixed set of items roster could not have roster title question");
             }
         }
 
@@ -3058,7 +3058,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (!RosterSizeQuestionTypes.Contains(rosterSizeQuestion.QuestionType))
                 throw new QuestionnaireException(string.Format(
-                    "Roster source question {0} should have Numeric or Categorical Multy Answers or List type.",
+                    "Roster source question {0} should have numeric or categorical multi-select Answers or List type.",
                     FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (
@@ -3076,7 +3076,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
-                    "Roster having categorical multiple answers question {0} as roster size source cannot have roster title question.",
+                    "Roster having categorical multi-select question {0} as roster size source cannot have roster title question.",
                     this.FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
@@ -3113,7 +3113,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (rosterFixedTitles != null && rosterFixedTitles.Any())
             {
-                throw new QuestionnaireException(string.Format("Roster fixed titles should be empty for roster group by question: {0}.",
+                throw new QuestionnaireException(string.Format("Roster fixed items list should be empty for roster by question: {0}.",
                     FormatGroupForException(groupId, this.innerDocument)));
             }
         }
@@ -3124,7 +3124,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (referencingRoster != null)
                 throw new QuestionnaireException(
-                    string.Format("Question {0} is referenced as roster source question by group {1}.",
+                    string.Format("Question {0} is referenced as roster source question by sub-section {1}.",
                         FormatQuestionForException(questionId, this.innerDocument),
                         FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
         }
@@ -3142,7 +3142,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (referencingRosterTitle != null)
                 throw new QuestionnaireException(
-                    string.Format("Question {0} is referenced as roster title question by group {1}.",
+                    string.Format("Question {0} is referenced as roster title question by sub-section {1}.",
                         FormatQuestionForException(questionId, this.innerDocument),
                         FormatGroupForException(referencingRosterTitle.PublicKey, this.innerDocument)));
         }
@@ -3165,7 +3165,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This roster can't become a group because contains a roster title questions of other group(s): {0}",
+                    "This roster can't become a sub-section because contains a roster title questions of other sub-section(s): {0}",
                     string.Join(Environment.NewLine,
                         rosterTitleQuestionsOfOtherGroups.Select(
                             questionId => FormatQuestionForException(questionId, this.innerDocument)))));
@@ -3181,7 +3181,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This group can't become a roster because contains pre-filled questions: {0}. Toggle pre-filled property for that questions to complete this operation",
+                    "This sub-section can't become a roster because contains pre-filled questions: {0}. Toggle off pre-filled property for that questions to complete this operation",
                     string.Join(Environment.NewLine, questionVariables)));
         }
 
@@ -3202,7 +3202,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This group can't become a roster because contains questions with reference on roster title in substitution: {0}.",
+                    "This sub-section can't become a roster because contains questions with reference on roster title in substitution: {0}.",
                     string.Join(Environment.NewLine, questionVariables)));
         }
 
@@ -3219,7 +3219,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "This {0} roster can't become a group because contains linked source question(s): {1}",
+                        "This {0} roster can't become a sub-section because contains linked source question(s): {1}",
                         FormatGroupForException(@group.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
                             linkedQuestionSourcesInGroup.Select(
@@ -3239,7 +3239,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can't delete {0} group because it contains linked source question(s): {1}",
+                        "You can't delete {0} sub-section because it contains linked source question(s): {1}",
                         FormatGroupForException(@group.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
                             linkedQuestionSourcesInGroup.Select(
@@ -3254,21 +3254,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.FilteredComboboxQuestionNotFound,
-                    string.Format("Filtered combobox with public key {0} can't be found", questionId));
+                    string.Format("Combo box with public key {0} can't be found", questionId));
             }
 
             if (!categoricalOneAnswerQuestion.IsFilteredCombobox.HasValue || !categoricalOneAnswerQuestion.IsFilteredCombobox.Value)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionIsNotAFilteredCombobox,
-                    string.Format("Question {0} is not a filtered combobox", FormatQuestionForException(questionId, this.innerDocument)));
+                    string.Format("Question {0} is not a combo box", FormatQuestionForException(questionId, this.innerDocument)));
             }
 
             if (options != null && options.Length > maxFilteredComboboxOptionsCount)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.FilteredComboboxQuestionOptionsMaxLength,
-                    string.Format("Filtered combobox question {0} contains more than {1} options",
+                    string.Format("Combo box question {0} contains more than {1} options",
                         FormatQuestionForException(questionId, this.innerDocument), maxFilteredComboboxOptionsCount));
             }
         }
@@ -3638,6 +3638,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static bool IsQuestionAndHaveQuestionIdInConditionOrValidation(IComposite composite, IQuestion sourceQuestion)
         {
             var question = composite as IQuestion;
+            bool isSelfReferenceIsChecking = composite.PublicKey == sourceQuestion.PublicKey;
+
+            if (isSelfReferenceIsChecking)
+            {
+                // we should allow do delete questions that reference itself in condition or validation expression
+                return false;
+            }
 
             if (question != null)
             {
@@ -3736,19 +3743,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Fixed roster value is required");
+                    "Fixed set of items roster value is required");
             }
 
             if (rosterFixedTitles.Any(x => !x.Value.IsDecimal()))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Fixed roster value should have only number characters");
+                    "Fixed set of items roster value should have only number characters");
             }
 
             if (rosterFixedTitles.Select(x => x.Value).Distinct().Count() != rosterFixedTitles.Length)
             {
-                throw new QuestionnaireException("Fixed roster values must be unique");
+                throw new QuestionnaireException("Fixed set of items roster values must be unique");
             }
 
             return rosterFixedTitles.Select(item => new FixedRosterTitle(decimal.Parse(item.Value), item.Title)).ToArray();                

@@ -9,7 +9,7 @@ namespace Ncqrs.Eventing.Storage
         {
         }
 
-        public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
+        public Snapshot GetSnapshot(Guid eventSourceId, int maxVersion)
         {
             return null;
         }

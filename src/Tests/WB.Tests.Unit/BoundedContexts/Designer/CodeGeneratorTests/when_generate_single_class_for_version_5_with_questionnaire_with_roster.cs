@@ -18,26 +18,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(
-                new IComposite[]
-                {
-                    new Group
+            questionnaire =
+                Create.QuestionnaireDocument(
+                    children: new[]
                     {
-                        Title = "Chapter",
-                        PublicKey = chapterId,
-                        Children = new List<IComposite>
-                        {
-                            new Group
+                        Create.Chapter(
+                            title: "Chapter",
+                            chapterId: chapterId,
+                            children: new[]
                             {
-                                PublicKey = rosterId,
-                                VariableName = "fixed_roster",
-                                IsRoster = true,
-                                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                                FixedRosterTitles = new[] {new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2")}
-                            }
-                        }
-                    },
-                });
+                                Create.Roster(
+                                    rosterId: rosterId,
+                                    variable: "fixed_roster",
+                                    rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                                    fixedTitles: new string[] {"1", "2"})
+                            })
+                    });
 
             generator = CreateCodeGenerator();
         };
@@ -46,13 +42,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent =
                 generator.Generate(questionnaire, version);
 
-        It generated_class_should_not_contain_using_of_V2_namespaces = () =>
+        It should_generate_class_with_V2_namespaces_included = () =>
             generatedClassContent.ShouldNotContain("WB.Core.SharedKernels.DataCollection.V2");
 
-        It generated_class_should_not_contain_method_UpdateRosterTitle = () =>
+        It should_generate_class_with_method_UpdateRosterTitle = () =>
             generatedClassContent.ShouldNotContain("UpdateRosterTitle");
 
-        It generated_class_should_not_contain_type_RosterRowList = () =>
+        It should_generate_class_with_RosterRowList_as_roster_type = () =>
             generatedClassContent.ShouldNotContain("RosterRowList");
 
         private static Version version = new Version(5, 0, 0);

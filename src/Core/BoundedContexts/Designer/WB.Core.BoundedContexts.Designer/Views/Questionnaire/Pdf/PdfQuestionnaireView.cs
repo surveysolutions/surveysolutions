@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     var childStaticText = child as IStaticText;
                     if (childQuestion != null)
                     {
-                        var newQuestion=new PdfQuestionView
+                        var newQuestion = new PdfQuestionView
                         {
                             PublicId = childQuestion.PublicKey,
                             Title = childQuestion.QuestionText,
@@ -160,11 +160,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                             {
                                 Title = x.AnswerText,
                                 AnswerValue = x.AnswerValue,
-                                ParentValue = x.ParentValue
+                                ParentValue = x.ParentValue,
                             }).ToList(),
                             VariableName = childQuestion.StataExportCaption,
                             ValidationExpression = childQuestion.ValidationExpression,
-                            ConditionExpression = childQuestion.ConditionExpression
+                            ConditionExpression = childQuestion.ConditionExpression,
+                            QuestionType = childQuestion.QuestionType,
+                            Depth = this.GetEntityDepth(childQuestion.PublicKey) + 1
                         };
 
                         this.AddEntity(newQuestion, item.PublicKey);

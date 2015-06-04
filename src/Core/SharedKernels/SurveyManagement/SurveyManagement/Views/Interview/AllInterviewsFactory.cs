@@ -66,7 +66,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
         {
-            var items = _;
+            var items = _.Where(x => !x.IsDeleted);
+
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.Contains(input.SearchBy)));

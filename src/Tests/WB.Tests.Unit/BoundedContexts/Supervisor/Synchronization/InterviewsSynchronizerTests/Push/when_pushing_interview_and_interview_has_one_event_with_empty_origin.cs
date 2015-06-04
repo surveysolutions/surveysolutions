@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Events;
 using Moq;
-using Moq.Language.Flow;
 using Moq.Protected;
-
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -26,6 +21,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -50,12 +46,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
-            var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview>>(writer
-                => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new [] { new ReadyToSendToHeadquartersInterview(interviewId) });
+            var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
+            readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
             interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == new CommittedEventStream(interviewId, interviewEvent));
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<int>()) == new CommittedEventStream(interviewId, interviewEvent));
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());

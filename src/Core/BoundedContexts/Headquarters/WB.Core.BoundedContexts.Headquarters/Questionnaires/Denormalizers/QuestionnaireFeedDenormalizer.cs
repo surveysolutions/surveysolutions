@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Events.Questionnaire;
+﻿using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 {

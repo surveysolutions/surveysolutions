@@ -5,15 +5,22 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     internal class PlainQuestionnaire : IQuestionnaire
     {
+        public ISubstitutionService SubstitutionService
+        {
+            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
+        }
+
         #region State
 
         private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
@@ -544,6 +551,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
 
             return parentValuesFromQuestion.Contains(parentValue);
+        }
+
+        public IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId)
+        {
+            var targetVariableName = this.GetQuestionVariableName(questionId);
+            foreach (var question in this.GetAllQuestions())
+            {
+                var substitutedVariableNames =
+                    this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
+                if (substitutedVariableNames.Contains(targetVariableName))
+                {
+                    yield return question.PublicKey;
+                }
+            }
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)

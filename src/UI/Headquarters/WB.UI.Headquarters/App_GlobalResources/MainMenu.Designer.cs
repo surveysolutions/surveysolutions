@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Export.
+        /// </summary>
+        internal static string DataExport {
+            get {
+                return ResourceManager.GetString("DataExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Headquarters.
         /// </summary>
         internal static string Headquarters {
@@ -115,7 +124,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        internal static string Quantity {
+            get {
+                return ResourceManager.GetString("Quantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Setup.
         /// </summary>
         internal static string Questionnaires {
             get {
@@ -142,6 +160,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Speed.
+        /// </summary>
+        internal static string Speed {
+            get {
+                return ResourceManager.GetString("Speed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisors.
         /// </summary>
         internal static string Supervisors {
@@ -156,6 +183,24 @@ namespace Resources {
         internal static string SurveysAndStatuses {
             get {
                 return ResourceManager.GetString("SurveysAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team and Roles.
+        /// </summary>
+        internal static string TeamAndRoles {
+            get {
+                return ResourceManager.GetString("TeamAndRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teams and Roles.
+        /// </summary>
+        internal static string TeamsAndRoles {
+            get {
+                return ResourceManager.GetString("TeamsAndRoles", resourceCulture);
             }
         }
         

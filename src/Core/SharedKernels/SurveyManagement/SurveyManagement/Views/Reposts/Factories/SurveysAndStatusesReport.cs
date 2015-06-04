@@ -25,36 +25,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             {
                 var filetredInterviews = ApplyFilter(input, _);
 
-                var supervisorAssignedStatusCount = CountInStatus(input, filetredInterviews, InterviewStatus.SupervisorAssigned);
-                var interviewerAssignedCount = CountInStatus(input, filetredInterviews, InterviewStatus.InterviewerAssigned);
-                var completedCount = CountInStatus(input, filetredInterviews, InterviewStatus.Completed);
-                var approvedBySupervisorCount = CountInStatus(input, filetredInterviews, InterviewStatus.ApprovedBySupervisor);
-                var rejectedBySupervisorCount = CountInStatus(input, filetredInterviews, InterviewStatus.RejectedBySupervisor);
-                var approvedByHeadquartersCount = CountInStatus(input, filetredInterviews, InterviewStatus.ApprovedByHeadquarters);
-                var rejectedByHeadquartersCount = CountInStatus(input, filetredInterviews, InterviewStatus.RejectedByHeadquarters);
-                var totalCount = CountInStatus(input, filetredInterviews, null);
+                var interviews = (from f in filetredInterviews
+                                 group f by new {f.QuestionnaireId, f.QuestionnaireVersion, f.QuestionnaireTitle, f.Status} into g
+                                 select new CounterObject
+                                 {
+                                     QuestionnaireId = g.Key.QuestionnaireId,
+                                     QuestionnaireVersion = g.Key.QuestionnaireVersion,
+                                     QuestionnaireTitle = g.Key.QuestionnaireTitle,
+                                     Status = g.Key.Status,
+                                     InterviewsCount = g.Count()
+                                 }).ToList();
 
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
-                foreach (var questionnaireWithVersion in totalCount.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion}).Distinct())
+                foreach (var questionnaire in interviews.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle}).Distinct())
                 {
-                    Func<CounterObject, bool> findQuestionnaire = x => x.QuestionnaireId == questionnaireWithVersion.QuestionnaireId && 
-                                                                       x.QuestionnaireVersion == questionnaireWithVersion.QuestionnaireVersion;
                     statistics.Add(new StatisticsLineGroupedByUserAndTemplate
                     {
-                        QuestionnaireId = questionnaireWithVersion.QuestionnaireId,
-                        QuestionnaireVersion = questionnaireWithVersion.QuestionnaireVersion,
-                        QuestionnaireTitle =            Monads.Maybe(() => totalCount.SingleOrDefault(findQuestionnaire).QuestionnaireTitle),
-                        SupervisorAssignedCount =       Monads.Maybe(() => supervisorAssignedStatusCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        InterviewerAssignedCount =      Monads.Maybe(() => interviewerAssignedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        CompletedCount =                Monads.Maybe(() => completedCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        ApprovedBySupervisorCount =     Monads.Maybe(() => approvedBySupervisorCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        RejectedBySupervisorCount =     Monads.Maybe(() => rejectedBySupervisorCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        ApprovedByHeadquartersCount =   Monads.Maybe(() => approvedByHeadquartersCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        RejectedByHeadquartersCount =   Monads.Maybe(() => rejectedByHeadquartersCount.SingleOrDefault(findQuestionnaire).InterviewsCount),
-                        TotalCount =                    Monads.Maybe(() => totalCount.SingleOrDefault(findQuestionnaire).InterviewsCount)
+                        QuestionnaireId =               questionnaire.QuestionnaireId,
+                        QuestionnaireVersion =          questionnaire.QuestionnaireVersion,
+                        QuestionnaireTitle =            questionnaire.QuestionnaireTitle,
+                        SupervisorAssignedCount =       Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned).InterviewsCount),
+                        InterviewerAssignedCount =      Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned).InterviewsCount),
+                        CompletedCount =                Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.Completed).InterviewsCount),
+                        ApprovedBySupervisorCount =     Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedBySupervisor).InterviewsCount),
+                        RejectedBySupervisorCount =     Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.RejectedBySupervisor).InterviewsCount),
+                        ApprovedByHeadquartersCount =   Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.ApprovedByHeadquarters).InterviewsCount),
+                        RejectedByHeadquartersCount =   Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.RejectedByHeadquarters).InterviewsCount),
+                        TotalCount =                    interviews.Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId && x.QuestionnaireVersion == questionnaire.QuestionnaireVersion).Sum(x => x.InterviewsCount)
                     });
                 }
-
+              
                 return statistics;
             });
 
@@ -97,45 +97,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 };
         }
 
+        private static CounterObject CountInStatus(List<CounterObject> interviews, dynamic questionnaire, InterviewStatus status)
+        {
+            return interviews.FirstOrDefault(x => x.QuestionnaireId == questionnaire.QuestionnaireId && x.QuestionnaireVersion == questionnaire.QuestionnaireVersion && x.Status == status);
+        }
+
         private static IQueryable<InterviewSummary> ApplyFilter(SurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
         {
             var filetredInterviews = _.Where(x => !x.IsDeleted);
 
-            if (input.UserId.HasValue)
+            if (input.ResponsibleId.HasValue)
             {
-                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleId == input.UserId);
+                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleId == input.ResponsibleId);
             }
-            if (input.ViewerId.HasValue)
+            if (input.TeamLeadId.HasValue)
             {
-                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadId == input.ViewerId);
+                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadId == input.TeamLeadId);
             }
 
             return filetredInterviews;
-        }
-
-        private static IEnumerable<CounterObject> CountInStatus(SurveysAndStatusesReportInputModel input, 
-            IQueryable<InterviewSummary> filetredInterviews, 
-            InterviewStatus? requestedStatus)
-        {
-            var query = filetredInterviews;
-            if (requestedStatus.HasValue)
-            {
-                query = query.Where(x => x.Status == requestedStatus);
-            }
-
-            var result = query.GroupBy(interview => new { interview.QuestionnaireId, interview.QuestionnaireVersion, interview.QuestionnaireTitle })
-                    .Select(g => new CounterObject
-                    {
-                        QuestionnaireId = g.Key.QuestionnaireId,
-                        QuestionnaireVersion = g.Key.QuestionnaireVersion,
-                        QuestionnaireTitle = g.Key.QuestionnaireTitle,
-                        InterviewsCount = g.Count()
-                    })
-                    .Skip((input.Page - 1)*input.PageSize)
-                    .Take(input.PageSize)
-                    .ToList();
-
-            return result;
         }
 
         class CounterObject
@@ -144,6 +124,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             public string QuestionnaireTitle { get; set; }
             public long QuestionnaireVersion { get; set; }
             public int InterviewsCount { get; set; }
+            public InterviewStatus Status { get; set; }
         }
     }
 }

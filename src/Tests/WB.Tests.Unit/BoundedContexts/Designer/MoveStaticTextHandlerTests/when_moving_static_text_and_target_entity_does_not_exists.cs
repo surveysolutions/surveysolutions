@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.MoveStaticTextHandlerTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__group_cant_found__ = () =>
-             new[] { "group", "can't", "found" }.ShouldEachConformTo(
+             new[] { "sub-section", "can't", "found" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
         

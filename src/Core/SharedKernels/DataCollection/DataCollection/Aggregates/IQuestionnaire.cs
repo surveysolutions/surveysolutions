@@ -104,5 +104,12 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetAllChildCascadingQuestions();
 
         bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
+
+        /// <summary>
+        /// Gets list of question ids that use question with provided <param name="questionId">questionId</param> as a substitution
+        /// </summary>
+        /// <param name="questionId">Substituted question id</param>
+        /// <returns>List of questions that depend on provided question</returns>
+        IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId);
     }
 }

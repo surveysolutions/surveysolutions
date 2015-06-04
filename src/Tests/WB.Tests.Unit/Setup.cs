@@ -43,14 +43,6 @@ namespace WB.Tests.Unit
                 .Setup(reader => reader.Query(It.IsAny<Func<IQueryable<TEntity>, TResult>>()))
                 .Returns<Func<IQueryable<TEntity>, TResult>>(query => query.Invoke(entities.AsQueryable()));
 
-            Mock.Get(repositoryReader)
-                .Setup(reader => reader.QueryAll(It.IsAny<Expression<Func<TEntity, bool>>>()))
-                .Returns<Expression<Func<TEntity, bool>>>(condition =>
-                {
-                    Func<TEntity, bool> predicate = condition.Compile();
-                    return entities.Where(predicate);
-                });
-
             return repositoryReader;
         }
 

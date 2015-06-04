@@ -29,69 +29,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var minCollectedDate = collectedStatistics.StatisticsByDate.Keys.Min();
             var maxCollectedDate = collectedStatistics.StatisticsByDate.Keys.Max();
 
-            var leftDate = minCollectedDate < input.From ? input.From : minCollectedDate;
-            var rightDate = maxCollectedDate > input.To ? input.To : maxCollectedDate;
+            var leftEdge = new[] { input.From ?? minCollectedDate.AddDays(-1), input.To ?? minCollectedDate.AddDays(-1) }.Min();
+            var rightEdge = new []{input.From ?? maxCollectedDate, input.To ?? maxCollectedDate}.Max();
 
-            var selectedRange = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
-
-            if (leftDate > rightDate)
-            {
-                if (rightDate < input.From)
-                {
-                    var lastDay = collectedStatistics.StatisticsByDate.Keys.Max();
-                    var statisticsToRepeat = collectedStatistics.StatisticsByDate[lastDay];
-                    RepeatLastStatistics(selectedRange, input.From, input.To, statisticsToRepeat);
-
-                    AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
-                }
-                else
-                {
-                    RepeatLastStatistics(selectedRange, input.From, input.To, new QuestionnaireStatisticsForChart());
-                }
-            }
-            else
-            {
-                if (leftDate > input.From)
-                {
-                    RepeatLastStatistics(selectedRange, input.From, leftDate.AddDays(-1), new QuestionnaireStatisticsForChart());
-                }
-
-                if (rightDate < input.To)
-                {
-                    RepeatLastStatistics(selectedRange, rightDate.AddDays(1), input.To, collectedStatistics.StatisticsByDate[rightDate]);
-                }
-
-                AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
-            }
-
-           
-
-            return ChartStatisticsView(selectedRange, input.From, input.To);
+            return CreateChartStatisticsView(collectedStatistics.StatisticsByDate, leftEdge, rightEdge, minCollectedDate);
         }
 
-        private static void AddReadlStatistics(StatisticsGroupedByDateAndTemplate collectedStatistics, DateTime leftDate, DateTime maxCollectedDate,
-            Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange)
+        private static ChartStatisticsView CreateChartStatisticsView(Dictionary<DateTime, QuestionnaireStatisticsForChart> range, DateTime start, DateTime stop, DateTime dataStart)
         {
-            collectedStatistics.StatisticsByDate
-                .Where(x => x.Key >= leftDate.Date && x.Key.Date <= maxCollectedDate.Date)
-                .ForEach(x => selectedRange.Add(x.Key, x.Value));
-        }
+            if (start > stop)
+                new ChartStatisticsView { Lines = new object[0][][] };
 
-        private void RepeatLastStatistics(Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange1, DateTime from, DateTime to, QuestionnaireStatisticsForChart statisticsToRepeat)
-        {
-            var date = from.Date;
-            while (date <= to)
+            var startValueToFill = range.LastOrDefault(x => x.Key <= start).Value ?? new QuestionnaireStatisticsForChart();
+            var stopValueToFill = range.LastOrDefault(x => x.Key <= stop).Value ?? new QuestionnaireStatisticsForChart();
+            
+            var currentDate = start.Date;
+            Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
+
+            var pointToBeSetGraphLooksOk = dataStart.AddDays(-1);
+
+            selectedRange.Add(currentDate, range.ContainsKey(currentDate) ? range[currentDate] : startValueToFill);
+            currentDate = currentDate.AddDays(1);
+
+            while (currentDate < stop)
             {
-                selectedRange1.Add(date, new QuestionnaireStatisticsForChart(statisticsToRepeat));
-                date = date.AddDays(1);
-            }
-        }
+                if(range.ContainsKey(currentDate))
+                    selectedRange.Add(currentDate, range[currentDate]);
+                else if (currentDate == pointToBeSetGraphLooksOk)
+                    selectedRange.Add(currentDate, new QuestionnaireStatisticsForChart());
 
-        private static ChartStatisticsView ChartStatisticsView(Dictionary<DateTime, QuestionnaireStatisticsForChart> range, DateTime minCollectedDate, DateTime maxCollectedDate)
-        {
-            var selectedRange = range
-                .OrderBy(x => x.Key)
-                .ToList();
+                currentDate = currentDate.AddDays(1);
+            }
+
+            if(start != stop)
+                selectedRange.Add(stop, range.ContainsKey(stop) ? range[stop] : stopValueToFill);
 
             IEnumerable<IEnumerable<Tuple<DateTime, int>>> rangeLines = new[]
             {
@@ -111,8 +82,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return new ChartStatisticsView
             {
                 Lines = chartLines,
-                From = FormatDate(minCollectedDate),
-                To = FormatDate(maxCollectedDate)
+                From = FormatDate(start),
+                To = FormatDate(stop)
             };
         }
 

@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IStatefullInterviewRepository interviewRepository,
             ChaptersViewModel chaptersViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
-            GroupViewModel groupViewModel, 
+            ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState)
         {
             this.principal = principal;
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .ToList();
 
             this.Breadcrumbs.Init(interviewId, this.navigationState);
-            this.Chapters.Init(this.navigationState);
+            this.Chapters.Init(interviewId, questionnaire.Id.FormatGuid(), this.navigationState);
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         public BreadcrumbsViewModel Breadcrumbs { get; set; }
-        public GroupViewModel CurrentGroup { get; set; }
+        public ActiveGroupViewModel CurrentGroup { get; set; }
         public ChaptersViewModel Chapters { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable PrefilledQuestions { get; set; } 

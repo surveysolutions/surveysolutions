@@ -31,13 +31,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
-                Mock.Of<IReadSideKeyValueStorage<InterviewStatusHistory>>(_ => _.GetById(It.IsAny<string>()) == new InterviewStatusHistory()));
+                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),null);
         }
 
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)
         {
-            return new InterviewCommentedStatus() { Status = status, ResponsibleId = Guid.NewGuid() };
+            return new InterviewCommentedStatus() { Status = status, InterviewerId = Guid.NewGuid() };
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")

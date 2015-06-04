@@ -94,7 +94,7 @@ namespace WB.UI.Capi.Syncronization
         
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid eventSourceId)
         {
-            var storedEvents = this.eventStore.ReadFrom(eventSourceId, 0, long.MaxValue).ToList();
+            var storedEvents = this.eventStore.ReadFrom(eventSourceId, 0, int.MaxValue).ToList();
 
             List<AggregateRootEvent> eventsToSend = new List<AggregateRootEvent>(); 
             

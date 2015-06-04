@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
@@ -20,6 +21,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.AllowCensusMode);
             Property(x => x.Disabled);
+
+            List(x => x.FeaturedQuestions, listMap =>
+            {
+                listMap.Table("FeaturedQuestions");
+                listMap.Index(index => index.Column("Position"));
+                listMap.Key(keyMap =>
+                {
+                    keyMap.Column(clm =>
+                    {
+                        clm.Name("QuestionnaireId");
+                        clm.Index("QuestionnaireBrowseItems_FeaturedQuestions");
+                    });
+                });
+                listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
+            },
+            rel =>
+            {
+                rel.Component(cmp =>
+                {
+                    cmp.Property(x => x.Id);
+                    cmp.Property(x => x.Caption);
+                    cmp.Property(x => x.Title);
+                });
+            });
         }
     }
 }

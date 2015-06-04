@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Core.Synchronization
                 CreateQuestionnaireSyncPackageMetaInformation(questionnaireId, questionnaireVersion:2, sortIndex:5, itemType: SyncItemType.QuestionnaireAssembly),
             };
 
-            var writer = new TestInMemoryWriter<QuestionnaireSyncPackageMeta>();
+            var writer = Stub.ReadSideRepository<QuestionnaireSyncPackageMeta>();
             foreach (var package in questionnaireSyncPackageMetas)
             {
                 writer.Store(package, package.PackageId);
