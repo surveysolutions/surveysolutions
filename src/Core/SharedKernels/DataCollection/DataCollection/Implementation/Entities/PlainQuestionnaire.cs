@@ -555,7 +555,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId)
         {
-            var targetVariableName = this.GetQuestionVariableName(questionId);
+            string targetVariableName = this.GetQuestionVariableName(questionId);
+
             foreach (var question in this.GetAllQuestions())
             {
                 var substitutedVariableNames =
@@ -563,6 +564,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 if (substitutedVariableNames.Contains(targetVariableName))
                 {
                     yield return question.PublicKey;
+                }
+            }
+
+            var rostersAffectedByRosterTitleQuestion = this.GetRostersAffectedByRosterTitleQuestion(questionId);
+            foreach (var rosterId in rostersAffectedByRosterTitleQuestion)
+            {
+                IEnumerable<Guid> questionsInRoster = this.GetAllUnderlyingQuestions(rosterId);
+                foreach (var questionsInRosterId in questionsInRoster)
+                {
+                    var questionTitle = GetQuestionTitle(questionsInRosterId);
+                    if (this.SubstitutionService.ContainsRosterTitle(questionTitle))
+                    {
+                        yield return questionsInRosterId;
+                    }
                 }
             }
         }
