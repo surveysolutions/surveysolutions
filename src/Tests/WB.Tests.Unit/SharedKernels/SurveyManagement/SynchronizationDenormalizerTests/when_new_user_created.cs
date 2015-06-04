@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             jsonUtilsMock = new Mock<IJsonUtils>();
 
-            jsonUtilsMock.Setup(x => x.Serialize(Moq.It.IsAny<object>(), TypeSerializationSettings.AllTypes))
+            jsonUtilsMock.Setup(x => x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()))
                 .Callback((object u, TypeSerializationSettings serializationSettings) => user = u as UserDocument);
 
             denormalizer = CreateDenormalizer(

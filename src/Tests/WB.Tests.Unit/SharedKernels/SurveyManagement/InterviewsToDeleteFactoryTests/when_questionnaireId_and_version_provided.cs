@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewsToDeleteFactory
             interviews.Add(expectedSummary);
             interviews.Add(Create.InterviewSummary(questionnaireId: questionnaireId, questionnaireVersion: 2));
 
-            TestInMemoryWriter<InterviewSummary> writer = new TestInMemoryWriter<InterviewSummary>();
+            TestInMemoryWriter<InterviewSummary> writer = Stub.ReadSideRepository<InterviewSummary>();
             interviews.ForEach(x => writer.Store(x, Guid.NewGuid().FormatGuid()));
 
 

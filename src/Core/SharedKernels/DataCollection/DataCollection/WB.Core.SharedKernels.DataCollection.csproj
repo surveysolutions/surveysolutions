@@ -64,6 +64,7 @@
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
+    <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Services\LimitlessInterviewPreconditionsService.cs" />
     <Compile Include="MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="MaskFormatter\IMaskedFormatter.cs" />
     <Compile Include="MaskFormatter\MaskCharacter.cs" />
@@ -250,6 +252,7 @@
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Services\IInterviewPreconditionsService.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />

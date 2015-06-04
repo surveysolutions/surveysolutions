@@ -16,6 +16,8 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -24,6 +26,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -91,11 +94,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
+            var featuredQuestionItems = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions;
             var viewModel = new BatchUploadModel()
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
-                FeaturedQuestions = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions ?? new FeaturedQuestionItem[] {}
+                FeaturedQuestions = new List<FeaturedQuestionItem>(featuredQuestionItems)
             };
 
             return this.View(viewModel);
@@ -103,6 +107,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult SampleBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
@@ -132,6 +137,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
         public ActionResult PanelBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
@@ -169,43 +175,43 @@ namespace WB.UI.Headquarters.Controllers
         {
             var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
             //null is handled inside 
-            var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample).ToList();
+            var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
 
             this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName"}).Items;
 
             //clean up for security reasons
-            if (errors.Any())
+            if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
             }
 
-            return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Sample));
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
+            return this.View(model);
         }
 
         public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
         {
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
-            var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData).ToList();
+            var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
             this.ViewBag.SupervisorList =
               this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName" }).Items;
 
             //clean up for security reasons
-            if (errors.Any())
+            if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
             }
-            
-            return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Panel));
+
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
+
+            return this.View("VerifySample", model);
         }
 
-        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        [ObserverNotAllowed]
+        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
         {
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, null, id, PreloadedContentType.Panel));
-            }
-
             PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
 
@@ -234,14 +240,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
-        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
+        [ObserverNotAllowed]
+        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
         {
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, null, id, PreloadedContentType.Panel));
-            }
-
             PreloadedDataByFile preloadedData = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
             Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
 
@@ -355,6 +356,17 @@ namespace WB.UI.Headquarters.Controllers
                     Templates = usersAndQuestionnaires.Questionnaires,
                     Statuses = statuses
                 };
+        }
+
+        public ActionResult DataExport()
+        {
+            this.ViewBag.ActivePage = MenuItem.DataExport;
+            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+
+            return this.View(usersAndQuestionnaires.Questionnaires);
         }
     }
 }

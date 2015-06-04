@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Membership;
+using DownloadQuestionnaireRequest = WB.UI.Designer.WebServices.Questionnaire.DownloadQuestionnaireRequest;
 
 namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 {
@@ -43,7 +44,11 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
         {
             return new DownloadQuestionnaireRequest
             {
-                SupportedQuestionnaireVersion = supportedExpressionsEngineVersion,
+                SupportedQuestionnaireVersion =
+                    new QuestionnaireVersion(
+                        supportedExpressionsEngineVersion.Major,
+                        supportedExpressionsEngineVersion.Minor,
+                        supportedExpressionsEngineVersion.Build),
                 QuestionnaireId = questionnaireId
             };
         }

@@ -19,17 +19,14 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireHelper
                     x.UserId == Guid.NewGuid()
                 );
 
-            var userHelperMock = Mock.Of<IMembershipUserService>(x =>
-                x.WebUser == user);
-
             var userViewFactoryMock = Mock.Of<IQuestionnaireListViewFactory>(x =>
                 x.Load(Moq.It.IsAny<QuestionnaireListInputModel>()) == CreateQuestionnaireListView(user));
 
-            questionnaireHelper = new UI.Designer.Code.QuestionnaireHelper(userHelperMock, userViewFactoryMock);
+            questionnaireHelper = new UI.Designer.Code.QuestionnaireHelper(userViewFactoryMock);
         };
 
         Because of = () =>
-            result = questionnaireHelper.GetPublicQuestionnaires(Moq.It.IsAny<Guid>());
+            result = questionnaireHelper.GetPublicQuestionnaires(Moq.It.IsAny<Guid>(), true);
 
         It should_be_not_allowed_to_open_deleted_questionnaire_for_zero_element = () =>
             result[0].CanOpen.ShouldEqual(false);

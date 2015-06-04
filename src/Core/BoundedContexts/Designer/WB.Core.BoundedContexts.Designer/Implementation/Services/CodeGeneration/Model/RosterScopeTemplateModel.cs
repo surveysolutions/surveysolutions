@@ -4,27 +4,47 @@ using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
-    public class RosterScopeTemplateModel : RosterScopeBaseModel
+    public class RosterScopeTemplateModel
     {
-        public RosterScopeTemplateModel(
-            KeyValuePair<string, List<RosterTemplateModel>> rosterScope,
-            QuestionnaireExecutorTemplateModel executorModel)
-            : base(
-            rosterScope.Value.First().ParentScope, 
-            String.Empty, 
-            rosterScope.Key,
-            rosterScope.Value.SelectMany(r => r.Groups).ToList(), 
-            rosterScope.Value.SelectMany(r => r.Questions).ToList(),
-            rosterScope.Value.SelectMany(r => r.Rosters).ToList(), 
-            new List<Guid>(),
-            executorModel.QuestionnaireLevelModel.AreRowSpecificVariablesPresent,
-            executorModel.QuestionnaireLevelModel.IsIRosterLevelInherited,
-            executorModel.QuestionnaireLevelModel.RosterType)
+        public RosterScopeTemplateModel(string rosterScopeType, List<RosterTemplateModel> rostersInScope, QuestionnaireExecutorTemplateModel executorModel)
         {
-            this.RostersInScope = rosterScope.Value;
-            this.ParentTypeName = rosterScope.Value[0].ParentScope.GeneratedTypeName;
+            GeneratedRosterScopeName =  String.Empty;
+            GeneratedTypeName = rosterScopeType;
+            Groups = rostersInScope.SelectMany(r => r.Groups).ToList();
+            Questions =  rostersInScope.SelectMany(r => r.Questions).ToList();
+            Rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
+            RosterScope = new List<Guid>();
+            AreRowSpecificVariablesPresent = executorModel.QuestionnaireLevelModel.AreRowSpecificVariablesPresent;
+            IsIRosterLevelInherited = executorModel.QuestionnaireLevelModel.IsIRosterLevelInherited;
+            RosterType = executorModel.QuestionnaireLevelModel.RosterType;
+            this.RostersInScope = rostersInScope;
+            this.ParentTypeName = rostersInScope[0].ParentScope.GeneratedTypeName;
             this.ExecutorModel = executorModel;
         }
+
+        public RosterScopeTemplateModel ParentScope { set; get; }
+
+        public string GeneratedRosterScopeName { get; set; }
+
+        public string GeneratedTypeName { set; get; }
+
+        public List<QuestionTemplateModel> Questions { get; set; }
+
+        public List<GroupTemplateModel> Groups { get; set; }
+
+        public List<RosterTemplateModel> Rosters { get; set; }
+
+        public List<Guid> RosterScope { set; get; }
+
+        public bool AreRowSpecificVariablesPresent { get; private set; }
+
+        public bool IsIRosterLevelInherited { get; private set; }
+
+        public string RosterType { get; private set; }
+
+        public IEnumerable<QuestionTemplateModel> AllParentsQuestionsToTop  { set; get; }
+
+        public IEnumerable<RosterTemplateModel> AllParentsRostersToTop { set; get; }
 
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
 

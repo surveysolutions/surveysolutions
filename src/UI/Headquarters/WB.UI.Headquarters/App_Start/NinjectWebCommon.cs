@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+           // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
@@ -157,13 +157,17 @@ namespace WB.UI.Headquarters
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
+            var interviewCountLimit = WebConfigurationManager.AppSettings["Limits.InterviewCountLimit"];
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
-                    LegacyOptions.SupervisorFunctionsEnabled));
+                    new InterviewHistorySettings(basePath,
+                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
+                    LegacyOptions.SupervisorFunctionsEnabled,
+                    string.IsNullOrEmpty(interviewCountLimit) ? (long?) null : long.Parse(interviewCountLimit)));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();

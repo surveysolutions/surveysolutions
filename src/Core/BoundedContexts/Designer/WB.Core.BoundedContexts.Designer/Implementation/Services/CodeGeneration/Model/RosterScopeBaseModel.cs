@@ -6,6 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public abstract class RosterScopeBaseModel
     {
+        private IEnumerable<RosterTemplateModel> allRostersToTop;
+
         protected RosterScopeBaseModel(
             RosterScopeBaseModel parentScope, 
             string generatedRosterScopeName, 
@@ -61,7 +63,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<RosterTemplateModel> GetAllRostersToTop()
         {
-            return this.ParentScope != null ? this.Rosters.Union(this.ParentScope.GetAllRostersToTop()) : this.Rosters;
+            if (allRostersToTop == null)
+            {
+                allRostersToTop = this.ParentScope != null
+                    ? this.Rosters.Union(this.ParentScope.GetAllRostersToTop())
+                    : this.Rosters;
+            }
+            return allRostersToTop;
         }
     }
 }
