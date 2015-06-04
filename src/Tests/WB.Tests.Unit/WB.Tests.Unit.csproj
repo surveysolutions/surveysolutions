@@ -341,6 +341,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\StatefulInterviewTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\when_creating_list_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\QuestionHeaderViewModelTestsContext.cs" />
