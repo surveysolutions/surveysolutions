@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
-using Android.Content.Res;
 using Android.Text;
 using Android.Util;
 using Android.Views;
@@ -10,10 +9,11 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
+using Range = WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl.Range;
 using String = System.String;
 
 
-namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
+namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 {
     public class MaskedEditText : EditText, ITextWatcher, IInputFilter
     {
@@ -76,7 +76,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             this.GeneratePositionArrays();
 
             this.maxRawLength = this.maskToRaw[this.PreviousValidPosition(this.mask.Length - 1)] + 1;
-            this.rawText = new RawText(maxRawLength);
+            this.rawText = new RawText(this.maxRawLength);
             this.selection = this.rawToMask[0];
 
             this.editingBefore = true;
@@ -90,7 +90,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             else 
             {
                 this.EditableText.Clear();
-                this.EditableText.Append(ReplaceCharRepresentation(this.mask, this.maskFill));
+                this.EditableText.Append(this.ReplaceCharRepresentation(this.mask, this.maskFill));
             }
 
             this.editingBefore = false;
@@ -142,7 +142,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
         }
 
-        public event EventHandler<bool> IsMaskedFormAnsweredChanged; 
+        public event EventHandler<EventArgs> IsMaskedFormAnsweredChanged; 
 
         private bool isMaskedFormAnswered;
         public bool IsMaskedFormAnswered
@@ -156,7 +156,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
                     if (this.IsMaskedFormAnsweredChanged != null)
                     {
-                        this.IsMaskedFormAnsweredChanged.Invoke(this, this.isMaskedFormAnswered);
+                        this.IsMaskedFormAnsweredChanged.Invoke(this, EventArgs.Empty);
                     }
                 }
             }
@@ -177,7 +177,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             for(int i = 0; i < this.mask.Length; i++) 
             {
                 char currentChar = this.mask[i];
-                if(charRepresentationArray.Contains(currentChar)) 
+                if(this.charRepresentationArray.Contains(currentChar)) 
                 {
                     aux[charIndex] = i;
                     this.maskToRaw[i] = charIndex++;
@@ -222,12 +222,12 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
         void ITextWatcher.AfterTextChanged(IEditable s)
         {
-            AfterTextChangedHandler(s);
+            this.AfterTextChangedHandler(s);
         }
 
         void ITextWatcher.BeforeTextChanged(ICharSequence s, int start, int count, int after)
         {
-            BeforeTextChangedHandler(s, start, count, after);
+            this.BeforeTextChangedHandler(s, start, count, after);
         }
 
         void ITextWatcher.OnTextChanged(ICharSequence s, int start, int before, int count)
@@ -237,7 +237,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
         protected override void OnTextChanged(ICharSequence s, int start, int before, int count)
         {
-            OnTextChangedHandle(s.ToString(), start, before, count);
+            this.OnTextChangedHandle(s.ToString(), start, before, count);
         }
 
         public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
@@ -259,20 +259,20 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             {
                 var currentChar = source.CharAt(i);
 
-                indexInMask = NextValidPosition(indexInMask);
-                if (indexInMask >= mask.Length)
+                indexInMask = this.NextValidPosition(indexInMask);
+                if (indexInMask >= this.mask.Length)
                     continue;
 
-                var maskChar = mask[indexInMask];
+                var maskChar = this.mask[indexInMask];
 
                 switch (maskChar)
                 {
                     case DigitKey:
-                        filterArray[i] = char.IsDigit(currentChar) ? currentChar : maskFill;
+                        filterArray[i] = char.IsDigit(currentChar) ? currentChar : this.maskFill;
                         break;
 
                     case CharacterKey:
-                        filterArray[i] = char.IsLetter(currentChar) ? currentChar : maskFill;
+                        filterArray[i] = char.IsLetter(currentChar) ? currentChar : this.maskFill;
                         break;
 
                     case AnythingKey:
@@ -286,7 +286,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             }
 
             var filterString = new string(filterArray);
-            filterString = filterString.Replace(maskFill.ToString(), "");
+            filterString = filterString.Replace(this.maskFill.ToString(), "");
             return new Java.Lang.String(filterString);
         }
 
@@ -374,7 +374,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                     this.EditableText.Append(this.MakeMaskedText());
                 }
 
-                this.IsMaskedFormAnswered = rawText.IsAnswered;
+                this.IsMaskedFormAnswered = this.rawText.IsAnswered;
             
                 this.selectionChanged = false;
                 this.SetSelection(this.selection);
@@ -411,7 +411,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
                         selEnd = this.FixSelection(selEnd);
                     }
 
-                    if (Text.Length > selStart && Text.Length > selEnd)
+                    if (this.Text.Length > selStart && this.Text.Length > selEnd)
                     {
                         this.SetSelection(selStart, selEnd);
                         this.selectionChanged = true;
@@ -485,13 +485,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
     
         private String MakeMaskedText() 
         {
-            char[] maskedText = ReplaceCharRepresentation(this.mask, ' ').ToCharArray();
+            char[] maskedText = this.ReplaceCharRepresentation(this.mask, ' ').ToCharArray();
 
             for(int i = 0; i < this.rawToMask.Length; i++)
             {
                 var rawTextChar = this.rawText.CharAt(i);
 
-                if (rawTextChar != rawText.EmptyChar)
+                if (rawTextChar != this.rawText.EmptyChar)
                 {
                     maskedText[this.rawToMask[i]] = rawTextChar;
                 }
@@ -528,7 +528,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
     
         private String Clear(String str) 
         {
-            str = str.Replace(Character.ToString(maskFill), String.Empty);
+            str = str.Replace(Character.ToString(this.maskFill), String.Empty);
 
             return str;
         }

@@ -1,11 +1,11 @@
-namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
+namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 {
     public class Range
     {
         public Range()
         {
-            Start = -1;
-            End = -1;
+            this.Start = -1;
+            this.End = -1;
         }
 
         public int Start { get; set; }

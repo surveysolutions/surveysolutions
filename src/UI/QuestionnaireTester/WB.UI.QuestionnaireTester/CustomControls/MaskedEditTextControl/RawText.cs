@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
+namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 {
 
     /**
@@ -25,9 +23,9 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
           */
         public void SubtractFromString(Range range)
         {
-            for (int i = range.Start; i <= range.End && i < text.Length; i++)
+            for (int i = range.Start; i <= range.End && i < this.text.Length; i++)
             {
-                text[i] = EmptyChar;
+                this.text[i] = this.EmptyChar;
             }
         }
 
@@ -43,7 +41,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
             for (int i = 0; i < newString.Length; i++)
             {
                 var index = start + i;
-                if (index < text.Length)
+                if (index < this.text.Length)
                 {
                     this.text[index] = newString[i];
                 }
@@ -63,12 +61,12 @@ namespace WB.UI.QuestionnaireTester.CustomBindings.Masked
 
         public bool HasAnyText
         {
-            get { return text.Any(c => c != EmptyChar); }
+            get { return this.text.Any(c => c != this.EmptyChar); }
         }
 
         public bool IsAnswered
         {
-            get { return text.All(c => c != EmptyChar); }
+            get { return this.text.All(c => c != this.EmptyChar); }
         }
 
         public char CharAt(int position)

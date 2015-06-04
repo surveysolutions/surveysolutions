@@ -239,13 +239,11 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\EditTextMaskedTextBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
-    <Compile Include="CustomBindings\Masked\EditTextMaskWrapper.cs" />
-    <Compile Include="CustomBindings\Masked\MaskedEditText.cs" />
-    <Compile Include="CustomBindings\Masked\Range.cs" />
-    <Compile Include="CustomBindings\Masked\RawText.cs" />
+    <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
+    <Compile Include="CustomControls\MaskedEditTextControl\Range.cs" />
+    <Compile Include="CustomControls\MaskedEditTextControl\RawText.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
     <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
@@ -261,7 +259,6 @@
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
-    <Compile Include="CustomBindings\EditTextMaskBinding.cs" />
     <Compile Include="CustomControls\DynamicImageView.cs" />
     <Compile Include="CustomControls\EnterTimeView.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />

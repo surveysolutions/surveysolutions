@@ -18,8 +18,8 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.Activities;
 using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
-using WB.UI.QuestionnaireTester.CustomBindings.Masked;
 using WB.UI.QuestionnaireTester.CustomControls;
+using WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl;
 using WB.UI.QuestionnaireTester.Ninject;
 using Xamarin;
 

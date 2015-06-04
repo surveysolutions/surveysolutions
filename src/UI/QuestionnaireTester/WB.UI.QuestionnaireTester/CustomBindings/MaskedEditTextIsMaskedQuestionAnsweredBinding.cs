@@ -1,6 +1,8 @@
-﻿using Cirrious.MvvmCross.Binding;
+﻿using System;
+using Android.Locations;
+using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using WB.UI.QuestionnaireTester.CustomBindings.Masked;
+using WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
@@ -18,10 +20,10 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(MaskedEditText control, bool value)
         {
-            // ignore, we only read
+            // ignore, we only read this property from control
         }
 
-        private void IsMaskedFormAnsweredChangedHandler(object sender, bool isAnswered)
+        private void IsMaskedFormAnsweredChangedHandler(object sender, EventArgs e)
         {
             var target = this.Target;
 
