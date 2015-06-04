@@ -12,8 +12,8 @@
   </MvxLinearLayout>
   <View style="@style/Interview_Entity_Divider" />
   <MvxListView
-        style="@style/Interview_Sidebar_Chapters"
-        local:MvxBind="ItemsSource Chapters.Chapters; ItemClick Chapters.NavigateToChapterCommand;"
-        local:MvxItemTemplate="@layout/interview_chapter_item" />
+        style="@style/Interview_Sidebar_Sections"
+        local:MvxBind="ItemsSource Sections.Sections; ItemClick Sections.NavigateToSectionCommand;"
+        local:MvxItemTemplate="@layout/interview_section_item" />
   
 </MvxLinearLayout>

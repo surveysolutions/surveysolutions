@@ -240,6 +240,7 @@
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="Converters\SectionBackgroundColorConverter.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
@@ -534,7 +535,7 @@
     <AndroidResource Include="Resources\layout\interview_question_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_chapter_item.axml">
+    <AndroidResource Include="Resources\layout\interview_section_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">

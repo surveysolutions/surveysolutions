@@ -18,9 +18,9 @@
   <dimen name="Interview_Sidebar_Header_padding_top">28dp</dimen>
   
 
-  <dimen name="Interview_Sidebar_Chapters_margin_top">28dp</dimen>
-  <dimen name="Interview_Sidebar_Chapters_height">0dp</dimen>
-  <dimen name="Interview_Sidebar_Chapters_Item_height">60dp</dimen>
+  <dimen name="Interview_Sidebar_Sections_margin_top">28dp</dimen>
+  <dimen name="Interview_Sidebar_Sections_height">0dp</dimen>
+  <dimen name="Interview_Sidebar_Sections_Item_height">60dp</dimen>
 
   <dimen name="Interview_Sidebar_PrefilledQuestion_Answer_margin_left">10dp</dimen>
   <dimen name="Interview_Sidebar_PrefilledQuestions_margin_top">18dp</dimen>
