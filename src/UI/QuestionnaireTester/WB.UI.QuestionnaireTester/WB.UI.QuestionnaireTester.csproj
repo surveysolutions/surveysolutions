@@ -241,6 +241,7 @@
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\Masked\EditTextMaskBindingNew.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="CustomBindings\Masked\EditTextMaskWrapper.cs" />
     <Compile Include="CustomBindings\Masked\MaskedEditText.cs" />
     <Compile Include="CustomBindings\Masked\Range.cs" />
     <Compile Include="CustomBindings\Masked\RawText.cs" />
