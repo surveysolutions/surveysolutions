@@ -157,7 +157,7 @@ namespace WB.UI.Headquarters
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
-            var interviewCountLimit = WebConfigurationManager.AppSettings["Limits.InterviewCountLimit"];
+            var interviewCountLimit = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
 
             kernel.Load(
                 eventStoreModule,
