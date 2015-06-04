@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IInterviewPreconditionsService
     {
-        long? InterviewCountLimit { get; }
-        bool IsInterviewCountLimitReached();
+        long? MaxNumberOfInterviews { get; }
+        long? NumberofInterviewsAllowedToCreate { get; }
     }
 }

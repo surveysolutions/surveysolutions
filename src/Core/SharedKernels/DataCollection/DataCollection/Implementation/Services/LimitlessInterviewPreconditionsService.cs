@@ -9,14 +9,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
     internal class LimitlessInterviewPreconditionsService : IInterviewPreconditionsService
     {
-        public long? InterviewCountLimit
+        public long? MaxNumberOfInterviews
         {
             get { return null; }
         }
 
-        public bool IsInterviewCountLimitReached()
+        public long? NumberofInterviewsAllowedToCreate
         {
-            return false;
+            get { return null; }
         }
     }
 }

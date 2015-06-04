@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             if (interviewLimitCount.HasValue)
             {
                 this.Bind<LimitedInterviewSettings>().ToConstant(new LimitedInterviewSettings(interviewLimitCount.Value));
-                this.Bind<IInterviewPreconditionsService, ILimitedInterviewService>().To<LimitedInterviewPreconditionsService>().InSingletonScope();
+                this.Bind<IInterviewPreconditionsService>().To<LimitedInterviewPreconditionsService>().InSingletonScope();
             }
             else
             {
