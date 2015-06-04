@@ -5,6 +5,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -70,6 +71,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { mask = value; RaisePropertyChanged(); }
         }
 
+        private bool isQuestionAnswered;
+        public bool IsQuestionAnswered
+        {
+            get { return isQuestionAnswered; }
+            private set { isQuestionAnswered = value; RaisePropertyChanged(); }
+        }
+
         private string answer;
         public string Answer
         {
@@ -88,6 +96,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async void SendAnswerTextQuestionCommand()
         {
+            if (IsQuestionAnswered)
+            {
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_ParsingError);
+                return;
+            }
+
             var command = new AnswerTextQuestionCommand(
                 interviewId: Guid.Parse(interviewId),
                 userId: principal.CurrentUserIdentity.UserId,
