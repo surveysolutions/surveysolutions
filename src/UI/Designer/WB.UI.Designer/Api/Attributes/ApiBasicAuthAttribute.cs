@@ -10,6 +10,7 @@ using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 
@@ -26,6 +27,11 @@ namespace WB.UI.Designer.Api.Attributes
         private IReadSideStatusService readSideStatusService
         {
             get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
+        }
+
+        private ITransactionManagerProvider TransactionManagerProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
         private readonly Func<string, string, bool> validateUserCredentials;
@@ -52,29 +58,36 @@ namespace WB.UI.Designer.Api.Attributes
                 this.ThrowUnathorizedException(actionContext);
                 return;
             }
-
-            if (!this.Authorize(credentials.Username, credentials.Password))
+            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            try
             {
-                this.ThrowUnathorizedException(actionContext);
-                return;
+                if (!this.Authorize(credentials.Username, credentials.Password))
+                {
+                    this.ThrowUnathorizedException(actionContext);
+                    return;
+                }
+
+                var identity = new GenericIdentity(credentials.Username, "Basic");
+                var principal = new GenericPrincipal(identity, null);
+
+                Thread.CurrentPrincipal = principal;
+                if (HttpContext.Current != null)
+                {
+                    HttpContext.Current.User = principal;
+                }
+
+                if (IsAccountLockedOut())
+                {
+                    this.ThrowLockedOutException(actionContext);
+                    return;
+                }
+
+                base.OnAuthorization(actionContext);
             }
-
-            var identity = new GenericIdentity(credentials.Username, "Basic");
-            var principal = new GenericPrincipal(identity, null);
-
-            Thread.CurrentPrincipal = principal;
-            if (HttpContext.Current != null)
+            finally
             {
-                HttpContext.Current.User = principal;
+                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
             }
-
-            if (IsAccountLockedOut())
-            {
-                this.ThrowLockedOutException(actionContext);
-                return;
-            }
-
-            base.OnAuthorization(actionContext);
         }
 
         private static BasicCredentials ParseCredentials(HttpActionContext actionContext)

@@ -7,5 +7,17 @@
   <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
                local:MvxBind="ItemsSource PrefilledQuestions"
                local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
-  <include layout="@layout/interview_chapters" />
+  <ScrollView
+    style="@style/Interview_Sidebar_Chapters"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarStyle="outsideOverlay">
+    
+    <MvxLinearLayout
+          style="@style/VerticalFullWidthWrappingLayout"
+          local:MvxBind="ItemsSource Chapters.Chapters"
+          local:MvxItemTemplate="@layout/interview_chapter_item" />
+ 
+ </ScrollView>
+  
 </MvxLinearLayout>

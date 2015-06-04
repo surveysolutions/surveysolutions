@@ -21,6 +21,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls
         private static readonly Dictionary<Type, int> QuestionTemplates = new Dictionary<Type, int>
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
+            {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
@@ -37,9 +38,17 @@ namespace WB.UI.QuestionnaireTester.CustomControls
 
         public override int GetItemViewType(int position)
         {
-            var source = this.GetRawItem(position);
+            object source = this.GetRawItem(position);
 
             var typeOfViewModel = source.GetType();
+            if (source is SingleOptionQuestionViewModel)
+            {
+                var multiOptionQuestionViewModel = (SingleOptionQuestionViewModel)source;
+                if (multiOptionQuestionViewModel.IsFiltered)
+                {
+                    return Resource.Layout.interview_question_single_filtered_option;
+                }
+            }
 
             return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
         }

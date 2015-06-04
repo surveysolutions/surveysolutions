@@ -26,7 +26,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             if (this.Target != null)
             {
-                this.Target.Click += HandleClick;
+                this.Target.Click += this.HandleClick;
             }
 
             base.SubscribeToEvents();
@@ -42,16 +42,16 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             base.Dispose(isDisposing);
         }
 
-        private static void HandleClick(object sender, EventArgs e)
+        private void HandleClick(object sender, EventArgs e)
         {
             var view = (View) sender;
             var activity = (Activity) view.Context;
 
-            RemoveFocusFromEditText(activity);
-            HideKeyboard(activity, view.WindowToken);
+            this.RemoveFocusFromEditText(activity);
+            this.HideKeyboard(activity, view.WindowToken);
         }
 
-        private static void RemoveFocusFromEditText(Activity activity)
+        private void RemoveFocusFromEditText(Activity activity)
         {
             View viewWithFocus = activity.CurrentFocus;
 
@@ -61,7 +61,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             }
         }
 
-        private static void HideKeyboard(Activity activity, IBinder windowToken)
+        private void HideKeyboard(Activity activity, IBinder windowToken)
         {
             var inputMethodManager = (InputMethodManager) activity.GetSystemService(Context.InputMethodService);
 

@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__question__exist__ = () =>
-            new[] { "empty", "title" }.ShouldEachConformTo(
+            new[] { "empty", "text" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

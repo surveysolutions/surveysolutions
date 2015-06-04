@@ -393,7 +393,8 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy,
                 sortOrder: sortOrder,
                 filter: filter,
-                viewerId: UserHelper.WebUser.UserId);
+                viewerId: UserHelper.WebUser.UserId,
+                isAdmin: UserHelper.WebUser.IsAdmin);
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
@@ -420,7 +421,8 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy,
                 sortOrder: sortOrder,
                 filter: filter,
-                viewerId: UserHelper.WebUser.UserId);
+                viewerId: UserHelper.WebUser.UserId,
+                isAdmin: UserHelper.WebUser.IsAdmin);
         }
         
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)

@@ -120,6 +120,9 @@
   <data name="CumulativeChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
+  <data name="DataExport" xml:space="preserve">
+    <value>Data Export</value>
+  </data>
   <data name="Headquarters" xml:space="preserve">
     <value>Headquarters</value>
   </data>
@@ -135,8 +138,11 @@
   <data name="Observers" xml:space="preserve">
     <value>Observers</value>
   </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Questionnaires</value>
+    <value>Survey Setup</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Number of synchronized interviews, but unprocessed yet</value>
@@ -144,11 +150,20 @@
   <data name="Reports" xml:space="preserve">
     <value>Reports</value>
   </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Surveys and Statuses</value>
+  </data>
+  <data name="TeamAndRoles" xml:space="preserve">
+    <value>Team and Roles</value>
+  </data>
+  <data name="TeamsAndRoles" xml:space="preserve">
+    <value>Teams and Roles</value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>

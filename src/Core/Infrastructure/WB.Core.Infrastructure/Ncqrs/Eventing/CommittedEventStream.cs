@@ -8,8 +8,8 @@ namespace Ncqrs.Eventing
 {
     public class CommittedEventStream : IEnumerable<CommittedEvent>
     {
-        private readonly long _fromVersion;
-        private readonly long _toVersion;
+        private readonly int _fromVersion;
+        private readonly int _toVersion;
         private readonly Guid _sourceId;
         private readonly List<CommittedEvent> _events = new List<CommittedEvent>();
 
@@ -33,7 +33,7 @@ namespace Ncqrs.Eventing
             get { return _sourceId; }
         }
 
-        public long CurrentSourceVersion
+        public int CurrentSourceVersion
         {
             get { return _toVersion; }
         }

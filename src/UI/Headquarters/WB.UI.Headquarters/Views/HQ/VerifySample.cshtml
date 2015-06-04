@@ -63,6 +63,8 @@
         {
             <fieldset class="form-horizontal">
                 <div class="control-group">
+                    @if (!Model.WasSupervsorProvided)
+                    {
                     <div class="control-label">Select responsible</div>
                     <div class="controls">
                         <select name="responsibleSupervisor" class="input-block-level">
@@ -72,6 +74,13 @@
                             }
                         </select>
                     </div>
+                    }
+                    else
+                    {
+                    <div class="controls">
+                        Responsible supervisor will be assigned automatically.
+                    </div>
+                    }
                 </div>
                 <div class="form-actions">
                     <button class="btn btn-large btn-primary pull-right" type="submit">Create sample from this data</button>

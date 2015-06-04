@@ -41,6 +41,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views
             return Roles.Any(role => role == UserRoles.Administrator);
         }
 
+        public virtual bool IsSupervisor()
+        {
+            return Roles.Any(role => role == UserRoles.Supervisor);
+        }
+
         public virtual UserLight GetUseLight()
         {
             return new UserLight(this.PublicKey, this.UserName);

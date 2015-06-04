@@ -7,7 +7,6 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
-
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
@@ -24,6 +23,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private readonly IStatefullInterviewRepository interviewRepository;
         private Identity questionIdentity;
         private string interviewId;
+
+        protected QuestionStateViewModel() { }
 
         public QuestionStateViewModel(
             ILiteEventRegistry liteEventRegistry,

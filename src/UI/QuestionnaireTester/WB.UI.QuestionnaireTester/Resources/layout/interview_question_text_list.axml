@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_QuestionWithDivider"
+    local:MvxBind="Enabled QuestionState.Enablement.Enabled; LongClick QuestionState.Comments.ShowCommentEditorCommand">
+    <MvxLinearLayout style="@style/Interview_Question">
+        <include layout="@layout/interview_question__title" />
+        <MvxLinearLayout
+            style="@style/Interview_Question_Body"
+            local:MvxBind="Visible QuestionState.Enablement.Enabled">
+          
+            <include layout="@layout/interview_question__instructions" />
+            <MvxLinearLayout
+                style="@style/VerticalFullWidthWrappingLayout"
+                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+
+              <MvxLinearLayout
+                   style="@style/VerticalFullWidthWrappingLayout"
+                   local:MvxBind="ItemsSource Answers"
+                   local:MvxItemTemplate="@layout/interview_question_text_list_item" />
+
+              <EditText
+                  style="@style/Interview_Question_Answer_List_NewItem_Editor"
+                  local:MvxBind="FocusText NewListItem; Hint Localization('TextListQuestion_Hint'); Visible IsAddNewItemVisible;" />
+              
+            </MvxLinearLayout>
+
+          <include layout="@layout/interview_question__errors" />
+          <include layout="@layout/interview_question__comments" />
+        </MvxLinearLayout>
+    </MvxLinearLayout>
+    <ProgressBar
+      style="@style/Interview_Question_Progress_Indicator"
+      local:MvxBind="ShowProgress Answering.InProgress" />
+    <View style="@style/Interview_Question_Divider" />
+
+</MvxLinearLayout>

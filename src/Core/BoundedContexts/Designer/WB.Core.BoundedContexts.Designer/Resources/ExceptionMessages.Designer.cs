@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question can&apos;t be linked and cascading at the same time.
+        ///   Looks up a localized string similar to Question can&apos;t be linked and cascading at the same time..
         /// </summary>
         internal static string CantBeLinkedAndCascadingAtSameTime {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed.
+        ///   Looks up a localized string similar to Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed..
         /// </summary>
         internal static string CantRemoveParentQuestionInCascading {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading questions can&apos;t have condition expression.
+        ///   Looks up a localized string similar to Cascading questions can&apos;t have enabling condition..
         /// </summary>
         internal static string CascadingCantHaveConditionExpression {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading questions can&apos;t have validation expression.
+        ///   Looks up a localized string similar to Cascading questions can&apos;t have validation condition..
         /// </summary>
         internal static string CascadingCantHaveValidationExpression {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column.
+        ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column..
         /// </summary>
         internal static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
             get {
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in cascading question can not have not numeric value in ParentValue column.
+        ///   Looks up a localized string similar to Options in cascading question can not have not numeric value in ParentValue column..
         /// </summary>
         internal static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire.
+        ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire..
         /// </summary>
         internal static string ShouldCascadeFromExistingQuestion {
             get {

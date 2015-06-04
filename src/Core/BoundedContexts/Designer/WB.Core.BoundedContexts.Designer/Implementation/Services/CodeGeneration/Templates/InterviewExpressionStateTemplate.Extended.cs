@@ -17,9 +17,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
         }
 
-        protected RosterScopeTemplate CreateRosterScopeTemplate(KeyValuePair<string, List<RosterTemplateModel>> rosterGroup)
+        protected RosterScopeTemplate CreateRosterScopeTemplate(RosterScopeTemplateModel rosterGroup)
         {
-            return new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
+            return new RosterScopeTemplate(rosterGroup);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Core.Synchronization
                                             CreateInterviewSyncPackageMetaInformation(interview1Id, sortIndex:8, itemType: SyncItemType.Interview, userId:userId)
                                         };
 
-            var writer = new TestInMemoryWriter<InterviewSyncPackageMeta>();
+            var writer = Stub.ReadSideRepository<InterviewSyncPackageMeta>();
             foreach (var package in interviewSyncPackageMetas)
             {
                 writer.Store(package, package.PackageId);

@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 {
     public class PreloadedDataVerificationErrorsView
     {
-        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, PreloadedDataVerificationError[] errors, string id, PreloadedContentType preloadedContentType)
+        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, PreloadedDataVerificationError[] errors, 
+            bool wasSupervsorProvided,
+            string id, PreloadedContentType preloadedContentType)
         {
             this.PreloadedContentType = preloadedContentType;
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
             this.Errors = errors;
+            this.WasSupervsorProvided = wasSupervsorProvided;
         }
 
         public string Id { get; private set; }
@@ -27,5 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
         public PreloadedDataVerificationError[] Errors { get; private set; }
 
         public PreloadedContentType PreloadedContentType { get; private set; }
+
+        public bool WasSupervsorProvided { get; set; }
     }
 }

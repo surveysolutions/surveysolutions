@@ -138,4 +138,7 @@
   <data name="UnknownUser" xml:space="preserve">
     <value>&lt;UNKNOWN USER&gt;</value>
   </data>
+  <data name="Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
 </root>

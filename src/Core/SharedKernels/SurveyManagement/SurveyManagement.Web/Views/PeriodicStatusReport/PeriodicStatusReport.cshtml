@@ -1,0 +1,148 @@
+﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Resources
+@model WB.Core.SharedKernels.SurveyManagement.Views.Reposts.PeriodicStatusReportModel
+@{
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+}
+
+@section scripts
+{
+    @Scripts.Render(
+    "~/Scripts/bootstrap-datepicker.js",
+    "~/Scripts/ko.datepicker.js",
+    "~/Scripts/components/moment-duration-format.js",
+                    "~/Scripts/viewmodels/pages/periodicstatusreport.js")
+    <script type="text/javascript">
+        function GetInterviewersUrl(supervisorId) {
+            var url = new Url(window.location.href);
+            return '@Url.Action(Model.ReportName + "ByInterviewers", "PeriodicStatusReport")'
+                    + '?questionnaireId=' + url.query['questionnaireId']
+                    + '&questionnaireVersion=' + url.query['questionnaireVersion']
+                    + '&from=' + url.query['from']
+                    + '&period=' + url.query['period']
+                    + '&columnCount=' + url.query['columnCount']
+                    + '&supervisorId=' + supervisorId;
+        }
+        function GetSupervisorsUrl() {
+            var url = new Url(window.location.href);
+            return '@Url.Action(Model.ReportName + "BySupervisors", "PeriodicStatusReport")'
+                + '?questionnaireId=' + url.query['questionnaireId']
+                + '&questionnaireVersion=' + url.query['questionnaireVersion']
+                + '&from=' + url.query['from']
+                + '&period=' + url.query['period']
+                + '&columnCount=' + url.query['columnCount'];
+        }
+        $(function () {
+            var model = new Supervisor.VM.PeriodicStatusReport('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = Model.ReportName + Model.WebApiActionName })');
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+@section styles
+{
+    @Styles.Render("~/Content/datepicker3.css")
+}
+
+@section header
+{
+
+<h3 class="sinle-line-header" data-bind="text: QuestionnaireName"></h3>
+}
+
+@section actionbar
+{
+
+<h3>@Model.ReportTitle</h3>
+    @if (Model.CanNavigateToQuantityBySupervisors)
+    {
+        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
+    }
+}
+
+@section filters
+{
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">
+                @PeriodicStatusReport.Questionnaire
+            </h4>
+            <p class="list-group-item-text">
+                <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire" class="form-control">
+                    @foreach (var item in Model.Questionnaires)
+                    {
+                        <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
+                    }
+                </select>
+            </p>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">From</h4>
+            <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
+                <input id="date-picker-from" type="text" class="form-control" readonly="readonly" data-bind="value: FromDate">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">@PeriodicStatusReport.Period</h4>
+            <p class="list-group-item-text">
+                <select id="periodSelector" class="form-control" data-bind="value: Period">
+                    <option value='d'>@PeriodicStatusReport.Day</option>
+                    <option value='w'>@PeriodicStatusReport.Week</option>
+                    <option value='m'>@PeriodicStatusReport.Month</option>
+                </select>
+            </p>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">@PeriodicStatusReport.PeriodCount</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: ColumnCount" class="form-control">
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </p>
+        </li>
+    </ul>
+}
+
+@section grid
+{
+
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>@Model.ResponsibleColumnName</th>
+                <!-- ko foreach:DateTimeRanges -->
+                <th>
+                    <span data-bind="text: $root.GetPeriodName($data)"></span>
+                </th>
+                <!-- /ko -->
+                <th>@PeriodicStatusReport.Average</th>
+                <th>@PeriodicStatusReport.Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:Items -->
+            <tr>
+                <td>
+                    @if (Model.CanNavigateToQuantityByTeamMember)
+                    {
+                        <a data-bind="attr: { href: GetInterviewersUrl(ResponsibleId()) }, text: ResponsibleName"> </a>
+                    }
+                    else
+                    {
+                        <span data-bind="text: ResponsibleName"></span>
+                    }
+                </td>
+                <!-- ko foreach:@(Model.ReportName + "ByPeriod") -->
+                <td><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
+                <!-- /ko -->
+                <td><span data-bind="text: $root.Format@(Model.ReportName)Period(Average())"></span></td>
+                <td><span data-bind="text: $root.Format@(Model.ReportName)Period(Total())"></span></td>
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+}

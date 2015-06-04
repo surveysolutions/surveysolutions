@@ -39,5 +39,7 @@ namespace WB.Core.Infrastructure.FileSystem
         Assembly LoadAssembly(string assemblyFile);
 
         bool IsWritePermissionExists(string path);
+
+        string ChangeExtension(string path1, string newExtension);
     }
 }

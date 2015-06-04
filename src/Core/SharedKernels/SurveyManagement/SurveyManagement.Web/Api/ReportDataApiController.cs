@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -33,6 +34,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
 
         private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
+  
+        private readonly IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport;
+        private readonly IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport;
+
+        private readonly IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport;
+        private readonly IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -44,7 +51,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IViewFactory<MapReportInputModel, MapReportView> mapReport, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
-            IChartStatisticsViewFactory chartStatisticsViewFactory)
+            IChartStatisticsViewFactory chartStatisticsViewFactory, 
+            IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, 
+            IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport, 
+            IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport, 
+            IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport)
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
@@ -54,6 +65,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.mapReport = mapReport;
             this.questionInforFactory = questionInforFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
+            this.quantityByInterviewersReport = quantityByInterviewersReport;
+            this.quantityBySupervisorsReport = quantityBySupervisorsReport;
+            this.speedByInterviewersReport = speedByInterviewersReport;
+            this.speedBySupervisorsReport = speedBySupervisorsReport;
         }
 
         [HttpPost]
@@ -95,15 +110,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public QuestionnaireAndVersionsView Questionnaires(QuestionnaireBrowseInputModel input)
         {
             QuestionnaireBrowseView questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(input);
-            var result = new QuestionnaireAndVersionsView();
-            result.Items = questionnaireBrowseView.Items.Select(x => new QuestionnaireAndVersionsItem
+            var result = new QuestionnaireAndVersionsView
             {
-                   QuestionnaireId = x.QuestionnaireId,
-                   Title = x.Title,
-                   Versions = questionnaireBrowseView.Items.Where(q => q.QuestionnaireId == x.QuestionnaireId)
-                                                           .Select(y => y.Version).ToArray()
-            }).ToArray();
-            result.TotalCount = questionnaireBrowseView.TotalCount;
+                Items = questionnaireBrowseView.Items
+                                               .Select(x => new QuestionnaireAndVersionsItem {
+                                                        QuestionnaireId = x.QuestionnaireId,
+                                                        Title = x.Title,
+                                                        Versions = questionnaireBrowseView.Items
+                                                                                          .Where(q => q.QuestionnaireId == x.QuestionnaireId)
+                                                                                          .Select(y => y.Version)
+                                                                                          .ToArray()
+                                                    }).ToArray(),
+                TotalCount = questionnaireBrowseView.TotalCount
+            };
             return result;
         }
 
@@ -112,10 +131,60 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.questionInforFactory.Load(input);
         }
 
+        public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+            if (input.Request.SupervisorId == Guid.Empty)
+            {
+                input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
+            }
+            return this.quantityByInterviewersReport.Load(input.Request);
+        }
+
+        public QuantityByResponsibleReportView QuantityBySupervisors(QuantityBySupervisorsReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+
+            return this.quantityBySupervisorsReport.Load(input.Request);
+        }
+
+        public SpeedByResponsibleReportView SpeedByInterviewers(SpeedByInterviewersReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+            if (input.Request.SupervisorId == Guid.Empty)
+            {
+                input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
+            }
+            return this.speedByInterviewersReport.Load(input.Request);
+        }
+
+        public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel input)
+        {
+            if (input.Pager != null)
+            {
+                input.Request.Page = input.Pager.Page;
+                input.Request.PageSize = input.Pager.PageSize;
+            }
+
+            return this.speedBySupervisorsReport.Load(input.Request);
+        }
+
         [HttpPost]
         public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
         {
-            var input = new SurveysAndStatusesReportInputModel { ViewerId = this.GlobalInfo.GetCurrentUser().Id };
+            var input = new SurveysAndStatusesReportInputModel { TeamLeadId = this.GlobalInfo.GetCurrentUser().Id };
 
             if (data != null)
             {
@@ -126,9 +195,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     input.PageSize = data.Pager.PageSize;
                 }
 
-                if (data.Request != null)
+                if (data.Request != null && data.Request.UserId != input.TeamLeadId)
                 {
-                    input.UserId = data.Request.UserId;
+                    input.ResponsibleId = data.Request.UserId;
                 }
             }
 
@@ -175,7 +244,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 if (data.Request != null)
                 {
-                    input.UserId = data.Request.UserId;
+                    input.TeamLeadId = data.Request.UserId;
                 }
             }
 
@@ -183,7 +252,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public ChartStatisticsView ChartStatistics(InterviewsStatisticsViewModel data)
+        public ChartStatisticsView ChartStatistics(InterviewsStatisticsInputModel data)
         {
             var input = new ChartStatisticsInputModel
             {

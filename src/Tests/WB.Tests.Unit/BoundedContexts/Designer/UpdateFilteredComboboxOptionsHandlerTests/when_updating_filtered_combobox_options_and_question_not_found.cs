@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__filtered_combobox_cant_be_found__ = () =>
-            new[] { "filtered combobox", "can't be found" }.ShouldEachConformTo(
+            new[] { "combo box", "can't be found" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

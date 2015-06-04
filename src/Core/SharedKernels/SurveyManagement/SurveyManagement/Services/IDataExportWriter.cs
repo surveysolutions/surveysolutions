@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
-    internal interface IDataExportWriter {
-        void AddActionRecord(InterviewActionExportView actions, string basePath);
-        void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath);
-        void CreateStructure(QuestionnaireExportStructure header, string basePath);
-        void DeleteInterviewRecords(string basePath, Guid interviewId);
-        void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas, IEnumerable<InterviewActionExportView> interviewActions, IEnumerable<Guid> interviewsForDelete);
+    internal interface IDataExportWriter : IReadSideRepositoryCleaner, IChacheableRepositoryWriter
+    {
+        void AddActionRecord(InterviewActionExportView actions, Guid questionnaireId, long questionnaireVersion);
+        void AddOrUpdateInterviewRecords(InterviewDataExportView items, Guid questionnaireId, long questionnaireVersion);
+        void DeleteInterviewRecords(Guid interviewId);
     }
 }

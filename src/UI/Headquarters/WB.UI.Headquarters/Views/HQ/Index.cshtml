@@ -9,22 +9,22 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/questionnaires.js")
     <script type="text/javascript">
-        var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
-        var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
-        var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
-        var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
-        var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
-        var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
-        var $importTemplateUrl = '@Url.Action("Import", "Template")';
-        $(function () {
-            var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "AllQuestionnaires"})';
-            var deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
+    var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
+    var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
+    var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
+    var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
+    var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
+    var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
+    var $importTemplateUrl = '@Url.Action("Import", "Template")';
+    $(function () {
+        var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "AllQuestionnaires"})';
+        var deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
 
-            var model = new Supervisor.VM.Questionnaires(questionnairesUrl, deleteQuestionnaireUrl);
+        var model = new Supervisor.VM.Questionnaires(questionnairesUrl, deleteQuestionnaireUrl);
 
-            ko.applyBindings(model);
-            model.load();
-        });
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -81,7 +81,7 @@
                             <i class="glyphicon glyphicon-plus-sign"></i>
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu">
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
                             <li>
                                 <a data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                                     <i class="glyphicon glyphicon-plus-sign"></i>
@@ -98,43 +98,7 @@
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
-
-                    <!-- ko ifnot:Disabled -->
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                            <i class=" glyphicon glyphicon-download">
-                            </i>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class=" glyphicon glyphicon-download">
-                                    </i> @Dashboard.AllData
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i> @Dashboard.ApprovedData
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i> @Dashboard.BinaryData
-                                </a>
-                                @if (this.ViewBag.EnableInterviewHistory)
-                                {
-                                    <a data-bind="attr: { href: $getExportedHistoryUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                        <i class="glyphicon glyphicon-download">
-                                        </i> @Dashboard.History
-                                    </a>
-                                }
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /ko -->
+                    
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">

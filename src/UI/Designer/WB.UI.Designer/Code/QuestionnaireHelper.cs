@@ -10,18 +10,17 @@ namespace WB.UI.Designer.Code
 {
     public class QuestionnaireHelper : IQuestionnaireHelper
     {
-        private readonly IMembershipUserService userService;
         private readonly IQuestionnaireListViewFactory viewFactory;
 
-        public QuestionnaireHelper(IMembershipUserService userSevice,
+        public QuestionnaireHelper(
             IQuestionnaireListViewFactory viewFactory)
         {
-            this.userService = userSevice;
             this.viewFactory = viewFactory;
         }
 
         public IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
             Guid viewerId, 
+            bool isAdmin,
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
@@ -32,15 +31,17 @@ namespace WB.UI.Designer.Code
                 isPublic: true, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
+                isAdmin:isAdmin,
                 sortOrder: sortOrder, 
                 filter: filter);
 
-            return model.Items.Select(this.GetPublicQuestionnaire)
+            return model.Items.Select(x => this.GetPublicQuestionnaire(x, viewerId, isAdmin))
                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            Guid viewerId, 
+            Guid viewerId,
+            bool isAdmin,
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
@@ -49,26 +50,26 @@ namespace WB.UI.Designer.Code
             QuestionnaireListView model = this.GetQuestionnaireView(
                 viewerId: viewerId, 
                 isPublic: false, 
+                isAdmin:isAdmin,
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter);
 
-            var result = model.Items.Select(this.GetQuestionnaire)
-                                    .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
+            var result = model.Items.Select(x => this.GetQuestionnaire(x, viewerId, isAdmin)).ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
             return result;
         }
 
-        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId)
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId, bool isAdmin)
         {
-            return this.GetQuestionnaires(viewerId: viewerId);
+            return this.GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin);
         }
 
-        private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
+        private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin)
         {
-            var hasAccess = (x.CreatedBy == this.userService.WebUser.UserId ||
-                x.SharedPersons.Contains(this.userService.WebUser.UserId) ||
-                this.userService.WebUser.IsAdmin) &&
+            var hasAccess = (x.CreatedBy == viewerId ||
+                x.SharedPersons.Contains(viewerId) ||
+                isAdmin) &&
                 !x.IsDeleted;
             return new QuestionnairePublicListViewModel
                        {
@@ -78,12 +79,12 @@ namespace WB.UI.Designer.Code
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            CanDelete =
-                               (x.CreatedBy == this.userService.WebUser.UserId
-                               || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
+                               (x.CreatedBy == viewerId
+                               || isAdmin) && !x.IsDeleted, 
                            CanExport = true, 
                            CanOpen = hasAccess,
                            CanEdit = hasAccess,
-                           CanSynchronize = this.userService.WebUser.IsAdmin, 
+                           CanSynchronize = isAdmin, 
                            CanExportToPdf = true,
                            CreatorName =
                                x.CreatedBy == null
@@ -92,7 +93,7 @@ namespace WB.UI.Designer.Code
                        };
         }
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x)
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin)
         {
             return new QuestionnaireListViewModel
                        {
@@ -104,17 +105,18 @@ namespace WB.UI.Designer.Code
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
                            CanExportToPdf = true,
-                           CanDelete = x.CreatedBy == this.userService.WebUser.UserId && !x.IsDeleted,
-                           CanOpen = (x.CreatedBy == this.userService.WebUser.UserId ||
-                                     x.SharedPersons.Contains(this.userService.WebUser.UserId))
+                           CanDelete = x.CreatedBy == viewerId && !x.IsDeleted,
+                           CanOpen = (x.CreatedBy == viewerId ||
+                                     x.SharedPersons.Contains(viewerId))
                                       && !x.IsDeleted,
-                           CanExport = true, 
-                           CanSynchronize = this.userService.WebUser.IsAdmin
+                           CanExport = true,
+                           CanSynchronize = isAdmin
                        };
         }
 
         private QuestionnaireListView GetQuestionnaireView(
             Guid viewerId, 
+            bool isAdmin,
             bool isPublic = true, 
             int? pageIndex = null, 
             string sortBy = null, 
@@ -127,8 +129,8 @@ namespace WB.UI.Designer.Code
                         new QuestionnaireListInputModel
                             {
                                 ViewerId = viewerId, 
-                                IsPublic = isPublic, 
-                                IsAdminMode = this.userService.WebUser.IsAdmin, 
+                                IsPublic = isPublic,
+                                IsAdminMode = isAdmin, 
                                 Page = pageIndex ?? 1,
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 

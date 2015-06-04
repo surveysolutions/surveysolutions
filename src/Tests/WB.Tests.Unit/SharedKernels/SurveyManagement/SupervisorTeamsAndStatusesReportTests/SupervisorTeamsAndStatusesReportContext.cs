@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorTeamsAndStatuse
     {
         protected static SupervisorTeamsAndStatusesReport CreateTeamsAndStatusesReport(IQueryableReadSideRepositoryReader<InterviewSummary> reader = null)
         {
-            return new SupervisorTeamsAndStatusesReport(reader ?? new TestInMemoryWriter<InterviewSummary>());
+            return new SupervisorTeamsAndStatusesReport(reader ?? Stub.ReadSideRepository<InterviewSummary>());
         }
     }
 }

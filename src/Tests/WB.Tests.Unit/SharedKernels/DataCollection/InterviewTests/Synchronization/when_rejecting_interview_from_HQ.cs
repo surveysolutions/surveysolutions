@@ -51,9 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
 
             interview = CreateInterview();
 
-            interview.AssignInterviewer(supervisorId, userId);
+            interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
             interview.Complete(userId, string.Empty, DateTime.Now);
-            interview.Approve(userId, string.Empty);
+            interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();
         };

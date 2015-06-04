@@ -25,7 +25,7 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>
         /// An <see cref="long"/> representing the current version of this aggregate root.
         /// </value>
-        public long Version
+        public int Version
         {
             get
             {
@@ -33,10 +33,10 @@ namespace Ncqrs.Eventing.Sourcing
             }
         }
         [NonSerialized]
-        private long _initialVersion;
+        private int _initialVersion;
 
         [NonSerialized]
-        private long _currentVersion;
+        private int _currentVersion;
 
         /// <summary>
         /// Gets the initial version.
@@ -49,7 +49,7 @@ namespace Ncqrs.Eventing.Sourcing
         /// </para>
         /// </summary>
         /// <value>The initial version.</value>
-        public long InitialVersion
+        public int InitialVersion
         {
             get { return _initialVersion; }            
         }
@@ -156,7 +156,7 @@ namespace Ncqrs.Eventing.Sourcing
             OnEventApplied(wrappedEvent);
         }
 
-        private long GetNextSequence()
+        private int GetNextSequence()
         {
 
             // 628426 31 Feb 2011 - the following absolutely needed to ensure correct sequencing, as incorrect versions were being passed to event store
@@ -181,7 +181,7 @@ namespace Ncqrs.Eventing.Sourcing
         {
             if (evnt.EventSourceId != EventSourceId)
             {
-                var message = String.Format("Cannot apply historical event from other event source.");
+                var message = "Cannot apply historical event from other event source.";
                 throw new InvalidOperationException(message);
             }
 

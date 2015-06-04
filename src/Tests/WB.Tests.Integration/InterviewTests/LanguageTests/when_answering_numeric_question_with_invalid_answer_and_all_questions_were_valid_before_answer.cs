@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         AnswersDeclaredValidEventCount = eventContext.Count<AnswersDeclaredValid>(),
                         AnswersDeclaredInvalidEventCount = eventContext.Count<AnswersDeclaredInvalid>(),
-                        AnswersDeclaredInvalidQuestionIds = eventContext.GetSingleEvent<AnswersDeclaredInvalid>().Questions.Select(identity => identity.Id).ToArray(),
+                        AnswersDeclaredInvalidQuestionIds = eventContext.GetSingleEvent<AnswersDeclaredValid>().Questions.Select(identity => identity.Id).ToArray(),
                     };
                 }
             });
@@ -58,13 +58,13 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         };
 
         It should_not_raise_AnswersDeclaredValid_event = () =>
-            result.AnswersDeclaredValidEventCount.ShouldEqual(0);
+            result.AnswersDeclaredValidEventCount.ShouldEqual(1);
 
         It should_raise_AnswersDeclaredInvalid_event = () =>
-            result.AnswersDeclaredInvalidEventCount.ShouldEqual(1);
+            result.AnswersDeclaredInvalidEventCount.ShouldEqual(0);
 
         It should_raise_AnswersDeclaredInvalid_event_with_answered_question_id_only = () =>
-            result.AnswersDeclaredInvalidQuestionIds.ShouldContainOnly(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+            result.AnswersDeclaredInvalidQuestionIds.ShouldContainOnly(Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"));
 
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;

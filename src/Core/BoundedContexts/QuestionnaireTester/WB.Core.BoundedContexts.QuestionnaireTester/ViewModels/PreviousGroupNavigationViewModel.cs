@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var parents = questionnaire.GroupParents[groupIdentity.Id];
+            var parents = questionnaire.Parents[groupIdentity.Id];
             IsExistsParent = parents.Count > 0;
 
             if (IsExistsParent)
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var parents = questionnaire.GroupParents[groupIdentity.Id];
+            var parents = questionnaire.Parents[groupIdentity.Id];
             var parent = parents.Last();
             int rosterLevelOfParent = parents.Count(p => p.IsRoster);
             decimal[] parentRosterVector = groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();

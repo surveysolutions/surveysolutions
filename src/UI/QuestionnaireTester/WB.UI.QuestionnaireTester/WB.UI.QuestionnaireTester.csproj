@@ -39,7 +39,7 @@
     <MandroidI18n>West</MandroidI18n>
     <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
-    <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
+    <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -324,7 +324,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml" />
+    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_edit_text_holo_light.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -508,6 +510,15 @@
     <AndroidResource Include="Resources\drawable\questionnaire_list_border.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\delete_button.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_list_item_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_list_item_editor_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -529,8 +540,8 @@
     <AndroidResource Include="Resources\layout\interview_question_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_chapters.axml">
-      <SubType>AndroidResource</SubType>
+    <AndroidResource Include="Resources\layout\interview_chapter_item.axml">
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
       <SubType>AndroidResource</SubType>
@@ -585,8 +596,13 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_left_side_panel.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_text_list.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_single_filtered_option.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">

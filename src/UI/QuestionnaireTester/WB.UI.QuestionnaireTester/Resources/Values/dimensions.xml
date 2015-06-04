@@ -67,5 +67,13 @@
 
   <dimen name="Questionnaires_Questionnaire_Description_margin_horizontal_in_between">5dp</dimen>
 
+  <dimen name="Interview_Question_List_Editor_margin_right">24dp</dimen>
+  <dimen name="Interview_Question_List_Editor_margin_left">14dp</dimen>
+  <dimen name="Interview_Question_List_Editor_width">0dp</dimen>
+  <dimen name="Interview_Question_List_Editor_padding">0dp</dimen>
+  <dimen name="Interview_Question_List_Editor_border">0dp</dimen>
 
+  <dimen name="Interview_Question_List_DeleteButton_width">24dp</dimen>
+  <dimen name="Interview_Question_List_DeleteButton_height">24dp</dimen>
+  
 </resources>

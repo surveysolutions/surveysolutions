@@ -4,8 +4,8 @@
             <div data-item-breadcrumbs data-crumbs="activeRoster.breadcrumbs"></div>
         </div>
         <div class="row">
-            <div class="form-group col-xs-7">
-                <label for="edit-group-title" class="wb-label">Roster Type</label><br>
+            <div class="form-group col-xs-6">
+                <label for="edit-group-title" class="wb-label">Roster source</label><br>
                 <div class="btn-group type-container-dropdown" dropdown>
                     <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" dropdown-toggle type="button">
                         {{activeRoster.getTitleForRosterType()}}
@@ -19,14 +19,14 @@
                 </div>
             </div>
 
-            <div class="form-group input-variable-name col-xs-4 pull-right">
-                <label for="edit-group-variableName" class="wb-label">Variable name <help key="variableName" placement="left" /></label><br>
+            <div class="form-group input-variable-name col-xs-5 pull-right">
+                <label for="edit-group-variableName" class="wb-label">Roster variable name <help key="variableName" placement="left" /></label><br>
                 <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName" maxlength="32" spellcheck="false">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="edit-group-title" class="wb-label">Title</label><br>
+            <label for="edit-group-title" class="wb-label">Roster name</label><br>
             <textarea id="edit-group-title" class="form-control" ng-model="activeRoster.title" msd-elastic></textarea>
 
             <div class="roster-type-specific-block" ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
@@ -35,7 +35,7 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
+            <label for="edit-group-condition" class="wb-label">Enabling condition  <help key="conditionExpression" /></label><br>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeRoster.enablementCondition"></div>
             </div>
@@ -57,7 +57,7 @@
     <script type="text/ng-template" id="List-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question (answer generates number of rows): </label>
+            <label>Source question (answer determines both the number and the name of roster rows): </label>
             <div class="btn-group" dropdown>
                 <button class="btn dropdown-toggle" dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
@@ -89,7 +89,7 @@
     <script type="text/ng-template" id="Numeric-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question (answer generates number of rows):</label>
+            <label>Source question for number of rows:</label>
             <div class="btn-group" dropdown>
                 <button class="btn dropdown-toggle" dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
@@ -117,7 +117,7 @@
         </div>
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Titles of rows:</label>
+            <label>Source question for names of rows:</label>
             <div class="btn-group" dropdown>
                 <button class="btn dropdown-toggle" dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
@@ -149,7 +149,7 @@
 <script type="text/ng-template" id="Fixed-template.html">
 
         <div class="form-group">
-            <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <help key="fixedTitles" /></label>
+            <label for="edit-fixed-roster-title" class="wb-label">Fixed set of items: <help key="fixedTitles" /></label>
             <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
             <div class="singleOption">
                 <div class="table-holder">
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                     <p>
-                        <button class="btn btn-link" ng-click="addFixedTitle()">Add title</button>
+                        <button class="btn btn-link" ng-click="addFixedTitle()">Add item</button>
                     </p>
 
                 </div>
@@ -177,7 +177,7 @@
     <script type="text/ng-template" id="Multi-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question (answer generates number of rows): </label>
+            <label>Source question (answer determines both the number and the name of roster rows): </label>
             <div class="btn-group" dropdown>
                 <button class="btn dropdown-toggle" dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>

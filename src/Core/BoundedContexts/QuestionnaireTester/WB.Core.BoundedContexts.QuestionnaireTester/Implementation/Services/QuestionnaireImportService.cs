@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -53,8 +54,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
                 .ToList();
             questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
-            questionnaireModel.GroupParents = groups.ToDictionary(x => x.PublicKey, x => this.BuildParentsList(x, questionnaireDocument.PublicKey));
+            questionnaireModel.Parents = questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ToDictionary(x => x.PublicKey, this.BuildParentsList);
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
+            questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => CreateQuestionModel(x, questionnaireDocument));
 
             questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
 
@@ -77,22 +79,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             };
         }
 
-        private List<QuestionnaireReferenceModel> BuildParentsList(Group group, Guid questionnaireId)
+        private List<QuestionnaireReferenceModel> BuildParentsList(IComposite group)
         {
             var parents = new List<QuestionnaireReferenceModel>();
 
-            var parent = group.GetParent() as Group;
-            while (parent != null && parent.PublicKey != questionnaireId )
+            var parentAsGroup = group.GetParent() as Group;
+            while (parentAsGroup != null)
             {
                 var parentPlaceholder = new QuestionnaireReferenceModel
                 {
-                    ModelType = parent.IsRoster ? typeof(RosterModel) : typeof(GroupModel),
-                    Id = parent.PublicKey
+                    ModelType = parentAsGroup.IsRoster ? typeof(RosterModel) : typeof(GroupModel),
+                    Id = parentAsGroup.PublicKey
                 };
                 parents.Add(parentPlaceholder);
 
-                parent = parent.GetParent() as Group;
+                parentAsGroup = parentAsGroup.GetParent() as Group;
             }
+
             return parents;
         }
 
@@ -170,7 +173,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         {
                             CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
                             IsFilteredCombobox = singleQuestion.IsFilteredCombobox,
-                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList()
+                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+                            IsFiltered = singleQuestion.IsFilteredCombobox.GetValueOrDefault()
                         };
                     }
                     break;
@@ -215,7 +219,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     questionModel = new MaskedTextQuestionModel { Mask = (question as TextQuestion).Mask };
                     break;
                 case QuestionType.TextList:
-                    questionModel = new TextListQuestionModel{ IsRosterSizeQuestion = isRosterSizeQuestion};
+                    var listQuestion = question as TextListQuestion;
+                    questionModel = new TextListQuestionModel
+                                    {
+                                        IsRosterSizeQuestion = isRosterSizeQuestion,
+                                        MaxAnswerCount = listQuestion.MaxAnswerCount
+                                    };
                     break;
                 case QuestionType.QRBarcode:
                     questionModel = new QRBarcodeQuestionModel();

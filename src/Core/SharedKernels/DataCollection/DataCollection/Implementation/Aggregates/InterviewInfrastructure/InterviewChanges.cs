@@ -4,11 +4,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class InterviewChanges
     {
-        public InterviewChanges(List<AnswerChange> interviewByAnswerChanges, EnablementChanges enablementChanges, ValidityChanges validityChanges,
-            RosterCalculationData rosterCalculationData, List<Identity> answersForLinkedQuestionsToRemove,
-            List<RosterIdentity> rosterInstancesWithAffectedTitles, string answerAsRosterTitle)
+        public InterviewChanges(List<AnswerChange> interviewByAnswerChanges, 
+            EnablementChanges enablementChanges, 
+            ValidityChanges validityChanges,
+            RosterCalculationData rosterCalculationData, 
+            List<Identity> answersForLinkedQuestionsToRemove,
+            List<RosterIdentity> rosterInstancesWithAffectedTitles, 
+            string answerAsRosterTitle,
+            List<Identity> changedQuestionTitles)
         {
             this.AnswerAsRosterTitle = answerAsRosterTitle;
+            this.ChangedQuestionTitles = changedQuestionTitles;
 
             this.InterviewByAnswerChanges = interviewByAnswerChanges;
 
@@ -20,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public string AnswerAsRosterTitle { set; get; }
+        public List<Identity> ChangedQuestionTitles { get; set; }
 
         public List<AnswerChange> InterviewByAnswerChanges { set; get; }
         public EnablementChanges EnablementChanges { set; get; }
