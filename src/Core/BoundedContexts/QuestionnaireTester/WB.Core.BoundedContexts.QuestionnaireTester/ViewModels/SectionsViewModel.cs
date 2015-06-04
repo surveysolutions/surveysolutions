@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,12 +16,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IMvxMessenger messenger;
 
         public IList<SectionViewModel> Sections { get; set; }
 
-        public SectionsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository)
+        public SectionsViewModel(
+            IMvxMessenger messenger,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
+            this.messenger = messenger;
         }
 
         public void Init(string interviewId, string questionnaireId, NavigationState navigationState)
@@ -54,6 +60,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 return;
             }
 
+            messenger.Publish(new SectionChangeMessage(this));
             this.navigationState.NavigateTo(item.sectionIdentity);
         }
 

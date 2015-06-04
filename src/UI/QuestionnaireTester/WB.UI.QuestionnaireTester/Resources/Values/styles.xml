@@ -177,6 +177,7 @@
     <item name="android:divider">@null</item>
     <item name="android:dividerHeight">@dimen/zero</item>
     <item name="android:choiceMode">singleChoice</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
   </style>
   
   <style name="Interview_Sidebar_Sections_Item" parent="FullWidthWrappingLayout">

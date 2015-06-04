@@ -802,29 +802,29 @@ namespace WB.UI.QuestionnaireTester
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f070057
-			public const int abc_background_cache_hint_selector_material_dark = 2131165271;
+			// aapt resource value: 0x7f07005a
+			public const int abc_background_cache_hint_selector_material_dark = 2131165274;
 			
-			// aapt resource value: 0x7f070058
-			public const int abc_background_cache_hint_selector_material_light = 2131165272;
+			// aapt resource value: 0x7f07005b
+			public const int abc_background_cache_hint_selector_material_light = 2131165275;
 			
 			// aapt resource value: 0x7f070000
 			public const int abc_input_method_navigation_guard = 2131165184;
 			
-			// aapt resource value: 0x7f070059
-			public const int abc_primary_text_disable_only_material_dark = 2131165273;
-			
-			// aapt resource value: 0x7f07005a
-			public const int abc_primary_text_disable_only_material_light = 2131165274;
-			
-			// aapt resource value: 0x7f07005b
-			public const int abc_primary_text_material_dark = 2131165275;
-			
 			// aapt resource value: 0x7f07005c
-			public const int abc_primary_text_material_light = 2131165276;
+			public const int abc_primary_text_disable_only_material_dark = 2131165276;
 			
 			// aapt resource value: 0x7f07005d
-			public const int abc_search_url_text = 2131165277;
+			public const int abc_primary_text_disable_only_material_light = 2131165277;
+			
+			// aapt resource value: 0x7f07005e
+			public const int abc_primary_text_material_dark = 2131165278;
+			
+			// aapt resource value: 0x7f07005f
+			public const int abc_primary_text_material_light = 2131165279;
+			
+			// aapt resource value: 0x7f070060
+			public const int abc_search_url_text = 2131165280;
 			
 			// aapt resource value: 0x7f070001
 			public const int abc_search_url_text_normal = 2131165185;

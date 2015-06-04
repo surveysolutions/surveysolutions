@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿using System;
+
+using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
@@ -6,7 +8,12 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.Views;
+using Cirrious.MvvmCross.Plugins.Messenger;
+
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.CustomControls;
 
@@ -16,6 +23,8 @@ namespace WB.UI.QuestionnaireTester.Activities
     public class InterviewActivity : BaseActivity<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
+        private DrawerLayout drawerLayout;
+        private MvxSubscriptionToken sectionChangeSubscriptionToken;
 
         protected override int ViewResourceId
         {
@@ -27,7 +36,8 @@ namespace WB.UI.QuestionnaireTester.Activities
             base.OnCreate(bundle);
 
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-            var drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            
             var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
 
             this.SetSupportActionBar(toolbar);
@@ -42,6 +52,14 @@ namespace WB.UI.QuestionnaireTester.Activities
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
             listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+
+             var messenger = Mvx.Resolve<IMvxMessenger>();
+             sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
+        }
+
+        private void OnSectionChange(SectionChangeMessage msg)
+        {
+            drawerLayout.CloseDrawers();
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
