@@ -4,9 +4,11 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using NSubstitute;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -40,11 +42,12 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             var importService = Create.QuestionnaireImportService(modelStorage.Object);
             importService.ImportQuestionnaire(questionnaire, null);
 
+            var interview = Mock.Of<IStatefulInterview>();
 
-            var maskedTextAnswer = new MaskedTextAnswer();
             rosterTitleAnswerValue = "answer";
-            maskedTextAnswer.SetAnswer(rosterTitleAnswerValue);
-            var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(rosterTitleId, new []{0m}) == maskedTextAnswer);
+            var rosterTitleSubstitutionService = new Mock<IRosterTitleSubstitutionService>();
+            rosterTitleSubstitutionService.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
+                .Returns<string, Identity, string>((title, id, interviewId) => title.Replace("%rostertitle%", rosterTitleAnswerValue));
 
             var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireRepository.SetReturnsDefault(model);
@@ -52,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             var interviewRepository = new Mock<IStatefullInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object);
+            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, rosterTitleSubstitutionService: rosterTitleSubstitutionService.Object);
         };
 
         Because of = () => viewModel.Init("interview", new Identity(substitutionTargetQuestionId, new decimal[] { 1 }));

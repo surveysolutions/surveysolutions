@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             QuestionnaireModel questionnaire)
         {
             List<QuestionnaireReferenceModel> parentItems =
-                new List<QuestionnaireReferenceModel>(questionnaire.GroupParents[newGroupIdentity.Id]);
+                new List<QuestionnaireReferenceModel>(questionnaire.Parents[newGroupIdentity.Id]);
             parentItems.Reverse();
             parentItems.Add(new QuestionnaireReferenceModel
             {
