@@ -9,7 +9,7 @@
         android:orientation="vertical">
         <TextView
             style="@style/Interview_Entity_Title"
-            local:MvxBind="Text StaticText" />
+            local:MvxBind="Html StaticText" />
     </MvxLinearLayout>
     <View
         style="@style/Interview_Entity_Divider" />

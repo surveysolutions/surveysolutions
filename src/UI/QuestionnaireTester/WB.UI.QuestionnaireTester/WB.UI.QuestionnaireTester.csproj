@@ -247,6 +247,7 @@
     <Compile Include="CustomBindings\Masked\Range.cs" />
     <Compile Include="CustomBindings\Masked\RawText.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
+    <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
     <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs">
