@@ -115,4 +115,10 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='IsDevelopmentEnvironment']/@value" />
    </parameter>
+  <parameter name="Check SSL for API"
+      defaultValue="true">
+    <parameterEntry kind="XmlFile"
+       scope="\\web.config$"
+       match="/configuration/appSettings/add[@key='IsApiSSLVerificationEnabled']/@value" />
+  </parameter>
   </parameters>
