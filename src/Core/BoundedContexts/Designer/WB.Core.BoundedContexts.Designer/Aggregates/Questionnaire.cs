@@ -46,12 +46,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private bool wasExpressionsMigrationPerformed = false;
 
-        private void Apply(SharedPersonToQuestionnaireAdded e)
+        internal void Apply(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
         }
 
-        private void Apply(SharedPersonFromQuestionnaireRemoved e)
+        internal void Apply(SharedPersonFromQuestionnaireRemoved e)
         {
             this.innerDocument.SharedPersons.Remove(e.PersonId);
         }
@@ -97,6 +97,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(TemplateImported e)
         {
             var upgradedDocument = e.Source;
+
+            foreach (var sharedPerson in this.innerDocument.SharedPersons)
+            {
+                if (!upgradedDocument.SharedPersons.Contains(sharedPerson))
+                    upgradedDocument.SharedPersons.Add(sharedPerson);
+            }
+
             this.innerDocument = upgradedDocument;
         }
 
