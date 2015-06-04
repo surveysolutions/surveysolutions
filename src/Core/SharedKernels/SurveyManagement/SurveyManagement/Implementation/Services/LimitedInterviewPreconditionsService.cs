@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
-    internal class LimitedInterviewPreconditionsService : IInterviewPreconditionsService, ILimitedInterviewService
+    internal class LimitedInterviewPreconditionsService : IInterviewPreconditionsService
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly LimitedInterviewSettings limitedInterviewSettings;
@@ -21,24 +21,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.limitedInterviewSettings = limitedInterviewSettings;
         }
 
-        public long? InterviewCountLimit
+        public long? MaxNumberOfInterviews
         {
             get { return limitedInterviewSettings.InterviewLimitCount; }
         }
 
-        public bool IsInterviewCountLimitReached()
+        public long? NumberofInterviewsAllowedToCreate
         {
-            return CreatedInterviewCount >= limitedInterviewSettings.InterviewLimitCount;
-        }
-
-        public long Limit
-        {
-            get { return limitedInterviewSettings.InterviewLimitCount; }
-        }
-
-        public long CreatedInterviewCount
-        {
-            get { return interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count()); }
+            get { return limitedInterviewSettings.InterviewLimitCount - interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count()); }
         }
     }
 

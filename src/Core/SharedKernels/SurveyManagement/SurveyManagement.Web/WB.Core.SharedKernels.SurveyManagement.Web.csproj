@@ -306,7 +306,6 @@
     <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
-    <Compile Include="Utils\InterviewLimits.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
     <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
@@ -492,6 +491,7 @@
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
+    <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
