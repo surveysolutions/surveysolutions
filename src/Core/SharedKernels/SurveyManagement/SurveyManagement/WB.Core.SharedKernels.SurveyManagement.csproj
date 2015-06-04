@@ -132,7 +132,6 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\Export\ExportDataType.cs" />
-    <Compile Include="Services\ILimitedInterviewService.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
@@ -355,6 +354,7 @@
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\PeriodicStatusReportModel.cs" />
+    <Compile Include="Views\Reposts\PeriodicStatusReportWebApiActionName.cs" />
     <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />

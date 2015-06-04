@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
             ((PeriodicStatusReportModel)result.Model).CanNavigateToQuantityBySupervisors.ShouldEqual(false);
 
         It should_WebApiActionName_be_BySupervisors = () =>
-           ((PeriodicStatusReportModel)result.Model).WebApiActionName.ShouldEqual("BySupervisors");
+           ((PeriodicStatusReportModel)result.Model).WebApiActionName.ShouldEqual(PeriodicStatusReportWebApiActionName.BySupervisors);
 
         It should_ReportName_be_Speed = () =>
            ((PeriodicStatusReportModel)result.Model).ReportName.ShouldEqual("Speed");
