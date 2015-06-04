@@ -31,7 +31,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         private bool editingBefore;
         private bool editingOnChanged;
         private bool editingAfter;
-        private int[] maskToRaw;
+        private int?[] maskToRaw;
         private char[] charsInMask;
         private int selection;
         private bool initialized;
@@ -75,7 +75,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         
             this.GeneratePositionArrays();
 
-            this.maxRawLength = this.maskToRaw[this.PreviousValidPosition(this.mask.Length - 1)] + 1;
+            this.maxRawLength = this.maskToRaw[this.PreviousValidPosition(this.mask.Length - 1)].GetValueOrDefault(-1) + 1;
             this.rawText = new RawText(this.maxRawLength);
             this.selection = this.rawToMask[0];
 
@@ -119,7 +119,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         {
             for(int i = this.maskToRaw.Length - 1; i >= 0; i--) 
             {
-                if(this.maskToRaw[i] != -1) 
+                if(this.maskToRaw[i].HasValue) 
                     return i;
             }
 
@@ -170,7 +170,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         private void GeneratePositionArrays() 
         {
             int[] aux = new int[this.mask.Length];
-            this.maskToRaw = new int[this.mask.Length];
+            this.maskToRaw = new int?[this.mask.Length];
             String charsInMaskAux = "";
         
             int charIndex = 0;
@@ -191,7 +191,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                     {
                         charsInMaskAux = charsInMaskAux + charAsString;
                     }
-                    this.maskToRaw[i] = -1;
+                    this.maskToRaw[i] = null;
                 }
             }
 
@@ -313,7 +313,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 }
 
                 Range range = this.CalculateRange(rangeStart, rangeEnd);
-                if (range.Start != -1)
+                if (range.Start.HasValue)
                 {
                     this.rawText.SubtractFromString(range);
                 }
@@ -339,7 +339,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
                 if (count > 0)
                 {
-                    int startingPosition = this.maskToRaw[this.NextValidPosition(start)];
+                    int startingPosition = this.maskToRaw[this.NextValidPosition(start)].GetValueOrDefault(-1);
                     String addedString = s.Substring(start, count);
                     var newString = this.Clear(addedString);
                     count = this.rawText.AddToString(newString, startingPosition, this.maxRawLength);
@@ -433,7 +433,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
         private int ErasingStart(int start)
         {
-            while (start > 0 && this.maskToRaw[start] == -1)
+            while (start > 0 && !this.maskToRaw[start].HasValue)
             {
                 start--;
             }
@@ -451,7 +451,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
         private int NextValidPosition(int currentPosition) 
         {
-            while(currentPosition < this.lastValidMaskPosition && this.maskToRaw[currentPosition] == -1) 
+            while(currentPosition < this.lastValidMaskPosition && !this.maskToRaw[currentPosition].HasValue) 
             {
                 currentPosition++;
             }
@@ -464,7 +464,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
     
         private int PreviousValidPosition(int currentPosition) 
         {
-            while(currentPosition >= 0 && this.maskToRaw[currentPosition] == -1) 
+            while(currentPosition >= 0 && !this.maskToRaw[currentPosition].HasValue) 
             {
                 currentPosition--;
 
@@ -508,9 +508,9 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             Range range = new Range();
             for(int i = start; i <= end && i < this.mask.Length; i++) 
             {
-                if(this.maskToRaw[i] != -1) 
+                if(this.maskToRaw[i].HasValue) 
                 {
-                    if(range.Start == -1) 
+                    if(!range.Start.HasValue) 
                     {
                         range.Start = this.maskToRaw[i];
                     }
