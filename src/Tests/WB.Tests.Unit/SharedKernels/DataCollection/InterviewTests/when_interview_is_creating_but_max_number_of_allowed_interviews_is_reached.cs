@@ -22,10 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewPreconditionsService>())
-                .Returns(
-                    Mock.Of<IInterviewPreconditionsService>(
+            SetupInstanceToMockedServiceLocator<IInterviewPreconditionsService>(
+                Mock.Of<IInterviewPreconditionsService>(
                         _ => _.MaxNumberOfInterviews == maxNumberOfInterviews && _.NumberofInterviewsAllowedToCreate == 0));
 
         };
@@ -43,6 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext.Dispose();
             eventContext = null;
+            SetupInstanceToMockedServiceLocator<IInterviewPreconditionsService>(Mock.Of<IInterviewPreconditionsService>());
         };
 
         private static Guid questionnaireId;
