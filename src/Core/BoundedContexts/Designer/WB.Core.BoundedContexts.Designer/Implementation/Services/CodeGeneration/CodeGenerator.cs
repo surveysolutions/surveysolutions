@@ -497,7 +497,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? ""
                 : string.Format(" && {0}", childQuestion.ConditionExpression));
 
-            return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + childQuestionCondition;
+            return string.Format("IsAnswered({0})", parentQuestion.StataExportCaption) + childQuestionCondition;
         }
 
         private string GenerateQuestionTypeName(IQuestion question)

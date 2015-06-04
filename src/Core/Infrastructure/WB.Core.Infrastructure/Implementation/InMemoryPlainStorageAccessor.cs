@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Implementation
 {
-    public class InMemoryPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>
+    public class InMemoryPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>, IPlainKeyValueStorage<TEntity>
         where TEntity : class
     {
         private readonly Dictionary<object,TEntity> inMemroyStorage = new Dictionary<object, TEntity>(); 
@@ -44,6 +44,21 @@ namespace WB.Core.Infrastructure.Implementation
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
             return query.Invoke(this.inMemroyStorage.Values.AsQueryable());
+        }
+
+        public TEntity GetById(string id)
+        {
+            return GetById((object) id);
+        }
+
+        public void Remove(string id)
+        {
+            Remove((object)id);
+        }
+
+        public void Store(TEntity view, string id)
+        {
+            Store(view, (object)id);
         }
     }
 }
