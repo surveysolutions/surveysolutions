@@ -171,7 +171,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         {
                             CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
                             IsFilteredCombobox = singleQuestion.IsFilteredCombobox,
-                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList()
+                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+                            IsFiltered = singleQuestion.IsFilteredCombobox.GetValueOrDefault()
                         };
                     }
                     break;

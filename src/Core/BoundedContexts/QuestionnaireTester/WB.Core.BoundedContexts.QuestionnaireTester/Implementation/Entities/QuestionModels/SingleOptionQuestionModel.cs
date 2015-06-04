@@ -10,5 +10,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Qu
         public bool? IsFilteredCombobox { get; set; }
 
         public List<OptionModel> Options { get; set; }
+
+        public bool IsFiltered { get; set; }
     }
 }
