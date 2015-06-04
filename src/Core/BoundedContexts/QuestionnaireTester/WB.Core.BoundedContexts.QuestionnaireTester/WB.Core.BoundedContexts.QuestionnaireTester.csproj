@@ -73,12 +73,14 @@
     <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
+    <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Infrastructure\IQrBarcodeScanService.cs" />
     <Compile Include="Infrastructure\ISettingsProvider.cs" />
     <Compile Include="Infrastructure\ScanResult.cs" />
     <Compile Include="Services\IAnswerToStringService.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
+    <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Implementation\Aggregates\IStatefulInterview.cs" />

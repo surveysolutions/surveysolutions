@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
         private readonly IAnswerToStringService answerToStringService;
+        private readonly IRosterTitleSubstitutionService rosterTitleSubstitutionService;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -57,13 +58,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             IStatefullInterviewRepository interviewRepository,
             ILiteEventRegistry registry,
             ISubstitutionService substitutionService,
-            IAnswerToStringService answerToStringService)
+            IAnswerToStringService answerToStringService,
+            IRosterTitleSubstitutionService rosterTitleSubstitutionService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
             this.substitutionService = substitutionService;
             this.answerToStringService = answerToStringService;
+            this.rosterTitleSubstitutionService = rosterTitleSubstitutionService;
         }
 
         public void Handle(SubstitutionTitlesChanged @event)
@@ -83,10 +86,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             BaseQuestionModel questionModel = questionnaire.Questions[this.questionIdentity.Id];
 
-            string[] variablesToReplace = this.substitutionService.GetAllSubstitutionVariableNames(questionModel.Title);
-            string questionTitle = questionModel.Title;
+            string questionTitle = rosterTitleSubstitutionService.Substitute(questionModel.Title, this.questionIdentity, this.interviewId);
+            string[] variablesToReplace = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
+
             foreach (var variable in variablesToReplace)
             {
+
                 BaseQuestionModel substitutedQuestionModel = questionnaire.QuestionsByVariableNames[variable];
 
                 var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionModel.Id, this.questionIdentity.RosterVector);

@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
+            this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
             CommandRegistry
                .Setup<StatefulInterview>()

@@ -432,6 +432,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
+        public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+
+            int grosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
+            var rosterVector = this.ShrinkRosterVector(targetRosterVector, grosterLevel);
+            var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
+
+            return this.Groups.ContainsKey(rosterKey) ? this.Groups[rosterKey] as InterviewRoster : null;
+        }
+
         public bool IsValid(Identity identity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
