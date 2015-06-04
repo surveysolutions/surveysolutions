@@ -14,19 +14,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class ChapterViewModel : MvxNotifyPropertyChanged
     {
-        private Identity chapterIdentity;
+        public Identity ChapterIdentity;
 
         private string title;
+        private bool isSelected;
+
         public string Title
         {
             get { return this.title; }
             set { this.title = value; this.RaisePropertyChanged(); }
         }
 
-        public ChapterViewModel(Guid id, decimal[] rosterVector, string chapterTitle)
+        public bool IsSelected
         {
-            chapterIdentity = new Identity(id, rosterVector);
-            Title = chapterTitle;
+            get { return this.isSelected; }
+            set { this.isSelected = value; this.RaisePropertyChanged(); }
         }
     }
 
@@ -58,8 +60,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = questionnaireRepository.GetById(questionnaireId);
             Chapters = questionnaire
                 .GroupsHierarchy
-                .Select(x => new ChapterViewModel(x.Id, new decimal[0], x.Title))
+                .Select(x => new ChapterViewModel { ChapterIdentity = new Identity(x.Id, new decimal[0]), Title = x.Title })
                 .ToList();
+        }
+
+        private MvxCommand<ChapterViewModel> navigateToChapterCommand;
+        public System.Windows.Input.ICommand NavigateToChapterCommand
+        {
+            get
+            {
+                this.navigateToChapterCommand = this.navigateToChapterCommand ?? new MvxCommand<ChapterViewModel>(this.NavigateToChapter);
+                return this.navigateToChapterCommand;
+            }
+        }
+
+        private void NavigateToChapter(ChapterViewModel item)
+        {
+            this.navigationState.NavigateTo(item.ChapterIdentity);
         }
 
         void navigationState_OnGroupChanged(Identity newGroupIdentity)
