@@ -38,9 +38,17 @@ namespace WB.UI.QuestionnaireTester.CustomControls
 
         public override int GetItemViewType(int position)
         {
-            var source = this.GetRawItem(position);
+            object source = this.GetRawItem(position);
 
             var typeOfViewModel = source.GetType();
+            if (source is SingleOptionQuestionViewModel)
+            {
+                var multiOptionQuestionViewModel = (SingleOptionQuestionViewModel)source;
+                if (multiOptionQuestionViewModel.IsFiltered)
+                {
+                    return Resource.Layout.interview_question_single_filtered_option;
+                }
+            }
 
             return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
         }

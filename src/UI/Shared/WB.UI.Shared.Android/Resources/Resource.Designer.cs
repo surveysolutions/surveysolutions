@@ -314,41 +314,41 @@ namespace WB.UI.Shared.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040007
-			public static int AnswerIsNotPresentInFilteredComboboxOptionsList = 2130968583;
-			
-			// aapt resource value: 0x7f040001
-			public static int ApplicationName = 2130968577;
+			// aapt resource value: 0x7f060005
+			public static int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099653;
 			
 			// aapt resource value: 0x7f060000
 			public static int ApplicationName = 2131099648;
 			
-			// aapt resource value: 0x7f040006
-			public static int AreYouSureYouWantToRemoveRowFromRosterFormat = 2130968582;
+			// aapt resource value: 0x7f060000
+			public static int ApplicationName = 2131099648;
 			
-			// aapt resource value: 0x7f040000
-			public static int Hello = 2130968576;
+			// aapt resource value: 0x7f060004
+			public static int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099652;
 			
-			// aapt resource value: 0x7f040005
-			public static int No = 2130968581;
+			// aapt resource value: 0x7f060009
+			public static int Hello = 2131099657;
 			
-			// aapt resource value: 0x7f040008
-			public static int SendingOfInformationPackageIsCanceling = 2130968584;
+			// aapt resource value: 0x7f060003
+			public static int No = 2131099651;
 			
-			// aapt resource value: 0x7f040003
-			public static int Warning = 2130968579;
+			// aapt resource value: 0x7f060006
+			public static int SendingOfInformationPackageIsCanceling = 2131099654;
 			
-			// aapt resource value: 0x7f040004
-			public static int Yes = 2130968580;
+			// aapt resource value: 0x7f060001
+			public static int Warning = 2131099649;
 			
-			// aapt resource value: 0x7f04000a
-			public static int drawer_close = 2130968586;
+			// aapt resource value: 0x7f060002
+			public static int Yes = 2131099650;
 			
-			// aapt resource value: 0x7f040009
-			public static int drawer_open = 2130968585;
+			// aapt resource value: 0x7f060008
+			public static int drawer_close = 2131099656;
 			
-			// aapt resource value: 0x7f040002
-			public static int library_name = 2130968578;
+			// aapt resource value: 0x7f060007
+			public static int drawer_open = 2131099655;
+			
+			// aapt resource value: 0x7f06000a
+			public static int library_name = 2131099658;
 			
 			static String()
 			{
