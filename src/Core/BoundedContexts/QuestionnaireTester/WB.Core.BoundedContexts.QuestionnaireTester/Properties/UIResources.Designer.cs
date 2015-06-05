@@ -424,7 +424,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to subgroups.
+        ///   Looks up a localized string similar to sub-sections.
         /// </summary>
         public static string Interview_Group_ManySubgroups {
             get {
@@ -433,7 +433,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to no subgroups.
+        ///   Looks up a localized string similar to no sub-sections.
         /// </summary>
         public static string Interview_Group_NoSubgroups {
             get {
@@ -469,7 +469,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to subgroup.
+        ///   Looks up a localized string similar to sub-section.
         /// </summary>
         public static string Interview_Group_OneSubgroup {
             get {
