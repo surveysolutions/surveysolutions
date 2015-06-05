@@ -98,13 +98,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
-            return questionnaire.PrefilledQuestionsIds.Select(
+            var result = questionnaire.PrefilledQuestionsIds.Select(
                 question => CreateInterviewEntityViewModel(
                     entityId: question.Id,
                     rosterVector: new decimal[0],
                     entityModelType: question.ModelType,
                     interviewId: interviewId,
                     navigationState: null)).ToList();
+
+            var startButton = Load<StartInterviewViewModel>();
+            startButton.Init(interviewId, null, null);
+            result.Add(startButton);
+            return result;
         }
 
         private static IInterviewEntityViewModel CreateInterviewEntityViewModel(
