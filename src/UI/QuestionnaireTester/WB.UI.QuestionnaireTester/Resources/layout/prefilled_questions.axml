@@ -13,7 +13,7 @@
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
             style="@style/PrefilledQuestionsToolbarTitle"
-            local:MvxBind="Text Localization('PrefilledQuestions_ToolbarTitle')" />
+            local:MvxBind="Text QuestionnaireTitle" />
     </android.support.v7.widget.Toolbar>
     <ScrollView
         android:layout_width="fill_parent"
@@ -22,31 +22,13 @@
         <MvxRelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <MvxRelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/PrefilledQuestions_QuestionnaireTitle_Holder_height"
-                android:id="@+id/prefilledQuestions_questionnaireTitle_holder">
-                <TextView
-                    style="@style/PrefilledQuestions_QuestionnaireTitle"
-                    local:MvxBind="Text QuestionnaireTitle" />
-            </MvxRelativeLayout>
-            <View
-                style="@style/Interview_Entity_Divider"
-                android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder" />
-            <MvxRecyclerView
+
+          <MvxRecyclerView
                 style="@style/PrefilledQuestions_List"
                 android:id="@+id/questionnaireEntitiesList"
                 android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
                 android:scrollbars="vertical"
                 local:MvxBind="ItemsSource PrefilledQuestions" />
-            <MvxRelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/PrefilledQuestions_StartButton_Holder_height"
-                android:layout_alignParentBottom="true">
-                <Button
-                    style="@style/PrefilledQuestions_StartButton"
-                    local:MvxBind="Click StartInterviewCommand; Text Localization('PrefilledQuestions_StartInterview')" />
-            </MvxRelativeLayout>
         </MvxRelativeLayout>
     </ScrollView>
 </MvxLinearLayout>

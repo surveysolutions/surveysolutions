@@ -34,6 +34,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (RosterViewModel), Resource.Layout.interview_roster},
             {typeof (PreviousGroupNavigationViewModel), Resource.Layout.interview__previous_group_navigation},
+            {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
         };
 
         public override int GetItemViewType(int position)

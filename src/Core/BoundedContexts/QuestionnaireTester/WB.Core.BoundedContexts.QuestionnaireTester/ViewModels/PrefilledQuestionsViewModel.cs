@@ -28,15 +28,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public string QuestionnaireTitle { get; set; }
 
-        private IMvxCommand startInterviewCommand;
-        public IMvxCommand StartInterviewCommand
-        {
-            get
-            {
-                return startInterviewCommand ?? (startInterviewCommand = new MvxCommand(this.StartInterview));
-            }
-        }
-
         private IList prefilledQuestions;
         public IList PrefilledQuestions
         {
@@ -53,11 +44,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
-        }
-
-        private void StartInterview()
-        {
-            this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
+            if (this.PrefilledQuestions.Count == 1)
+            {
+                this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
+            }
         }
 
         public override void NavigateToPreviousViewModel()

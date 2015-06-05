@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:local="http://schemas.android.com/apk/res-auto"
+                 style="@style/Interview_Previous_Group_Navigation_Layout">
+  <Button style="@style/Interview_Previous_Group_Navigation_Button"
+    local:MvxBind="Click StartInterviewCommand; Text Localization('PrefilledQuestions_StartInterview');"/>
+</MvxLinearLayout>

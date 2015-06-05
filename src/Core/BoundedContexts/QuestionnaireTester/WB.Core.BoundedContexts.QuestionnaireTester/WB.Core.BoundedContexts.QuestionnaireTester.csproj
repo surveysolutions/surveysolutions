@@ -150,6 +150,7 @@
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
     <Compile Include="ViewModels\AnsweringViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
+    <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
   </ItemGroup>
   <ItemGroup>
