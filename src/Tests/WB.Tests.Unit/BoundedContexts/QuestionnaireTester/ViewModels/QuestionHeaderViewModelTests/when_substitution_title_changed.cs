@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             questionnaire.QuestionsByVariableNames["blah"] = substTargetModel;
             questionnaire.QuestionsByVariableNames[substitutedModel.Variable] = substitutedModel;
 
-            var interviewRepository = Mock.Of<IStatefullInterviewRepository>(x => x.Get(interviewId) == interview);
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaire);
 
             ILiteEventRegistry registry = Create.LiteEventRegistry();

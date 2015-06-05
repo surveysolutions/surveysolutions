@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             answer.SetAnswer("answer");
             var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuesiton, Empty.RosterVector) == answer);
 
-            var interviewRepository = new Mock<IStatefullInterviewRepository>();
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object);
         };

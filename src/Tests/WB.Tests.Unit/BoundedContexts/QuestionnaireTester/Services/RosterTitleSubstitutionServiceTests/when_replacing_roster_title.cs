@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.RosterTitle
             var questionnaireStorageStub = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireStorageStub.SetReturnsDefault(questionnaire);
 
-            var interviewRepositoryStub = new Mock<IStatefullInterviewRepository>();
+            var interviewRepositoryStub = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryStub.SetReturnsDefault(interview);
 
             service = new RosterTitleSubstitutionService(questionnaireStorageStub.Object, interviewRepositoryStub.Object, Create.SubstitutionService());

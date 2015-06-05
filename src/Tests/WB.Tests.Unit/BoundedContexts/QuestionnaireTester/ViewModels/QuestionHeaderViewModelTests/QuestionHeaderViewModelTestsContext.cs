@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
     public class QuestionHeaderViewModelTestsContext
     {
         public static QuestionHeaderViewModel CreateViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null, 
-            IStatefullInterviewRepository interviewRepository = null, 
+            IStatefulInterviewRepository interviewRepository = null, 
             ILiteEventRegistry registry = null,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
         {
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             }
 
             return new QuestionHeaderViewModel(questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                interviewRepository ?? Mock.Of<IStatefullInterviewRepository>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 registry ?? Create.LiteEventRegistry(),
                 new SubstitutionService(),
                 new AnswerToStringService(),
