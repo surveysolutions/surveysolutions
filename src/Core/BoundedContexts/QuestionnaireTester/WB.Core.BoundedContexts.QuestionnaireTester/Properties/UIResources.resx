@@ -363,7 +363,7 @@
   <data name="Interview_Group_OneQuestion_Answered" xml:space="preserve">
     <value>Question</value>
   </data>
-  <data name="Interview_Group_OneSubgroup" xml:space="preserve">
+  <data name="Interview_Group_OneSubgroup" xml:baspace="preserve">
     <value>sub-section</value>
   </data>
   <data name="Interview_Group_StartedFormat" xml:space="preserve">
@@ -389,7 +389,7 @@
   </data>
   <data name="Interview_PreviousGroupNavigation_ButtonText" xml:space="preserve">
     <value>Back to
-parent group</value>
+parent sub-section</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Note: {0} questions is unanswered</value>

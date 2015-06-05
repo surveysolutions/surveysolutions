@@ -506,7 +506,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Back to
-        ///parent group.
+        ///parent sub-section.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_ButtonText {
             get {
