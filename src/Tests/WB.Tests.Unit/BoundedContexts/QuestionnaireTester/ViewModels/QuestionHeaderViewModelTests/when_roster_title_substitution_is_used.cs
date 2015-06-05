@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireRepository.SetReturnsDefault(model);
 
-            var interviewRepository = new Mock<IStatefullInterviewRepository>();
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, rosterTitleSubstitutionService: rosterTitleSubstitutionService.Object);

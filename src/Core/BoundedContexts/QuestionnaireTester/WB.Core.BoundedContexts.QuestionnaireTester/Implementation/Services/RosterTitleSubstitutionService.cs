@@ -11,11 +11,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
     internal class RosterTitleSubstitutionService : IRosterTitleSubstitutionService
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
 
         public RosterTitleSubstitutionService(IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService)
         {
             this.questionnaireStorage = questionnaireStorage;

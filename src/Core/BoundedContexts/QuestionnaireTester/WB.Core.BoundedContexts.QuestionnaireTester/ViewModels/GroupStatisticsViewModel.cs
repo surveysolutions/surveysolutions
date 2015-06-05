@@ -20,10 +20,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class GroupStatisticsViewModel
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         public GroupStatisticsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;

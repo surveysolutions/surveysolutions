@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         IInterviewEntityViewModel
     {
         private readonly IPrincipal principal;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public RealQuestionViewModel(
             IPrincipal principal,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {

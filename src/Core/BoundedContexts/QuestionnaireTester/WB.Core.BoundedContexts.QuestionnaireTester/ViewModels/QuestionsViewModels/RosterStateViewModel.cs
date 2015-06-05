@@ -7,13 +7,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class RosterStateViewModel : MvxNotifyPropertyChanged
     {
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         public GroupViewModel GroupState { get; private set; }
         public string RosterTitle { get; private set; }
 
         public RosterStateViewModel(
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             GroupViewModel groupState)
         {
             this.interviewRepository = interviewRepository;

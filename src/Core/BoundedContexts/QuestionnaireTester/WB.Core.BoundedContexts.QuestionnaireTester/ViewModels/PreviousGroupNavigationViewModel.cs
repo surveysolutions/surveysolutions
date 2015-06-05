@@ -43,13 +43,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly GroupStatisticsViewModel groupStatisticsViewModel;
 
         public PreviousGroupNavigationViewModel(
             ILiteEventRegistry liteEventRegistry,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             GroupStatisticsViewModel groupStatisticsViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;

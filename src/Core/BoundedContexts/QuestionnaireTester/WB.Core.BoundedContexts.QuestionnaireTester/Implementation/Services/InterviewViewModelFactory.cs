@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
     internal class InterviewViewModelFactory : IInterviewViewModelFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         private static readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap = 
             new Dictionary<Type, Func<IInterviewEntityViewModel>>
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         public InterviewViewModelFactory(
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
-            IStatefullInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewRepository = interviewRepository;

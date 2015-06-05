@@ -19,13 +19,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private NavigationState navigationState;
         private string interviewId;
 
         public BreadcrumbsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry)
         {
             this.questionnaireRepository = questionnaireRepository;

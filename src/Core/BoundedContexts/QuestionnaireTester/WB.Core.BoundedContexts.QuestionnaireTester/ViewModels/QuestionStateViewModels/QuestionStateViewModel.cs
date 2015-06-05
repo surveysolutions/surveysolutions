@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         public CommentsViewModel Comments { get; private set; }
 
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
         public QuestionStateViewModel(
             ILiteEventRegistry liteEventRegistry,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             ValidityViewModel validityViewModel, 
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel,

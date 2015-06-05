@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class GroupViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
 
         private NavigationState navigationState;
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         public GroupViewModel(
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             EnablementViewModel enablement)
         {

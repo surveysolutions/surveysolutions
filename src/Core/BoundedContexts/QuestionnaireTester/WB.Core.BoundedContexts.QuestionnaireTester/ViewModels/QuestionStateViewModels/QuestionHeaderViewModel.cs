@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         }
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
         private readonly IAnswerToStringService answerToStringService;
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
         public QuestionHeaderViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry registry,
             ISubstitutionService substitutionService,
             IAnswerToStringService answerToStringService,
