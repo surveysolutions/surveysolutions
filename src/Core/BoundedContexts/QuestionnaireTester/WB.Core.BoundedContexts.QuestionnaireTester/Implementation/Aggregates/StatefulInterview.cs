@@ -381,7 +381,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<QRBarcodeAnswer>(identity);
         }
 
-        public TextListAnswer GetTextListAnswer(Identity identity)
+        public virtual TextListAnswer GetTextListAnswer(Identity identity)
         {
             return this.GetQuestionAnswer<TextListAnswer>(identity);
         }

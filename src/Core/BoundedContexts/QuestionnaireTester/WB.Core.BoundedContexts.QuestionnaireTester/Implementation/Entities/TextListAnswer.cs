@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class TextListAnswer : BaseInterviewAnswer
     {
-        public Tuple<decimal, string>[] Answers { get; private set; }
+        public virtual Tuple<decimal, string>[] Answers { get; private set; }
 
         public TextListAnswer() { }
         public TextListAnswer(Guid id, decimal[] rosterVector)

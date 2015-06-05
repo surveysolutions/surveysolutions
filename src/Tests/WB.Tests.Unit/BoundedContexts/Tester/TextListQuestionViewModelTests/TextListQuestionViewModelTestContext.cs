@@ -1,6 +1,8 @@
 ﻿using Chance.MvvmCross.Plugins.UserInteraction;
 
 using Moq;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -9,6 +11,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 using it = Moq.It;
 
@@ -32,6 +35,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
                 userInteraction ?? Mock.Of<IUserInteraction>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
+        }
+
+        protected static NavigationState CreateNavigationState()
+        {
+            return new NavigationState();
         }
     }
 }
