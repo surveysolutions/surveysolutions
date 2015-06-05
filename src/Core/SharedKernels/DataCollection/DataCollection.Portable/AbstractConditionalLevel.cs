@@ -305,29 +305,29 @@ namespace WB.Core.SharedKernels.DataCollection
             return true;
         }
 
-        protected bool IsAnswered(string answer)
+        protected bool IsAnswerEmpty(string answer)
         {
-            return !string.IsNullOrWhiteSpace(answer);
+            return string.IsNullOrWhiteSpace(answer);
         }
 
-        protected bool IsAnswered<TY>(TY? answer) where TY : struct
+        protected bool IsAnswerEmpty<TY>(TY? answer) where TY : struct
         {
-            return answer.HasValue;
+            return !answer.HasValue;
         }
 
-        protected bool IsAnswered<TY>(TY answer) where TY : class
+        protected bool IsAnswerEmpty<TY>(TY answer) where TY : class
         {
-            return answer != null;
+            return answer == null;
         }
 
-        protected bool IsAnswered<TY>(TY[] answer)
+        protected bool IsAnswerEmpty<TY>(TY[] answer)
         {
-            return answer != null && answer.Length != 0;
+            return answer == null || answer.Length == 0;
         }
 
-        protected bool IsAnswered(Tuple<decimal, string>[] answer)
+        protected bool IsAnswerEmpty(Tuple<decimal, string>[] answer)
         {
-            return answer != null && answer.Any();
+            return answer == null || !answer.Any();
         }
 
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,

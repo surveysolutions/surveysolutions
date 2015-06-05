@@ -607,7 +607,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             private bool name_IsMandatory()
             {
-                return this.IsAnswered(this.name);
+                return !this.IsAnswerEmpty(this.name);
             }
 
             private bool food_IsValid()
