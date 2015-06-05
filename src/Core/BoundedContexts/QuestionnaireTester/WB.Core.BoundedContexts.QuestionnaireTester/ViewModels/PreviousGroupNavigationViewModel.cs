@@ -31,7 +31,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         ILiteEventHandler<GeoLocationQuestionAnswered>,
-        ILiteEventHandler<DateTimeQuestionAnswered>
+        ILiteEventHandler<DateTimeQuestionAnswered>,
+        ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<QuestionsDisabled>,
+        ILiteEventHandler<AnswersRemoved>
 
     {
         private string interviewId;
@@ -127,7 +130,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             Statistics = groupStatisticsViewModel.GetStatistics(interviewId, this.groupIdentity);
         }
 
-        #region Handle All Answers events
+        #region Handle events
 
         public void Handle(TextQuestionAnswered @event)
         {
@@ -185,6 +188,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         public void Handle(DateTimeQuestionAnswered @event)
+        {
+            UpdateSelfFromModel();
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            UpdateSelfFromModel();
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            UpdateSelfFromModel();
+        }
+
+        public void Handle(AnswersRemoved @event)
         {
             UpdateSelfFromModel();
         }

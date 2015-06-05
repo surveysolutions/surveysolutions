@@ -55,7 +55,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         private SpannableString GetSpannableStringForAnsweredState(GroupStatistics statistics)
         {
-            var groupStatisticsText = UIResources.Interview_PreviousGroupNavigation_AnsweredQuestions.FormatString(statistics.QuestionsCount);
+            var groupStatisticsText = UIResources.Interview_PreviousGroupNavigation_AnsweredQuestions.FormatString(statistics.EnabledQuestionsCount);
             groupStatisticsText = groupStatisticsText.ToUpper();
             var spannableText = new SpannableString(groupStatisticsText);
             var answeredColor = this.GetColorFromResources(Resource.Color.previous_group_navigation_answered);
