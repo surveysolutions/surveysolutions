@@ -1447,10 +1447,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static int? GetRosterSizeQuestionMaxValue(IQuestion question)
         {
             var integerQuestion = question as INumericQuestion;
+            if (integerQuestion != null)
+                return integerQuestion.IsInteger
+                    ? integerQuestion.MaxValue
+                    : null;
 
-            return integerQuestion != null && integerQuestion.IsInteger
-                ? integerQuestion.MaxValue
-                : null;
+            var multyOptionQuestion = question as IMultyOptionsQuestion;
+            if (multyOptionQuestion != null)
+                return multyOptionQuestion.Answers.Count;
+            return null;
         }
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)
