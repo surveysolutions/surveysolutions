@@ -704,7 +704,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter number.
+        ///   Looks up a localized string similar to Tap to enter decimal.
         /// </summary>
         public static string RealQuestion_Hint {
             get {
