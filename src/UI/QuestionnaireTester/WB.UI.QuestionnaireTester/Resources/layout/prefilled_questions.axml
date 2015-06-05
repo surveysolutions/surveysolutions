@@ -12,6 +12,8 @@
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
+             android:singleLine="true"
+             android:ellipsize="end"
             style="@style/PrefilledQuestionsToolbarTitle"
             local:MvxBind="Text QuestionnaireTitle" />
     </android.support.v7.widget.Toolbar>
