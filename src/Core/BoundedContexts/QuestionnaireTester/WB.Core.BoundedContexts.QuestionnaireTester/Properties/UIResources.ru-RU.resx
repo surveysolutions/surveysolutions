@@ -370,4 +370,7 @@
   <data name="TextListQuestion_Hint" xml:space="preserve">
     <value>Нажмите для добавления нового элемента</value>
   </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Заполните ответ на вопрос полностью</value>
+  </data>
 </root>

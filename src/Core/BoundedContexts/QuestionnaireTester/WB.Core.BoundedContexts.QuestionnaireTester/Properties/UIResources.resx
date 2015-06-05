@@ -402,4 +402,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="TextListQuestion_Hint" xml:space="preserve">
     <value>Tap to enter new item</value>
   </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Please fill answer text fully</value>
+  </data>
 </root>
