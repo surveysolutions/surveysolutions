@@ -108,6 +108,11 @@ namespace Main.Core.Documents
 
         public long LastEventSequence { get; set; }
 
+        public void ReplaceSharedPersons(List<Guid> sharedPersons)
+        {
+            this.SharedPersons = sharedPersons;
+        }
+
         public void Insert(int index, IComposite c, Guid? parent)
         {
             if (!parent.HasValue || this.PublicKey == parent)

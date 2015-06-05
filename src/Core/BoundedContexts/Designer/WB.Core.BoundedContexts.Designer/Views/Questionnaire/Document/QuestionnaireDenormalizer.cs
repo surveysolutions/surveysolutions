@@ -457,7 +457,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.AddNewQuestionnaire(evnt.Payload.Source);
+            var upgradedDocument = evnt.Payload.Source;
+
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            if (document != null)
+                upgradedDocument.ReplaceSharedPersons(document.SharedPersons);
+
+            this.AddNewQuestionnaire(upgradedDocument);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
