@@ -1,7 +1,5 @@
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
@@ -36,7 +34,5 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 
         static Mock<QuestionStateViewModel<TextListQuestionAnswered>> questionStateMock = new Mock<QuestionStateViewModel<TextListQuestionAnswered>>();
         static Mock<AnsweringViewModel> answeringViewModelMock = new Mock<AnsweringViewModel>();
-        
-
     }
 }

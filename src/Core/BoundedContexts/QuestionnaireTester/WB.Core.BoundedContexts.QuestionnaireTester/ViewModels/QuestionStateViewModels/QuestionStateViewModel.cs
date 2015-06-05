@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         where TAnswerEvent : QuestionAnswered
     {
         public QuestionHeaderViewModel Header { get; private set; }
-        public ValidityViewModel Validity { get; private set; }
+        public virtual ValidityViewModel Validity { get; private set; }
         public EnablementViewModel Enablement { get; private set; }
         public CommentsViewModel Comments { get; private set; }
 
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             Comments = commentsViewModel;
         }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
