@@ -4,8 +4,8 @@
                  style="@style/FullWidthWrappingLayout"
                  android:orientation="vertical">
   <TextView
-        style="@style/Interview_Sidebar_Chapters_Item"
-        local:MvxBind="Text Title;" />
+        style="@style/Interview_Sidebar_Sections_Item"
+        local:MvxBind="Text Title; BackgroundColor SectionBackgroundColor(IsSelected)" />
 
   <View style="@style/Interview_Entity_Divider" />
 </MvxLinearLayout>

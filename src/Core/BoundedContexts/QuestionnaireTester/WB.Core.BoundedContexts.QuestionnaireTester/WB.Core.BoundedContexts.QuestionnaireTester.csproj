@@ -108,6 +108,8 @@
     <Compile Include="Repositories\IStatefullInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\SectionChangeMessage.cs" />
+    <Compile Include="ViewModels\SectionViewModel.cs" />
     <Compile Include="ViewModels\GroupStatisticsViewModel.cs" />
     <Compile Include="ViewModels\PreviousGroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -117,7 +119,7 @@
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\EnablementViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
-    <Compile Include="ViewModels\ChaptersViewModel.cs" />
+    <Compile Include="ViewModels\SectionsViewModel.cs" />
     <Compile Include="ViewModels\ActiveGroupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
@@ -172,6 +174,10 @@
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Location">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.0\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.Location.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Messenger, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.Messenger.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>

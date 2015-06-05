@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Android.Provider;
 using Cirrious.CrossCore.Converters;
 using Cirrious.MvvmCross.Binding.Bindings.SourceSteps;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.ExtensionMethods;
-using WB.UI.QuestionnaireTester.Converters;
-using WB.UI.QuestionnaireTester.CustomBindings;
 
 namespace WB.UI.QuestionnaireTester.Converters
 {

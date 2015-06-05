@@ -31,7 +31,14 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Set(x => x.SharedPersons, m =>
             {
-                m.Key(km => km.Column("QuestionnaireId"));
+                m.Key(keyMap =>
+                {
+                    keyMap.Column(clm =>
+                    {
+                        clm.Name("QuestionnaireId");
+                        clm.Index("QuestionnaireListViewItem_SharedPersons");
+                    });
+                });
                 m.Table("SharedPersons");
                 m.Lazy(CollectionLazy.NoLazy);
             },

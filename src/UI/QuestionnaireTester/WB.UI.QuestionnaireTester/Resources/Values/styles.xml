@@ -162,12 +162,11 @@
   <style name="Interview_Sidebar_Header" parent="VerticalFullWidthWrappingLayout">
     <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
     <item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>
-    
     <item name="android:paddingTop">@dimen/Interview_Sidebar_Header_padding_top</item>
     <item name="android:paddingBottom">@dimen/Interview_Sidebar_Header_padding_bottom</item>
   </style>
 
-  <style name="Interview_Sidebar_Chapters" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Sidebar_Sections" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_height">match_parent</item>
     <item name="android:layout_weight">1</item>
     <item name="android:scrollbarStyle">outsideOverlay</item>
@@ -178,15 +177,18 @@
     <item name="android:divider">@null</item>
     <item name="android:dividerHeight">@dimen/zero</item>
     <item name="android:choiceMode">singleChoice</item>
-  
+    <item name="android:textSize">@dimen/textsize_14</item>
   </style>
   
-  <style name="Interview_Sidebar_Chapters_Item" parent="FullWidthWrappingLayout">
+  <style name="Interview_Sidebar_Sections_Item" parent="FullWidthWrappingLayout">
     <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
     <item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>
-    <item name="android:layout_height">@dimen/Interview_Sidebar_Chapters_Item_height</item>
+    <item name="android:layout_height">@dimen/Interview_Sidebar_Sections_Item_height</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textColor">@color/sections_list_text_color</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
   </style>
 
   <style name="Interview_Sidebar_PrefilledQuestion_Question" parent="AppTheme">

@@ -50,5 +50,10 @@
 
   <color name="previous_group_navigation_answered">#7AC16B</color>
   <color name="previous_group_navigation_unanswered">#2A81CB</color>
+
+  <color name="sections_list_background_color">#ffffff</color>
+  <color name="sections_list_selected_background_color">#f3f3f3</color>
+  <color name="sections_list_text_color">#000000</color>
   
+
 </resources>
