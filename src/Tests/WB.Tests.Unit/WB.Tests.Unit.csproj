@@ -57,6 +57,9 @@
     <Reference Include="Cirrious.MvvmCross.Localization">
       <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Messenger">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Messenger.dll</HintPath>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Wpf">
       <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
     </Reference>
@@ -344,6 +347,13 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\when_navigating_to_section_and_non_of_those_were_selected.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\when_navigating_to_selected_section.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\when_navigating_to_some_subsection_that_is_not_section.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\when_the_first_section_was_selected_and_the_second_was_previously_selected.cs" />
+    <Compile Include="BoundedContexts\Tester\SectionsViewModelTests\when_the_second_section_was_selected_and_the_same_section_was_previously_selected.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\TextListQuestionViewModelTests\when_creating_list_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\QuestionHeaderViewModelTestsContext.cs" />
