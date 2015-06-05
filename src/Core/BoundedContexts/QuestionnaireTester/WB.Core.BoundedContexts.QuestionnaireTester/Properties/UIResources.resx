@@ -241,7 +241,7 @@
     <value>Survey initial information</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Timeout when connecting to the survey solutions designer website. Check your internet connection</value>
+    <value>Timeout when connecting to the Survey Solutions Designer website. Check your internet connection.</value>
   </data>
   <data name="ResetSettingsConfirmationText" xml:space="preserve">
     <value>Are you sure to reset all settings to default parameters?</value>
@@ -259,7 +259,7 @@
     <value>Save</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>No connection to the Survey Solutions designer. Please make sure that the website is available</value>
+    <value>No connection to the Survey Solutions Designer. Please make sure that the website is available.</value>
   </data>
   <data name="SettingsText" xml:space="preserve">
     <value>Settings</value>

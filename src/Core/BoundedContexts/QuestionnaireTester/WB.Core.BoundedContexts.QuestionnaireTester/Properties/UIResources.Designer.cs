@@ -713,7 +713,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout when connecting to the survey solutions designer website. Check your internet connection.
+        ///   Looks up a localized string similar to Timeout when connecting to the Survey Solutions Designer website. Check your internet connection..
         /// </summary>
         public static string RequestTimeout {
             get {
@@ -767,7 +767,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to the Survey Solutions designer. Please make sure that the website is available.
+        ///   Looks up a localized string similar to No connection to the Survey Solutions Designer. Please make sure that the website is available..
         /// </summary>
         public static string ServiceUnavailable {
             get {
