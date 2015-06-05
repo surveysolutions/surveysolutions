@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.messenger = messenger;
         }
 
-        public void Init(string interviewId, string questionnaireId, NavigationState navigationState)
+        public void Init(string questionnaireId, NavigationState navigationState)
         {
             if (navigationState == null) throw new ArgumentNullException("navigationState");
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = questionnaireRepository.GetById(questionnaireId);
             this.Sections = questionnaire
                 .GroupsHierarchy
-                .Select(x => new SectionViewModel { sectionIdentity = new Identity(x.Id, new decimal[0]), Title = x.Title })
+                .Select(x => new SectionViewModel { SectionIdentity = new Identity(x.Id, new decimal[0]), Title = x.Title })
                 .ToList();
         }
 
@@ -61,12 +61,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
 
             messenger.Publish(new SectionChangeMessage(this));
-            this.navigationState.NavigateTo(item.sectionIdentity);
+            this.navigationState.NavigateTo(item.SectionIdentity);
         }
 
         void navigationState_OnGroupChanged(Identity newGroupIdentity)
         {
-            var sectionToBeSelected = Sections.FirstOrDefault(x => x.sectionIdentity.Equals(newGroupIdentity));
+            var sectionToBeSelected = Sections.FirstOrDefault(x => x.SectionIdentity.Equals(newGroupIdentity));
             if (sectionToBeSelected == null)
             {
                 return;

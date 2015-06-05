@@ -6,10 +6,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class SectionViewModel : MvxNotifyPropertyChanged
     {
-        public Identity sectionIdentity;
-
         private string title;
         private bool isSelected;
+
+        public Identity SectionIdentity { get; set; }
 
         public string Title
         {
