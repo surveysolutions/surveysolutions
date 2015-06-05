@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
         {
             var interview = Mock.Of<IStatefulInterview>(_ => _.QuestionnaireId == questionnaireId);
 
-            var interviewRepository = Mock.Of<IStatefullInterviewRepository>(_ => _.Get(interviewId) == interview);
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
             var textListQuestionModel = Mock.Of<TextListQuestionModel>(_
                 => _.Id == questionIdentity.Id

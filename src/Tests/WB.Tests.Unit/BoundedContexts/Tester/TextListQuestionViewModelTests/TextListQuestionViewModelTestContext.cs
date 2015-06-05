@@ -24,14 +24,14 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
             AnsweringViewModel answering,
             IPrincipal principal = null,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
-            IStatefullInterviewRepository interviewRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
             
             IUserInteraction userInteraction = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                interviewRepository ?? Mock.Of<IStatefullInterviewRepository>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
                 userInteraction ?? Mock.Of<IUserInteraction>(),
                 answering ?? Mock.Of<AnsweringViewModel>());

@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<DesignerApiService>().ToSelf().InSingletonScope();
 
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
-            this.Bind<IStatefullInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
+            this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();

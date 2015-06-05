@@ -21,12 +21,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {

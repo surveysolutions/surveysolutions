@@ -21,18 +21,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         private readonly Dictionary<string, BaseInterviewAnswer> answers;
         private readonly Dictionary<string, InterviewGroup> groups;
         private readonly Dictionary<string, List<Identity>> rosterInstancesIds;
-        private readonly Dictionary<string, bool> untypedQuestionsValidityStatus;
-        private readonly Dictionary<string, bool> untypedQuestionsEnablementStatus;
-        private readonly Dictionary<string, string> untypedQuestionsInterviewerComments;
+        private readonly Dictionary<string, bool> notAnsweredQuestionsValidityStatus;
+        private readonly Dictionary<string, bool> notAnsweredQuestionsEnablementStatus;
+        private readonly Dictionary<string, string> notAnsweredQuestionsInterviewerComments;
 
         public StatefulInterview()
         {
             this.answers = new Dictionary<string, BaseInterviewAnswer>();
             this.groups = new Dictionary<string, InterviewGroup>();
             this.rosterInstancesIds = new Dictionary<string, List<Identity>>();
-            this.untypedQuestionsValidityStatus = new Dictionary<string, bool>();
-            this.untypedQuestionsEnablementStatus = new Dictionary<string, bool>();
-            this.untypedQuestionsInterviewerComments = new Dictionary<string, string>();
+            this.notAnsweredQuestionsValidityStatus = new Dictionary<string, bool>();
+            this.notAnsweredQuestionsEnablementStatus = new Dictionary<string, bool>();
+            this.notAnsweredQuestionsInterviewerComments = new Dictionary<string, string>();
         }
 
         protected new void Apply(InterviewOnClientCreated @event)
@@ -136,12 +136,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             base.Apply(@event);
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-            var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
-            if (answer != null) 
+            var answer = this.GetExistingAnswer(questionKey);
+            if (answer != null)
+            {
                 answer.InterviewerComment = @event.Comment;
+            }
             else
             {
-                untypedQuestionsInterviewerComments[questionKey] = @event.Comment;
+                this.notAnsweredQuestionsInterviewerComments[questionKey] = @event.Comment;
             }
         }
 
@@ -161,12 +163,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+                var answer = this.GetExistingAnswer(questionKey);
                 if (answer != null)
+                {
                     answer.IsValid = true;
+                }
                 else
                 {
-                    untypedQuestionsValidityStatus[questionKey] = true;
+                    this.notAnsweredQuestionsValidityStatus[questionKey] = true;
                 }
             });
         }
@@ -177,12 +181,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
-                if (answer != null) 
+                var answer = this.GetExistingAnswer(questionKey);
+                if (answer != null)
+                {
                     answer.IsValid = false;
+                }
                 else
                 {
-                    untypedQuestionsValidityStatus[questionKey] = false;
+                    this.notAnsweredQuestionsValidityStatus[questionKey] = false;
                 }
             });
         }
@@ -213,28 +219,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
-                if (answer != null) 
+                var answer = this.GetExistingAnswer(questionKey);
+                if (answer != null)
+                {
                     answer.IsEnabled = false;
+                }
                 else
                 {
-                    untypedQuestionsEnablementStatus[questionKey] = false;
+                    this.notAnsweredQuestionsEnablementStatus[questionKey] = false;
                 }
             });
         }
 
+      
         public virtual void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
-                if (answer != null) 
+                var answer = GetExistingAnswer(questionKey);
+                if (answer != null)
+                {
                     answer.IsEnabled = true;
+                }
                 else
                 {
-                    untypedQuestionsEnablementStatus[questionKey] = true;
+                    this.notAnsweredQuestionsEnablementStatus[questionKey] = true;
                 }
             });
         }
@@ -448,7 +459,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
             if (!this.Answers.ContainsKey(questionKey))
             {
-                return !this.untypedQuestionsValidityStatus.ContainsKey(questionKey) || this.untypedQuestionsValidityStatus[questionKey];
+                return !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsValidityStatus[questionKey];
             }
 
             var interviewAnswerModel = this.Answers[questionKey];
@@ -471,9 +482,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 return answer.IsEnabled;
             }
 
-            if (this.untypedQuestionsEnablementStatus.ContainsKey(entityKey))
+            if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(entityKey))
             {
-                return this.untypedQuestionsEnablementStatus[entityKey];
+                return this.notAnsweredQuestionsEnablementStatus[entityKey];
             }
 
             return true;
@@ -494,8 +505,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
             if (!Answers.ContainsKey(questionKey))
             {
-                return this.untypedQuestionsInterviewerComments.ContainsKey(questionKey) 
-                    ? this.untypedQuestionsInterviewerComments[questionKey] 
+                return this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey) 
+                    ? this.notAnsweredQuestionsInterviewerComments[questionKey] 
                     : null;
             }
 
@@ -511,19 +522,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 return (T)this.Answers[questionKey];
             }
 
-            if (!this.untypedQuestionsEnablementStatus.ContainsKey(questionKey)
-                && !this.untypedQuestionsInterviewerComments.ContainsKey(questionKey)
-                && !this.untypedQuestionsValidityStatus.ContainsKey(questionKey))
+            if (!this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey)
+                && !this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
+                && !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
             {
                 return null;
             }
 
-            var interviewerComment = this.untypedQuestionsInterviewerComments.ContainsKey(questionKey)
-                ? this.untypedQuestionsInterviewerComments[questionKey]
+            var interviewerComment = this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
+                ? this.notAnsweredQuestionsInterviewerComments[questionKey]
                 : null;
 
-            var isEnabled = !this.untypedQuestionsEnablementStatus.ContainsKey(questionKey) || this.untypedQuestionsEnablementStatus[questionKey];
-            var isValid = !this.untypedQuestionsValidityStatus.ContainsKey(questionKey) || this.untypedQuestionsValidityStatus[questionKey];
+            var isEnabled = !this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsEnablementStatus[questionKey];
+            var isValid = !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsValidityStatus[questionKey];
 
             var answer = new T
             {
@@ -547,22 +558,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             else
             {
                 question = new T { Id = @event.QuestionId, RosterVector = @event.PropagationVector };
-                if (untypedQuestionsEnablementStatus.ContainsKey(questionKey))
+                if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey))
                 {
-                    question.IsEnabled = untypedQuestionsEnablementStatus[questionKey];
-                    untypedQuestionsEnablementStatus.Remove(questionKey);
+                    question.IsEnabled = this.notAnsweredQuestionsEnablementStatus[questionKey];
+                    this.notAnsweredQuestionsEnablementStatus.Remove(questionKey);
                 }
 
-                if (untypedQuestionsValidityStatus.ContainsKey(questionKey))
+                if (this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
                 {
-                    question.IsValid = untypedQuestionsValidityStatus[questionKey];
-                    untypedQuestionsValidityStatus.Remove(questionKey);
+                    question.IsValid = this.notAnsweredQuestionsValidityStatus[questionKey];
+                    this.notAnsweredQuestionsValidityStatus.Remove(questionKey);
                 }
 
-                if (untypedQuestionsInterviewerComments.ContainsKey(questionKey))
+                if (this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey))
                 {
-                    question.InterviewerComment = untypedQuestionsInterviewerComments[questionKey];
-                    untypedQuestionsInterviewerComments.Remove(questionKey);
+                    question.InterviewerComment = this.notAnsweredQuestionsInterviewerComments[questionKey];
+                    this.notAnsweredQuestionsInterviewerComments.Remove(questionKey);
                 }
             }
 
@@ -594,6 +605,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         private static decimal[] GetFullRosterVector(RosterInstance instance)
         {
             return instance.OuterRosterVector.Concat(new[] { instance.RosterInstanceId }).ToArray();
+        }
+
+        private BaseInterviewAnswer GetExistingAnswer(string questionKey)
+        {
+            return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
     }
 }

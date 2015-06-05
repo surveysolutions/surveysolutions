@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Repositories
 {
-    internal class StatefulInterviewRepository : IStatefullInterviewRepository
+    internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {
         private readonly IAggregateRootRepository aggregateRootRepository;
 

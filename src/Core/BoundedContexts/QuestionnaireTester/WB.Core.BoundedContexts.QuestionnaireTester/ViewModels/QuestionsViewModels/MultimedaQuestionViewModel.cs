@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IUserIdentity userIdentity;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private Guid interviewId;
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public MultimedaQuestionViewModel(
             IUserIdentity userIdentity,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,

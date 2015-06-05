@@ -10,10 +10,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         public StaticTextViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-             IStatefullInterviewRepository interviewRepository)
+             IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;

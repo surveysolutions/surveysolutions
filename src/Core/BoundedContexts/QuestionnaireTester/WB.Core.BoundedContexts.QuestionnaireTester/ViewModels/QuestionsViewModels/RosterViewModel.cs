@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         ILiteEventHandler<RosterInstancesRemoved>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private string interviewId;
         private Identity groupIdendity;
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         public RosterViewModel(
-            IStatefullInterviewRepository interviewRepository, 
+            IStatefulInterviewRepository interviewRepository, 
             ILiteEventRegistry liteEventRegistry, 
             IInterviewViewModelFactory interviewViewModelFactory,
             EnablementViewModel enablement)

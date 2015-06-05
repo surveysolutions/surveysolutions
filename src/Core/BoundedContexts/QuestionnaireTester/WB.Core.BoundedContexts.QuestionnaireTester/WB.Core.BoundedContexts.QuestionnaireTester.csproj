@@ -105,7 +105,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\IStatefullInterviewRepository.cs" />
+    <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />

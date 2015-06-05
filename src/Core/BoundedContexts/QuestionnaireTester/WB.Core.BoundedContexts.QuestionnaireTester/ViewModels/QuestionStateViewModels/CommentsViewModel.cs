@@ -13,13 +13,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
     public class CommentsViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
     {
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
         public CommentsViewModel(
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService)
         {

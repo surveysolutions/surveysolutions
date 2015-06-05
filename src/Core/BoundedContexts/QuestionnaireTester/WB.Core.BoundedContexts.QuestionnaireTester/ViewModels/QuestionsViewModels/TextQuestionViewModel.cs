@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             ILiteEventRegistry liteEventRegistry,
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            IStatefullInterviewRepository interviewRepository,
+            IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {

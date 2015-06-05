@@ -16,10 +16,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         ILiteEventHandler<QuestionsEnabled>,
         ILiteEventHandler<QuestionsDisabled>
     {
-        private readonly IStatefullInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
 
-        public EnablementViewModel(IStatefullInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
+        public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
         {
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
