@@ -41,13 +41,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var model = new PeriodicStatusReportModel
             {
-                WebApiActionName = "ByInterviewers",
+                WebApiActionName = PeriodicStatusReportWebApiActionName.ByInterviewers,
                 CanNavigateToQuantityByTeamMember = false,
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Quantity",
                 ReportTitle = PeriodicStatusReport.NumberOfCompletedInterviews,
-                ResponsibleColumnName = PeriodicStatusReport.TeamMember
+                ResponsibleColumnName = PeriodicStatusReport.TeamMember,
+                SupervisorId = supervisorId
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -63,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var model = new PeriodicStatusReportModel
             {
-                WebApiActionName = "BySupervisors",
+                WebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors,
                 CanNavigateToQuantityByTeamMember = true,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
@@ -83,13 +84,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var model = new PeriodicStatusReportModel
             {
-                WebApiActionName = "ByInterviewers",
+                WebApiActionName = PeriodicStatusReportWebApiActionName.ByInterviewers,
                 CanNavigateToQuantityByTeamMember = false,
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
                 ReportTitle = PeriodicStatusReport.TimeSpentToCompleteInterviewInHours,
-                ResponsibleColumnName = PeriodicStatusReport.TeamMember
+                ResponsibleColumnName = PeriodicStatusReport.TeamMember,
+                SupervisorId = supervisorId
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -105,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var model = new PeriodicStatusReportModel
             {
-                WebApiActionName = "BySupervisors",
+                WebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors,
                 CanNavigateToQuantityByTeamMember = true,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),

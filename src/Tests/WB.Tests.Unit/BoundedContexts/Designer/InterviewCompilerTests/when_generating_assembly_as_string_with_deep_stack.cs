@@ -281,7 +281,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             
             ValidationExpressions.Add(new Identity(IdOf.@__a_id, rosterVector), new Func<bool>[] {                             
                                   
-                    () => this.IsAnswerEmpty(a) || IsValid_a() , 
+                    () => IsValid_a() , 
                             }); 
                     AddUpdaterToMap(IdOf.@__a_id, (double? val) => {@__a  = val; });
                 
