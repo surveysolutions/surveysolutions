@@ -98,11 +98,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var upgradedDocument = e.Source;
 
-            foreach (var sharedPerson in this.innerDocument.SharedPersons)
-            {
-                if (!upgradedDocument.SharedPersons.Contains(sharedPerson))
-                    upgradedDocument.SharedPersons.Add(sharedPerson);
-            }
+            upgradedDocument.ReplaceSharedPersons(this.innerDocument.SharedPersons);
 
             this.innerDocument = upgradedDocument;
         }
