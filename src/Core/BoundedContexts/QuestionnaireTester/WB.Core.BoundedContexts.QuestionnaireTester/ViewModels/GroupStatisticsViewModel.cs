@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {     
     public class GroupStatistics
     {
-        public int QuestionsCount { get; set; }
+        public int EnabledQuestionsCount { get; set; }
         public int SubgroupsCount { get; set; }
         public int AnsweredQuestionsCount { get; set; }
         public int UnansweredQuestionsCount { get; set; }
@@ -51,15 +51,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 !interview.IsEnabled(new Identity(question.Id, groupIdentity.RosterVector)));
 
             var invalidAnswersCount = 0;
-            var questionsCount = groupQuestions.Count() - disabledQuestionsCount;
-            var unansweredQuestionsCount = questionsCount - answeredQuestionsCount;
+            var enabledQuestionsCount = groupQuestions.Count() - disabledQuestionsCount;
+            var unansweredQuestionsCount = enabledQuestionsCount - answeredQuestionsCount;
 
             return new GroupStatistics()
             {
                 AnsweredQuestionsCount = answeredQuestionsCount,
                 UnansweredQuestionsCount = unansweredQuestionsCount,
                 InvalidAnswersCount = invalidAnswersCount,
-                QuestionsCount = questionsCount,
+                EnabledQuestionsCount = enabledQuestionsCount,
                 SubgroupsCount = subgroupsCount,
             };
         } 
