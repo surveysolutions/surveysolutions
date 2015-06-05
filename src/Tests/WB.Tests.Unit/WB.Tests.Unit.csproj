@@ -314,6 +314,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_5_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_lower_then_5.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TemplateImported_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
