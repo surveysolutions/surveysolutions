@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
 
+        protected ValidityViewModel() { }
+
         public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository)
@@ -118,7 +120,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             }
         }
 
-        public void ProcessException(Exception exception)
+        public virtual void ProcessException(Exception exception)
         {
             if (exception is InterviewException)
             {
@@ -130,14 +132,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             }
         }
 
-        public void ExecutedWithoutExceptions()
+        public virtual void ExecutedWithoutExceptions()
         {
             this.errorFromViewModel = null;
 
             UpdateValidState();
         }
 
-        public void MarkAnswerAsInvalidWithMessage(string errorMessageText)
+        public virtual void MarkAnswerAsInvalidWithMessage(string errorMessageText)
         {
             this.errorFromViewModel = new ErrorMessage(
                 string.Empty,

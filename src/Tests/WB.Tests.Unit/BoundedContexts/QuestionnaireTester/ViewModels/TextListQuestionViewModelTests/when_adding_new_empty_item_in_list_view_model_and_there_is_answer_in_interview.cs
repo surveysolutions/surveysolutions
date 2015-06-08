@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
@@ -20,15 +19,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 {
-    public class when_deleting_item_in_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
+    public class when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.Answers == savedAnswers);
-
-            var interview = Mock.Of<IStatefulInterview>(_
-                => _.QuestionnaireId == questionnaireId
-                   && _.GetTextListAnswer(questionIdentity) == textListAnswer);
+            var interview = Mock.Of<IStatefulInterview>(_ => _.QuestionnaireId == questionnaireId);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -54,44 +49,28 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
             listModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () => 
-            listModel.Answers[deletedItemIndex].DeleteListItemCommand.Execute();
+        Because of = () =>
+            listModel.NewListItem = string.Empty;
 
-        It should_create_list_with_4_answers = () =>
-            listModel.Answers.Count.ShouldEqual(4);
+        It should_not_add_anything_in_list_of_answers = () =>
+            listModel.Answers.Count.ShouldEqual(0);
 
-        It should_delete_item_with_index_equals__deletedItemIndex__ = () =>
-            listModel.Answers.Any(x 
-                => x.Value == savedAnswers[deletedItemIndex].Item1
-                && x.Title == savedAnswers[deletedItemIndex].Item2)
-                .ShouldBeFalse();
-
-        It should_set_IsAddNewItemVisible_flag_in_true = () =>
-            listModel.IsAddNewItemVisible.ShouldBeTrue();
-
-        It should_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
+        It should_not_send_answer_command = () =>
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
 
         private static TextListQuestionViewModel listModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
         private static NavigationState navigationState = CreateNavigationState();
-        private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock = new Mock<QuestionStateViewModel<TextListQuestionAnswered>>();
-        private static readonly Mock<AnsweringViewModel> AnsweringViewModelMock = new Mock<AnsweringViewModel>();
+
+        private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock =
+           new Mock<QuestionStateViewModel<TextListQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
+
+        private static readonly Mock<AnsweringViewModel> AnsweringViewModelMock =
+            new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
 
         private static readonly string interviewId = "44444444444444444444444444444444";
-        
+
         private static readonly string questionnaireId = "Questionnaire Id";
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
-        
-        private static readonly Tuple<decimal, string>[] savedAnswers = new[]
-        {
-            new Tuple<decimal, string>(1m, "Answer 1"),
-            new Tuple<decimal, string>(3m, "Answer 3"),
-            new Tuple<decimal, string>(4m, "Answer 5"),
-            new Tuple<decimal, string>(8m, "Answer 8"),
-            new Tuple<decimal, string>(9m, "Answer 9"),
-        };
-
-        private static readonly int deletedItemIndex = 2;
     }
 }

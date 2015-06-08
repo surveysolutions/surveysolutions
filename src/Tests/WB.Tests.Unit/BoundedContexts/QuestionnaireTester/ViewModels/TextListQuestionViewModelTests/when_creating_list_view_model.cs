@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 
         Because of = () =>
             listModel = CreateTextListQuestionViewModel(
-            questionStateViewModel: questionStateMock.Object, 
-            answering: answeringViewModelMock.Object);
+            questionStateViewModel: QuestionStateMock.Object,
+            answering: AnsweringViewModelMock.Object);
 
         It should_set_QuestionState_with_non_null_value = () =>
             listModel.QuestionState.ShouldNotBeNull();
@@ -32,7 +32,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 
         static TextListQuestionViewModel listModel;
 
-        static Mock<QuestionStateViewModel<TextListQuestionAnswered>> questionStateMock = new Mock<QuestionStateViewModel<TextListQuestionAnswered>>();
-        static Mock<AnsweringViewModel> answeringViewModelMock = new Mock<AnsweringViewModel>();
+        private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock =
+           new Mock<QuestionStateViewModel<TextListQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
+
+        private static readonly Mock<AnsweringViewModel> AnsweringViewModelMock =
+            new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
     }
 }
