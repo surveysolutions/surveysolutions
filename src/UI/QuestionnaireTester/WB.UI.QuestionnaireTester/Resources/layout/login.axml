@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal"
                 android:singleLine="true"
+                android:inputType="textVisiblePassword|textNoSuggestions"
                 local:MvxBind="Text LoginName; Hint Localization('LoginNameHint')" />
             <EditText
                 android:layout_width="@dimen/Login_Element_width"
