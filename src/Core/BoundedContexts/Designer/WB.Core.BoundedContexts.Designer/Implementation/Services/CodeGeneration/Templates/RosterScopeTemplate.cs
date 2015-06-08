@@ -230,7 +230,14 @@ if(!string.IsNullOrWhiteSpace(question.Validations)) {
             
             #line default
             #line hidden
-            this.Write("  \r\n                    () => ");
+            this.Write("  \r\n                    () => this.IsAnswerEmpty(");
+            
+            #line 47 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write(") || ");
             
             #line 47 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));

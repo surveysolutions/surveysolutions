@@ -41,15 +41,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, question2Id, new decimal[0], DateTime.Now, 5);
 
-                    result.Questions2ShouldBeDeclaredValid = 
-                        eventContext.AnyEvent<AnswersDeclaredValid>(x => x.Questions.Any(q => q.Id == question2Id));
+                    result.Questions2ShouldBeDeclaredInvalid = 
+                        eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == question2Id));
                 }
 
                 return result;
             });
 
         It should_declare_second_question_as_invalid = () =>
-            results.Questions2ShouldBeDeclaredValid.ShouldBeTrue();
+            results.Questions2ShouldBeDeclaredInvalid.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -63,7 +63,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [Serializable]
         internal class InvokeResults
         {
-            public bool Questions2ShouldBeDeclaredValid { get; set; }
+            public bool Questions2ShouldBeDeclaredInvalid { get; set; }
         } 
     }
 }
