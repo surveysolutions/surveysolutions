@@ -53,6 +53,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             this.registry.Subscribe(this);
         }
 
+        protected QuestionHeaderViewModel() { }
+
         public QuestionHeaderViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
