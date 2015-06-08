@@ -20,6 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.RostersInScope = rostersInScope;
             this.ParentTypeName = rostersInScope[0].ParentScope.GeneratedTypeName;
             this.ExecutorModel = executorModel;
+            this.AbstractConditionalLevelClassName =
+                executorModel.QuestionnaireLevelModel.AbstractConditionalLevelClassName;
         }
 
         public RosterScopeTemplateModel ParentScope { set; get; }
@@ -51,5 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string ParentTypeName { set; get; }
 
         public List<RosterTemplateModel> RostersInScope { set; get; }
+
+        public string AbstractConditionalLevelClassName { private set; get; }
     }
 }
