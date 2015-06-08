@@ -1454,7 +1454,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var multyOptionQuestion = question as IMultyOptionsQuestion;
             if (multyOptionQuestion != null)
-                return multyOptionQuestion.Answers.Count;
+                return multyOptionQuestion.MaxAllowedAnswers ?? multyOptionQuestion.Answers.Count;
             return null;
         }
 
