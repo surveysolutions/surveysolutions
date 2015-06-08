@@ -39,7 +39,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         {
             questionnaireDocument.ConnectChildrenWithParent();
             
-            var questionnaireModel = new QuestionnaireModel();
+            var questionnaireModel = new QuestionnaireModel
+            {
+                Parents = new Dictionary<Guid, List<GroupReferenceModel>>(),
+                GroupsParentIdMap = new Dictionary<Guid, Guid?>(),
+                GroupsRosterLevelDepth = new Dictionary<Guid, int>(),
+                QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>()
+            };
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
@@ -53,8 +59,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
                 .ToList();
-            questionnaireModel.GroupsWithoutNestedChildren = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
-            questionnaireModel.Parents = questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ToDictionary(x => x.PublicKey, this.BuildParentsList);
+            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
+            
+            questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x));
+
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
             questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => CreateQuestionModel(x, questionnaireDocument));
 
@@ -79,24 +87,46 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             };
         }
 
-        private List<QuestionnaireReferenceModel> BuildParentsList(IComposite group)
+        private void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item)
         {
-            var parents = new List<QuestionnaireReferenceModel>();
+            var parents = new List<GroupReferenceModel>();
 
-            var parentAsGroup = group.GetParent() as Group;
+            var parentAsGroup = item.GetParent() as Group;
+
+            var closestParentGroupId = parentAsGroup == null? (Guid?)null : parentAsGroup.PublicKey;
+
+            var countOfRostersToTop = 0;
+
             while (parentAsGroup != null)
             {
-                var parentPlaceholder = new QuestionnaireReferenceModel
+                countOfRostersToTop += parentAsGroup.IsRoster ? 1 : 0;
+
+                var parentPlaceholder = new GroupReferenceModel
                 {
-                    ModelType = parentAsGroup.IsRoster ? typeof(RosterModel) : typeof(GroupModel),
+                    IsRoster = parentAsGroup.IsRoster,
                     Id = parentAsGroup.PublicKey
                 };
                 parents.Add(parentPlaceholder);
-
                 parentAsGroup = parentAsGroup.GetParent() as Group;
             }
 
-            return parents;
+            var @group = item as Group;
+            if (@group != null)
+            {
+                parents.Reverse();
+                parents.Add(new GroupReferenceModel{ Id = @group.PublicKey, IsRoster = @group.IsRoster});
+                questionnaireModel.Parents.Add(item.PublicKey, parents);
+                questionnaireModel.GroupsRosterLevelDepth.Add(item.PublicKey, countOfRostersToTop);
+                questionnaireModel.GroupsParentIdMap.Add(item.PublicKey, closestParentGroupId);
+            }
+
+            if (item is IQuestion)
+            {
+                var closestRosterReference = parents.LastOrDefault(x => x.IsRoster);
+                questionnaireModel.QuestionsNearestRosterIdMap.Add(
+                    item.PublicKey,
+                    closestRosterReference == null ? (Guid?)null : closestRosterReference.Id);
+            }
         }
 
         private static GroupModel CreateGroupModelWithoutNestedChildren(Group @group, Dictionary<Guid, BaseQuestionModel> questions)

@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = (IntegerNumericQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var questionModel = questionnaire.GetIntegerNumericQuestion(entityIdentity.Id);
 
             if (answerModel != null)
             {

@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var answerModel = interview.GetTextListAnswer(entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = (TextListQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var questionModel = questionnaire.GetTextListQuestion(entityIdentity.Id);
 
             if (answerModel != null && answerModel.Answers != null)
             {

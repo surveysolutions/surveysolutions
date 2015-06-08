@@ -24,14 +24,11 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.RosterTitle
                 x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>()) == 
                     new InterviewRoster { Title = rosterTitle });
 
-            var questionnaire = new QuestionnaireModel { Parents = new Dictionary<Guid, List<QuestionnaireReferenceModel>>() };
-            questionnaire.Parents[questionid] = new List<QuestionnaireReferenceModel>
-            {
-                new QuestionnaireReferenceModel
+            var questionnaire = new QuestionnaireModel { 
+                QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>
                 {
-                    Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"),
-                    ModelType = typeof(RosterModel)
-                }
+                    {questionid,  Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")}
+                } 
             };
 
             var questionnaireStorageStub = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();

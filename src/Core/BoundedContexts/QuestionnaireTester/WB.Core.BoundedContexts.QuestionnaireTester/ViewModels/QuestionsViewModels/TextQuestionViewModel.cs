@@ -122,11 +122,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var textQuestionModel = questionnaire.Questions[questionIdentity.Id] as MaskedTextQuestionModel;
-            if (textQuestionModel != null)
-            {
-                this.Mask = textQuestionModel.Mask;
-            }
+            var textQuestionModel = questionnaire.GetMaskedTextQuestion(questionIdentity.Id);
+            this.Mask = textQuestionModel.Mask;
         }
 
         private void UpdateSelfFromModel()

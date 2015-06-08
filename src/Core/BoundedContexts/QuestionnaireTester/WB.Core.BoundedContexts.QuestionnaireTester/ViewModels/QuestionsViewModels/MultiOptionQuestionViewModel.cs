@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewId = interview.Id;
             QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var questionModel = (MultiOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var questionModel = questionnaire.GetMultiOptionQuestion(entityIdentity.Id);
             this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
 
