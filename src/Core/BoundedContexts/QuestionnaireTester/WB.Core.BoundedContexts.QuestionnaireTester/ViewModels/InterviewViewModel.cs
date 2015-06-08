@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]));
+            this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
         }
 
         private static BaseInterviewAnswer GetAnswerModel(IStatefulInterview interview, QuestionnaireReferenceModel referenceToQuestion)

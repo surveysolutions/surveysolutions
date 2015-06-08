@@ -67,8 +67,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var parents = questionnaire.Parents[groupIdentity.Id];
-            IsExistsParent = parents.Count > 0;
+            this.IsExistsParent = questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue;
 
             if (IsExistsParent)
             {
@@ -118,11 +117,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var parents = questionnaire.Parents[groupIdentity.Id];
-            var parent = parents.Last();
-            int rosterLevelOfParent = parents.Count(p => p.IsRoster);
+            var parentId = questionnaire.GroupsParentIdMap[this.groupIdentity.Id].Value;
+            int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[groupIdentity.Id];
             decimal[] parentRosterVector = groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
-            return new Identity(parent.Id, parentRosterVector);
+            return new Identity(parentId, parentRosterVector);
         }
 
         private void UpdateSelfFromModel()
