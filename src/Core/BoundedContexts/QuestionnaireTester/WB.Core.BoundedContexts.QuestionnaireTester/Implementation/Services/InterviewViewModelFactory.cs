@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -20,27 +21,42 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        private static readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap = 
-            new Dictionary<Type, Func<IInterviewEntityViewModel>>
+        private Dictionary<Type, Func<string, Identity, IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap =
+            new Dictionary<Type, Func<string, Identity, IInterviewEntityViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
                 { typeof(IntegerNumericQuestionModel), Load<IntegerQuestionViewModel> },
                 { typeof(RealNumericQuestionModel), Load<RealQuestionViewModel> },
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(TextListQuestionModel), Load<TextListQuestionViewModel> },
-                { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
+                //{ typeof(SingleOptionQuestionModel), LoadSingleOptionViewModel },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
-                { typeof(DateTimeQuestionModel), Load<DateTimeQuestionViewModel> },
+                { typeof(SingleOptionQuestionModel), Load<ComboboxSingleOptionQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
                 { typeof(GroupModel), Load<GroupViewModel> },
                 { typeof(RosterModel), Load<RosterViewModel> }
             };
 
+        /*private static IInterviewEntityViewModel LoadSingleOptionViewModel(string interviewId, Identity identity)
+        {
+            var statefulInterview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.plainQuestionnaireRepository.GetById(statefulInterview.QuestionnaireId);
+            var model = (SingleOptionQuestionModel)questionnaire.Questions[identity.Id];
+            return model.IsFilteredCombobox.GetValueOrDefault()
+                ? (IInterviewEntityViewModel)Load<ComboboxSingleOptionQuestionViewModel>()
+                : Load<SingleOptionQuestionViewModel>();
+        }*/
+
         private static T Load<T>() where T : class
         {
             return Mvx.Resolve<T>();
+        }
+
+        private static T Load<T>(string interviewId, Identity identity) where T : class
+        {
+            return Load<T>();
         }
 
         public InterviewViewModelFactory(
@@ -112,7 +128,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return result;
         }
 
-        private static IInterviewEntityViewModel CreateInterviewEntityViewModel(
+        private IInterviewEntityViewModel CreateInterviewEntityViewModel(
             Guid entityId,
             decimal[] rosterVector,
             Type entityModelType,
@@ -124,14 +140,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
                 //throw new ArgumentOutOfRangeException("entityModelType", entityModelType, "View model is not registered");
-                var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
+                var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke(null, null);
                 text.StaticText = entityModelType.ToString();
                 return text;
             }
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
 
-            IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
+            IInterviewEntityViewModel viewModel = viewModelActivator.Invoke(interviewId, identity);
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;

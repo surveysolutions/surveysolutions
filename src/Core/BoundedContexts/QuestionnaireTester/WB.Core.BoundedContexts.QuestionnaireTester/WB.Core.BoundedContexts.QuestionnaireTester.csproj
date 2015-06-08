@@ -108,6 +108,7 @@
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\ComboboxSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\SectionViewModel.cs" />
     <Compile Include="ViewModels\GroupStatisticsViewModel.cs" />
