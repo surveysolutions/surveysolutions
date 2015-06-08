@@ -14,7 +14,7 @@ using String = System.String;
 
 namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 {
-    public class MaskedEditText : EditText, ITextWatcher, IInputFilter
+    public class MaskedEditText : EditText, IInputFilter
     {
         private const char DigitKey = '#';
         private const char CharacterKey = '~';
@@ -38,7 +38,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         private int maxRawLength;
         private int lastValidMaskPosition;
         private bool selectionChanged;
-        private IOnFocusChangeListener focusChangeListener;
+
     
         public MaskedEditText(Context context) : base(context) 
         {
@@ -50,21 +50,8 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             this.Init();
 
             this.CleanUp();
-
-            // Ignoring enter key presses
-            this.EditorAction += (sender, args) =>
-            {
-                args.Handled = args.ActionId != ImeAction.Next;
-            };
         }
 
-        /** @param listener - its onFocusChange() method will be called before performing MaskedEditText operations, 
-         * related to this event. */
-        public void SetOnFocusChangeListener(IOnFocusChangeListener listener) 
-        {
-            this.focusChangeListener = listener;
-        }
-    
         private void CleanUp() 
         {
             if (this.mask.IsNullOrEmpty()) 
@@ -98,25 +85,6 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         
             this.lastValidMaskPosition = this.FindLastValidMaskPosition();
             this.initialized = true;
-
-            this.FocusChange += (sender, args) =>
-            {
-                if (this.focusChangeListener != null) 
-                {
-                    this.focusChangeListener.OnFocusChange((View)sender, this.HasFocus);
-                }
-
-                if (args.HasFocus && (this.rawText.HasAnyText || !this.HasHint)) 
-                {
-                    this.selectionChanged = false;
-                    var lastValidPosition = this.LastValidPosition();
-
-                    if (lastValidPosition < Text.Length)
-                    {
-                        this.SetSelection(lastValidPosition);
-                    }
-                }
-            };
         }
 
         private int FindLastValidMaskPosition() 
@@ -145,6 +113,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 {
                     this.mask = value;
                     this.CleanUp();
+                    this.Text = string.Empty; // clear text value after change mask
                 }
             }
         }
@@ -219,27 +188,11 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         private void Init() 
         {
             this.SetFilters(new IInputFilter[] { this });
-            //this.AddTextChangedListener(this);
             this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
             this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
             this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
 
             this.SetRawInputType(InputTypes.TextFlagNoSuggestions);
-        }
-
-        void ITextWatcher.AfterTextChanged(IEditable s)
-        {
-            this.AfterTextChangedHandler(s);
-        }
-
-        void ITextWatcher.BeforeTextChanged(ICharSequence s, int start, int count, int after)
-        {
-            this.BeforeTextChangedHandler(s, start, count, after);
-        }
-
-        void ITextWatcher.OnTextChanged(ICharSequence s, int start, int before, int count)
-        {
-            this.OnTextChanged(s, start, before, count);
         }
 
         protected override void OnTextChanged(ICharSequence s, int start, int before, int count)
@@ -332,7 +285,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             }
         }
 
-        protected void OnTextChangedHandle(string s, int start, int before, int count)
+        void OnTextChangedHandle(string s, int start, int before, int count)
         {
             if (this.mask.IsNullOrEmpty())
                 return;
