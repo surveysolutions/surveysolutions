@@ -9,7 +9,6 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
-using Range = WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl.Range;
 using String = System.String;
 
 
@@ -110,7 +109,12 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 if (args.HasFocus && (this.rawText.HasAnyText || !this.HasHint)) 
                 {
                     this.selectionChanged = false;
-                    this.SetSelection(this.LastValidPosition());
+                    var lastValidPosition = this.LastValidPosition();
+
+                    if (lastValidPosition < Text.Length)
+                    {
+                        this.SetSelection(lastValidPosition);
+                    }
                 }
             };
         }
@@ -137,8 +141,11 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             get { return this.mask; }
             set
             {
-                this.mask = value;
-                this.CleanUp();
+                if (this.mask != value)
+                {
+                    this.mask = value;
+                    this.CleanUp();
+                }
             }
         }
 
@@ -212,10 +219,10 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         private void Init() 
         {
             this.SetFilters(new IInputFilter[] { this });
-            this.AddTextChangedListener(this);
-            //this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
-            //this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
-            //this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
+            //this.AddTextChangedListener(this);
+            this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
+            this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
+            this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
 
             this.SetRawInputType(InputTypes.TextFlagNoSuggestions);
         }
