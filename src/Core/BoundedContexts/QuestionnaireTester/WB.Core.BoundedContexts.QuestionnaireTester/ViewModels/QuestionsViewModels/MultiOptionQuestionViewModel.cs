@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -21,7 +22,8 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -31,6 +33,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid userId;
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
+        private bool inProgress;
 
         public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
@@ -75,14 +78,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
+        public bool InProgress
+        {
+            get { return this.inProgress; }
+            private set { this.inProgress = value; this.RaisePropertyChanged(); }
+        }
+
         private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model, MultiOptionAnswer multiOptionAnswer)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
                 Value = model.Value,
                 Title = model.Title,
-                Checked = multiOptionAnswer != null && 
-                          multiOptionAnswer.IsAnswered && 
+                Checked = multiOptionAnswer != null &&
+                          multiOptionAnswer.IsAnswered &&
                           multiOptionAnswer.Answers.Any(x => model.Value == x)
             };
 
@@ -91,28 +100,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public async Task ToggleAnswer(MultiOptionQuestionOptionViewModel changedModel)
         {
-            var allSelectedOptions = this.Options.Where(x => x.Checked).ToList();
-
-            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count > maxAllowedAnswers)
+            this.InProgress = true;
+            try
             {
-                changedModel.Checked = false;
-                return;
-            }
+                List<MultiOptionQuestionOptionViewModel> allSelectedOptions = this.Options.Where(x => x.Checked).ToList();
 
-            if (this.isRosterSizeQuestion && !changedModel.Checked)
-            {
-                var amountOfRostersToRemove = 1;
-                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
+                if (maxAllowedAnswers.HasValue && allSelectedOptions.Count > maxAllowedAnswers)
                 {
-                    changedModel.Checked = true;
+                    changedModel.Checked = false;
                     return;
                 }
-            }
 
-            var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
+                if (this.isRosterSizeQuestion && !changedModel.Checked)
+                {
+                    var amountOfRostersToRemove = 1;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                    if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
+                    {
+                        changedModel.Checked = true;
+                        return;
+                    }
+                }
 
-            var command = new AnswerMultipleOptionsQuestionCommand(
+                var selectedValues = allSelectedOptions.OrderBy(x => x.CheckedOrder)
+                    .Select(x => x.Value)
+                    .ToArray();
+
+                var command = new AnswerMultipleOptionsQuestionCommand(
                     this.interviewId,
                     this.userId,
                     this.questionIdentity.Id,
@@ -120,15 +134,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     DateTime.UtcNow,
                     selectedValues);
 
-            try
-            {
-                await this.Answering.SendAnswerQuestionCommand(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                try
+                {
+                    await this.Answering.SendAnswerQuestionCommand(command);
+                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    if (changedModel.Checked)
+                    {
+                        changedModel.CheckedOrder = allSelectedOptions.Count;
+                    }
+                    else
+                    {
+                        changedModel.CheckedOrder = null;
+                        for (int i = 0; i < selectedValues.Length; i++)
+                        {
+                            this.Options.Single(x => x.Value == selectedValues[i]).CheckedOrder = i + 1;
+                        }
+                    }
+                }
+                catch (InterviewException ex)
+                {
+                    changedModel.Checked = !changedModel.Checked;
+                    this.QuestionState.Validity.ProcessException(ex);
+                }
             }
-            catch (InterviewException ex)
+            finally
             {
-                changedModel.Checked = !changedModel.Checked;
-                this.QuestionState.Validity.ProcessException(ex);
+                this.InProgress = false;
             }
         }
     }
