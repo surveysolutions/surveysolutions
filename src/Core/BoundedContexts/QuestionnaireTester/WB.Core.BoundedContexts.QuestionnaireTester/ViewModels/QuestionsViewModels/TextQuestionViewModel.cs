@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             private set { mask = value; RaisePropertyChanged(); }
         }
 
-        public bool IsMaskedQuestionAnswered { get; private set; }
+        public bool IsMaskedQuestionAnswered { get; set; }
 
         private string answer;
         public string Answer
