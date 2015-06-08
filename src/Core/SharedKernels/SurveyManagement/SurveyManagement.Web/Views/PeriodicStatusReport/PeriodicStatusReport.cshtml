@@ -47,17 +47,16 @@
 @section header
 {
 
-<h3 class="sinle-line-header" data-bind="text: QuestionnaireName"></h3>
+<h3>@Model.ReportTitle</h3>
 }
 
 @section actionbar
 {
-
-<h3>@Model.ReportTitle</h3>
-    @if (Model.CanNavigateToQuantityBySupervisors)
-    {
-        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
-    }
+@if (Model.CanNavigateToQuantityBySupervisors)
+{
+    <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
+}
+<h4 class="sinle-line-header" data-bind="text: QuestionnaireName"></h4>
 }
 
 @section filters
