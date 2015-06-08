@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
         };
 
         Because of = () =>
-            brokenSyncPackagesStorage.StoreUnhandledPackage("test", interviewId, nullReferenceException);
+            brokenSyncPackagesStorage.StoreUnhandledPackageForInterview("test", interviewId, nullReferenceException);
 
         It should_copy_package_to_error_folder = () =>
-           fileSystemAccessorMock.Verify(x => x.CopyFileOrDirectory("test", @"App_Data\IncomingDataWithErrors\" + interviewId.FormatGuid()), Times.Once);
+           fileSystemAccessorMock.Verify(x => x.CopyFileOrDirectory("test", @"App_Data\IncomingDataWithErrors\categorized\unknown\" + interviewId.FormatGuid()), Times.Once);
 
         It should_create_exception_file_with_exception_message = () =>
-            fileSystemAccessorMock.Verify(x => x.WriteAllText(string.Format(@"App_Data\IncomingDataWithErrors\{0}\{0}.exception", interviewId.FormatGuid()), nullReferenceException.Message+" "), Times.Once);
+            fileSystemAccessorMock.Verify(x => x.WriteAllText(string.Format(@"App_Data\IncomingDataWithErrors\categorized\unknown\{0}\{0}.exception", interviewId.FormatGuid()), nullReferenceException.Message + " "), Times.Once);
 
         private static BrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;

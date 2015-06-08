@@ -67,6 +67,7 @@
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
+    <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
