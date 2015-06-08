@@ -3,6 +3,7 @@ using Quartz;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
@@ -36,7 +37,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
             catch (IncomingSyncPackageException e)
             {
-                brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+                if (e.InterviewId.HasValue)
+                    brokenSyncPackagesStorage.StoreUnhandledPackageForInterview(e.PathToPackage, e.InterviewId.Value,
+                        e.InnerException);
+                else
+                    brokenSyncPackagesStorage.StoreUnknownUnhandledPackage(e.PathToPackage, e.InnerException);
+
                 incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
             }
 
@@ -59,7 +65,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             catch (Exception e)
             {
                 logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", syncPackage.PathToPackage, e.Message), e);
-                brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId, e);
+
+                var interviewException = e as InterviewException;
+                if (interviewException != null)
+                    brokenSyncPackagesStorage.StoreUnhandledPackageForInterviewInTypedFolder(syncPackage.PathToPackage, syncPackage.InterviewId, e, interviewException.ErrorType.ToString());
+                else
+                    brokenSyncPackagesStorage.StoreUnhandledPackageForInterview(syncPackage.PathToPackage, syncPackage.InterviewId, e);
             }
 
             incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);

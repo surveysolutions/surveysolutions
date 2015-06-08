@@ -5,12 +5,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization
 {
     public interface IBrokenSyncPackagesStorage
     {
-        string[] GetListOfUnhandledPackagesForInterview(Guid interviewId);
-
         IEnumerable<string> GetListOfUnhandledPackages();
 
-        string GetUnhandledPackagePath(string id);
+        string GetUnhandledPackagePath(string package);
 
-        void StoreUnhandledPackage(string unhandledPackagePath, Guid? interviewId, Exception e);
+        void StoreUnknownUnhandledPackage(string unhandledPackagePath, Exception e);
+
+        void StoreUnhandledPackageForInterview(string unhandledPackagePath, Guid interviewId, Exception e);
+
+        void StoreUnhandledPackageForInterviewInTypedFolder(string unhandledPackagePath, Guid interviewId, Exception e, string typeFolderName);
     }
 }
