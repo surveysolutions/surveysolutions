@@ -30,7 +30,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
-            {typeof (ComboboxSingleOptionQuestionViewModel), Resource.Layout.interview_question_filter_combobox},
+            {typeof (FilteredComboboxQuestionViewModel), Resource.Layout.interview_question_filter_combobox},
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (RosterViewModel), Resource.Layout.interview_roster},
@@ -43,14 +43,6 @@ namespace WB.UI.QuestionnaireTester.CustomControls
             object source = this.GetRawItem(position);
 
             var typeOfViewModel = source.GetType();
-            if (source is SingleOptionQuestionViewModel)
-            {
-                var multiOptionQuestionViewModel = (SingleOptionQuestionViewModel)source;
-                if (multiOptionQuestionViewModel.IsFiltered)
-                {
-                    return Resource.Layout.interview_question_single_filtered_option;
-                }
-            }
 
             return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
         }

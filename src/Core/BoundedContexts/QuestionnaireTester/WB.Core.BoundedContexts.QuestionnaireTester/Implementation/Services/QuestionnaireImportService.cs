@@ -169,13 +169,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     }
                     else
                     {
-                        questionModel = new SingleOptionQuestionModel
+                        var isFilteredCombobox = singleQuestion.IsFilteredCombobox.GetValueOrDefault();
+                        if (isFilteredCombobox)
                         {
-                            CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
-                            IsFilteredCombobox = singleQuestion.IsFilteredCombobox,
-                            Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
-                            IsFiltered = singleQuestion.IsFilteredCombobox.GetValueOrDefault()
-                        };
+                            questionModel = new FilteredComboboxQuestionModel
+                            {
+                                //CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
+                                Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+                            };
+                        }
+                        else
+                        {
+                            questionModel = new SingleOptionQuestionModel
+                            {
+                                CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
+                                Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+                            };
+                        }
                     }
                     break;
                 case QuestionType.MultyOption:
