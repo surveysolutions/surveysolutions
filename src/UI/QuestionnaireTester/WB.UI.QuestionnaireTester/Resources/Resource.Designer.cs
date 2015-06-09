@@ -55,6 +55,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.Core.Infrastructure.Android.Resource.Id.preview_view = global::WB.UI.QuestionnaireTester.Resource.Id.preview_view;
 			global::WB.Core.Infrastructure.Android.Resource.Id.zoomButton = global::WB.UI.QuestionnaireTester.Resource.Id.zoomButton;
 			global::WB.Core.Infrastructure.Android.Resource.Integer.BufferSize = global::WB.UI.QuestionnaireTester.Resource.Integer.BufferSize;
+			global::WB.Core.Infrastructure.Android.Resource.Integer.GpsReceiveTimeoutSec = global::WB.UI.QuestionnaireTester.Resource.Integer.GpsReceiveTimeoutSec;
 			global::WB.Core.Infrastructure.Android.Resource.Integer.HttpResponseTimeout = global::WB.UI.QuestionnaireTester.Resource.Integer.HttpResponseTimeout;
 			global::WB.Core.Infrastructure.Android.Resource.Layout.scanner = global::WB.UI.QuestionnaireTester.Resource.Layout.scanner;
 			global::WB.Core.Infrastructure.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
@@ -65,6 +66,8 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_ConnectionSettings = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_ConnectionSettings;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_DesignerEndPointSummary = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_DesignerEndPointSummary;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_DesignerEndPointTitle = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_DesignerEndPointTitle;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_GpsReceiveTimeoutSecSummary = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_GpsReceiveTimeoutSecSummary;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_GpsReceiveTimeoutSecTitle = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_GpsReceiveTimeoutSecTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionSummaryFormat = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_VersionSummaryFormat;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionTitle = global::WB.UI.QuestionnaireTester.Resource.String.Prefs_VersionTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.library_name = global::WB.UI.QuestionnaireTester.Resource.String.library_name;
@@ -2540,6 +2543,9 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0a0004
 			public const int BufferSize = 2131361796;
 			
+			// aapt resource value: 0x7f0a0005
+			public const int GpsReceiveTimeoutSec = 2131361797;
+			
 			// aapt resource value: 0x7f0a0003
 			public const int HttpResponseTimeout = 2131361795;
 			
@@ -2804,26 +2810,32 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0012
 			public const int DesignerEndpoint = 2131427346;
 			
+			// aapt resource value: 0x7f0b001c
+			public const int Hello = 2131427356;
+			
+			// aapt resource value: 0x7f0b001b
+			public const int Prefs_AcceptUnsignedSummary = 2131427355;
+			
 			// aapt resource value: 0x7f0b001a
-			public const int Hello = 2131427354;
-			
-			// aapt resource value: 0x7f0b0019
-			public const int Prefs_AcceptUnsignedSummary = 2131427353;
-			
-			// aapt resource value: 0x7f0b0018
-			public const int Prefs_AcceptUnsignedTitle = 2131427352;
-			
-			// aapt resource value: 0x7f0b0015
-			public const int Prefs_ConnectionSettings = 2131427349;
+			public const int Prefs_AcceptUnsignedTitle = 2131427354;
 			
 			// aapt resource value: 0x7f0b0017
-			public const int Prefs_DesignerEndPointSummary = 2131427351;
+			public const int Prefs_ConnectionSettings = 2131427351;
 			
-			// aapt resource value: 0x7f0b0016
-			public const int Prefs_DesignerEndPointTitle = 2131427350;
+			// aapt resource value: 0x7f0b0019
+			public const int Prefs_DesignerEndPointSummary = 2131427353;
+			
+			// aapt resource value: 0x7f0b0018
+			public const int Prefs_DesignerEndPointTitle = 2131427352;
+			
+			// aapt resource value: 0x7f0b0015
+			public const int Prefs_GpsReceiveTimeoutSecSummary = 2131427349;
 			
 			// aapt resource value: 0x7f0b0014
-			public const int Prefs_VersionSummaryFormat = 2131427348;
+			public const int Prefs_GpsReceiveTimeoutSecTitle = 2131427348;
+			
+			// aapt resource value: 0x7f0b0016
+			public const int Prefs_VersionSummaryFormat = 2131427350;
 			
 			// aapt resource value: 0x7f0b0013
 			public const int Prefs_VersionTitle = 2131427347;
@@ -2879,8 +2891,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f0b0010
 			public const int abc_toolbar_collapse_description = 2131427344;
 			
-			// aapt resource value: 0x7f0b001b
-			public const int library_name = 2131427355;
+			// aapt resource value: 0x7f0b001d
+			public const int library_name = 2131427357;
 			
 			static String()
 			{

@@ -73,6 +73,8 @@
     <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
+    <Compile Include="Implementation\Services\GpsLocationService.cs" />
+    <Compile Include="Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Infrastructure\IQrBarcodeScanService.cs" />
     <Compile Include="Infrastructure\ISettingsProvider.cs" />

@@ -14,6 +14,8 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
+        private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
+
         private readonly IExpressionsEngineVersionService versionService;
 
         public ApplicationSettings(IExpressionsEngineVersionService versionService)
@@ -54,6 +56,22 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
         {
             get { return SharedPreferences.GetBoolean(AcceptUnsignedSslCertificateParameterName, 
                 Application.Context.Resources.GetBoolean(Resource.Boolean.AcceptUnsignedSslCertificate)); }
+        }
+
+        public int GpsReceiveTimeoutSec
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec);
+                string gpsReceiveTimeoutSec = SharedPreferences.GetString(GpsReceiveTimeoutSecParameterName, defValue.ToString());
+                int result;
+                if (int.TryParse(gpsReceiveTimeoutSec, out result))
+                {
+                    return result;
+                }
+
+                return defValue;
+            }
         }
 
         public string ApplicationVersion
