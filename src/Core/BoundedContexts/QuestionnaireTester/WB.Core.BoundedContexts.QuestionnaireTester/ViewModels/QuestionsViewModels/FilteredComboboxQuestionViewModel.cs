@@ -17,13 +17,13 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class ComboboxSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class FilteredComboboxQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public ComboboxSingleOptionQuestionViewModel(
+        public FilteredComboboxQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        public bool IsFiltered { get; private set; }
+
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -59,14 +59,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = (SingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var questionModel = (FilteredComboboxQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
             var selectedValue = Monads.Maybe(() => answerModel.Answer);
-
-            this.IsFiltered = questionModel.IsFiltered;
-
-            if (!IsFiltered)
-                throw new ArgumentException("Is not filtered single option question");
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;

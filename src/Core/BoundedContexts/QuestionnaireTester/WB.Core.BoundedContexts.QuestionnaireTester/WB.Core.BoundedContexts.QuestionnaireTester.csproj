@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Entities\QuestionModels\FilteredComboboxQuestionModel.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Entities\BaseInterviewAnswer.cs" />
     <Compile Include="Implementation\Entities\DateTimeAnswer.cs" />
@@ -108,7 +109,7 @@
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\ComboboxSingleOptionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\FilteredComboboxQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\SectionViewModel.cs" />
     <Compile Include="ViewModels\GroupStatisticsViewModel.cs" />

@@ -21,42 +21,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        private Dictionary<Type, Func<string, Identity, IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap =
-            new Dictionary<Type, Func<string, Identity, IInterviewEntityViewModel>>
+        private Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap =
+            new Dictionary<Type, Func<IInterviewEntityViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
                 { typeof(IntegerNumericQuestionModel), Load<IntegerQuestionViewModel> },
                 { typeof(RealNumericQuestionModel), Load<RealQuestionViewModel> },
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(TextListQuestionModel), Load<TextListQuestionViewModel> },
-                //{ typeof(SingleOptionQuestionModel), LoadSingleOptionViewModel },
+                { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
+                { typeof(FilteredComboboxQuestionModel), Load<FilteredComboboxQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
-                { typeof(SingleOptionQuestionModel), Load<ComboboxSingleOptionQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
                 { typeof(GroupModel), Load<GroupViewModel> },
                 { typeof(RosterModel), Load<RosterViewModel> }
             };
 
-        /*private static IInterviewEntityViewModel LoadSingleOptionViewModel(string interviewId, Identity identity)
-        {
-            var statefulInterview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.GetById(statefulInterview.QuestionnaireId);
-            var model = (SingleOptionQuestionModel)questionnaire.Questions[identity.Id];
-            return model.IsFilteredCombobox.GetValueOrDefault()
-                ? (IInterviewEntityViewModel)Load<ComboboxSingleOptionQuestionViewModel>()
-                : Load<SingleOptionQuestionViewModel>();
-        }*/
-
         private static T Load<T>() where T : class
         {
             return Mvx.Resolve<T>();
-        }
-
-        private static T Load<T>(string interviewId, Identity identity) where T : class
-        {
-            return Load<T>();
         }
 
         public InterviewViewModelFactory(
@@ -140,14 +125,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
                 //throw new ArgumentOutOfRangeException("entityModelType", entityModelType, "View model is not registered");
-                var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke(null, null);
+                var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
                 text.StaticText = entityModelType.ToString();
                 return text;
             }
 
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
 
-            IInterviewEntityViewModel viewModel = viewModelActivator.Invoke(interviewId, identity);
+            IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;
