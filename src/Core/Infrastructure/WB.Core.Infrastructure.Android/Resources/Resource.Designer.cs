@@ -112,6 +112,9 @@ namespace WB.Core.Infrastructure.Android
 			// aapt resource value: 0x7f050001
 			public static int BufferSize = 2131034113;
 			
+			// aapt resource value: 0x7f050002
+			public static int GpsReceiveTimeoutSec = 2131034114;
+			
 			// aapt resource value: 0x7f050000
 			public static int HttpResponseTimeout = 2131034112;
 			
@@ -153,23 +156,29 @@ namespace WB.Core.Infrastructure.Android
 			// aapt resource value: 0x7f040000
 			public static int Hello = 2130968576;
 			
-			// aapt resource value: 0x7f04000a
-			public static int Prefs_AcceptUnsignedSummary = 2130968586;
+			// aapt resource value: 0x7f04000c
+			public static int Prefs_AcceptUnsignedSummary = 2130968588;
 			
-			// aapt resource value: 0x7f040009
-			public static int Prefs_AcceptUnsignedTitle = 2130968585;
-			
-			// aapt resource value: 0x7f040006
-			public static int Prefs_ConnectionSettings = 2130968582;
+			// aapt resource value: 0x7f04000b
+			public static int Prefs_AcceptUnsignedTitle = 2130968587;
 			
 			// aapt resource value: 0x7f040008
-			public static int Prefs_DesignerEndPointSummary = 2130968584;
+			public static int Prefs_ConnectionSettings = 2130968584;
 			
-			// aapt resource value: 0x7f040007
-			public static int Prefs_DesignerEndPointTitle = 2130968583;
+			// aapt resource value: 0x7f04000a
+			public static int Prefs_DesignerEndPointSummary = 2130968586;
+			
+			// aapt resource value: 0x7f040009
+			public static int Prefs_DesignerEndPointTitle = 2130968585;
+			
+			// aapt resource value: 0x7f040006
+			public static int Prefs_GpsReceiveTimeoutSecSummary = 2130968582;
 			
 			// aapt resource value: 0x7f040005
-			public static int Prefs_VersionSummaryFormat = 2130968581;
+			public static int Prefs_GpsReceiveTimeoutSecTitle = 2130968581;
+			
+			// aapt resource value: 0x7f040007
+			public static int Prefs_VersionSummaryFormat = 2130968583;
 			
 			// aapt resource value: 0x7f040004
 			public static int Prefs_VersionTitle = 2130968580;

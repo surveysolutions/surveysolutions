@@ -3,6 +3,7 @@
   <string name="ApplicationName">Questionnaire Tester</string>
   <integer name="HttpResponseTimeout">30</integer>
   <integer name="BufferSize">512</integer>
+  <integer name="GpsReceiveTimeoutSec">30</integer>
   <bool name="AcceptUnsignedSslCertificate">true</bool>
   <!--<string name="DesignerEndpoint">http://192.168.88.196/designer/api/v1</string>-->
   <!--<string name="DesignerEndpoint">https://192.168.1.90/designer/api/v1</string>-->
@@ -14,6 +15,8 @@
   <!--<string name="DesignerEndpoint">https://192.168.73.1/designer/api/v1</string>-->
 
   <string name="Prefs_VersionTitle">Application version</string>
+  <string name="Prefs_GpsReceiveTimeoutSecTitle">GPS Receive timeout</string>
+  <string name="Prefs_GpsReceiveTimeoutSecSummary">Number of seconds to wait for coordinates</string>
   <string name="Prefs_VersionSummaryFormat">Version: {0}{1}Engine version: {2}</string>
   <string name="Prefs_ConnectionSettings">Connection settings</string>
   <string name="Prefs_DesignerEndPointTitle">Designer URL</string>

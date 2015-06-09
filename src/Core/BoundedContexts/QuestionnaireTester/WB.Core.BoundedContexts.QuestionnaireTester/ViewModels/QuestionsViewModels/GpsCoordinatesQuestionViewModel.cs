@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -33,13 +33,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
-            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer, () => !this.IsInProgress)); }
+            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(() => SaveAnswer(), () => !this.IsInProgress)); }
         }
 
         private readonly IUserIdentity userIdentity;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IMvxLocationWatcher geoLocationWatcher;
-        private readonly IUserInteraction userInteraction;
+        private readonly ISettingsProvider settingsProvider;
+        private readonly IGpsLocationService locationService;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -50,15 +50,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public GpsCoordinatesQuestionViewModel(
             IUserIdentity userIdentity,
             IStatefulInterviewRepository interviewRepository,
-            IMvxLocationWatcher geoLocationWatcher,
-            IUserInteraction userInteraction,
+            ISettingsProvider settingsProvider,
+            IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
             this.userIdentity = userIdentity;
             this.interviewRepository = interviewRepository;
-            this.geoLocationWatcher = geoLocationWatcher;
-            this.userInteraction = userInteraction;
+            this.settingsProvider = settingsProvider;
+            this.locationService = locationService;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -89,36 +89,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void SaveAnswer()
+        private async Task SaveAnswer()
         {
             this.IsInProgress = true;
 
-            if (this.geoLocationWatcher.Started) return;
-
-            this.geoLocationWatcher.Start(options: new MvxLocationOptions(),
-                success: this.SetGeoLocationAnswer,
-                error: async (error) => { await this.TryGetGeoLocationAgain(); });
-        }
-
-        private async Task TryGetGeoLocationAgain()
-        {
-            this.geoLocationWatcher.Stop();
-            this.IsInProgress = false;
-
-            if (await this.userInteraction.ConfirmAsync(
-                message: UIResources.Interview_GeoLocation_Confirm_NoLocation,
-                title: UIResources.ConfirmationText, 
-                okButton: UIResources.ConfirmationTryAgainText,
-                cancelButton: UIResources.ConfirmationCancelText))
+            try
             {
-                this.SaveAnswer();
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settingsProvider.GpsReceiveTimeoutSec));
+                var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
+                await this.SetGeoLocationAnswer(mvxGeoLocation);
+            }
+            finally
+            {
+                this.IsInProgress = false;
             }
         }
 
-        private async void SetGeoLocationAnswer(MvxGeoLocation location)
+        private async Task SetGeoLocationAnswer(MvxGeoLocation location)
         {
-            this.geoLocationWatcher.Stop();
-
             var command = new AnswerGeoLocationQuestionCommand(
                 interviewId: interviewId,
                 userId: userIdentity.UserId,
@@ -135,14 +124,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 await this.Answering.SendAnswerQuestionCommand(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+                this.Answer = location.Coordinates;
             }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-
-            this.Answer = location.Coordinates;
-            this.IsInProgress = false;
         }
     }
 }
