@@ -1940,6 +1940,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
+            this.ThrowIfIsIntegerConflictsWithMaxValue(isInteger, maxValue);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
 
             this.ApplyEvent(new NumericQuestionChanged
@@ -2779,6 +2780,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
                     "Roster size question can't have decimal places settings");
+            }
+        }
+
+        private void ThrowIfIsIntegerConflictsWithMaxValue(bool isInteger, int? maxValue)
+        {
+            if (!isInteger && maxValue.HasValue)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DecimalQuestionCantHaveMaxValueSettings,
+                    "Decimal question can't have Max Value settings");
             }
         }
 
