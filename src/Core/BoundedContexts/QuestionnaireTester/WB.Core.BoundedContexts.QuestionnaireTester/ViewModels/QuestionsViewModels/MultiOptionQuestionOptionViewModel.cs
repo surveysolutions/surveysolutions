@@ -1,3 +1,4 @@
+using System;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
@@ -28,6 +29,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set
             {
                 @checked = value;
+                if (value)
+                {
+                    this.CheckedTimeStamp = DateTime.Now;
+                }
+                else
+                {
+                    this.CheckedTimeStamp = DateTime.MinValue;
+                }
+
                 RaisePropertyChanged();
             }
         }
@@ -43,11 +53,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
+        public DateTime CheckedTimeStamp { get; private set; }
+
         public IMvxCommand CheckAnswerCommand
         {
             get
             {
-                return new MvxCommand(() => QuestionViewModel.ToggleAnswer(this), () => !QuestionViewModel.InProgress);
+                return new MvxCommand(() => QuestionViewModel.ToggleAnswer(this));
             }
         }
     }

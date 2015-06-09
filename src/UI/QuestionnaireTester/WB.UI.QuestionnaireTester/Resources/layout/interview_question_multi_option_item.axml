@@ -9,6 +9,6 @@
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked; Enabled If(QuestionViewModel.InProgress, false, true)" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked;" />
 
 </LinearLayout>
