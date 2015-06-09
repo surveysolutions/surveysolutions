@@ -44,10 +44,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
-            if (this.PrefilledQuestions.Count == 1)
+            if (this.NoPrefiiledQuestionsExists())
             {
                 this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
             }
+        }
+
+        private bool NoPrefiiledQuestionsExists()
+        {
+            return this.PrefilledQuestions.Count == 1;
         }
 
         public override void NavigateToPreviousViewModel()
