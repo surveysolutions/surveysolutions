@@ -49,7 +49,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                     IsLockedByHQ = evnt.Payload.IsLocked,
                     Supervisor = evnt.Payload.Supervisor,
-                    Roles = evnt.Payload.Roles.ToHashSet()
+                    Roles = evnt.Payload.Roles.ToHashSet(),
+                    PersonName = evnt.Payload.PersonName,
+                    PhoneNumber = evnt.Payload.PhoneNumber
                 };
             this.users.Store(doc, doc.UserId);
         }
@@ -61,6 +63,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             item.Email = evnt.Payload.Email;
             item.Roles = evnt.Payload.Roles.ToHashSet();
             item.Password = evnt.Payload.PasswordHash;
+            item.PersonName = evnt.Payload.PersonName;
+            item.PhoneNumber = evnt.Payload.PhoneNumber;
+
             this.users.Store(item, item.PublicKey);
         }
 

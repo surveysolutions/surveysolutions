@@ -17,7 +17,7 @@ namespace Main.Core.Events.User
 
         public string Email { get; set; }
 
-        //means locked by HQ. For Bakcward compatibility
+        //means locked by HQ. For Backward compatibility
         public bool IsLocked { get; set; }
         
         public bool IsLockedBySupervisor { get; set; }
@@ -46,6 +46,10 @@ namespace Main.Core.Events.User
         /// Gets or sets the supervisor.
         /// </summary>
         public UserLight Supervisor { get; set; }
+
+        public string PersonName { get; set; }
+
+        public string PhoneNumber { get; set; }
 
         #endregion
 

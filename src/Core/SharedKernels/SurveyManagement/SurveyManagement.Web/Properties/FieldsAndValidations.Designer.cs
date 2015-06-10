@@ -142,6 +142,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Input name to long.
+        /// </summary>
+        public static string PersonNameErrorMessage {
+            get {
+                return ResourceManager.GetString("PersonNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person name.
+        /// </summary>
+        public static string PersonNameFieldName {
+            get {
+                return ResourceManager.GetString("PersonNameFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid phone number.
+        /// </summary>
+        public static string PhoneErrorMessage {
+            get {
+                return ResourceManager.GetString("PhoneErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number.
+        /// </summary>
+        public static string PhoneNumberFieldName {
+            get {
+                return ResourceManager.GetString("PhoneNumberFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email is required.
         /// </summary>
         public static string RequiredEmailErrorMessage {

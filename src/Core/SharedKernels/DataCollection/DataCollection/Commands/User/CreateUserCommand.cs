@@ -18,7 +18,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.User
             UserRoles[] roles,
             bool isLockedBySupervisor, 
             bool isLockedByHQ,
-            UserLight supervsor)
+            UserLight supervsor,
+            string personName, 
+            string phoneNumber)
             : base(publicKey)
         {
             this.PublicKey = publicKey;
@@ -29,6 +31,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.User
             this.IsLockedBySupervisor = isLockedBySupervisor;
             this.IsLockedByHQ = isLockedByHQ;
             this.Supervisor = supervsor;
+
+            this.PhoneNumber = phoneNumber;
+            this.PersonName = personName;
         }
 
         public string Email { get; set; }
@@ -46,5 +51,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.User
         public UserLight Supervisor { get; set; }
 
         public string UserName { get; set; }
+
+        public string PersonName { get; set; }
+
+        public string PhoneNumber { get; set; }
+
     }
 }
