@@ -14,6 +14,10 @@ namespace Main.Core.Events.User
         public UserRoles[] Roles { get; set; }
 
         public string PasswordHash { get; set; }
+
+        public string PersonName { get; set; }
+
+        public string PhoneNumber { get; set; }
         
         protected override bool DoCheckIsAssignedRole(UserRoles role)
         {

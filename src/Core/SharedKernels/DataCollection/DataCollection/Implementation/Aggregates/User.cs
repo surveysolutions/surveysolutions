@@ -14,13 +14,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public User(){}
 
-        public User(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor, 
-            bool isLockedbyHQ, UserLight supervisor) : base(publicKey)
+        public User(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor,
+            bool isLockedbyHQ, UserLight supervisor, string personName, string phoneNumber)
+            : base(publicKey)
         {
-            this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName);
+            this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName, personName, phoneNumber);
         }
 
-        public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName)
+        public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
+            string phoneNumber)
         {
             //// Check for uniqueness of person name and email!
             this.ApplyEvent(
@@ -33,13 +35,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     IsLocked = isLockedByHq,
                     Roles = roles,
                     Supervisor = supervisor,
+                    PersonName = personName,
+                    PhoneNumber = phoneNumber,
                     PublicKey = publicKey
                 });
         }
 
-        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, Guid userId)
+        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, 
+            string personName, string phoneNumber, Guid userId)
         {
-            this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash});
+            this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash, PersonName = personName, PhoneNumber = phoneNumber});
 
             if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !this.isUserLockedBySupervisor)
             {
