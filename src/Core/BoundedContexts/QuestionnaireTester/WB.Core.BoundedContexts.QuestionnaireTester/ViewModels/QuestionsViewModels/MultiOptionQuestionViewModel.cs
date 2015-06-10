@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private bool inProgress;
+        private bool areAnswersOrdered;
 
         public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
@@ -68,13 +69,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;
-
             this.userId = principal.CurrentUserIdentity.UserId;
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
             QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             var questionModel = questionnaire.GetMultiOptionQuestion(entityIdentity.Id);
+
+            this.areAnswersOrdered = questionModel.AreAnswersOrdered;
             this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
 
@@ -100,7 +102,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public async Task ToggleAnswer(MultiOptionQuestionOptionViewModel changedModel)
         {
-            List<MultiOptionQuestionOptionViewModel> allSelectedOptions = this.Options.Where(x => x.Checked).ToList();
+            List<MultiOptionQuestionOptionViewModel> allSelectedOptions = 
+                this.areAnswersOrdered ?
+                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder).ToList() :
+                this.Options.Where(x => x.Checked).ToList();
 
             if (maxAllowedAnswers.HasValue && allSelectedOptions.Count > maxAllowedAnswers)
             {
@@ -146,16 +151,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
         {
-            var orderedOptions = Options.Where(x => @event.SelectedValues.Contains(x.Value)).OrderBy(x => x.CheckedTimeStamp).ToList();
-
-            for (int i = 0; i < orderedOptions.Count; i++)
+            if (this.areAnswersOrdered)
             {
-                orderedOptions[i].CheckedOrder = i + 1;
-            }
+                var orderedOptions = Options.Where(x => @event.SelectedValues.Contains(x.Value))
+                                            .OrderBy(x => x.CheckedTimeStamp)
+                                            .ToList();
 
-            foreach (var option in Options.Except(orderedOptions))
-            {
-                option.CheckedOrder = null;
+                for (int i = 0; i < orderedOptions.Count; i++)
+                {
+                    orderedOptions[i].CheckedOrder = i + 1;
+                }
+
+                foreach (var option in Options.Except(orderedOptions))
+                {
+                    option.CheckedOrder = null;
+                }
             }
         }
     }

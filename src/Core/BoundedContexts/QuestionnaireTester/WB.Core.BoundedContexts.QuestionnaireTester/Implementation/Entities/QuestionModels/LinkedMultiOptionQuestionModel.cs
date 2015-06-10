@@ -5,5 +5,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Qu
     public class LinkedMultiOptionQuestionModel : BaseQuestionModel
     {
         public Guid LinkedToQuestionId { get; set; }
+
+        public int? MaxAllowedAnswers { get; set; }
+
+        public bool AreAnswersOrdered { get; set; }
     }
 }

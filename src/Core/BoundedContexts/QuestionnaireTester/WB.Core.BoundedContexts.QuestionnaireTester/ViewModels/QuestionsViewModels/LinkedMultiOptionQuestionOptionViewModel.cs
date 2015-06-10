@@ -1,11 +1,19 @@
+using System;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class LinkedMultiOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
+        private readonly LinkedMultiOptionQuestionViewModel questionViewModel;
+
         private string title;
         private bool @checked;
+
+        public LinkedMultiOptionQuestionOptionViewModel(LinkedMultiOptionQuestionViewModel questionViewModel)
+        {
+            this.questionViewModel = questionViewModel;
+        }
 
         public string Title
         {
@@ -15,17 +23,36 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public decimal[] Value { get; set; }
 
+        public DateTime CheckedTimeStamp { get; private set; }
+
+        private int? checkedOrder;
+        public int? CheckedOrder
+        {
+            get { return this.checkedOrder; }
+            set
+            {
+                this.checkedOrder = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
         public bool Checked
         {
             get { return this.@checked; }
-            set { this.@checked = value; this.RaisePropertyChanged(); }
+            set
+            {
+                this.@checked = value;
+                this.CheckedTimeStamp = value ? DateTime.Now : DateTime.MinValue;
+
+                this.RaisePropertyChanged();
+            }
         }
 
         public IMvxCommand CheckAnswerCommand
         {
             get
             {
-                return new MvxCommand(() => { });
+                return new MvxCommand(async () => await this.questionViewModel.ToggleAnswerAsync(this));
             }
         }
     }
