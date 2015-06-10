@@ -382,12 +382,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupId];
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.GroupBecomeARoster, QuestionnaireItemType.Roster,
+                QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Group,
                 evnt.Payload.GroupId, groupTitle, evnt.EventSequence);
         }
 
-        public void Handle(
-            IPublishedEvent<RosterChanged> evnt)
+        public void Handle(IPublishedEvent<RosterChanged> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
             var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupId];
@@ -403,7 +402,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupId];
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.RosterBecomeAGroup, QuestionnaireItemType.Group, evnt.Payload.GroupId,
+                QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, evnt.Payload.GroupId,
                 groupTitle, evnt.EventSequence);
         }
 

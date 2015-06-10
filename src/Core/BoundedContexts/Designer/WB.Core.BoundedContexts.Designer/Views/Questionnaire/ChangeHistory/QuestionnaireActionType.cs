@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Move,
         Import,
         Replace,
-        GroupBecomeARoster,
-        RosterBecomeAGroup
+        GroupBecameARoster,
+        RosterBecameAGroup
     }
 }
