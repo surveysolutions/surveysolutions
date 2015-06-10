@@ -155,19 +155,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (this.areAnswersOrdered)
             {
-                var orderedOptions = Options.Where(x => @event.SelectedValues.Contains(x.Value))
-                                            .OrderBy(x => x.CheckedTimeStamp)
-                                            .ToList();
+                this.PutOrderOnOptions(@event);
+            }
+        }
 
-                for (int i = 0; i < orderedOptions.Count; i++)
-                {
-                    orderedOptions[i].CheckedOrder = i + 1;
-                }
+        private void PutOrderOnOptions(MultipleOptionsQuestionAnswered @event)
+        {
+            var orderedOptions = this.Options.Where(x => @event.SelectedValues.Contains(x.Value))
+                .OrderBy(x => x.CheckedTimeStamp)
+                .ToList();
 
-                foreach (var option in Options.Except(orderedOptions))
-                {
-                    option.CheckedOrder = null;
-                }
+            for (int i = 0; i < orderedOptions.Count; i++)
+            {
+                orderedOptions[i].CheckedOrder = i + 1;
+            }
+
+            foreach (var option in this.Options.Except(orderedOptions))
+            {
+                option.CheckedOrder = null;
             }
         }
     }
