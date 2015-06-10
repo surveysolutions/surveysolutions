@@ -214,7 +214,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     {
                         questionModel = new LinkedMultiOptionQuestionModel
                         {
-                            LinkedToQuestionId = multiQuestion.LinkedToQuestionId.Value
+                            LinkedToQuestionId = multiQuestion.LinkedToQuestionId.Value,
+                            MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
+                            AreAnswersOrdered = multiQuestion.AreAnswersOrdered
                         };
                     }
                     else
