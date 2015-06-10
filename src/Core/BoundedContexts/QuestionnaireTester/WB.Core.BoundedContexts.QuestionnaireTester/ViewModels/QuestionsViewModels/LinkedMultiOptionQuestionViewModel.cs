@@ -54,17 +54,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             linkedToQuestionId = linkedQuestionModel.LinkedToQuestionId;
 
+            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(entityIdentity);
             IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers = interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, entityIdentity.RosterVector);
+
+            this.Options.Clear();
             foreach (var answer in linkedQuestionAnswers)
             {
                 if (answer != null && answer.IsAnswered)
                 {
                     string title = this.answerToStringService.AnswerToString(questionnaire.Questions[entityIdentity.Id], answer);
 
+                    var isChecked = linkedMultiOptionAnswer != null && 
+                                    linkedMultiOptionAnswer.IsAnswered && 
+                                    linkedMultiOptionAnswer.Answers.Any(x => x.SequenceEqual(answer.RosterVector));
+
                     this.Options.Add(new LinkedMultiOptionQuestionOptionViewModel
                     {
                         Title = title,
-                        Value = answer.RosterVector
+                        Value = answer.RosterVector,
+                        Checked = isChecked
                     });
                 }
             }
