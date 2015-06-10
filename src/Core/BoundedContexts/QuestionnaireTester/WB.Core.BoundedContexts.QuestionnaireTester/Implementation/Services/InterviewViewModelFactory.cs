@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(TextListQuestionModel), Load<TextListQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
-                { typeof(FilteredComboboxQuestionModel), Load<FilteredComboboxQuestionViewModel> },
+                { typeof(FilteredSingleOptionQuestionModel), Load<FilteredComboboxQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },

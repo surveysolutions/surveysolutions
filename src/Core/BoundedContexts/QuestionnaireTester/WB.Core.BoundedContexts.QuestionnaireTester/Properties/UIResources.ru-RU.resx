@@ -373,4 +373,7 @@
   <data name="Interview_Question_Text_MaskError" xml:space="preserve">
     <value>Заполните ответ на вопрос полностью</value>
   </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>Нажмите для ввода текста</value>
+  </data>
 </root>

@@ -10,6 +10,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -71,7 +72,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = (FilteredComboboxQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var questionModel = (FilteredSingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
 
             this.questionIdentity = entityIdentity;
@@ -100,11 +101,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             return optionViewModel;
         }
 
-        private string text;
-        public string Text
+        private string answer;
+        public string Answer
         {
-            get { return this.text; }
-            set { this.text = value; this.RaisePropertyChanged(); }
+            get { return this.answer; }
+            set 
+            {
+                if (answer != value)
+                {
+                    this.answer = value;
+                    this.RaisePropertyChanged();
+
+                    SendAnswerFilteredComboboxQuestionCommand();
+                }
+            }
         }
 
         private FilteredComboboxItemViewModel selectedObject;
@@ -117,10 +127,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 if (selectedObject != null)
                 {
-                    Text = value.Title;
+                    this.Answer = value.Title;
                 }
 
-                SendAnswerFilteredComboboxQuestionCommand(selectedObject);
                 RaisePropertyChanged();
             }
         }
@@ -131,31 +140,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return this.currentTextHint; }
             set
             {
-                MvxTrace.Trace("Partial Text Value Sent {0}", value);
-                //Setting _currentTextHint to null if an empty string gets passed here
-                //is extremely important.
-                if (value == "")
+                if (value.IsNullOrEmpty())
                 {
                     this.currentTextHint = null;
                     SetSuggestionsEmpty();
                     return;
                 }
-                else
-                {
-                    this.currentTextHint = value;
-                }
+                    
+                this.currentTextHint = value;
 
-                if (this.currentTextHint.Trim().Length < 2)
+/*                if (this.currentTextHint.Trim().Length < 2)
                 {
                     SetSuggestionsEmpty();
                     return;
-                }
+                }*/
 
                 var textHint = this.currentTextHint.ToUpper();
-                var list = Options.Where(i => (i.Title ?? "").ToUpper().Contains(textHint));
+                var list = Options.Where(i => (i.Title ?? "").ToUpper().Contains(textHint)).ToList();
+
                 if (list.Any())
                 {
-                    AutoCompleteSuggestions = list.ToList();
+                    AutoCompleteSuggestions = list;
                 }
                 else
                 {
@@ -183,8 +188,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
         }
 
-        private async void SendAnswerFilteredComboboxQuestionCommand(FilteredComboboxItemViewModel answerViewModel)
+        private async void SendAnswerFilteredComboboxQuestionCommand()
         {
+            var answerViewModel = this.Options.SingleOrDefault(i => i.Title == this.Answer);
+
+            if (answerViewModel == null)
+            {
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError);
+                return;
+            }
+
             var answerValue = answerViewModel.Value;
 
             var command = new AnswerSingleOptionQuestionCommand(

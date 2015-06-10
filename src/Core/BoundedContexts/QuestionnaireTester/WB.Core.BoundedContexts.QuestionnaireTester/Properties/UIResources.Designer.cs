@@ -244,6 +244,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to enter text.
+        /// </summary>
+        public static string FilteredComboboxQuestion_Hint {
+            get {
+                return ResourceManager.GetString("FilteredComboboxQuestion_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The time for waiting response from web server:.
         /// </summary>
         public static string HttpResponseTimeoutText {
