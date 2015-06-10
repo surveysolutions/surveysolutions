@@ -827,5 +827,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0098_QuestionnaireHasSizeMoreThan5MB", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be empty when question has more than 40 options..
+        /// </summary>
+        internal static string WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options {
+            get {
+                return ResourceManager.GetString("WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreTha" +
+                        "n40Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater then 40..
+        /// </summary>
+        internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40 {
+            get {
+                return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40", resourceCulture);
+            }
+        }
     }
 }

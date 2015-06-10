@@ -51,8 +51,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0026__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0026");
+        It should_return_error_with_code__WB0100__ = () =>
+            resultErrors.Single().Code.ShouldEqual("WB0100");
 
         It should_return_error_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);

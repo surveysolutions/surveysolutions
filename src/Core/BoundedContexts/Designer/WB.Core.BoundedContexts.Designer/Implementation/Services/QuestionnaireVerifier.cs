@@ -119,7 +119,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
                     Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
                     Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
-                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldBeInRange1And40, "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
+                    Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetNumericQuestionRosterSizeQuestionMaxValue), "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
+                    Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMultyOptionRosterSizeOptionCountWhenMaxAllowedAnswersIsEmpty), "WB0099", VerificationMessages.WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options),
+                    Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
@@ -178,12 +180,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
 
-                    this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
+                    ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByConditionAndValidationExpressions,
+                    ErrorsByConditionAndValidationExpressions
                 };
             }
         }
@@ -621,13 +623,40 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 && IsMaxValueMissing(question);
         }
 
-        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And40(IQuestion question, QuestionnaireDocument questionnaire)
+        private static int? GetNumericQuestionRosterSizeQuestionMaxValue(IQuestion question)
+        {
+            var integerQuestion = question as INumericQuestion;
+            if (integerQuestion != null)
+                return integerQuestion.IsInteger
+                    ? integerQuestion.MaxValue
+                    : null;
+
+            return null;
+        }
+
+        private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options(IQuestion question)
+        {
+            var multyOptionQuestion = question as IMultyOptionsQuestion;
+            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count>40)
+                return multyOptionQuestion.MaxAllowedAnswers;
+            return null;
+        }
+
+        private static int? GetMultyOptionRosterSizeOptionCountWhenMaxAllowedAnswersIsEmpty(IQuestion question)
+        {
+            var multyOptionQuestion = question as IMultyOptionsQuestion;
+            if (multyOptionQuestion != null && !multyOptionQuestion.MaxAllowedAnswers.HasValue)
+                return multyOptionQuestion.Answers.Count;
+            return null;
+        }
+
+        private static bool RosterSizeQuestionMaxValueCouldBeInRange1And40(IQuestion question, QuestionnaireDocument questionnaire, Func<IQuestion, int?> getRosterSizeQuestionMaxValue)
         {
             if (!IsRosterSizeQuestion(question, questionnaire))
                 return false;
             if (!IsQuestionAllowedToBeRosterSizeSource(question))
                 return false;
-            var rosterSizeQuestionMaxValue = GetRosterSizeQuestionMaxValue(question);
+            var rosterSizeQuestionMaxValue = getRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
             return !Enumerable.Range(1, 40).Contains(rosterSizeQuestionMaxValue.Value);
@@ -1442,20 +1471,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return !integerQuestion.MaxValue.HasValue;
             else
                 return false;
-        }
-
-        private static int? GetRosterSizeQuestionMaxValue(IQuestion question)
-        {
-            var integerQuestion = question as INumericQuestion;
-            if (integerQuestion != null)
-                return integerQuestion.IsInteger
-                    ? integerQuestion.MaxValue
-                    : null;
-
-            var multyOptionQuestion = question as IMultyOptionsQuestion;
-            if (multyOptionQuestion != null)
-                return multyOptionQuestion.MaxAllowedAnswers ?? multyOptionQuestion.Answers.Count;
-            return null;
         }
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)
