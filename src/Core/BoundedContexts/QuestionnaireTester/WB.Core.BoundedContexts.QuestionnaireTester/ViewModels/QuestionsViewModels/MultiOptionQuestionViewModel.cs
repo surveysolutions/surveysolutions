@@ -81,12 +81,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
 
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select(x => ToViewModel(x, existingAnswer)).ToList());
+            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select((x, index) => ToViewModel(x, existingAnswer, index)).ToList());
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model, MultiOptionAnswer multiOptionAnswer)
+        private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
@@ -96,6 +96,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                           multiOptionAnswer.IsAnswered &&
                           multiOptionAnswer.Answers.Any(x => model.Value == x)
             };
+            result.CheckedOrder = this.areAnswersOrdered && result.Checked ? (int?)answerIndex : null;
 
             return result;
         }
@@ -126,6 +127,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             var selectedValues = allSelectedOptions.OrderBy(x => x.CheckedTimeStamp)
+                .ThenBy(x => x.CheckedOrder)
                 .Select(x => x.Value)
                 .ToArray();
 
