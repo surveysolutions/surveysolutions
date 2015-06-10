@@ -12,11 +12,14 @@
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
         <MvxAutoCompleteTextView
-          style="@style/Interview_Question_Answer_TextEditor"
-          android:completionThreshold="1"
-          android:hint="Enter drug name..."
+          style="@style/Interview_Question_Answer_FilteredComboBox"
           local:MvxItemTemplate="@layout/interview_question_filter_combobox_item"
-          local:MvxBind="Text Text; ItemsSource AutoCompleteSuggestions; PartialText CurrentTextHint; SelectedObject SelectedObject" />
+          local:MvxBind="FocusText Answer; 
+                         ItemsSource AutoCompleteSuggestions; 
+                         PartialText CurrentTextHint; 
+                         SelectedObject SelectedObject; 
+                         Hint Localization('FilteredComboboxQuestion_Hint');
+                         BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />

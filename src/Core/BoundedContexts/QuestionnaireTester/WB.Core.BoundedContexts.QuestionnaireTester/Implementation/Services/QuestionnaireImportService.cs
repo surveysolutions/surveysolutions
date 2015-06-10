@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         var isFilteredCombobox = singleQuestion.IsFilteredCombobox.GetValueOrDefault();
                         if (isFilteredCombobox)
                         {
-                            questionModel = new FilteredComboboxQuestionModel
+                            questionModel = new FilteredSingleOptionQuestionModel
                             {
                                 //CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
                                 Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),

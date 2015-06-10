@@ -2,6 +2,6 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_Question_Answer_Option_Background">
   <TextView
-    style="@style/Interview_Question_Answer_Option_Input"
+    style="@style/Interview_Question_Answer_FilteredComboBox_Item"
     local:MvxBind="Text Title;" />
 </LinearLayout>

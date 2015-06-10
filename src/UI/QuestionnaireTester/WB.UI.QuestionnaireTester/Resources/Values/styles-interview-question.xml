@@ -58,6 +58,13 @@
     <item name="android:background">@drawable/question_text_question</item>
     <item name="android:textCursorDrawable">@null</item>
   </style>
+  
+  <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_Answer_TextEditor">
+    <item name="android:completionThreshold">1</item>
+  </style>  
+  
+  <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Question_Answer_Option_Input">
+  </style>
 
   <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout" />
 
