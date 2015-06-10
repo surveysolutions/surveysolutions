@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -8,18 +10,22 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Questi
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class LinkedMultiOptionQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel
+        IInterviewEntityViewModel,
+        ILiteEventHandler<AnswersRemoved>
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
+        private Guid linkedToQuestionId;
         public QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
@@ -27,7 +33,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage)
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+            ILiteEventRegistry eventRegistry)
         {
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
@@ -35,6 +42,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState = questionState;
             this.Answering = answering;
             this.Options = new ObservableCollection<LinkedMultiOptionQuestionOptionViewModel>();
+            eventRegistry.Subscribe(this);
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -44,6 +52,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
             LinkedMultiOptionQuestionModel linkedQuestionModel = questionnaire.GetLinkedMultiOptionQuestion(entityIdentity.Id);
+
+            linkedToQuestionId = linkedQuestionModel.LinkedToQuestionId;
 
             IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers = interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, entityIdentity.RosterVector);
             foreach (var answer in linkedQuestionAnswers)
@@ -61,34 +71,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-
         public ObservableCollection<LinkedMultiOptionQuestionOptionViewModel> Options { get; private set; }
-    }
 
-    public class LinkedMultiOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
-    {
-        private string title;
-        private bool @checked;
-
-        public string Title
+        public void Handle(AnswersRemoved @event)
         {
-            get { return this.title; }
-            set { this.title = value; this.RaisePropertyChanged(); }
-        }
-
-        public decimal[] Value { get; set; }
-
-        public bool Checked
-        {
-            get { return this.@checked; }
-            set { this.@checked = value; this.RaisePropertyChanged(); }
-        }
-
-        public IMvxCommand CheckAnswerCommand
-        {
-            get
+            foreach (var question in @event.Questions)
             {
-                return new MvxCommand(() => { });
+                if (question.Id == this.linkedToQuestionId)
+                {
+                    var shownAnswer = this.Options.SingleOrDefault(x => x.Value.SequenceEqual(question.RosterVector));
+                    if (shownAnswer != null)
+                    {
+                        MvxMainThreadDispatcher.Instance.RequestMainThreadAction(() => this.Options.Remove(shownAnswer));
+                    }
+                }
             }
         }
     }
