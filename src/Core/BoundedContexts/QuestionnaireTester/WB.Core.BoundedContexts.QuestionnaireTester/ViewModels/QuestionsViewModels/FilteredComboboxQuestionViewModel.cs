@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -15,13 +19,27 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
+
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class FilteredComboboxQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
+        public class FilteredComboboxItemViewModel 
+        {
+            public string Title { get; set; }
+            public decimal Value { get; set; }
+        }       
+        
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+
+        private Identity questionIdentity;
+        private Guid interviewId;
+        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
+        public AnsweringViewModel Answering { get; private set; }
+        public IList<FilteredComboboxItemViewModel> Options { get; set; }
+
 
         public FilteredComboboxQuestionViewModel(
             IPrincipal principal,
@@ -42,12 +60,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Answering = answering;
         }
 
-        private Identity questionIdentity;
-        private Guid interviewId;
-
-        public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
-        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
-        public AnsweringViewModel Answering { get; private set; }
 
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -61,21 +73,119 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = (FilteredComboboxQuestionModel)questionnaire.Questions[entityIdentity.Id];
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
-            var selectedValue = Monads.Maybe(() => answerModel.Answer);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
             this.Options = questionModel
                 .Options
-                .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
+                .Select(this.ToViewModel)
                 .ToList();
+
+            if (answerModel != null)
+            {
+                var selectedValue = answerModel.Answer;
+                SelectedObject = Options.Single(i => i.Value == selectedValue);
+            }
         }
 
-        private async void OptionSelected(object sender, EventArgs eventArgs)
+        private FilteredComboboxItemViewModel ToViewModel(OptionModel model)
         {
-            var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
-            var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
+            var optionViewModel = new FilteredComboboxItemViewModel
+            {
+                Title = model.Title,
+                Value = model.Value
+            };
+
+            return optionViewModel;
+        }
+
+        private string text;
+        public string Text
+        {
+            get { return this.text; }
+            set { this.text = value; this.RaisePropertyChanged(); }
+        }
+
+        private FilteredComboboxItemViewModel selectedObject;
+        public FilteredComboboxItemViewModel SelectedObject
+        {
+            get { return this.selectedObject; }
+            set
+            {
+                this.selectedObject = value;
+
+                if (selectedObject != null)
+                {
+                    Text = value.Title;
+                }
+
+                SendAnswerFilteredComboboxQuestionCommand(selectedObject);
+                RaisePropertyChanged();
+            }
+        }
+
+        private string currentTextHint;
+        public string CurrentTextHint
+        {
+            get { return this.currentTextHint; }
+            set
+            {
+                MvxTrace.Trace("Partial Text Value Sent {0}", value);
+                //Setting _currentTextHint to null if an empty string gets passed here
+                //is extremely important.
+                if (value == "")
+                {
+                    this.currentTextHint = null;
+                    SetSuggestionsEmpty();
+                    return;
+                }
+                else
+                {
+                    this.currentTextHint = value;
+                }
+
+                if (this.currentTextHint.Trim().Length < 2)
+                {
+                    SetSuggestionsEmpty();
+                    return;
+                }
+
+                var textHint = this.currentTextHint.ToUpper();
+                var list = Options.Where(i => (i.Title ?? "").ToUpper().Contains(textHint));
+                if (list.Any())
+                {
+                    AutoCompleteSuggestions = list.ToList();
+                }
+                else
+                {
+                    SetSuggestionsEmpty();
+                }
+            }
+        }
+
+        private void SetSuggestionsEmpty()
+        {
+            AutoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
+        }
+
+        private List<FilteredComboboxItemViewModel> autoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
+        public List<FilteredComboboxItemViewModel> AutoCompleteSuggestions
+        {
+            get
+            {
+                if (this.autoCompleteSuggestions == null)
+                {
+                    this.autoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
+                }
+                return this.autoCompleteSuggestions;
+            }
+            set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
+        }
+
+        private async void SendAnswerFilteredComboboxQuestionCommand(FilteredComboboxItemViewModel answerViewModel)
+        {
+            var answerValue = answerViewModel.Value;
 
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
@@ -83,46 +193,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.UtcNow,
-                selectedOption.Value);
+                answerValue);
 
             try
             {
-                if (previousOption != null)
-                {
-                    previousOption.Selected = false;
-                }
-
                 await this.Answering.SendAnswerQuestionCommand(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                selectedOption.Selected = false;
-
-                if (previousOption != null)
-                {
-                    previousOption.Selected = true;
-                }
-
                 this.QuestionState.Validity.ProcessException(ex);
             }
-        }
-
-        private SingleOptionQuestionOptionViewModel ToViewModel(OptionModel model, bool isSelected)
-        {
-            var optionViewModel = new SingleOptionQuestionOptionViewModel
-            {
-                Enablement = QuestionState.Enablement,
-
-                Value = model.Value,
-                Title = model.Title,
-                Selected = isSelected,
-            };
-
-            optionViewModel.BeforeSelected += OptionSelected;
-
-            return optionViewModel;
         }
     }
 }
