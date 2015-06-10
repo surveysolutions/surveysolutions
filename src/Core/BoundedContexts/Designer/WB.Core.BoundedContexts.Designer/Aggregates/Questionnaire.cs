@@ -897,8 +897,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ApplyEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = clonedDocument,
-                ClonedFromQuestionnaireId = clonedDocument.PublicKey,
-                ClonedFromQuestionnaireVersion = clonedDocument.LastEventSequence
+                ClonedFromQuestionnaireId = document.PublicKey,
+                ClonedFromQuestionnaireVersion = document.LastEventSequence
             });
 
             if (source.UsesCSharp)
