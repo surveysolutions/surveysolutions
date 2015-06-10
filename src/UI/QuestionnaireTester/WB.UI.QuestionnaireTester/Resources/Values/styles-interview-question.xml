@@ -61,9 +61,27 @@
   
   <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_Answer_TextEditor">
     <item name="android:completionThreshold">1</item>
+    <item name="android:drawablePadding">2dip</item>
+    <item name="android:dropDownListViewStyle">@style/Interview_Question_Answer_FilteredComboBox_ListStyle</item>
+    <item name="android:popupBackground">@drawable/question_combobox_popup_background</item>
+  </style>    
+  
+  <style name="Interview_Question_Answer_FilteredComboBox_ListStyle" parent="@android:style/Widget.ListView">
+    <item name="android:divider">#EDEDED</item>
+    <item name="android:dividerHeight">10dp</item>
   </style>  
   
-  <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Question_Answer_Option_Input">
+  <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:textColor">@drawable/question_option_text_color</item>
+  </style>  
+  
+  <style name="Interview_Question_Answer_FilteredComboBox_Item_Background">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
   </style>
 
   <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout" />

@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
               xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_Question_Answer_Option_Background">
+              style="@style/Interview_Question_Answer_FilteredComboBox_Item_Background">
   <TextView
     style="@style/Interview_Question_Answer_FilteredComboBox_Item"
     local:MvxBind="Text Title;" />
+
 </LinearLayout>
