@@ -95,7 +95,8 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null || !(GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
                 throw new HttpException(404, string.Empty);
 
-            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email});
+            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email, 
+                PersonName = currentUser.PersonName, PhoneNumber = currentUser.PhoneNumber});
         }
 
         [HttpPost]
