@@ -272,13 +272,6 @@
     <Compile Include="CustomControls\IMvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\IMvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\IMvxBindableListItemView.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\IMvxBindingActivity.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\MvxBindableAutoCompleteTextView.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\MvxBindableListAdapter.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\MvxBindableListItemView.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\MvxBindableListViewHelpers.cs" />
-    <Compile Include="CustomControls\MvxBindableAutoCompleteTextViewControl\MvxFilteringBindableListAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerView.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
