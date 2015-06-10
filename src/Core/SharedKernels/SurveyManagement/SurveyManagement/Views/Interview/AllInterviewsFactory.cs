@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         Answer = a.Answer,
                         Question = a.Title,
                         Type = a.Type
-                    }).ToList(),
+                    }).OrderBy(question => question.Id).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
