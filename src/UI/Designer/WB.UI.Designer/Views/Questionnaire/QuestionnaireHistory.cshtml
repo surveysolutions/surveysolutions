@@ -1,0 +1,89 @@
+﻿@using System.Web.Mvc.Html
+@using Main.Core.Documents
+@using Main.Core.Entities.Composite
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
+@using WB.Core.GenericSubdomains.Utils
+@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Utils
+@model WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory.QuestionnaireChangeHistory
+
+@{
+    ViewBag.Title = "Questionnaire change history";
+}
+@section Scripts {
+    @Scripts.Render("~/list")
+}
+
+<table id="questionnaire-table-header" class="table  table-header">
+    <thead>
+        <tr>
+            <th></th>
+            <th>UserName</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+</table>
+<div id="table-content-holder">
+    <div class="scroller-container">
+        @if (Model == null || Model.ChangeHistory.Count == 0)
+        {
+            <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+        }
+        else
+        {
+            var rows = Model.ChangeHistory.ToPagedList(page: Model.PageIndex, pageSize: Model.PageSize, totalCount: Model.TotalCount);
+            <table id="questionnaire-table-content" class="table table-content">
+                <tbody>
+                    @foreach (var listViewModel in rows)
+                    {
+
+                        <tr>
+                            <td>
+                                @listViewModel.TargetType @BuildQuestionnaireItemLink(listViewModel.TargetId, listViewModel.TargetTitle, listViewModel.TargetType) @listViewModel.ActionType
+                                @if (listViewModel.ReferenceMessages.Any())
+                                {
+                                    foreach (var r in listViewModel.ReferenceMessages)
+                                    {
+                                        @r.Type  @BuildQuestionnaireItemLink(r.Id, r.Title, r.Type)
+                                    }
+                                }
+                            </td>
+                            <td>@listViewModel.UserName</td>
+                            <td>@listViewModel.Timestamp</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.Pager(rows.PageIndex + 1, rows.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new
+            {
+                page = x,
+                id = Model.Id
+            }), 2)
+        }
+    </div>
+</div>
+@functions
+{
+    private MvcHtmlString BuildQuestionnaireItemLink(Guid itemId, string title, QuestionnaireItemType type)
+    {
+        var quatedTitle = string.Format("\"{0}\"", title);
+        if (type == QuestionnaireItemType.Person)
+            return @Html.Label(quatedTitle);
+        if (type == QuestionnaireItemType.Questionnaire)
+            return @Html.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
+        var item = Model.QuestionnaireDocument.FirstOrDefault<IComposite>(g => g.PublicKey == itemId);
+        if (item == null)
+            return @Html.Label(quatedTitle);
+
+        while (item.GetParent().GetType() != typeof(QuestionnaireDocument))
+        {
+            item = item.GetParent();
+        }
+        var url = Url.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", Model.Id.FormatGuid(), item.PublicKey.FormatGuid(), itemId.FormatGuid(), type.ToString().ToLower()));
+        return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, quatedTitle));
+    }
+
+}
