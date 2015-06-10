@@ -1167,6 +1167,7 @@
     <Content Include="Scripts\jquery-2.1.3.min.map" />
     <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
+    <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
