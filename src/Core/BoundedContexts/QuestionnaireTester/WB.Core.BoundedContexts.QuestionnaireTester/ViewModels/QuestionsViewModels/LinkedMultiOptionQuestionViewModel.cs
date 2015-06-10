@@ -76,43 +76,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.GenerateOptions(entityIdentity, interview, linkedQuestionModel, questionnaire);
         }
 
-        private void GenerateOptions(Identity entityIdentity, 
-            IStatefulInterview interview,
-            LinkedMultiOptionQuestionModel linkedQuestionModel, 
-            QuestionnaireModel questionnaire)
-        {
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(entityIdentity);
-            IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers =
-                interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, entityIdentity.RosterVector);
-
-            this.Options.Clear();
-            int checkedAnswerCount = 1;
-            foreach (var answer in linkedQuestionAnswers)
-            {
-                if (answer != null && answer.IsAnswered)
-                {
-                    string title = this.answerToStringService.AnswerToString(questionnaire.Questions[entityIdentity.Id], answer);
-
-                    var isChecked = linkedMultiOptionAnswer != null &&
-                                    linkedMultiOptionAnswer.IsAnswered &&
-                                    linkedMultiOptionAnswer.Answers.Any(x => x.SequenceEqual(answer.RosterVector));
-
-                    var option = new LinkedMultiOptionQuestionOptionViewModel(this)
-                    {
-                        Title = title,
-                        Value = answer.RosterVector,
-                        Checked = isChecked
-                    };
-                    if (this.areAnswersOrdered && isChecked)
-                    {
-                        option.CheckedOrder = checkedAnswerCount;
-                        checkedAnswerCount++;
-                    }
-                    this.Options.Add(option);
-                }
-            }
-        }
-
         public ObservableCollection<LinkedMultiOptionQuestionOptionViewModel> Options { get; private set; }
 
         public void Handle(AnswersRemoved @event)
@@ -171,19 +134,62 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             if (this.areAnswersOrdered)
             {
-                var orderedSelectedOptions = Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
-                                                    .OrderBy(x => x.CheckedTimeStamp)
-                                                    .ToList();
+                this.PutOrderOnOptions(@event);
+            }
+        }
 
-                for (int i = 0; i < orderedSelectedOptions.Count; i++)
-                {
-                    orderedSelectedOptions[i].CheckedOrder = i + 1;
-                }
+        private void GenerateOptions(Identity entityIdentity, 
+            IStatefulInterview interview,
+            LinkedMultiOptionQuestionModel linkedQuestionModel, 
+            QuestionnaireModel questionnaire)
+        {
+            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(entityIdentity);
+            IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers =
+                interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, entityIdentity.RosterVector);
 
-                foreach (var option in Options.Except(orderedSelectedOptions))
+            this.Options.Clear();
+            int checkedAnswerCount = 1;
+            foreach (var answer in linkedQuestionAnswers)
+            {
+                if (answer != null && answer.IsAnswered)
                 {
-                    option.CheckedOrder = null;
+                    string title = this.answerToStringService.AnswerToString(questionnaire.Questions[entityIdentity.Id], answer);
+
+                    var isChecked = linkedMultiOptionAnswer != null &&
+                                    linkedMultiOptionAnswer.IsAnswered &&
+                                    linkedMultiOptionAnswer.Answers.Any(x => x.SequenceEqual(answer.RosterVector));
+
+                    var option = new LinkedMultiOptionQuestionOptionViewModel(this)
+                    {
+                        Title = title,
+                        Value = answer.RosterVector,
+                        Checked = isChecked
+                    };
+                    if (this.areAnswersOrdered && isChecked)
+                    {
+                        option.CheckedOrder = checkedAnswerCount;
+                        checkedAnswerCount++;
+                    }
+                    this.Options.Add(option);
                 }
+            }
+        }
+
+        private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
+        {
+            var orderedSelectedOptions =
+                this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
+                    .OrderBy(x => x.CheckedTimeStamp)
+                    .ToList();
+
+            for (int i = 0; i < orderedSelectedOptions.Count; i++)
+            {
+                orderedSelectedOptions[i].CheckedOrder = i + 1;
+            }
+
+            foreach (var option in this.Options.Except(orderedSelectedOptions))
+            {
+                option.CheckedOrder = null;
             }
         }
     }
