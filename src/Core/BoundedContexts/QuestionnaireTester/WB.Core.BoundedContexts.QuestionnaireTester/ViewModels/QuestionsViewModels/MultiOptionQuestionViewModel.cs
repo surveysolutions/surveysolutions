@@ -152,6 +152,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 orderedOptions[i].CheckedOrder = i + 1;
             }
+
+            foreach (var option in Options.Except(orderedOptions))
+            {
+                option.CheckedOrder = null;
+            }
         }
     }
 }
