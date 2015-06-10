@@ -15,6 +15,11 @@
           style="@style/Interview_Question_Answer_TextEditor"
           local:MvxBind="FocusText Answer;" />
 
+        <MvxBindableAutoCompleteTextView
+          style="@style/Interview_Question_Answer_TextEditor"
+          local:MvxItemTemplate="@layout/interview_question_filter_combobox_item"
+          local:MvxBind="ItemsSource Options;" />
+
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />
       <include layout="@layout/interview_question__comments" />
