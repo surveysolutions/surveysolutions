@@ -12,12 +12,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             Guid targetId, 
             string title, 
             QuestionnaireItemType type, 
-            List<QuestionnaireChangeHistoricalRecordReference> referenceMessages)
+            List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences)
         {
             UserName = userName;
             Timestamp = timestamp;
             ActionType = actionType;
-            ReferenceMessages = referenceMessages;
+            HistoricalRecordReferences = historicalRecordReferences;
             TargetId = targetId;
             TargetTitle = title;
             TargetType = type;
@@ -31,6 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public string TargetTitle { get; private set; }
         public QuestionnaireItemType TargetType { get; private set; }
 
-        public List<QuestionnaireChangeHistoricalRecordReference> ReferenceMessages { get; private set; }
+        public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }
     }
 }
