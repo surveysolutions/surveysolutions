@@ -447,12 +447,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
-            IEnumerable<Identity> targetQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, targetRosterVector, questionnaire, GetRosterInstanceIds);
+            IEnumerable<Identity> targetQuestions = 
+                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, targetRosterVector, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {
                 var id = ConversionHelper.ConvertIdentityToString(targetQuestion);
-                yield return this.Answers.ContainsKey(id) ? this.Answers[id] : null;
+
+                if (this.Answers.ContainsKey(id))
+                {
+                    yield return this.Answers[id];
+                }
             }
         }
 
