@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Input name to long.
+        ///   Looks up a localized string similar to Input name too long.
         /// </summary>
         public static string PersonNameErrorMessage {
             get {
