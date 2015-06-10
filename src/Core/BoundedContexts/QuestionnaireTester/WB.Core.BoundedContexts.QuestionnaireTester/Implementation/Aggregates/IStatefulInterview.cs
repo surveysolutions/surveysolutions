@@ -51,10 +51,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         string GetInterviewerAnswerComment(Identity entityIdentity);
 
         /// <summary>
-        /// Gets string representation of an answer. 
+        /// Gets an answer by roster vector that will be reduced until requested question is found.
         /// </summary>
         /// <returns>null if question is not answered yet.</returns>
         BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector);
+
+        /// <summary>
+        /// Gets an answer by roster vector that will be extented and all answers will be returned. 
+        /// </summary>
+        /// <param name="questionId"></param>
+        /// <param name="targetRosterVector"></param>
+        /// <returns></returns>
+        IEnumerable<BaseInterviewAnswer> FindBaseAnswerByOrShorterRosterLevel(Guid questionId, decimal[] targetRosterVector);
 
         InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector);
     }

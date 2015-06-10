@@ -943,7 +943,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>
         /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
         /// </remarks>
-        private IEnumerable<decimal[]> ExtendRosterVector(InterviewStateDependentOnAnswers state, decimal[] rosterVector, int length,
+        protected IEnumerable<decimal[]> ExtendRosterVector(InterviewStateDependentOnAnswers state, 
+            decimal[] rosterVector, 
+            int length,
             Guid[] rosterGroupsStartingFromTop,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
@@ -1122,7 +1124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     getRosterInstanceIds));
         }
 
-        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+        protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -3925,7 +3927,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .IndexOf(rosterId);
         }
 
-        private static DistinctDecimalList GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
+        protected static DistinctDecimalList GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
             decimal[] outerRosterVector)
         {
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
