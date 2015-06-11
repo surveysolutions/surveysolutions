@@ -149,8 +149,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     
                 this.currentTextHint = value;
 
-                var textHint = this.currentTextHint.ToUpper();
-                var list = Options.Where(i => (i.Text ?? "").ToUpper().Contains(textHint)).ToList();
+                var list = this.GetSuggestionsList(currentTextHint).ToList();
 
                 if (list.Any())
                 {
@@ -159,6 +158,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 else
                 {
                     SetSuggestionsEmpty();
+                }
+            }
+        }
+
+        private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string textHint)
+        {
+            var upperTextHint = textHint.ToUpper();
+
+            foreach (var model in Options)
+            {
+                if (model.Text.IsNullOrEmpty())
+                    continue;
+
+                string upperText = model.Text.ToUpper();
+
+                var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
+                if (index >= 0)
+                {
+                    yield return new FilteredComboboxItemViewModel()
+                    {
+                        Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
+                        Value = model.Value
+                    };
                 }
             }
         }

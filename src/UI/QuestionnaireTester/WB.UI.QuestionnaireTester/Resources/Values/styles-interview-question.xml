@@ -68,9 +68,9 @@
   <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:textColor">@drawable/question_option_text_color</item>
   </style>  
   
   <style name="Interview_Question_Answer_FilteredComboBox_Item_Background">
