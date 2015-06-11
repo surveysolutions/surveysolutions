@@ -55,12 +55,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void NavigateToSection(SectionViewModel item)
         {
+            messenger.Publish(new SectionChangeMessage(this));
+
             if (item.IsSelected)
             {
                 return;
             }
-
-            messenger.Publish(new SectionChangeMessage(this));
+            
             this.navigationState.NavigateTo(item.SectionIdentity);
         }
 

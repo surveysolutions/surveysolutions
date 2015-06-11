@@ -45,8 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         It should_select_section_that_was_navigated_to = () =>
             sectionsModel.Sections.First(x => x.IsSelected).SectionIdentity.ShouldEqual(sectionsModel.Sections[1].SectionIdentity);
 
-        It should_not_publish_message_that_section_was_changed = () =>
-            messenger.Verify(x => x.Publish(Moq.It.IsAny<SectionChangeMessage>()), Times.Never);
+        It should_publish_message_that_section_was_changed = () =>
+            messenger.Verify(x => x.Publish(Moq.It.IsAny<SectionChangeMessage>()), Times.Once);
 
         private static SectionsViewModel sectionsModel;
         private const string questionnaireId = "questionnaire Id";
