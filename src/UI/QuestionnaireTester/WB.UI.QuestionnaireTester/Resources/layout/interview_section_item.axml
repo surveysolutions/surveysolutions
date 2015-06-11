@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
-                 style="@style/FullWidthWrappingLayout"
-                 android:orientation="vertical">
+                 style="@style/Interview_Sidebar_Sections_Section"
+                 local:MvxBind="BackgroundStyle SectionStyleBackground(IsSelected)">
   <TextView
-        style="@style/Interview_Sidebar_Sections_Item"
-        local:MvxBind="Text Title; BackgroundColor SectionBackgroundColor(IsSelected)" />
+        style="@style/Interview_Sidebar_Sections_Section_Title"
+        local:MvxBind="Text Title; " />
 
   <View style="@style/Interview_Entity_Divider" />
 </MvxLinearLayout>

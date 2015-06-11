@@ -72,7 +72,7 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
             registry.AddOrOverwrite("IsPublicQuestionnaireToColor", new IsPublicQuestionnaireToColorConverter());
-            registry.AddOrOverwrite("SectionBackgroundColor", new SectionBackgroundColorConverter());
+            registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

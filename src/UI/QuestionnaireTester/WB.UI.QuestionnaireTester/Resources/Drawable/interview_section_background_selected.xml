@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<item xmlns:android="http://schemas.android.com/apk/res/android">
+  <shape android:shape="rectangle" >
+    <solid android:color="@color/sections_list_selected_background_color" />
+  </shape>
+</item>
