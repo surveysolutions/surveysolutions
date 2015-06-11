@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             SetupInstanceToMockedServiceLocator<IInterviewPreconditionsService>(
                 Mock.Of<IInterviewPreconditionsService>(
-                        _ => _.MaxNumberOfInterviews == maxNumberOfInterviews && _.NumberofInterviewsAllowedToCreate == 0));
+                        _ => _.GetMaxAllowedInterviewsCount() == maxNumberOfInterviews && _.GetInterviewsCountAllowedToCreateUntilLimitReached() == 0));
 
         };
 
