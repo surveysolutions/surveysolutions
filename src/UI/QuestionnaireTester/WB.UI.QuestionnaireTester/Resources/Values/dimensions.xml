@@ -11,6 +11,8 @@
   <dimen name="Theme_SeekBar_padding">16dip</dimen>
   <dimen name="Theme_Button_min_height">48dip</dimen>
   <dimen name="Theme_Button_min_width">64dip</dimen>
+  
+  <dimen name="ListStyle_Divider_height">1dp</dimen>
 
 
   <dimen name="Toolbar_margin_horizontal">25dp</dimen>
