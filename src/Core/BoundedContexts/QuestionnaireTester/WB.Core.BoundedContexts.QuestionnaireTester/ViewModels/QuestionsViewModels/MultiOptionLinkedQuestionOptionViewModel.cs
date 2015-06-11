@@ -3,14 +3,14 @@ using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class LinkedMultiOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
+    public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
-        private readonly LinkedMultiOptionQuestionViewModel questionViewModel;
+        private readonly MultiOptionLinkedQuestionViewModel questionViewModel;
 
         private string title;
         private bool @checked;
 
-        public LinkedMultiOptionQuestionOptionViewModel(LinkedMultiOptionQuestionViewModel questionViewModel)
+        public MultiOptionLinkedQuestionOptionViewModel(MultiOptionLinkedQuestionViewModel questionViewModel)
         {
             this.questionViewModel = questionViewModel;
         }
