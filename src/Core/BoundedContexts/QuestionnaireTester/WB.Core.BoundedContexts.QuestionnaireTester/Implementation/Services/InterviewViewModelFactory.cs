@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(MaskedTextQuestionModel), Load<TextQuestionViewModel> },
                 { typeof(TextListQuestionModel), Load<TextListQuestionViewModel> },
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
+                { typeof(LinkedSingleOptionQuestionModel), Load<SingleOptionLinkedQuestionViewModel> },
                 { typeof(FilteredSingleOptionQuestionModel), Load<FilteredSingleOptionQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
                 { typeof(LinkedMultiOptionQuestionModel), Load<MultiOptionLinkedQuestionViewModel> },
