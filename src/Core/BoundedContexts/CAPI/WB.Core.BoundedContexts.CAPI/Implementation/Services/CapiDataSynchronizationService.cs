@@ -69,10 +69,11 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
             if (this.loginViewFactory.Load(new LoginViewInput(user.PublicKey)) == null)
                 userCommand = new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
-                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor);
+                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor, 
+                    user.PersonName, user.PhoneNumber);
             else
                 userCommand = new ChangeUserCommand(user.PublicKey, user.Email,
-                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, Guid.Empty);
+                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, user.PersonName, user.PhoneNumber,Guid.Empty);
 
             this.commandService.Execute(userCommand);
         }

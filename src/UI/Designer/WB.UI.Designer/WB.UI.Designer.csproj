@@ -253,6 +253,7 @@
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
+    <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -356,6 +357,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\QuestionnaireHistory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireHistory.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
@@ -1182,6 +1188,7 @@
     <Content Include="Scripts\jquery-2.1.3.min.map" />
     <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
+    <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1321,6 +1328,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireHistory.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireHistory.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -372,4 +372,10 @@
   <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
     <value>Fixed set of items roster values must be unique.</value>
   </data>
+  <data name="WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options" xml:space="preserve">
+    <value>Max number of answers for roster size question cannot be empty when question has more than 40 options.</value>
+  </data>
+  <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
+    <value>Max number of answers for roster size question cannot be greater then 40.</value>
+  </data>
 </root>

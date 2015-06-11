@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -35,7 +36,7 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
@@ -49,7 +50,7 @@ namespace WB.UI.Designer.Controllers
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IExpressionProcessorGenerator expressionProcessorGenerator)
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -58,7 +59,7 @@ namespace WB.UI.Designer.Controllers
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
-            this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
         }
 
         public ActionResult Clone(Guid id)
@@ -160,6 +161,12 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Public(int? p, string sb, int? so, string f)
         {
             var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f);
+            return this.View(questionnairePublicListViewModels);
+        }
+
+        public ActionResult QuestionnaireHistory(Guid id, int? page)
+        {
+            var questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
             return this.View(questionnairePublicListViewModels);
         }
 

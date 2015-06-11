@@ -67,20 +67,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             if (version.Major == 5)
                 return new CodeGenerationSettings(
+                    abstractConditionalLevelClassName:"AbstractConditionalLevel",
                     additionInterfaces: new string[0], 
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable");
 
+            if (version.Major == 6)
+                return new CodeGenerationSettings(
+                    abstractConditionalLevelClassName:"AbstractConditionalLevel",
+                    additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
+                    namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
+                        },
+                    areRosterServiceVariablesPresent: true,
+                    rosterType: "RosterRowList");
+
             return new CodeGenerationSettings(
-                additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
-                namespaces: new[]
+                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
+                    additionInterfaces: new[] { "IInterviewExpressionStateV2" },
+                    namespaces: new[]
                     {
                         "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
-                areRosterServiceVariablesPresent: true,
-                rosterType: "RosterRowList");
+                    areRosterServiceVariablesPresent: true,
+                    rosterType: "RosterRowList");
         }
 
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
@@ -254,7 +269,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 executorModel: template,
                 areRowSpecificVariablesPresent: codeGenerationSettings.AreRosterServiceVariablesPresent,
                 isIRosterLevelInherited: codeGenerationSettings.AreRosterServiceVariablesPresent,
-                rosterType: codeGenerationSettings.RosterType);
+                rosterType: codeGenerationSettings.RosterType,
+                abstractConditionalLevelClassName:codeGenerationSettings.AbstractConditionalLevelClassName);
 
             template.QuestionnaireLevelModel = questionnaireLevelModel;
 
