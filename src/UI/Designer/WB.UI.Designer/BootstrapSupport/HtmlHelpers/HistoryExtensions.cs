@@ -8,6 +8,7 @@ using System.Web.Mvc.Html;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Designer.Resources;
 
