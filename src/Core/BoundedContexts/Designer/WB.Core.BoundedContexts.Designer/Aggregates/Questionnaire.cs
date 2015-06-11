@@ -1355,10 +1355,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
-
+            
             var group = this.GetGroupById(groupId);
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
+            this.ThrowDomainExceptionIfGroupContainsQuestionsUsedAsCascadingParentForOutsideQuestion(groupId);
 
             this.ApplyEvent(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
         }
@@ -2968,6 +2969,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         Environment.NewLine,
                         string.Join(Environment.NewLine, x.Value)))));
             }
+        }
+
+        private void ThrowDomainExceptionIfGroupContainsQuestionsUsedAsCascadingParentForOutsideQuestion(Guid groupId)
+        {
+            var groupQuestions = this.innerDocument.Find<SingleQuestion>(x => IsQuestionParent(groupId, x)).Select(x => x.PublicKey).ToList();
+
+            if (!groupQuestions.Any())
+                return;
+
+            var dependentCascades = this.innerDocument.Find<SingleQuestion>(x => x.CascadeFromQuestionId != null && groupQuestions.Contains(x.CascadeFromQuestionId.Value))
+                .Select(x => x.PublicKey);
+
+            if (dependentCascades.Except(groupQuestions).Any())
+                throw new QuestionnaireException(ExceptionMessages.CantRemoveSectionParentQuestionInCascading);
         }
 
         private void ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(IQuestion question, IGroup targetGroup)
