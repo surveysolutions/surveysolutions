@@ -8,7 +8,10 @@ using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.Activities
 {
-    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Label = "", Theme = "@style/BlueAppTheme", 
+        HardwareAccelerated = true, 
+        WindowSoftInputMode = SoftInput.StateHidden,
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class PrefilledQuestionsActivity : BaseActivity<PrefilledQuestionsViewModel>
     {
         protected override int ViewResourceId

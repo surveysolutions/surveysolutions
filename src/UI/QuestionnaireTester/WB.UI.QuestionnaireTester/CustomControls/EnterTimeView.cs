@@ -11,6 +11,10 @@ namespace WB.UI.QuestionnaireTester.CustomControls
         private DateTime date;
         private readonly EventHandler<DatePickerDialog.DateSetEventArgs> handler;
 
+        public DatePickerDialogFragment()
+        {
+        }
+
         public DatePickerDialogFragment(Context context, DateTime date, EventHandler<DatePickerDialog.DateSetEventArgs> handler)
         {
             this.context = context;
