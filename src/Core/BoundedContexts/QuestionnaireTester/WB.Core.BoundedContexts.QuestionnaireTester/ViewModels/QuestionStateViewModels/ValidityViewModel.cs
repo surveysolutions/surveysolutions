@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         public virtual void MarkAnswerAsInvalidWithMessage(string errorMessageText)
         {
             this.errorFromViewModel = new ErrorMessage(
-                string.Empty,
+                UIResources.Validity_InterviewException_ErrorCaption,
                 errorMessageText);
 
             UpdateValidState();

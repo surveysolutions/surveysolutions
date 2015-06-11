@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         public class FilteredComboboxItemViewModel 
         {
-            public string Title { get; set; }
+            public string Text { get; set; }
             public decimal Value { get; set; }
         }       
         
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var optionViewModel = new FilteredComboboxItemViewModel
             {
-                Title = model.Title,
+                Text = model.Title,
                 Value = model.Value
             };
 
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 if (selectedObject != null)
                 {
-                    this.Answer = value.Title;
+                    this.Answer = value.Text;
                 }
 
                 RaisePropertyChanged();
@@ -149,14 +149,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     
                 this.currentTextHint = value;
 
-/*                if (this.currentTextHint.Trim().Length < 2)
-                {
-                    SetSuggestionsEmpty();
-                    return;
-                }*/
-
                 var textHint = this.currentTextHint.ToUpper();
-                var list = Options.Where(i => (i.Title ?? "").ToUpper().Contains(textHint)).ToList();
+                var list = Options.Where(i => (i.Text ?? "").ToUpper().Contains(textHint)).ToList();
 
                 if (list.Any())
                 {
@@ -190,7 +184,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async void SendAnswerFilteredComboboxQuestionCommand()
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.Title == this.Answer);
+            var answerViewModel = this.Options.SingleOrDefault(i => i.Text == this.Answer);
 
             if (answerViewModel == null)
             {
