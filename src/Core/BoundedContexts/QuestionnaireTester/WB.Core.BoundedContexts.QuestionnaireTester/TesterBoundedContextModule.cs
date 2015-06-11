@@ -1,4 +1,7 @@
-﻿using Ninject.Modules;
+﻿using System;
+using Chance.MvvmCross.Plugins.UserInteraction;
+using Cirrious.CrossCore;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
@@ -24,6 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
+            this.Bind<Func<IUserInteraction>>().ToMethod(context => () => Mvx.Resolve<IUserInteraction>());
 
             CommandRegistry
                .Setup<StatefulInterview>()

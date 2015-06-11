@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal principal;
+        private readonly Func<IUserInteraction> userInteraction;
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -49,6 +50,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
+            Func<IUserInteraction> userInteraction,
             AnsweringViewModel answering)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
@@ -56,6 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
             this.principal = principal;
+            this.userInteraction = userInteraction;
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
         }
@@ -96,7 +99,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                           multiOptionAnswer.IsAnswered &&
                           multiOptionAnswer.Answers.Any(x => model.Value == x)
             };
-            result.CheckedOrder = this.areAnswersOrdered && result.Checked ? (int?)answerIndex : null;
+            result.CheckedOrder = this.areAnswersOrdered && result.Checked ? (int?)answerIndex + 1 : null;
 
             return result;
         }
@@ -119,7 +122,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var amountOfRostersToRemove = 1;
                 var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
                     amountOfRostersToRemove);
-                if (!(await Mvx.Resolve<IUserInteraction>().ConfirmAsync(message)))
+                if (!(await this.userInteraction().ConfirmAsync(message)))
                 {
                     changedModel.Checked = true;
                     return;
