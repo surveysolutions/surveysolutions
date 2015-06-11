@@ -9,10 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization
 
         string GetUnhandledPackagePath(string package);
 
-        void StoreUnknownUnhandledPackage(string unhandledPackagePath, Exception e);
-
-        void StoreUnhandledPackageForInterview(string unhandledPackagePath, Guid interviewId, Exception e);
-
-        void StoreUnhandledPackageForInterviewInTypedFolder(string unhandledPackagePath, Guid interviewId, Exception e, string typeFolderName);
+        void StoreUnhandledPackage(string unhandledPackagePath, Guid? interviewId, Exception e);
     }
 }

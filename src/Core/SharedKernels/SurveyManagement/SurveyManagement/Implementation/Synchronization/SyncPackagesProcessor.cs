@@ -37,11 +37,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
             catch (IncomingSyncPackageException e)
             {
-                if (e.InterviewId.HasValue)
-                    brokenSyncPackagesStorage.StoreUnhandledPackageForInterview(e.PathToPackage, e.InterviewId.Value,
-                        e.InnerException);
-                else
-                    brokenSyncPackagesStorage.StoreUnknownUnhandledPackage(e.PathToPackage, e.InnerException);
+                brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId,
+                    e.InnerException);
 
                 incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
             }
@@ -53,24 +50,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             try
             {
-                var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId, 
-                    syncPackage.ResponsibleId, 
+                var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId,
+                    syncPackage.ResponsibleId,
                     syncPackage.QuestionnaireId,
                     syncPackage.QuestionnaireVersion,
-                    syncPackage.EventsToSynchronize, 
-                    syncPackage.InterviewStatus, 
+                    syncPackage.EventsToSynchronize,
+                    syncPackage.InterviewStatus,
                     syncPackage.CreatedOnClient);
                 commandService.Execute(command, syncPackage.Origin);
             }
             catch (Exception e)
             {
-                logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", syncPackage.PathToPackage, e.Message), e);
-
-                var interviewException = e as InterviewException;
-                if (interviewException != null)
-                    brokenSyncPackagesStorage.StoreUnhandledPackageForInterviewInTypedFolder(syncPackage.PathToPackage, syncPackage.InterviewId, e, interviewException.ErrorType.ToString());
-                else
-                    brokenSyncPackagesStorage.StoreUnhandledPackageForInterview(syncPackage.PathToPackage, syncPackage.InterviewId, e);
+                logger.Error(
+                    string.Format("package '{0}' wasn't processed. Reason: '{1}'", syncPackage.PathToPackage, e.Message),
+                    e);
+                brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId, e);
             }
 
             incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);

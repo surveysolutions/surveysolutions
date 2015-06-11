@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_call_StoreUnknownUnhandledPackage = () =>
-            unhandledPackageStorage.Verify(x => x.StoreUnknownUnhandledPackage("path", Moq.It.IsAny<NullReferenceException>()), Times.Once);
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path",null, Moq.It.IsAny<NullReferenceException>()), Times.Once);
 
         private static SyncPackagesProcessor syncPackagesProcessor;
         private static Mock<IBrokenSyncPackagesStorage> unhandledPackageStorage;
