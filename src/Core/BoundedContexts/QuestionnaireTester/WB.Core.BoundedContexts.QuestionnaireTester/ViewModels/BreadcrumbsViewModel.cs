@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 var changedRosterInstanceIdentity = GetChangedRosterIdentity(changedRosterInstance);
                 if (changedRosterInstanceIdentity.Equals(lastBreadCrumb.ItemId))
                 {
-                    var groupTitle = questionnaire.GroupsWithoutNestedChildren[lastBreadCrumb.ItemId.Id].Title;
+                    var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[lastBreadCrumb.ItemId.Id].Title;
                     lastBreadCrumb.Text = GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
                     break;
                 }
@@ -80,15 +80,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            List<QuestionnaireReferenceModel> parentItems = GetBreadCrumbsReferencesFromQuestionnaire(newGroupIdentity, questionnaire);
+            List<GroupReferenceModel> parentItems = questionnaire.Parents[newGroupIdentity.Id];
 
             var breadCrumbs = new List<BreadCrumbItemViewModel>();
             int metRosters = 0;
             foreach (var reference in parentItems)
             {
-                var groupTitle = questionnaire.GroupsWithoutNestedChildren[reference.Id].Title;
+                var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[reference.Id].Title;
 
-                if (reference.ModelType == typeof (RosterModel))
+                if (reference.IsRoster)
                 {
                     metRosters++;
                     var itemRosterVector = newGroupIdentity.RosterVector.Take(metRosters).ToArray();
@@ -116,20 +116,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
 
             this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(breadCrumbs);
-        }
-
-        private static List<QuestionnaireReferenceModel> GetBreadCrumbsReferencesFromQuestionnaire(Identity newGroupIdentity,
-            QuestionnaireModel questionnaire)
-        {
-            List<QuestionnaireReferenceModel> parentItems =
-                new List<QuestionnaireReferenceModel>(questionnaire.Parents[newGroupIdentity.Id]);
-            parentItems.Reverse();
-            parentItems.Add(new QuestionnaireReferenceModel
-            {
-                Id = newGroupIdentity.Id,
-                ModelType = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id].GetType()
-            });
-            return parentItems;
         }
 
         private static string GenerateRosterTitle(string groupTitle, string changedRosterInstanceIdentity)

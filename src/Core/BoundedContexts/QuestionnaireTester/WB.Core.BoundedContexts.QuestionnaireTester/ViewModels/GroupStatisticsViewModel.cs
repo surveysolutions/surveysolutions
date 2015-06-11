@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var groupModel = questionnaire.GroupsWithoutNestedChildren[groupIdentity.Id];
+            var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[groupIdentity.Id];
             var groupEntities = groupModel.Children;
 
             var groupModelTypes = new[] { typeof(GroupModel), typeof(RosterModel) };

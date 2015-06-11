@@ -443,6 +443,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
+        public IEnumerable<BaseInterviewAnswer> FindBaseAnswerByOrShorterRosterLevel(Guid questionId, decimal[] targetRosterVector)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+
+            IEnumerable<Identity> targetQuestions = 
+                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, targetRosterVector, questionnaire, GetRosterInstanceIds);
+
+            foreach (var targetQuestion in targetQuestions)
+            {
+                var id = ConversionHelper.ConvertIdentityToString(targetQuestion);
+
+                if (this.Answers.ContainsKey(id))
+                {
+                    yield return this.Answers[id];
+                }
+            }
+        }
+
         public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);

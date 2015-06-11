@@ -8,5 +8,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
         TimeSpan RequestTimeout { get; }
         int BufferSize { get; }
         bool AcceptUnsignedSslCertificate { get; }
+
+        int GpsReceiveTimeoutSec { get; }
     }
 }

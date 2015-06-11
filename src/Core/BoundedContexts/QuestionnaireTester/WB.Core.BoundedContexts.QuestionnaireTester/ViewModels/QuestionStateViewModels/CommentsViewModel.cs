@@ -18,6 +18,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
+        protected CommentsViewModel() { }
+
         public CommentsViewModel(
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,

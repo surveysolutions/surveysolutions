@@ -83,6 +83,8 @@
   <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:ellipsize">end</item>
   </style>
 
   <style name="InterviewToolbarTitle" parent="ToolbarTitle">
@@ -123,6 +125,7 @@
     <item name="android:smoothScrollbar">true</item>
     <item name="android:scrollingCache">false</item>
     <item name="android:animationCache">false</item>
+    <item name="android:scrollbars">vertical</item>
   </style>
 
   <style name="PrefilledQuestions_QuestionnaireTitle" parent="AppTheme">

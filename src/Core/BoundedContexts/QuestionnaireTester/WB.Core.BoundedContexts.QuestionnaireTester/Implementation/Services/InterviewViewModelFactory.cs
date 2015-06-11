@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 { typeof(SingleOptionQuestionModel), Load<SingleOptionQuestionViewModel> },
                 { typeof(FilteredSingleOptionQuestionModel), Load<FilteredComboboxQuestionViewModel> },
                 { typeof(MultiOptionQuestionModel), Load<MultiOptionQuestionViewModel> },
+                { typeof(LinkedMultiOptionQuestionModel), Load<LinkedMultiOptionQuestionViewModel> },
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
@@ -69,13 +70,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             if (groupIdentity == null || groupIdentity.Id == Guid.Empty)
             {
-                groupIdentity = new Identity(questionnaire.GroupsWithoutNestedChildren.Keys.First(), new decimal[0]);
+                groupIdentity = new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]);
             }
 
-            if (!questionnaire.GroupsWithoutNestedChildren.ContainsKey(groupIdentity.Id))
+            if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.ContainsKey(groupIdentity.Id))
                 throw new KeyNotFoundException(string.Format("Group with id : {0} don't found", groupIdentity));
 
-            var groupWithoutNestedChildren = questionnaire.GroupsWithoutNestedChildren[groupIdentity.Id];
+            var groupWithoutNestedChildren = questionnaire.GroupsWithFirstLevelChildrenAsReferences[groupIdentity.Id];
 
             var viewModels = groupWithoutNestedChildren
                 .Children

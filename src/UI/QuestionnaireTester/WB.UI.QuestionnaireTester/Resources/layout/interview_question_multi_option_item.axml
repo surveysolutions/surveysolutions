@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_Question_Answer_Option_Background">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              style="@style/Interview_Question_Answer_Option_Background"
+              android:orientation="horizontal">
+  <TextView
+    style="@style/Interview_Question_MultiOptionOrder"
+    local:MvxBind="Text CheckedOrder; Visible CheckedOrder"/>
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked;" />
+
 </LinearLayout>

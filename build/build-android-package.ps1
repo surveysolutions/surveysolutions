@@ -64,18 +64,18 @@ function UpdateAndroidAppManifest( $VersionName, $VersionCode, $CapiProject){
 function BuildAndroidApp($AndroidProject, $BuildConfiguration){
 
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
-	Write-Host "##teamcity[progressStart 'Building '$AndroidProject' project']"
+	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
 	& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
 	if (-not $wasBuildSuccessfull) {
-		Write-Host "##teamcity[message status='ERROR' text='Failed to build '$AndroidProject' project']"
-		Write-Host "##teamcity[buildProblem description='Failed to build '$AndroidProject' project']"
+		Write-Host "##teamcity[message status='ERROR' text='Failed to build |'$AndroidProject|' project']"
+		Write-Host "##teamcity[buildProblem description='Failed to build |'$AndroidProject|' project']"
 	}
 
-	Write-Host "##teamcity[progressFinish 'Building '$AndroidProject' project']"
+	Write-Host "##teamcity[progressFinish 'Building |'$AndroidProject|' project']"
 	Write-Host "##teamcity[blockClosed name='Building Android project']"
 
 	return $wasBuildSuccessfull
@@ -136,6 +136,9 @@ function PathToFinalCapi($CapiProject) {
 # Main part
 $ErrorActionPreference = "Stop"
 
+if (Test-Path $OutFileName) {
+	Remove-Item $OutFileName -Force
+}
 if([string]::IsNullOrWhiteSpace($VersionName)){
 	$VersionName = (GetVersionString $CapiProject)
 }

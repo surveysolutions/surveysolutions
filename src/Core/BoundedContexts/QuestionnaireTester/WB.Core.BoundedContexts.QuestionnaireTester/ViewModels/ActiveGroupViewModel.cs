@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
-            var group = questionnaire.GroupsWithoutNestedChildren[newGroupIdentity.Id];
+            var group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[newGroupIdentity.Id];
 
             this.Name = group.Title;
             this.Items = this.interviewViewModelFactory.GetEntities(interviewId: this.navigationState.InterviewId,

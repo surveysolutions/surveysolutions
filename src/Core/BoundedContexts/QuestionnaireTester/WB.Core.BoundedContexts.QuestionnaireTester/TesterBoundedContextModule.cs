@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
+            this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
 
             CommandRegistry
                .Setup<StatefulInterview>()

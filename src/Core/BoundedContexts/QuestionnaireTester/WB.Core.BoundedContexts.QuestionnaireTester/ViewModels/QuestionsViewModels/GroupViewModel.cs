@@ -57,9 +57,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.groupIdentity = entityIdentity;
 
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
-            this.Title = questionnaire.GroupsWithoutNestedChildren[entityIdentity.Id].Title;
+            this.Title = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id].Title;
 
-            var groupEntities = questionnaire.GroupsWithoutNestedChildren[entityIdentity.Id].Children;
+            var groupEntities = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id].Children;
 
             var groupModelTypes = new[] {typeof (GroupModel), typeof (RosterModel)};
             var nonQuestionModelTypes = groupModelTypes.Concat(new[] {typeof (StaticTextModel)});

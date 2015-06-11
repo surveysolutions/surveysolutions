@@ -93,7 +93,7 @@
         {#>        
         private bool <#=question.GeneratedMandatoryMethodName#>()
         {
-            return this.IsAnswered(<#=question.VariableName#>);
+            return !this.IsAnswerEmpty(<#=question.VariableName#>);
         }
         <# }#>
 

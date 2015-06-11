@@ -943,7 +943,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>
         /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
         /// </remarks>
-        private IEnumerable<decimal[]> ExtendRosterVector(InterviewStateDependentOnAnswers state, decimal[] rosterVector, int length,
+        protected IEnumerable<decimal[]> ExtendRosterVector(InterviewStateDependentOnAnswers state, 
+            decimal[] rosterVector, 
+            int length,
             Guid[] rosterGroupsStartingFromTop,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
@@ -1122,7 +1124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     getRosterInstanceIds));
         }
 
-        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+        protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -1861,7 +1863,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(
                     string.Format(
                         "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
-                        userId, interviewerId));
+                        userId, interviewerId), InterviewDomainExceptionType.OtherUserIsResponsible);
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
@@ -3197,7 +3199,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (this.InterviewPreconditionsService.NumberofInterviewsAllowedToCreate <= 0)
                 throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
-                    this.InterviewPreconditionsService.MaxNumberOfInterviews));
+                    this.InterviewPreconditionsService.MaxNumberOfInterviews),
+                    InterviewDomainExceptionType.InterviewLimitReached);
         }
 
         private void ThrowIfInterviewWasCompleted()
@@ -3475,13 +3478,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Interview status is {0}. But one of the following statuses was expected: {1}. InterviewId: {2}",
                     this.status, 
                     string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString())),
-                    EventSourceId));
+                    EventSourceId), InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         }
 
         private void ThrowIfInterviewHardDeleted()
         {
             if (this.wasHardDeleted)
-                throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId));
+                throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId), InterviewDomainExceptionType.QuestionnaireDeleted);
         }
 
         private void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
@@ -3522,7 +3525,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             throw new InterviewException(string.Format(
                 "Status {0} not allowed to be changed with ApplySynchronizationMetadata command. InterviewId: {1}",
-                interviewStatus, EventSourceId));
+                interviewStatus, EventSourceId), InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         }
 
         #endregion
@@ -3532,7 +3535,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
 
             if (questionnaire == null)
-                throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version));
+                throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version), InterviewDomainExceptionType.QuestionnaireDeleted);
 
             return questionnaire;
         }
@@ -3924,7 +3927,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .IndexOf(rosterId);
         }
 
-        private static DistinctDecimalList GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
+        protected static DistinctDecimalList GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
             decimal[] outerRosterVector)
         {
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);

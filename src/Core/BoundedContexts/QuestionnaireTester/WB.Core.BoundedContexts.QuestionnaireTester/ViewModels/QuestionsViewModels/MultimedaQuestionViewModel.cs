@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewId = interview.Id;
 
             QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
-            this.variableName = questionnaire.Questions[entityIdentity.Id].Variable;
+            this.variableName = questionnaire.GetMultimediaQuestion(entityIdentity.Id).Variable;
             MultimediaAnswer multimediaAnswer = interview.GetMultimediaAnswer(entityIdentity);
             if (multimediaAnswer != null && multimediaAnswer.IsAnswered)
             {

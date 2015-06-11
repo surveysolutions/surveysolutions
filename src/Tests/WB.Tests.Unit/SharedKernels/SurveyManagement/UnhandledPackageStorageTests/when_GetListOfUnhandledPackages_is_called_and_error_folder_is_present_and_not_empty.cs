@@ -26,12 +26,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
             fileSystemAccessorMock.Setup(x => x.GetFileName(Moq.It.IsAny<string>()))
                .Returns<string>(Path.GetFileName);
 
-            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(@"App_Data\IncomingDataWithErrors", Moq.It.IsAny<string>()))
-                .Returns(filesWithoutInterview);
-
             fileSystemAccessorMock.Setup(x => x.GetDirectoriesInDirectory(@"App_Data\IncomingDataWithErrors"))
-                .Returns(new[] {interviewId.FormatGuid()});
+                .Returns(new[] { "unknown", interviewId.FormatGuid() });
 
+            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(@"unknown", Moq.It.IsAny<string>()))
+               .Returns(filesWithoutInterview);
 
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(interviewId.FormatGuid(), Moq.It.IsAny<string>()))
                 .Returns(filesWithInterview);
@@ -43,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
             result = brokenSyncPackagesStorage.GetListOfUnhandledPackages();
 
         It should_result_not_empty = () =>
-           result.ShouldEqual(new[] { "f1.sync", "f2.sync", interviewId.FormatGuid() + @"\" + "i1.sync", interviewId.FormatGuid() + @"\" + "i2.sync" });
+           result.ShouldEqual(new[] { "f1.sync", "f2.sync", "i1.sync", "i2.sync" });
 
         private static BrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
