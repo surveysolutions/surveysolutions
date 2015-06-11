@@ -29,9 +29,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             public string Text { get; set; }
             public decimal Value { get; set; }
-        }       
-        
-        private readonly Guid userId;
+        }
+
+        private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
 
-            this.userId = principal.CurrentUserIdentity.UserId;
+            this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
@@ -124,32 +124,30 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set
             {
                 this.selectedObject = value;
-
-                if (selectedObject != null)
-                {
-                    this.Answer = value.Text;
-                }
+                this.Answer = selectedObject != null 
+                    ? Options.Single(i => i.Value == value.Value).Text 
+                    : null;
 
                 RaisePropertyChanged();
             }
         }
 
-        private string currentTextHint;
-        public string CurrentTextHint
+        private string filterText;
+        public string FilterText
         {
-            get { return this.currentTextHint; }
+            get { return this.filterText; }
             set
             {
                 if (value.IsNullOrEmpty())
                 {
-                    this.currentTextHint = null;
+                    this.filterText = null;
                     SetSuggestionsEmpty();
                     return;
                 }
                     
-                this.currentTextHint = value;
+                this.filterText = value;
 
-                var list = this.GetSuggestionsList(currentTextHint).ToList();
+                var list = this.GetSuggestionsList(this.filterText).ToList();
 
                 if (list.Any())
                 {
@@ -218,7 +216,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
-                this.userId,
+                this.principal.CurrentUserIdentity.UserId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.UtcNow,

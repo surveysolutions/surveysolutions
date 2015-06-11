@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class SingleOptionAnswer : BaseInterviewAnswer
     {
-        public decimal Answer { get; private set; }
+        public virtual decimal Answer { get; private set; }
 
         public SingleOptionAnswer() { }
         public SingleOptionAnswer(Guid id, decimal[] rosterVector)
