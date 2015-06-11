@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             string userName, 
             DateTime timestamp,
             QuestionnaireActionType actionType,
-            Guid targetId, 
+            Guid targetId,
+            Guid? targetParentId, 
             string title, 
             QuestionnaireItemType type, 
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences)
@@ -18,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             Timestamp = timestamp;
             ActionType = actionType;
             HistoricalRecordReferences = historicalRecordReferences;
+            TargetParentId = targetParentId;
             TargetId = targetId;
             TargetTitle = title;
             TargetType = type;
@@ -29,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         public Guid TargetId { get; private set; }
         public string TargetTitle { get; private set; }
+        public Guid? TargetParentId { get; private set; }
         public QuestionnaireItemType TargetType { get; private set; }
 
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }

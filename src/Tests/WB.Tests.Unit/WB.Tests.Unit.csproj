@@ -327,6 +327,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_updated.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_is_cloned.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_is_cloned_but_source_of_cloning_equal_to_cloned_one.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryFactoryTests\QuestionnaireChangeHistoryFactoryTestContext.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryFactoryTests\when_load_questionnaire_history.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TemplateImported_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />

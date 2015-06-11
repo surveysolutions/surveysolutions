@@ -16,40 +16,42 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
     public static class HistoryExtensions
     {
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
-           QuestionnaireDocument questionnaireDocument, QuestionnaireChangeHistoricalRecord record)
+            Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
             var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType.ToString()),
-                BuildQuestionnaireItemLink(helper, urlHelper, questionnaireDocument, record.TargetId, record.TargetTitle, record.TargetType), GetActionStringRepresentations(record.ActionType, record.TargetType));
+                BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
+                    record.TargetTitle, record.TargetType),
+                GetActionStringRepresentations(record.ActionType, record.TargetType));
 
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
-                mainRecord += string.Format(" {0} {1}", GetStringRepresentation(historicalRecordReference.Type.ToString()).ToLower(),
-                    BuildQuestionnaireItemLink(helper, urlHelper, questionnaireDocument, historicalRecordReference.Id,
+                mainRecord += string.Format(" {0} {1}",
+                    GetStringRepresentation(historicalRecordReference.Type.ToString()).ToLower(),
+                    BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, historicalRecordReference.Id,
+                        historicalRecordReference.ParentId,
                         historicalRecordReference.Title, historicalRecordReference.Type));
             }
-              
+
             return MvcHtmlString.Create(mainRecord);
         }
 
-        private static MvcHtmlString BuildQuestionnaireItemLink(HtmlHelper helper, UrlHelper urlHelper,
-            QuestionnaireDocument questionnaireDocument, Guid itemId, string title, QuestionnaireItemType type)
+        private static MvcHtmlString BuildQuestionnaireItemLink(
+            HtmlHelper helper, 
+            UrlHelper urlHelper,
+            Guid questionnaireId, 
+            Guid itemId, 
+            Guid? chapterId, 
+            string title, 
+            QuestionnaireItemType type)
         {
             var quatedTitle = string.Format("\"{0}\"", title);
-            if (type == QuestionnaireItemType.Person)
+            if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
                 return helper.Label(quatedTitle);
             if (type == QuestionnaireItemType.Questionnaire)
                 return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
-            var item = questionnaireDocument.FirstOrDefault<IComposite>(g => g.PublicKey == itemId);
-            if (item == null)
-                return helper.Label(quatedTitle);
-
-            while (item.GetParent().GetType() != typeof(QuestionnaireDocument))
-            {
-                item = item.GetParent();
-            }
             var url =
-                urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireDocument.PublicKey.FormatGuid(),
-                    item.PublicKey.FormatGuid(), itemId.FormatGuid(), type.ToString().ToLower()));
+                urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
+                    chapterId.FormatGuid(), itemId.FormatGuid(), type.ToString().ToLower()));
             return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, quatedTitle));
         }
 
