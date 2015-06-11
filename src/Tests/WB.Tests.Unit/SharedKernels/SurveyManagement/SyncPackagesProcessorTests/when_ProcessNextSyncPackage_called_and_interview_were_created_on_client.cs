@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
         incomingSyncPackagesQueueMock.Verify(x => x.DeleteSyncItem("path"), Times.Once);
 
         It should_never_call_StoreUnhandledPackage = () =>
-            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId, Moq.It.IsAny<Exception>()), Times.Never);
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackageForInterview("path", interviewId, Moq.It.IsAny<Exception>()), Times.Never);
 
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;

@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
 
+        protected EnablementViewModel() { }
+
         public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
         {
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");

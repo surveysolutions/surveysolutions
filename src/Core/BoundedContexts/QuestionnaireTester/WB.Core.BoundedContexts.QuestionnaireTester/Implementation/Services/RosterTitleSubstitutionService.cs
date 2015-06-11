@@ -28,10 +28,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
 
-            var parents = questionnaire.Parents[questionIdentity.Id];
-            var nearestRoster = parents.Last(p => p.IsRoster);
+            var nearestRosterId  = questionnaire.QuestionsNearestRosterIdMap[questionIdentity.Id];
 
-            InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRoster.Id, questionIdentity.RosterVector);
+            InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRosterId.Value, questionIdentity.RosterVector);
 
             var replaceTo = string.IsNullOrEmpty(roster.Title) ? this.substitutionService.DefaultSubstitutionText : roster.Title;
             var result = this.substitutionService.ReplaceSubstitutionVariable(questionTitle, this.substitutionService.RosterTitleSubstitutionReference, replaceTo);

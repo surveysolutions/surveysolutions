@@ -148,7 +148,7 @@
     <value>Team member</value>
   </data>
   <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
-    <value>Average time spent to complete an interview</value>
+    <value>Average time on interview completion</value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>

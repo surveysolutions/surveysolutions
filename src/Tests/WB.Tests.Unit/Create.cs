@@ -629,11 +629,12 @@ namespace WB.Tests.Unit
             return result;
         }
 
-        public static IPublishedEvent<designer::Main.Core.Events.Questionnaire.TemplateImported> TemplateImportedEvent(string questionnaireId,
-            string chapter1Id,
-            string chapter1Title,
-            string chapter2Id,
-            string chapter2Title,
+        public static IPublishedEvent<designer::Main.Core.Events.Questionnaire.TemplateImported> TemplateImportedEvent(
+            string questionnaireId,
+            string chapter1Id = null,
+            string chapter1Title = null,
+            string chapter2Id = null,
+            string chapter2Title = null,
             string questionnaireTitle = null,
             string chapter1GroupId = null, string chapter1GroupTitle = null,
             string chapter2QuestionId = null,
@@ -647,7 +648,8 @@ namespace WB.Tests.Unit
             {
                 Source =
                     CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
-                        chapter1Id: chapter1Id, chapter1Title: chapter1Title, chapter2Id: chapter2Id,
+                        chapter1Id: chapter1Id ?? Guid.NewGuid().FormatGuid(), chapter1Title: chapter1Title,
+                        chapter2Id: chapter2Id ?? Guid.NewGuid().FormatGuid(),
                         chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
                         chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
                         chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,

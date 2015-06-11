@@ -1,35 +1,65 @@
+using System;
 using Cirrious.MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class MultiOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
-        private readonly MultiOptionQuestionViewModel questionViewModel;
+        public MultiOptionQuestionViewModel QuestionViewModel { get; private set; }
 
         public MultiOptionQuestionOptionViewModel(MultiOptionQuestionViewModel questionViewModel)
         {
-            this.questionViewModel = questionViewModel;
+            this.QuestionViewModel = questionViewModel;
         }
 
         public decimal Value { get; set; }
-        public string Title { get; set; }
-        
+
+        private string title;
+        public string Title
+        {
+            get { return this.title; }
+            set { this.title = value; this.RaisePropertyChanged(); }
+        }
+
         private bool @checked;
+
         public bool Checked
         {
             get { return @checked; }
             set
             {
                 @checked = value;
+                if (value)
+                {
+                    this.CheckedTimeStamp = DateTime.Now;
+                }
+                else
+                {
+                    this.CheckedTimeStamp = DateTime.MinValue;
+                }
+
                 RaisePropertyChanged();
             }
         }
+
+        private int? checkedOrder;
+        public int? CheckedOrder
+        {
+            get { return this.checkedOrder; }
+            set
+            {
+                this.checkedOrder = value; 
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public DateTime CheckedTimeStamp { get; private set; }
 
         public IMvxCommand CheckAnswerCommand
         {
             get
             {
-                return new MvxCommand(() => questionViewModel.ToggleAnswer(this));
+                return new MvxCommand(() => QuestionViewModel.ToggleAnswer(this));
             }
         }
     }
