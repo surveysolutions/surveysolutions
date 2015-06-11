@@ -539,6 +539,7 @@
     <AndroidResource Include="Resources\drawable\question_combobox_popup_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_input_button_disabled.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
