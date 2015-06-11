@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            exception.ShouldNotBeNull();
 
         It should_raise_InterviewException_with_type_OtherUserIsResponsible = () =>
-            exception.ErrorType.ShouldEqual(InterviewDomainExceptionType.OtherUserIsResponsible);
+            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.OtherUserIsResponsible);
 
         private static EventContext eventContext;
         private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");

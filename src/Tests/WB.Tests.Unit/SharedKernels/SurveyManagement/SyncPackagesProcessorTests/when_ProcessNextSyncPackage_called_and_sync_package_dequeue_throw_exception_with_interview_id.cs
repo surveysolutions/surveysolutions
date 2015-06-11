@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_call_StoreUnhandledPackageForInterview = () =>
-            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackageForInterview("path",interviewId, Moq.It.IsAny<NullReferenceException>()), Times.Once);
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId, Moq.It.IsAny<NullReferenceException>()), Times.Once);
 
         private static SyncPackagesProcessor syncPackagesProcessor;
         private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
