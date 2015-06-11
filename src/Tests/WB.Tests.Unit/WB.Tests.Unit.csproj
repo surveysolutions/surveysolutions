@@ -348,6 +348,12 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\MultiOptionQuestionViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_handling_question_answered_event.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_initializing_answered_question.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer_and_max_answers_count_reached.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer_and_user_rejects_reduce_roster_size.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />

@@ -1629,5 +1629,10 @@ namespace WB.Tests.Unit
         {
             return new SubstitutionService();
         }
+
+        public static QuestionnaireModel QuestionnaireModel()
+        {
+            return new QuestionnaireModel();
+        }
     }
 }
