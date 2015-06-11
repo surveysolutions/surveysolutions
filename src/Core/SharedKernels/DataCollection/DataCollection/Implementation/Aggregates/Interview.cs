@@ -3141,9 +3141,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfInterviewCountLimitReached()
         {
-            if (this.InterviewPreconditionsService.NumberofInterviewsAllowedToCreate <= 0)
+            if (this.InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
                 throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
-                    this.InterviewPreconditionsService.MaxNumberOfInterviews),
+                    this.InterviewPreconditionsService.GetMaxAllowedInterviewsCount()),
                     InterviewDomainExceptionType.InterviewLimitReached);
         }
 
