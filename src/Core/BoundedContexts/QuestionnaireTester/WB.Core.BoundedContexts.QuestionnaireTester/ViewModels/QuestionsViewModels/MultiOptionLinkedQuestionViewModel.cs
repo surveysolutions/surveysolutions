@@ -21,7 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class LinkedMultiOptionQuestionViewModel : MvxNotifyPropertyChanged,
+    public class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public LinkedMultiOptionQuestionViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
+        public MultiOptionLinkedQuestionViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.userIdentity = userIdentity;
             this.QuestionState = questionState;
             this.Answering = answering;
-            this.Options = new ObservableCollection<LinkedMultiOptionQuestionOptionViewModel>();
+            this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
             eventRegistry.Subscribe(this);
         }
 
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.GenerateOptions(entityIdentity, interview, linkedQuestionModel, questionnaire);
         }
 
-        public ObservableCollection<LinkedMultiOptionQuestionOptionViewModel> Options { get; private set; }
+        public ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; private set; }
 
         public void Handle(AnswersRemoved @event)
         {
@@ -93,9 +93,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        public async Task ToggleAnswerAsync(LinkedMultiOptionQuestionOptionViewModel changedModel)
+        public async Task ToggleAnswerAsync(MultiOptionLinkedQuestionOptionViewModel changedModel)
         {
-            List<LinkedMultiOptionQuestionOptionViewModel> allSelectedOptions = 
+            List<MultiOptionLinkedQuestionOptionViewModel> allSelectedOptions = 
                 this.areAnswersOrdered ? 
                 this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder).ToList() : 
                 this.Options.Where(x => x.Checked).ToList();
@@ -159,7 +159,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                                     linkedMultiOptionAnswer.IsAnswered &&
                                     linkedMultiOptionAnswer.Answers.Any(x => x.SequenceEqual(answer.RosterVector));
 
-                    var option = new LinkedMultiOptionQuestionOptionViewModel(this)
+                    var option = new MultiOptionLinkedQuestionOptionViewModel(this)
                     {
                         Title = title,
                         Value = answer.RosterVector,
