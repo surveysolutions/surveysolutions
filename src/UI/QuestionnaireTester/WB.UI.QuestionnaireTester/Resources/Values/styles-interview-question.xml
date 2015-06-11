@@ -61,7 +61,7 @@
   
   <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_Answer_TextEditor">
     <item name="android:completionThreshold">1</item>
-    <item name="android:drawablePadding">2dip</item>
+    <item name="android:drawablePadding">@dimen/Interview_Question_Answer_FilteredComboBox_padding</item>
     <item name="android:popupBackground">@drawable/question_combobox_popup_background</item>
   </style>    
   

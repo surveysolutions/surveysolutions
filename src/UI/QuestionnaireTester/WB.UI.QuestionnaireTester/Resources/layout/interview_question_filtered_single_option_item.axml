@@ -3,6 +3,6 @@
               style="@style/Interview_Question_Answer_FilteredComboBox_Item_Background">
   <TextView
     style="@style/Interview_Question_Answer_FilteredComboBox_Item"
-    local:MvxBind="Text Title;" />
+    local:MvxBind="Text Text;" />
 
 </LinearLayout>

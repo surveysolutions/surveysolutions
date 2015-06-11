@@ -78,4 +78,6 @@
   <dimen name="Interview_Question_List_DeleteButton_width">24dp</dimen>
   <dimen name="Interview_Question_List_DeleteButton_height">24dp</dimen>
   
+  <dimen name="Interview_Question_Answer_FilteredComboBox_padding">4dp</dimen>
+  
 </resources>
