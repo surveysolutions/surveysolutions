@@ -118,7 +118,6 @@
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\SectionViewModel.cs" />
-    <Compile Include="ViewModels\GroupStatisticsViewModel.cs" />
     <Compile Include="ViewModels\PreviousGroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BreadCrumbItemViewModel.cs" />
