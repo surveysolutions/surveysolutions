@@ -148,7 +148,9 @@ namespace WB.UI.Supervisor.App_Start
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
-            var interviewCountLimit = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
+            var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
+            int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -156,7 +158,7 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
                     new InterviewHistorySettings(basePath, false),
                     isSupervisorFunctionsEnabled: true,
-                    interviewLimitCount: string.IsNullOrEmpty(interviewCountLimit) ? (long?)null : long.Parse(interviewCountLimit)));
+                    interviewLimitCount: interviewCountLimit));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
