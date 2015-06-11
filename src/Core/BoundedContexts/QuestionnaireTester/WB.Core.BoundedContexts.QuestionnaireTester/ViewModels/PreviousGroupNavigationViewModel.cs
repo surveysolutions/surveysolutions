@@ -37,6 +37,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventHandler<AnswersRemoved>
 
     {
+        public class GroupStatistics
+        {
+            public int EnabledQuestionsCount { get; set; }
+            public int SubgroupsCount { get; set; }
+            public int AnsweredQuestionsCount { get; set; }
+            public int UnansweredQuestionsCount { get; set; }
+            public int InvalidAnswersCount { get; set; }
+        }
+
         private string interviewId;
         private Identity groupIdentity;
         private NavigationState navigationState;
@@ -44,18 +53,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly GroupStatisticsViewModel groupStatisticsViewModel;
 
         public PreviousGroupNavigationViewModel(
             ILiteEventRegistry liteEventRegistry,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
-            IStatefulInterviewRepository interviewRepository,
-            GroupStatisticsViewModel groupStatisticsViewModel)
+            IStatefulInterviewRepository interviewRepository)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.groupStatisticsViewModel = groupStatisticsViewModel;
         }
 
 
@@ -125,7 +131,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void UpdateSelfFromModel()
         {
-            Statistics = groupStatisticsViewModel.GetStatistics(interviewId, this.groupIdentity);
+            // Here we should update statistics
+            // Statistics = ...
         }
 
         #region Handle events
