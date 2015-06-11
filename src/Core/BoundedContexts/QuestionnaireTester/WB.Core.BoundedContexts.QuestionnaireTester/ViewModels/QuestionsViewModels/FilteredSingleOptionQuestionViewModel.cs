@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class FilteredComboboxQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         public class FilteredComboboxItemViewModel 
         {
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public IList<FilteredComboboxItemViewModel> Options { get; set; }
 
 
-        public FilteredComboboxQuestionViewModel(
+        public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
