@@ -159,4 +159,16 @@
   <data name="InvalidUser" xml:space="preserve">
     <value>Invalid user</value>
   </data>
+  <data name="PersonNameFieldName" xml:space="preserve">
+    <value>Person name</value>
+  </data>
+  <data name="PhoneNumberFieldName" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="PhoneErrorMessage" xml:space="preserve">
+    <value>Invalid phone number</value>
+  </data>
+  <data name="PersonNameErrorMessage" xml:space="preserve">
+    <value>Input name too long</value>
+  </data>
 </root>

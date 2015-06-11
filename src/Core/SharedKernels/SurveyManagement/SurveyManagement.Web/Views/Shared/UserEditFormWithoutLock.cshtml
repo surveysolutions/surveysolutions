@@ -21,3 +21,17 @@
         @Html.ValidationMessageFor(x => x.Email, null, new { @class = "help-block" })
     </div>
 </div>
+<div class="form-group">
+    @Html.LabelFor(x => x.PersonName, new { @class = "col-sm-4 control-label" })
+    <div class="col-sm-8">
+        @Html.TextBoxFor(x => x.PersonName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.PersonName, null, new { @class = "help-block" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(x => x.PhoneNumber, new { @class = "col-sm-4 control-label" })
+    <div class="col-sm-8">
+        @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.PhoneNumber, null, new { @class = "help-block" })
+    </div>
+</div>

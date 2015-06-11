@@ -7,8 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel,
             bool areRowSpecificVariablesPresent, 
-            bool isIRosterLevelInherited, 
-            string rosterType)
+            bool isIRosterLevelInherited,
+            string rosterType, string abstractConditionalLevelClassName)
             : base(
             null, 
             "@__questionnaire_scope", 
@@ -19,7 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             new List<Guid>(),
             areRowSpecificVariablesPresent,
             isIRosterLevelInherited,
-            rosterType)
+            rosterType,
+            abstractConditionalLevelClassName)
         {
             ExecutorModel = executorModel;
         }

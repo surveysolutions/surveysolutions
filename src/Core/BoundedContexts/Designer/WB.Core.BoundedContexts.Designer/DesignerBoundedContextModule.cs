@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
@@ -49,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
+            this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
 
             this.Bind<IAsyncExecutor>().To<AsyncExecutor>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
@@ -62,6 +64,7 @@ namespace WB.Core.BoundedContexts.Designer
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireSharedPersonsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireListViewItemDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<PdfQuestionnaireDenormalizer>(this.Kernel);
+            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireChangeHistoryDenormalizer>(this.Kernel);
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
             this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();

@@ -133,7 +133,9 @@ namespace WB.UI.Headquarters.Controllers
                             userName: model.UserName,
                             password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
-                            isLockedByHQ: false, roles: new[] { role }, supervsor: null));
+                            isLockedByHQ: false, roles: new[] { role }, supervsor: null,
+                            personName:model.PersonName,
+                            phoneNumber:model.PhoneNumber));
                         return true;
                     }
                     catch (Exception ex)
@@ -170,7 +172,8 @@ namespace WB.UI.Headquarters.Controllers
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
-                        roles: userToCheck.Roles.ToArray()));
+                        roles: userToCheck.Roles.ToArray(),
+                        personName:userToCheck.PersonName, phoneNumber:userToCheck.PhoneNumber));
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
                 }

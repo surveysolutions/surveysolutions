@@ -36,7 +36,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(" : AbstractConditionalLevel<");
+            this.Write(" : ");
+            
+            #line 8 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.AbstractConditionalLevelClassName));
+            
+            #line default
+            #line hidden
+            this.Write("<");
             
             #line 8 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
@@ -153,7 +160,14 @@ if(!string.IsNullOrWhiteSpace(question.Validations)) {
             
             #line default
             #line hidden
-            this.Write("  \r\n                    () => ");
+            this.Write("  \r\n                    () => this.IsAnswerEmpty(");
+            
+            #line 33 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write(") || ");
             
             #line 33 "C:\Work\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));

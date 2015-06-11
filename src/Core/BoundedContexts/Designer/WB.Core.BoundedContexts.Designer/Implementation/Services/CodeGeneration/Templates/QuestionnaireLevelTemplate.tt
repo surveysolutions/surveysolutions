@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
  
-    internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
+    internal partial class <#=Model.GeneratedTypeName#> : <#=this.Model.AbstractConditionalLevelClassName#><<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
     {
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -30,7 +30,7 @@
                 <#= question.GeneratedMandatoryMethodName #> ,                                               
                 <# }#>
                 <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
-                    () => <#=question.GeneratedValidationsMethodName#>() , 
+                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
                 <# }#>
             }); 
         <# }#>

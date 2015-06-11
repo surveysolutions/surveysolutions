@@ -84,7 +84,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
                             new[] { UserRoles.Supervisor },
                             userDocument.IsLockedBySupervisor,
                             userDocument.IsLockedByHQ,
-                            null);
+                            null,
+                            userDocument.PersonName,
+                            userDocument.PhoneNumber);
 
                         this.executeCommand(command);
                     }

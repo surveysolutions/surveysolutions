@@ -64,7 +64,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                           IsLockedBySupervisor = evnt.Payload.IsLockedBySupervisor,
                           IsLockedByHQ = evnt.Payload.IsLocked,
                           Supervisor = evnt.Payload.Supervisor,
-                          Roles = evnt.Payload.Roles.ToHashSet()
+                          Roles = evnt.Payload.Roles.ToHashSet(),
+                          PersonName = evnt.Payload.PersonName,
+                          PhoneNumber = evnt.Payload.PhoneNumber
                       };
             this.SaveUser(doc, evnt.EventTimeStamp);
         }

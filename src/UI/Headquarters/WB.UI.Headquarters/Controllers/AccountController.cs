@@ -95,7 +95,8 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null || !(GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
                 throw new HttpException(404, string.Empty);
 
-            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email});
+            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email, 
+                PersonName = currentUser.PersonName, PhoneNumber = currentUser.PhoneNumber});
         }
 
         [HttpPost]
@@ -135,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw new HttpException(404, string.Empty);
             bool isHeadquarter = userRoles.Contains(UserRoles.Headquarter.ToString(), StringComparer.OrdinalIgnoreCase);
             
-            //do not forget pass currentuser to display you are observing
+            //do not forget pass current user to display you are observing
             this.authentication.SignIn(user.UserName, false, currentUser);
             
             return isHeadquarter ? 

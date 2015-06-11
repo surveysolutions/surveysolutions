@@ -294,6 +294,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExecutorTemplateModel.cs" />
     <Compile Include="Mappings\AccountDocumentMap.cs" />
+    <Compile Include="Mappings\QuestionnaireChangeRecordMap.cs" />
     <Compile Include="Mappings\QuestionnaireListViewItemMap.cs" />
     <Compile Include="Resources\VerificationMessages.Designer.cs">
       <DependentUpon>VerificationMessages.resx</DependentUpon>
@@ -353,6 +354,17 @@
     <Compile Include="Views\Account\AccountViewInputModel.cs" />
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryFactory.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTacker.cs" />
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
