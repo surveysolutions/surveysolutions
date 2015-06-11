@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -18,29 +20,35 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,
+        ILiteEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
+        private readonly ILiteEventRegistry eventRegistry;
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
+            ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
+            if (answerToStringService == null) throw new ArgumentNullException("answerToStringService");
+            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.userId = principal.CurrentUserIdentity.UserId;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
+            this.eventRegistry = eventRegistry;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -48,6 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private Identity questionIdentity;
         private Guid interviewId;
+        private Guid referencedQuestionId;
 
         public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
@@ -66,18 +75,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
+            var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
+            this.referencedQuestionId = questionModel.LinkedToQuestionId;
+
             this.InitOptionsFromModel(interview, questionnaire);
+
+            this.eventRegistry.Subscribe(this);
         }
 
         private void InitOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)
         {
-            var linkedQuestionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
             var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.questionIdentity);
 
             IEnumerable<BaseInterviewAnswer> referencedQuestionAnswers =
-                interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, this.questionIdentity.RosterVector);
+                interview.FindBaseAnswerByOrShorterRosterLevel(this.referencedQuestionId, this.questionIdentity.RosterVector);
 
-            var referencedQuestion = questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId];
+            var referencedQuestion = questionnaire.Questions[this.referencedQuestionId];
 
             var options = referencedQuestionAnswers
                 .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, referencedQuestion, linkedAnswerModel))
@@ -121,6 +134,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (question.Id == this.referencedQuestionId)
+                {
+                    var optionToRemove = this.Options.SingleOrDefault(option => option.RosterVector.SequenceEqual(question.RosterVector));
+
+                    if (optionToRemove != null)
+                    {
+                        MvxMainThreadDispatcher.Instance.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
+                    }
+                }
             }
         }
 
