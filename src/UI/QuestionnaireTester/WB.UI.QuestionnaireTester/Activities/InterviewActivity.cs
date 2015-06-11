@@ -93,12 +93,6 @@ namespace WB.UI.QuestionnaireTester.Activities
                 case Resource.Id.interview_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
-                case Resource.Id.interview_help:
-                    this.ViewModel.NavigateToHelpCommand.Execute();
-                    break;
-                case Resource.Id.interview_language:
-                    this.ViewModel.ChangeLanguageCommand.Execute();
-                    break;
                 case Resource.Id.interview_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
