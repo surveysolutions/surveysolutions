@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.ShouldNotBeNull();
 
         It should_raise_InterviewException_with_type_StatusIsNotOneOfExpected = () =>
-            exception.ErrorType.ShouldEqual(InterviewDomainExceptionType.StatusIsNotOneOfExpected);
+            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         
         Cleanup stuff = () =>
         {
