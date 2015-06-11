@@ -16,7 +16,7 @@
           local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
           local:MvxBind="FocusText Answer; 
                          ItemsSource AutoCompleteSuggestions; 
-                         PartialText CurrentTextHint; 
+                         PartialText FilterText; 
                          SelectedObject SelectedObject; 
                          Hint Localization('FilteredComboboxQuestion_Hint');
                          BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
