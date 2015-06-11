@@ -79,6 +79,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sub-section or roster containing question that is used as parent for cascading combo box cannot be removed before all child questions are removed..
+        /// </summary>
+        internal static string CantRemoveSectionParentQuestionInCascading {
+            get {
+                return ResourceManager.GetString("CantRemoveSectionParentQuestionInCascading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cascading questions can&apos;t have enabling condition..
         /// </summary>
         internal static string CascadingCantHaveConditionExpression {
