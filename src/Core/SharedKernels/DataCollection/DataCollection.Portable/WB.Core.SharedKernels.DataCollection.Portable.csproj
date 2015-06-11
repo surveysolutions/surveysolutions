@@ -70,6 +70,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="V2\IInterviewExpressionStateV2.cs" />
     <Compile Include="V2\InterviewExpressionStateV1ToV2Adapter.cs" />
+    <Compile Include="V3\CustomFunctions\AbstractConditionalLevelInstanceV3.cs" />
     <Compile Include="ValidityChanges.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -104,6 +104,8 @@
         
         IntegerQuestionCantHaveDecimalPlacesSettings,
 
+        DecimalQuestionCantHaveMaxValueSettings,
+
         QuestionTitleContainsUnknownSubstitutionReference,
 
         QuestionTitleContainsSubstitutionReferenceToSelf,

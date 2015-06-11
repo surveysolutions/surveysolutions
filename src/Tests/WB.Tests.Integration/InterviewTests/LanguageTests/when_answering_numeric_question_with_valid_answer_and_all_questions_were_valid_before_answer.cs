@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         };
 
         It should_not_raise_AnswersDeclaredValid_event = () =>
-            result.AnswersDeclaredValidEventCount.ShouldEqual(1);
+            result.AnswersDeclaredValidEventCount.ShouldEqual(0);
 
         It should_not_raise_AnswersDeclaredInvalid_event = () =>
             result.AnswersDeclaredInvalidEventCount.ShouldEqual(0);

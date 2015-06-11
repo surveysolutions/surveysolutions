@@ -4,7 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #> 
-    internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>
+    internal partial class <#=Model.GeneratedTypeName#> : <#=this.Model.AbstractConditionalLevelClassName#><<#=this.Model.GeneratedTypeName#>>
 	<# if(Model.IsIRosterLevelInherited){#>
 	, IRosterLevel<<#=this.Model.GeneratedTypeName#>> 
 	<#}#>
@@ -44,7 +44,7 @@
                 <#= question.GeneratedMandatoryMethodName #> ,                                               
                 <# }#>
                 <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
-                    () => <#=question.GeneratedValidationsMethodName#>() , 
+                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
                 <# }#>
             });             
             <# }#>
