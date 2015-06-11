@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 Selected = isSelected,
             };
 
-            optionViewModel.BeforeSelected += OptionSelected;
+            optionViewModel.BeforeSelected += this.OptionSelected;
 
             return optionViewModel;
         }

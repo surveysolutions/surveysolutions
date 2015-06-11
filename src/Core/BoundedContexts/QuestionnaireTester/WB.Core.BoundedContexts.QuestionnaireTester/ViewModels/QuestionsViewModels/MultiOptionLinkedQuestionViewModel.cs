@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.areAnswersOrdered = linkedQuestionModel.AreAnswersOrdered;
 
-            this.GenerateOptions(entityIdentity, interview, linkedQuestionModel, questionnaire);
+            this.GenerateOptions(interview, linkedQuestionModel, questionnaire);
         }
 
         public ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; private set; }
@@ -138,14 +138,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void GenerateOptions(Identity entityIdentity, 
+        private void GenerateOptions(
             IStatefulInterview interview,
             LinkedMultiOptionQuestionModel linkedQuestionModel, 
             QuestionnaireModel questionnaire)
         {
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(entityIdentity);
+            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers =
-                interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, entityIdentity.RosterVector);
+                interview.FindBaseAnswerByOrShorterRosterLevel(linkedQuestionModel.LinkedToQuestionId, this.questionIdentity.RosterVector);
 
             this.Options.Clear();
             int checkedAnswerCount = 1;
@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 if (answer != null && answer.IsAnswered)
                 {
-                    string title = this.answerToStringService.AnswerToString(questionnaire.Questions[entityIdentity.Id], answer);
+                    string title = this.answerToStringService.AnswerToString(questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId], answer);
 
                     var isChecked = linkedMultiOptionAnswer != null &&
                                     linkedMultiOptionAnswer.IsAnswered &&
