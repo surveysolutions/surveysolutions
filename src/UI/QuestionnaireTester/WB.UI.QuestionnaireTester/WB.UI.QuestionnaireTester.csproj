@@ -626,10 +626,10 @@
     <AndroidResource Include="Resources\layout\prefilled_questions_start_button.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_filter_combobox.axml">
+    <AndroidResource Include="Resources\layout\interview_question_filtered_single_option.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_filter_combobox_item.axml">
+    <AndroidResource Include="Resources\layout\interview_question_filtered_single_option_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

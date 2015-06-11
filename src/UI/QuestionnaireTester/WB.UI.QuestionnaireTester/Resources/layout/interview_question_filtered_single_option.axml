@@ -13,7 +13,7 @@
 
         <MvxAutoCompleteTextView
           style="@style/Interview_Question_Answer_FilteredComboBox"
-          local:MvxItemTemplate="@layout/interview_question_filter_combobox_item"
+          local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
           local:MvxBind="FocusText Answer; 
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText CurrentTextHint; 

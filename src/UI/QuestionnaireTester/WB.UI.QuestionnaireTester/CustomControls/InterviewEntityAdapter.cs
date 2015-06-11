@@ -31,7 +31,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (LinkedMultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
-            {typeof (FilteredComboboxQuestionViewModel), Resource.Layout.interview_question_filter_combobox},
+            {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (RosterViewModel), Resource.Layout.interview_roster},

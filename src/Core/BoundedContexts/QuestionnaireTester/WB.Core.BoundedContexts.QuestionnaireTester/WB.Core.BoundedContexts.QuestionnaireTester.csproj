@@ -111,7 +111,7 @@
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="ViewModels\QuestionsViewModels\FilteredComboboxQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\FilteredSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\LinkedMultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\LinkedMultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
