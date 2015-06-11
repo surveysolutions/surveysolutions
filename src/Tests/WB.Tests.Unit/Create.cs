@@ -1621,5 +1621,33 @@ namespace WB.Tests.Unit
         {
             return new AccountDocument() { UserName = userName };
         }
+
+        public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
+            string questionnaireId = null,
+            QuestionnaireActionType? action = null, 
+            Guid? targetId = null, 
+            QuestionnaireItemType? targetType = null,
+            params QuestionnaireChangeReference[] reference)
+        {
+            return new QuestionnaireChangeRecord()
+            {
+                QuestionnaireId = questionnaireId,
+                ActionType = action ?? QuestionnaireActionType.Add,
+                TargetItemId = targetId ?? Guid.NewGuid(),
+                TargetItemType = targetType ?? QuestionnaireItemType.Group,
+                References = reference.ToHashSet()
+            };
+        }
+
+        public static QuestionnaireChangeReference QuestionnaireChangeReference(
+            Guid? referenceId = null,
+            QuestionnaireItemType? referenceType = null)
+        {
+            return new QuestionnaireChangeReference()
+            {
+                ReferenceId = referenceId ?? Guid.NewGuid(),
+                ReferenceType = referenceType ?? QuestionnaireItemType.Group
+            };
+        }
     }
 }
