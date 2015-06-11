@@ -75,139 +75,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.questionnaireStateTackerStorage = questionnaireStateTackerStorage;
         }
 
-        private string GetUserName(Guid? userId)
+        public override object[] Writers
         {
-            if (userId.HasValue)
-            {
-                var creator = accountStorage.GetById(userId);
-                if (creator != null)
-                    return creator.UserName;
-            }
-            return "<<UNKNOWN>>";
+            get { return new object[] { questionnaireChangeItemStorage, questionnaireStateTackerStorage }; }
         }
 
-        private void UpdateFullQuestionnaireState(QuestionnaireDocument questionnaireDocument, Guid questionnaireId, Guid createdBy)
+        public override object[] Readers
         {
-            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
-            if (questionnaireStateTacker == null)
-                questionnaireStateTacker = new QuestionnaireStateTacker() { CreatedBy = createdBy };
-
-            questionnaireStateTacker.GroupsState[questionnaireId] = questionnaireDocument.Title;
-
-            var compositeElements = questionnaireDocument.Find<IComposite>(c=>true);
-            foreach (var compositeElement in compositeElements)
-            {
-                var question = compositeElement as IQuestion;
-                if (question != null)
-                {
-                    questionnaireStateTacker.QuestionsState[question.PublicKey] = CreateTitle(question,
-                        q => q.StataExportCaption, q => q.QuestionText);
-                    continue;
-                }
-                var group = compositeElement as IGroup;
-                if (group != null)
-                {
-                    questionnaireStateTacker.GroupsState[group.PublicKey] = CreateTitle(group,
-                        g => g.VariableName, g => g.Title);
-                    continue;
-                }
-                var staticTexts = compositeElement as IStaticText;
-                if (staticTexts != null)
-                {
-                    questionnaireStateTacker.StaticTextState[staticTexts.PublicKey] = staticTexts.Text;
-                    continue;
-                }
-            }
-            questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
-        }
-
-        private void AddOrUpdateQuestionState(Guid questionnaireId, Guid itemId, string itemTitle)
-        {
-            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
-                (s, id, title) => s.QuestionsState[id] = title);
-        }
-
-        private void AddOrUpdateGroupState(Guid questionnaireId, Guid itemId, string itemTitle)
-        {
-            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
-                (s, id, title) => s.GroupsState[id] = title);
-        }
-
-        private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string itemTitle)
-        {
-            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
-                (s, id, title) => s.StaticTextState[id] = title);
-        }
-
-        private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,
-            Action<QuestionnaireStateTacker, Guid, string> setAction)
-        {
-            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
-
-            setAction(questionnaireStateTacker,itemId,itemTitle);
-
-            questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
-        }
-
-        private void AddQuestionnaireChangeItem(
-            Guid id,
-            Guid questionnaireId,
-            Guid? creatorId,
-            DateTime timestamp,
-            QuestionnaireActionType actionType,
-            QuestionnaireItemType targetType,
-            Guid targetId,
-            string targetTitle,
-            int sequence,
-            params QuestionnaireChangeReference[] references)
-        {
-            var questionnaireChangeItem = new QuestionnaireChangeRecord()
-            {
-                QuestionnaireChangeRecordId = id.FormatGuid(),
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                UserId = creatorId ?? Guid.Empty,
-                UserName = GetUserName(creatorId),
-                Timestamp = timestamp,
-                ActionType = actionType,
-                TargetItemId = targetId,
-                TargetItemTitle = targetTitle,
-                TargetItemType = targetType,
-                Sequence = sequence,
-                References = references.ToHashSet()
-            };
-            questionnaireChangeItemStorage.Store(questionnaireChangeItem,
-                questionnaireChangeItem.QuestionnaireChangeRecordId);
-        }
-
-        private QuestionnaireChangeReference CreateQuestionnaireChangeReference(
-            QuestionnaireItemType referenceType, Guid id, string title)
-        {
-            return new QuestionnaireChangeReference() {ReferenceId = id, ReferenceType = referenceType, ReferenceTitle = title};
-        }
-
-        private string CreateTitle<T>(T target, Func<T, string> getVariableName, Func<T, string> getTitle)
-        {
-            return string.IsNullOrEmpty(getVariableName(target)) ? getTitle(target) : getVariableName(target);
-        }
-
-        private string CreateGroupTitleFromEvent(FullGroupDataEvent evnt)
-        {
-            return CreateTitle(evnt, q => q.VariableName, q => q.GroupText);
-        }
-
-        private string CreateQuestionTitleFromEvent(AbstractQuestionDataEvent evnt)
-        {
-            return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
-        }
-
-        private string CreateQuestionTitleFromEvent(AbstractQuestionUpdated evnt)
-        {
-            return CreateTitle(evnt, q => q.VariableName, q => q.Title);
-        }
-
-        private string CreateQuestionTitleFromEvent(AbstractListQuestionDataEvent evnt)
-        {
-            return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
+            get { return new object[] { accountStorage }; }
         }
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -227,7 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             UpdateFullQuestionnaireState(evnt.Payload.QuestionnaireDocument, evnt.EventSourceId, creatorId);
 
-#warning don't remove this line, it is here because clone event had been risen incorrectly for some time. ClonedFromQuestionnaireId were set as EventSourceId, but should be Id of the colned questionnaire
+#warning don't remove this line, it is here because clone event had been risen incorrectly for some time. ClonedFromQuestionnaireId were set equal EventSourceId, but should be Id of the colned questionnaire
             if (evnt.Payload.ClonedFromQuestionnaireId == evnt.EventSourceId)
             {
                 AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, creatorId, evnt.EventTimeStamp,
@@ -242,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     QuestionnaireActionType.Clone, QuestionnaireItemType.Questionnaire,
                     evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.EventSequence,
                     CreateQuestionnaireChangeReference(QuestionnaireItemType.Questionnaire,
-                        evnt.Payload.ClonedFromQuestionnaireId, questionnaire.GroupsState[evnt.EventSourceId]));
+                        evnt.Payload.ClonedFromQuestionnaireId, questionnaire.GroupsState[evnt.Payload.ClonedFromQuestionnaireId]));
             }
         }
 
@@ -264,6 +139,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, questionnaire.CreatedBy, evnt.EventTimeStamp,
                 QuestionnaireActionType.Delete, QuestionnaireItemType.Questionnaire,
                 evnt.EventSourceId, questionnaire.GroupsState[evnt.EventSourceId], evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
+        {
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Update, QuestionnaireItemType.Questionnaire, evnt.EventSourceId,
+                evnt.Payload.Title, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<SharedPersonToQuestionnaireAdded> evnt)
@@ -300,70 +182,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 groupTitle, evnt.EventSequence,
                 CreateQuestionnaireChangeReference(QuestionnaireItemType.Group, evnt.Payload.SourceGroupId,
                     groupTitle));
-        }
-
-        public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
-        public void Handle(IPublishedEvent<QuestionCloned> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Clone, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence,
-                CreateQuestionnaireChangeReference(QuestionnaireItemType.Question,
-                    evnt.Payload.SourceQuestionId, questionTitle));
-        }
-
-        public void Handle(IPublishedEvent<QuestionChanged> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Update, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Clone, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence,
-                CreateQuestionnaireChangeReference(QuestionnaireItemType.Question,
-                    evnt.Payload.SourceQuestionId, questionTitle));
-        }
-
-        public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Update, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<GroupUpdated> evnt)
@@ -406,15 +224,96 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 groupTitle, evnt.EventSequence);
         }
 
-        public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
+        public void Handle(IPublishedEvent<GroupDeleted> evnt)
         {
+            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+            var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupPublicKey];
+
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Update, QuestionnaireItemType.Questionnaire, evnt.EventSourceId,
-                evnt.Payload.Title, evnt.EventSequence);
+                QuestionnaireActionType.Delete, QuestionnaireItemType.Group, evnt.Payload.GroupPublicKey,
+                groupTitle, evnt.EventSequence);
+
+            questionnaire.GroupsState.Remove(evnt.Payload.GroupPublicKey);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
-        public void Handle(
-            IPublishedEvent<TextListQuestionAdded> evnt)
+        public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
+        {
+            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
+            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
+                questionTitle, evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<QuestionCloned> evnt)
+        {
+            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
+            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Clone, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
+                questionTitle, evnt.EventSequence,
+                CreateQuestionnaireChangeReference(QuestionnaireItemType.Question,
+                    evnt.Payload.SourceQuestionId, questionTitle));
+        }
+
+        public void Handle(IPublishedEvent<QuestionChanged> evnt)
+        {
+            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
+            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Update, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
+                questionTitle, evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<QuestionDeleted> evnt)
+        {
+            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+            var questionTitle = questionnaire.QuestionsState[evnt.Payload.QuestionId];
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Delete, QuestionnaireItemType.Question, evnt.Payload.QuestionId, questionTitle, evnt.EventSequence);
+
+            questionnaire.QuestionsState.Remove(evnt.Payload.QuestionId);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
+        {
+            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
+            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
+                questionTitle, evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
+        {
+            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
+            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Clone, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
+                questionTitle, evnt.EventSequence,
+                CreateQuestionnaireChangeReference(QuestionnaireItemType.Question,
+                    evnt.Payload.SourceQuestionId, questionTitle));
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
+        {
+            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
+            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Update, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
+                questionTitle, evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
         {
             var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
             AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
@@ -534,31 +433,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
-        public void Handle(IPublishedEvent<GroupDeleted> evnt)
-        {
-            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupPublicKey];
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Delete, QuestionnaireItemType.Group, evnt.Payload.GroupPublicKey,
-                groupTitle, evnt.EventSequence);
-
-            questionnaire.GroupsState.Remove(evnt.Payload.GroupPublicKey);
-            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<QuestionDeleted> evnt)
-        {
-            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var questionTitle = questionnaire.QuestionsState[evnt.Payload.QuestionId];
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-               QuestionnaireActionType.Delete, QuestionnaireItemType.Question, evnt.Payload.QuestionId, questionTitle, evnt.EventSequence);
-
-             questionnaire.QuestionsState.Remove(evnt.Payload.QuestionId);
-             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
-        }
-
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
@@ -567,7 +441,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             if (questionnaire.QuestionsState.ContainsKey(evnt.Payload.PublicKey))
             {
-                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
+                    evnt.EventTimeStamp,
                     QuestionnaireActionType.Move, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
                     questionnaire.QuestionsState[evnt.Payload.PublicKey], evnt.EventSequence,
                     CreateQuestionnaireChangeReference(QuestionnaireItemType.Group,
@@ -576,7 +451,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
             if (questionnaire.GroupsState.ContainsKey(evnt.Payload.PublicKey))
             {
-                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
+                    evnt.EventTimeStamp,
                     QuestionnaireActionType.Move, QuestionnaireItemType.Group, evnt.Payload.PublicKey,
                     questionnaire.GroupsState[evnt.Payload.PublicKey], evnt.EventSequence,
                     CreateQuestionnaireChangeReference(QuestionnaireItemType.Group,
@@ -585,22 +461,149 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
             if (questionnaire.StaticTextState.ContainsKey(evnt.Payload.PublicKey))
             {
-                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                    QuestionnaireActionType.Move, QuestionnaireItemType.Group, evnt.Payload.PublicKey,
+                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
+                    evnt.EventTimeStamp,
+                    QuestionnaireActionType.Move, QuestionnaireItemType.StaticText, evnt.Payload.PublicKey,
                     questionnaire.StaticTextState[evnt.Payload.PublicKey], evnt.EventSequence,
                     CreateQuestionnaireChangeReference(QuestionnaireItemType.Group,
                         targetGroupId, questionnaire.GroupsState[targetGroupId]));
             }
         }
 
-        public override object[] Writers
+        private string GetUserName(Guid? userId)
         {
-            get { return new object[] { questionnaireChangeItemStorage, questionnaireStateTackerStorage }; }
+            if (userId.HasValue)
+            {
+                var creator = accountStorage.GetById(userId);
+                if (creator != null)
+                    return creator.UserName;
+            }
+            return "<<UNKNOWN>>";
         }
 
-        public override object[] Readers
+        private void UpdateFullQuestionnaireState(QuestionnaireDocument questionnaireDocument, Guid questionnaireId, Guid createdBy)
         {
-            get { return new object[] {accountStorage}; }
+            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
+            if (questionnaireStateTacker == null)
+                questionnaireStateTacker = new QuestionnaireStateTacker() { CreatedBy = createdBy };
+
+            questionnaireStateTacker.GroupsState[questionnaireId] = questionnaireDocument.Title;
+
+            var compositeElements = questionnaireDocument.Find<IComposite>(c => true);
+            foreach (var compositeElement in compositeElements)
+            {
+                var question = compositeElement as IQuestion;
+                if (question != null)
+                {
+                    questionnaireStateTacker.QuestionsState[question.PublicKey] = CreateTitle(question,
+                        q => q.StataExportCaption, q => q.QuestionText);
+                    continue;
+                }
+                var group = compositeElement as IGroup;
+                if (group != null)
+                {
+                    questionnaireStateTacker.GroupsState[group.PublicKey] = CreateTitle(group,
+                        g => g.VariableName, g => g.Title);
+                    continue;
+                }
+                var staticTexts = compositeElement as IStaticText;
+                if (staticTexts != null)
+                {
+                    questionnaireStateTacker.StaticTextState[staticTexts.PublicKey] = staticTexts.Text;
+                    continue;
+                }
+            }
+            questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
         }
+
+        private void AddOrUpdateQuestionState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.QuestionsState[id] = title);
+        }
+
+        private void AddOrUpdateGroupState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.GroupsState[id] = title);
+        }
+
+        private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.StaticTextState[id] = title);
+        }
+
+        private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,
+            Action<QuestionnaireStateTacker, Guid, string> setAction)
+        {
+            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
+
+            setAction(questionnaireStateTacker, itemId, itemTitle);
+
+            questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
+        }
+
+        private void AddQuestionnaireChangeItem(
+            Guid id,
+            Guid questionnaireId,
+            Guid? creatorId,
+            DateTime timestamp,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string targetTitle,
+            int sequence,
+            params QuestionnaireChangeReference[] references)
+        {
+            var questionnaireChangeItem = new QuestionnaireChangeRecord()
+            {
+                QuestionnaireChangeRecordId = id.FormatGuid(),
+                QuestionnaireId = questionnaireId.FormatGuid(),
+                UserId = creatorId ?? Guid.Empty,
+                UserName = GetUserName(creatorId),
+                Timestamp = timestamp,
+                ActionType = actionType,
+                TargetItemId = targetId,
+                TargetItemTitle = targetTitle,
+                TargetItemType = targetType,
+                Sequence = sequence,
+                References = references.ToHashSet()
+            };
+            questionnaireChangeItemStorage.Store(questionnaireChangeItem,
+                questionnaireChangeItem.QuestionnaireChangeRecordId);
+        }
+
+        private QuestionnaireChangeReference CreateQuestionnaireChangeReference(
+            QuestionnaireItemType referenceType, Guid id, string title)
+        {
+            return new QuestionnaireChangeReference() { ReferenceId = id, ReferenceType = referenceType, ReferenceTitle = title };
+        }
+
+        private string CreateTitle<T>(T target, Func<T, string> getVariableName, Func<T, string> getTitle)
+        {
+            return string.IsNullOrEmpty(getVariableName(target)) ? getTitle(target) : getVariableName(target);
+        }
+
+        private string CreateGroupTitleFromEvent(FullGroupDataEvent evnt)
+        {
+            return CreateTitle(evnt, q => q.VariableName, q => q.GroupText);
+        }
+
+        private string CreateQuestionTitleFromEvent(AbstractQuestionDataEvent evnt)
+        {
+            return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
+        }
+
+        private string CreateQuestionTitleFromEvent(AbstractQuestionUpdated evnt)
+        {
+            return CreateTitle(evnt, q => q.VariableName, q => q.Title);
+        }
+
+        private string CreateQuestionTitleFromEvent(AbstractListQuestionDataEvent evnt)
+        {
+            return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
+        }
+
     }
 }
