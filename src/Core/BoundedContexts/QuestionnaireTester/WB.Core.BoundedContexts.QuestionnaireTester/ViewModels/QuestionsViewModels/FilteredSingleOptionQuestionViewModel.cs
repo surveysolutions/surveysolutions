@@ -111,10 +111,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 {
                     this.answer = value;
                     this.RaisePropertyChanged();
-
-                    SendAnswerFilteredComboboxQuestionCommand();
                 }
             }
+        }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerFilteredComboboxQuestionCommand)); }
         }
 
         private FilteredComboboxItemViewModel selectedObject;

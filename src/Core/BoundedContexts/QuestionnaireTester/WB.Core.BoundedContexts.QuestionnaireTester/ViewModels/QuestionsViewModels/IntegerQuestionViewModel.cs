@@ -44,11 +44,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 {
                     answerAsString = value;
                     RaisePropertyChanged();
-
-                    this.SendAnswerIntegerQuestionCommand();
                 }
             }
         }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerIntegerQuestionCommand)); }
+        }
+
 
         public IntegerQuestionViewModel(
             IPrincipal principal,

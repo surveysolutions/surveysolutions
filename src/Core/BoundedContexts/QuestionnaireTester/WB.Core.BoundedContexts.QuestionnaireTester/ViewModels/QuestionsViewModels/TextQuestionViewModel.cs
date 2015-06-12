@@ -80,14 +80,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return answer; }
             set
             {
-                if (Answer != value)
+                if (answer != value)
                 {
                     answer = value;
                     RaisePropertyChanged();
-
-                    SendAnswerTextQuestionCommand();
                 }
             }
+        }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
         }
 
         private async void SendAnswerTextQuestionCommand()
