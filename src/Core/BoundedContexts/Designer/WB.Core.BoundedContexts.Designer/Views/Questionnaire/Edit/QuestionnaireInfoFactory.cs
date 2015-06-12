@@ -252,13 +252,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 .Select(x => x.VariableName)
                 .ToList();
 
-            var allReferencedQuestions = questionnaire.Questions
+            var allReferencedQuestionsByExpressions = questionnaire.Questions
                 .Where(x => !x.ParentGroupsIds.Contains(id))
                 .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || !string.IsNullOrEmpty(x.ValidationExpression))
                 .Where(x => this.expressionProcessor.GetIdentifiersUsedInExpression(x.EnablementCondition).Any(v => variablesToBeDeleted.Contains(v))
                          || this.expressionProcessor.GetIdentifiersUsedInExpression(x.ValidationExpression).Any(v => variablesToBeDeleted.Contains(v)));
 
-            return allReferencedQuestions.Select(x => new QuestionnaireItemLink
+            var singleQuestionIdsToBeDeleted = questionnaire.Questions
+                .Where(x => x.ParentGroupsIds.Contains(id))
+                .Where(x => x.Type == QuestionType.SingleOption)
+                .Select(x => x.Id)
+                .ToList();
+
+            var allCascadingDependentOutsideQestions = questionnaire.Questions
+                .OfType<SingleOptionDetailsView>()
+                .Where(x => !x.ParentGroupsIds.Contains(id))
+                .Where(x => x.Type == QuestionType.SingleOption)
+                .Where(x => x.CascadeFromQuestionId != null && singleQuestionIdsToBeDeleted.Contains(x.CascadeFromQuestionId.Value));
+
+
+            var allQuestions = allReferencedQuestionsByExpressions.Concat(allCascadingDependentOutsideQestions);
+            return allQuestions.Select(x => new QuestionnaireItemLink
                                                       {
                                                           Id = x.Id.FormatGuid(),
                                                           ChapterId = x.ParentGroupsIds.Last().FormatGuid(),
