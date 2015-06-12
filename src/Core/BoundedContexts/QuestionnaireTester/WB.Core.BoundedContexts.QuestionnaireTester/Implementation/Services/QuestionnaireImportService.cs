@@ -220,7 +220,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                                 {
                                     CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId.Value,
                                     RosterLevelDeepOfParentQuestion = 0,
-                                    Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+                                    Options = singleQuestion.Answers.Select(ToCascadingOptionModel).ToList(),
 
                                 };
                             }
@@ -312,6 +312,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             {
                 Value = decimal.Parse(answer.AnswerValue, CultureInfo.InvariantCulture),
                 Title = answer.AnswerText,
+            };
+        }
+
+        private static CascadingOptionModel ToCascadingOptionModel(Answer answer)
+        {
+            return new CascadingOptionModel
+            {
+                Value = decimal.Parse(answer.AnswerValue, CultureInfo.InvariantCulture),
+                Title = answer.AnswerText,
+                ParentValue = decimal.Parse(answer.ParentValue, CultureInfo.InvariantCulture),
             };
         }
     }

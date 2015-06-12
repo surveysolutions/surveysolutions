@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -17,12 +18,16 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel,
+         ILiteEventHandler<SingleOptionQuestionAnswered>,
+         ILiteEventHandler<AnswersRemoved>
     {
         public class CascadingComboboxItemViewModel 
         {
             public string Text { get; set; }
             public decimal Value { get; set; }
+            public decimal ParentValue { get; set; }
         }
 
         private readonly IPrincipal principal;
@@ -37,14 +42,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
         public IList<CascadingComboboxItemViewModel> Options { get; set; }
-
+        private readonly ILiteEventRegistry eventRegistry;
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            ILiteEventRegistry eventRegistry)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
@@ -56,6 +62,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.eventRegistry = eventRegistry;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -92,14 +99,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var selectedValue = answerModel.Answer;
                 SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
             }
+
+            this.eventRegistry.Subscribe(this);
         }
 
-        private CascadingComboboxItemViewModel ToViewModel(OptionModel model)
+        private CascadingComboboxItemViewModel ToViewModel(CascadingOptionModel model)
         {
             var optionViewModel = new CascadingComboboxItemViewModel
             {
                 Text = model.Title,
-                Value = model.Value
+                Value = model.Value,
+                ParentValue = model.ParentValue
             };
 
             return optionViewModel;
@@ -170,9 +180,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private IEnumerable<CascadingComboboxItemViewModel> GetSuggestionsList(string textHint)
         {
+            if (!answerOnParentQuestion.HasValue) 
+                yield break;
+
             var upperTextHint = textHint.ToUpper();
 
-            foreach (var model in Options)
+            foreach (var model in Options.Where(x => x.ParentValue == answerOnParentQuestion.Value))
             {
                 if (model.Text.IsNullOrEmpty())
                     continue;
@@ -185,7 +198,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     yield return new CascadingComboboxItemViewModel
                     {
                         Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
-                        Value = model.Value
+                        Value = model.Value,
+                        ParentValue = model.ParentValue
                     };
                 }
             }
@@ -197,8 +211,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private List<CascadingComboboxItemViewModel> autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
-
-
 
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
         {
@@ -242,6 +254,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        public void Handle(SingleOptionQuestionAnswered @event)
+        {
+            if (@event.QuestionId == parentQuestionIdentity.Id
+                && @event.PropagationVector.SequenceEqual(parentQuestionIdentity.RosterVector))
+            {
+                var interview = this.interviewRepository.Get(interviewId.FormatGuid());
+                var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
+                if (parentAnswerModel != null)
+                {
+                    answerOnParentQuestion = parentAnswerModel.Answer;
+                }              
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (question.Id == questionIdentity.Id && question.RosterVector.SequenceEqual(questionIdentity.RosterVector))
+                {
+                    SelectedObject = null;
+                }
             }
         }
     }

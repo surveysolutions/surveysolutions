@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Qu
 {
     public class CascadingSingleOptionQuestionModel : BaseQuestionModel
     {
-        public List<OptionModel> Options { get; set; }
+        public List<CascadingOptionModel> Options { get; set; }
 
         public Guid CascadeFromQuestionId { get; set; }
 
