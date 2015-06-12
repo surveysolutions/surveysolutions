@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
@@ -1631,6 +1632,11 @@ namespace WB.Tests.Unit
             return new SubstitutionService();
         }
 
+        public static IAnswerToStringService AnswerToStringService()
+        {
+            return new AnswerToStringService();
+        }
+
         public static QuestionnaireModel QuestionnaireModel()
         {
             return new QuestionnaireModel();
@@ -1644,6 +1650,17 @@ namespace WB.Tests.Unit
         public static NavigationState NavigationState()
         {
             return new NavigationState();
+        }
+
+        public static MaskedTextAnswer MasedMaskedTextAnswer(string answer = null, Guid? questionId = null, decimal[] rosterVector = null)
+        {
+            var masedMaskedTextAnswer = new MaskedTextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
+            if (answer != null)
+            {
+                masedMaskedTextAnswer.SetAnswer(answer);
+            }
+
+            return masedMaskedTextAnswer;
         }
     }
 }
