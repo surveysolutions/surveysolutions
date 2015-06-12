@@ -98,7 +98,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
             foreach (var variable in variablesToReplace)
             {
-
                 BaseQuestionModel substitutedQuestionModel = questionnaire.QuestionsByVariableNames[variable];
 
                 var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionModel.Id, this.questionIdentity.RosterVector);

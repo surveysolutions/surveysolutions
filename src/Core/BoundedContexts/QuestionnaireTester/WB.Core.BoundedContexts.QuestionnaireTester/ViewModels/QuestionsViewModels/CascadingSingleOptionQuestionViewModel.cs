@@ -30,10 +30,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private Identity questionIdentity;
+        private Identity parentQuestionIdentity;
         private Guid interviewId;
+        private decimal? answerOnParentQuestion = null;
+
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
         public IList<CascadingComboboxItemViewModel> Options { get; set; }
+
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -69,6 +73,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
+            var parentRosterVector = entityIdentity.RosterVector.Take(questionModel.RosterLevelDeepOfParentQuestion).ToArray();
+            this.parentQuestionIdentity = new Identity(questionModel.CascadeFromQuestionId, parentRosterVector);
+
+            var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
+            if (parentAnswerModel != null)
+            {
+                answerOnParentQuestion = parentAnswerModel.Answer;
+            }
+
             this.Options = questionModel
                 .Options
                 .Select(this.ToViewModel)
@@ -96,7 +109,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string Answer
         {
             get { return this.answer; }
-            set 
+            set
             {
                 if (answer != value)
                 {
@@ -184,6 +197,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private List<CascadingComboboxItemViewModel> autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
+
+
+
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
         {
             get

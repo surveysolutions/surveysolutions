@@ -54,17 +54,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionnaireModel.Id = questionnaireDocument.PublicKey;
             questionnaireModel.Title = questionnaireDocument.Title;
             questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
-            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument));
+
+            var questionIdToRosterLevelDeep = new Dictionary<Guid, int>();
+            questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDeep));
+
+            questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
+            
+            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDeep));
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
                 .ToList();
-            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
-            
-            questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x));
 
-            questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
-            questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => CreateQuestionModel(x, questionnaireDocument));
+            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
+
+            questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => questionnaireModel.Questions[x.PublicKey]);
 
             questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
 
@@ -87,7 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             };
         }
 
-        private void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item)
+        private void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item, Dictionary<Guid, int> questionIdToRosterLevelDeep)
         {
             var parents = new List<GroupReferenceModel>();
 
@@ -126,6 +130,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 questionnaireModel.QuestionsNearestRosterIdMap.Add(
                     item.PublicKey,
                     closestRosterReference == null ? (Guid?)null : closestRosterReference.Id);
+                questionIdToRosterLevelDeep.Add(item.PublicKey, countOfRostersToTop);
             }
         }
 
@@ -180,7 +185,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         }
 
 
-        private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument)
+        private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument, Dictionary<Guid, int> questionIdToRosterLevelDeep)
         {
             BaseQuestionModel questionModel;
             
@@ -207,13 +212,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                                 Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
                             };
                         }
-                        else
+                        else 
                         {
-                            questionModel = new CascadingSingleOptionQuestionModel
+                            if (singleQuestion.CascadeFromQuestionId.HasValue)
                             {
-                                CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
-                                Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
-                            };
+                                questionModel = new CascadingSingleOptionQuestionModel
+                                {
+                                    CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId.Value,
+                                    RosterLevelDeepOfParentQuestion = 0,
+                                    Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+
+                                };
+                            }
+                            else
+                            {
+                                questionModel = new SingleOptionQuestionModel
+                                {
+                                    Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
+                                };
+                            }
                         }
                     }
                     break;
