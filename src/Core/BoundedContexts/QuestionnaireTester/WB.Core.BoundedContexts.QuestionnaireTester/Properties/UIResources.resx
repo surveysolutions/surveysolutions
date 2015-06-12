@@ -178,7 +178,7 @@
     <value>Downloading questionnaire -  {0}%</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>You don't have permissions to look this questionnaire</value>
+    <value>You don't have permission to access this questionnaire</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Requested questionnaire is no longer available</value>
@@ -402,7 +402,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to enter new item</value>
   </data>
   <data name="Interview_Question_Text_MaskError" xml:space="preserve">
-    <value>Please fill answer text fully</value>
+    <value>Please, fill in all the required values</value>
   </data>
   <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
     <value>Tap to enter text</value>
