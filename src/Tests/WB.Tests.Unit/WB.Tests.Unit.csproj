@@ -317,7 +317,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\QuestionnaireChangeHistoryDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_new_questionnaire_created.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_deleted.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_group_became_a_roster_is_posted_for_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_group_is_changing.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_group_stop_being_roster_is_posted_for_group.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_imported.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_item_is_moving.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryDenormalizerTests\when_questionnaire_question_is_changing.cs" />
