@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -1633,6 +1634,16 @@ namespace WB.Tests.Unit
         public static QuestionnaireModel QuestionnaireModel()
         {
             return new QuestionnaireModel();
+        }
+
+        public static MultiOptionAnswer MultiOptionAnswer(Guid questionId, decimal[] rosterVector)
+        {
+            return new MultiOptionAnswer(questionId, rosterVector);
+        }
+
+        public static NavigationState NavigationState()
+        {
+            return new NavigationState();
         }
     }
 }
