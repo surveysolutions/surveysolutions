@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    public class when_entering_filter_text_equals_to_ones_from_options : FilteredSingleOptionQuestionViewModelTestsContext
+    public class when_initing_view_model : FilteredSingleOptionQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
@@ -63,24 +63,30 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            var navigationState = CreateNavigationState();
-            viewModel.Init(interviewId, questionIdentity, navigationState);
+            navigationState = CreateNavigationState();
         };
 
         private Because of = () =>
-            viewModel.FilterText = "bba";
+            viewModel.Init(interviewId, questionIdentity, navigationState);
 
-        It should_update_suggestions_list = () =>
-            viewModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
+        It should_set_to_answer_backend_value = () =>
+            viewModel.Answer.ShouldEqual("bbc");
 
-        It should_send_save_answer_command = () =>
-            answeringViewModelMock.Verify(
-                a => a.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerQuestionCommand>()), 
-                Times.AtLeastOnce);
+        It should_set_to_options_all_values = () =>
+        {
+            viewModel.Options.Count.ShouldEqual(5);
+            viewModel.Options.ShouldContain(i => i.Value == 1);
+            viewModel.Options.ShouldContain(i => i.Value == 2);
+            viewModel.Options.ShouldContain(i => i.Value == 3);
+            viewModel.Options.ShouldContain(i => i.Value == 4);
+            viewModel.Options.ShouldContain(i => i.Value == 5);
+        };
+
 
 
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
+        private static NavigationState navigationState;
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
         private static Mock<AnsweringViewModel> answeringViewModelMock;
         private static Identity questionIdentity;

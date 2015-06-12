@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (answerModel != null)
             {
                 var selectedValue = answerModel.Answer;
-                SelectedObject = Options.Single(i => i.Value == selectedValue);
+                SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
             }
         }
 
