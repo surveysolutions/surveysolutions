@@ -46,8 +46,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
 
-            this.Bind<IInterviewPreconditionsService>().To<DummyPreconditionsService>();
-
             if (this.usePlainQuestionnaireRepository)
             {
                 this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
