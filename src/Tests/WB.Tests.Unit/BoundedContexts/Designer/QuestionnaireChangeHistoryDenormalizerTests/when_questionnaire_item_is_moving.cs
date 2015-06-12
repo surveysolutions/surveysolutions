@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
             questionnaireStateTacker.GroupsState.Add(Guid.Parse(questionnaireId), "");
             questionnaireStateTacker.GroupsState.Add(Guid.Parse(groupId), "");
             questionnaireStateTacker.QuestionsState.Add(Guid.Parse(questionId), "");
+            questionnaireStateTacker.RosterState.Add(Guid.Parse(rosterId), "");
             questionnaireStateTackerStorage =
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTacker>>(
                     _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireStateTacker);
@@ -36,10 +37,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(staticTextId, questionnaireId: questionnaireId));
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(groupId, questionnaireId: questionnaireId));
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(questionId, questionnaireId: questionnaireId));
+            questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireItemMovedEvent(rosterId, questionnaireId: questionnaireId));
         };
 
-        It should_store_3_changes = () =>
-           GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(3);
+        It should_store_4_changes = () =>
+           GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(4);
 
         It should_store_first_change_for_static_text = () =>
             GetAllRecords(questionnaireChangeRecordStorage)[0].TargetItemType.ShouldEqual(QuestionnaireItemType.StaticText);
@@ -50,11 +52,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         It should_store_third_change_for_question = () =>
            GetAllRecords(questionnaireChangeRecordStorage)[2].TargetItemType.ShouldEqual(QuestionnaireItemType.Question);
 
+        It should_store_fourth_change_for_roster = () =>
+           GetAllRecords(questionnaireChangeRecordStorage)[3].TargetItemType.ShouldEqual(QuestionnaireItemType.Roster);
+
         private static QuestionnaireChangeHistoryDenormalizer questionnaireChangeHistoryDenormalizer;
         private static string staticTextId = "11111111111111111111111111111111";
         private static string groupId = "22222222222222222222222222222222";
         private static string questionId = "33333333333333333333333333333333";
         private static string questionnaireId = "44444444444444444444444444444444";
+        private static string rosterId = "55555555555555555555555555555555";
 
         private static IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTackerStorage;
         private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;

@@ -39,15 +39,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         };
 
         It should_store_7_changes = () =>
-           GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(7);
+            GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(7);
 
-        It should_store_5_change_records_with_target_type_equal_to_group = () =>
-            GetAllRecords(questionnaireChangeRecordStorage).Count(r => r.TargetItemType == QuestionnaireItemType.Group)
-                .ShouldEqual(5);
+        It should_store_first_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[0].TargetItemType.ShouldEqual(QuestionnaireItemType.Group);
 
-        It should_store_2_change_records_with_target_type_equal_to_roster = () =>
-           GetAllRecords(questionnaireChangeRecordStorage).Count(r => r.TargetItemType == QuestionnaireItemType.Roster)
-               .ShouldEqual(2);
+        It should_store_second_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[1].TargetItemType.ShouldEqual(QuestionnaireItemType.Group);
+
+        It should_store_third_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[2].TargetItemType.ShouldEqual(QuestionnaireItemType.Group);
+
+        It should_store_forth_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[3].TargetItemType.ShouldEqual(QuestionnaireItemType.Group);
+
+        It should_store_fifth_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[4].TargetItemType.ShouldEqual(QuestionnaireItemType.Roster);
+
+        It should_store_six_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[5].TargetItemType.ShouldEqual(QuestionnaireItemType.Roster);
+
+        It should_store_seventh_change_record_with_target_type_equal_to_group = () =>
+            GetAllRecords(questionnaireChangeRecordStorage)[6].TargetItemType.ShouldEqual(QuestionnaireItemType.Group);
 
         private static QuestionnaireChangeHistoryDenormalizer questionnaireChangeHistoryDenormalizer;
         private static string groupId = "11111111111111111111111111111111";
