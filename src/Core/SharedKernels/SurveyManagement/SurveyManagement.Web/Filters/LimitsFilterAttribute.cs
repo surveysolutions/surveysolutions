@@ -1,19 +1,21 @@
 ﻿
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
     public class LimitsFilterAttribute : ActionFilterAttribute
     {
-        private readonly IInterviewPreconditionsService interviewPreconditionsService;
-
-        public LimitsFilterAttribute()
+        private IInterviewPreconditionsService InterviewPreconditionsService
         {
-            //this.interviewPreconditionsService = ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); ;
-            this.interviewPreconditionsService = new DummyPreconditionsService();
+            get { return ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); }
+        }
+
+        private ITransactionManagerProvider TransactionManagerProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -21,16 +23,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             var viewResult = filterContext.Result as ViewResult;
             if (viewResult != null)
             {
-                var mxAllowedInterviewsCount = interviewPreconditionsService.GetMaxAllowedInterviewsCount();
+                var shouldUseOwnTransaction = !TransactionManagerProvider.GetTransactionManager().IsQueryTransactionStarted;
 
-                viewResult.ViewBag.ShowLimitIndicator = mxAllowedInterviewsCount.HasValue;
-
-                if (mxAllowedInterviewsCount.HasValue)
+                if (shouldUseOwnTransaction)
                 {
-                    var limit = mxAllowedInterviewsCount.Value;
-                    var interviewsLeft = interviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached();
-                    viewResult.ViewBag.InterviewsLeft = interviewsLeft;
-                    viewResult.ViewBag.PayAttention = interviewsLeft <= (limit / 10);
+                    this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                }
+                try
+                {
+                    var mxAllowedInterviewsCount = InterviewPreconditionsService.GetMaxAllowedInterviewsCount();
+
+                    viewResult.ViewBag.ShowInterviewLimitIndicator = mxAllowedInterviewsCount.HasValue;
+
+                    if (mxAllowedInterviewsCount.HasValue)
+                    {
+                        var limit = mxAllowedInterviewsCount.Value;
+                        var interviewsLeft =
+                            InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached();
+                        viewResult.ViewBag.InterviewsCountAllowedToCreateUntilLimitReached = interviewsLeft;
+                        viewResult.ViewBag.PayAttentionOnInterviewLimitIndicator = interviewsLeft <= (limit/10);
+                    }
+                }
+                finally
+                {
+                    if (shouldUseOwnTransaction)
+                    {
+                        this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                    }
                 }
             }
             base.OnActionExecuted(filterContext);

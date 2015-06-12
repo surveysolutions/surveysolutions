@@ -1,7 +1,7 @@
-﻿@if (ViewBag.ShowLimitIndicator)
+﻿@if (ViewBag.ShowInterviewLimitIndicator)
 {
-    <li class='dropdown active @(ViewBag.PayAttention ? "open" : "")'>
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style='background: @(ViewBag.PayAttention ? "red" : "#ffa500")'>
+    <li class='dropdown active @(ViewBag.PayAttentionOnInterviewLimitIndicator ? "open" : "")'>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style='background: @(ViewBag.PayAttentionOnInterviewLimitIndicator ? "red" : "#ffa500")'>
             <i class="glyphicon glyphicon-warning-sign"></i>
         </a>
         <ul class="dropdown-menu">
@@ -9,7 +9,7 @@
                 <a href="#"><b>You are in TESTING MODE</b></a>
             </li>
             <li>
-                <a href="#">You can create @ViewBag.InterviewsLeft new interview(s)</a>
+                <a href="#">You can create @ViewBag.InterviewsCountAllowedToCreateUntilLimitReached new interview(s)</a>
             </li>
         </ul>
     </li>
