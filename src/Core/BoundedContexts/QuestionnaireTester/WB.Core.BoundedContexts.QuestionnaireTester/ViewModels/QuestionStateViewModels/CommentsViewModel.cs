@@ -78,15 +78,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                 {
                     interviewerComment = value;
                     RaisePropertyChanged();
-
-                    SendCommentQuestionCommand();
-                }
-                else
-                {
-                    IsCommentInEditMode = false;
                 }
             }
         }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand InterviewerCommentChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendCommentQuestionCommand)); }
+        }
+
 
         private IMvxCommand showCommentEditorCommand;
         public IMvxCommand ShowCommentEditorCommand

@@ -23,16 +23,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
             set
             {
-                try
-                {
-                    this.title = value;
-                    this.OnItemEdited();
-                }
-                finally
-                {
-                    this.RaisePropertyChanged();
-                }
+                this.title = value;
+                this.RaisePropertyChanged();
             }
+        }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(OnItemEdited)); }
         }
 
         public IMvxCommand DeleteListItemCommand

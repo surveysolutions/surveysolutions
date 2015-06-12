@@ -20,19 +20,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             set
             {
-                try
+                if (value)
                 {
-                    if (value == true)
-                    {
-                        this.OnBeforeSelected();
-                    }
+                    this.OnBeforeSelected();
+                }
 
-                    this.selected = value;
-                }
-                finally
-                {
-                    this.RaisePropertyChanged();
-                }
+                this.selected = value;
+                this.RaisePropertyChanged();
             }
         }
 
