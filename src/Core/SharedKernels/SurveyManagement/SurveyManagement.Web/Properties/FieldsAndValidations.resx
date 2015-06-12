@@ -160,7 +160,7 @@
     <value>Invalid user</value>
   </data>
   <data name="PersonNameFieldName" xml:space="preserve">
-    <value>Person name</value>
+    <value>Full name</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Phone number</value>
