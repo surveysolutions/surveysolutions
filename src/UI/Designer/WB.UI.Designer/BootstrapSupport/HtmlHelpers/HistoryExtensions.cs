@@ -51,8 +51,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
             var url =
                 urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
-                    chapterId.FormatGuid(), itemId.FormatGuid(), type.ToString().ToLower()));
-            return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, quatedTitle));
+                    chapterId.FormatGuid(), itemId.FormatGuid(), GetQuestionnaireItemTypeStringRepresentationForLink(type)));
+            return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, helper.Encode(quatedTitle)));
         }
 
         private static string GetActionStringRepresentations(QuestionnaireActionType actionType,
@@ -91,6 +91,22 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         private static string GetStringRepresentation(string type)
         {
             return new ResourceManager(typeof(QuestionnaireHistory)).GetString(type);
+        }
+
+        private static string GetQuestionnaireItemTypeStringRepresentationForLink(QuestionnaireItemType type)
+        {
+            switch (type)
+            {
+                case QuestionnaireItemType.Group:
+                    return "group";
+                case QuestionnaireItemType.Question:
+                    return "question";
+                case QuestionnaireItemType.Roster:
+                    return "roster";
+                    case QuestionnaireItemType.StaticText:
+                    return "static-text";
+            }
+            return string.Empty;
         }
     }
 }

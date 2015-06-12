@@ -478,7 +478,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 if (creator != null)
                     return creator.UserName;
             }
-            return "<<UNKNOWN>>";
+            return null;
         }
 
         private void UpdateFullQuestionnaireState(QuestionnaireDocument questionnaireDocument, Guid questionnaireId, Guid createdBy)
