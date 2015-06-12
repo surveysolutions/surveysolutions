@@ -509,6 +509,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
             var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
 
+            if (parentQuestion == null)
+                return childQuestion.ConditionExpression;
+
             string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
                 ? ""
                 : string.Format(" && {0}", childQuestion.ConditionExpression));

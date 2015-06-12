@@ -331,7 +331,7 @@
     <value>Question should have deeper or the same level as it's parent question.</value>
   </data>
   <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
-    <value>Cascading combo box question references missing or supported type question.</value>
+    <value>Cascading combo box question references missing or unsupported type question.</value>
   </data>
   <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
     <value>Circular references in cascading combo box questions not allowed.</value>

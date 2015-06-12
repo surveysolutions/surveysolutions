@@ -166,9 +166,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition),
                     Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition),
                     Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-                    Verifier<IQuestion, IComposite>(CascadingComboboxHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
+                    Verifier<IQuestion, IComposite>(CascadingComboboxOptionsHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
                     Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
-                    Verifier<IQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+                    Verifier<SingleQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
                     Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
                     Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
                     Verifier<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
-
+                                        
                     ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
@@ -225,7 +225,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
-       
+
+        
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -308,7 +309,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
         }
 
-        private static bool CascadingQuestionReferencesMissingParent(IQuestion question, QuestionnaireDocument questionnaire)
+        private static bool CascadingQuestionReferencesMissingParent(SingleQuestion question, QuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
                 return false;
@@ -346,7 +347,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private static EntityVerificationResult<IComposite> CascadingComboboxHasNoParentOptions(IQuestion question, QuestionnaireDocument document)
+        private static EntityVerificationResult<IComposite> CascadingComboboxOptionsHasNoParentOptions(IQuestion question, QuestionnaireDocument document)
         {
             if (!question.CascadeFromQuestionId.HasValue)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
