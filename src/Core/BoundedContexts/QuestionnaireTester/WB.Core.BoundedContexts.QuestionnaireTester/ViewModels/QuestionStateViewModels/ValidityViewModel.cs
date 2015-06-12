@@ -85,9 +85,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             var interview = this.interviewRepository.Get(this.interviewId);
 
             bool isInvalidAnswer = !interview.IsValid(this.questionIdentity);
+            bool wasAnswered = interview.WasAnswered(this.questionIdentity);
             bool wasError = this.errorFromViewModel != null;
 
-            if (isInvalidAnswer)
+            if (isInvalidAnswer && wasAnswered)
             {
                 var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
                 var questionModel = questionnaireModel.Questions[questionIdentity.Id];
