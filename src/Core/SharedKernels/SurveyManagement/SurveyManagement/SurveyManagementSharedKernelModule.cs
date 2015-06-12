@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<InterviewPreconditionsServiceSettings>()
                 .ToConstant(new InterviewPreconditionsServiceSettings(interviewLimitCount));
-            this.Bind<IInterviewPreconditionsService>().To<InterviewPreconditionsService>().InSingletonScope();
+            this.Bind<IInterviewPreconditionsService>().To<SurveyManagementPreconditionsService>().InSingletonScope();
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
