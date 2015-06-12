@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -556,8 +555,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IInterviewPreconditionsService InterviewPreconditionsService
         {
-            //get { return ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); }
-            get { return new DummyPreconditionsService(); }
+            get { return ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); }
         }
 
         #endregion
