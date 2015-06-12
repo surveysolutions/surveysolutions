@@ -13,5 +13,5 @@
         style="@style/Interview_Question_Comments_InterviewerDetails_Editor"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        local:MvxBind="FocusText QuestionState.Comments.InterviewerComment; Visible QuestionState.Comments.IsCommentInEditMode; SetFocus QuestionState.Comments.IsCommentInEditMode" />
+        local:MvxBind="Text QuestionState.Comments.InterviewerComment; FocusValueChanged QuestionState.Comments.InterviewerCommentChangeCommand; Visible QuestionState.Comments.IsCommentInEditMode; SetFocus QuestionState.Comments.IsCommentInEditMode" />
 </MvxLinearLayout>

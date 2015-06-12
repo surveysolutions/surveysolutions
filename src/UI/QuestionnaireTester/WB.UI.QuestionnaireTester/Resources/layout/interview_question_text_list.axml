@@ -21,7 +21,7 @@
 
               <EditText
                   style="@style/Interview_Question_Answer_List_NewItem_Editor"
-                  local:MvxBind="FocusText NewListItem; Hint Localization('TextListQuestion_Hint'); Visible IsAddNewItemVisible;" />
+                  local:MvxBind="Text NewListItem; FocusValueChanged ValueChangeCommand; Hint Localization('TextListQuestion_Hint'); Visible IsAddNewItemVisible;" />
               
             </MvxLinearLayout>
 

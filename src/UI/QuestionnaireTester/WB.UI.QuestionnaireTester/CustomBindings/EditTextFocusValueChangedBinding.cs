@@ -19,6 +19,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         public EditTextFocusValueChangedBinding(EditText target)
             : base(target)
         {
+            target.ImeOptions = ImeAction.Done;
         }
 
         public override void SubscribeToEvents()
@@ -39,7 +40,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             e.Handled = false;
 
-            if (e.ActionId != ImeAction.Done && e.ActionId != ImeAction.Next) 
+            if (e.ActionId != ImeAction.Done) 
                 return;
 
             e.Handled = true;

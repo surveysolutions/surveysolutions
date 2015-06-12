@@ -56,11 +56,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set
             {
                 newListItem = value;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    this.AddNewItemAndSaveAnswers(value.Trim());
-                }
                 this.RaisePropertyChanged();
+            }
+        }
+
+        private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand
+        {
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(AddNewItemCommand)); }
+        }
+
+        private void AddNewItemCommand()
+        {
+            if (!string.IsNullOrWhiteSpace(NewListItem))
+            {
+                this.AddNewItemAndSaveAnswers(NewListItem.Trim());
             }
         }
 
