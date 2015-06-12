@@ -54,7 +54,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
         };
 
         Because of = () =>
+        {
             listModel.Answers[editedItemIndex].Title = newListItemTitle;
+            listModel.Answers[editedItemIndex].ValueChangeCommand.Execute();
+        };
 
         It should_create_list_with_5_answers = () =>
             listModel.Answers.Count.ShouldEqual(5);
