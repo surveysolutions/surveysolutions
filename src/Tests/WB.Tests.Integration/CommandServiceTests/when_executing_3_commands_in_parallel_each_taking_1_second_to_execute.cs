@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -11,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_executing_10_commands_in_parallel_each_taking_1_second_to_execute
+    internal class when_executing_3_commands_in_parallel_each_taking_1_second_to_execute
     {
         private class WorkFor1Second : ICommand { public Guid CommandIdentifier { get; private set; } }
 
@@ -42,20 +43,13 @@ namespace WB.Tests.Integration.CommandServiceTests
             Task.WaitAll(
                 commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
                 commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
-                commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None),
                 commandService.ExecuteAsync(new WorkFor1Second(), null, CancellationToken.None));
 
             timeSpent = DateTime.Now - startTime;
         };
 
-        It should_take_less_than_9_seconds_to_execute = () =>
-            timeSpent.TotalMilliseconds.ShouldBeLessThan(9000);
+        It should_take_less_than_3_seconds_to_execute = () =>
+            timeSpent.TotalMilliseconds.ShouldBeLessThan(3000);
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
