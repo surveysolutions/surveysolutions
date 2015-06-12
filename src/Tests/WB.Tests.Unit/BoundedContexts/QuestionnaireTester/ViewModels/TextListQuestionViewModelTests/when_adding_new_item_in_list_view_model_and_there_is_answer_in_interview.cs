@@ -55,7 +55,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
         };
 
         Because of = () =>
+        {
             listModel.NewListItem = newListItemTitle;
+            listModel.ValueChangeCommand.Execute();
+        };
 
         It should_create_list_with_5_answers = () =>
             listModel.Answers.Count.ShouldEqual(5);
@@ -91,12 +94,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
 
         private static readonly Tuple<decimal, string>[] savedAnswers = new[]
-                                                                        {
-                                                                            new Tuple<decimal, string>(1m, "Answer 1"),
-                                                                            new Tuple<decimal, string>(3m, "Answer 3"),
-                                                                            new Tuple<decimal, string>(4m, "Answer 5"),
-                                                                            new Tuple<decimal, string>(8m, "Answer 8"),
-                                                                        };
+        {
+            new Tuple<decimal, string>(1m, "Answer 1"),
+            new Tuple<decimal, string>(3m, "Answer 3"),
+            new Tuple<decimal, string>(4m, "Answer 5"),
+            new Tuple<decimal, string>(8m, "Answer 8")
+        };
 
         private static readonly string newListItemTitle = "   Hello World!      ";
     }
