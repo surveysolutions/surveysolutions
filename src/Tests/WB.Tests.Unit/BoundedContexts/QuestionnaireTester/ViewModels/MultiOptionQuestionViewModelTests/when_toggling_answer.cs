@@ -20,12 +20,12 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
         Establish context = () =>
         {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = new Identity(questionGuid, Empty.RosterVector);
+            questionId = Create.Identity(questionGuid, Empty.RosterVector);
 
             var questionnaire = BuildDefaultQuestionnaire(questionId);
             ((MultiOptionQuestionModel)questionnaire.Questions.First().Value).MaxAllowedAnswers = null;
 
-            var multiOptionAnswer = new MultiOptionAnswer(questionGuid, Empty.RosterVector);
+            var multiOptionAnswer = Create.MultiOptionAnswer(questionGuid, Empty.RosterVector);
             multiOptionAnswer.SetAnswers(new[] { 1m });
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionAnswer(questionId) == multiOptionAnswer);
@@ -36,9 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             questionnaireStorage.SetReturnsDefault(questionnaire);
             interviewRepository.SetReturnsDefault(interview);
 
-
             answeringMock = new Mock<AnsweringViewModel>();
-
 
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
