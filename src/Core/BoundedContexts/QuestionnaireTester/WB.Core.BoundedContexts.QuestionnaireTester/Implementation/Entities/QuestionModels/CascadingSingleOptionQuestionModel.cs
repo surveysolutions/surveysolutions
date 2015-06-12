@@ -1,0 +1,12 @@
+using System;
+using System.Collections.Generic;
+
+namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels
+{
+    public class CascadingSingleOptionQuestionModel : BaseQuestionModel
+    {
+        public List<OptionModel> Options { get; set; }
+
+        public Guid? CascadeFromQuestionId { get; set; }
+    }
+}

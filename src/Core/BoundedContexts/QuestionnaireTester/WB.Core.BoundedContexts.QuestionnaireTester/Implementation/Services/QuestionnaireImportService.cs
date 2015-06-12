@@ -204,13 +204,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                         {
                             questionModel = new FilteredSingleOptionQuestionModel
                             {
-                                //CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
                                 Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
                             };
                         }
                         else
                         {
-                            questionModel = new SingleOptionQuestionModel
+                            questionModel = new CascadingSingleOptionQuestionModel
                             {
                                 CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId,
                                 Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
