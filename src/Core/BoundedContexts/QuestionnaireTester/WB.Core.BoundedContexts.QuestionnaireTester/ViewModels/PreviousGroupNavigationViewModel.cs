@@ -80,16 +80,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 liteEventRegistry.Subscribe(this);
             }
 
-            ButtonText = UIResources.Interview_PreviousGroupNavigation_ButtonText;
-
             UpdateSelfFromModel();
-        }
-
-        private string buttonText;
-        public string ButtonText
-        {
-            get { return buttonText; }
-            set { buttonText = value; RaisePropertyChanged(); }
         }
 
         private GroupStatistics statistics;
