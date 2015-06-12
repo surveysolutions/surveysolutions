@@ -46,10 +46,15 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
                 answeringViewModel: answeringMock.Object);
 
             viewModel.Init("blah", questionId, new NavigationState());
-            viewModel.Options.Second().Checked = true;
+
+            
         };
 
-        Because of = () => viewModel.ToggleAnswer(viewModel.Options.Second()).WaitAndUnwrapException();
+        Because of = () =>
+        {
+            viewModel.Options.Second().Checked = true;
+            viewModel.ToggleAnswer(viewModel.Options.Second()).WaitAndUnwrapException();
+        };
 
         It should_send_command_to_service = () => answeringMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => 
             c.SelectedValues.SequenceEqual(new []{1m,2m}))));
