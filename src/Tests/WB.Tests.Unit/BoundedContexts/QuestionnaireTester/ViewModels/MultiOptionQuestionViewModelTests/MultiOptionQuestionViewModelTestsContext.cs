@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
                 : (() => userInteraction);
 
             return new MultiOptionQuestionViewModel(
-                questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(),
+                questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
