@@ -20,6 +20,13 @@ namespace WB.Tests.Integration.TesterResourcesTests
                 .Select(xmlResourceFullPath => xmlResourceFullPath.Replace(resourcesFullPath, string.Empty).TrimStart('\\'));
         }
 
+        protected static IEnumerable<string> GetDimensionsNames(string resourcesRelativePath)
+        {
+            return TestEnvironment
+                .GetAllFilesFromSourceFolder(resourcesRelativePath, "*.xml")
+                .SelectMany(GetDimensionsNamesFromResource);
+        }
+
         private static bool HasHardcodedDimensions(string xmlResourcePath)
         {
             return XDocument
@@ -27,6 +34,16 @@ namespace WB.Tests.Integration.TesterResourcesTests
                 .Root
                 .TreeToEnumerable(_ => _.Elements())
                 .Any(HasHardcodedDimensions);
+        }
+
+        private static IEnumerable<string> GetDimensionsNamesFromResource(string xmlResourcePath)
+        {
+            return XDocument
+                .Load(xmlResourcePath)
+                .Root
+                .TreeToEnumerable(_ => _.Elements())
+                .Where(element => element.Name == "dimen")
+                .Select(element => element.Attribute("name").Value);
         }
 
         private static bool HasHardcodedDimensions(XElement element)
