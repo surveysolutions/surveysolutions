@@ -3441,9 +3441,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (roundedAnswer != answer)
                 throw new InterviewException(
                     string.Format(
-                        "Answer '{0}' for question {1}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {2}. InterviewId: {3}", answer,
+                        "Answer '{0}' for question {1}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {2}. InterviewId: {3}", 
+                        answer,
+                        FormatQuestionForException(questionId, questionnaire),
                         countOfDecimalPlacesAllowed.Value,
-                        FormatQuestionForException(questionId, questionnaire), EventSourceId));
+                        EventSourceId));
         }
 
         private void ThrowIfNumericAnswerExceedsMaxValue(Guid questionId, decimal answer, IQuestionnaire questionnaire)
