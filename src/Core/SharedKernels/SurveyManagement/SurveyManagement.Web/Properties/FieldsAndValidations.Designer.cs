@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person name.
+        ///   Looks up a localized string similar to Full name.
         /// </summary>
         public static string PersonNameFieldName {
             get {
