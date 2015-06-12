@@ -26,6 +26,4 @@
   <dimen name="Interview_Question_Errors_Title_margin_top">7dp</dimen>
   <dimen name="Interview_Question_Errors_Details_margin_top">7dp</dimen>
 
-  <dimen name="Interview_Sidebar_padding_right">48dp</dimen>
-
 </resources>

@@ -26,10 +26,4 @@
   <dimen name="Interview_Question_Errors_Title_margin_top">10dp</dimen>
   <dimen name="Interview_Question_Errors_Details_margin_top">10dp</dimen>
   
-  
-  <dimen name="Interview_Previous_Group_Navigation_Layout_margin_top">28dp</dimen>
-  <dimen name="Interview_Previous_Group_Navigation_Layout_margin_bottom">28dp</dimen>
-  <dimen name="Interview_Previous_Group_Navigation_Note_margin_left">10dp</dimen>
-  <dimen name="Interview_Previous_Group_Navigation_Button_padding">10dp</dimen>
-
 </resources>
