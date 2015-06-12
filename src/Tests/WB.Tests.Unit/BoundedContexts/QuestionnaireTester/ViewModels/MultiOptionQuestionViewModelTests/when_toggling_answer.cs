@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
@@ -11,7 +12,8 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using It = Machine.Specifications.It;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using It = System.Reflection.PortableExecutable.Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOptionQuestionViewModelTests
 {
@@ -37,6 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             interviewRepository.SetReturnsDefault(interview);
 
             answeringMock = new Mock<AnsweringViewModel>();
+            answeringMock.Setup(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerQuestionCommand>()))
+                    .Returns(Task.FromResult(true));
 
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
