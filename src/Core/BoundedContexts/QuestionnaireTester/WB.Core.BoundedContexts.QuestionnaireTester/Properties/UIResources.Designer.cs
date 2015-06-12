@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permissions to look this questionnaire.
+        ///   Looks up a localized string similar to You don&apos;t have permission to access this questionnaire.
         /// </summary>
         public static string ImportQuestionnaire_Error_Forbidden {
             get {
@@ -550,7 +550,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please fill answer text fully.
+        ///   Looks up a localized string similar to Please, fill in all the required values.
         /// </summary>
         public static string Interview_Question_Text_MaskError {
             get {
