@@ -45,7 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
 
         Because of = () => viewModel.Handle(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []{2m, 1m}));
 
-        It should_set_checked_order_to_options = () => viewModel.Options.First().CheckedOrder.ShouldEqual(2);
+        It should_set_checked_order_to_options = () => viewModel.Options.Second().CheckedOrder.ShouldEqual(1);
+        It should_set_checked_order_to_options1 = () => viewModel.Options.First().CheckedOrder.ShouldEqual(2);
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;
