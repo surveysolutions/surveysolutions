@@ -371,7 +371,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\FilteredSingleOptionQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_entering_filter_text.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_selecting_one_from_option_list.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_entering_filter_text_equals_to_ones_from_options.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_creating_filtered_single_option_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer_and_user_rejects_reduce_roster_size.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />

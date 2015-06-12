@@ -73,12 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
         It should_set_Answer_to_text_from_Options = () =>
             viewModel.Answer.ShouldEqual("bba");
 
-        It should_send_save_answer_command = () =>
-            answeringViewModelMock.Verify(
-                a => a.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerQuestionCommand>()), 
-                Times.AtLeastOnce);
-
-
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
