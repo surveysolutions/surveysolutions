@@ -1,6 +1,7 @@
 ﻿
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
@@ -11,7 +12,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 
         public LimitsFilterAttribute()
         {
-            this.interviewPreconditionsService = ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); ;
+            //this.interviewPreconditionsService = ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); ;
+            this.interviewPreconditionsService = new DummyPreconditionsService();
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
