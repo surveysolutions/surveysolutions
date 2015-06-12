@@ -7,6 +7,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Qu
     {
         public List<OptionModel> Options { get; set; }
 
-        public Guid? CascadeFromQuestionId { get; set; }
+        public Guid CascadeFromQuestionId { get; set; }
+
+        public int RosterLevelDeepOfParentQuestion { get; set; }
     }
 }
