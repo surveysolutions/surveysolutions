@@ -349,6 +349,8 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\MultiOptionQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_handling_question_answered_event.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_initializing_answered_question.cs" />
