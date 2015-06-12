@@ -14,7 +14,8 @@
         <MvxAutoCompleteTextView
           style="@style/Interview_Question_Answer_FilteredComboBox"
           local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-          local:MvxBind="FocusText Answer; 
+          local:MvxBind="Text Answer; 
+                         FocusValueChanged ValueChangeCommand; 
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
                          SelectedObject SelectedObject; 

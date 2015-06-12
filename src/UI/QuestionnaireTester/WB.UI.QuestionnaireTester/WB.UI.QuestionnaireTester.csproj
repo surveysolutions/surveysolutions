@@ -254,6 +254,8 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
+    <Compile Include="CustomBindings\EditTextFocusTextBinding.cs" />
+    <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
@@ -268,7 +270,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
-    <Compile Include="CustomBindings\EditTextFocusTextBinding.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
     <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
