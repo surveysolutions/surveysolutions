@@ -2,10 +2,13 @@
 using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -18,6 +21,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
     {
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -25,6 +29,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public AnsweringViewModel Answering { get; private set; }
 
         private string answerAsString;
+
+        private int? countOfDecimalPlaces;
+
         public string AnswerAsString
         {
             get { return this.answerAsString; }
@@ -45,17 +52,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
 
+        public int? CountOfDecimalPlaces
+        {
+            get { return this.countOfDecimalPlaces; }
+            set { this.countOfDecimalPlaces = value; RaisePropertyChanged(); }
+        }
+
         public RealQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -71,6 +86,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionModel = questionnaire.GetRealNumericQuestion(entityIdentity.Id);
+
+            this.CountOfDecimalPlaces = questionModel.CountOfDecimalPlaces;
             if (answerModel != null)
             {
                 this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);

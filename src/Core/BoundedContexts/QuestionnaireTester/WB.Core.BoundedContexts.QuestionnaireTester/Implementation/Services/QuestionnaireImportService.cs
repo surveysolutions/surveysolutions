@@ -248,7 +248,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     }
                     else
                     {
-                        questionModel = new RealNumericQuestionModel();
+                        questionModel = new RealNumericQuestionModel { CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces };
                     }
                     break;
                 case QuestionType.DateTime:
