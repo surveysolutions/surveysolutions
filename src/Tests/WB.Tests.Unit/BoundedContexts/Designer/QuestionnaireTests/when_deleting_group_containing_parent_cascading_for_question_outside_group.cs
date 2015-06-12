@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting_message_about_preconditions = () =>
-            exception.Message.ToLower().ShouldContain("sub-section or roster containing question that is used as parent in cascading combo box cannot be removed before all child questions are removed");
+            new[] { "sub-section", "roster", "containing", "question","parent","cascading","combo","box","cannot","removed","before","all", "child", "questions" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+
 
         private static Exception exception;
         private static Questionnaire questionnaire;
