@@ -189,15 +189,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var groupTitle = CreateGroupTitleFromEvent(evnt.Payload);
             AddOrUpdateGroupState(evnt.EventSourceId, evnt.Payload.GroupPublicKey, groupTitle);
 
+            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Update, QuestionnaireItemType.Group, evnt.Payload.GroupPublicKey,
+                QuestionnaireActionType.Update, questionnaire.GroupsState.ContainsKey(evnt.Payload.GroupPublicKey) ? QuestionnaireItemType.Group : QuestionnaireItemType.Roster, evnt.Payload.GroupPublicKey,
                 groupTitle, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<GroupBecameARoster> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+
+            if (questionnaire.RosterState.ContainsKey(evnt.Payload.GroupId))
+                return;
+
             var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupId];
+            
+            questionnaire.RosterState[evnt.Payload.GroupId] = groupTitle;
+            questionnaire.GroupsState.Remove(evnt.Payload.GroupId);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Group,
@@ -207,33 +216,44 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<RosterChanged> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupId];
+            var rosterTitle = questionnaire.RosterState[evnt.Payload.GroupId];
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Update, QuestionnaireItemType.Roster, evnt.Payload.GroupId,
-                groupTitle, evnt.EventSequence);
+                rosterTitle, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<GroupStoppedBeingARoster> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupId];
+
+            if(questionnaire.GroupsState.ContainsKey(evnt.Payload.GroupId))
+                return;
+
+            var rosterTitle = questionnaire.RosterState[evnt.Payload.GroupId];
+
+            questionnaire.GroupsState[evnt.Payload.GroupId] = rosterTitle;
+            questionnaire.RosterState.Remove(evnt.Payload.GroupId);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, evnt.Payload.GroupId,
-                groupTitle, evnt.EventSequence);
+                rosterTitle, evnt.EventSequence);
         }
 
         public void Handle(IPublishedEvent<GroupDeleted> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var groupTitle = questionnaire.GroupsState[evnt.Payload.GroupPublicKey];
+            
+            var isGroup = questionnaire.GroupsState.ContainsKey(evnt.Payload.GroupPublicKey);
+            var groupTitle = isGroup ? questionnaire.GroupsState[evnt.Payload.GroupPublicKey] : questionnaire.RosterState[evnt.Payload.GroupPublicKey];
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Delete, QuestionnaireItemType.Group, evnt.Payload.GroupPublicKey,
+                QuestionnaireActionType.Delete, isGroup ? QuestionnaireItemType.Group : QuestionnaireItemType.Roster, evnt.Payload.GroupPublicKey,
                 groupTitle, evnt.EventSequence);
 
             questionnaire.GroupsState.Remove(evnt.Payload.GroupPublicKey);
+            questionnaire.RosterState.Remove(evnt.Payload.GroupPublicKey);
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
@@ -438,36 +458,46 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
 
             var targetGroupId = evnt.Payload.GroupKey ?? evnt.EventSourceId;
+            var isTargetGroupRoster = questionnaire.RosterState.ContainsKey(targetGroupId);
+            var targetGroupTitle = isTargetGroupRoster
+                ? questionnaire.RosterState[targetGroupId]
+                : questionnaire.GroupsState[targetGroupId];
+
+            QuestionnaireItemType movedItemType;
+            string moveditemTitle;
 
             if (questionnaire.QuestionsState.ContainsKey(evnt.Payload.PublicKey))
             {
-                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
-                    evnt.EventTimeStamp,
-                    QuestionnaireActionType.Move, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                    questionnaire.QuestionsState[evnt.Payload.PublicKey], evnt.EventSequence,
-                    CreateQuestionnaireChangeReference(QuestionnaireItemType.Group,
-                        targetGroupId, questionnaire.GroupsState[targetGroupId]));
+                movedItemType = QuestionnaireItemType.Question;
+                moveditemTitle = questionnaire.QuestionsState[evnt.Payload.PublicKey];
+            }
+            else if (questionnaire.GroupsState.ContainsKey(evnt.Payload.PublicKey))
+            {
+                movedItemType = QuestionnaireItemType.Group;
+                moveditemTitle = questionnaire.GroupsState[evnt.Payload.PublicKey];
+            }
+            else if (questionnaire.RosterState.ContainsKey(evnt.Payload.PublicKey))
+            {
+                movedItemType = QuestionnaireItemType.Roster;
+                moveditemTitle = questionnaire.RosterState[evnt.Payload.PublicKey];
+            }
+            else if (questionnaire.StaticTextState.ContainsKey(evnt.Payload.PublicKey))
+            {
+                movedItemType = QuestionnaireItemType.StaticText;
+                moveditemTitle = questionnaire.StaticTextState[evnt.Payload.PublicKey];
+            }
+            else
+            {
                 return;
             }
-            if (questionnaire.GroupsState.ContainsKey(evnt.Payload.PublicKey))
-            {
-                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
-                    evnt.EventTimeStamp,
-                    QuestionnaireActionType.Move, QuestionnaireItemType.Group, evnt.Payload.PublicKey,
-                    questionnaire.GroupsState[evnt.Payload.PublicKey], evnt.EventSequence,
-                    CreateQuestionnaireChangeReference(QuestionnaireItemType.Group,
-                        targetGroupId, questionnaire.GroupsState[targetGroupId]));
-                return;
-            }
-            if (questionnaire.StaticTextState.ContainsKey(evnt.Payload.PublicKey))
-            {
-                AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
-                    evnt.EventTimeStamp,
-                    QuestionnaireActionType.Move, QuestionnaireItemType.StaticText, evnt.Payload.PublicKey,
-                    questionnaire.StaticTextState[evnt.Payload.PublicKey], evnt.EventSequence,
-                    CreateQuestionnaireChangeReference(QuestionnaireItemType.Group,
-                        targetGroupId, questionnaire.GroupsState[targetGroupId]));
-            }
+
+            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
+                evnt.EventTimeStamp,
+                QuestionnaireActionType.Move, movedItemType, evnt.Payload.PublicKey,
+                moveditemTitle, evnt.EventSequence,
+                CreateQuestionnaireChangeReference(
+                    isTargetGroupRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group,
+                    targetGroupId, targetGroupTitle));
         }
 
         private string GetUserName(Guid? userId)
@@ -502,8 +532,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 var group = compositeElement as IGroup;
                 if (group != null)
                 {
-                    questionnaireStateTacker.GroupsState[group.PublicKey] = CreateTitle(group,
-                        g => g.VariableName, g => g.Title);
+                    if (group.IsRoster)
+                    {
+                        questionnaireStateTacker.RosterState[group.PublicKey] = CreateTitle(group,
+                          g => g.VariableName, g => g.Title);
+                    }
+                    else
+                    {
+                        questionnaireStateTacker.GroupsState[group.PublicKey] = CreateTitle(group,
+                            g => g.VariableName, g => g.Title);
+                    }
                     continue;
                 }
                 var staticTexts = compositeElement as IStaticText;
@@ -525,7 +563,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         private void AddOrUpdateGroupState(Guid questionnaireId, Guid itemId, string itemTitle)
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
-                (s, id, title) => s.GroupsState[id] = title);
+                (s, id, title) =>
+                {
+                    if (s.RosterState.ContainsKey(id))
+                        s.RosterState[id] = title;
+                    else
+                        s.GroupsState[id] = title;
+                });
         }
 
         private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string itemTitle)
