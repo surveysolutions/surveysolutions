@@ -14,7 +14,7 @@
         <EditText
           style="@style/Interview_Question_Answer_TextEditor"
           android:numeric="integer|signed|decimal"
-          local:MvxBind="Text AnswerAsString; FocusValueChanged ValueChangeCommand; Hint Localization('RealQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+          local:MvxBind="Text AnswerAsString; DecimalPlaces CountOfDecimalPlaces; FocusValueChanged ValueChangeCommand; Hint Localization('RealQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />

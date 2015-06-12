@@ -2,5 +2,6 @@
 {
     public class RealNumericQuestionModel : BaseQuestionModel
     {
+        public int? CountOfDecimalPlaces { get; set; }
     }
 }

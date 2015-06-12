@@ -256,6 +256,8 @@
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusTextBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
+    <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
+    <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
