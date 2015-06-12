@@ -27,6 +27,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public QuestionnaireChangeHistory Load(Guid id, int page,int pageSize)
         {
             var questionnaire = questionnaireDocumentStorage.GetById(id);
+
+            if (questionnaire == null)
+                return null;
+
             var questionnaireId = id.FormatGuid();
 
             var count = questionnaireChangeHistoryStorage.Query(
@@ -41,9 +45,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                             .Skip((page - 1)*pageSize)
                             .Take(pageSize).ToArray());
 
-            if (questionnaire == null)
-                return null;
-
             questionnaire.ConnectChildrenWithParent();
 
             return new QuestionnaireChangeHistory(id, questionnaire.Title,
@@ -57,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.References.Select(
                     r => CreateQuestionnaireChangeHistoryReference(questionnaire, r)).ToList();
 
-            return new QuestionnaireChangeHistoricalRecord(questionnaireChangeRecord.UserName,
+            return new QuestionnaireChangeHistoricalRecord(questionnaireChangeRecord.UserName ?? "<<UNKNOWN>>",
                 questionnaireChangeRecord.Timestamp, questionnaireChangeRecord.ActionType,
                 questionnaireChangeRecord.TargetItemId, GetItemParentId(questionnaire, questionnaireChangeRecord.TargetItemId), questionnaireChangeRecord.TargetItemTitle,
                 questionnaireChangeRecord.TargetItemType, references);
