@@ -137,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="CommandServiceTests\when_canceling_3_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_3_seconds_to_execute.cs" />
+    <Compile Include="CommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
     <Compile Include="CommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
     <Compile Include="CommandServiceTests\when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository.cs" />
@@ -208,7 +208,7 @@
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
     <Compile Include="RavenMockUtils.cs" />
-    <Compile Include="SequentialCommandServiceTests\when_canceling_3_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_3_seconds_to_execute.cs" />
+    <Compile Include="SequentialCommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_in_parallel_with_small_delays_each_command_taking_half_second_to_execute.cs" />
     <Compile Include="Setup.cs" />
