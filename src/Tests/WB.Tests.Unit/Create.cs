@@ -1710,7 +1710,7 @@ namespace WB.Tests.Unit
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
-                questionState ?? Mock.Of<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>(),
+                questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
     }

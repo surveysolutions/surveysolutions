@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
@@ -105,7 +106,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
-            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel)sender;
+            await OptionSelectedImpl(sender);
+        }
+
+        internal async Task OptionSelectedImpl(object sender)
+        {
+            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
             var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
