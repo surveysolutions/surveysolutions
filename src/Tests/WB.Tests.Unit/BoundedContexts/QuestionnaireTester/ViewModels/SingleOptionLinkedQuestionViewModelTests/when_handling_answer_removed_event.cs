@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    public class when_initializing
+    public class when_handling_answer_removed_event
     {
         Establish context = () =>
         {
@@ -28,11 +28,10 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.FindBaseAnswerByOrShorterRosterLevel(Moq.It.IsAny<Guid>(), Empty.RosterVector) == new []
-                    {
-                        Create.TextAnswer("answer1"),
-                        Create.TextAnswer(null),
-                        Create.TextAnswer("answer2"),
-                    }
+                {
+                    Create.TextAnswer("answer not to remove", linkedToQuestionId, new [] { 0m }),
+                    Create.TextAnswer("answer to remove", linkedToQuestionId, answerToRemoveRosterVector),
+                }
                 && _.Answers == new Dictionary<string, BaseInterviewAnswer>());
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(
@@ -40,19 +39,15 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
                 questionState: questionStateMock.Object,
                 questionnaireModel: questionnaire,
                 interview: interview);
+
+            viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>
-            viewModel.Init(interviewId, questionIdentity, navigationState);
+            viewModel.Handle(Create.Event.AnswersRemoved(Create.Event.Identity(linkedToQuestionId, answerToRemoveRosterVector)));
 
-        It should_initialize_question_state = () =>
-            questionStateMock.Verify(state => state.Init(interviewId, questionIdentity, navigationState), Times.Once);
-
-        It should_subsribe_self_to_event_registry = () =>
-            eventRegistryMock.Verify(registry => registry.Subscribe(viewModel), Times.Once);
-
-        It should_fill_options_with_answers_from_linked_to_question = () =>
-            viewModel.Options.Select(option => option.Title).ShouldContainOnly("answer1", "answer2");
+        It should_remove_removed_answer_from_options = () =>
+            viewModel.Options.Select(option => option.Title).ShouldContainOnly("answer not to remove");
 
         private static Mock<ILiteEventRegistry> eventRegistryMock = new Mock<ILiteEventRegistry>();
         private static SingleOptionLinkedQuestionViewModel viewModel;
@@ -62,5 +57,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
         private static Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static NavigationState navigationState = Create.NavigationState();
         private static Mock<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>> questionStateMock = new Mock<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>();
+        private static decimal[] answerToRemoveRosterVector = { 1m };
     }
 }

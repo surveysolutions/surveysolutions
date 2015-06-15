@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
@@ -49,6 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
             this.eventRegistry = eventRegistry;
+            this.mainThreadDispatcher = mainThreadDispatcher ?? MvxMainThreadDispatcher.Instance;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -147,7 +150,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                     if (optionToRemove != null)
                     {
-                        MvxMainThreadDispatcher.Instance.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
+                        this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
                     }
                 }
             }
