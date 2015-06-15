@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             var interview = Mock.Of<IStatefulInterview>(x =>
                 x.FindBaseAnswerByOrShorterRosterLevel(Moq.It.IsAny<Guid>(), Empty.RosterVector) == new List<MaskedTextAnswer>
                 {
-                    Create.MasedMaskedTextAnswer("answer1", linkedToQuestionId, new []{1m}),
-                    Create.MasedMaskedTextAnswer("answer2", linkedToQuestionId, new []{2m})
+                    Create.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
+                    Create.TextAnswer("answer2", linkedToQuestionId, new []{2m})
                 } &&
                 x.Answers == new Dictionary<string, BaseInterviewAnswer>()
                 );

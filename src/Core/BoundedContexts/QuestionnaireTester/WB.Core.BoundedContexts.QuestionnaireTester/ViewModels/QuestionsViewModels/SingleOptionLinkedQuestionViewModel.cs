@@ -24,14 +24,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         ILiteEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
@@ -39,13 +39,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             AnsweringViewModel answering)
         {
             if (principal == null) throw new ArgumentNullException("principal");
-            if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
+            if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
             if (answerToStringService == null) throw new ArgumentNullException("answerToStringService");
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
             this.eventRegistry = eventRegistry;
@@ -62,17 +62,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
 
-            this.questionIdentity = entityIdentity;
+            this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
             var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);

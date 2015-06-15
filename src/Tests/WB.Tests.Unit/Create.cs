@@ -28,10 +28,16 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -82,6 +88,7 @@ using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Supervisor.Controllers;
 using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
@@ -1167,8 +1174,7 @@ namespace WB.Tests.Unit
             IJsonUtils jsonUtils = null,
             ICommandService commandService = null,
             HeadquartersPushContext headquartersPushContext = null,
-            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null,
-            IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
+            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null, WB.Core.Infrastructure.PlainStorage.IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
             IHeadquartersInterviewReader headquartersInterviewReader = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null,
@@ -1179,7 +1185,7 @@ namespace WB.Tests.Unit
                 HeadquartersSettings(),
                 logger ?? Mock.Of<ILogger>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
+                plainStorage ?? Mock.Of<WB.Core.Infrastructure.PlainStorage.IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
                 userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
                 plainQuestionnaireRepository ??
                     Mock.Of<IPlainQuestionnaireRepository>(
@@ -1637,9 +1643,12 @@ namespace WB.Tests.Unit
             return new AnswerToStringService();
         }
 
-        public static QuestionnaireModel QuestionnaireModel()
+        public static QuestionnaireModel QuestionnaireModel(Dictionary<Guid, BaseQuestionModel> questions = null)
         {
-            return new QuestionnaireModel();
+            return new QuestionnaireModel
+            {
+                Questions = questions ?? new Dictionary<Guid, BaseQuestionModel>()
+            };
         }
 
         public static MultiOptionAnswer MultiOptionAnswer(Guid questionId, decimal[] rosterVector)
@@ -1652,15 +1661,45 @@ namespace WB.Tests.Unit
             return new NavigationState();
         }
 
-        public static MaskedTextAnswer MasedMaskedTextAnswer(string answer = null, Guid? questionId = null, decimal[] rosterVector = null)
+        public static MaskedTextAnswer TextAnswer(string answer)
+        {
+            return Create.TextAnswer(answer, null, null);
+        }
+
+        public static MaskedTextAnswer TextAnswer(string answer, Guid? questionId, decimal[] rosterVector)
         {
             var masedMaskedTextAnswer = new MaskedTextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
+
             if (answer != null)
             {
                 masedMaskedTextAnswer.SetAnswer(answer);
             }
 
             return masedMaskedTextAnswer;
+        }
+
+        public static SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
+            QuestionnaireModel questionnaireModel = null,
+            IStatefulInterview interview = null,
+            ILiteEventRegistry eventRegistry = null,
+            QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
+            AnsweringViewModel answering = null)
+        {
+            var userIdentity = Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid());
+            questionnaireModel = questionnaireModel ?? Mock.Of<QuestionnaireModel>();
+            interview = interview ?? Mock.Of<IStatefulInterview>();
+
+            return new SingleOptionLinkedQuestionViewModel(
+                Mock.Of<IPrincipal>(_
+                    => _.CurrentUserIdentity == userIdentity),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(_
+                    => _.GetById(It.IsAny<string>()) == questionnaireModel),
+                Mock.Of<IStatefulInterviewRepository>(_
+                    => _.Get(It.IsAny<string>()) == interview),
+                Create.AnswerToStringService(),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                questionState ?? Mock.Of<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>(),
+                answering ?? Mock.Of<AnsweringViewModel>());
         }
     }
 }
