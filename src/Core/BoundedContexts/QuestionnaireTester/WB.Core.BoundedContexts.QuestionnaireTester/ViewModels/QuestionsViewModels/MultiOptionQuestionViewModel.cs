@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == questionIdentity.Id && @event.PropagationVector == questionIdentity.RosterVector)
+            if (this.areAnswersOrdered && @event.QuestionId == questionIdentity.Id && @event.PropagationVector.Identical(questionIdentity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
             }
