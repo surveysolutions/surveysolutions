@@ -1661,14 +1661,14 @@ namespace WB.Tests.Unit
             return new NavigationState();
         }
 
-        public static MaskedTextAnswer TextAnswer(string answer)
+        public static TextAnswer TextAnswer(string answer)
         {
             return Create.TextAnswer(answer, null, null);
         }
 
-        public static MaskedTextAnswer TextAnswer(string answer, Guid? questionId, decimal[] rosterVector)
+        public static TextAnswer TextAnswer(string answer, Guid? questionId, decimal[] rosterVector)
         {
-            var masedMaskedTextAnswer = new MaskedTextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
+            var masedMaskedTextAnswer = new TextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
 
             if (answer != null)
             {

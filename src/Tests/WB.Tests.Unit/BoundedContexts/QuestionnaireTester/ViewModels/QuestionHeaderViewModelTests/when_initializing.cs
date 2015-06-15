@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
         {
             substitutedQuesiton = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             substitutionTargetId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var maskedTextQuestionModel = new MaskedTextQuestionModel
+            var maskedTextQuestionModel = new TextQuestionModel
             {
                 Title = "title with %subst%",
                 Id = substitutionTargetId
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
                         "blah", maskedTextQuestionModel
                     },
                     {
-                        "subst", new MaskedTextQuestionModel
+                        "subst", new TextQuestionModel
                         {
                             Variable = "subst",
                             Id = substitutedQuesiton
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireRepository.SetReturnsDefault(questionnaireModel);
 
-            var answer = new MaskedTextAnswer();
+            var answer = new TextAnswer();
             answer.SetAnswer("answer");
             var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuesiton, Empty.RosterVector) == answer);
 

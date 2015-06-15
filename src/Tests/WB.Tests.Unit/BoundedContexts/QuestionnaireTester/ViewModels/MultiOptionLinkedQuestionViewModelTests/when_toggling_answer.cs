@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var interview = Mock.Of<IStatefulInterview>(x =>
-                x.FindBaseAnswerByOrShorterRosterLevel(Moq.It.IsAny<Guid>(), Empty.RosterVector) == new List<MaskedTextAnswer>
+                x.FindBaseAnswerByOrShorterRosterLevel(Moq.It.IsAny<Guid>(), Empty.RosterVector) == new List<TextAnswer>
                 {
                     Create.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
                     Create.TextAnswer("answer2", linkedToQuestionId, new []{2m})
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             {
                 LinkedToQuestionId = linkedToQuestionId
             });
-            questionnaire.Questions.Add(linkedToQuestionId, new MaskedTextQuestionModel());
+            questionnaire.Questions.Add(linkedToQuestionId, new TextQuestionModel());
 
             var interviews = new Mock<IStatefulInterviewRepository>();
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
