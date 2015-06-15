@@ -385,6 +385,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_navigating_to_some_subsection_that_is_not_section.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_the_first_section_was_selected_and_the_second_was_previously_selected.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_the_second_section_was_selected_and_the_same_section_was_previously_selected.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_initializing.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
@@ -2127,9 +2128,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
+    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.CAPI.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
-      <Name>WB.Core.BoundedContexts.Capi</Name>
+      <Name>WB.Core.BoundedContexts.CAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
