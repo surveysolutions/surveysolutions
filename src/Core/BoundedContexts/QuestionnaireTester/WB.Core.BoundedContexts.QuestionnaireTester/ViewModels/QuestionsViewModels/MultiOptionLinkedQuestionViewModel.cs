@@ -95,9 +95,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public async Task ToggleAnswerAsync(MultiOptionLinkedQuestionOptionViewModel changedModel)
         {
-            List<MultiOptionLinkedQuestionOptionViewModel> allSelectedOptions = 
-                this.areAnswersOrdered ? 
-                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder).ToList() : 
+            List<MultiOptionLinkedQuestionOptionViewModel> allSelectedOptions =
+                this.areAnswersOrdered ?
+                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder).ToList() :
                 this.Options.Where(x => x.Checked).ToList();
 
             if (maxAllowedAnswers.HasValue && allSelectedOptions.Count > maxAllowedAnswers)
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void GenerateOptions(
             IStatefulInterview interview,
-            LinkedMultiOptionQuestionModel linkedQuestionModel, 
+            LinkedMultiOptionQuestionModel linkedQuestionModel,
             QuestionnaireModel questionnaire)
         {
             LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
@@ -177,19 +177,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            var orderedSelectedOptions =
-                this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
-                    .OrderBy(x => x.CheckedTimeStamp)
-                    .ToList();
-
-            for (int i = 0; i < orderedSelectedOptions.Count; i++)
+            if (@event.QuestionId == this.questionIdentity.Id && @event.PropagationVector == this.questionIdentity.RosterVector)
             {
-                orderedSelectedOptions[i].CheckedOrder = i + 1;
-            }
+                var orderedSelectedOptions =
+                    this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
+                        .OrderBy(x => x.CheckedTimeStamp)
+                        .ToList();
 
-            foreach (var option in this.Options.Except(orderedSelectedOptions))
-            {
-                option.CheckedOrder = null;
+                for (int i = 0; i < orderedSelectedOptions.Count; i++)
+                {
+                    orderedSelectedOptions[i].CheckedOrder = i + 1;
+                }
+
+                foreach (var option in this.Options.Except(orderedSelectedOptions))
+                {
+                    option.CheckedOrder = null;
+                }
             }
         }
     }
