@@ -89,6 +89,7 @@
     <Compile Include="Rest\RestHttpException.cs" />
     <Compile Include="Rest\RestHttpTimeoutException.cs" />
     <Compile Include="Rest\RestService.cs" />
+    <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\IInfoFileSupplierRegistry.cs" />
     <Compile Include="Services\IJsonUtils.cs" />
     <Compile Include="Services\ILogger.cs" />

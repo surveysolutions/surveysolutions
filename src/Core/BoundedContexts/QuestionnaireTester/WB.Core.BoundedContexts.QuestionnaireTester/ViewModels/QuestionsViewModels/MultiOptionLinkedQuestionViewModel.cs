@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -177,7 +178,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            if (@event.QuestionId == this.questionIdentity.Id && @event.PropagationVector == this.questionIdentity.RosterVector)
+            if (@event.QuestionId == this.questionIdentity.Id && @event.PropagationVector.Identical(this.questionIdentity.RosterVector))
             {
                 var orderedSelectedOptions =
                     this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
