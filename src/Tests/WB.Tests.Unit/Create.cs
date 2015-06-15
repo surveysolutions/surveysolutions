@@ -14,6 +14,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
+using Cirrious.CrossCore.Core;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NHibernate;
@@ -341,6 +342,16 @@ namespace WB.Tests.Unit
             public static TextQuestionAnswered TextQuestionAnswered(Guid questionId, decimal[] rosterVector, string answer)
             {
                 return new TextQuestionAnswered(Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answer);
+            }
+
+            public static AnswersRemoved AnswersRemoved(params Identity[] questions)
+            {
+                return new AnswersRemoved(questions);
+            }
+
+            public static Identity Identity(Guid id, decimal[] rosterVector)
+            {
+                return new Identity(id, rosterVector);
             }
         }
 
@@ -1643,11 +1654,11 @@ namespace WB.Tests.Unit
             return new AnswerToStringService();
         }
 
-        public static QuestionnaireModel QuestionnaireModel(Dictionary<Guid, BaseQuestionModel> questions = null)
+        public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)
         {
             return new QuestionnaireModel
             {
-                Questions = questions ?? new Dictionary<Guid, BaseQuestionModel>()
+                Questions = questions != null ? questions.ToDictionary(question => question.Id, question => question) : new Dictionary<Guid, BaseQuestionModel>()
             };
         }
 
@@ -1698,6 +1709,7 @@ namespace WB.Tests.Unit
                     => _.Get(It.IsAny<string>()) == interview),
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                Stub.MvxMainThreadDispatcher(),
                 questionState ?? Mock.Of<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
