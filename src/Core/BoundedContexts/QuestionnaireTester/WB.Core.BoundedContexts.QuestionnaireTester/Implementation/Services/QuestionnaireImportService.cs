@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     questionModel = new GpsCoordinatesQuestionModel();
                     break;
                 case QuestionType.Text:
-                    questionModel = new MaskedTextQuestionModel { Mask = (question as TextQuestion).Mask };
+                    questionModel = new TextQuestionModel { Mask = (question as TextQuestion).Mask };
                     break;
                 case QuestionType.TextList:
                     var listQuestion = question as TextListQuestion;

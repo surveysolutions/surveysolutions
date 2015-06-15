@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
             var questionnaire = Create.QuestionnaireModel(questions: new Dictionary<Guid, BaseQuestionModel>
             {
                 { questionId, new LinkedSingleOptionQuestionModel { LinkedToQuestionId = linkedToQuestionId } },
-                { linkedToQuestionId, new MaskedTextQuestionModel() },
+                { linkedToQuestionId, new TextQuestionModel() },
             });
 
             var interview = Mock.Of<IStatefulInterview>(_

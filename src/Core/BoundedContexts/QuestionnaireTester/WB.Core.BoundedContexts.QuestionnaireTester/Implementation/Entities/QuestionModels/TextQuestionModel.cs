@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels
 {
-    public class MaskedTextQuestionModel : BaseQuestionModel
+    public class TextQuestionModel : BaseQuestionModel
     {
         public string Mask { get; set; }
     }

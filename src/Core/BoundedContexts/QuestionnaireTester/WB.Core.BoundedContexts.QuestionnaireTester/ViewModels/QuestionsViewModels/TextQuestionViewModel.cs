@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var textQuestionModel = questionnaire.GetMaskedTextQuestion(questionIdentity.Id);
+            var textQuestionModel = questionnaire.GetTextQuestion(questionIdentity.Id);
             this.Mask = textQuestionModel.Mask;
         }
 
