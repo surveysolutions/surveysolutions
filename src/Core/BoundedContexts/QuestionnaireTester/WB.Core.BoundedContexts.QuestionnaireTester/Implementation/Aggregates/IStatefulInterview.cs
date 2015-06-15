@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         RealNumericAnswer GetRealNumericAnswer(Identity identity);
 
-        MaskedTextAnswer GetTextAnswer(Identity identity);
+        TextAnswer GetTextAnswer(Identity identity);
 
         SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
         

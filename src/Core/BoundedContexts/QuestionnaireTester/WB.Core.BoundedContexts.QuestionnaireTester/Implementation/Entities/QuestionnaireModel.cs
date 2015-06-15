@@ -41,9 +41,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
             return this.GetQuestion<RealNumericQuestionModel>(questionId);
         }
 
-        public MaskedTextQuestionModel GetMaskedTextQuestion(Guid questionId)
+        public TextQuestionModel GetTextQuestion(Guid questionId)
         {
-            return this.GetQuestion<MaskedTextQuestionModel>(questionId);
+            return this.GetQuestion<TextQuestionModel>(questionId);
         }
 
         public TextListQuestionModel GetTextListQuestion(Guid questionId)

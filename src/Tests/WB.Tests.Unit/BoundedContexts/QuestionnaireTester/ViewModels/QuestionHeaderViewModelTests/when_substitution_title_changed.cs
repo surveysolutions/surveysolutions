@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             var substitutionTargetQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var substitedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var answer = new MaskedTextAnswer();
+            var answer = new TextAnswer();
             answer.SetAnswer("new value");
             var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitedQuestionId, Empty.RosterVector) == answer);
 
@@ -36,12 +36,12 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
                 Questions = new Dictionary<Guid, BaseQuestionModel>(),
                 QuestionsByVariableNames = new Dictionary<string, BaseQuestionModel>()
             };
-            var substTargetModel = new MaskedTextQuestionModel
+            var substTargetModel = new TextQuestionModel
             {
                 Title = "Old title %substitute%",
                 Id = substitutionTargetQuestionId
             };
-            var substitutedModel = new MaskedTextQuestionModel
+            var substitutedModel = new TextQuestionModel
             {
                 Id = substitedQuestionId,
                 Variable = "substitute"

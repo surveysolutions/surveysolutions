@@ -31,7 +31,7 @@ namespace WB.UI.QuestionnaireTester.Converters
             if (value != null)
             {
                 TypeSwitch.Do(value, 
-                    TypeSwitch.Case<MaskedTextAnswer>((maskedTextAnswerModel)=>answerAsString = maskedTextAnswerModel.Answer),
+                    TypeSwitch.Case<TextAnswer>((maskedTextAnswerModel)=>answerAsString = maskedTextAnswerModel.Answer),
                     TypeSwitch.Case<IntegerNumericAnswer>((integerAnswerModel) => answerAsString = GetAnswerOnIntegerQuestionAsString(integerAnswerModel, culture)),
                     TypeSwitch.Case<RealNumericAnswer>((realAnswerModel)=>answerAsString = GetAnswerOnRealQuestionAsString(realAnswerModel,culture)),
                     TypeSwitch.Case<DateTimeAnswer>((dateAnswerModel)=>answerAsString = dateAnswerModel.Answer.ToString("d", culture)),
