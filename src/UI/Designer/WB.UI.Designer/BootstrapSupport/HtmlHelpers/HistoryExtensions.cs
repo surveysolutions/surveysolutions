@@ -67,30 +67,30 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             switch (actionType)
             {
                 case QuestionnaireActionType.Add:
-                    return itemsToAdd.Contains(itemType) ? QuestionnaireHistory.added : QuestionnaireHistory.created;
+                    return itemsToAdd.Contains(itemType) ? QuestionnaireHistoryResources.added : QuestionnaireHistoryResources.created;
                 case QuestionnaireActionType.Clone:
-                    return QuestionnaireHistory.cloned_from;
+                    return QuestionnaireHistoryResources.cloned_from;
                 case QuestionnaireActionType.Delete:
-                    return QuestionnaireHistory.deleted;
+                    return QuestionnaireHistoryResources.deleted;
                 case QuestionnaireActionType.Update:
-                    return QuestionnaireHistory.changed;
+                    return QuestionnaireHistoryResources.changed;
                 case QuestionnaireActionType.GroupBecameARoster:
-                    return QuestionnaireHistory.became_a_roster;
+                    return QuestionnaireHistoryResources.became_a_roster;
                 case QuestionnaireActionType.RosterBecameAGroup:
-                    return QuestionnaireHistory.became_a_group;
+                    return QuestionnaireHistoryResources.became_a_group;
                 case QuestionnaireActionType.Move:
-                    return QuestionnaireHistory.moved_to;
+                    return QuestionnaireHistoryResources.moved_to;
                 case QuestionnaireActionType.Import:
-                    return QuestionnaireHistory.created;
+                    return QuestionnaireHistoryResources.created;
                 case QuestionnaireActionType.Replace:
-                    return QuestionnaireHistory.replaced;
+                    return QuestionnaireHistoryResources.replaced;
             }
-            return QuestionnaireHistory.unknown;
+            return QuestionnaireHistoryResources.unknown;
         }
 
         private static string GetStringRepresentation(string type)
         {
-            return new ResourceManager(typeof(QuestionnaireHistory)).GetString(type);
+            return new ResourceManager(typeof(QuestionnaireHistoryResources)).GetString(type);
         }
 
         private static string GetQuestionnaireItemTypeStringRepresentationForLink(QuestionnaireItemType type)

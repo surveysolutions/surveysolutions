@@ -343,10 +343,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\QuestionnaireHistory.Designer.cs">
+    <Compile Include="Resources\QuestionnaireHistoryResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireHistory.resx</DependentUpon>
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
@@ -1318,9 +1318,9 @@
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistory.resx">
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireHistory.Designer.cs</LastGenOutput>
+      <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
