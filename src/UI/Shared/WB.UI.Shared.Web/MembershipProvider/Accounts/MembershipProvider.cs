@@ -687,7 +687,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             account.LastActivityAt = user.LastActivityDate;
             account.LastLockedOutAt = user.LastLockoutDate;
             account.LastPasswordChangeAt = user.LastPasswordChangedDate;
-            account.ProviderUserKey = user.ProviderUserKey;
+            account.ProviderUserKey = Guid.Parse(user.ProviderUserKey.ToString());
             account.UserName = user.UserName;
         }
 

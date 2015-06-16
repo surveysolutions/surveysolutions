@@ -46,12 +46,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private bool wasExpressionsMigrationPerformed = false;
 
-        private void Apply(SharedPersonToQuestionnaireAdded e)
+        internal void Apply(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
         }
 
-        private void Apply(SharedPersonFromQuestionnaireRemoved e)
+        internal void Apply(SharedPersonFromQuestionnaireRemoved e)
         {
             this.innerDocument.SharedPersons.Remove(e.PersonId);
         }
@@ -97,6 +97,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(TemplateImported e)
         {
             var upgradedDocument = e.Source;
+
+            upgradedDocument.ReplaceSharedPersons(this.innerDocument.SharedPersons);
+
             this.innerDocument = upgradedDocument;
         }
 
@@ -894,8 +897,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ApplyEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = clonedDocument,
-                ClonedFromQuestionnaireId = clonedDocument.PublicKey,
-                ClonedFromQuestionnaireVersion = clonedDocument.LastEventSequence
+                ClonedFromQuestionnaireId = document.PublicKey,
+                ClonedFromQuestionnaireVersion = document.LastEventSequence
             });
 
             if (source.UsesCSharp)
@@ -1352,7 +1355,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
-
+            
             var group = this.GetGroupById(groupId);
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
@@ -1937,6 +1940,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
+            this.ThrowIfIsIntegerConflictsWithMaxValue(isInteger, maxValue);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
 
             this.ApplyEvent(new NumericQuestionChanged
@@ -2779,6 +2783,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+        private void ThrowIfIsIntegerConflictsWithMaxValue(bool isInteger, int? maxValue)
+        {
+            if (!isInteger && maxValue.HasValue)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DecimalQuestionCantHaveMaxValueSettings,
+                    "Decimal question can't have Max Value settings");
+            }
+        }
+
         private void ThrowIfDecimalPlacesValueIsIncorrect(int? countOfDecimalPlaces)
         {
             if (!countOfDecimalPlaces.HasValue)
@@ -2956,6 +2970,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+        
         private void ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(IQuestion question, IGroup targetGroup)
         {
 

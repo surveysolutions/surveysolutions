@@ -1,4 +1,7 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Roles
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.Transactions;
+
+namespace WB.UI.Shared.Web.MembershipProvider.Roles
 {
     using System;
     using System.Collections.Specialized;
@@ -30,6 +33,10 @@
     {
         private IRoleRepository _roleService;
 
+        private ITransactionManagerProvider TransactionProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
+        }
         /// <summary>
         /// Gets repository used to retrieve information from the data source.
         /// </summary>
@@ -99,8 +106,26 @@
         /// <param name="username">The user name to search for.</param><param name="roleName">The role to search in.</param>
         public override bool IsUserInRole(string username, string roleName)
         {
-            var user = this.Repository.GetUser(this.ApplicationName, username);
-            return user.IsInRole(roleName);
+            var transactionManager = this.TransactionProvider.GetTransactionManager();
+            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
+
+            if (shouldUseOwnTransaction)
+            {
+                transactionManager.BeginQueryTransaction();
+            }
+
+            try
+            {
+                var user = this.Repository.GetUser(this.ApplicationName, username);
+                return user.IsInRole(roleName);
+            }
+            finally
+            {
+                if (shouldUseOwnTransaction)
+                {
+                    transactionManager.RollbackQueryTransaction();
+                }
+            }
         }
 
         /// <summary>
@@ -112,10 +137,29 @@
         /// <param name="username">The user to return a list of roles for.</param>
         public override string[] GetRolesForUser(string username)
         {
-            var user = this.Repository.GetUser(this.ApplicationName, username);
-            if (user == null)
-                return new string[0];
-            return user.GetRoles().ToArray();
+            var transactionManager = this.TransactionProvider.GetTransactionManager();
+            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
+
+            if (shouldUseOwnTransaction)
+            {
+                transactionManager.BeginQueryTransaction();
+            }
+
+
+            try
+            {
+                var user = this.Repository.GetUser(this.ApplicationName, username);
+                if (user == null)
+                    return new string[0];
+                return user.GetRoles().ToArray();
+            }
+            finally
+            {
+                if (shouldUseOwnTransaction)
+                {
+                    transactionManager.RollbackQueryTransaction();
+                }
+            }
         }
 
         /// <summary>
