@@ -4,10 +4,9 @@ using System.Linq;
 using Android.Content;
 using Android.Text;
 using Android.Util;
-using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
 using WB.Core.GenericSubdomains.Portable;
 
 
