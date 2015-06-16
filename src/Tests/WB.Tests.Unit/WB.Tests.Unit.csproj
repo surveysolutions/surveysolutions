@@ -359,6 +359,11 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\StatefulInterviewTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\MaskTextTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_with_length_more_then_length_of_mask.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_without_setting_mask.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_coincidents_with_mask.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_partialy_coincidents_with_part_of_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />

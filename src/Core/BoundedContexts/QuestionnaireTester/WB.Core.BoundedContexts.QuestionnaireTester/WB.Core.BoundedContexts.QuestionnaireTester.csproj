@@ -85,6 +85,9 @@
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
+    <Compile Include="Services\MaskText\MaskedText.cs" />
+    <Compile Include="Services\MaskText\Range.cs" />
+    <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Implementation\Aggregates\IStatefulInterview.cs" />
