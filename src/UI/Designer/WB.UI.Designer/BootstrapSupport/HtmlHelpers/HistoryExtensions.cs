@@ -18,7 +18,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
-            var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType.ToString()),
+            var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType),
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
                     record.TargetTitle, record.TargetType),
                 GetActionStringRepresentations(record.ActionType, record.TargetType));
@@ -26,7 +26,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
                 mainRecord += string.Format(" {0} {1}",
-                    GetStringRepresentation(historicalRecordReference.Type.ToString()).ToLower(),
+                    GetStringRepresentation(historicalRecordReference.Type).ToLower(),
                     BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, historicalRecordReference.Id,
                         historicalRecordReference.ParentId,
                         historicalRecordReference.Title, historicalRecordReference.Type));
@@ -45,10 +45,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             QuestionnaireItemType type)
         {
             var quatedTitle = string.Format("\"{0}\"", title);
-            if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
-                return helper.Label(quatedTitle);
+
             if (type == QuestionnaireItemType.Questionnaire)
                 return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
+
+            if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
+                return helper.Label(quatedTitle);
+
             var url =
                 urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
                     chapterId.FormatGuid(), itemId.FormatGuid(), GetQuestionnaireItemTypeStringRepresentationForLink(type)));
@@ -81,16 +84,16 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 case QuestionnaireActionType.Move:
                     return QuestionnaireHistoryResources.moved_to;
                 case QuestionnaireActionType.Import:
-                    return QuestionnaireHistoryResources.created;
+                    return QuestionnaireHistoryResources.imported;
                 case QuestionnaireActionType.Replace:
                     return QuestionnaireHistoryResources.replaced;
             }
             return QuestionnaireHistoryResources.unknown;
         }
 
-        private static string GetStringRepresentation(string type)
+        private static string GetStringRepresentation(QuestionnaireItemType type)
         {
-            return new ResourceManager(typeof(QuestionnaireHistoryResources)).GetString(type);
+            return new ResourceManager(typeof(QuestionnaireHistoryResources)).GetString(type.ToString());
         }
 
         private static string GetQuestionnaireItemTypeStringRepresentationForLink(QuestionnaireItemType type)

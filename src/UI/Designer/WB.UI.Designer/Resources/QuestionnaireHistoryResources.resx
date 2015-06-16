@@ -127,7 +127,7 @@
     <value>Question</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire,</value>
+    <value>Questionnaire</value>
   </data>
   <data name="Roster" xml:space="preserve">
     <value>Roster</value>
@@ -185,5 +185,8 @@
   </data>
   <data name="UserName" xml:space="preserve">
     <value>UserName</value>
+  </data>
+  <data name="imported" xml:space="preserve">
+    <value>imported</value>
   </data>
 </root>

@@ -123,8 +123,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
+            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.Source.CreatedBy, evnt.EventTimeStamp,
-                QuestionnaireActionType.Replace, QuestionnaireItemType.Questionnaire,
+                questionnaireStateTacker==null?QuestionnaireActionType.Import : QuestionnaireActionType.Replace, QuestionnaireItemType.Questionnaire,
                 evnt.EventSourceId, evnt.Payload.Source.Title, evnt.EventSequence);
 
             UpdateFullQuestionnaireState(evnt.Payload.Source, evnt.EventSourceId, evnt.Payload.Source.CreatedBy ?? Guid.Empty);
