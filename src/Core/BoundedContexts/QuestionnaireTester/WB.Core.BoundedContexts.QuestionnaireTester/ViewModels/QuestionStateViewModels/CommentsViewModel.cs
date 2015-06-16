@@ -89,16 +89,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         }
 
 
-        private IMvxCommand showCommentEditorCommand;
-        public IMvxCommand ShowCommentEditorCommand
-        {
-            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
-        }
-
-        private void ShowCommentsCommand()
-        {
-            ShowCommentInEditor();
-        }
+        
 
         private void SendCommentQuestionCommand()
         {
