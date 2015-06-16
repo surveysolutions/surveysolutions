@@ -12,7 +12,7 @@
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory.QuestionnaireChangeHistory
 
 @{
-    ViewBag.Title = QuestionnaireHistory.QuestionnaireChangeHistory;
+    ViewBag.Title = QuestionnaireHistoryResources.QuestionnaireChangeHistory;
 }
 @section Scripts {
     @Scripts.Render("~/list")
@@ -22,10 +22,10 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink(string.Format(QuestionnaireHistory.BackTo_0_Format, Model.Title ), "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" })
+                @Html.ActionLink(string.Format(QuestionnaireHistoryResources.BackTo_0_Format, Model.Title ), "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" })
             </th>
-            <th>@QuestionnaireHistory.UserName</th>
-            <th>@QuestionnaireHistory.Timestamp</th>
+            <th>@QuestionnaireHistoryResources.UserName</th>
+            <th>@QuestionnaireHistoryResources.Timestamp</th>
         </tr>
     </thead>
 </table>
@@ -33,7 +33,7 @@
     <div class="scroller-container">
         @if (Model == null || Model.ChangeHistory.Count == 0)
         {
-            <p class="text-center" style="line-height: 10em">@QuestionnaireHistory.ThisListDoesNotContainAnyRecords</p>
+            <p class="text-center" style="line-height: 10em">@QuestionnaireHistoryResources.ThisListDoesNotContainAnyRecords</p>
         }
         else
         {
@@ -47,7 +47,7 @@
                         <td class="search-value">
                             @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
                         </td>
-                        <td>@(listViewModel.UserName ?? QuestionnaireHistory.UnknownUserName)</td>
+                        <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
                         <td>@listViewModel.Timestamp</td>
                     </tr>
                 }
