@@ -4,6 +4,7 @@ using System.Web.Http;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
@@ -68,7 +69,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Route("apis/v1/interviews/{id:guid}/details")]
         public InterviewApiDetails InterviewDetails(Guid id)
         {
-            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id);
+            InterviewDetailsFilter filter = new InterviewDetailsFilter();
+
+            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, filter:filter);
 
             if (interview == null)
             {

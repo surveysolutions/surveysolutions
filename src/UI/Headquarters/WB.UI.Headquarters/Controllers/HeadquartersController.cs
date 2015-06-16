@@ -85,7 +85,9 @@ namespace WB.UI.Headquarters.Controllers
                     Id = user.PublicKey,
                     Email = user.Email,
                     IsLocked = user.IsLockedByHQ,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    PersonName = user.PersonName,
+                    PhoneNumber = user.PhoneNumber
                 });
         }
 

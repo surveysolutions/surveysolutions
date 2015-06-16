@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -51,13 +52,15 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly bool hqEnabled;
         private readonly bool isSupervisorFunctionsEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
+        private readonly int? interviewLimitCount;
         private readonly InterviewHistorySettings interviewHistorySettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
             InterviewHistorySettings interviewHistorySettings,
-            bool isSupervisorFunctionsEnabled)
+            bool isSupervisorFunctionsEnabled,
+            int? interviewLimitCount = null)
         {
             this.currentFolderPath = currentFolderPath;
             this.isDebug = isDebug;
@@ -67,11 +70,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewHistorySettings = interviewHistorySettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
+            this.interviewLimitCount = interviewLimitCount;
         }
 
         public override void Load()
         {
-            //this.Bind<IUserViewFactory>().To<UserViewFactory>(); // binded automatically but should not
+            this.Bind<InterviewPreconditionsServiceSettings>()
+                .ToConstant(new InterviewPreconditionsServiceSettings(interviewLimitCount));
+            this.Bind<IInterviewPreconditionsService>().To<SurveyManagementPreconditionsService>().InSingletonScope();
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());

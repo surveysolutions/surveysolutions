@@ -3,10 +3,10 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 {
-    public class QuantityByResponsibleReportView : IListView<QuantityByInterviewersReportRow>
+    public class QuantityByResponsibleReportView : IListView<QuantityByResponsibleReportRow>
     {
         public QuantityByResponsibleReportView(
-            QuantityByInterviewersReportRow[] items,
+            QuantityByResponsibleReportRow[] items,
             DateTimeRange[] dateTimeRanges, int totalCount)
         {
             Items = items;
@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 
         public int TotalCount { get; set; }
 
-        public IEnumerable<QuantityByInterviewersReportRow> Items { get; set; }
+        public IEnumerable<QuantityByResponsibleReportRow> Items { get; set; }
 
         public DateTimeRange[] DateTimeRanges { get; private set; }
     }

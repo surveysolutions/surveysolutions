@@ -150,6 +150,9 @@
   <data name="Reports" xml:space="preserve">
     <value>Reports</value>
   </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>

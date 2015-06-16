@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             statusEvents = new List<object>();
             statusEvents.Add(new InterviewerAssigned(interviewId, Guid.NewGuid(), DateTime.Now));
-            statusEvents.Add(new InterviewStatusChanged(InterviewStatus.Completed, "comment"));
-            statusEvents.Add(new InterviewStatusChanged(InterviewStatus.Restarted,"rest"));
+            statusEvents.Add(new InterviewCompleted(Guid.NewGuid(), DateTime.Now, "comment"));
+            statusEvents.Add(new InterviewRestarted(Guid.NewGuid(), DateTime.Now,"rest"));
             statusEvents.Add(new InterviewRejected(Guid.NewGuid(), "rej", DateTime.Now));
             statusEvents.Add(new InterviewApproved(Guid.NewGuid(), "comment", DateTime.Now));
             statusEvents.Add(new InterviewRestored(Guid.NewGuid()));

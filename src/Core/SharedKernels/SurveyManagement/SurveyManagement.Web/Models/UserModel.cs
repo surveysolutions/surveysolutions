@@ -27,14 +27,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
             ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessageResourceName = "RequiredEmailErrorMessage",
-            ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [EmailAddress(ErrorMessageResourceName = "EmailErrorMessage",
             ErrorMessageResourceType = typeof (FieldsAndValidations), ErrorMessage = null)]
         [Display(Name = "EmailFieldName", ResourceType = typeof (FieldsAndValidations), Order = 4)]
         public string Email { get; set; }
 
-        [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 5)]
+        [StringLength(100, ErrorMessageResourceName = "PersonNameErrorMessage",
+            ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
+        [Display(Name = "PersonNameFieldName", ResourceType = typeof(FieldsAndValidations), Order = 5)]
+        public string PersonName { get; set; }
+
+        [Phone(ErrorMessageResourceName = "PhoneErrorMessage",
+            ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
+        [Display(Name = "PhoneNumberFieldName", ResourceType = typeof(FieldsAndValidations), Order = 6)]
+        public string PhoneNumber { get; set; }
+
+        [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 7)]
         public bool IsLocked { get; set; }
     }
 }

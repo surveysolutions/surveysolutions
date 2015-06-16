@@ -29,14 +29,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             {
                 // arrange
                 Guid responsibleId = Guid.NewGuid();
+                Guid sharedPersonWith = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+                questionnaire.Apply(new SharedPersonToQuestionnaireAdded() { PersonId = sharedPersonWith });
                 var newState = new QuestionnaireDocument();
-
                 // act
                 questionnaire.ImportQuestionnaire(responsibleId,newState);
 
                 // assert
                 Assert.That(GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
+                Assert.That(questionnaire.CreateSnapshot().QuestionnaireDocument.SharedPersons.Contains(sharedPersonWith), Is.True);
             }
         }
 

@@ -39,7 +39,9 @@ namespace WB.UI.Headquarters.Controllers
                                               password: passwordHasher.Hash(model.Password), 
                                               email: model.Email, isLockedBySupervisor: false,
                                               isLockedByHQ: false, roles: new[] { UserRoles.Administrator }, 
-                                              supervsor: null));
+                                              supervsor: null,
+                                              personName:model.PersonName,
+                                              phoneNumber:model.PhoneNumber));
 
                     return this.RedirectToAction("LogOn", "Account");
                 }
