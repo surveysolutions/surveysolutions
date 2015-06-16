@@ -77,5 +77,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                 IsAnswered = interview.WasAnswered(questionIdentity);
             }
         }
+
+        private IMvxCommand showCommentEditorCommand;
+        public IMvxCommand ShowCommentEditorCommand
+        {
+            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
+        }
+
+        private void ShowCommentsCommand()
+        {
+            if (this.Enablement.Enabled)
+            {
+                this.Comments.ShowCommentInEditor();
+            }
+        }
     }
 }

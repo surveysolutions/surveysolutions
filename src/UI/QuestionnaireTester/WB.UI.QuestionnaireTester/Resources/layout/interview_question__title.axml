@@ -2,7 +2,7 @@
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Header"
-    local:MvxBind="LongClick QuestionState.Comments.ShowCommentEditorCommand; HideKeyboardOnClick .">
+    local:MvxBind="LongClick QuestionState.ShowCommentEditorCommand; HideKeyboardOnClick .">
     <TextView
         style="@style/Interview_Question_Title"
         local:MvxBind="Text QuestionState.Header.Title; Enabled QuestionState.Enablement.Enabled" />
