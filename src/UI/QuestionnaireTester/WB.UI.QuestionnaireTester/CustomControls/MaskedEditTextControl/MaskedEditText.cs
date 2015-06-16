@@ -9,34 +9,21 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
-using String = System.String;
 
 
 namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 {
     public class MaskedEditText : EditText, IInputFilter
     {
-        private const char DigitKey = '#';
-        private const char CharacterKey = '~';
-        private const char AnythingKey = '*';
+        private readonly MaskedText maskedText = new MaskedText();
 
-        private readonly char[] charRepresentationArray = { AnythingKey, DigitKey, CharacterKey };
-
-        private String mask = String.Empty;
-        private char maskFill = '_';
-
-        private int[] rawToMask;
-        private RawText rawText;
         private bool editingBefore;
         private bool editingOnChanged;
         private bool editingAfter;
-        private int?[] maskToRaw;
-        private char[] charsInMask;
         private int selection;
+        private int lastValidMaskPosition;
         private bool initialized;
         private bool ignore;
-        private int maxRawLength;
-        private int lastValidMaskPosition;
         private bool selectionChanged;
 
     
@@ -54,49 +41,45 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
         private void CleanUp() 
         {
-            if (this.mask.IsNullOrEmpty()) 
+            if (this.Mask.IsNullOrEmpty()) 
                 return;
 
             this.initialized = false;
-        
-            this.GeneratePositionArrays();
 
-            this.maxRawLength = this.maskToRaw[this.PreviousValidPosition(this.mask.Length - 1)].GetValueOrDefault(-1) + 1;
-            this.rawText = new RawText(this.maxRawLength);
-            this.selection = this.rawToMask[0];
+            this.maskedText.Init();
+
+            this.selection = this.maskedText.FindFirstValidMaskPosition();
 
             this.editingBefore = true;
             this.editingOnChanged = true;
             this.editingAfter = true;
 
-            if(this.HasHint) 
+            if (Text.IsNullOrEmpty())
             {
-                this.EditableText.Clear();
-            }
-            else 
-            {
-                this.EditableText.Clear();
-                this.EditableText.Append(this.ReplaceCharRepresentation(this.mask, this.maskFill));
+                if (this.HasHint && !this.maskedText.HasAnyText)
+                {
+                    this.EditableText.Clear();
+                }
+                else
+                {
+                    //this.EditableText.Clear();
+                    //this.EditableText.Append(this.maskedText.MakeMaskedText());
+                    var newMaskedText = this.maskedText.MakeMaskedText();
+                    if (newMaskedText != this.Text)
+                    {
+                        this.EditableText.Replace(0, this.Text.Length, newMaskedText);
+                    }
+                }
             }
 
             this.editingBefore = false;
             this.editingOnChanged = false;
             this.editingAfter = false;
         
-            this.lastValidMaskPosition = this.FindLastValidMaskPosition();
+            this.lastValidMaskPosition = maskedText.FindLastValidMaskPosition();
             this.initialized = true;
         }
 
-        private int FindLastValidMaskPosition() 
-        {
-            for(int i = this.maskToRaw.Length - 1; i >= 0; i--) 
-            {
-                if(this.maskToRaw[i].HasValue) 
-                    return i;
-            }
-
-            throw new RuntimeException("Mask contains only the representation char");
-        }
 
         public MaskedEditText(Context context, IAttributeSet attrs, int defStyle)
             :base(context, attrs, defStyle)
@@ -106,14 +89,18 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
         public string Mask
         {
-            get { return this.mask; }
+            get { return maskedText.Mask; }
             set
             {
-                if (this.mask != value)
+                if (maskedText.Mask != value)
                 {
-                    this.mask = value;
+                    this.maskedText.Mask = value;
+                    //this.Text = string.Empty; // clear text value after change mask
                     this.CleanUp();
-                    this.Text = string.Empty; // clear text value after change mask
+
+                    this.SetRawInputType(value.IsNullOrEmpty() 
+                        ? InputTypes.Null 
+                        : InputTypes.TextFlagNoSuggestions);
                 }
             }
         }
@@ -143,56 +130,13 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             get { return this.Hint != null; }
         }
 
-        private void GeneratePositionArrays() 
-        {
-            int[] aux = new int[this.mask.Length];
-            this.maskToRaw = new int?[this.mask.Length];
-            String charsInMaskAux = "";
-        
-            int charIndex = 0;
-            for(int i = 0; i < this.mask.Length; i++) 
-            {
-                char currentChar = this.mask[i];
-                if(this.charRepresentationArray.Contains(currentChar)) 
-                {
-                    aux[charIndex] = i;
-                    this.maskToRaw[i] = charIndex++;
-                }
-                else 
-                {
-                    String charAsString = Character.ToString(currentChar);
-                    if(!charsInMaskAux.Contains(charAsString) 
-                        && !Character.IsLetter(currentChar) 
-                        && !Character.IsDigit(currentChar)) 
-                    {
-                        charsInMaskAux = charsInMaskAux + charAsString;
-                    }
-                    this.maskToRaw[i] = null;
-                }
-            }
-
-            if(charsInMaskAux.IndexOf(' ') < 0) 
-            {
-                charsInMaskAux = charsInMaskAux + " ";
-            }
-
-            this.charsInMask = charsInMaskAux.ToCharArray();
-        
-            this.rawToMask = new int[charIndex];
-            for (int i = 0; i < charIndex; i++) 
-            {
-                this.rawToMask[i] = aux[i];
-            }
-        }
-    
+   
         private void Init() 
         {
             this.SetFilters(new IInputFilter[] { this });
             this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
             this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
             this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
-
-            this.SetRawInputType(InputTypes.TextFlagNoSuggestions);
         }
 
         protected override void OnTextChanged(ICharSequence s, int start, int before, int count)
@@ -202,7 +146,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
         public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {
-            if (this.mask.IsNullOrEmpty())
+            if (this.Mask.IsNullOrEmpty())
                 return null;
 
             if (this.editingAfter)
@@ -211,48 +155,16 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             if (source.Length() == 0)
                 return null;
 
-            char[] filterArray = new char[source.Length()];
+            var filteredString = this.maskedText.FilterInserting(source.ToString(), dstart);
+            if (filteredString == null)
+                return null;
 
-            var indexInMask = dstart;
-
-            for (int i = 0; i < source.Length(); i++)
-            {
-                var currentChar = source.CharAt(i);
-
-                indexInMask = this.NextValidPosition(indexInMask);
-                if (indexInMask >= this.mask.Length)
-                    continue;
-
-                var maskChar = this.mask[indexInMask];
-
-                switch (maskChar)
-                {
-                    case DigitKey:
-                        filterArray[i] = char.IsDigit(currentChar) ? currentChar : this.maskFill;
-                        break;
-
-                    case CharacterKey:
-                        filterArray[i] = char.IsLetter(currentChar) ? currentChar : this.maskFill;
-                        break;
-
-                    case AnythingKey:
-                        filterArray[i] = currentChar;
-                        break;
-
-                    default:
-                        filterArray[i] = maskChar;
-                        break;
-                }
-            }
-
-            var filterString = new string(filterArray);
-            filterString = filterString.Replace(this.maskFill.ToString(), "");
-            return new Java.Lang.String(filterString);
+            return new Java.Lang.String(filteredString);
         }
 
         void BeforeTextChangedHandler(IEnumerable<char> s, int start, int count, int after)
         {
-            if (this.mask.IsNullOrEmpty())
+            if (this.Mask.IsNullOrEmpty())
                 return;
 
             if (!this.editingBefore)
@@ -263,31 +175,13 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                     this.ignore = true;
                 }
 
-                int rangeStart = start;
-                int rangeEnd = start + count;
-
-                if (after == 0)
-                {
-                    rangeStart = this.ErasingStart(start);
-                    rangeEnd = start + after;
-                }
-
-                Range range = this.CalculateRange(rangeStart, rangeEnd);
-                if (range.Start.HasValue)
-                {
-                    this.rawText.SubtractFromString(range);
-                }
-
-                if (count > 0)
-                {
-                    this.selection = this.PreviousValidPosition(start);
-                }
+                maskedText.RemoveRange(start, count, after, ref this.selection);
             }
         }
 
         void OnTextChangedHandle(string s, int start, int before, int count)
         {
-            if (this.mask.IsNullOrEmpty())
+            if (this.Mask.IsNullOrEmpty())
                 return;
 
             if (!this.editingOnChanged && this.editingBefore)
@@ -299,42 +193,33 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
                 if (count > 0)
                 {
-                    int startingPosition = this.maskToRaw[this.NextValidPosition(start)].GetValueOrDefault(-1);
-                    String addedString = s.Substring(start, count);
-                    var newString = this.Clear(addedString);
-                    count = this.rawText.AddToString(newString, startingPosition, this.maxRawLength);
-
-                    if (this.initialized)
-                    {
-                        int currentPosition = startingPosition + count < this.rawToMask.Length
-                            ? this.rawToMask[startingPosition + count]
-                            : this.lastValidMaskPosition + 1;
-                        this.selection = this.NextValidPosition(currentPosition);
-                    }
+                    string addedString = s.Substring(start, count);
+                    maskedText.AddString(addedString, start, ref this.selection);
                 }
             }
         }
 
         void AfterTextChangedHandler(IEditable s)
         {
-            if (this.mask.IsNullOrEmpty()) 
+            if (this.Mask.IsNullOrEmpty()) 
                 return;
 
             if(!this.editingAfter && this.editingBefore && this.editingOnChanged) 
             {
                 this.editingAfter = true;
-                if (!this.rawText.HasAnyText && this.HasHint) 
+                if (!this.maskedText.HasAnyText && this.HasHint) 
                 {
                     this.selection = 0;
                     this.EditableText.Clear(); 
                 }
                 else 
                 {
-                    this.EditableText.Clear();
-                    this.EditableText.Append(this.MakeMaskedText());
+                    //this.EditableText.Clear();
+                    //this.EditableText.Append(this.maskedText.MakeMaskedText());
+                    this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
                 }
 
-                this.IsMaskedFormAnswered = this.rawText.IsAnswered;
+                this.IsMaskedFormAnswered = this.maskedText.IsMaskedFormAnswered;
             
                 this.selectionChanged = false;
                 this.SetSelection(this.selection);
@@ -350,7 +235,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         {
             // On Android 4+ this method is being called more than 1 time if there is a hint in the EditText, what moves the cursor to left
             // Using the bool var selectionChanged to limit to one execution
-            if (this.mask.IsNullOrEmpty()) 
+            if (this.Mask.IsNullOrEmpty()) 
             {
                 base.OnSelectionChanged(selStart, selEnd);
                 return;
@@ -360,15 +245,15 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             {
                 if(!this.selectionChanged) 
                 {
-                    if (!this.rawText.HasAnyText && this.HasHint) 
+                    if (!this.maskedText.HasAnyText && this.HasHint) 
                     {
                         selStart = 0;
                         selEnd = 0;
                     }
                     else 
                     {
-                        selStart = this.FixSelection(selStart);
-                        selEnd = this.FixSelection(selEnd);
+                        selStart = this.maskedText.FixSelectionIndex(selStart);
+                        selEnd = this.maskedText.FixSelectionIndex(selEnd);
                     }
 
                     if (this.Text.Length > selStart && this.Text.Length > selEnd)
@@ -379,126 +264,17 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 }
                 else  //check to see if the current selection is outside the already entered text
                 {
-                    if(!(this.HasHint && this.rawText.Length == 0) 
-                        && selStart > this.rawText.Length - 1)
+                    if(!(this.HasHint && this.maskedText.RawTextLength == 0)
+                        && selStart > this.maskedText.RawTextLength - 1)
                     {
-                        this.SetSelection(this.FixSelection(selStart),this.FixSelection(selEnd));
+                        this.SetSelection(
+                            this.maskedText.FixSelectionIndex(selStart), 
+                            this.maskedText.FixSelectionIndex(selEnd));
                     }
                 }
             }
 
             base.OnSelectionChanged(selStart, selEnd);
-        }
-
-
-        private int ErasingStart(int start)
-        {
-            while (start > 0 && !this.maskToRaw[start].HasValue)
-            {
-                start--;
-            }
-
-            return start;
-        }
-    
-        private int FixSelection(int selectionPosition) 
-        {
-            if(selectionPosition > this.LastValidPosition()) 
-                return this.LastValidPosition();
-
-            return this.NextValidPosition(selectionPosition);
-        }
-
-        private int NextValidPosition(int currentPosition) 
-        {
-            while(currentPosition < this.lastValidMaskPosition && !this.maskToRaw[currentPosition].HasValue) 
-            {
-                currentPosition++;
-            }
-
-            if(currentPosition > this.lastValidMaskPosition) 
-                return this.lastValidMaskPosition + 1;
-
-            return currentPosition;
-        }
-    
-        private int PreviousValidPosition(int currentPosition) 
-        {
-            while(currentPosition >= 0 && !this.maskToRaw[currentPosition].HasValue) 
-            {
-                currentPosition--;
-
-                if(currentPosition < 0) 
-                    return this.NextValidPosition(0);
-            }
-
-            return currentPosition;
-        }
-    
-        private int LastValidPosition() 
-        {
-            if(this.rawText.Length == this.maxRawLength) 
-                return this.rawToMask[this.rawText.Length - 1] + 1;
-
-            return this.NextValidPosition(this.rawToMask[this.rawText.Length]);
-        }
-    
-        private String MakeMaskedText() 
-        {
-            char[] maskedText = this.ReplaceCharRepresentation(this.mask, ' ').ToCharArray();
-
-            for(int i = 0; i < this.rawToMask.Length; i++)
-            {
-                var rawTextChar = this.rawText.CharAt(i);
-
-                if (rawTextChar != this.rawText.EmptyChar)
-                {
-                    maskedText[this.rawToMask[i]] = rawTextChar;
-                }
-                else
-                {
-                    maskedText[this.rawToMask[i]] = this.maskFill;
-                }
-            }
-            return new String(maskedText);
-        }
-
-        private Range CalculateRange(int start, int end) 
-        {
-            Range range = new Range();
-            for(int i = start; i <= end && i < this.mask.Length; i++) 
-            {
-                if(this.maskToRaw[i].HasValue) 
-                {
-                    if(!range.Start.HasValue) 
-                    {
-                        range.Start = this.maskToRaw[i];
-                    }
-                    range.End = this.maskToRaw[i];
-                }
-            }
-
-            if(end == this.mask.Length) 
-            {
-                range.End = this.rawText.Length;
-            }
-
-            return range;
-        }
-    
-        private String Clear(String str) 
-        {
-            str = str.Replace(Character.ToString(this.maskFill), String.Empty);
-
-            return str;
-        }
-
-        private string ReplaceCharRepresentation(string originalString, char replaceChar)
-        {
-            return this.charRepresentationArray.Aggregate(
-                originalString, 
-                (current, charRepresentation) => current.Replace(charRepresentation, replaceChar)
-                );
         }
     }
 }

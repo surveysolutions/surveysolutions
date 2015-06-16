@@ -12,7 +12,12 @@
 
         <MaskedEditText
           style="@style/Interview_Question_Answer_TextEditor"
-          local:MvxBind="IsMaskedQuestionAnswered IsMaskedQuestionAnswered; Mask Mask; Text Answer; FocusValueChanged ValueChangeCommand; Hint Localization('TextQuestion_Hint'); BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+          local:MvxBind="Mask Mask; 
+                         Text Answer; 
+                         FocusValueChanged ValueChangeCommand; 
+                         IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 
+                         Hint Localization('TextQuestion_Hint'); 
+                         BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />

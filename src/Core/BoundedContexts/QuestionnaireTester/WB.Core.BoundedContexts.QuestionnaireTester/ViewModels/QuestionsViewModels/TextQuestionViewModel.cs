@@ -91,11 +91,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(SendAnswerTextQuestionCommand)); }
         }
 
-        private async void SendAnswerTextQuestionCommand()
+        private async void SendAnswerTextQuestionCommand(string text)
         {
+            Answer = text;
+
             if (!Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
                 this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError);
@@ -108,7 +110,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: Answer);
+                answer: text);
 
             try
             {
