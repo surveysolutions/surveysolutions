@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.SharedKernels.DataCollection;
@@ -86,47 +84,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             this.IsInProgress = true;
 
-            var hasException = false;
             try
             {
                 var scanCode = await this.qrBarcodeScanService.ScanAsync();
 
-                var command = new AnswerQRBarcodeQuestionCommand(
-                    interviewId: this.interviewId,
-                    userId: this.userIdentity.UserId,
-                    questionId: this.questionIdentity.Id,
-                    rosterVector: this.questionIdentity.RosterVector,
-                    answerTime: DateTime.UtcNow,
-                    answer: scanCode.Code);
+                if (scanCode != null)
+                {
+                    var command = new AnswerQRBarcodeQuestionCommand(
+                        interviewId: this.interviewId,
+                        userId: this.userIdentity.UserId,
+                        questionId: this.questionIdentity.Id,
+                        rosterVector: this.questionIdentity.RosterVector,
+                        answerTime: DateTime.UtcNow,
+                        answer: scanCode.Code);
 
-                this.Answer = scanCode.Code;
-
-                await this.Answering.SendAnswerQuestionCommand(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    await this.Answering.SendAnswerQuestionCommand(command);
+                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    this.Answer = scanCode.Code;
+                }
             }
             catch (InterviewException ex)
             {
-                hasException = true;
                 this.QuestionState.Validity.ProcessException(ex);
             }
-
-            if (hasException)
+            finally
             {
-                await TryGetQbBarcodeAgainAsync();
-            }
-
-            this.IsInProgress = false;
-        }
-
-        private async Task TryGetQbBarcodeAgainAsync()
-        {
-            if (await this.userInteraction.ConfirmAsync(
-                message: UIResources.Interview_GeoLocation_Confirm_NoLocation,
-                title: UIResources.ConfirmationText,
-                okButton: UIResources.ConfirmationTryAgainText,
-                cancelButton: UIResources.ConfirmationCancelText))
-            {
-                this.SaveAnswer();
+                this.IsInProgress = false;
             }
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
@@ -24,31 +25,34 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         ILiteEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
             if (principal == null) throw new ArgumentNullException("principal");
-            if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
+            if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
             if (answerToStringService == null) throw new ArgumentNullException("answerToStringService");
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
             this.eventRegistry = eventRegistry;
+            this.mainThreadDispatcher = mainThreadDispatcher ?? MvxMainThreadDispatcher.Instance;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -62,17 +66,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
 
-            this.questionIdentity = entityIdentity;
+            this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
             var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
@@ -88,7 +92,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.questionIdentity);
 
             IEnumerable<BaseInterviewAnswer> referencedQuestionAnswers =
-                interview.FindBaseAnswerByOrShorterRosterLevel(this.referencedQuestionId, this.questionIdentity.RosterVector);
+                interview.FindAnswersByQuestionId(this.referencedQuestionId);
 
             var referencedQuestion = questionnaire.Questions[this.referencedQuestionId];
 
@@ -102,7 +106,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
-            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel)sender;
+            await OptionSelectedImpl(sender);
+        }
+
+        internal async Task OptionSelectedImpl(object sender)
+        {
+            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
             var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
@@ -147,7 +156,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                     if (optionToRemove != null)
                     {
-                        MvxMainThreadDispatcher.Instance.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
+                        this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
                     }
                 }
             }

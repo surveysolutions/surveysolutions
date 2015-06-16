@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         internal new void Apply(TextQuestionAnswered @event)
         {
             base.Apply(@event);
-            var answer = this.GetOrCreateAnswer<MaskedTextAnswer>(@event);
+            var answer = this.GetOrCreateAnswer<TextAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
 
@@ -422,9 +422,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<RealNumericAnswer>(identity);
         }
 
-        public MaskedTextAnswer GetTextAnswer(Identity identity)
+        public TextAnswer GetTextAnswer(Identity identity)
         {
-            return this.GetQuestionAnswer<MaskedTextAnswer>(identity);
+            return this.GetQuestionAnswer<TextAnswer>(identity);
         }
 
         public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
@@ -443,12 +443,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
-        public IEnumerable<BaseInterviewAnswer> FindBaseAnswerByOrShorterRosterLevel(Guid questionId, decimal[] targetRosterVector)
+        public IEnumerable<BaseInterviewAnswer> FindAnswersByQuestionId(Guid questionId)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
             IEnumerable<Identity> targetQuestions = 
-                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, targetRosterVector, questionnaire, GetRosterInstanceIds);
+                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, new decimal[]{}, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {

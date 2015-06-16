@@ -223,7 +223,7 @@
     <value>Survey Solutions Questionnaire Tester Application</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
+    <value>The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
     <value>START</value>
@@ -283,7 +283,7 @@
     <value>Your login or password is incorrect</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Designer web application is not accessable at this moment. Check connection setting or try again later</value>
+    <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
     <value>Tap to record GPS</value>

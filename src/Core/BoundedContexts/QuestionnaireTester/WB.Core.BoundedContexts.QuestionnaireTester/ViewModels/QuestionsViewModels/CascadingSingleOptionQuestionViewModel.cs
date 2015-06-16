@@ -26,8 +26,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public class CascadingComboboxItemViewModel 
         {
             public string Text { get; set; }
+            public string OriginalText { get; set; }
             public decimal Value { get; set; }
             public decimal ParentValue { get; set; }
+
+            public override string ToString()
+            {
+                return OriginalText;
+            }
         }
 
         private readonly IPrincipal principal;
@@ -108,6 +114,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var optionViewModel = new CascadingComboboxItemViewModel
             {
                 Text = model.Title,
+                OriginalText = model.Title,
                 Value = model.Value,
                 ParentValue = model.ParentValue
             };
@@ -142,10 +149,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set
             {
                 this.selectedObject = value;
-                this.Answer = selectedObject != null 
-                    ? Options.Single(i => i.Value == value.Value).Text 
-                    : null;
-
                 RaisePropertyChanged();
             }
         }
@@ -198,6 +201,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     yield return new CascadingComboboxItemViewModel
                     {
                         Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
+                        OriginalText = model.Text,
                         Value = model.Value,
                         ParentValue = model.ParentValue
                     };
@@ -214,14 +218,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
         {
-            get
-            {
-                if (this.autoCompleteSuggestions == null)
-                {
-                    this.autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
-                }
-                return this.autoCompleteSuggestions;
-            }
+            get { return this.autoCompleteSuggestions; }
             set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
         }
 

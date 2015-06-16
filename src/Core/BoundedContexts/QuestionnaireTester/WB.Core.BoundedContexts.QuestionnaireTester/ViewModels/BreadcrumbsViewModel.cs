@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -21,16 +22,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly ISubstitutionService substitutionService;
         private NavigationState navigationState;
         private string interviewId;
 
         public BreadcrumbsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry,
+            ISubstitutionService substitutionService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
+            this.substitutionService = substitutionService;
         }
 
         public void Init(string interviewId, NavigationState navigationState)
@@ -118,9 +122,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(breadCrumbs);
         }
 
-        private static string GenerateRosterTitle(string groupTitle, string changedRosterInstanceIdentity)
+        private string GenerateRosterTitle(string groupTitle, string rosterInstanceTitle)
         {
-            return string.Format("{0} - {1} / ", groupTitle, changedRosterInstanceIdentity);
+            return string.Format("{0} - {1} / ", groupTitle, string.IsNullOrEmpty(rosterInstanceTitle) ? this.substitutionService.DefaultSubstitutionText : rosterInstanceTitle);
         }
 
         private ReadOnlyCollection<BreadCrumbItemViewModel> items;

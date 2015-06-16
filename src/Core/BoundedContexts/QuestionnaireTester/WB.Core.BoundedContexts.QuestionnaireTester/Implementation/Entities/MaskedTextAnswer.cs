@@ -4,12 +4,12 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
-    public class MaskedTextAnswer : BaseInterviewAnswer
+    public class TextAnswer : BaseInterviewAnswer
     {
         public string Answer { get; private set; }
 
-        public MaskedTextAnswer() { }
-        public MaskedTextAnswer(Guid id, decimal[] rosterVector)
+        public TextAnswer() { }
+        public TextAnswer(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }

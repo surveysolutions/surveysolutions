@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 
         Because of = () => answerValue = interview.FindBaseAnswerByOrDeeperRosterLevel(questionId, new decimal[]{0m, 1m});
 
-        It should_reduce_roster_vector_to_find_target_question_answer = () => ((MaskedTextAnswer)answerValue).Answer.ShouldEqual("answer");
+        It should_reduce_roster_vector_to_find_target_question_answer = () => ((TextAnswer)answerValue).Answer.ShouldEqual("answer");
 
         private static StatefulInterview interview;
         private static Guid questionId;
