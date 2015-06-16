@@ -1,11 +1,13 @@
 ﻿extern alias designer;
 
 using System;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate.Util;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -74,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
                             i =>
                                 i.Title == newtitle && i.CreationDate == documentReplacement.CreationDate &&
                                     i.LastEntryDate == documentReplacement.CreationDate && i.SharedPersons.Count == 1 &&
-                                    i.SharedPersons.Contains(oldView.SharedPersons[0])), questionnaireId.FormatGuid()));
+                                    i.SharedPersons.Contains(oldView.SharedPersons.First())), questionnaireId.FormatGuid()));
 
         }
 

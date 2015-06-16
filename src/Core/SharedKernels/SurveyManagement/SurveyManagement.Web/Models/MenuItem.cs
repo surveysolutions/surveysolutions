@@ -18,6 +18,7 @@
         Headquarters,
         Observers,
         NumberOfCompletedInterviews,
-        DataExport
+        DataExport,
+        SpeedOfCompletingInterviews
     }
 }

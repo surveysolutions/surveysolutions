@@ -12,6 +12,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -21,6 +22,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.MembershipProvider.Roles;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
@@ -34,7 +36,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IJsonUtils jsonUtils;
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -43,8 +45,7 @@ namespace WB.UI.Designer.Controllers
             IStringCompressor zipUtils,
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IExpressionsEngineVersionService expressionsEngineVersionService, 
-            IJsonUtils jsonUtils)
+            IJsonUtils jsonUtils, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -52,8 +53,8 @@ namespace WB.UI.Designer.Controllers
             this.zipUtils = zipUtils;
             this.commandService = commandService;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
             this.jsonUtils = jsonUtils;
+            this.accountListViewFactory = accountListViewFactory;
         }
 
         [HttpGet]
@@ -149,7 +150,8 @@ namespace WB.UI.Designer.Controllers
         {
             MembershipUser account = this.GetUser(id);
 
-            var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id);
+            var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id,
+                    isAdmin: this.UserHelper.WebUser.IsAdmin);
             questionnaires.ToList().ForEach(
                 x =>
                     {
@@ -247,23 +249,19 @@ namespace WB.UI.Designer.Controllers
             {
                 sb = string.Format("{0} Desc", sb);
             }
+            var users = accountListViewFactory.Load(new AccountListViewInputModel()
+            {
+                Filter = f,
+                Page = page,
+                PageSize = GlobalHelper.GridPageItemsCount,
+                Order = sb ?? string.Empty,
+            });
 
-            IEnumerable<MembershipUser> users =
-                Membership.GetAllUsers()
-                          .OfType<MembershipUser>()
-                          .Where(
-                              x =>
-                              (!string.IsNullOrEmpty(f) && (x.UserName.Contains(f) || x.Email.Contains(f)))
-                              || string.IsNullOrEmpty(f))
-                          .AsQueryable()
-                          .OrderUsingSortExpression(sb ?? string.Empty);
-
-            Func<MembershipUser, bool> editAction =
-                (user) => !Roles.GetRolesForUser(user.UserName).Contains(this.UserHelper.ADMINROLENAME);
+            Func<AccountListItem, bool> editAction =
+                (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
 
             IEnumerable<AccountListViewItemModel> retVal =
-                users.Skip((page - 1) * GlobalHelper.GridPageItemsCount)
-                     .Take(GlobalHelper.GridPageItemsCount)
+                users.Items
                      .Select(
                          x =>
                          new AccountListViewItemModel
@@ -271,15 +269,15 @@ namespace WB.UI.Designer.Controllers
                                  Id = x.ProviderUserKey.AsGuid(), 
                                  UserName = x.UserName, 
                                  Email = x.Email, 
-                                 CreationDate = x.CreationDate, 
-                                 IsApproved = x.IsApproved, 
+                                 CreationDate = x.CreatedAt,
+                                 IsApproved = x.IsConfirmed, 
                                  IsLockedOut = x.IsLockedOut, 
                                  CanEdit = editAction(x), 
                                  CanOpen = false,
                                  CanDelete = false, 
                                  CanPreview = editAction(x)
                              });
-            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
+            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount));
         }
 
         private MembershipUser GetUser(Guid id)

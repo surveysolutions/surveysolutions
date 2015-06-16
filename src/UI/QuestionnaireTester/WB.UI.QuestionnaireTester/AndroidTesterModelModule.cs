@@ -32,6 +32,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
+            this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
             this.Bind<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);
             this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);

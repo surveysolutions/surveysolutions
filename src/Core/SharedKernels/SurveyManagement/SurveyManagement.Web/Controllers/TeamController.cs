@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 passwordHash:
                     string.IsNullOrEmpty(editModel.Password)
                         ? user.Password
-                        : passwordHasher.Hash(editModel.Password), userId: this.GlobalInfo.GetCurrentUser().Id));
+                        : passwordHasher.Hash(editModel.Password), personName:editModel.PersonName, phoneNumber:editModel.PhoneNumber, userId: this.GlobalInfo.GetCurrentUser().Id));
         }
 
         private void CreateUser(UserModel user, UserRoles role, Guid? supervisorId = null)
@@ -75,7 +75,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: user.UserName,
                 password: passwordHasher.Hash(user.Password), email: user.Email, isLockedBySupervisor: false,
                 isLockedByHQ: user.IsLocked, roles: new[] {role},
-                supervsor: supervisorId.HasValue ? this.GetUserById(supervisorId.Value).GetUseLight() : null));
+                supervsor: supervisorId.HasValue ? this.GetUserById(supervisorId.Value).GetUseLight() : null,
+                personName: user.PersonName, phoneNumber: user.PhoneNumber));
         }
     }
 }

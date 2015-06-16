@@ -321,6 +321,11 @@
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 
+            $scope.isIntegerChange = function () {
+                $scope.activeQuestion.maxValue = null;
+                $scope.activeQuestion.countOfDecimalPlaces = null;
+            };
+
             $scope.loadQuestion();
         }
     );

@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                             ics => ics.Timestamp.Date > dateTimeRange.From && ics.Timestamp.Date <= dateTimeRange.To);
                     quantityByPeriod.Add(count);
                 }
-                return new QuantityByInterviewersReportRow(u.UserId, quantityByPeriod.ToArray(),
+                return new QuantityByResponsibleReportRow(u.UserId, quantityByPeriod.ToArray(),
                     u.UserName, interviewsForUser.Count());
             }).ToArray();
 

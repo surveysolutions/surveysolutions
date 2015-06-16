@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
@@ -15,7 +16,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingCapiPackagesWithErrorsDirectory;
         private readonly SyncSettings syncSettings;
+
         private readonly string exceptionExtension = ".exception";
+        private readonly string unknownFolderName = "unknown";
+        private readonly string categorizedFolderName = "categorized";
 
         public BrokenSyncPackagesStorage(IFileSystemAccessor fileSystemAccessor, SyncSettings syncSettings)
         {
@@ -29,42 +33,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 fileSystemAccessor.CreateDirectory(incomingCapiPackagesWithErrorsDirectory);
         }
 
-        public string[] GetListOfUnhandledPackagesForInterview(Guid interviewId)
-        {
-            var interviewFolder = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory,
-              interviewId.FormatGuid());
-
-            if (!fileSystemAccessor.IsDirectoryExists(interviewFolder))
-                return new string[0];
-
-            return fileSystemAccessor.GetFilesInDirectory(interviewFolder);
-        }
-
         public IEnumerable<string> GetListOfUnhandledPackages()
         {
             if (!fileSystemAccessor.IsDirectoryExists(incomingCapiPackagesWithErrorsDirectory))
                 return Enumerable.Empty<string>();
 
-            var syncFiles = fileSystemAccessor.GetFilesInDirectory(incomingCapiPackagesWithErrorsDirectory,
-                string.Format("*.{0}", syncSettings.IncomingCapiPackageFileNameExtension));
+            return GetListOfUnhandledPackagesInDirectoryRecursively(incomingCapiPackagesWithErrorsDirectory);
+        }
 
+        private List<string> GetListOfUnhandledPackagesInDirectoryRecursively(string rootDirectory)
+        {
             var result = new List<string>();
-            foreach (var syncFile in syncFiles)
-            {
-                result.Add(fileSystemAccessor.GetFileName(syncFile));
-            }
 
-            var interviewFolders = fileSystemAccessor.GetDirectoriesInDirectory(incomingCapiPackagesWithErrorsDirectory);
-            foreach (var interviewFolder in interviewFolders)
+            foreach (string nestedDirectory in fileSystemAccessor.GetDirectoriesInDirectory(rootDirectory))
             {
-                var interviewSyncFiles = fileSystemAccessor.GetFilesInDirectory(interviewFolder,
+                var interviewSyncFiles = fileSystemAccessor.GetFilesInDirectory(nestedDirectory,
                     string.Format("*.{0}", syncSettings.IncomingCapiPackageFileNameExtension));
 
-                foreach (var interviewSyncFile in interviewSyncFiles)
-                {
-                    result.Add(fileSystemAccessor.CombinePath(fileSystemAccessor.GetFileName(interviewFolder), fileSystemAccessor.GetFileName(interviewSyncFile)));
-                }
+                result.AddRange(interviewSyncFiles);
+
+                result.AddRange(GetListOfUnhandledPackagesInDirectoryRecursively(nestedDirectory));
             }
+
             return result;
         }
 
@@ -75,22 +65,59 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public void StoreUnhandledPackage(string unhandledPackagePath, Guid? interviewId, Exception e)
         {
-            string folderToStore;
             if (interviewId.HasValue)
             {
-                folderToStore = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory,
-                    interviewId.Value.FormatGuid());
+                var typeFolderName = unknownFolderName;
+                var interviewException = e as InterviewException;
+                if (interviewException != null)
+                    typeFolderName = interviewException.ExceptionType.ToString();
 
-                if (!fileSystemAccessor.IsDirectoryExists(folderToStore))
-                    fileSystemAccessor.CreateDirectory(folderToStore);
+                StoreUnhandledPackageForInterviewInTypedFolder(unhandledPackagePath, interviewId.Value, e,
+                    typeFolderName);
             }
             else
-                folderToStore = incomingCapiPackagesWithErrorsDirectory;
+                StoreUnknownUnhandledPackage(unhandledPackagePath, e);
+        }
 
+        private void StoreUnhandledPackage(string unhandledPackagePath, string folderToStore, Exception e)
+        {
             fileSystemAccessor.CopyFileOrDirectory(unhandledPackagePath, folderToStore);
-            var fileName = fileSystemAccessor.GetFileNameWithoutExtension(unhandledPackagePath) +exceptionExtension;
+
+            var fileName = fileSystemAccessor.GetFileNameWithoutExtension(unhandledPackagePath) + exceptionExtension;
 
             fileSystemAccessor.WriteAllText(fileSystemAccessor.CombinePath(folderToStore, fileName), CreateContentOfExceptionFile(e));
+        }
+
+        private void StoreUnknownUnhandledPackage(string unhandledPackagePath, Exception e)
+        {
+            var folderToStore = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory,
+                unknownFolderName);
+            
+            if (!fileSystemAccessor.IsDirectoryExists(folderToStore))
+                fileSystemAccessor.CreateDirectory(folderToStore);
+            
+            StoreUnhandledPackage(unhandledPackagePath, folderToStore, e);
+        }
+
+        private void StoreUnhandledPackageForInterviewInTypedFolder(string unhandledPackagePath, Guid interviewId, Exception e, string typeFolderName)
+        {
+            var folderToStoreCategorizedPackages = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory, categorizedFolderName);
+
+            if (!fileSystemAccessor.IsDirectoryExists(folderToStoreCategorizedPackages))
+                fileSystemAccessor.CreateDirectory(folderToStoreCategorizedPackages);
+
+            var folderToStorePackagesWithErrorType = fileSystemAccessor.CombinePath(folderToStoreCategorizedPackages, typeFolderName);
+
+            if (!fileSystemAccessor.IsDirectoryExists(folderToStorePackagesWithErrorType))
+                fileSystemAccessor.CreateDirectory(folderToStorePackagesWithErrorType);
+
+            var folderToStorePackagesForInterview= fileSystemAccessor.CombinePath(folderToStorePackagesWithErrorType,
+                      interviewId.FormatGuid());
+
+            if (!fileSystemAccessor.IsDirectoryExists(folderToStorePackagesForInterview))
+                fileSystemAccessor.CreateDirectory(folderToStorePackagesForInterview);
+
+            StoreUnhandledPackage(unhandledPackagePath, folderToStorePackagesForInterview, e);
         }
 
         private string CreateContentOfExceptionFile(Exception e)
