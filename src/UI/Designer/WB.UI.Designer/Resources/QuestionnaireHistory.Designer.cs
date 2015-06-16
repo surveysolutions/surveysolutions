@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class QuestionnaireHistory {
+    public class QuestionnaireHistory {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Designer.Resources.QuestionnaireHistory", typeof(QuestionnaireHistory).Assembly);
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,16 +63,25 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to added.
         /// </summary>
-        internal static string added {
+        public static string added {
             get {
                 return ResourceManager.GetString("added", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;- Back to {0}.
+        /// </summary>
+        public static string BackTo_0_Format {
+            get {
+                return ResourceManager.GetString("BackTo_0_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to became a group.
         /// </summary>
-        internal static string became_a_group {
+        public static string became_a_group {
             get {
                 return ResourceManager.GetString("became_a_group", resourceCulture);
             }
@@ -81,7 +90,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to became a roster.
         /// </summary>
-        internal static string became_a_roster {
+        public static string became_a_roster {
             get {
                 return ResourceManager.GetString("became_a_roster", resourceCulture);
             }
@@ -90,7 +99,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to changed.
         /// </summary>
-        internal static string changed {
+        public static string changed {
             get {
                 return ResourceManager.GetString("changed", resourceCulture);
             }
@@ -99,7 +108,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to cloned from.
         /// </summary>
-        internal static string cloned_from {
+        public static string cloned_from {
             get {
                 return ResourceManager.GetString("cloned_from", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to created.
         /// </summary>
-        internal static string created {
+        public static string created {
             get {
                 return ResourceManager.GetString("created", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to deleted.
         /// </summary>
-        internal static string deleted {
+        public static string deleted {
             get {
                 return ResourceManager.GetString("deleted", resourceCulture);
             }
@@ -126,7 +135,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Group.
         /// </summary>
-        internal static string Group {
+        public static string Group {
             get {
                 return ResourceManager.GetString("Group", resourceCulture);
             }
@@ -135,7 +144,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to moved to.
         /// </summary>
-        internal static string HistoryExtensions_GetActionStringRepresentationmoved_to {
+        public static string HistoryExtensions_GetActionStringRepresentationmoved_to {
             get {
                 return ResourceManager.GetString("HistoryExtensions_GetActionStringRepresentationmoved_to", resourceCulture);
             }
@@ -144,7 +153,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to moved to.
         /// </summary>
-        internal static string moved_to {
+        public static string moved_to {
             get {
                 return ResourceManager.GetString("moved_to", resourceCulture);
             }
@@ -153,7 +162,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Person.
         /// </summary>
-        internal static string Person {
+        public static string Person {
             get {
                 return ResourceManager.GetString("Person", resourceCulture);
             }
@@ -162,7 +171,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question.
         /// </summary>
-        internal static string Question {
+        public static string Question {
             get {
                 return ResourceManager.GetString("Question", resourceCulture);
             }
@@ -171,16 +180,25 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire,.
         /// </summary>
-        internal static string Questionnaire {
+        public static string Questionnaire {
             get {
                 return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire change history.
+        /// </summary>
+        public static string QuestionnaireChangeHistory {
+            get {
+                return ResourceManager.GetString("QuestionnaireChangeHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to replaced.
         /// </summary>
-        internal static string replaced {
+        public static string replaced {
             get {
                 return ResourceManager.GetString("replaced", resourceCulture);
             }
@@ -189,7 +207,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster.
         /// </summary>
-        internal static string Roster {
+        public static string Roster {
             get {
                 return ResourceManager.GetString("Roster", resourceCulture);
             }
@@ -198,18 +216,54 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Static text.
         /// </summary>
-        internal static string StaticText {
+        public static string StaticText {
             get {
                 return ResourceManager.GetString("StaticText", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This list does not contain any records.
+        /// </summary>
+        public static string ThisListDoesNotContainAnyRecords {
+            get {
+                return ResourceManager.GetString("ThisListDoesNotContainAnyRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timestamp.
+        /// </summary>
+        public static string Timestamp {
+            get {
+                return ResourceManager.GetString("Timestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to unknown.
         /// </summary>
-        internal static string unknown {
+        public static string unknown {
             get {
                 return ResourceManager.GetString("unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;&lt;UNKNOWN&gt;&gt;.
+        /// </summary>
+        public static string UnknownUserName {
+            get {
+                return ResourceManager.GetString("UnknownUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserName.
+        /// </summary>
+        public static string UserName {
+            get {
+                return ResourceManager.GetString("UserName", resourceCulture);
             }
         }
     }
