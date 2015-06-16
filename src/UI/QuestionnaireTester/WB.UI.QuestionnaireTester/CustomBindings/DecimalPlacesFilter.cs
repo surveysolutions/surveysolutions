@@ -1,10 +1,9 @@
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using Android.Text;
-
 using Java.Lang;
-
 using Math = System.Math;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
@@ -12,28 +11,34 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
     public class DecimalPlacesFilter : Java.Lang.Object, IInputFilter
     {
         private readonly int decimalPlacesCount;
-        private readonly string[] allowedStringValues = new string[] { "-" };
+
+        private readonly string[] allowedStringValues = new string[] { CultureInfo.CurrentCulture.NumberFormat.NegativeSign };
+
         public DecimalPlacesFilter(int decimalPlacesCount)
         {
-            this.decimalPlacesCount = decimalPlacesCount;
+            this.decimalPlacesCount = Math.Max(decimalPlacesCount, 1);
         }
 
         public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {
-            var text = dest.ToString() + source;
-            var replacedAnswer = text.Replace(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            var text = dest.ToString().Insert(dstart, source.ToString());
+            var numberInInvariantCulture = text.Replace(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
             decimal answer;
-            if (!decimal.TryParse(replacedAnswer, NumberStyles.Number, CultureInfo.CurrentCulture, out answer))
+            if (decimal.TryParse(numberInInvariantCulture, NumberStyles.Number, CultureInfo.InvariantCulture, out answer))
             {
-                if (this.allowedStringValues.Contains(replacedAnswer))
+                Regex decimalRegex = new Regex(@"^[-+]?\d+([.,]\d{0," + decimalPlacesCount + @"})?$");
+                
+                if (decimalRegex.IsMatch(numberInInvariantCulture))
+                {
                     return null;
-                return new SpannableString("");
+                }
+                return new Java.Lang.String("");
             }
 
-            var roundedAnswer = Math.Round(answer, this.decimalPlacesCount);
-            if (roundedAnswer != answer)
-                return new SpannableString("");
-            return null;
+            if (allowedStringValues.Contains(numberInInvariantCulture)) 
+                return null;
+           
+            return new Java.Lang.String("");
         }
     }
 }
