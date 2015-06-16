@@ -360,6 +360,12 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\StatefulInterviewTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\MaskTextTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_adding_text_with_mask_symbol.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_adding_new_text_and_next_char_predifined.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_adding_new_text_to_midle_of_existed_text.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_adding_new_text_to_empty_mask.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_dont_consided_to_mask_with_digits_and_letters.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_coincidents_with_mask_with_digits_and_letters.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_with_length_more_then_length_of_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_without_setting_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_coincidents_with_mask.cs" />
