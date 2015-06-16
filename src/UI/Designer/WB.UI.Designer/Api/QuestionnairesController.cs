@@ -113,7 +113,7 @@ namespace WB.UI.Designer.Api
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
                 return true;
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
