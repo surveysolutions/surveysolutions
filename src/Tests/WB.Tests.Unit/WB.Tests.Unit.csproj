@@ -363,6 +363,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_to_question_is_answered.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_toggling_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\MultiOptionQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_handling_question_answered_event.cs" />

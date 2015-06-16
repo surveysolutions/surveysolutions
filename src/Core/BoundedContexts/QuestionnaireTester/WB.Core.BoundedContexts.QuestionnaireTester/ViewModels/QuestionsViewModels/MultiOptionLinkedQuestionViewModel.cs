@@ -33,11 +33,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IAnswerToStringService answerToStringService;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IPrincipal userIdentity;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private Guid linkedToQuestionId;
         private int? maxAllowedAnswers;
         private Guid interviewId;
         private Guid userId;
-        private static Guid q = Guid.Parse("1a8b932978eb5f7669f872d325d18565");
         private Identity questionIdentity;
         private bool areAnswersOrdered;
         public QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> QuestionState { get; private set; }
@@ -50,13 +50,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             IAnswerToStringService answerToStringService,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             IPrincipal userIdentity,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.answerNotifier = answerNotifier;
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
             this.questionnaireStorage = questionnaireStorage;
             this.userIdentity = userIdentity;
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.QuestionState = questionState;
             this.Answering = answering;
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
@@ -95,7 +97,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 interview.FindAnswersByQuestionId(linkedQuestionModel.LinkedToQuestionId)
                 .Where(x => x != null && x.IsAnswered).ToList();
 
-            this.InvokeOnMainThread(() => // otherwize its f.g magic with those observable collections. This is the only way to implement insertions without locks.
+            this.mainThreadDispatcher.RequestMainThreadAction(() => // otherwize its f.g magic with those observable collections. This is the only way I found to implement insertions without locks.
             {
                 for (int i = 0; i < linkedQuestionAnswers.Count; i++)
                 {
@@ -186,19 +188,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers =
                 interview.FindAnswersByQuestionId(linkedQuestionModel.LinkedToQuestionId);
-            InvokeOnMainThread(() => this.Options.Clear());
+            this.Options.Clear();
             int checkedAnswerCount = 1;
             foreach (var answer in linkedQuestionAnswers)
             {
                 if (answer != null && answer.IsAnswered)
                 {
-
                     BaseQuestionModel linkedToQuestion = questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId];
                     var option = this.BuildOption(linkedToQuestion, answer, linkedMultiOptionAnswer, checkedAnswerCount);
                     if(option.Checked) 
                         checkedAnswerCount++;
 
-                    InvokeOnMainThread(() => this.Options.Add(option));
+                    this.Options.Add(option);
                 }
             }
         }
