@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
                         var interviewsLeft =
                             InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached();
                         viewResult.ViewBag.InterviewsCountAllowedToCreateUntilLimitReached = interviewsLeft;
+                        viewResult.ViewBag.MxAllowedInterviewsCount = mxAllowedInterviewsCount;
                         viewResult.ViewBag.PayAttentionOnInterviewLimitIndicator = interviewsLeft <= (limit/10);
                     }
                 }

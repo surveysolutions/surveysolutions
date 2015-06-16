@@ -1840,6 +1840,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
+                ThrowIfInterviewCountLimitReached();
                 this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             }
             else
