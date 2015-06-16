@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Implementation\Entities\QuestionModels\CascadingSingleOptionQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\FilteredSingleOptionQuestionModel.cs" />
+    <Compile Include="ViewModels\AnswerNotifier.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Entities\BaseInterviewAnswer.cs" />
     <Compile Include="Implementation\Entities\DateTimeAnswer.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="Implementation\Entities\QuestionModels\IntegerNumericQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\LinkedMultiOptionQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\LinkedSingleOptionQuestionModel.cs" />
-    <Compile Include="Implementation\Entities\QuestionModels\MaskedTextQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\QuestionModels\TextQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\MultimediaQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\MultiOptionQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\OptionModel.cs" />

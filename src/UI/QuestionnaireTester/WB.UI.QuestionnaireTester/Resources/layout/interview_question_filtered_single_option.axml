@@ -13,6 +13,7 @@
         <MvxAutoCompleteTextView
           style="@style/Interview_Question_Answer_FilteredComboBox"
           local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
+          android:completionThreshold="1"
           local:MvxBind="Text Answer; 
                          FocusValueChanged ValueChangeCommand; 
                          ItemsSource AutoCompleteSuggestions; 

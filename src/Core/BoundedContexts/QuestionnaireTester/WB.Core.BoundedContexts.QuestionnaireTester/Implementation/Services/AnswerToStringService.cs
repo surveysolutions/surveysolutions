@@ -16,8 +16,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             if (answer == null)
                 return string.Empty;
 
-            if (answer is MaskedTextAnswer)
-                return ((MaskedTextAnswer)answer).Answer;
+            if (answer is TextAnswer)
+                return ((TextAnswer)answer).Answer;
 
             if (answer is IntegerNumericAnswer)
             {
