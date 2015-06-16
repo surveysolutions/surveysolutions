@@ -1,3 +1,5 @@
+using System;
+using Cirrious.CrossCore.Core;
 using Moq;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -18,6 +20,17 @@ namespace WB.Tests.Unit
         public static TestInMemoryWriter<TEntity> ReadSideRepository<TEntity>() where TEntity : class, IReadSideRepositoryEntity
         {
             return new TestInMemoryWriter<TEntity>();
-        }  
+        }
+
+        public static IMvxMainThreadDispatcher MvxMainThreadDispatcher()
+        {
+            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
+
+            dispatcherMock
+                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
+                .Callback<Action>(action => action.Invoke());
+
+            return dispatcherMock.Object;
+        }
     }
 }

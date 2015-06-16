@@ -109,11 +109,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4D7FA4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.CleanIntegration", "Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj", "{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Android", "Core\GenericSubdomains\WB.Core.GenericSubdomains.Android\WB.Core.GenericSubdomains.Android.csproj", "{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Native", "Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj", "{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Portable", "Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj", "{1BB55F28-7905-424D-9AA6-05E4048DFB0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuestionnaireTester", "QuestionnaireTester", "{043CD8AB-573F-4017-AA85-FF34B396455F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.QuestionnaireTester", "Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj", "{689346D7-30AC-420E-BC5B-588CC186A466}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -266,12 +268,6 @@ Global
 		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
@@ -284,6 +280,12 @@ Global
 		{1BB55F28-7905-424D-9AA6-05E4048DFB0C}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{1BB55F28-7905-424D-9AA6-05E4048DFB0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BB55F28-7905-424D-9AA6-05E4048DFB0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{689346D7-30AC-420E-BC5B-588CC186A466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{689346D7-30AC-420E-BC5B-588CC186A466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{689346D7-30AC-420E-BC5B-588CC186A466}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{689346D7-30AC-420E-BC5B-588CC186A466}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{689346D7-30AC-420E-BC5B-588CC186A466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{689346D7-30AC-420E-BC5B-588CC186A466}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -332,8 +334,9 @@ Global
 		{4BFD5CA2-964D-4914-A1E8-28BEDB557796} = {6B7FFF83-E2B8-43F7-8469-D2D69537F00B}
 		{64FF78F2-775B-4728-9D8A-D3A7B9A7344C} = {4BFD5CA2-964D-4914-A1E8-28BEDB557796}
 		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
-		{1EB1EBB0-92CF-4339-9F62-4A5AE3ED93A4} = {6B7FFF83-E2B8-43F7-8469-D2D69537F00B}
 		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7} = {6B7FFF83-E2B8-43F7-8469-D2D69537F00B}
 		{1BB55F28-7905-424D-9AA6-05E4048DFB0C} = {6B7FFF83-E2B8-43F7-8469-D2D69537F00B}
+		{043CD8AB-573F-4017-AA85-FF34B396455F} = {E3404571-E3D0-47E8-94FC-001982D11D59}
+		{689346D7-30AC-420E-BC5B-588CC186A466} = {043CD8AB-573F-4017-AA85-FF34B396455F}
 	EndGlobalSection
 EndGlobal
