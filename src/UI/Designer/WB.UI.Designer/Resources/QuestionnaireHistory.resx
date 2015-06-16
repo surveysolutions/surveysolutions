@@ -168,4 +168,22 @@
   <data name="unknown" xml:space="preserve">
     <value>unknown</value>
   </data>
+  <data name="BackTo_0_Format" xml:space="preserve">
+    <value>&lt;- Back to {0}</value>
+  </data>
+  <data name="QuestionnaireChangeHistory" xml:space="preserve">
+    <value>Questionnaire change history</value>
+  </data>
+  <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+    <value>This list does not contain any records</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+  <data name="UnknownUserName" xml:space="preserve">
+    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>UserName</value>
+  </data>
 </root>
