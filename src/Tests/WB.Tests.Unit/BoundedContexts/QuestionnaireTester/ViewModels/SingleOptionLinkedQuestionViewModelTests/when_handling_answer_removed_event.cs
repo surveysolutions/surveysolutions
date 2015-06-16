@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
             var questionnaire = SetupQuestionnaireModelWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
 
             var interview = Mock.Of<IStatefulInterview>(_
-                => _.FindBaseAnswerByOrShorterRosterLevel(Moq.It.IsAny<Guid>(), Empty.RosterVector) == new []
+                => _.FindAnswersByQuestionId(Moq.It.IsAny<Guid>()) == new []
                 {
                     Create.TextAnswer("answer not to remove", linkedToQuestionId, new [] { 0m }),
                     Create.TextAnswer("answer to remove", linkedToQuestionId, answerToRemoveRosterVector),
