@@ -1,6 +1,8 @@
 ﻿using System;
+using Cirrious.CrossCore.Core;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
@@ -25,7 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage = null, 
             IPrincipal userIdentity = null, 
             AnswerNotifier answerNotifier = null,
-            ILiteEventRegistry eventRegistry = null)
+            ILiteEventRegistry eventRegistry = null,
+            IMvxMainThreadDispatcher mainThreadDispatcher = null)
         {
             return new MultiOptionLinkedQuestionViewModel(questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answering ?? Mock.Of<AnsweringViewModel>(),
@@ -34,7 +37,17 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
                 answerToStringService ?? Create.AnswerToStringService(),
                 questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 userIdentity ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>());
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+        }
+
+        protected static MultiOptionLinkedQuestionViewModel CreateViewModel(QuestionnaireModel questionnaire, 
+            IStatefulInterview statefulInterview,
+            AnswerNotifier answerNotifier)
+        {
+            return CreateViewModel(questionnaireStorage: Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaire),
+                interviewRepository: Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == statefulInterview),
+                answerNotifier: answerNotifier);
         }
     }
 }

@@ -11,6 +11,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ILiteEventRegistry registry;
         private Guid questionId;
 
+        protected AnswerNotifier()
+        {
+        }
+
         public event EventHandler QuestionAnswered;
 
         public AnswerNotifier(ILiteEventRegistry registry)
@@ -26,7 +30,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Handle(TextQuestionAnswered @event)
         {
-            Debug.WriteLine("TextQuestionAnswered questionId {0}. RV: {1}, answer: {2} ", @event.QuestionId, string.Join(",", @event.PropagationVector), @event.Answer);
             if (@event.QuestionId == this.questionId)
             {
                 this.OnSomeQuestionAnswered();
