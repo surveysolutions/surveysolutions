@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
         {
             return new MultiOptionLinkedQuestionViewModel(questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                answerNotifier ?? Mock.Of<AnswerNotifier>(),
+                answerNotifier ?? Create.AnswerNotifier(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 answerToStringService ?? Create.AnswerToStringService(),
                 questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
