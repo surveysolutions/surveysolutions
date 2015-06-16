@@ -552,6 +552,10 @@
     <AndroidResource Include="Resources\drawable\interview_section_background_selected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\default_input_button.xml" />
+    <AndroidResource Include="Resources\drawable\default_input_button_disabled.xml" />
+    <AndroidResource Include="Resources\drawable\default_input_button_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\default_input_button_unpressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

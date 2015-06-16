@@ -33,8 +33,12 @@
   <color name="group_with_invalid_answers">#F05A26</color>
   <color name="group_with_invalid_answers_pressed">#CC4D20</color>
 
-  <color name="question_input_button_pressed">#0D6DBF</color>
-  <color name="question_input_button_unpressed">#2A81CB</color>
+  <color name="default_input_button_pressed">#0D6DBF</color>
+  <color name="default_input_button_unpressed">#2A81CB</color>
+  <color name="default_input_button_disabled">#C6C6C6</color>
+
+  <color name="question_input_button_pressed">#FAFAFA</color>
+  <color name="question_input_button_unpressed">@android:color/white</color>
   <color name="question_input_button_disabled">#C6C6C6</color>
 
   <color name="dashboard_questionnaire_list_item_title">#3f3f3f</color>
