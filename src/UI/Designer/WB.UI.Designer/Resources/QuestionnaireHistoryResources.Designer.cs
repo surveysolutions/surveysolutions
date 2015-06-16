@@ -151,6 +151,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to imported.
+        /// </summary>
+        public static string imported {
+            get {
+                return ResourceManager.GetString("imported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to moved to.
         /// </summary>
         public static string moved_to {
@@ -178,7 +187,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire,.
+        ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         public static string Questionnaire {
             get {
