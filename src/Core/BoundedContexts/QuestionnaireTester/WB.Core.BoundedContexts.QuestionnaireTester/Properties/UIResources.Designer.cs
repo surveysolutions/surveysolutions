@@ -613,7 +613,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Designer web application is not accessable at this moment. Check connection setting or try again later.
+        ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
         /// </summary>
         public static string Login_Error_NotFound {
             get {
@@ -649,7 +649,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience.
+        ///   Looks up a localized string similar to The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience.
         /// </summary>
         public static string Maintenance {
             get {
