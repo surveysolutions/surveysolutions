@@ -1713,5 +1713,10 @@ namespace WB.Tests.Unit
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
+
+        public static AnswerNotifier AnswerNotifier()
+        {
+            return new AnswerNotifier(Create.LiteEventRegistry());
+        }
     }
 }
