@@ -1319,7 +1319,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistory.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireHistory.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
