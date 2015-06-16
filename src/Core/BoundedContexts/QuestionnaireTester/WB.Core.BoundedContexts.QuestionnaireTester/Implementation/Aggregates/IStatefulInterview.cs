@@ -60,9 +60,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         /// Gets an answer by roster vector that will be extented and all answers will be returned. 
         /// </summary>
         /// <param name="questionId"></param>
-        /// <param name="targetRosterVector"></param>
         /// <returns></returns>
-        IEnumerable<BaseInterviewAnswer> FindBaseAnswerByOrShorterRosterLevel(Guid questionId, decimal[] targetRosterVector);
+        IEnumerable<BaseInterviewAnswer> FindAnswersByQuestionId(Guid questionId);
 
         InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector);
     }
