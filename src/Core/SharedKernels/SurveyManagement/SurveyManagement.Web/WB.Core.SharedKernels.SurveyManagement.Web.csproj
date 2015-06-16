@@ -200,6 +200,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Interviews.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\LimitsIndicator.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LimitsIndicator.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PeriodicStatusReport.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -346,6 +351,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LimitsIndicator.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LimitsIndicator.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PeriodicStatusReport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
