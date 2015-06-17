@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Input name too long.
+        ///   Looks up a localized string similar to Input name is too long.
         /// </summary>
         public static string PersonNameErrorMessage {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person name.
+        ///   Looks up a localized string similar to Full name.
         /// </summary>
         public static string PersonNameFieldName {
             get {

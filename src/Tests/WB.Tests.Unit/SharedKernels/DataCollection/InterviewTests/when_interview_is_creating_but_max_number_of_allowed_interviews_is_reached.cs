@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             SetupInstanceToMockedServiceLocator<IInterviewPreconditionsService>(
                 Mock.Of<IInterviewPreconditionsService>(
-                        _ => _.MaxNumberOfInterviews == maxNumberOfInterviews && _.NumberofInterviewsAllowedToCreate == 0));
+                        _ => _.GetMaxAllowedInterviewsCount() == maxNumberOfInterviews && _.GetInterviewsCountAllowedToCreateUntilLimitReached() == 0));
 
         };
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.ShouldNotBeNull();
 
         It should_raise_InterviewException_with_type_InterviewLimitReached = () =>
-           exception.ErrorType.ShouldEqual(InterviewDomainExceptionType.InterviewLimitReached);
+           exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewLimitReached);
 
         It should_throw_exception_that_contains_such_words = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("max", "number", "interviews", "'" + maxNumberOfInterviews + "'", "reached");

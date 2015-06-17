@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.ShouldNotBeNull();
 
         It should_return_not_null_view1 =
-            () => result.Select(x => x.Id).ShouldContainOnly(new string[] { q2Id.FormatGuid() });
+            () => result.Select(x => x.Id).ShouldContainOnly(new string[] { q2Id.FormatGuid(), q4Id.FormatGuid() });
 
         private static QuestionnaireInfoFactory factory;
         private static List<QuestionnaireItemLink> result;

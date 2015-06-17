@@ -257,8 +257,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
                 }
 
-                filteredItems.OrderBy(x => x.SortIndex);
-                return filteredItems.ToList();
+                return filteredItems.OrderBy(x => x.SortIndex).ToList();
             });
 
             IEnumerable<InterviewSyncPackageMeta> result = 

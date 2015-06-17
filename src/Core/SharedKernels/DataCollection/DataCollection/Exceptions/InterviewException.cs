@@ -4,19 +4,19 @@ namespace WB.Core.SharedKernels.DataCollection.Exceptions
 {
     public class InterviewException : Exception
     {
-        public readonly InterviewDomainExceptionType ErrorType;
+        public readonly InterviewDomainExceptionType ExceptionType;
 
-        internal InterviewException(string message, InterviewDomainExceptionType errorType = InterviewDomainExceptionType.Undefined)
+        internal InterviewException(string message, InterviewDomainExceptionType exceptionType = InterviewDomainExceptionType.Undefined)
             : base(message)
         {
-            ErrorType = errorType;
+            ExceptionType = exceptionType;
         }
 
         internal InterviewException(string message, Exception innerException,
-            InterviewDomainExceptionType errorType = InterviewDomainExceptionType.Undefined)
+            InterviewDomainExceptionType exceptionType = InterviewDomainExceptionType.Undefined)
             : base(message, innerException)
         {
-            ErrorType = errorType;
+            ExceptionType = exceptionType;
         }
     }
 }

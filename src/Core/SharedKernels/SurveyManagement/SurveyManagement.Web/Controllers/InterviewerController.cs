@@ -75,7 +75,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     Email = user.Email,
                     IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
                     UserName = user.UserName,
-                    DevicesHistory = user.DeviceChangingHistory.ToList()
+                    DevicesHistory = user.DeviceChangingHistory.ToList(),
+                    PersonName = user.PersonName,
+                    PhoneNumber = user.PhoneNumber
                 });
         }
 

@@ -1,28 +1,25 @@
-﻿@using Microsoft.Practices.ServiceLocation
-@using WB.Core.SharedKernels.DataCollection.Services
-@using WB.Core.SharedKernels.SurveyManagement.Services
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
-
-@{
-    var limitedInterviewService = ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>();
-
-    if (limitedInterviewService.MaxNumberOfInterviews.HasValue)
-    {
-        var limit = limitedInterviewService.MaxNumberOfInterviews.Value;
-        var interviewsLeft = limitedInterviewService.NumberofInterviewsAllowedToCreate;
-        var payAttention = interviewsLeft <= (limit/10);
-        <li class='dropdown active @(payAttention ? "open" : "")'>
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style='background: @(payAttention ? "red" : "#ffa500")'>
-                <i class="glyphicon glyphicon-warning-sign"></i>
-            </a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="#"><b>You are in TESTING MODE</b></a>
-                </li>
-                <li>
-                    <a href="#">You can create @interviewsLeft new interview(s)</a>
-                </li>
-            </ul>
-        </li>
-    }
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Filters
+@using WB.Core.SharedKernels.SurveyManagement.Web.Resources
+@if (ViewBag.ShowInterviewLimitIndicator)
+{
+    <li class='dropdown active @(ViewBag.PayAttentionOnInterviewLimitIndicator ? "open" : "")'>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style='background: @(ViewBag.PayAttentionOnInterviewLimitIndicator ? "red" : "#ffa500")'>
+            <i class="glyphicon glyphicon-warning-sign"></i>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#"><b>@LimitsIndicator.YouAreInTESTINGMODE</b></a>
+            </li>
+            <li>
+                @if (ViewBag.InterviewsCountAllowedToCreateUntilLimitReached >= 0)
+                {
+                    <a href="#">@string.Format(@LimitsIndicator.YouCanCreate_0_newInterviewsFormat, ViewBag.InterviewsCountAllowedToCreateUntilLimitReached)</a>
+                }
+                else
+                {
+                    <a href="#">@string.Format(@LimitsIndicator.YouHaveExceededYourLimit_0_newInterviewsYouCantCreateInterviewsAnyMore, ViewBag.MxAllowedInterviewsCount)</a>
+                }
+            </li>
+        </ul>
+    </li>
 }

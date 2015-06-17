@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
@@ -62,6 +63,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             return fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory, package);
         }
 
+        public void StoreUnhandledPackage(string unhandledPackagePath, Guid? interviewId, Exception e)
+        {
+            if (interviewId.HasValue)
+            {
+                var typeFolderName = unknownFolderName;
+                var interviewException = e as InterviewException;
+                if (interviewException != null)
+                    typeFolderName = interviewException.ExceptionType.ToString();
+
+                StoreUnhandledPackageForInterviewInTypedFolder(unhandledPackagePath, interviewId.Value, e,
+                    typeFolderName);
+            }
+            else
+                StoreUnknownUnhandledPackage(unhandledPackagePath, e);
+        }
+
         private void StoreUnhandledPackage(string unhandledPackagePath, string folderToStore, Exception e)
         {
             fileSystemAccessor.CopyFileOrDirectory(unhandledPackagePath, folderToStore);
@@ -71,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             fileSystemAccessor.WriteAllText(fileSystemAccessor.CombinePath(folderToStore, fileName), CreateContentOfExceptionFile(e));
         }
 
-        public void StoreUnknownUnhandledPackage(string unhandledPackagePath, Exception e)
+        private void StoreUnknownUnhandledPackage(string unhandledPackagePath, Exception e)
         {
             var folderToStore = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory,
                 unknownFolderName);
@@ -82,13 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             StoreUnhandledPackage(unhandledPackagePath, folderToStore, e);
         }
 
-        public void StoreUnhandledPackageForInterview(string unhandledPackagePath, Guid interviewId, Exception e)
-        {
-            StoreUnhandledPackageForInterviewInTypedFolder(unhandledPackagePath, interviewId, e, unknownFolderName);
-        }
-
-        public void StoreUnhandledPackageForInterviewInTypedFolder(string unhandledPackagePath, Guid interviewId, Exception e,
-            string typeFolderName)
+        private void StoreUnhandledPackageForInterviewInTypedFolder(string unhandledPackagePath, Guid interviewId, Exception e, string typeFolderName)
         {
             var folderToStoreCategorizedPackages = fileSystemAccessor.CombinePath(incomingCapiPackagesWithErrorsDirectory, categorizedFolderName);
 

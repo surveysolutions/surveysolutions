@@ -123,6 +123,9 @@
   <data name="CantRemoveParentQuestionInCascading" xml:space="preserve">
     <value>Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed.</value>
   </data>
+  <data name="CantRemoveSectionParentQuestionInCascading" xml:space="preserve">
+    <value>Sub-section or roster containing question that is used as parent for cascading combo box cannot be removed before all child questions are removed.</value>
+  </data>
   <data name="CascadingCantHaveConditionExpression" xml:space="preserve">
     <value>Cascading questions can't have enabling condition.</value>
   </data>

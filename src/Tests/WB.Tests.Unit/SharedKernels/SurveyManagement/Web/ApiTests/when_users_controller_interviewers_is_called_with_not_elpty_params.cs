@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            interviewersFactoryMock = new Mock<IViewFactory<InterviewersInputModel, InterviewersView>>();
+            interviewersFactoryMock = new Mock<IInterviewersViewFactory>();
 
             controller = CreateUsersController(interviewersViewViewFactory: interviewersFactoryMock.Object);
         };
@@ -32,6 +32,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
         private static UserApiView actionResult;
         private static UsersController controller;
-        private static Mock<IViewFactory<InterviewersInputModel, InterviewersView>> interviewersFactoryMock;
+        private static Mock<IInterviewersViewFactory> interviewersFactoryMock;
     }
 }

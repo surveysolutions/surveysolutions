@@ -160,7 +160,7 @@
     <value>Invalid user</value>
   </data>
   <data name="PersonNameFieldName" xml:space="preserve">
-    <value>Person name</value>
+    <value>Full name</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Phone number</value>
@@ -169,6 +169,6 @@
     <value>Invalid phone number</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Input name too long</value>
+    <value>Input name is too long</value>
   </data>
 </root>

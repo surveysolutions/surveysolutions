@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_call_StoreUnhandledPackageForInterviewInTypedFolder = () =>
-            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackageForInterviewInTypedFolder("path", interviewId, Moq.It.IsAny<InterviewException>(), "OtherUserIsResponsible"), Times.Once);
+            unhandledPackageStorage.Verify(x => x.StoreUnhandledPackage("path", interviewId, Moq.It.IsAny<InterviewException>()), Times.Once);
 
         It should_call_DeleteSyncItem = () =>
           incomingSyncPackagesQueueMock.Verify(x => x.DeleteSyncItem("path"), Times.Once);

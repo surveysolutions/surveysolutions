@@ -712,7 +712,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question references missing or supported type question..
+        ///   Looks up a localized string similar to Cascading combo box question references missing or unsupported type question..
         /// </summary>
         internal static string WB0086_ParentCascadingQuestionShouldExist {
             get {

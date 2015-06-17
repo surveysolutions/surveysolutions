@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             exception.ShouldNotBeNull();
 
         It should_raise_InterviewException_with_type_QuestionnaireDeleted = () =>
-            exception.ErrorType.ShouldEqual(InterviewDomainExceptionType.QuestionnaireDeleted);
+            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.QuestionnaireDeleted);
 
         Cleanup stuff = () =>
         {

@@ -117,55 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Group" xml:space="preserve">
-    <value>Group</value>
+  <data name="YouAreInTESTINGMODE" xml:space="preserve">
+    <value>You are in TESTING MODE</value>
   </data>
-  <data name="Person" xml:space="preserve">
-    <value>Person</value>
+  <data name="YouCanCreate_0_newInterviewsFormat" xml:space="preserve">
+    <value>You can create {0} new interview(s)</value>
   </data>
-  <data name="Question" xml:space="preserve">
-    <value>Question</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire,</value>
-  </data>
-  <data name="Roster" xml:space="preserve">
-    <value>Roster</value>
-  </data>
-  <data name="StaticText" xml:space="preserve">
-    <value>Static text</value>
-  </data>
-  <data name="added" xml:space="preserve">
-    <value>added</value>
-  </data>
-  <data name="created" xml:space="preserve">
-    <value>created</value>
-  </data>
-  <data name="cloned_from" xml:space="preserve">
-    <value>cloned from</value>
-  </data>
-  <data name="deleted" xml:space="preserve">
-    <value>deleted</value>
-  </data>
-  <data name="changed" xml:space="preserve">
-    <value>changed</value>
-  </data>
-  <data name="became_a_roster" xml:space="preserve">
-    <value>became a roster</value>
-  </data>
-  <data name="became_a_group" xml:space="preserve">
-    <value>became a group</value>
-  </data>
-  <data name="HistoryExtensions_GetActionStringRepresentationmoved_to" xml:space="preserve">
-    <value>moved to</value>
-  </data>
-  <data name="moved_to" xml:space="preserve">
-    <value>moved to</value>
-  </data>
-  <data name="replaced" xml:space="preserve">
-    <value>replaced</value>
-  </data>
-  <data name="unknown" xml:space="preserve">
-    <value>unknown</value>
+  <data name="YouHaveExceededYourLimit_0_newInterviewsYouCantCreateInterviewsAnyMore" xml:space="preserve">
+    <value>You have exceeded your limit {0} interview(s). You can't create new interviews any more...</value>
   </data>
 </root>

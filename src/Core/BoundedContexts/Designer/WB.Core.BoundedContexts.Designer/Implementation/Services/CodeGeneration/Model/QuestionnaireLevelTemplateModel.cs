@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             bool isIRosterLevelInherited,
             string rosterType, string abstractConditionalLevelClassName)
             : base(
-            null, 
             "@__questionnaire_scope", 
             "QuestionnaireTopLevel",
             new List<GroupTemplateModel>(), 
@@ -20,7 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             areRowSpecificVariablesPresent,
             isIRosterLevelInherited,
             rosterType,
-            abstractConditionalLevelClassName)
+            abstractConditionalLevelClassName,
+            null)
         {
             ExecutorModel = executorModel;
         }
