@@ -47,8 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewException = () =>
             exception.ShouldNotBeNull();
 
-        It should_raise_InterviewException_with_type_QuestionnaireDeleted = () =>
-            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.QuestionnaireDeleted);
+        It should_raise_InterviewException_with_type_InterviewHardDeleted = () =>
+            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewHardDeleted);
 
         Cleanup stuff = () =>
         {
