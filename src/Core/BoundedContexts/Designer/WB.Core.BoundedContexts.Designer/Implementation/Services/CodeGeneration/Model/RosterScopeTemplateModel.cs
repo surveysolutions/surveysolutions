@@ -8,23 +8,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public RosterScopeTemplateModel(string rosterScopeType, List<RosterTemplateModel> rostersInScope, QuestionnaireExecutorTemplateModel executorModel)
         {
-            GeneratedRosterScopeName =  String.Empty;
-            GeneratedTypeName = rosterScopeType;
-            Groups = rostersInScope.SelectMany(r => r.Groups).ToList();
-            Questions =  rostersInScope.SelectMany(r => r.Questions).ToList();
-            Rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
-            RosterScope = new List<Guid>();
-            AreRowSpecificVariablesPresent = executorModel.QuestionnaireLevelModel.AreRowSpecificVariablesPresent;
-            IsIRosterLevelInherited = executorModel.QuestionnaireLevelModel.IsIRosterLevelInherited;
-            RosterType = executorModel.QuestionnaireLevelModel.RosterType;
+            this.GeneratedRosterScopeName = String.Empty;
+            this.GeneratedTypeName = rosterScopeType;
+            this.Groups = rostersInScope.SelectMany(r => r.Groups).ToList();
+            this.Questions = rostersInScope.SelectMany(r => r.Questions).ToList();
+            this.Rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
+            this.RosterScope = new List<Guid>();
+            this.AreRowSpecificVariablesPresent = executorModel.QuestionnaireLevelModel.AreRowSpecificVariablesPresent;
+            this.IsIRosterLevelInherited = executorModel.QuestionnaireLevelModel.IsIRosterLevelInherited;
+            this.RosterType = executorModel.QuestionnaireLevelModel.RosterType;
             this.RostersInScope = rostersInScope;
-            this.ParentTypeName = rostersInScope[0].ParentScope.GeneratedTypeName;
+            this.ParentTypeName = rostersInScope[0].ParentGeneratedTypeName;
             this.ExecutorModel = executorModel;
             this.AbstractConditionalLevelClassName =
                 executorModel.QuestionnaireLevelModel.AbstractConditionalLevelClassName;
         }
-
-        public RosterScopeTemplateModel ParentScope { set; get; }
 
         public string GeneratedRosterScopeName { get; set; }
 

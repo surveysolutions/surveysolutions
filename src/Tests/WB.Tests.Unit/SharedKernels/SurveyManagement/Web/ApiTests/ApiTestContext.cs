@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         protected static UsersController CreateUsersController(
             ILogger logger = null,
-            IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewViewFactory = null,
+            IInterviewersViewFactory interviewersViewViewFactory = null,
             IUserListViewFactory userListViewViewFactory = null,
             IUserViewFactory userViewViewFactory = null)
         {
             return new UsersController(
                 logger ?? Mock.Of<ILogger>(),
-                interviewersViewViewFactory ?? Mock.Of<IViewFactory<InterviewersInputModel, InterviewersView>>(),
+                interviewersViewViewFactory ?? Mock.Of<IInterviewersViewFactory>(),
                 userListViewViewFactory ?? Mock.Of<IUserListViewFactory>(),
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>());
         }

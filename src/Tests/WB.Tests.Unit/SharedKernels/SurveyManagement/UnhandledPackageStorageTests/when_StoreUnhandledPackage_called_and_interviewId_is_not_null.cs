@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
         };
 
         Because of = () =>
-            brokenSyncPackagesStorage.StoreUnhandledPackageForInterview("test", interviewId, nullReferenceException);
+            brokenSyncPackagesStorage.StoreUnhandledPackage("test", interviewId, nullReferenceException);
 
         It should_copy_package_to_error_folder = () =>
            fileSystemAccessorMock.Verify(x => x.CopyFileOrDirectory("test", @"App_Data\IncomingDataWithErrors\categorized\unknown\" + interviewId.FormatGuid()), Times.Once);

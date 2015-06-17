@@ -294,17 +294,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var allParentsQuestionsToTop = new List<QuestionTemplateModel>();
                 var allParentsRostersToTop = new List<RosterTemplateModel>();
 
-                foreach (var rosterTemplateModel in rosterScopeModel.RostersInScope)
+                var parentScopeTypeName = rosterScopeModel.ParentTypeName;
+                while (rostersGroupedByScope.ContainsKey(parentScopeTypeName))
                 {
-                    if (rosterTemplateModel.ParentScope != null)
+                    var parentScope = rostersGroupedByScope[parentScopeTypeName];
+                    foreach (var parentRosters in parentScope.RostersInScope)
                     {
-                        allParentsQuestionsToTop.AddRange(rosterTemplateModel.ParentScope.Questions);
-                        allParentsQuestionsToTop.AddRange(rosterTemplateModel.ParentScope.GetAllQuestionsToTop());
-
-                        allParentsRostersToTop.AddRange(rosterTemplateModel.ParentScope.Rosters);
-                        allParentsRostersToTop.AddRange(rosterTemplateModel.ParentScope.GetAllRostersToTop());
+                        allParentsQuestionsToTop.AddRange(parentRosters.Questions);
+                        allParentsRostersToTop.AddRange(parentRosters.Rosters);
                     }
+                    parentScopeTypeName = parentScope.ParentTypeName;
                 }
+
+                allParentsQuestionsToTop.AddRange(questionnaireLevelModel.Questions);
+                allParentsRostersToTop.AddRange(questionnaireLevelModel.Rosters);
                 
                 rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop.Distinct();
                 rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop.Distinct();
@@ -461,10 +464,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 GeneratedTypeName =
                                     GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey.FormatGuid()), currentRosterScope, generatedScopesTypeNames),
                                 GeneratedStateName = "@__" + varName + "_state",
-                                ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
                                 GeneratedConditionsMethodName = "IsEnabled_" + varName,
                                 RosterScope = currentRosterScope,
+                                ParentGeneratedTypeName = currentScope.GeneratedTypeName,
                                 GeneratedRosterScopeName = "@__" + varName + "_scope",
                             };
 
@@ -508,6 +511,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
             var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
+
+            if (parentQuestion == null)
+                return childQuestion.ConditionExpression;
 
             string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
                 ? ""
