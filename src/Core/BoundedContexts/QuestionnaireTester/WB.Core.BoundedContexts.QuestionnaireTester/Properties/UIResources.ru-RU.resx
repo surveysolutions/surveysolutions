@@ -375,4 +375,7 @@
   <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
     <value>Нажмите для ввода текста</value>
   </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>Не удается получить вашу гео позицию. Выйдите на открытое пространство или увеличте значение таймаута в настройках.</value>
+  </data>
 </root>

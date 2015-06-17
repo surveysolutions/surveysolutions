@@ -253,6 +253,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t determine Your current location. Check it outdoor or increase GPS Receive Timeout value in settings..
+        /// </summary>
+        public static string GpsQuestion_Timeout {
+            get {
+                return ResourceManager.GetString("GpsQuestion_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The time for waiting response from web server:.
         /// </summary>
         public static string HttpResponseTimeoutText {
