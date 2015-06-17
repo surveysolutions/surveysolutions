@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTes
         };
 
         Because of = () =>
-            filterResult = maskedText.FilterInserting("---2-Z3.", 0);
+            filterResult = maskedText.FilterOnlyMaskedChars("---2-Z3.", 0);
 
         It should_be_accept_only_AnyChars = () =>
             filterResult.ShouldEqual("-_2Z__");

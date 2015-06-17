@@ -5,21 +5,23 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTests
 {
-    internal class when_adding_text_with_mask_symbol : MaskTextTestsContext
+    internal class when_making_text_for_not_filled_mask : MaskTextTestsContext
     {
         Establish context = () =>
         {
-            maskedText = CreateMaskedText("*--**");
+            maskedText = CreateMaskedText("*-**");
+            maskedText.AddString("_-_s", 0, ref selection);
         };
 
         Because of = () =>
-            maskedText.AddString("__1", 0, ref selection);
+            result = maskedText.MakeMaskedText();
 
-        It should_be_pass_1_to_correct_position = () =>
-            maskedText.MakeMaskedText().ShouldEqual("_--_1");
+        It should_be_make_mask_with_correct_char_indexes = () =>
+            result.ShouldEqual("_-_s");
 
 
         static int selection;
+        static string result;
         static MaskedText maskedText;
     }
 }
