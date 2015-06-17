@@ -97,6 +97,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
             if (addedString.IsNullOrEmpty())
                 return;
 
+            addedString = FilterOnlyMaskedChars(addedString, insertPosition);
+
             int startingPosition = this.maskToRaw[this.NextValidPosition(insertPosition)].GetValueOrDefault(-1);
             var newString = this.Clear(addedString);
             int count = this.rawText.AddToString(newString, startingPosition, this.maxRawLength);
@@ -111,7 +113,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
         }
 
 
-        public string FilterInserting(string source, int position)
+        public string Filter(string source, int position)
+        {
+            return this.FilterImpl(source, position, false);
+        }
+
+        public string FilterOnlyMaskedChars(string source, int position)
+        {
+            return this.FilterImpl(source, position, true);
+        }
+
+
+        private string FilterImpl(string source, int position, bool skipNonMaskedChars)
         {
             if (this.Mask.IsNullOrEmpty())
                 return null;
@@ -131,18 +144,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
                 if (nextValidPosition >= this.Mask.Length)
                     continue;
 
-                var maskChar = this.Mask[indexInMask];
-
                 if (nextValidPosition > indexInMask)
                 {
-                    if (maskChar == currentChar)
+                    var maskCharForCheck = this.Mask[indexInMask];
+
+                    if (maskCharForCheck == currentChar)
                     {
                         indexInMask++;
+
+                        if (!skipNonMaskedChars)
+                            filterArray[i] = currentChar;
+                            
                         continue;
                     }
                 }
 
                 indexInMask = nextValidPosition;
+                var maskChar = this.Mask[indexInMask];
 
                 switch (maskChar)
                 {
@@ -336,8 +354,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
 
         private string Clear(String str)
         {
-            str = str.Replace(char.ToString(this.maskFill), string.Empty);
-
+            str = str.Replace(this.maskFill, rawText.EmptyChar);
             return str;
         }
 

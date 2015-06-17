@@ -97,13 +97,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { this.isExistsParent = value; RaisePropertyChanged(); }
         }
 
-        private IMvxCommand navigateToRosterCommand;
-        public IMvxCommand NavigateToRosterCommand
+        private IMvxCommand navigateToParentCommand;
+        public IMvxCommand NavigateToParentCommand
         {
-            get { return navigateToRosterCommand ?? (navigateToRosterCommand = new MvxCommand(SendAnswerTextQuestionCommand)); }
+            get { return this.navigateToParentCommand ?? (this.navigateToParentCommand = new MvxCommand(this.SendNavigateToParentCommand)); }
         }
 
-        private void SendAnswerTextQuestionCommand()
+        private void SendNavigateToParentCommand()
         {
             var parentIdentity = GetParentIdentity();
             navigationState.NavigateTo(parentIdentity);

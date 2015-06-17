@@ -209,7 +209,6 @@
     <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
     <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_InputButton_margin_Bottom</item>
   </style>
 
   <style name="Interview_Question_Errors" parent="VerticalFullWidthWrappingLayout">
