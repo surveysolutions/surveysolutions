@@ -96,8 +96,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async void SendAnswerTextQuestionCommand(string text)
         {
-            Answer = text;
-
             if (!Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
                 this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError);

@@ -154,7 +154,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             if (source.Length() == 0)
                 return null;
 
-            var filteredString = this.maskedText.FilterInserting(source.ToString(), dstart);
+            var filteredString = this.maskedText.Filter(source.ToString(), dstart);
             if (filteredString == null)
                 return null;
 
