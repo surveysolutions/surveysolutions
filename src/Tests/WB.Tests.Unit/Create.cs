@@ -1650,5 +1650,10 @@ namespace WB.Tests.Unit
                 ReferenceType = referenceType ?? QuestionnaireItemType.Group
             };
         }
+
+        public static Interview Interview()
+        {
+            return new Interview();
+        }
     }
 }
