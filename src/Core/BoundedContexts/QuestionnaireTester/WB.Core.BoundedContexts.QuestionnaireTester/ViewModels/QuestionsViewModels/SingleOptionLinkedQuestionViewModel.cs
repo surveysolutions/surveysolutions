@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var referencedQuestion = questionnaire.Questions[this.referencedQuestionId];
 
             var options = referencedQuestionAnswers
-                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, referencedQuestion, linkedAnswerModel))
+                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, referencedQuestion, linkedAnswerModel, interview))
                 .Where(optionOrNull => optionOrNull != null)
                 .ToList();
 
@@ -162,12 +162,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(BaseInterviewAnswer referencedAnswer, BaseQuestionModel referencedQuestion, LinkedSingleOptionAnswer linkedAnswerModel)
+        private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(
+            BaseInterviewAnswer referencedAnswer, BaseQuestionModel referencedQuestion,
+            LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview)
         {
             if (referencedAnswer == null || !referencedAnswer.IsAnswered)
                 return null;
 
-            string title = this.answerToStringService.AnswerToString(referencedQuestion, referencedAnswer);
+            var title = this.GenerateOptionTitle(referencedQuestion, referencedAnswer, interview);
 
             var isSelected =
                 linkedAnswerModel != null &&
@@ -186,6 +188,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             optionViewModel.BeforeSelected += this.OptionSelected;
 
             return optionViewModel;
+        }
+
+        private string GenerateOptionTitle(BaseQuestionModel referencedQuestion, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview)
+        {
+            string answerAsTitle = this.answerToStringService.AnswerToString(referencedQuestion, referencedAnswer);
+
+            string rosterTitlesWithoutLast = string.Join(": ", interview.GetParentRosterTitlesWithoutLast(referencedAnswer.Id, referencedAnswer.RosterVector));
+
+            return string.IsNullOrEmpty(rosterTitlesWithoutLast) ? answerAsTitle : string.Join(": ", rosterTitlesWithoutLast, answerAsTitle);
         }
     }
 }

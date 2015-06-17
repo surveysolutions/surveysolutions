@@ -1,5 +1,4 @@
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -23,10 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public void Init(string interviewId, Identity rosterIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
-
-            var roster = (InterviewRoster)interview.Groups[ConversionHelper.ConvertIdAndRosterVectorToString(rosterIdentity.Id, rosterIdentity.RosterVector)];
-
-            this.RosterTitle = roster.Title;
+            this.RosterTitle = interview.GetRosterTitle(rosterIdentity);
 
             this.GroupState.Init(interviewId, rosterIdentity, navigationState);
         }

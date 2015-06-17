@@ -533,9 +533,6 @@
     <AndroidResource Include="Resources\drawable\question_list_item_editor_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable-v21\questionnaire_list_item_border.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_combobox_popup_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -556,6 +553,8 @@
     <AndroidResource Include="Resources\drawable\default_input_button_disabled.xml" />
     <AndroidResource Include="Resources\drawable\default_input_button_pressed.xml" />
     <AndroidResource Include="Resources\drawable\default_input_button_unpressed.xml" />
+    <AndroidResource Include="Resources\drawable\default_dashboard_item.xml" />
+    <AndroidResource Include="Resources\drawable\default_dashboard_item_pressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -2,9 +2,9 @@
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/Interview_Previous_Group_Navigation_Layout"
-                 local:MvxBind="Visible IsExistsParent">
+                 local:MvxBind="HideKeyboardOnClick .; Visible IsExistsParent">
   <Button style="@style/Interview_Previous_Group_Navigation_Button"
-    local:MvxBind="Click NavigateToParentCommand; Text Localization('Interview_PreviousGroupNavigation_ButtonText')"/>
+    local:MvxBind="Click NavigateToParentCommand; HideKeyboardOnClick .; Text Localization('Interview_PreviousGroupNavigation_ButtonText')"/>
   <TextView style="@style/Interview_Previous_Group_Navigation_Note"
     local:MvxBind="GroupStatus Statistics"/>
 </MvxLinearLayout>

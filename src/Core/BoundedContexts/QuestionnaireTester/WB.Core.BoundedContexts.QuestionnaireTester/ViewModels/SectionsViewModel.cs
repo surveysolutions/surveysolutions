@@ -39,21 +39,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = questionnaireRepository.GetById(questionnaireId);
             this.Sections = questionnaire
                 .GroupsHierarchy
-                .Select(x => new SectionViewModel { SectionIdentity = new Identity(x.Id, new decimal[0]), Title = x.Title })
+                .Select(x => new SectionViewModel(this) { SectionIdentity = new Identity(x.Id, new decimal[0]), Title = x.Title })
                 .ToList();
         }
 
-        private MvxCommand<SectionViewModel> navigateToSectionCommand;
-        public System.Windows.Input.ICommand NavigateToSectionCommand
-        {
-            get
-            {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand<SectionViewModel>(this.NavigateToSection);
-                return this.navigateToSectionCommand;
-            }
-        }
-
-        private void NavigateToSection(SectionViewModel item)
+        internal void NavigateToSection(SectionViewModel item)
         {
             messenger.Publish(new SectionChangeMessage(this));
 

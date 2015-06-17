@@ -2,5 +2,5 @@
 
 <TextView xmlns:local="http://schemas.android.com/apk/res-auto"
           style="@style/Interview_BreadCrumbs"
-          local:MvxBind="Text Text; Click NavigateCommand"/>
+          local:MvxBind="HideKeyboardOnClick .; Text Text; Click NavigateCommand"/>
 

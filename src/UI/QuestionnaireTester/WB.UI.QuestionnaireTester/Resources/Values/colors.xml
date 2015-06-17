@@ -42,6 +42,7 @@
   <color name="question_input_button_disabled">#C6C6C6</color>
 
   <color name="dashboard_questionnaire_list_item_title">#3f3f3f</color>
+  <color name="dashboard_questionnaire_list_item_bg">#FFFFFF</color>
   <color name="dashboard_questionnaire_list_item_modified_date">#5D6468</color>
 
   <color name="dashboard_my_questionnaire">#e8e8e8</color>
