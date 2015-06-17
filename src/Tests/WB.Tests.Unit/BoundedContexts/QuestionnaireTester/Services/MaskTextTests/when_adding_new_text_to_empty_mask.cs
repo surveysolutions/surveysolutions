@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTes
         It should_be_accept_all_chars = () =>
             maskedText.MakeMaskedText().ShouldEqual("s-ss");
 
-        It should_set_selection_to_3 = () =>
-            selection.ShouldEqual(3);
+        It should_set_selection_to_4 = () =>
+            selection.ShouldEqual(4);
 
         static int selection;
         static MaskedText maskedText;
