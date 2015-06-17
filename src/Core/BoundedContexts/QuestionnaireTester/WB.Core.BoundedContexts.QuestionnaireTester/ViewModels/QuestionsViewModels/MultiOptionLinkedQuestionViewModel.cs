@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     }
                     else
                     {
-                        var option = this.BuildOption(linkedToQuestionModel, linkedQuestionAnswer, linkedMultiOptionAnswer, null);
+                        var option = this.BuildOption(interview, linkedToQuestionModel, linkedQuestionAnswer, linkedMultiOptionAnswer); 
                         this.Options.Insert(i, option);
                     }
                 }
@@ -185,46 +185,43 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             LinkedMultiOptionQuestionModel linkedQuestionModel,
             QuestionnaireModel questionnaire)
         {
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
-            IEnumerable<BaseInterviewAnswer> linkedQuestionAnswers =
+            LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
+            IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =
                 interview.FindAnswersByQuestionId(linkedQuestionModel.LinkedToQuestionId);
             this.Options.Clear();
-            int checkedAnswerCount = 1;
-            foreach (var answer in linkedQuestionAnswers)
-            {
-                if (answer != null && answer.IsAnswered)
-                {
-                    BaseQuestionModel linkedToQuestion = questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId];
-                    var option = this.BuildOption(linkedToQuestion, answer, linkedMultiOptionAnswer, checkedAnswerCount);
-                    if(option.Checked) 
-                        checkedAnswerCount++;
 
-                    this.Options.Add(option);
-                }
+            foreach (var answer in linkedToQuestionAnswers.Where(x => x.IsAnswered))
+            {
+                BaseQuestionModel linkedToQuestion = questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId];
+                var option = this.BuildOption(interview, linkedToQuestion, answer, thisQuestionAnswers);
+
+                this.Options.Add(option);
             }
         }
 
-        private MultiOptionLinkedQuestionOptionViewModel BuildOption(BaseQuestionModel linkedToQuestion,
-            BaseInterviewAnswer answer, 
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer,
-            int? checkedAnswerCount)
+        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IStatefulInterview interview, 
+            BaseQuestionModel linkedToQuestion, 
+            BaseInterviewAnswer linkedToAnswer, 
+            LinkedMultiOptionAnswer linkedMultiOptionAnswer)
         {
-            
-            string title = this.answerToStringService.AnswerToString(linkedToQuestion, answer);
+            string title = this.answerToStringService.AnswerToString(linkedToQuestion, linkedToAnswer);
 
             var isChecked = linkedMultiOptionAnswer != null &&
                             linkedMultiOptionAnswer.IsAnswered &&
-                            linkedMultiOptionAnswer.Answers.Any(x => x.SequenceEqual(answer.RosterVector));
+                            linkedMultiOptionAnswer.Answers.Any(x => x.Identical(linkedToAnswer.RosterVector));
+
+            string itemPrefix = string.Join(": ", interview.GetParentRosterTitles(linkedToAnswer.Id, linkedToAnswer.RosterVector));
 
             var option = new MultiOptionLinkedQuestionOptionViewModel(this)
             {
-                Title = title,
-                Value = answer.RosterVector,
+                Title = string.IsNullOrEmpty(itemPrefix) ? title : string.Join(": ", itemPrefix, title),
+                Value = linkedToAnswer.RosterVector,
                 Checked = isChecked
             };
             if (this.areAnswersOrdered && isChecked)
             {
-                option.CheckedOrder = checkedAnswerCount;
+                int selectedItemIndex = Array.FindIndex(linkedMultiOptionAnswer.Answers, x => x.Identical(linkedToAnswer.RosterVector)) + 1;
+                option.CheckedOrder = selectedItemIndex;
             }
 
             return option;

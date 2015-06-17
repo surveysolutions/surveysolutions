@@ -432,6 +432,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
         }
 
+        public BaseInterviewAnswer GetAnswer(Identity identity)
+        {
+            string id = ConversionHelper.ConvertIdentityToString(identity);
+            return this.Answers.ContainsKey(id) ? this.Answers[id] : null;
+        }
+
+        public string GetRosterTitle(Identity rosterIdentity)
+        {
+            var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
+            if (!Groups.ContainsKey(convertIdentityToString))
+            {
+                throw new KeyNotFoundException(string.Format("There is no roster with {0} id in interview {1}", convertIdentityToString, this.Id));
+            }
+
+            return ((InterviewRoster) Groups[convertIdentityToString]).Title;
+        }
+
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
@@ -454,7 +471,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             {
                 var id = ConversionHelper.ConvertIdentityToString(targetQuestion);
 
-                if (this.Answers.ContainsKey(id))
+                if (this.Answers.ContainsKey(id) && this.Answers[id] != null)
                 {
                     yield return this.Answers[id];
                 }
@@ -470,6 +487,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
 
             return this.Groups.ContainsKey(rosterKey) ? this.Groups[rosterKey] as InterviewRoster : null;
+        }
+
+        public IEnumerable<string> GetParentRosterTitles(Guid questionId, decimal[] rosterVector)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+
+            IEnumerable<Guid> parentRosters = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId);
+
+            foreach (var parentRosterId in parentRosters)
+            {
+                int parentRosterLevel = questionnaire.GetRosterLevelForGroup(parentRosterId);
+                var parentRosterVector = this.ShrinkRosterVector(rosterVector, parentRosterLevel);
+                yield return GetRosterTitle(new Identity(parentRosterId, parentRosterVector));
+            }
         }
 
         public bool IsValid(Identity identity)
