@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
@@ -99,6 +100,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settingsProvider.GpsReceiveTimeoutSec));
                 var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
                 await this.SetGeoLocationAnswer(mvxGeoLocation);
+            }
+            catch (OperationCanceledException)
+            {
+                QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.GpsQuestion_Timeout);
             }
             finally
             {

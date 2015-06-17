@@ -407,4 +407,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
     <value>Tap to enter text</value>
   </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>Can't determine Your current location. Check it outdoor or increase GPS Receive Timeout value in settings.</value>
+  </data>
 </root>
