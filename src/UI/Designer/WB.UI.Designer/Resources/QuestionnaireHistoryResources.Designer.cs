@@ -70,11 +70,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;- Back to {0}.
+        ///   Looks up a localized string similar to &lt;- Back.
         /// </summary>
-        public static string BackTo_0_Format {
+        public static string Back {
             get {
-                return ResourceManager.GetString("BackTo_0_Format", resourceCulture);
+                return ResourceManager.GetString("Back", resourceCulture);
             }
         }
         
@@ -106,11 +106,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to cloned from.
+        ///   Looks up a localized string similar to cloned.
         /// </summary>
-        public static string cloned_from {
+        public static string cloned {
             get {
-                return ResourceManager.GetString("cloned_from", resourceCulture);
+                return ResourceManager.GetString("cloned", resourceCulture);
             }
         }
         
@@ -133,20 +133,20 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group.
+        ///   Looks up a localized string similar to  from.
         /// </summary>
-        public static string Group {
+        public static string from {
             get {
-                return ResourceManager.GetString("Group", resourceCulture);
+                return ResourceManager.GetString("from", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to moved to.
+        ///   Looks up a localized string similar to Section.
         /// </summary>
-        public static string HistoryExtensions_GetActionStringRepresentationmoved_to {
+        public static string Group {
             get {
-                return ResourceManager.GetString("HistoryExtensions_GetActionStringRepresentationmoved_to", resourceCulture);
+                return ResourceManager.GetString("Group", resourceCulture);
             }
         }
         
@@ -160,11 +160,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to moved to.
+        ///   Looks up a localized string similar to moved.
         /// </summary>
-        public static string moved_to {
+        public static string moved {
             get {
-                return ResourceManager.GetString("moved_to", resourceCulture);
+                return ResourceManager.GetString("moved", resourceCulture);
             }
         }
         
@@ -246,6 +246,15 @@ namespace WB.UI.Designer.Resources {
         public static string Timestamp {
             get {
                 return ResourceManager.GetString("Timestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  to.
+        /// </summary>
+        public static string to {
+            get {
+                return ResourceManager.GetString("to", resourceCulture);
             }
         }
         
