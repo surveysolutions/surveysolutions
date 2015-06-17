@@ -204,17 +204,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             BaseInterviewAnswer linkedToAnswer, 
             LinkedMultiOptionAnswer linkedMultiOptionAnswer)
         {
-            string title = this.answerToStringService.AnswerToString(linkedToQuestion, linkedToAnswer);
-
             var isChecked = linkedMultiOptionAnswer != null &&
                             linkedMultiOptionAnswer.IsAnswered &&
                             linkedMultiOptionAnswer.Answers.Any(x => x.Identical(linkedToAnswer.RosterVector));
 
-            string itemPrefix = string.Join(": ", interview.GetParentRosterTitles(linkedToAnswer.Id, linkedToAnswer.RosterVector));
+            var title = this.BuildOptionTitle(interview, linkedToQuestion, linkedToAnswer);
 
             var option = new MultiOptionLinkedQuestionOptionViewModel(this)
             {
-                Title = string.IsNullOrEmpty(itemPrefix) ? title : string.Join(": ", itemPrefix, title),
+                Title = title,
                 Value = linkedToAnswer.RosterVector,
                 Checked = isChecked
             };
@@ -225,6 +223,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             return option;
+        }
+
+        private string BuildOptionTitle(IStatefulInterview interview, BaseQuestionModel linkedToQuestion, BaseInterviewAnswer linkedToAnswer)
+        {
+            string answerAsTitle = this.answerToStringService.AnswerToString(linkedToQuestion, linkedToAnswer);
+
+            string rosterTitlesWithoutLast = string.Join(": ", interview.GetParentRosterTitlesWithoutLast(linkedToAnswer.Id, linkedToAnswer.RosterVector));
+
+            return string.IsNullOrEmpty(rosterTitlesWithoutLast) ? answerAsTitle : string.Join(": ", rosterTitlesWithoutLast, answerAsTitle);
         }
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
