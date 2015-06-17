@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -41,7 +41,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         TextAnswer GetTextAnswer(Identity identity);
 
         SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
-        
+
+        BaseInterviewAnswer GetAnswer(Identity identity);
+
         bool IsValid(Identity identity);
 
         bool IsEnabled(Identity entityIdentity);
@@ -49,6 +51,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         bool WasAnswered(Identity entityIdentity);
 
         string GetInterviewerAnswerComment(Identity entityIdentity);
+
+        string GetRosterTitle(Identity rosterIdentity);
 
         /// <summary>
         /// Gets an answer by roster vector that will be reduced until requested question is found.
@@ -64,5 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         IEnumerable<BaseInterviewAnswer> FindAnswersByQuestionId(Guid questionId);
 
         InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector);
+
+        IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector);
     }
 }
