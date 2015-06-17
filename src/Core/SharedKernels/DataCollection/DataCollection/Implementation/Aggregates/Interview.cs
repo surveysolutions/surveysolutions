@@ -613,7 +613,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var orderedData = preloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
-
+            var expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
             foreach (var preloadedLevel in orderedData)
             {
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
@@ -633,7 +633,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     interviewChangeStructures.State.AnsweredQuestions.Add(key);
                 }
 
-                this.CalculateChangesByFeaturedQuestion(this.ExpressionProcessorStatePrototype, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+                this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                     answersTime,
                     newAnswers, preloadedLevel.RosterVector);
             }
@@ -682,7 +682,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            this.CalculateChangesByFeaturedQuestion(this.ExpressionProcessorStatePrototype, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+            var expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
+            this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
@@ -733,7 +734,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            this.CalculateChangesByFeaturedQuestion(this.ExpressionProcessorStatePrototype, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+            var expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
+            this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
@@ -1841,6 +1843,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
+                ThrowIfInterviewCountLimitReached();
                 this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             }
             else
@@ -3197,9 +3200,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfInterviewCountLimitReached()
         {
-            if (this.InterviewPreconditionsService.NumberofInterviewsAllowedToCreate <= 0)
+            if (this.InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
                 throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
-                    this.InterviewPreconditionsService.MaxNumberOfInterviews),
+                    this.InterviewPreconditionsService.GetMaxAllowedInterviewsCount()),
                     InterviewDomainExceptionType.InterviewLimitReached);
         }
 

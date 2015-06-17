@@ -15,12 +15,12 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.UI.Shared.Android.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -46,7 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
 
-            this.Bind<IInterviewPreconditionsService>().To<LimitlessInterviewPreconditionsService>();
+            this.Bind<IInterviewPreconditionsService>().To<AndroidPreconditionsService>();
+
 
             if (this.usePlainQuestionnaireRepository)
             {

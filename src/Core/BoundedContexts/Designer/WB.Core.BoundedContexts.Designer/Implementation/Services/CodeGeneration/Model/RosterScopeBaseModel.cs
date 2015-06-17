@@ -6,10 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public abstract class RosterScopeBaseModel
     {
-        private IEnumerable<RosterTemplateModel> allRostersToTop;
-
         protected RosterScopeBaseModel(
-            RosterScopeBaseModel parentScope, 
             string generatedRosterScopeName, 
             string generatedTypeName, 
             List<GroupTemplateModel> groups, 
@@ -19,9 +16,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             bool areRowSpecificVariablesPresent, 
             bool isIRosterLevelInherited, 
             string rosterType,
-            string abstractConditionalLevelClassName)
+            string abstractConditionalLevelClassName,
+            string parentGeneratedTypeName)
         {
-            ParentScope = parentScope;
             GeneratedRosterScopeName = generatedRosterScopeName;
             GeneratedTypeName = generatedTypeName;
             Groups = groups;
@@ -32,17 +29,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             IsIRosterLevelInherited = isIRosterLevelInherited;
             RosterType = rosterType;
             AbstractConditionalLevelClassName = abstractConditionalLevelClassName;
+            ParentGeneratedTypeName = parentGeneratedTypeName;
         }
 
         protected RosterScopeBaseModel()
         {
         }
 
-        public RosterScopeBaseModel ParentScope { set; get; }
-
         public string GeneratedRosterScopeName { get; set; }
 
         public string GeneratedTypeName { set; get; }
+
+        public string ParentGeneratedTypeName { set; get; }
 
         public List<QuestionTemplateModel> Questions { get; set; }
 
@@ -59,21 +57,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string RosterType { get; private set; }
 
         public string AbstractConditionalLevelClassName { get; private set; }
-
-        public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()
-        {
-            return this.ParentScope != null ? this.Questions.Union(this.ParentScope.GetAllQuestionsToTop()) : this.Questions;
-        }
-
-        public IEnumerable<RosterTemplateModel> GetAllRostersToTop()
-        {
-            if (allRostersToTop == null)
-            {
-                allRostersToTop = this.ParentScope != null
-                    ? this.Rosters.Union(this.ParentScope.GetAllRostersToTop())
-                    : this.Rosters;
-            }
-            return allRostersToTop;
-        }
     }
 }

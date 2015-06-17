@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTe
         };
 
         Because of = () =>
-            brokenSyncPackagesStorage.StoreUnknownUnhandledPackage(unhandledPackageName, aggregateException);
+            brokenSyncPackagesStorage.StoreUnhandledPackage(unhandledPackageName,null, aggregateException);
 
         It should_unwrap_aggregate_exception = () =>
             exceptionFileContent.ShouldEqual("aggregate exception message " + Environment.NewLine + "null reference test " + Environment.NewLine + "not supported ");

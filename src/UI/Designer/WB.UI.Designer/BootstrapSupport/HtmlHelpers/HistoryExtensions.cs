@@ -17,41 +17,46 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
     public static class HistoryExtensions
     {
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
-           QuestionnaireDocument questionnaireDocument, QuestionnaireChangeHistoricalRecord record)
+            Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
-            var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType.ToString()),
-                BuildQuestionnaireItemLink(helper, urlHelper, questionnaireDocument, record.TargetId, record.TargetTitle, record.TargetType), GetActionStringRepresentations(record.ActionType, record.TargetType));
+            var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType),
+                BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
+                    record.TargetTitle, record.TargetType),
+                GetActionStringRepresentations(record.ActionType, record.TargetType));
 
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
-                mainRecord += string.Format(" {0} {1}", GetStringRepresentation(historicalRecordReference.Type.ToString()).ToLower(),
-                    BuildQuestionnaireItemLink(helper, urlHelper, questionnaireDocument, historicalRecordReference.Id,
+                mainRecord += string.Format(" {0} {1}",
+                    GetStringRepresentation(historicalRecordReference.Type).ToLower(),
+                    BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, historicalRecordReference.Id,
+                        historicalRecordReference.ParentId,
                         historicalRecordReference.Title, historicalRecordReference.Type));
             }
-              
+
             return MvcHtmlString.Create(mainRecord);
         }
 
-        private static MvcHtmlString BuildQuestionnaireItemLink(HtmlHelper helper, UrlHelper urlHelper,
-            QuestionnaireDocument questionnaireDocument, Guid itemId, string title, QuestionnaireItemType type)
+        private static MvcHtmlString BuildQuestionnaireItemLink(
+            HtmlHelper helper, 
+            UrlHelper urlHelper,
+            Guid questionnaireId, 
+            Guid itemId, 
+            Guid? chapterId, 
+            string title, 
+            QuestionnaireItemType type)
         {
             var quatedTitle = string.Format("\"{0}\"", title);
-            if (type == QuestionnaireItemType.Person)
-                return helper.Label(quatedTitle);
+
             if (type == QuestionnaireItemType.Questionnaire)
                 return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
-            var item = questionnaireDocument.FirstOrDefault<IComposite>(g => g.PublicKey == itemId);
-            if (item == null)
+
+            if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
                 return helper.Label(quatedTitle);
 
-            while (item.GetParent().GetType() != typeof(QuestionnaireDocument))
-            {
-                item = item.GetParent();
-            }
             var url =
-                urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireDocument.PublicKey.FormatGuid(),
-                    item.PublicKey.FormatGuid(), itemId.FormatGuid(), type.ToString().ToLower()));
-            return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, quatedTitle));
+                urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),
+                    chapterId.FormatGuid(), itemId.FormatGuid(), GetQuestionnaireItemTypeStringRepresentationForLink(type)));
+            return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, helper.Encode(quatedTitle)));
         }
 
         private static string GetActionStringRepresentations(QuestionnaireActionType actionType,
@@ -66,30 +71,46 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             switch (actionType)
             {
                 case QuestionnaireActionType.Add:
-                    return itemsToAdd.Contains(itemType) ? QuestionnaireHistory.added : QuestionnaireHistory.created;
+                    return itemsToAdd.Contains(itemType) ? QuestionnaireHistoryResources.added : QuestionnaireHistoryResources.created;
                 case QuestionnaireActionType.Clone:
-                    return QuestionnaireHistory.cloned_from;
+                    return QuestionnaireHistoryResources.cloned_from;
                 case QuestionnaireActionType.Delete:
-                    return QuestionnaireHistory.deleted;
+                    return QuestionnaireHistoryResources.deleted;
                 case QuestionnaireActionType.Update:
-                    return QuestionnaireHistory.changed;
+                    return QuestionnaireHistoryResources.changed;
                 case QuestionnaireActionType.GroupBecameARoster:
-                    return QuestionnaireHistory.became_a_roster;
+                    return QuestionnaireHistoryResources.became_a_roster;
                 case QuestionnaireActionType.RosterBecameAGroup:
-                    return QuestionnaireHistory.became_a_group;
+                    return QuestionnaireHistoryResources.became_a_group;
                 case QuestionnaireActionType.Move:
-                    return QuestionnaireHistory.moved_to;
+                    return QuestionnaireHistoryResources.moved_to;
                 case QuestionnaireActionType.Import:
-                    return QuestionnaireHistory.created;
+                    return QuestionnaireHistoryResources.imported;
                 case QuestionnaireActionType.Replace:
-                    return QuestionnaireHistory.replaced;
+                    return QuestionnaireHistoryResources.replaced;
             }
-            return QuestionnaireHistory.unknown;
+            return QuestionnaireHistoryResources.unknown;
         }
 
-        private static string GetStringRepresentation(string type)
+        private static string GetStringRepresentation(QuestionnaireItemType type)
         {
-            return new ResourceManager(typeof(QuestionnaireHistory)).GetString(type);
+            return new ResourceManager(typeof(QuestionnaireHistoryResources)).GetString(type.ToString());
+        }
+
+        private static string GetQuestionnaireItemTypeStringRepresentationForLink(QuestionnaireItemType type)
+        {
+            switch (type)
+            {
+                case QuestionnaireItemType.Group:
+                    return "group";
+                case QuestionnaireItemType.Question:
+                    return "question";
+                case QuestionnaireItemType.Roster:
+                    return "roster";
+                    case QuestionnaireItemType.StaticText:
+                    return "static-text";
+            }
+            return string.Empty;
         }
     }
 }
