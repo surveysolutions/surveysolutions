@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;

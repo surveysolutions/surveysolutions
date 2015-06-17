@@ -31,17 +31,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
                 }
                 try
                 {
-                    var mxAllowedInterviewsCount = InterviewPreconditionsService.GetMaxAllowedInterviewsCount();
+                    var maxAllowedInterviewsCount = InterviewPreconditionsService.GetMaxAllowedInterviewsCount();
 
-                    viewResult.ViewBag.ShowInterviewLimitIndicator = mxAllowedInterviewsCount.HasValue;
+                    viewResult.ViewBag.ShowInterviewLimitIndicator = maxAllowedInterviewsCount.HasValue;
 
-                    if (mxAllowedInterviewsCount.HasValue)
+                    if (maxAllowedInterviewsCount.HasValue)
                     {
-                        var limit = mxAllowedInterviewsCount.Value;
+                        var limit = maxAllowedInterviewsCount.Value;
                         var interviewsLeft =
                             InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached();
                         viewResult.ViewBag.InterviewsCountAllowedToCreateUntilLimitReached = interviewsLeft;
-                        viewResult.ViewBag.MxAllowedInterviewsCount = mxAllowedInterviewsCount;
+                        viewResult.ViewBag.MaxAllowedInterviewsCount = maxAllowedInterviewsCount;
                         viewResult.ViewBag.PayAttentionOnInterviewLimitIndicator = interviewsLeft <= (limit/10);
                     }
                 }

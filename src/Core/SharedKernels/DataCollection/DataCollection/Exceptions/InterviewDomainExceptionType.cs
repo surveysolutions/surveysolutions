@@ -4,7 +4,8 @@
     {
         Undefined,
         InterviewLimitReached,
-        QuestionnaireDeleted,
+        QuestionnaireIsMissing,
+        InterviewHardDeleted,
         OtherUserIsResponsible,
         StatusIsNotOneOfExpected
     }
