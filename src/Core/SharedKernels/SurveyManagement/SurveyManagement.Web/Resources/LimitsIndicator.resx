@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="YouAreInTESTINGMODE" xml:space="preserve">
-    <value>You are in TESTING MODE</value>
-  </data>
-  <data name="YouCanCreate_0_newInterviewsFormat" xml:space="preserve">
+  <data name="InterviewsLeftFormat" xml:space="preserve">
     <value>You can create {0} new interview(s)</value>
   </data>
-  <data name="YouHaveExceededYourLimit_0_newInterviewsYouCantCreateInterviewsAnyMore" xml:space="preserve">
+  <data name="YouAreInTestingMode" xml:space="preserve">
+    <value>You are in TESTING MODE</value>
+  </data>
+  <data name="YouHaveExceededYourLimitFormat" xml:space="preserve">
     <value>You have exceeded your limit {0} interview(s). You can't create new interviews any more...</value>
   </data>
 </root>

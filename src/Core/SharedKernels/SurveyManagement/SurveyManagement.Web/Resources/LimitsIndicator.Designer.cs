@@ -61,29 +61,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are in TESTING MODE.
+        ///   Looks up a localized string similar to You can create {0} new interview(s).
         /// </summary>
-        public static string YouAreInTESTINGMODE {
+        public static string InterviewsLeftFormat {
             get {
-                return ResourceManager.GetString("YouAreInTESTINGMODE", resourceCulture);
+                return ResourceManager.GetString("InterviewsLeftFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can create {0} new interview(s).
+        ///   Looks up a localized string similar to You are in TESTING MODE.
         /// </summary>
-        public static string YouCanCreate_0_newInterviewsFormat {
+        public static string YouAreInTestingMode {
             get {
-                return ResourceManager.GetString("YouCanCreate_0_newInterviewsFormat", resourceCulture);
+                return ResourceManager.GetString("YouAreInTestingMode", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to You have exceeded your limit {0} interview(s). You can&apos;t create new interviews any more....
         /// </summary>
-        public static string YouHaveExceededYourLimit_0_newInterviewsYouCantCreateInterviewsAnyMore {
+        public static string YouHaveExceededYourLimitFormat {
             get {
-                return ResourceManager.GetString("YouHaveExceededYourLimit_0_newInterviewsYouCantCreateInterviewsAnyMore", resourceCulture);
+                return ResourceManager.GetString("YouHaveExceededYourLimitFormat", resourceCulture);
             }
         }
     }

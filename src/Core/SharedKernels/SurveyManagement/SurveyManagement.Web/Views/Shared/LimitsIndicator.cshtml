@@ -8,16 +8,16 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a href="#"><b>@LimitsIndicator.YouAreInTESTINGMODE</b></a>
+                <a href="#"><b>@LimitsIndicator.YouAreInTestingMode</b></a>
             </li>
             <li>
                 @if (ViewBag.InterviewsCountAllowedToCreateUntilLimitReached >= 0)
                 {
-                    <a href="#">@string.Format(@LimitsIndicator.YouCanCreate_0_newInterviewsFormat, ViewBag.InterviewsCountAllowedToCreateUntilLimitReached)</a>
+                    <a href="#">@string.Format(@LimitsIndicator.InterviewsLeftFormat, ViewBag.InterviewsCountAllowedToCreateUntilLimitReached)</a>
                 }
                 else
                 {
-                    <a href="#">@string.Format(@LimitsIndicator.YouHaveExceededYourLimit_0_newInterviewsYouCantCreateInterviewsAnyMore, ViewBag.MxAllowedInterviewsCount)</a>
+                    <a href="#">@string.Format(@LimitsIndicator.YouHaveExceededYourLimitFormat, ViewBag.MaxAllowedInterviewsCount)</a>
                 }
             </li>
         </ul>
