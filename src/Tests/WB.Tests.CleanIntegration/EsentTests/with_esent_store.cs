@@ -3,6 +3,7 @@ using System.IO;
 using Machine.Specifications;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
