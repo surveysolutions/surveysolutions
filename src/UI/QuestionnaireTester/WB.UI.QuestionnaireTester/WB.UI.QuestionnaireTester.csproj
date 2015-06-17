@@ -533,9 +533,6 @@
     <AndroidResource Include="Resources\drawable\question_list_item_editor_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable-v21\questionnaire_list_item_border.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_combobox_popup_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
