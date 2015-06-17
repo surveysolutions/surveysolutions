@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         Because of = () =>
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireClonedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle, clonedFromQuestionnaireId: Guid.Parse(questionnaireId)));
 
-        It should_store_change_record_with_target_action_equal_to_add = () =>
-            GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Add);
+        It should_store_change_record_with_target_action_equal_to_clone = () =>
+            GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Clone);
 
         It should_store_change_record_with_target_type_equal_to_questionnaire = () =>
             GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).TargetItemType.ShouldEqual(QuestionnaireItemType.Questionnaire);
