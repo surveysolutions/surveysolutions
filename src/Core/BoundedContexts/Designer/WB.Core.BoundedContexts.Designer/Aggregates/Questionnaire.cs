@@ -849,9 +849,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new NewGroupAdded
                 {
                     GroupText = "New Section",
-                    PublicKey = Guid.NewGuid()
+                    PublicKey = Guid.NewGuid(),
+                    ResponsibleId = createdBy ?? Guid.Empty
                 }
-            );
+                );
 
             this.ApplyEvent(new ExpressionsMigratedToCSharp());
         }

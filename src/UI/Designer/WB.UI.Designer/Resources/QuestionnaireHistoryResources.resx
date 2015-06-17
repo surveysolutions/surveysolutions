@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Group" xml:space="preserve">
-    <value>Group</value>
+    <value>Section</value>
   </data>
   <data name="Person" xml:space="preserve">
     <value>Person</value>
@@ -141,8 +141,8 @@
   <data name="created" xml:space="preserve">
     <value>created</value>
   </data>
-  <data name="cloned_from" xml:space="preserve">
-    <value>cloned from</value>
+  <data name="cloned" xml:space="preserve">
+    <value>cloned</value>
   </data>
   <data name="deleted" xml:space="preserve">
     <value>deleted</value>
@@ -156,11 +156,8 @@
   <data name="became_a_group" xml:space="preserve">
     <value>became a group</value>
   </data>
-  <data name="HistoryExtensions_GetActionStringRepresentationmoved_to" xml:space="preserve">
-    <value>moved to</value>
-  </data>
-  <data name="moved_to" xml:space="preserve">
-    <value>moved to</value>
+  <data name="moved" xml:space="preserve">
+    <value>moved</value>
   </data>
   <data name="replaced" xml:space="preserve">
     <value>replaced</value>
@@ -168,8 +165,8 @@
   <data name="unknown" xml:space="preserve">
     <value>unknown</value>
   </data>
-  <data name="BackTo_0_Format" xml:space="preserve">
-    <value>&lt;- Back to {0}</value>
+  <data name="Back" xml:space="preserve">
+    <value>&lt;- Back</value>
   </data>
   <data name="QuestionnaireChangeHistory" xml:space="preserve">
     <value>Questionnaire change history</value>
@@ -188,5 +185,11 @@
   </data>
   <data name="imported" xml:space="preserve">
     <value>imported</value>
+  </data>
+  <data name="from" xml:space="preserve">
+    <value> from</value>
+  </data>
+  <data name="to" xml:space="preserve">
+    <value> to</value>
   </data>
 </root>

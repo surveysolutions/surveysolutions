@@ -17,12 +17,12 @@
 @section Scripts {
     @Scripts.Render("~/list")
 }
-
+@*<h3>@Model.Title</h3>*@
 <table id="questionnaire-table-header" class="table  table-header">
     <thead>
         <tr>
-            <th>
-                @Html.ActionLink(string.Format(QuestionnaireHistoryResources.BackTo_0_Format, Model.Title ), "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" })
+            <th style="width: 78%">
+                @Html.ActionLink(QuestionnaireHistoryResources.Back, "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" })
             </th>
             <th>@QuestionnaireHistoryResources.UserName</th>
             <th>@QuestionnaireHistoryResources.Timestamp</th>
