@@ -24,6 +24,11 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             string collectionName = typeof(TEntity).Name;
             this.collectionFolder = Path.Combine(settings.Folder, collectionName);
 
+            if (!fileSystemAccessor.IsDirectoryExists(this.collectionFolder))
+            {
+                fileSystemAccessor.CreateDirectory(this.collectionFolder);
+            }
+
             if (!fileSystemAccessor.IsWritePermissionExists(this.collectionFolder))
             {
                 throw new ArgumentException(string.Format("Error initializing ESENT persistent dictionary because there are problems with write access to folder {0}", this.collectionFolder));

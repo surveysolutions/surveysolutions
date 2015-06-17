@@ -1123,7 +1123,6 @@ namespace WB.Tests.Unit
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                StataExportCaption = variable,
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
@@ -1798,6 +1797,11 @@ namespace WB.Tests.Unit
                 ReferenceId = referenceId ?? Guid.NewGuid(),
                 ReferenceType = referenceType ?? QuestionnaireItemType.Group
             };
+        }
+
+        public static Interview Interview()
+        {
+            return new Interview();
         }
     }
 }
