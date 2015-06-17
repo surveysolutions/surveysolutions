@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         };
 
         Because of = () =>
-            sectionsModel.NavigateToSectionCommand.Execute(sectionsModel.Sections[1]);
+            sectionsModel.Sections[1].NavigateToSectionCommand.Execute(sectionsModel.Sections[1]);
 
         It should_mark_one_section_as_selected = () =>
             sectionsModel.Sections.Count(x => x.IsSelected).ShouldEqual(1);
