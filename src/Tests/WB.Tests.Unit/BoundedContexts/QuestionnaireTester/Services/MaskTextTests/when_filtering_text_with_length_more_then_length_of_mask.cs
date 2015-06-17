@@ -5,7 +5,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTests
 {
-    [Ignore("temporary")]
     internal class when_filtering_text_with_length_more_then_length_of_mask : MaskTextTestsContext
     {
         Establish context = () =>
