@@ -1718,5 +1718,22 @@ namespace WB.Tests.Unit
         {
             return new AnswerNotifier(Create.LiteEventRegistry());
         }
+
+        public static TextQuestionModel TextQuestionModel(Guid? questionId)
+        {
+            return new TextQuestionModel
+            {
+                Id  = questionId ?? Guid.NewGuid()
+            };
+        }
+
+        public static LinkedMultiOptionQuestionModel LinkedMultiOptionQuestionModel(Guid? questionId = null, Guid? linkedToQuestionId =null)
+        {
+            return new LinkedMultiOptionQuestionModel()
+            {
+                Id =  questionId ?? Guid.NewGuid(),
+                LinkedToQuestionId = linkedToQuestionId ?? Guid.NewGuid()
+            };
+        }
     }
 }
