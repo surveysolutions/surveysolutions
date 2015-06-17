@@ -13,7 +13,7 @@
   <View style="@style/Interview_Entity_Divider" />
   <MvxListView
         style="@style/Interview_Sidebar_Sections"
-        local:MvxBind="ItemsSource Sections.Sections; ItemClick Sections.NavigateToSectionCommand;"
+        local:MvxBind="ItemsSource Sections.Sections"
         local:MvxItemTemplate="@layout/interview_section_item" />
   
 </MvxLinearLayout>
