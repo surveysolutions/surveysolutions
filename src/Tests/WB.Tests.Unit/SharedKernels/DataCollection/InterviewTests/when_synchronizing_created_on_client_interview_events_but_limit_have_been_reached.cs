@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupInstanceToMockedServiceLocator<IInterviewPreconditionsService>(
              Mock.Of<IInterviewPreconditionsService>(
                      _ => _.GetMaxAllowedInterviewsCount() == maxNumberOfInterviews && _.GetInterviewsCountAllowedToCreateUntilLimitReached() == 0));
-            interview = new Interview();
+            interview = Create.Interview();
         };
 
         Because of = () =>
