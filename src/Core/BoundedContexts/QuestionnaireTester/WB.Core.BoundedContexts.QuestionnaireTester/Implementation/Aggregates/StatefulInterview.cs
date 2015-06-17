@@ -489,7 +489,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Groups.ContainsKey(rosterKey) ? this.Groups[rosterKey] as InterviewRoster : null;
         }
 
-        public IEnumerable<string> GetParentRosterTitles(Guid questionId, decimal[] rosterVector)
+        public IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 

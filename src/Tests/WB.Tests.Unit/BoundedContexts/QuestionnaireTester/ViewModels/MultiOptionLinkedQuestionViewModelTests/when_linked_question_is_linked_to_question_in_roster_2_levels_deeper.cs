@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
                     Create.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
                 });
 
-            interview.GetParentRosterTitles(secondRosterTitlQuestionId, linkedAnswerRosterVector)
+            interview.GetParentRosterTitlesWithoutLast(secondRosterTitlQuestionId, linkedAnswerRosterVector)
                 .Returns(new List<string> {
                     "nastya"
                 });

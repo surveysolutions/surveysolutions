@@ -69,6 +69,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector);
 
-        IEnumerable<string> GetParentRosterTitles(Guid questionId, decimal[] rosterVector);
+        IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector);
     }
 }
