@@ -2,7 +2,6 @@ using Ninject.Modules;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -27,9 +26,6 @@ namespace WB.UI.QuestionnaireTester.Ninject
                 .To<PlainInterviewFileStorage>().InSingletonScope()
                                                 .WithConstructorArgument("rootDirectoryPath", this.basePath)
                                                 .WithConstructorArgument("dataDirectoryName", this.dataDirectoryName);
-
-            this.Bind<IInterviewPreconditionsService>().To<LimitlessInterviewPreconditionsService>();
-
         }
     }
 }
