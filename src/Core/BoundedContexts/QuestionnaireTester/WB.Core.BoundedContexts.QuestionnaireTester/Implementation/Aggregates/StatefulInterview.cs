@@ -493,7 +493,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
-            IEnumerable<Guid> parentRosters = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId);
+            IEnumerable<Guid> parentRosters = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).WithoutLast();
 
             foreach (var parentRosterId in parentRosters)
             {
