@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTes
         };
 
         Because of = () =>
-            filterResult = maskedText.FilterInserting("s-ss", 0);
+            filterResult = maskedText.FilterOnlyMaskedChars("s-ss", 0);
 
         It should_accept_all = () =>
             filterResult.ShouldBeNull();
