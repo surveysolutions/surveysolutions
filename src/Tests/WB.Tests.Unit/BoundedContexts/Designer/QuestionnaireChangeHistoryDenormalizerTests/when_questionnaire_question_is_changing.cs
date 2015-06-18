@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         Establish context = () =>
         {
             questionnaireStateTackerStorage =
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTacker>>(
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>(
                     _ => _.GetById(Moq.It.IsAny<string>()) == Create.QuestionnaireStateTacker());
             questionnaireChangeRecordStorage = new TestInMemoryWriter<QuestionnaireChangeRecord>();
 
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         private static string questionId2 = "22222222222222222222222222222222";
 
         private static string questionTitle = "test";
-        private static IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTackerStorage;
+        private static IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage;
         private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
     }
 }
