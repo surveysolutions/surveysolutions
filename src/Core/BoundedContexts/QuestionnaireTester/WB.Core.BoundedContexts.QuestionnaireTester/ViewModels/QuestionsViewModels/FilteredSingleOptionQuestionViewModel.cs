@@ -29,6 +29,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             public string Text { get; set; }
             public decimal Value { get; set; }
+
+            public override string ToString()
+            {
+                return Text.Replace("</b>", "").Replace("<b>", "");
+            }
         }
 
         private readonly IPrincipal principal;
@@ -101,24 +106,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             return optionViewModel;
         }
 
-        private string answer;
-        public string Answer
-        {
-            get { return this.answer; }
-            set 
-            {
-                if (answer != value)
-                {
-                    this.answer = value;
-                    this.RaisePropertyChanged();
-                }
-            }
-        }
-
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerFilteredComboboxQuestionCommand)); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(SendAnswerFilteredComboboxQuestionCommand)); }
         }
 
         private FilteredComboboxItemViewModel selectedObject;
@@ -128,10 +119,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set
             {
                 this.selectedObject = value;
-                this.Answer = selectedObject != null 
-                    ? Options.Single(i => i.Value == value.Value).Text 
-                    : null;
-
                 RaisePropertyChanged();
             }
         }
@@ -178,6 +165,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
                 if (index >= 0)
                 {
+                    yield return model;
                     yield return new FilteredComboboxItemViewModel()
                     {
                         Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
@@ -206,9 +194,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
         }
 
-        private async void SendAnswerFilteredComboboxQuestionCommand()
+        private async void SendAnswerFilteredComboboxQuestionCommand(string text)
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.Text == this.Answer);
+            var answerViewModel = this.Options.SingleOrDefault(i => i.Text == text);
 
             if (answerViewModel == null)
             {

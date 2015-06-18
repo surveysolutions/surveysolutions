@@ -70,8 +70,11 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
         Because of = () =>
             viewModel.SelectedObject = new FilteredSingleOptionQuestionViewModel.FilteredComboboxItemViewModel() { Text = "html", Value = 4 };
 
-        It should_set_Answer_to_text_from_Options = () =>
-            viewModel.Answer.ShouldEqual("bba");
+        It should_set_nonnull_answer = () =>
+            viewModel.SelectedObject.ShouldNotBeNull();
+
+        It should_set_to_answer_backend_value = () =>
+            viewModel.SelectedObject.Value.ShouldEqual(4);
 
 
         private static FilteredSingleOptionQuestionViewModel viewModel;

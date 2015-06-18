@@ -12,11 +12,10 @@
 
         <MvxAutoCompleteTextView
           style="@style/Interview_Question_Answer_FilteredComboBox"
-          local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
           android:completionThreshold="1"
           android:inputType="textVisiblePassword"
-          local:MvxBind="Text Answer; 
-                         FocusValueChanged ValueChangeCommand; 
+          local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
+          local:MvxBind="FocusValueChanged ValueChangeCommand; 
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
                          SelectedObject SelectedObject; 
