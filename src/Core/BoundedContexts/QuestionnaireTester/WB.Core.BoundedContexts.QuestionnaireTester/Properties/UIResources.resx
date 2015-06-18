@@ -408,7 +408,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to enter text</value>
   </data>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>Can't determine Your current location. Check it outdoor or increase GPS Receive Timeout value in settings.</value>
+    <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
