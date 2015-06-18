@@ -15,12 +15,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public void SetAnswer(decimal? answer)
         {
             this.Answer = answer;
-            this.IsAnswered = this.Answer.HasValue;
+        }
+
+        public override bool IsAnswered
+        {
+            get { return this.Answer.HasValue; }
         }
 
         public override void RemoveAnswer()
         {
-            this.IsAnswered = false;
             this.Answer = null;
         }
     }

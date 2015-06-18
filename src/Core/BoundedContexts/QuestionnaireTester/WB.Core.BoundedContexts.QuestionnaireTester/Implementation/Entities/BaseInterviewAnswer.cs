@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 
         public bool IsValid { get; set; }
         public bool IsEnabled { get; set; }
-        public bool IsAnswered { get; set; }
+        public abstract bool IsAnswered { get; }
 
         public string InterviewerComment { get; set; }
 

@@ -51,7 +51,7 @@
     <Compile Include="Implementation\Entities\InterviewRoster.cs" />
     <Compile Include="Implementation\Entities\LinkedMultiOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\LinkedSingleOptionAnswer.cs" />
-    <Compile Include="Implementation\Entities\MaskedTextAnswer.cs" />
+    <Compile Include="Implementation\Entities\TextAnswer.cs" />
     <Compile Include="Implementation\Entities\MultimediaAnswer.cs" />
     <Compile Include="Implementation\Entities\MultiOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\QRBarcodeAnswer.cs" />
