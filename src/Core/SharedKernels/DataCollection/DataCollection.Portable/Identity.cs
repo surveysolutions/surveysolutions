@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection
     /// and to reduce parameters count in calculation methods.
     /// Should not be made public or be used in any form in events or commands.
     /// </remarks>
-    [DebuggerDisplay("Id = {Id}, RosterVector = [{string.Join(\",\", RosterVector)}]")]
     public class Identity
     {
         protected bool Equals(Identity other)
