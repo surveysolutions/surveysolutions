@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t determine Your current location. Check it outdoor or increase GPS Receive Timeout value in settings..
+        ///   Looks up a localized string similar to GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting..
         /// </summary>
         public static string GpsQuestion_Timeout {
             get {
