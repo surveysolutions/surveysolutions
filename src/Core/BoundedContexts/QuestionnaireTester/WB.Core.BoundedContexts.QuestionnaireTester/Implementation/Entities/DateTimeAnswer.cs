@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class DateTimeAnswer : BaseInterviewAnswer
     {
-        public DateTime Answer { get; private set; }
+        public DateTime? Answer { get; private set; }
 
         public DateTimeAnswer() { }
         public DateTimeAnswer(Guid id, decimal[] rosterVector)
@@ -15,13 +15,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public void SetAnswer(DateTime answer)
         {
             this.Answer = answer;
-            this.IsAnswered = true;
+        }
+
+        public override bool IsAnswered
+        {
+            get { return Answer.HasValue; }
         }
 
         public override void RemoveAnswer()
         {
-            this.IsAnswered = false;
-            this.Answer = default(DateTime);
+            this.Answer = null;
         }
     }
 }

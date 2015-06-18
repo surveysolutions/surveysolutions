@@ -34,7 +34,7 @@ namespace WB.UI.QuestionnaireTester.Converters
                     TypeSwitch.Case<TextAnswer>((maskedTextAnswerModel)=>answerAsString = maskedTextAnswerModel.Answer),
                     TypeSwitch.Case<IntegerNumericAnswer>((integerAnswerModel) => answerAsString = GetAnswerOnIntegerQuestionAsString(integerAnswerModel, culture)),
                     TypeSwitch.Case<RealNumericAnswer>((realAnswerModel)=>answerAsString = GetAnswerOnRealQuestionAsString(realAnswerModel,culture)),
-                    TypeSwitch.Case<DateTimeAnswer>((dateAnswerModel)=>answerAsString = dateAnswerModel.Answer.ToString("d", culture)),
+                    TypeSwitch.Case<DateTimeAnswer>((dateAnswerModel)=>answerAsString = GetAnswerOnDateTimeQuestionAsString(dateAnswerModel, culture)),
                     TypeSwitch.Case<SingleOptionAnswer>((singleOptionAnswerModel) => answerAsString = GetAnswerOnSingleOptionQuestionAsString(interviewId, singleOptionAnswerModel)),
                     TypeSwitch.Case<MultiOptionAnswer>((multiOptionAnswerModel) => answerAsString = GetAnswerOnMultiOptionQuestionAsString(interviewId, multiOptionAnswerModel)));
             }
@@ -56,6 +56,11 @@ namespace WB.UI.QuestionnaireTester.Converters
         private static string GetAnswerOnRealQuestionAsString(RealNumericAnswer realAnswer, CultureInfo culture)
         {
             return realAnswer != null && realAnswer.Answer.HasValue ? realAnswer.Answer.Value.ToString(culture) : string.Empty;
+        }   
+        
+        private static string GetAnswerOnDateTimeQuestionAsString(DateTimeAnswer dateTimeAnswer, CultureInfo culture)
+        {
+            return dateTimeAnswer != null && dateTimeAnswer.Answer.HasValue ? dateTimeAnswer.Answer.Value.ToString("d", culture) : string.Empty;
         }
 
         private static string GetAnswerOnSingleOptionQuestionAsString(string interviewId, SingleOptionAnswer singleOptionAnswer)

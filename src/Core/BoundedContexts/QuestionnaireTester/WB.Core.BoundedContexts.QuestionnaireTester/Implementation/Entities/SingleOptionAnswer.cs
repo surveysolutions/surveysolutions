@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class SingleOptionAnswer : BaseInterviewAnswer
     {
-        public virtual decimal Answer { get; private set; }
+        public virtual decimal? Answer { get; private set; }
 
         public SingleOptionAnswer() { }
         public SingleOptionAnswer(Guid id, decimal[] rosterVector)
@@ -15,13 +15,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
         public void SetAnswer(decimal answer)
         {
             this.Answer = answer;
-            this.IsAnswered = true;
+        }
+
+        public override bool IsAnswered
+        {
+            get { return Answer.HasValue; }
         }
 
         public override void RemoveAnswer()
         {
-            this.IsAnswered = false;
-            this.Answer = default(decimal);
+            this.Answer = null;
         }
     }
 }

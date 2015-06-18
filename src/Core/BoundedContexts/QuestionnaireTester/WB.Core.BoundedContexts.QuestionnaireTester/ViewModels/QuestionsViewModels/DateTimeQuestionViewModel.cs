@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var answerModel = interview.GetDateTimeAnswer(entityIdentity);
             if (answerModel != null && answerModel.IsAnswered)
             {
-                SetToView(answerModel.Answer);
+                SetToView(answerModel.Answer.Value);
             }
         }
 

@@ -4,10 +4,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class GpsCoordinatesAnswer : BaseInterviewAnswer
     {
-        public double Latitude { get; private set; }
-        public double Longitude { get; private set; }
-        public double Accuracy { get; private set; }
-        public double Altitude { get; private set; }
+        public double? Latitude { get; private set; }
+        public double? Longitude { get; private set; }
+        public double? Accuracy { get; private set; }
+        public double? Altitude { get; private set; }
 
         public GpsCoordinatesAnswer() { }
         public GpsCoordinatesAnswer(Guid id, decimal[] rosterVector)
@@ -21,18 +21,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
             this.Longitude = longitude;
             this.Accuracy = accuracy;
             this.Altitude = altitude;
+        }
 
-            this.IsAnswered = true;
+        public override bool IsAnswered
+        {
+            get { return Latitude.HasValue && Longitude.HasValue && Altitude.HasValue && Accuracy.HasValue; }
         }
 
         public override void RemoveAnswer()
         {
-            this.Latitude = default(double);
-            this.Longitude = default(double);
-            this.Accuracy = default(double);
-            this.Altitude = default(double);
-
-            this.IsAnswered = false;
+            this.Latitude = null;
+            this.Longitude = null;
+            this.Accuracy = null;
+            this.Altitude = null;
         }
     }
 }

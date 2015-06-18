@@ -82,9 +82,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.Answer = new MvxCoordinates()
                 {
+                    Longitude = answerModel.Longitude.Value,
+                    Latitude = answerModel.Latitude.Value,
                     Altitude = answerModel.Altitude,
-                    Longitude = answerModel.Longitude,
-                    Latitude = answerModel.Latitude,
                     Accuracy = answerModel.Accuracy
                 };
             }
