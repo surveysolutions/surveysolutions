@@ -19,7 +19,7 @@
 }
 <div id="edit-form" style="position: initial;">
   
-    <h3>@Html.ActionLink(QuestionnaireHistoryResources.Back, "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
+    <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">@Html.ActionLink(QuestionnaireHistoryResources.Back, "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
 </div>
     <table id="questionnaire-table-header" class="table  table-header">
         <thead>
@@ -32,7 +32,7 @@
             </tr>
         </thead>
     </table>
-    <div id="table-content-holder" style="position: initial;">
+    <div id="table-content-holder" style="top: 77px;">
     <div class="scroller-container">
         @if (Model == null || Model.ChangeHistory.Count == 0)
         {

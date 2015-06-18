@@ -4,9 +4,9 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
-    public class QuestionnaireStateTacker : IView
+    public class QuestionnaireStateTracker : IView
     {
-        public QuestionnaireStateTacker()
+        public QuestionnaireStateTracker()
         {
             QuestionsState = new Dictionary<Guid, string>();
             GroupsState = new Dictionary<Guid, string>();
