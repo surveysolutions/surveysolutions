@@ -21,8 +21,8 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
         public RestService(ISettingsProvider settingsProvider, ILogger logger, INetworkService networkService)
         {
             if (settingsProvider == null) throw new ArgumentNullException("settingsProvider");
-            if(logger == null) throw new ArgumentNullException("logger");
-            if(networkService == null) throw  new ArgumentNullException("networkService");
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (networkService == null) throw new ArgumentNullException("networkService");
 
             this.settingsProvider = settingsProvider;
             this.logger = logger;
@@ -53,6 +53,13 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             try
             {
                 return await request(restClient);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new RestException(
+                    message: string.Format("Invalid endpoint url {0}", this.settingsProvider.Endpoint),
+                    statusCode: HttpStatusCode.BadRequest,
+                    innerException: ex);
             }
             catch (FlurlHttpTimeoutException ex)
             {
