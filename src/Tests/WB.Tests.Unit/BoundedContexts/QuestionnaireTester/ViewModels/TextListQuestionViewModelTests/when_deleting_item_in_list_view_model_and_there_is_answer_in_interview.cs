@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.Answers == savedAnswers);
+            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.Answers == savedAnswers && _.IsAnswered == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId

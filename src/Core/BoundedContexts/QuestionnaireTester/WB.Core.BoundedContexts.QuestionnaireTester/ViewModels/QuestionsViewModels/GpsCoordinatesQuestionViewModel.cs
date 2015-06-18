@@ -78,9 +78,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
-            if (answerModel != null && answerModel.IsAnswered)
+            if (answerModel.IsAnswered)
             {
-                this.Answer = new MvxCoordinates()
+                this.Answer = new MvxCoordinates
                 {
                     Longitude = answerModel.Longitude.Value,
                     Latitude = answerModel.Latitude.Value,

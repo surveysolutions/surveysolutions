@@ -428,12 +428,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
         }
 
-        public BaseInterviewAnswer GetAnswer(Identity identity)
-        {
-            string id = ConversionHelper.ConvertIdentityToString(identity);
-            return this.Answers.ContainsKey(id) ? this.Answers[id] : null;
-        }
-
         public string GetRosterTitle(Identity rosterIdentity)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
@@ -647,7 +641,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 && !this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
                 && !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
             {
-                return null;
+                return new T
+                       {
+                           InterviewerComment = null,
+                           IsEnabled = true,
+                           IsValid = true
+                       };
             }
 
             var interviewerComment = this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)

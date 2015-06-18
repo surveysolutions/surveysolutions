@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = (FilteredSingleOptionQuestionModel)questionnaire.Questions[entityIdentity.Id];
+            var questionModel = questionnaire.GetQuestion<FilteredSingleOptionQuestionModel>(entityIdentity.Id);
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
 
             this.questionIdentity = entityIdentity;
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 .Select(this.ToViewModel)
                 .ToList();
 
-            if (answerModel != null)
+            if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
                 SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);

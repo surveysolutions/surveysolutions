@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var answerModel = interview.GetQRBarcodeAnswer(entityIdentity);
-            if (answerModel != null)
+            if (answerModel.IsAnswered)
             {
                 this.Answer = answerModel.Answer;
             }
