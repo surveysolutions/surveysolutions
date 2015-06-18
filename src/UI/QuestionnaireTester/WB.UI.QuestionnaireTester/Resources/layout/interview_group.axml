@@ -12,12 +12,12 @@
       <Button style="@style/Interview_Group_Button"
               local:MvxBind="Click NavigateToGroupCommand; 
                              Text Title; 
-                             ButtonGroupStyle .; 
+                             ButtonGroupStyle GroupState; 
                              Enabled Enablement.Enabled; 
                              HideKeyboardOnClick .; "/>
     </MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
-              local:MvxBind="Visible Enablement.Enabled; GroupInfo ."/>
+              local:MvxBind="Visible Enablement.Enabled; GroupInfo GroupState"/>
   </MvxLinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"

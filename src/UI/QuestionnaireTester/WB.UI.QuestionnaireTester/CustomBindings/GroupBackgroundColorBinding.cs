@@ -1,21 +1,25 @@
 ﻿using Android.Widget;
+using Cirrious.MvvmCross.Binding;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupViewModel>
+    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupState>
     {
+        private MvxBindingMode defaultMode;
+
         public ButtonGroupStyleBinding(Button androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(Button control, GroupViewModel value)
+        public override MvxBindingMode DefaultMode
         {
-            if (value == null) return;
+            get { return MvxBindingMode.OneWay; }
+        }
 
+        protected override void SetValueToView(Button control, GroupState value)
+        {
             int groupBackgroundResourceId;
-
-            if (!value.Enablement.Enabled) return;
 
             switch (value.Status)
             {

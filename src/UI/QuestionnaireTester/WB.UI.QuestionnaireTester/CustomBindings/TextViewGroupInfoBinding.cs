@@ -1,15 +1,18 @@
-﻿using Android.Graphics;
+﻿using System;
+using System.ComponentModel;
+using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using Cirrious.CrossCore.Droid.Platform;
+using Cirrious.MvvmCross.Binding;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class TextViewGroupInfoBinding : BaseBinding<TextView, GroupViewModel>
+    public class TextViewGroupInfoBinding : BaseBinding<TextView, GroupState>
     {
         private IMvxAndroidCurrentTopActivity CurrentTopActivity
         {
@@ -19,10 +22,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
         }
 
-        protected override void SetValueToView(TextView control, GroupViewModel value)
+        public override MvxBindingMode DefaultMode
         {
-            if (value == null) return;
+            get { return MvxBindingMode.OneWay; }
+        }
 
+        protected override void SetValueToView(TextView control, GroupState value)
+        {
             string groupInformationText;
 
             if (value.Status == GroupStatus.NotStarted)
@@ -56,7 +62,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             control.TextFormatted = spannableText;
         }
 
-        private Color GetGroupColorByStatus(GroupViewModel value)
+        private Color GetGroupColorByStatus(GroupState value)
         {
             int groupTitleTextColorId;
             switch (value.Status)
@@ -81,7 +87,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             return this.CurrentTopActivity.Activity.Resources.GetColor(resourceId);
         }
 
-        private static string GetInformationByInvalidAnswers(GroupViewModel value)
+        private static string GetInformationByInvalidAnswers(GroupState value)
         {
             return string.Format("{0} {1}", value.InvalidAnswersCount,
                 value.InvalidAnswersCount == 1
@@ -89,7 +95,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                     : UIResources.Interview_Group_ManyInvalidAnswers);
         }
 
-        private static string GetInformationByQuestionsAndAnswers(GroupViewModel value)
+        private static string GetInformationByQuestionsAndAnswers(GroupState value)
         {
             var subGroupsText = GetInformationBySubgroups(value);
 
@@ -110,7 +116,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         }
 
-        private static string GetInformationBySubgroups(GroupViewModel value)
+        private static string GetInformationBySubgroups(GroupState value)
         {
             return value.SubgroupsCount == 0
                 ? UIResources.Interview_Group_NoSubgroups

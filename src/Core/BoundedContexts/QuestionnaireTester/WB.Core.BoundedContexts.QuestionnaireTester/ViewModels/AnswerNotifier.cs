@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
@@ -20,10 +23,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventHandler<TextListQuestionAnswered>
     {
         private readonly ILiteEventRegistry registry;
-        private Guid questionId;
+        private Guid? questionId;
+        private Identity[] questions;
 
         protected AnswerNotifier()
         {
+            this.questions = new Identity[]{};
         }
 
         public event EventHandler QuestionAnswered;
@@ -31,17 +36,26 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public AnswerNotifier(ILiteEventRegistry registry)
         {
             this.registry = registry;
+            this.registry.Subscribe(this);
         }
 
         public void Init(Guid questionId)
         {
-            this.registry.Subscribe(this);
             this.questionId = questionId;
+        }
+
+        public void Init(params Identity[] questions)
+        {
+            if (questions == null) throw new ArgumentNullException("questions");
+            this.questions = questions;
         }
 
         private void RaiseEventIfNeeded(QuestionAnswered @event)
         {
-            if (@event.QuestionId == this.questionId)
+            var shouldRaiseEvent = (this.questionId.HasValue && @event.QuestionId == this.questionId) ||
+                                this.questions.Any(x => @event.QuestionId == x.Id && @event.PropagationVector.Identical(x.RosterVector));
+
+            if (shouldRaiseEvent)
             {
                 this.OnSomeQuestionAnswered();
             }
