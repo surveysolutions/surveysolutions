@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public string QuestionnaireId { get; private set; }
         public Identity CurrentGroup { get; private set; }
 
-        private readonly Stack<Identity> navigationQueue = new Stack<Identity>();
+        private readonly Stack<Identity> navigationStack = new Stack<Identity>();
 
         public void Init(string interviewId, string questionnaireId)
         {
@@ -21,7 +21,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void NavigateTo(Identity groupIdentity)
         {
-            this.navigationQueue.Push(groupIdentity);
+            while (this.navigationStack.Contains(groupIdentity))
+            {
+                this.navigationStack.Pop();
+            }
+
+            this.navigationStack.Push(groupIdentity);
+
             this.CurrentGroup = groupIdentity;
 
             if (OnGroupChanged != null)
@@ -33,13 +39,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (navigateToIfHistoryIsEmpty == null) throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
 
             // remove current group from stack
-            this.navigationQueue.Pop();
+            this.navigationStack.Pop();
 
-            if (navigationQueue.Count == 0)
+            if (this.navigationStack.Count == 0)
                 navigateToIfHistoryIsEmpty();
             else
             {
-                var previousGroupIdentity = this.navigationQueue.Pop();
+                var previousGroupIdentity = this.navigationStack.Pop();
                 this.NavigateTo(previousGroupIdentity);
             }
         }
