@@ -1116,7 +1116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new Identity(questionId, questionRosterVector);
         }
 
-        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+        protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
             IEnumerable<Guid> questionIds, decimal[] rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
@@ -1151,7 +1151,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
+        protected IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
             IEnumerable<Guid> groupIds, 
             decimal[] rosterVector, 
             IQuestionnaire questionnaire, 
@@ -1161,7 +1161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(state, groupId, rosterVector, questionnaire, getRosterInstanceIds));
         }
 
-        private IEnumerable<Identity> GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
+        protected IEnumerable<Identity> GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
             Guid groupId, decimal[] rosterVector, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {

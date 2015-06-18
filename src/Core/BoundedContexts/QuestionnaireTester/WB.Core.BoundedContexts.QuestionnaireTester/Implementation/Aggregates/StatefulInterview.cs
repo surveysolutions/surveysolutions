@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-      
+
         public virtual void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
@@ -446,7 +446,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 throw new KeyNotFoundException(string.Format("There is no roster with {0} id in interview {1}", convertIdentityToString, this.Id));
             }
 
-            return ((InterviewRoster) Groups[convertIdentityToString]).Title;
+            return ((InterviewRoster)Groups[convertIdentityToString]).Title;
         }
 
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
@@ -466,8 +466,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
             var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(linkedToQuestionId, linkedQuestion, questionnaire);
 
-            IEnumerable<Identity> targetQuestions = 
-                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, linkedToQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
+            IEnumerable<Identity> targetQuestions =
+                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, new decimal[] { }, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {
@@ -514,6 +514,69 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 var parentRosterVector = this.ShrinkRosterVector(rosterVector, parentRosterLevel);
                 yield return GetRosterTitle(new Identity(parentRosterId, parentRosterVector));
             }
+        }
+
+        public int GetQuestionsInGroupCount(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+
+            return this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                allQuestionsInGroup,
+                groupIdentity.RosterVector,
+                questionnaire,
+                GetRosterInstanceIds).Count();
+        }
+
+        public int GetGroupsInGroupCount(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id);
+            var result = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                allQuestionsInGroup,
+                groupIdentity.RosterVector,
+                questionnaire,
+                GetRosterInstanceIds).Count();
+            return result;
+        }
+
+        public int GetAnsweredQuestionsCount(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+
+            var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                allQuestionsInGroup,
+                groupIdentity.RosterVector,
+                questionnaire,
+                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
+            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered);
+        }
+
+        public int GetInvalidAnswersCount(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+
+            var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                allQuestionsInGroup,
+                groupIdentity.RosterVector,
+                questionnaire,
+                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
+            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered && !x.Value.IsValid);
+        }
+
+        public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+
+            IEnumerable<Identity> questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                allQuestionsInGroup,
+                groupIdentity.RosterVector,
+                questionnaire,
+                GetRosterInstanceIds);
+            return questionInstances;
         }
 
         public bool IsValid(Identity identity)
@@ -567,8 +630,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
             if (!Answers.ContainsKey(questionKey))
             {
-                return this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey) 
-                    ? this.notAnsweredQuestionsInterviewerComments[questionKey] 
+                return this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
+                    ? this.notAnsweredQuestionsInterviewerComments[questionKey]
                     : null;
             }
 
