@@ -378,4 +378,7 @@
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>Не удается получить вашу гео позицию. Выйдите на открытое пространство или увеличте значение таймаута в настройках.</value>
   </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>Указан неверный адрес Survey Solutions Designer. Проверьте настройки.</value>
+  </data>
 </root>
