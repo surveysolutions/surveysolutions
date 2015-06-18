@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
 
             var answerModel = interview.GetTextAnswer(questionIdentity);
-            if (answerModel != null)
+            if (answerModel.IsAnswered)
             {
                 this.Answer = answerModel.Answer;
             }

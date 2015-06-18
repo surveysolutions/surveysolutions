@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.parentQuestionIdentity = new Identity(questionModel.CascadeFromQuestionId, parentRosterVector);
 
             var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
-            if (parentAnswerModel != null)
+            if (parentAnswerModel.IsAnswered)
             {
                 answerOnParentQuestion = parentAnswerModel.Answer;
             }
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 .Select(this.ToViewModel)
                 .ToList();
 
-            if (answerModel != null)
+            if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
                 SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 var interview = this.interviewRepository.Get(interviewId.FormatGuid());
                 var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
-                if (parentAnswerModel != null)
+                if (parentAnswerModel.IsAnswered)
                 {
                     answerOnParentQuestion = parentAnswerModel.Answer;
                 }              

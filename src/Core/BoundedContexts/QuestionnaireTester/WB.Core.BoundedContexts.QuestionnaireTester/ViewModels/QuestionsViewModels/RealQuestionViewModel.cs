@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionModel = questionnaire.GetRealNumericQuestion(entityIdentity.Id);
 
             this.CountOfDecimalPlaces = questionModel.CountOfDecimalPlaces;
-            if (answerModel != null)
+            if (answerModel.IsAnswered)
             {
                 this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
             }

@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = questionnaire.GetIntegerNumericQuestion(entityIdentity.Id);
 
-            if (answerModel != null)
+            if (answerModel.IsAnswered)
             {
                 var answer = answerModel.Answer;
                 this.AnswerAsString = NullableIntToAnswerString(answer);

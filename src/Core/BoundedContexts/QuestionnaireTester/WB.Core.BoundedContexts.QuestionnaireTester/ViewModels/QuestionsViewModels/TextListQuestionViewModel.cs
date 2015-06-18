@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var questionModel = questionnaire.GetTextListQuestion(entityIdentity.Id);
 
-            if (answerModel != null && answerModel.Answers != null)
+            if (answerModel.IsAnswered)
             {
                 answerModel.Answers.Select(x => this.CreateListItemViewModel(x.Item1, x.Item2)).ForEach(x => this.Answers.Add(x));
             }
