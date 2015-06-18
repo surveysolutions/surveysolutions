@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -39,7 +40,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering,
+            AnswerNotifier referencedAnswerNotifier)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
@@ -56,6 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.ReferencedAnswerNotifier = referencedAnswerNotifier;
         }
 
         private Identity questionIdentity;
@@ -65,6 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
+        public AnswerNotifier ReferencedAnswerNotifier { get; private set; }
 
         public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
@@ -82,12 +86,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
             this.referencedQuestionId = questionModel.LinkedToQuestionId;
 
-            this.InitOptionsFromModel(interview, questionnaire);
+            this.ReferencedAnswerNotifier.Init(this.referencedQuestionId);
+            this.ReferencedAnswerNotifier.QuestionAnswered += this.ReferencedQuestionAnswered;
+
+            var options = this.GenerateOptionsFromModel(interview, questionnaire);
+            this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
             this.eventRegistry.Subscribe(this);
         }
 
-        private void InitOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)
+        private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)
         {
             var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.questionIdentity);
 
@@ -101,7 +109,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 .Where(optionOrNull => optionOrNull != null)
                 .ToList();
 
-            this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
+            return options;
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
@@ -160,6 +168,47 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                     }
                 }
             }
+        }
+
+        private void ReferencedQuestionAnswered(object sender, EventArgs e)
+        {
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+
+            var actualOptions = this.GenerateOptionsFromModel(interview, questionnaire);
+
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                List<SingleOptionLinkedQuestionOptionViewModel> optionsToRemove = this
+                    .Options
+                    .Where(existingOption => !actualOptions.Any(actualOption => AreOptionsReferencingSameAnswer(actualOption, existingOption)))
+                    .ToList();
+
+                foreach (SingleOptionLinkedQuestionOptionViewModel optionToRemove in optionsToRemove)
+                {
+                    this.Options.Remove(optionToRemove);
+                }
+
+                for (int actualOptionIndex = 0; actualOptionIndex < actualOptions.Count; actualOptionIndex++)
+                {
+                    var actualOption = actualOptions[actualOptionIndex];
+                    var existingOption = this.Options.SingleOrDefault(option => AreOptionsReferencingSameAnswer(option, actualOption));
+
+                    if (existingOption != null)
+                    {
+                        existingOption.Title = actualOption.Title;
+                    }
+                    else
+                    {
+                        this.Options.Insert(actualOptionIndex, actualOption);
+                    }
+                }
+            });
+        }
+
+        private static bool AreOptionsReferencingSameAnswer(SingleOptionLinkedQuestionOptionViewModel option1, SingleOptionLinkedQuestionOptionViewModel option2)
+        {
+            return option1.RosterVector.SequenceEqual(option2.RosterVector);
         }
 
         private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(

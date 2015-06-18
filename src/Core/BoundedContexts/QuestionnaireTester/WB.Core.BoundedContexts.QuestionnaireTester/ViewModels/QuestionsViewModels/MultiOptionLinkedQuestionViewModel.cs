@@ -82,11 +82,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.answerNotifier.Init(this.linkedToQuestionId);
 
-            this.answerNotifier.QuestionAnswered += LinkedQuestionAnswered;
+            this.answerNotifier.QuestionAnswered += this.LinkedToQuestionAnswered;
             this.GenerateOptions(interview, linkedQuestionModel, questionnaire);
         }
 
-        private void LinkedQuestionAnswered(object sender, EventArgs e)
+        private void LinkedToQuestionAnswered(object sender, EventArgs e)
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
             QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);

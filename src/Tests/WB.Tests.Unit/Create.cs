@@ -1737,7 +1737,8 @@ namespace WB.Tests.Unit
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                answering ?? Mock.Of<AnsweringViewModel>());
+                answering ?? Mock.Of<AnsweringViewModel>(),
+                Mock.Of<AnswerNotifier>());
         }
 
         public static AnswerNotifier AnswerNotifier()
