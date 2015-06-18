@@ -215,7 +215,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             BaseInterviewAnswer referencedAnswer, BaseQuestionModel referencedQuestion,
             LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview)
         {
-            if (referencedAnswer == null || !referencedAnswer.IsAnswered)
+            if (referencedAnswer == null)
                 return null;
 
             var title = this.GenerateOptionTitle(referencedQuestion, referencedAnswer, interview);
@@ -224,6 +224,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 linkedAnswerModel != null &&
                 linkedAnswerModel.IsAnswered &&
                 linkedAnswerModel.Answer.SequenceEqual(referencedAnswer.RosterVector);
+
+            if (!referencedAnswer.IsAnswered && !isSelected)
+                return null;
 
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
