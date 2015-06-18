@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using System.Runtime.Caching;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -18,6 +20,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
         private readonly MemoryCache cache = MemoryCache.Default;
         private const string CacheKeyName = "interviewsCountAllowedToCreateUntilLimitReached";
+
+        private ITransactionManagerProvider TransactionManagerProvider
+        {
+            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
+        }
 
         public SurveyManagementPreconditionsService(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, 
@@ -40,14 +47,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             object cachedLength = this.cache.Get(CacheKeyName);
             if (cachedLength != null)
             {
-                return (int?)cachedLength;
+                return (int?) cachedLength;
             }
 
-            var interviewsCountAllowedToCreateUntilLimitReached = interviewPreconditionsServiceSettings.InterviewLimitCount -
-                   interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
+            var interviewsCountAllowedToCreateUntilLimitReached =
+                interviewPreconditionsServiceSettings.InterviewLimitCount -
+                QueryInterviewsCount();
+
             this.cache.Add(CacheKeyName, interviewsCountAllowedToCreateUntilLimitReached, DateTime.Now.AddSeconds(30));
 
             return interviewsCountAllowedToCreateUntilLimitReached;
+        }
+
+        private int QueryInterviewsCount()
+        {
+            var shouldUseOwnTransaction = !TransactionManagerProvider.GetTransactionManager().IsQueryTransactionStarted;
+
+            if (shouldUseOwnTransaction)
+            {
+                this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            }
+            try
+            {
+                return interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
+            }
+            finally
+            {
+                if (shouldUseOwnTransaction)
+                {
+                    this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                }
+            }
         }
     }
 
