@@ -64,12 +64,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTackerStorage; 
+        private readonly IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage; 
 
         public QuestionnaireChangeHistoryDenormalizer(
             IReadSideRepositoryWriter<AccountDocument> accountStorage,
             IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage,
-            IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTackerStorage)
+            IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage)
         {
             this.accountStorage = accountStorage;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 QuestionnaireActionType.Add, QuestionnaireItemType.Questionnaire,
                 evnt.EventSourceId, evnt.Payload.Title, evnt.EventSequence);
 
-            questionnaireStateTackerStorage.Store(new QuestionnaireStateTacker() { CreatedBy = evnt.Payload.CreatedBy ?? Guid.Empty }, evnt.EventSourceId);
+            questionnaireStateTackerStorage.Store(new QuestionnaireStateTracker() { CreatedBy = evnt.Payload.CreatedBy ?? Guid.Empty }, evnt.EventSourceId);
 
             AddOrUpdateGroupState(evnt.EventSourceId, evnt.EventSourceId, evnt.Payload.Title);
         }
@@ -107,8 +107,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             if (evnt.Payload.ClonedFromQuestionnaireId == evnt.EventSourceId)
             {
                 AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, creatorId, evnt.EventTimeStamp,
-                    QuestionnaireActionType.Add, QuestionnaireItemType.Questionnaire,
-                    evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.EventSequence);
+                   QuestionnaireActionType.Clone, QuestionnaireItemType.Questionnaire,
+                   evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.EventSequence);
             }
             else
             {
@@ -459,11 +459,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
 
-            var targetGroupId = evnt.Payload.GroupKey ?? evnt.EventSourceId;
-            var isTargetGroupRoster = questionnaire.RosterState.ContainsKey(targetGroupId);
-            var targetGroupTitle = isTargetGroupRoster
-                ? questionnaire.RosterState[targetGroupId]
-                : questionnaire.GroupsState[targetGroupId];
+            var moveReferences=new List<QuestionnaireChangeReference>();
+            if (evnt.Payload.GroupKey.HasValue)
+            {
+                var targetGroupId = evnt.Payload.GroupKey ?? evnt.EventSourceId;
+                var isTargetGroupRoster = questionnaire.RosterState.ContainsKey(targetGroupId);
+                var targetGroupTitle = isTargetGroupRoster
+                    ? questionnaire.RosterState[targetGroupId]
+                    : questionnaire.GroupsState[targetGroupId];
+                moveReferences.Add(CreateQuestionnaireChangeReference(
+                    isTargetGroupRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group,
+                    targetGroupId, targetGroupTitle));
+            }
 
             QuestionnaireItemType movedItemType;
             string moveditemTitle;
@@ -496,10 +503,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId,
                 evnt.EventTimeStamp,
                 QuestionnaireActionType.Move, movedItemType, evnt.Payload.PublicKey,
-                moveditemTitle, evnt.EventSequence,
-                CreateQuestionnaireChangeReference(
-                    isTargetGroupRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group,
-                    targetGroupId, targetGroupTitle));
+                moveditemTitle, evnt.EventSequence, moveReferences.ToArray());
         }
 
         private string GetUserName(Guid? userId)
@@ -517,7 +521,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
             if (questionnaireStateTacker == null)
-                questionnaireStateTacker = new QuestionnaireStateTacker() { CreatedBy = createdBy };
+                questionnaireStateTacker = new QuestionnaireStateTracker() { CreatedBy = createdBy };
 
             questionnaireStateTacker.GroupsState[questionnaireId] = questionnaireDocument.Title;
 
@@ -581,7 +585,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         }
 
         private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,
-            Action<QuestionnaireStateTacker, Guid, string> setAction)
+            Action<QuestionnaireStateTracker, Guid, string> setAction)
         {
             var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
 

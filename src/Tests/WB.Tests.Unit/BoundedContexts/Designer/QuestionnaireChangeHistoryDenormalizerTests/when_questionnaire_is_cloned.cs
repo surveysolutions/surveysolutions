@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
     {
         Establish context = () =>
         {
-            questionnaireStateTackerStorage = new TestInMemoryWriter<QuestionnaireStateTacker>();
+            questionnaireStateTackerStorage = new TestInMemoryWriter<QuestionnaireStateTracker>();
 
             var clonedQuestionnaireState = Create.QuestionnaireStateTacker();
             clonedQuestionnaireState.GroupsState.Add(clonedFromQuestionnaireId, "clone");
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid clonedFromQuestionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static string questionnaireTitle = "test";
-        private static TestInMemoryWriter<QuestionnaireStateTacker> questionnaireStateTackerStorage;
+        private static TestInMemoryWriter<QuestionnaireStateTracker> questionnaireStateTackerStorage;
         private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
     }
 }
