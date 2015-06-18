@@ -2,9 +2,11 @@
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [LimitsFilter]
     public class TabletReportController : Controller
     {
         private readonly ITabletInformationService tabletInformationService;

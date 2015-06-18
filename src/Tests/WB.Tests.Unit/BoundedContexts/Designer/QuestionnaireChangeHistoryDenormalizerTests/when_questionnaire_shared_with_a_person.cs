@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
     {
         Establish context = () =>
         {
-            questionnaireStateTackerStorage = new TestInMemoryWriter<QuestionnaireStateTacker>();
+            questionnaireStateTackerStorage = new TestInMemoryWriter<QuestionnaireStateTracker>();
             questionnaireChangeRecordStorage = new TestInMemoryWriter<QuestionnaireChangeRecord>();
             questionnaireChangeHistoryDenormalizer =
                 CreateQuestionnaireChangeHistoryDenormalizer(questionnaireStateTacker: questionnaireStateTackerStorage,
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         private static Guid personId = Guid.Parse("22222222222222222222222222222222");
 
         private static string userName = "test";
-        private static TestInMemoryWriter<QuestionnaireStateTacker> questionnaireStateTackerStorage;
+        private static TestInMemoryWriter<QuestionnaireStateTracker> questionnaireStateTackerStorage;
         private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
     }
 }

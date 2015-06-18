@@ -18,12 +18,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         protected static QuestionnaireChangeHistoryDenormalizer CreateQuestionnaireChangeHistoryDenormalizer(
             IReadSideRepositoryWriter<AccountDocument> accountDocumentStorage=null,
             IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecord = null,
-            IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTacker = null
+            IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTacker = null
             )
         {
             return new QuestionnaireChangeHistoryDenormalizer(accountDocumentStorage??Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
                 questionnaireChangeRecord ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireChangeRecord>>(),
-                questionnaireStateTacker??Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTacker>>());
+                questionnaireStateTacker??Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>());
         }
 
         protected static QuestionnaireChangeRecord GetFirstChangeRecord(IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeRecord, string questionnaireId)

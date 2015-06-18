@@ -21,7 +21,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType),
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
                     record.TargetTitle, record.TargetType),
-                GetActionStringRepresentations(record.ActionType, record.TargetType));
+                GetActionStringRepresentations(record.ActionType, record.TargetType,
+                    record.HistoricalRecordReferences.Any()));
 
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
@@ -59,7 +60,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         }
 
         private static string GetActionStringRepresentations(QuestionnaireActionType actionType,
-            QuestionnaireItemType itemType)
+            QuestionnaireItemType itemType, bool hasReference)
         {
             var itemsToAdd = new[]
             {
@@ -72,7 +73,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 case QuestionnaireActionType.Add:
                     return itemsToAdd.Contains(itemType) ? QuestionnaireHistoryResources.added : QuestionnaireHistoryResources.created;
                 case QuestionnaireActionType.Clone:
-                    return QuestionnaireHistoryResources.cloned_from;
+                    return QuestionnaireHistoryResources.cloned + (hasReference ? QuestionnaireHistoryResources.from : "");
                 case QuestionnaireActionType.Delete:
                     return QuestionnaireHistoryResources.deleted;
                 case QuestionnaireActionType.Update:
@@ -82,7 +83,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 case QuestionnaireActionType.RosterBecameAGroup:
                     return QuestionnaireHistoryResources.became_a_group;
                 case QuestionnaireActionType.Move:
-                    return QuestionnaireHistoryResources.moved_to;
+                    return QuestionnaireHistoryResources.moved + (hasReference ? QuestionnaireHistoryResources.to : "");
                 case QuestionnaireActionType.Import:
                     return QuestionnaireHistoryResources.imported;
                 case QuestionnaireActionType.Replace:
