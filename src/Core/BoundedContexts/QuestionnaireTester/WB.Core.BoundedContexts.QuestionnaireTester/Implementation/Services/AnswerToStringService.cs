@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
     {
         public string AnswerToString(BaseQuestionModel question, BaseInterviewAnswer answer)
         {
-            if (answer == null)
+            if (answer == null || !answer.IsAnswered)
                 return string.Empty;
 
             if (answer is TextAnswer)
