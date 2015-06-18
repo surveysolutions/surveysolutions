@@ -1613,9 +1613,9 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static QuestionnaireStateTacker QuestionnaireStateTacker()
+        public static QuestionnaireStateTracker QuestionnaireStateTacker()
         {
-            return new QuestionnaireStateTacker();
+            return new QuestionnaireStateTracker();
         }
 
         public static AccountDocument AccountDocument(string userName="")
