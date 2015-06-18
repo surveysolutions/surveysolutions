@@ -1,7 +1,6 @@
+using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
-
 using Android.Text;
 using Java.Lang;
 using Math = System.Math;
@@ -23,12 +22,11 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             var text = dest.ToString().Insert(dstart, source.ToString());
             var numberInInvariantCulture = text.Replace(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
-            decimal answer;
-            if (decimal.TryParse(numberInInvariantCulture, NumberStyles.Number, CultureInfo.InvariantCulture, out answer))
+            decimal decimalNumber;
+            if (decimal.TryParse(numberInInvariantCulture, NumberStyles.Number, CultureInfo.InvariantCulture, out decimalNumber))
             {
-                Regex decimalRegex = new Regex(@"^[-+]?\d+([.,]\d{0," + decimalPlacesCount + @"})?$");
-                
-                if (decimalRegex.IsMatch(numberInInvariantCulture))
+                int countOfDecimalPlaces = BitConverter.GetBytes(decimal.GetBits(decimalNumber)[3])[2];
+                if (countOfDecimalPlaces <= decimalPlacesCount)
                 {
                     return null;
                 }
