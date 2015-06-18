@@ -12,7 +12,7 @@
     <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     
     <item name="colorPrimary">@android:color/darker_gray</item>
-    <item name="colorPrimaryDark">@android:color/white</item>
+    <item name="colorPrimaryDark">@color/darkActionBar</item>
     <item name="colorAccent">@android:color/holo_blue_bright</item>
 
     <!-- elements -->

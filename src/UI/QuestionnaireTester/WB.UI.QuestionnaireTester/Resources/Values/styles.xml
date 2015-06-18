@@ -261,6 +261,7 @@
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
     <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    <item name="colorPrimaryDark">@color/darkActionBar</item>
 
     <!-- elements -->
     <item name="android:checkboxStyle">@style/CheckBoxTheme</item>
@@ -283,6 +284,7 @@
 
   <style name="BlueAppTheme" parent="AppTheme">
     <item name="colorPrimary">@color/colorBlueThemePrimary</item>
+    <item name="colorPrimaryDark">@color/interviewActionBar</item>
     <item name="android:textColorHighlight">#9936aee5</item>
     <item name="android:imageButtonStyle">@style/ImageButtonTheme_Blue_Light</item>
     <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>

@@ -62,6 +62,8 @@
   <color name="sections_list_text_color">#000000</color>
   
   <color name="list_style_divider_color">#EDEDED</color>
-  
+
+  <color name="darkActionBar">#575757</color>
+  <color name="interviewActionBar">#246EAD</color>
 
 </resources>
