@@ -464,8 +464,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
+            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(linkedToQuestionId, linkedQuestion, questionnaire);
+
             IEnumerable<Identity> targetQuestions = 
-                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, linkedToQuestionId, new decimal[]{}, questionnaire, GetRosterInstanceIds);
+                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, linkedToQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {
@@ -476,6 +478,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                     yield return this.Answers[id];
                 }
             }
+        }
+
+        private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
+            Guid linkedToQuestionId, Identity linkedQuestion, IQuestionnaire questionnaire)
+        {
+            int linkedToQuestionRosterLevel = questionnaire.GetRosterLevelForQuestion(linkedToQuestionId);
+            int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
+
+            int targetRosterLevel = Math.Min(linkedToQuestionRosterLevel - 1, linkedQuestionRosterLevel);
+
+            return this.ShrinkRosterVector(linkedQuestion.RosterVector, targetRosterLevel);
         }
 
         public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector)
