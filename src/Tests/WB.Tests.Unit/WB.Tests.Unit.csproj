@@ -378,6 +378,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\StatefulInterviewTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\MaskTextTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_making_text_after_setting_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_making_text_for_not_filled_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_adding_text_with_mask_symbol.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_adding_new_text_and_next_char_predifined.cs" />

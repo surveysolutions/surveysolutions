@@ -24,7 +24,6 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         private bool initialized;
         private bool ignore;
         private bool selectionChanged;
-
     
         public MaskedEditText(Context context) : base(context) 
         {
@@ -55,19 +54,10 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
             if (Text.IsNullOrEmpty())
             {
-                if (this.HasHint && !this.maskedText.HasAnyText)
+                var newMaskedText = this.maskedText.MakeMaskedText();
+                if (newMaskedText != this.Text)
                 {
-                    this.EditableText.Clear();
-                }
-                else
-                {
-                    //this.EditableText.Clear();
-                    //this.EditableText.Append(this.maskedText.MakeMaskedText());
-                    var newMaskedText = this.maskedText.MakeMaskedText();
-                    if (newMaskedText != this.Text)
-                    {
-                        this.EditableText.Replace(0, this.Text.Length, newMaskedText);
-                    }
+                    this.EditableText.Replace(0, this.Text.Length, newMaskedText);
                 }
             }
 
@@ -94,14 +84,24 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 if (maskedText.Mask != value)
                 {
                     this.maskedText.Mask = value;
-                    //this.Text = string.Empty; // clear text value after change mask
                     this.CleanUp();
 
-                    this.SetRawInputType(value.IsNullOrEmpty() 
-                        ? InputTypes.Null 
-                        : InputTypes.TextFlagNoSuggestions);
+                    this.UpdatetInputType();
                 }
             }
+        }
+
+        private void UpdatetInputType()
+        {
+            var inputTypes = this.InputType;
+            var inputTypeOverrided = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword;
+
+            if (Mask.IsNullOrEmpty())
+                inputTypes &= ~inputTypeOverrided;
+            else
+                inputTypes |= inputTypeOverrided;
+
+            this.SetRawInputType(inputTypes);
         }
 
         public event EventHandler<EventArgs> IsMaskedFormAnsweredChanged; 
@@ -130,12 +130,14 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
         }
 
    
-        private void Init() 
+        private void Init()
         {
             this.SetFilters(new IInputFilter[] { this });
             this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
             this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
             this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
+
+            this.UpdatetInputType();
         }
 
         protected override void OnTextChanged(ICharSequence s, int start, int before, int count)
@@ -209,14 +211,9 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 if (!this.maskedText.HasAnyText && this.HasHint) 
                 {
                     this.selection = 0;
-                    this.EditableText.Clear(); 
                 }
-                else 
-                {
-                    //this.EditableText.Clear();
-                    //this.EditableText.Append(this.maskedText.MakeMaskedText());
-                    this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
-                }
+
+                this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
 
                 this.IsMaskedFormAnswered = this.maskedText.IsMaskedFormAnswered;
             
