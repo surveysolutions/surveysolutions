@@ -260,6 +260,7 @@
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
+    <Compile Include="CustomBindings\MvxAutoCompleteTextViewClearTextBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
@@ -646,6 +647,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_filtered_single_option_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_question_cascading_single_option.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

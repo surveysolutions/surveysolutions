@@ -122,24 +122,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             return optionViewModel;
         }
 
-        private string answer;
-        public string Answer
+        private bool shouldClearText;
+        public bool ShouldClearText
         {
-            get { return this.answer; }
-            set
-            {
-                if (answer != value)
-                {
-                    this.answer = value;
-                    this.RaisePropertyChanged();
-                }
+            get { return this.shouldClearText; }
+            set 
+            { 
+                this.shouldClearText = value;
+                SelectedObject = null;
+                SetSuggestionsEmpty();
+                this.RaisePropertyChanged(); 
             }
         }
 
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerFilteredComboboxQuestionCommand)); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(this.FindMatchOptionAndSendAnswerQuestionCommand)); }
         }
 
         private CascadingComboboxItemViewModel selectedObject;
@@ -148,7 +147,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return this.selectedObject; }
             set
             {
+                if (this.selectedObject == value)
+                    return;
+                
                 this.selectedObject = value;
+                if (this.selectedObject != null)
+                {
+                    SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
+                }
                 RaisePropertyChanged();
             }
         }
@@ -216,15 +222,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private List<CascadingComboboxItemViewModel> autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
 
+
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
         {
             get { return this.autoCompleteSuggestions; }
             set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
         }
 
-        private async void SendAnswerFilteredComboboxQuestionCommand()
+        private void FindMatchOptionAndSendAnswerQuestionCommand(string enteredText)
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.Text == this.Answer);
+            var answerViewModel = this.Options.SingleOrDefault(i => i.OriginalText == enteredText);
 
             if (answerViewModel == null)
             {
@@ -233,7 +240,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             var answerValue = answerViewModel.Value;
+            if (selectedObject!= null && answerValue == selectedObject.Value)
+                return;
 
+            SendAnswerFilteredComboboxQuestionCommand(answerValue);
+        }
+
+        private async void SendAnswerFilteredComboboxQuestionCommand(decimal answerValue)
+        {
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
                 this.principal.CurrentUserIdentity.UserId,
@@ -264,6 +278,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 if (parentAnswerModel.IsAnswered)
                 {
                     answerOnParentQuestion = parentAnswerModel.Answer;
+                    ShouldClearText = true;
                 }              
             }
         }
@@ -274,7 +289,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 if (question.Id == questionIdentity.Id && question.RosterVector.SequenceEqual(questionIdentity.RosterVector))
                 {
-                    SelectedObject = null;
+                    ShouldClearText = true;
                 }
             }
         }
