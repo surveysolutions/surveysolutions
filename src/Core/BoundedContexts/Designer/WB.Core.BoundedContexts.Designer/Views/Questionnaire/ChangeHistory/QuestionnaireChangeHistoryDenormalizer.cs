@@ -63,12 +63,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTackerStorage; 
+        private readonly IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage; 
 
         public QuestionnaireChangeHistoryDenormalizer(
             IReadSideRepositoryWriter<AccountDocument> accountStorage,
             IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage,
-            IReadSideKeyValueStorage<QuestionnaireStateTacker> questionnaireStateTackerStorage)
+            IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage)
         {
             this.accountStorage = accountStorage;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 QuestionnaireActionType.Add, QuestionnaireItemType.Questionnaire,
                 evnt.EventSourceId, evnt.Payload.Title, evnt.EventSequence);
 
-            questionnaireStateTackerStorage.Store(new QuestionnaireStateTacker() { CreatedBy = evnt.Payload.CreatedBy ?? Guid.Empty }, evnt.EventSourceId);
+            questionnaireStateTackerStorage.Store(new QuestionnaireStateTracker() { CreatedBy = evnt.Payload.CreatedBy ?? Guid.Empty }, evnt.EventSourceId);
 
             AddOrUpdateGroupState(evnt.EventSourceId, evnt.EventSourceId, evnt.Payload.Title);
         }
@@ -520,7 +520,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
             if (questionnaireStateTacker == null)
-                questionnaireStateTacker = new QuestionnaireStateTacker() { CreatedBy = createdBy };
+                questionnaireStateTacker = new QuestionnaireStateTracker() { CreatedBy = createdBy };
 
             questionnaireStateTacker.GroupsState[questionnaireId] = questionnaireDocument.Title;
 
@@ -584,7 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         }
 
         private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,
-            Action<QuestionnaireStateTacker, Guid, string> setAction)
+            Action<QuestionnaireStateTracker, Guid, string> setAction)
         {
             var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId);
 
