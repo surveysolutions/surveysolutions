@@ -229,9 +229,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             string answerAsTitle = this.answerToStringService.AnswerToString(linkedToQuestion, linkedToAnswer);
 
-            string rosterTitlesWithoutLast = string.Join(": ", interview.GetParentRosterTitlesWithoutLast(linkedToAnswer.Id, linkedToAnswer.RosterVector));
+            int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
-            return string.IsNullOrEmpty(rosterTitlesWithoutLast) ? answerAsTitle : string.Join(": ", rosterTitlesWithoutLast, answerAsTitle);
+            IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
+                interview
+                    .GetParentRosterTitlesWithoutLast(linkedToAnswer.Id, linkedToAnswer.RosterVector)
+                    .Skip(currentRosterLevel);
+
+            string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);
+
+            return string.IsNullOrEmpty(rosterPrefixes) ? answerAsTitle : string.Join(": ", rosterPrefixes, answerAsTitle);
         }
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
