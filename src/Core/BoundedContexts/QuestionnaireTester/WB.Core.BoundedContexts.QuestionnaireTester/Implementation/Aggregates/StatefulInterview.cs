@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
@@ -260,7 +259,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
             {
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedRosterInstanceTitle.RosterInstance.GroupId, GetFullRosterVector(changedRosterInstanceTitle.RosterInstance));
-                var roster = (InterviewRoster)this.Groups[rosterKey];
+                var roster = (InterviewRoster)this.groups[rosterKey];
                 roster.Title = changedRosterInstanceTitle.Title;
             }
         }
@@ -315,13 +314,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public virtual void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
-            this.IsInProgress = false;
+            this.IsCompleted = true;
         }
 
         public virtual void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
-            this.IsInProgress = true;
+            this.IsCompleted = false;
         }
 
         public virtual void Apply(InterviewDeclaredValid @event)
@@ -352,14 +351,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public IReadOnlyDictionary<string, InterviewGroup> Groups
-        {
-            get
-            {
-                return new ReadOnlyDictionary<string, InterviewGroup>(this.groups);
-            }
-        }
-
         public IReadOnlyDictionary<string, List<Identity>> RosterInstancesIds
         {
             get
@@ -370,7 +361,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public bool HasErrors { get; set; }
 
-        public bool IsInProgress { get; set; }
+        public bool IsCompleted { get; set; }
+
+        public InterviewRoster GetRoster(Identity identity)
+        {
+            return (InterviewRoster)this.groups[ConversionHelper.ConvertIdentityToString(identity)];
+        }
 
         public GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity)
         {
@@ -441,12 +437,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public string GetRosterTitle(Identity rosterIdentity)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
-            if (!Groups.ContainsKey(convertIdentityToString))
+            if (!this.groups.ContainsKey(convertIdentityToString))
             {
                 throw new KeyNotFoundException(string.Format("There is no roster with {0} id in interview {1}", convertIdentityToString, this.Id));
             }
 
-            return ((InterviewRoster)Groups[convertIdentityToString]).Title;
+            return ((InterviewRoster)this.groups[convertIdentityToString]).Title;
         }
 
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
@@ -499,7 +495,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var rosterVector = this.ShrinkRosterVector(targetRosterVector, grosterLevel);
             var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
 
-            return this.Groups.ContainsKey(rosterKey) ? this.Groups[rosterKey] as InterviewRoster : null;
+            return this.groups.ContainsKey(rosterKey) ? this.groups[rosterKey] as InterviewRoster : null;
         }
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector)
@@ -595,9 +591,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             var entityKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
 
-            if (this.Groups.ContainsKey(entityKey))
+            if (this.groups.ContainsKey(entityKey))
             {
-                var group = this.Groups[entityKey];
+                var group = this.groups[entityKey];
                 return !group.IsDisabled;
             }
 
@@ -711,9 +707,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
             InterviewGroup groupOrRoster;
-            if (this.Groups.ContainsKey(groupKey))
+            if (this.groups.ContainsKey(groupKey))
             {
-                groupOrRoster = this.Groups[groupKey];
+                groupOrRoster = this.groups[groupKey];
             }
             else
             {

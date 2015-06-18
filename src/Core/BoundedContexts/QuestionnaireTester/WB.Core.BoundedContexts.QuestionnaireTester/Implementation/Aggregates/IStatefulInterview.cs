@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -12,11 +11,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         long QuestionnaireVersion { get; set; }
         Guid Id { get; set; }
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
-        IReadOnlyDictionary<string, InterviewGroup> Groups { get; }
         IReadOnlyDictionary<string, List<Identity>> RosterInstancesIds { get; }
         
         bool HasErrors { get; set; }
-        bool IsInProgress { get; set; }
+        bool IsCompleted { get; set; }
+
+        InterviewRoster GetRoster(Identity identity);
 
         GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity);
 
