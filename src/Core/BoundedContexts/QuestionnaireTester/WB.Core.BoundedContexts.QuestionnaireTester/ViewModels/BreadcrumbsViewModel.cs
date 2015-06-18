@@ -98,9 +98,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     var itemRosterVector = newGroupIdentity.RosterVector.Take(metRosters).ToArray();
                     var itemIdentity = new Identity(reference.Id, itemRosterVector);
 
-                    var rosterInstance =
-                        (InterviewRoster)
-                            interview.Groups[ConversionHelper.ConvertIdAndRosterVectorToString(reference.Id, itemRosterVector)];
+                    var rosterInstance = interview.GetRoster(itemIdentity);
+                        
                     var title = GenerateRosterTitle(groupTitle, rosterInstance.Title);
                     breadCrumbs.Add(new BreadCrumbItemViewModel(navigationState)
                     {
