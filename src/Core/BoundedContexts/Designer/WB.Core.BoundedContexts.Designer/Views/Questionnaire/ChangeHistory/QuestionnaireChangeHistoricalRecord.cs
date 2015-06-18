@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             QuestionnaireActionType actionType,
             Guid targetId,
             Guid? targetParentId, 
-            string title, 
+            string title,
             QuestionnaireItemType type, 
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences)
         {
