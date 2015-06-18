@@ -1762,11 +1762,10 @@ namespace WB.Tests.Unit
                 LinkedToQuestionId = linkedToQuestionId ?? Guid.NewGuid()
             };
         }
-        public static QuestionnaireStateTacker QuestionnaireStateTacker()
+        public static QuestionnaireStateTracker QuestionnaireStateTacker()
         {
-            return new QuestionnaireStateTacker();
+            return new QuestionnaireStateTracker();
         }
-
         public static AccountDocument AccountDocument(string userName="")
         {
             return new AccountDocument() { UserName = userName };

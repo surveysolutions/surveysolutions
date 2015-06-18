@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
     {
         Establish context = () =>
         {
-            questionnaireStateTackerStorage = new TestInMemoryWriter<QuestionnaireStateTacker>();
+            questionnaireStateTackerStorage = new TestInMemoryWriter<QuestionnaireStateTracker>();
             questionnaireChangeRecordStorage = new TestInMemoryWriter<QuestionnaireChangeRecord>();
             questionnaireChangeHistoryDenormalizer = CreateQuestionnaireChangeHistoryDenormalizer(questionnaireStateTacker: questionnaireStateTackerStorage, questionnaireChangeRecord: questionnaireChangeRecordStorage);
         };
@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         Because of = () =>
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionnaireClonedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle, clonedFromQuestionnaireId: Guid.Parse(questionnaireId)));
 
-        It should_store_change_record_with_target_action_equal_to_add = () =>
-            GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Add);
+        It should_store_change_record_with_target_action_equal_to_clone = () =>
+            GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).ActionType.ShouldEqual(QuestionnaireActionType.Clone);
 
         It should_store_change_record_with_target_type_equal_to_questionnaire = () =>
             GetFirstChangeRecord(questionnaireChangeRecordStorage, questionnaireId).TargetItemType.ShouldEqual(QuestionnaireItemType.Questionnaire);
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
         private static QuestionnaireChangeHistoryDenormalizer questionnaireChangeHistoryDenormalizer;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "test";
-        private static TestInMemoryWriter<QuestionnaireStateTacker> questionnaireStateTackerStorage;
+        private static TestInMemoryWriter<QuestionnaireStateTracker> questionnaireStateTackerStorage;
         private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
     }
 }
