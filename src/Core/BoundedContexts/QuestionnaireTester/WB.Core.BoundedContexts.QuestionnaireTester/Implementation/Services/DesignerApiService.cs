@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -180,6 +181,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     break;
                 case HttpStatusCode.UpgradeRequired:
                     errorMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
+                    break;
+                case HttpStatusCode.BadRequest:
+                    errorMessage = UIResources.InvalidEndpoint;
                     break;
                 case HttpStatusCode.InternalServerError:
                     this.logger.Error("Internal server error when login.", ex);

@@ -604,6 +604,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provided Survey Solutions Designer URL is invalid. Check settings..
+        /// </summary>
+        public static string InvalidEndpoint {
+            get {
+                return ResourceManager.GetString("InvalidEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modified on:.
         /// </summary>
         public static string LastModifiedDateTitle {
