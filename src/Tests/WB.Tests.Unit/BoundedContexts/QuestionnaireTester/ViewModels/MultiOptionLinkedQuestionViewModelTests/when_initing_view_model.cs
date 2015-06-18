@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             questionId = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var interview = Mock.Of<IStatefulInterview>(x => 
-                x.FindAnswersByQuestionId(Moq.It.IsAny<Guid>()) == new []
+            var interview = Mock.Of<IStatefulInterview>(x =>
+                x.FindAnswersOfLinkedToQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[]
                 {
                     Create.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
                     Create.TextAnswer("answer2", linkedToQuestionId, new []{2m})

@@ -460,12 +460,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
-        public IEnumerable<BaseInterviewAnswer> FindAnswersByQuestionId(Guid questionId)
+        public IEnumerable<BaseInterviewAnswer> FindAnswersOfLinkedToQuestionForLinkedQuestion(Guid linkedToQuestionId, Identity linkedQuestion)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
             IEnumerable<Identity> targetQuestions = 
-                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, new decimal[]{}, questionnaire, GetRosterInstanceIds);
+                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, linkedToQuestionId, new decimal[]{}, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {

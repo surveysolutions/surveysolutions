@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             List<BaseInterviewAnswer> linkedQuestionAnswers =
-                interview.FindAnswersByQuestionId(linkedQuestionModel.LinkedToQuestionId)
+                interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(linkedQuestionModel.LinkedToQuestionId, this.questionIdentity)
                 .Where(x => x != null && x.IsAnswered).ToList();
 
             this.mainThreadDispatcher.RequestMainThreadAction(() => // otherwize its f.g magic with those observable collections. This is the only way I found to implement insertions without locks.
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =
-                interview.FindAnswersByQuestionId(linkedQuestionModel.LinkedToQuestionId);
+                interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(linkedQuestionModel.LinkedToQuestionId, this.questionIdentity);
             this.Options.Clear();
 
             foreach (var answer in linkedToQuestionAnswers.Where(x => x.IsAnswered))
