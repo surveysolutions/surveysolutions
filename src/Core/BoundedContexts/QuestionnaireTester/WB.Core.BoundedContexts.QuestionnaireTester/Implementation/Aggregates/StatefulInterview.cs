@@ -467,7 +467,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(linkedToQuestionId, linkedQuestion, questionnaire);
 
             IEnumerable<Identity> targetQuestions =
-                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionId, new decimal[] { }, questionnaire, GetRosterInstanceIds);
+               this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, linkedToQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {
