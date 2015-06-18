@@ -69,8 +69,11 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
         private Because of = () =>
             viewModel.Init(interviewId, questionIdentity, navigationState);
 
+        It should_set_nonnull_answer = () =>
+            viewModel.SelectedObject.ShouldNotBeNull();
+
         It should_set_to_answer_backend_value = () =>
-            viewModel.Answer.ShouldEqual("bbc");
+            viewModel.SelectedObject.Value.ShouldEqual(3);
 
         It should_set_to_options_all_values = () =>
         {
