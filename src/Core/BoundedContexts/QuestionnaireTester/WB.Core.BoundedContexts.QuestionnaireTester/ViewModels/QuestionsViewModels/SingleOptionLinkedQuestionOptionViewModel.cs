@@ -11,7 +11,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public EnablementViewModel Enablement { get; set; }
 
         public decimal[] RosterVector { get; set; }
-        public string Title { get; set; }
+
+        private string title;
+        public string Title
+        {
+            get { return this.title; }
+            set { this.title = value; this.RaisePropertyChanged(); }
+        }
 
         private bool selected;
         public bool Selected
