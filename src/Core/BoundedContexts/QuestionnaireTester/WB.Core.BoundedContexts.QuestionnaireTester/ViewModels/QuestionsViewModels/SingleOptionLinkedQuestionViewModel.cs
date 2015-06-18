@@ -194,9 +194,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             string answerAsTitle = this.answerToStringService.AnswerToString(referencedQuestion, referencedAnswer);
 
-            string rosterTitlesWithoutLast = string.Join(": ", interview.GetParentRosterTitlesWithoutLast(referencedAnswer.Id, referencedAnswer.RosterVector));
+            int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
-            return string.IsNullOrEmpty(rosterTitlesWithoutLast) ? answerAsTitle : string.Join(": ", rosterTitlesWithoutLast, answerAsTitle);
+            IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
+                interview
+                    .GetParentRosterTitlesWithoutLast(referencedAnswer.Id, referencedAnswer.RosterVector)
+                    .Skip(currentRosterLevel);
+
+            string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);
+
+            return string.IsNullOrEmpty(rosterPrefixes) ? answerAsTitle : string.Join(": ", rosterPrefixes, answerAsTitle);
         }
     }
 }
