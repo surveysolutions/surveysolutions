@@ -364,7 +364,7 @@
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTacker.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
