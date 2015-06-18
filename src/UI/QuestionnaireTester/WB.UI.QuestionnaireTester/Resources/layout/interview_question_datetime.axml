@@ -13,8 +13,12 @@
         <EditText
           android:editable="false"
           android:focusable="false"
-          style="@style/Interview_Question_Answer_Editor"
-          local:MvxBind="HideKeyboardOnClick .; Text Answer; Hint Localization('DateQuestion_Hint'); DateChange AnswerCommand" />
+          style="@style/Interview_Question_Answer_TextEditor"
+          local:MvxBind="HideKeyboardOnClick .; 
+                         Text Answer; 
+                         Hint Localization('DateQuestion_Hint'); 
+                         DateChange AnswerCommand;
+                         BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />
