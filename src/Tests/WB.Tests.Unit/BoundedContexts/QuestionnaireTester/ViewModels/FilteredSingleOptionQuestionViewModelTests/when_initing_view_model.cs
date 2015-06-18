@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
             userId = Guid.NewGuid();
             questionIdentity = Create.Identity(Guid.NewGuid(), new decimal[0]);
 
-            var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3);
+            var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3 && _.IsAnswered == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
