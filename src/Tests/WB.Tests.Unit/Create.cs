@@ -339,6 +339,11 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId);
             }
 
+            public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
+            {
+                return new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
+            }
+
             public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, InterviewStatus status, string comment = "hello")
             {
                 return new InterviewStatusChanged(status, comment)
