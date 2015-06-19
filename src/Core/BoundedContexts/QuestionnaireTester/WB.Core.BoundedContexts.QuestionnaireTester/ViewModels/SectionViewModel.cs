@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 
 using WB.Core.SharedKernels.DataCollection;
@@ -29,19 +30,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { this.isSelected = value; this.RaisePropertyChanged(); }
         }
 
-        private MvxCommand<SectionViewModel> navigateToSectionCommand;
+        private MvxCommand navigateToSectionCommand;
         public System.Windows.Input.ICommand NavigateToSectionCommand
         {
             get
             {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand<SectionViewModel>(this.NavigateToSection);
+                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand(async () => await this.NavigateToSection());
                 return this.navigateToSectionCommand;
             }
         }
 
-        private void NavigateToSection(SectionViewModel item)
+        private async Task NavigateToSection()
         {
-            this.parent.NavigateToSection(this);
+            await this.parent.NavigateToSection(this);
         }
     }
 }

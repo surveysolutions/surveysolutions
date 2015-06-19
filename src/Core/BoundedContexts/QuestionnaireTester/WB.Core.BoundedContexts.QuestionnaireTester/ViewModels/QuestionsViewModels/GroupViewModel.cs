@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public IMvxCommand NavigateToGroupCommand
         {
-            get { return navigateToGroupCommand ?? (navigateToGroupCommand = new MvxCommand(NavigateToGroup)); }
+            get { return navigateToGroupCommand ?? (navigateToGroupCommand = new MvxCommand(async () => await NavigateToGroup())); }
         }
 
         public GroupViewModel(
@@ -130,9 +131,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.GroupState = state;
         }
 
-        private void NavigateToGroup()
+        private async Task NavigateToGroup()
         {
-            this.navigationState.NavigateTo(this.groupIdentity);
+            await this.navigationState.NavigateTo(this.groupIdentity);
         }
     }
 }

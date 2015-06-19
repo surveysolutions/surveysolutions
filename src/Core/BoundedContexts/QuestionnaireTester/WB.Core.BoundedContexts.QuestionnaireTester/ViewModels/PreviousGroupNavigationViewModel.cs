@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -100,13 +101,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private IMvxCommand navigateToParentCommand;
         public IMvxCommand NavigateToParentCommand
         {
-            get { return this.navigateToParentCommand ?? (this.navigateToParentCommand = new MvxCommand(this.SendNavigateToParentCommand)); }
+            get { return this.navigateToParentCommand ?? (this.navigateToParentCommand = new MvxCommand(async () => await this.SendNavigateToParentCommand())); }
         }
 
-        private void SendNavigateToParentCommand()
+        private async Task SendNavigateToParentCommand()
         {
             var parentIdentity = GetParentIdentity();
-            navigationState.NavigateTo(parentIdentity);
+            await navigationState.NavigateTo(parentIdentity);
         }
 
         private Identity GetParentIdentity()
