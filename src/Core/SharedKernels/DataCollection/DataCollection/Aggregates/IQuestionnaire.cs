@@ -111,5 +111,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// <param name="questionId">Substituted question id</param>
         /// <returns>List of questions that depend on provided question</returns>
         IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId);
+
+        /// <summary>
+        /// Gets first level child questions of a group
+        /// </summary>
+        List<Guid> GetChildQuestions(Guid groupId);
     }
 }
