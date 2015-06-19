@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             base.Apply(@event);
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-            var answer = this.GetExistingAnswer(questionKey);
+            var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
             {
                 answer.InterviewerComment = @event.Comment;
@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.GetExistingAnswer(questionKey);
+                var answer = this.GetExistingAnswerOrNull(questionKey);
                 if (answer != null)
                 {
                     answer.IsValid = true;
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.GetExistingAnswer(questionKey);
+                var answer = this.GetExistingAnswerOrNull(questionKey);
                 if (answer != null)
                 {
                     answer.IsValid = false;
@@ -218,7 +218,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = this.GetExistingAnswer(questionKey);
+                var answer = this.GetExistingAnswerOrNull(questionKey);
                 if (answer != null)
                 {
                     answer.IsEnabled = false;
@@ -237,7 +237,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = GetExistingAnswer(questionKey);
+                var answer = GetExistingAnswerOrNull(questionKey);
                 if (answer != null)
                 {
                     answer.IsEnabled = true;
@@ -459,15 +459,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             IEnumerable<Identity> targetQuestions =
                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, referencedQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
 
-            foreach (var targetQuestion in targetQuestions)
-            {
-                var id = ConversionHelper.ConvertIdentityToString(targetQuestion);
+            var answers = targetQuestions
+                .Select(GetExistingAnswerOrNull)
+                .Where(answer => answer != null);
 
-                if (this.Answers.ContainsKey(id) && this.Answers[id] != null)
-                {
-                    yield return this.Answers[id];
-                }
-            }
+            return answers;
         }
 
         private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
@@ -727,9 +723,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return instance.OuterRosterVector.Concat(new[] { instance.RosterInstanceId }).ToArray();
         }
 
-        private BaseInterviewAnswer GetExistingAnswer(string questionKey)
+        private BaseInterviewAnswer GetExistingAnswerOrNull(string questionKey)
         {
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
+        }
+
+        private BaseInterviewAnswer GetExistingAnswerOrNull(Identity questionIdentity)
+        {
+            var questionKey = ConversionHelper.ConvertIdentityToString(questionIdentity);
+
+            return this.GetExistingAnswerOrNull(questionKey);
         }
     }
 }
