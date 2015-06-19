@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 {
-    public class when_creating_filtered_single_option_view_model : TextListQuestionViewModelTestContext
+    public class when_creating_list_view_model : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {
