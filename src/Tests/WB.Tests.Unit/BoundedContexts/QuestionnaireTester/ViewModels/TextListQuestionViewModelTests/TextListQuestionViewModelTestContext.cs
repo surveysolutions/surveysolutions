@@ -36,10 +36,5 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
                 userInteraction ?? Mock.Of<IUserInteraction>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
-
-        protected static NavigationState CreateNavigationState()
-        {
-            return new NavigationState();
-        }
     }
 }
