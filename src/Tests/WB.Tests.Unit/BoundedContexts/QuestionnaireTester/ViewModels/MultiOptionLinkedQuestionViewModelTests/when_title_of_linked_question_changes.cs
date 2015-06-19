@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
 
             interview = new Mock<IStatefulInterview>();
             interview.SetupGet(x => x.Answers).Returns(new Dictionary<string, BaseInterviewAnswer>());
-            interview.Setup(x => x.FindAnswersOfLinkedToQuestionForLinkedQuestion(linkedToQuestionId.Id, Moq.It.IsAny<Identity>()))
+            interview.Setup(x => x.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedToQuestionId.Id, Moq.It.IsAny<Identity>()))
                 .Returns(new BaseInterviewAnswer[] { Create.TextAnswer("answer", null, new decimal[] { 1 }) });
 
             answerNotifier = Create.AnswerNotifier();
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
 
         Because of = () =>
         {
-            interview.Setup(x => x.FindAnswersOfLinkedToQuestionForLinkedQuestion(linkedToQuestionId.Id, Moq.It.IsAny<Identity>()))
+            interview.Setup(x => x.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedToQuestionId.Id, Moq.It.IsAny<Identity>()))
                 .Returns(new BaseInterviewAnswer[] { Create.TextAnswer("changed", null, new decimal[] { 1 }) });
             answerNotifier.Handle(Create.Event.TextQuestionAnswered(linkedToQuestionId.Id, linkedToQuestionId.RosterVector, "changed"));
         };
