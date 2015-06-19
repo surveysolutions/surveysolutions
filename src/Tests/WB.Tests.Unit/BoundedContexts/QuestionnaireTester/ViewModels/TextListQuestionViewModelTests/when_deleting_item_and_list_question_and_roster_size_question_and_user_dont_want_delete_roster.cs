@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 
         private static TextListQuestionViewModel listModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
-        private static NavigationState navigationState = CreateNavigationState();
+        private static NavigationState navigationState = Create.NavigationState();
 
         private static readonly Mock<QuestionStateViewModel<TextListQuestionAnswered>> QuestionStateMock =
            new Mock<QuestionStateViewModel<TextListQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
