@@ -45,6 +45,7 @@
   <style name="Interview_Question_EmptyOptions">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/emptyOptionsText</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:fontFamily">Arial</item>

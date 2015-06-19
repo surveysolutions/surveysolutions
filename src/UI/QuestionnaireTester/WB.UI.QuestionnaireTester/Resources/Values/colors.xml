@@ -17,6 +17,8 @@
   <color name="publicQuestionnaireListItemLeftCorner">@color/colorBlueThemePrimary</color>
   <color name="publicQuestionnairesLink">#FF4C8FD0</color>
   
+  <color name="emptyOptionsText">#a5a5a5</color>
+  
   <color name="editorTextColor">#FF3F3F3F</color>
   <color name="editorHintTextColor">#FFB2B2B2</color>
   <color name="btn_default">#2a81cb</color>
