@@ -63,21 +63,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         It should_subscribe_for_events = () =>
             EventRegistry.Verify(x => x.Subscribe(cascadingModel), Times.Once);
 
-        It should_create_6_option_models = () =>
-            cascadingModel.Options.Count.ShouldEqual(6);
-
-        It should_create_option_models_with_specified_Texts = () => 
-            cascadingModel.Options.Select(x => x.Text).ShouldContainOnly(Options.Select(x=>x.Title));
-
-        It should_create_option_models_with_specified_OriginalTexts = () =>
-            cascadingModel.Options.Select(x => x.OriginalText).ShouldContainOnly(Options.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_values = () =>
-            cascadingModel.Options.Select(x => x.Value).ShouldContainOnly(Options.Select(x => x.Value));
-
-        It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.Options.Select(x => x.ParentValue).ShouldContainOnly(Options.Select(x => x.ParentValue));
-
         It should_not_set_selected_object = () => 
             cascadingModel.SelectedObject.ShouldBeNull();
 

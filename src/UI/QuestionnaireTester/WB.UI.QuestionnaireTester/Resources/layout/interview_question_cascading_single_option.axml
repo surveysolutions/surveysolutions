@@ -19,8 +19,7 @@
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
                          SelectedObject SelectedObject; 
-                         HidePopupOnDone .;
-                         ClearText ShouldClearText;
+                         ResetText ResetTextInEditor;
                          Hint Localization('FilteredComboboxQuestion_Hint');
                          BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 

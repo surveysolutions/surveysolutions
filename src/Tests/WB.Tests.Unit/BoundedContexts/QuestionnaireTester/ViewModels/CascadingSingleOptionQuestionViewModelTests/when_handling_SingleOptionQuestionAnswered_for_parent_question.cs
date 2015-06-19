@@ -65,8 +65,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         Because of = () =>
             cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
 
-        It should_set_ShouldClearText_in_true = () =>
-            cascadingModel.ShouldClearText.ShouldBeTrue();
+        It should_set_ShouldClearText_in_null = () =>
+            cascadingModel.ResetTextInEditor.ShouldBeNull();
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
