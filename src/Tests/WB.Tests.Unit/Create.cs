@@ -227,6 +227,20 @@ namespace WB.Tests.Unit
                 return new QuestionsDisabled(identities);
             }
 
+            public static RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params decimal[][] fullRosterVectors)
+            {
+                AddedRosterInstance[] instances =
+                    fullRosterVectors
+                        .Select(fullRosterVector => new AddedRosterInstance(
+                            rosterId,
+                            outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                            rosterInstanceId: fullRosterVector.Last(),
+                            sortIndex: null))
+                        .ToArray();
+
+                return new RosterInstancesAdded(instances);
+            }
+
             public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
                 decimal[] rosterVector = null,
                 decimal? rosterInstanceId = null,
@@ -1802,6 +1816,17 @@ namespace WB.Tests.Unit
         public static Interview Interview()
         {
             return new Interview();
+        }
+
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null)
+        {
+            questionnaireId = questionnaireId ?? Guid.NewGuid();
+
+            return new StatefulInterview
+            {
+                QuestionnaireId = questionnaireId.FormatGuid(),
+                QuestionnaireVersion = 1,
+            };
         }
     }
 }
