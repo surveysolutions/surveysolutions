@@ -403,6 +403,10 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_filtering_text_partialy_coincidents_with_part_of_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_entityIdentity.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
