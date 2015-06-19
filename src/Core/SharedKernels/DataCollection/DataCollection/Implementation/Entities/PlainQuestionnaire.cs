@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, List<Guid>> cacheOfChildQuestions = new Dictionary<Guid, List<Guid>>(); 
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
 
         internal QuestionnaireDocument QuestionnaireDocument
         {
@@ -374,14 +375,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfUnderlyingQuestions[groupId];
         }
 
-        public List<Guid> GetChildQuestions(Guid groupId)
+        public ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId)
         {
             if (!this.cacheOfChildQuestions.ContainsKey(groupId))
             {
-                this.cacheOfChildQuestions[groupId] = this.GetGroupOrThrow(groupId)
-                .Children.OfType<IQuestion>()
-                .Select(question => question.PublicKey)
-                .ToList();
+                this.cacheOfChildQuestions[groupId] = new ReadOnlyCollection<Guid>(
+                    this.GetGroupOrThrow(groupId)
+                        .Children.OfType<IQuestion>()
+                        .Select(question => question.PublicKey)
+                        .ToList());
             }
 
             return this.cacheOfChildQuestions[groupId];
