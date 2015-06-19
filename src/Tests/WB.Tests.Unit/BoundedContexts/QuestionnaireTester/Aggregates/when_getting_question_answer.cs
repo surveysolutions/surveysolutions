@@ -17,9 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
         {
             questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            interview = new StatefulInterview();
-            interview.QuestionnaireId = questionnaireId.FormatGuid();
-            interview.QuestionnaireVersion = 1;
+            interview = Create.StatefulInterview(questionnaireId: questionnaireId);
 
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var targetRosterVector = new[] {0m};

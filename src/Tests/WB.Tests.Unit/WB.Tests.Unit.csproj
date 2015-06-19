@@ -376,6 +376,7 @@
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\StatefulInterviewTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_finding_referenced_answers_for_linked_question_on_roster_level_0.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\MaskTextTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_making_text_after_setting_mask.cs" />
