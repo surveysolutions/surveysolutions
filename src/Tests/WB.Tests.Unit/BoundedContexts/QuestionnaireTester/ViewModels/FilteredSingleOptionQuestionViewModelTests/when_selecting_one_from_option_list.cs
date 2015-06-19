@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            var navigationState = CreateNavigationState();
+            var navigationState = Create.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 

@@ -1695,7 +1695,7 @@ namespace WB.Tests.Unit
 
         public static NavigationState NavigationState()
         {
-            return new NavigationState();
+            return new NavigationState(Mock.Of<ICommandService>());
         }
 
         public static TextAnswer TextAnswer(string answer)
