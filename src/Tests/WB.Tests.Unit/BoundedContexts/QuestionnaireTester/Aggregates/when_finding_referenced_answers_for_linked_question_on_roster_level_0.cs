@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
         };
 
         Because of = () =>
-            result = interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(referencedQuestionId, Create.Identity(linkedQuestionId, linkedQuestionRosterVector));
+            result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, Create.Identity(linkedQuestionId, linkedQuestionRosterVector));
 
         It should_return_all_answers = () =>
             result.Cast<TextAnswer>().Select(answer => answer.Answer)
