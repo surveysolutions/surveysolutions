@@ -8,8 +8,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 {
     public class EditTextSetFocusBinding : BaseBinding<EditText, bool>
     {
-        private bool subscribed;
-
         public EditTextSetFocusBinding(EditText editText)
             : base(editText)
         {
