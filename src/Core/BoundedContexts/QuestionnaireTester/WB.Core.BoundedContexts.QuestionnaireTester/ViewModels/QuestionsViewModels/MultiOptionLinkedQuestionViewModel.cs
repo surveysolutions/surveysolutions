@@ -83,36 +83,40 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.answerNotifier.Init(this.linkedToQuestionId);
 
             this.answerNotifier.QuestionAnswered += this.LinkedToQuestionAnswered;
-            this.GenerateOptions(interview, linkedQuestionModel, questionnaire);
+            this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.GenerateOptions(interview, questionnaire));
         }
 
         private void LinkedToQuestionAnswered(object sender, EventArgs e)
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
             QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
-            LinkedMultiOptionQuestionModel linkedQuestionModel = questionnaire.GetLinkedMultiOptionQuestion(this.questionIdentity.Id);
-
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
-            List<BaseInterviewAnswer> linkedQuestionAnswers =
-                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedQuestionModel.LinkedToQuestionId, this.questionIdentity)
-                .Where(x => x != null && x.IsAnswered).ToList();
+            
+            var actualOptions = this.GenerateOptions(interview, questionnaire);
 
             this.mainThreadDispatcher.RequestMainThreadAction(() => // otherwize its f.g magic with those observable collections. This is the only way I found to implement insertions without locks.
             {
-                for (int i = 0; i < linkedQuestionAnswers.Count; i++)
-                {
-                    var linkedToQuestionModel = questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId];
-                    var linkedQuestionAnswer = linkedQuestionAnswers[i];
+                List<MultiOptionLinkedQuestionOptionViewModel> optionsToRemove = this
+                    .Options
+                    .Where(existingOption => !actualOptions.Any(actualOption => actualOption.Value.Identical(existingOption.Value)))
+                    .ToList();
 
-                    if (this.Options.Count > i && linkedQuestionAnswer.RosterVector.Identical(this.Options[i].Value))
+                foreach (var optionToRemove in optionsToRemove)
+                {
+                    this.Options.Remove(optionToRemove);
+                }
+
+                for (int actualOptionIndex = 0; actualOptionIndex < actualOptions.Count; actualOptionIndex++)
+                {
+                    var actualOption = actualOptions[actualOptionIndex];
+                    var existingOption = this.Options.SingleOrDefault(option => option.Value.Identical(actualOption.Value));
+
+                    if (existingOption != null)
                     {
-                        var newTitle = this.answerToStringService.AnswerToString(linkedToQuestionModel, linkedQuestionAnswer);
-                        this.Options[i].Title = newTitle;
+                        existingOption.Title = actualOption.Title;
                     }
                     else
                     {
-                        var option = this.BuildOption(interview, linkedToQuestionModel, linkedQuestionAnswer, linkedMultiOptionAnswer); 
-                        this.Options.Insert(i, option);
+                        this.Options.Insert(actualOptionIndex, actualOption);
                     }
                 }
             });
@@ -180,33 +184,41 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        private void GenerateOptions(
+        private List<MultiOptionLinkedQuestionOptionViewModel> GenerateOptions(
             IStatefulInterview interview,
-            LinkedMultiOptionQuestionModel linkedQuestionModel,
             QuestionnaireModel questionnaire)
         {
             LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =
-                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedQuestionModel.LinkedToQuestionId, this.questionIdentity);
-            this.Options.Clear();
+                interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(this.linkedToQuestionId, this.questionIdentity);
 
-            foreach (var answer in linkedToQuestionAnswers.Where(x => x.IsAnswered))
+            List<MultiOptionLinkedQuestionOptionViewModel> options = new List<MultiOptionLinkedQuestionOptionViewModel>();
+            foreach (var answer in linkedToQuestionAnswers)
             {
-                BaseQuestionModel linkedToQuestion = questionnaire.Questions[linkedQuestionModel.LinkedToQuestionId];
+                BaseQuestionModel linkedToQuestion = questionnaire.Questions[this.linkedToQuestionId];
                 var option = this.BuildOption(interview, linkedToQuestion, answer, thisQuestionAnswers);
 
-                this.Options.Add(option);
+                if (option != null)
+                {
+                    options.Add(option);
+                }
             }
+            return options;
         }
 
-        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IStatefulInterview interview, 
-            BaseQuestionModel linkedToQuestion, 
-            BaseInterviewAnswer linkedToAnswer, 
+        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IStatefulInterview interview,
+            BaseQuestionModel linkedToQuestion,
+            BaseInterviewAnswer linkedToAnswer,
             LinkedMultiOptionAnswer linkedMultiOptionAnswer)
         {
             var isChecked = linkedMultiOptionAnswer != null &&
                             linkedMultiOptionAnswer.IsAnswered &&
                             linkedMultiOptionAnswer.Answers.Any(x => x.Identical(linkedToAnswer.RosterVector));
+
+            if (!linkedToAnswer.IsAnswered && !isChecked)
+            {
+                return null;
+            }
 
             var title = this.BuildOptionTitle(interview, linkedToQuestion, linkedToAnswer);
 
@@ -243,22 +255,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            if (@event.QuestionId == this.questionIdentity.Id && @event.PropagationVector.Identical(this.questionIdentity.RosterVector))
+            var orderedSelectedOptions =
+                this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
+                    .OrderBy(x => x.CheckedTimeStamp)
+                    .ToList();
+
+            for (int i = 0; i < orderedSelectedOptions.Count; i++)
             {
-                var orderedSelectedOptions =
-                    this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
-                        .OrderBy(x => x.CheckedTimeStamp)
-                        .ToList();
+                orderedSelectedOptions[i].CheckedOrder = i + 1;
+            }
 
-                for (int i = 0; i < orderedSelectedOptions.Count; i++)
-                {
-                    orderedSelectedOptions[i].CheckedOrder = i + 1;
-                }
-
-                foreach (var option in this.Options.Except(orderedSelectedOptions))
-                {
-                    option.CheckedOrder = null;
-                }
+            foreach (var option in this.Options.Except(orderedSelectedOptions))
+            {
+                option.CheckedOrder = null;
             }
         }
     }
