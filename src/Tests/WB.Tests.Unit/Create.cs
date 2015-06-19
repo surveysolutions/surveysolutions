@@ -1828,5 +1828,15 @@ namespace WB.Tests.Unit
                 QuestionnaireVersion = 1,
             };
         }
+
+        public static CascadingOptionModel CascadingOptionModel(int value, string title, int parentValue)
+        {
+            return new CascadingOptionModel
+                   {
+                       Value = value,
+                       Title = title,
+                       ParentValue = parentValue
+                   };
+        }
     }
 }
