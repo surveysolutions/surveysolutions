@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
+                selectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
             }
 
             this.eventRegistry.Subscribe(this);
@@ -129,8 +129,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set 
             { 
                 this.shouldClearText = value;
-                SelectedObject = null;
-                SetSuggestionsEmpty();
+                if (value)
+                {
+                    SelectedObject = null;
+                    SetSuggestionsEmpty();
+                }
                 this.RaisePropertyChanged(); 
             }
         }
@@ -196,9 +199,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             foreach (var model in Options.Where(x => x.ParentValue == answerOnParentQuestion.Value))
             {
-                if (model.Text.IsNullOrEmpty())
-                    continue;
-
                 string upperText = model.Text.ToUpper();
 
                 var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
