@@ -7,29 +7,29 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {
-    internal class when_finding_referenced_answers_for_linked_question_on_roster_level_0 : StatefulInterviewTestsContext
+    internal class when_finding_referenced_answers_for_linked_question_on_roster_level_1_and_referenced_answers_are_on_roster_level_3 : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
-            linkedQuestionRosterVector = new decimal[] { };
-            var linkedQuestionRosters = new Guid[] { };
+            linkedQuestionRosterVector = new[] { 1m };
+            var linkedQuestionRosters = new[] { referencedRoster1 };
 
-            var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2 };
+            var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2, referencedRoster3 };
 
             SetupQuestionnaireWithLinkedAndReferencedQuestions(
                 questionnaireId, linkedQuestionId, linkedQuestionRosters, referencedQuestionId, referencedQuestionRosters);
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId);
 
-            FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(interview, referencedRoster1, referencedRoster2, referencedQuestionId);
+            FillInterviewWithInstancesForThreeNestedRostersAndAnswersToTextQuestionInLastRoster(interview, referencedRoster1, referencedRoster2, referencedRoster3, referencedQuestionId);
         };
 
         Because of = () =>
             result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, Create.Identity(linkedQuestionId, linkedQuestionRosterVector));
 
-        It should_return_all_answers = () =>
+        It should_return_answers_with_roster_vector_starting_with_linked_question_roster_vector = () =>
             result.Cast<TextAnswer>().Select(answer => answer.Answer)
-                .ShouldContainOnly("1-1", "1-2", "2-1", "2-2");
+                .ShouldContainOnly("1-1-1", "1-1-2", "1-2-1", "1-2-2");
 
         private static StatefulInterview interview;
         private static IEnumerable<BaseInterviewAnswer> result;
@@ -39,5 +39,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
         private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid referencedRoster1 = Guid.Parse("00000000000000001111111111111111");
         private static Guid referencedRoster2 = Guid.Parse("00000000000000002222222222222222");
+        private static Guid referencedRoster3 = Guid.Parse("00000000000000003333333333333333");
     }
 }
