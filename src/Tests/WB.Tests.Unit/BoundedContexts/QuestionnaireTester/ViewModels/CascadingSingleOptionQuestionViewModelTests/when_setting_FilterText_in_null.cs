@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
@@ -63,8 +65,24 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         It should_set_null_filter_text = () =>
             cascadingModel.FilterText.ShouldBeNull();
 
-        It should_set_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldBeEmpty();
+        It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
+            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
+
+        It should_set_3_items_in_AutoCompleteSuggestions = () =>
+            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
+
+        It should_create_option_models_with_specified_Texts = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.Text).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
+
+        It should_create_option_models_with_specified_OriginalTexts = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
+
+        It should_create_option_models_with_specified_values = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.Value).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
+
+        It should_create_option_models_with_specified_ParentValues = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue));
+
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
@@ -93,5 +111,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         private static readonly string questionnaireId = "Questionnaire Id";
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
         private static readonly int answerOnChildQuestion = 3;
+
+        private static readonly List<CascadingOptionModel> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
     }
 }

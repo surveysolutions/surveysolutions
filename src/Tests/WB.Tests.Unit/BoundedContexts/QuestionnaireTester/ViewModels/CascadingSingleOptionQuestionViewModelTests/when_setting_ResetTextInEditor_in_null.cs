@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -20,7 +23,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_setting_ShouldClearText_in_false: CascadingSingleOptionQuestionViewModelTestContext
+    public class when_setting_ResetTextInEditor_in_null : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {
@@ -61,16 +64,29 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         };
 
         Because of = () =>
-            cascadingModel.ShouldClearText = false;
+            cascadingModel.ResetTextInEditor = null;
 
         It should_not_set_selected_object = () =>
-            cascadingModel.SelectedObject.ShouldNotBeNull();
+            cascadingModel.SelectedObject.ShouldBeNull();
 
-        It should_not_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldNotBeNull();
+        It should_set_filter_text_in_null = () =>
+            cascadingModel.FilterText.ShouldBeNull();
 
-        It should_set_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
+        It should_set_3_items_in_AutoCompleteSuggestions = () =>
+            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
+
+        It should_create_option_models_with_specified_Texts = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.Text).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
+
+        It should_create_option_models_with_specified_OriginalTexts = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.OriginalText).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Title));
+
+        It should_create_option_models_with_specified_values = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.Value).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
+
+        It should_create_option_models_with_specified_ParentValues = () =>
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue));
+
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
@@ -99,5 +115,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         private static readonly string questionnaireId = "Questionnaire Id";
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
         private static readonly int answerOnChildQuestion = 3;
+
+        private static readonly List<CascadingOptionModel> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
     }
 }

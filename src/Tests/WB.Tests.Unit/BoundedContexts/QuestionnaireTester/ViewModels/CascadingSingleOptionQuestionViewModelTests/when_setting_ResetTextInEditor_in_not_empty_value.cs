@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -22,7 +20,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_setting_ShouldClearText_in_true : CascadingSingleOptionQuestionViewModelTestContext
+    public class when_setting_ResetTextInEditor_in_not_empty_value: CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {
@@ -63,16 +61,16 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         };
 
         Because of = () =>
-            cascadingModel.ShouldClearText = true;
+            cascadingModel.ResetTextInEditor = "hello";
 
         It should_not_set_selected_object = () =>
-            cascadingModel.SelectedObject.ShouldBeNull();
+            cascadingModel.SelectedObject.ShouldNotBeNull();
 
         It should_not_set_filter_text = () =>
             cascadingModel.FilterText.ShouldNotBeNull();
 
         It should_set_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldBeEmpty();
+            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });

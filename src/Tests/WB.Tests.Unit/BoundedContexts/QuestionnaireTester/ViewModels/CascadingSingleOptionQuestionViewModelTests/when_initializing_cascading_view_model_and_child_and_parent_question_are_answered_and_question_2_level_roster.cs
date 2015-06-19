@@ -70,27 +70,21 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
 
         It should_subscribe_for_events = () =>
             EventRegistry.Verify(x => x.Subscribe(cascadingModel), Times.Once);
-
-        It should_create_6_option_models = () =>
-            cascadingModel.Options.Count.ShouldEqual(6);
-
-        It should_create_option_models_with_specified_Texts = () =>
-            cascadingModel.Options.Select(x => x.Text).ShouldContainOnly(Options.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_OriginalTexts = () =>
-            cascadingModel.Options.Select(x => x.OriginalText).ShouldContainOnly(Options.Select(x => x.Title));
-
-        It should_create_option_models_with_specified_values = () =>
-            cascadingModel.Options.Select(x => x.Value).ShouldContainOnly(Options.Select(x => x.Value));
-
-        It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.Options.Select(x => x.ParentValue).ShouldContainOnly(Options.Select(x => x.ParentValue));
         
-        It should_not_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldBeNull();
+        It should_set_filter_text = () =>
+            cascadingModel.FilterText.ShouldEqual(cascadingModel.SelectedObject.OriginalText);
 
-        It should_set_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldBeEmpty();
+        It should_set_1_item_list_in_AutoCompleteSuggestions = () =>
+            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
+
+        It should_format_first_option_in_AutoCompleteSuggestions = () =>
+        {
+            var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
+            firstOption.Text.ShouldEqual("title 3");
+            firstOption.Value.ShouldEqual(3);
+            firstOption.ParentValue.ShouldEqual(1);
+            firstOption.OriginalText.ShouldEqual("title 3");
+        };
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
