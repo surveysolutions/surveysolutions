@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public event EventHandler QuestionAnswered;
 
-        public AnswerNotifier(ILiteEventRegistry registry)
+        public AnswerNotifier(ILiteEventRegistry registry) : this()
         {
             this.registry = registry;
             this.registry.Subscribe(this);
@@ -52,8 +52,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void RaiseEventIfNeeded(QuestionAnswered @event)
         {
-            var shouldRaiseEvent = (this.questionId.HasValue && @event.QuestionId == this.questionId) ||
-                                this.questions.Any(x => @event.QuestionId == x.Id && @event.PropagationVector.Identical(x.RosterVector));
+            var shouldNotifyAboutSingleAnswer = this.questionId.HasValue && @event.QuestionId == this.questionId;
+            var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
+                                                 this.questions.Any(x => @event.QuestionId == x.Id && @event.PropagationVector.Identical(x.RosterVector));
+            var shouldRaiseEvent = shouldNotifyAboutSingleAnswer || shouldNotifyAboutListOfAnswers;
 
             if (shouldRaiseEvent)
             {

@@ -450,14 +450,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
-        public IEnumerable<BaseInterviewAnswer> FindAnswersOfLinkedToQuestionForLinkedQuestion(Guid linkedToQuestionId, Identity linkedQuestion)
+        public IEnumerable<BaseInterviewAnswer> FindAnswersOfLinkedToQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
-            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(linkedToQuestionId, linkedQuestion, questionnaire);
+            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedQuestionId, linkedQuestion, questionnaire);
 
             IEnumerable<Identity> targetQuestions =
-               this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, linkedToQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
+               this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, referencedQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
 
             foreach (var targetQuestion in targetQuestions)
             {
@@ -559,7 +559,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetChildQuestions(groupIdentity.Id);
 
             IEnumerable<Identity> questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                 allQuestionsInGroup,

@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         /// <returns>null if question is not answered yet.</returns>
         BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector);
 
-        IEnumerable<BaseInterviewAnswer> FindAnswersOfLinkedToQuestionForLinkedQuestion(Guid linkedToQuestionId, Identity linkedQuestion);
+        IEnumerable<BaseInterviewAnswer> FindAnswersOfLinkedToQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion);
 
         InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector);
 
