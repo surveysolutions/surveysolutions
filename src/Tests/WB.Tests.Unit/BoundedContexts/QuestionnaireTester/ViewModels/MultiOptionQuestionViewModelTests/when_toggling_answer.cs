@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
@@ -52,6 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
 
         Because of = () =>
         {
+            Thread.Sleep(1);
             viewModel.Options.Second().Checked = true;
             viewModel.ToggleAnswer(viewModel.Options.Second()).WaitAndUnwrapException();
         };
