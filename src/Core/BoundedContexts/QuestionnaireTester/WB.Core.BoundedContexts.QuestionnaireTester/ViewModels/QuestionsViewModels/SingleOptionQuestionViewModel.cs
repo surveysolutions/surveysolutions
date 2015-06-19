@@ -48,7 +48,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-
+        public bool HasOptions 
+        {
+            get { return true; }
+        }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
