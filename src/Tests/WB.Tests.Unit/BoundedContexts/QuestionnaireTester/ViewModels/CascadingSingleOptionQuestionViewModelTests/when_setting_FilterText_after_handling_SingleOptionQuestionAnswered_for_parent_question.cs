@@ -68,8 +68,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         Because of = () =>
             cascadingModel.FilterText = "c";
 
-        It should_set_ShouldClearText_in_true = () =>
-            cascadingModel.ShouldClearText.ShouldBeTrue();
+        It should_set_ShouldClearText_in_null = () =>
+            cascadingModel.ResetTextInEditor.ShouldBeNull();
 
         It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
             cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();

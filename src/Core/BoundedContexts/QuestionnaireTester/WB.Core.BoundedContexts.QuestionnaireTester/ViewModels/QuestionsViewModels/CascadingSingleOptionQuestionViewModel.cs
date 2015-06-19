@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        public IList<CascadingComboboxItemViewModel> Options { get; set; }
+        private List<CascadingOptionModel> Options { get; set; }
         private readonly ILiteEventRegistry eventRegistry;
 
         public CascadingSingleOptionQuestionViewModel(
@@ -95,44 +95,33 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = questionModel
-                .Options
-                .Select(this.ToViewModel)
-                .ToList();
+            this.Options = questionModel.Options.ToList();
 
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                selectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
+                selectedObject = CreateFormattedOptionModel(Options.SingleOrDefault(i => i.Value == selectedValue));
+                FilterText = selectedObject.OriginalText;
+            }
+            else
+            {
+                FilterText = null;
             }
 
             this.eventRegistry.Subscribe(this);
         }
 
-        private CascadingComboboxItemViewModel ToViewModel(CascadingOptionModel model)
+        private string resetTextInEditor;
+        public string ResetTextInEditor
         {
-            var optionViewModel = new CascadingComboboxItemViewModel
-            {
-                Text = model.Title,
-                OriginalText = model.Title,
-                Value = model.Value,
-                ParentValue = model.ParentValue
-            };
-
-            return optionViewModel;
-        }
-
-        private bool shouldClearText;
-        public bool ShouldClearText
-        {
-            get { return this.shouldClearText; }
+            get { return this.resetTextInEditor; }
             set 
             { 
-                this.shouldClearText = value;
-                if (value)
+                this.resetTextInEditor = value;
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     SelectedObject = null;
-                    SetSuggestionsEmpty();
+                    FilterText = null;
                 }
                 this.RaisePropertyChanged(); 
             }
@@ -162,19 +151,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
+        private bool isInitialized = false;
         private string filterText;
         public string FilterText
         {
             get { return this.filterText; }
             set
             {
-                if (value.IsNullOrEmpty())
+                if (value == this.filterText && isInitialized)
                 {
-                    this.filterText = null;
-                    SetSuggestionsEmpty();
                     return;
                 }
-                    
+
                 this.filterText = value;
 
                 var list = this.GetSuggestionsList(this.filterText).ToList();
@@ -187,6 +175,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 {
                     SetSuggestionsEmpty();
                 }
+
+                isInitialized = true;
             }
         }
 
@@ -195,24 +185,42 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (!answerOnParentQuestion.HasValue) 
                 yield break;
 
+            if (textHint.IsNullOrEmpty())
+            {
+                var options = this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value).Select(x => CreateFormattedOptionModel(x));
+                foreach (var option in options)
+                {
+                    yield return option;
+                }
+                yield break;
+            }
+
             var upperTextHint = textHint.ToUpper();
 
-            foreach (var model in Options.Where(x => x.ParentValue == answerOnParentQuestion.Value))
+            foreach (CascadingOptionModel model in Options.Where(x => x.ParentValue == answerOnParentQuestion.Value))
             {
-                string upperText = model.Text.ToUpper();
-
+                string upperText = model.Title.ToUpper();
                 var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
                 if (index >= 0)
                 {
-                    yield return new CascadingComboboxItemViewModel
-                    {
-                        Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
-                        OriginalText = model.Text,
-                        Value = model.Value,
-                        ParentValue = model.ParentValue
-                    };
+                    yield return CreateFormattedOptionModel(model, index, textHint.Length);
                 }
             }
+        }
+
+        private static CascadingComboboxItemViewModel CreateFormattedOptionModel(CascadingOptionModel model, int index = -1, int length = 0)
+        {
+            var text = index > 0 
+                ? model.Title.Insert(index + length, "</b>").Insert(index, "<b>") 
+                : model.Title;
+
+            return new CascadingComboboxItemViewModel
+                   {
+                       Text = text,
+                       OriginalText = model.Title,
+                       Value = model.Value,
+                       ParentValue = model.ParentValue
+                   };
         }
 
         private void SetSuggestionsEmpty()
@@ -231,11 +239,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private void FindMatchOptionAndSendAnswerQuestionCommand(string enteredText)
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.OriginalText == enteredText);
+            var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText);
 
-            if (answerViewModel == null)
+            if (answerViewModel == null || answerViewModel.ParentValue != answerOnParentQuestion)
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError);
+                if (this.selectedObject != null)
+                {
+                    ResetTextInEditor = this.selectedObject.OriginalText;
+                }
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
             }
 
@@ -278,7 +290,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 if (parentAnswerModel.IsAnswered)
                 {
                     answerOnParentQuestion = parentAnswerModel.Answer;
-                    ShouldClearText = true;
+                    ResetTextInEditor = null;
                 }              
             }
         }
@@ -289,7 +301,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 if (question.Id == questionIdentity.Id && question.RosterVector.SequenceEqual(questionIdentity.RosterVector))
                 {
-                    ShouldClearText = true;
+                    ResetTextInEditor = null;
                 }
             }
         }

@@ -59,10 +59,12 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
                 principal: principal);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
+
+            cascadingModel.FilterText = "ti";
         };
 
         Because of = () =>
-            cascadingModel.SelectedObject = cascadingModel.Options[1];
+            cascadingModel.SelectedObject = cascadingModel.AutoCompleteSuggestions[1];
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
@@ -70,8 +72,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         It should_set_not_null_SelectedObject = () =>
             cascadingModel.SelectedObject.ShouldNotBeNull();
 
-        It should_set_SelectedObject_with_specified_value = () => 
-            cascadingModel.SelectedObject.ShouldEqual(cascadingModel.Options[1]);
+        It should_set_SelectedObject_with_specified_value = () =>
+            cascadingModel.SelectedObject.ShouldEqual(cascadingModel.AutoCompleteSuggestions[1]);
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });

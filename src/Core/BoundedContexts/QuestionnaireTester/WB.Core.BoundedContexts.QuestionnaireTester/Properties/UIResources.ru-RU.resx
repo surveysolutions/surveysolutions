@@ -384,4 +384,7 @@
   <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
     <value>Опции будут доступны после ответа на соответствующий вопрос</value>
   </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>Ответ "{0}" не может быть сохранен, поскольку не совпадает ни с одной опцией</value>
+  </data>
 </root>

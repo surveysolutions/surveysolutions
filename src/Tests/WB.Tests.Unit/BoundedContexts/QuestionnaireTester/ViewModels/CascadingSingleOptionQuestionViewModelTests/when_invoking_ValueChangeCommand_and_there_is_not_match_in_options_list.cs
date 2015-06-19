@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             cascadingModel.ValueChangeCommand.Execute("b");
 
         It should_mark_question_as_invalid = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsInvalidWithMessage(@"Answer ""b"" cannot be saved, because it does not match any option"), Times.Once);
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });

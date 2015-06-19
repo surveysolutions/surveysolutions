@@ -421,8 +421,8 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_there_are_match_options.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_there_are_no_match_options.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_in_null.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_ShouldClearText_in_false.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_ShouldClearText_in_true.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_ResetTextInEditor_in_not_empty_value.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_ResetTextInEditor_in_true.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
