@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.questionIdentity);
 
             IEnumerable<BaseInterviewAnswer> referencedQuestionAnswers =
-                interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(this.referencedQuestionId, this.questionIdentity);
+                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(this.referencedQuestionId, this.questionIdentity);
 
             var referencedQuestion = questionnaire.Questions[this.referencedQuestionId];
 
