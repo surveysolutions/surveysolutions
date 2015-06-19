@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -115,6 +116,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// <summary>
         /// Gets first level child questions of a group
         /// </summary>
-        List<Guid> GetChildQuestions(Guid groupId);
+        ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
     }
 }
