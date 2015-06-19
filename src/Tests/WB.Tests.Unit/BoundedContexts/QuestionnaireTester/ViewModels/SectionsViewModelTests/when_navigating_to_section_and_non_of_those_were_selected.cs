@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
         private static SectionsViewModel sectionsModel;
         private const string questionnaireId = "questionnaire Id";
-        private static readonly NavigationState navigationState = CreateNavigationState();
+        private static readonly NavigationState navigationState = Create.NavigationState();
         private static readonly Mock<IPlainKeyValueStorage<QuestionnaireModel>> questionnaireRepositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
         private static readonly Guid Section2Id = Guid.Parse("22222222222222222222222222222222");
 

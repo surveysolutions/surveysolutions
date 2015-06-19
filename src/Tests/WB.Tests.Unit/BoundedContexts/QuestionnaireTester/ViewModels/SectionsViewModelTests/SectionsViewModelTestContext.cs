@@ -22,10 +22,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>());
         }
 
-        protected static NavigationState CreateNavigationState()
-        {
-            return new NavigationState();
-        }
         protected static GroupsHierarchyModel CreateGroupsHierarchyModel(Guid id, string title)
         {
             return new GroupsHierarchyModel
