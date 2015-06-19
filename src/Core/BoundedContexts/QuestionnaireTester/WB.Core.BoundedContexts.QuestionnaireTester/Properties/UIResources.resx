@@ -413,4 +413,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
   </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Options will be available after answering referenced question</value>
+  </data>
 </root>
