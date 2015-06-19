@@ -24,16 +24,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly ILiteEventRegistry registry;
         private Guid? questionId;
-        private Identity[] questions;
-
-        protected AnswerNotifier()
-        {
-            this.questions = new Identity[]{};
-        }
+        private Identity[] questions = { };
 
         public event EventHandler QuestionAnswered;
 
-        public AnswerNotifier(ILiteEventRegistry registry) : this()
+        public AnswerNotifier(ILiteEventRegistry registry)
         {
             this.registry = registry;
             this.registry.Subscribe(this);
