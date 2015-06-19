@@ -450,7 +450,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.ContainsKey(questionKey) ? this.Answers[questionKey] : null;
         }
 
-        public IEnumerable<BaseInterviewAnswer> FindAnswersOfLinkedToQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
+        public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
 
