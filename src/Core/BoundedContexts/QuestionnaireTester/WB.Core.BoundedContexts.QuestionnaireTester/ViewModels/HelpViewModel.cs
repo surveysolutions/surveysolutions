@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class HelpViewModel : BaseViewModel
     {

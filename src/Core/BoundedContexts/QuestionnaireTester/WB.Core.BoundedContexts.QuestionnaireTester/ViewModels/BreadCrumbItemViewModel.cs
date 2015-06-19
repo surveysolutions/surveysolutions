@@ -25,10 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return new MvxCommand(() =>
-                {
-                    navigationState.NavigateTo(ItemId);
-                });
+                return new MvxCommand(async () => await this.navigationState.NavigateTo(this.ItemId));
             }
         }
     }

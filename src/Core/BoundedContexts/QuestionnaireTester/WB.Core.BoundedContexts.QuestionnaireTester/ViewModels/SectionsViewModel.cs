@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .ToList();
         }
 
-        internal void NavigateToSection(SectionViewModel item)
+        internal async Task NavigateToSection(SectionViewModel item)
         {
             messenger.Publish(new SectionChangeMessage(this));
 
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 return;
             }
             
-            this.navigationState.NavigateTo(item.SectionIdentity);
+            await this.navigationState.NavigateTo(item.SectionIdentity);
         }
 
         void navigationState_OnGroupChanged(Identity newGroupIdentity)

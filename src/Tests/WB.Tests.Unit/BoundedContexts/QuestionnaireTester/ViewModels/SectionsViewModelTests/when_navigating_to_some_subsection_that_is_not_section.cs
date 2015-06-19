@@ -5,7 +5,7 @@ using System.Linq;
 using Machine.Specifications;
 
 using Moq;
-
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
@@ -29,11 +29,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
             sectionsModel.Init(questionnaireId, navigationState);
 
-            navigationState.NavigateTo(selectedGroupIdentity);
+            navigationState.NavigateTo(selectedGroupIdentity).WaitAndUnwrapException();
         };
 
         Because of = () =>
-            navigationState.NavigateTo(Create.Identity(someGroupThatIsNotSectionId, new decimal[0]));
+            navigationState.NavigateTo(Create.Identity(someGroupThatIsNotSectionId, new decimal[0])).WaitAndUnwrapException();
 
         It should_mark_one_section_as_selected = () =>
             sectionsModel.Sections.Count(x => x.IsSelected).ShouldEqual(1);
