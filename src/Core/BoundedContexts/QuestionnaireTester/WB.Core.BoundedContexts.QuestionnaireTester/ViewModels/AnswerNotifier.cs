@@ -28,6 +28,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public event EventHandler QuestionAnswered;
 
+        internal AnswerNotifier() {}
+
         public AnswerNotifier(ILiteEventRegistry registry)
         {
             this.registry = registry;
