@@ -27,10 +27,5 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
-
-        protected static NavigationState CreateNavigationState()
-        {
-            return new NavigationState();
-        }
     }
 }

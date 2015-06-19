@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
                 interviewRepository: interviewRepository.Object,
                 answeringViewModel: answeringMock.Object);
 
-            viewModel.Init("blah", questionId, new NavigationState());
+            viewModel.Init("blah", questionId, Create.NavigationState());
 
             
         };

@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.FilteredS
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            navigationState = CreateNavigationState();
+            navigationState = Create.NavigationState();
         };
 
         private Because of = () =>
