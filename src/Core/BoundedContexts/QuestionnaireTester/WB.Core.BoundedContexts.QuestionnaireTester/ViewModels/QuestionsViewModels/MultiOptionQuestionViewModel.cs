@@ -89,6 +89,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
+        public bool HasOptions
+        {
+            get { return true; }
+        }
+
         private MultiOptionQuestionOptionViewModel ToViewModel(OptionModel model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
