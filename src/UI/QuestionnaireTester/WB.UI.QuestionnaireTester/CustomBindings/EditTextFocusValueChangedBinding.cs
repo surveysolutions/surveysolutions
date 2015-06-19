@@ -60,6 +60,9 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             if (Target == null)
                 return;
 
+            if (Target.Visibility != ViewStates.Visible)
+                return;
+
             if (this.command == null)
                 return;
 
