@@ -8,9 +8,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
     internal class GpsLocationService : IGpsLocationService
     {
+        private class GpsLocation
+        {
+            public MvxGeoLocation BestLocation { get; set; }
+            public MvxGeoLocation CurrentLocation { get; set; }
+            public MvxGeoLocation LastSeenLocation { get; set; }
+
+            public MvxGeoLocation GetLocation()
+            {
+                if (BestLocation != null) 
+                    return BestLocation;
+                if (CurrentLocation != null)
+                    return CurrentLocation;
+                return LastSeenLocation;
+            }
+        }
+
+        private GpsLocation location;
+
         private readonly IMvxLocationWatcher locationWatcher;
         private int requestersCount;
-        private static object LockObject = new object();
+        private static object lockObject = new object();
         
         public GpsLocationService(IMvxLocationWatcher locationWatcher)
         {
@@ -23,14 +41,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             try
             {
                 this.ThreadSafeStart();
-                while (this.Coordinates == null) 
+                location.LastSeenLocation = this.locationWatcher.LastSeenLocation;
+
+                while (location.BestLocation == null)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    location.CurrentLocation = this.locationWatcher.CurrentLocation;
 
-                    await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
-                } 
+                    if (cancellationToken.IsCancellationRequested)
+                        break;
 
-                return await Task.FromResult(this.Coordinates);
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+
+                return await Task.FromResult(this.location.GetLocation());
             }
             finally
             {
@@ -41,34 +64,34 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private void ThreadSafeStop()
         {
             Interlocked.Decrement(ref this.requestersCount);
-            lock (LockObject)
+            lock (lockObject)
             {
                 if (this.requestersCount == 0)
                 {
                     this.locationWatcher.Stop();
                 }
-                
             }
         }
 
         private void ThreadSafeStart()
         {
             Interlocked.Increment(ref this.requestersCount);
-            lock (LockObject)
+            lock (lockObject)
             {
                 if (!this.locationWatcher.Started)
                 {
-                    this.locationWatcher.Start(new MvxLocationOptions(), this.OnSuccess, this.OnError);
+                    location = new GpsLocation();
+                    var locationOptions = new MvxLocationOptions();
+                    this.locationWatcher.Start(locationOptions, this.OnSuccess, this.OnError);
                 }
             }
         }
 
         private void OnSuccess(MvxGeoLocation obj)
         {
-            this.Coordinates = obj;
+            this.location.BestLocation = obj;
         }
 
-        public MvxGeoLocation Coordinates { get; set; }
 
         private void OnError(MvxLocationError obj)
         {
