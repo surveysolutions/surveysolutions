@@ -33,6 +33,11 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.ExecuteImpl(command, origin, CancellationToken.None);
         }
 
+        public Task WaitPendingCommandsAsync()
+        {
+            return Task.FromResult<object>(null);
+        }
+
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException("command");
