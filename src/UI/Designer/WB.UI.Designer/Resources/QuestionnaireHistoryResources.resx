@@ -165,8 +165,8 @@
   <data name="unknown" xml:space="preserve">
     <value>unknown</value>
   </data>
-  <data name="Back" xml:space="preserve">
-    <value>&lt;- Back</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
   <data name="QuestionnaireChangeHistory" xml:space="preserve">
     <value>Questionnaire change history</value>
