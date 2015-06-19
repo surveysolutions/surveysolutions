@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             interview.Answers.Returns(new ReadOnlyDictionary<string, BaseInterviewAnswer>(new Dictionary<string, BaseInterviewAnswer>()));
 
             var linkedAnswerRosterVector = new decimal[]{1, 1};
-            interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(secondRosterTitlQuestionId, Arg.Any<Identity>())
+            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(secondRosterTitlQuestionId, Arg.Any<Identity>())
                 .Returns(new List<BaseInterviewAnswer> {
                     Create.TextAnswer("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
                     Create.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
