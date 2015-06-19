@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly Stack<Identity> navigationStack = new Stack<Identity>();
 
+        protected NavigationState() { }
+
         public NavigationState(ICommandService commandService)
         {
             this.commandService = commandService;
