@@ -15,6 +15,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         private readonly IAggregateRootRepository repository;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
+        private int executingCommandsCount;
 
         public CommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
         {
@@ -23,19 +24,35 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.snapshooter = snapshooter;
         }
 
-        public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.ExecuteImpl(command, origin, cancellationToken));
+            await Task.Run(() => this.Execute(command, origin, cancellationToken));
         }
 
         public void Execute(ICommand command, string origin)
         {
-            this.ExecuteImpl(command, origin, CancellationToken.None);
+            this.Execute(command, origin, CancellationToken.None);
         }
 
-        public Task WaitPendingCommandsAsync()
+        private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            return Task.FromResult<object>(null);
+            Interlocked.Increment(ref this.executingCommandsCount);
+            try
+            {
+                this.ExecuteImpl(command, origin, cancellationToken);
+            }
+            finally
+            {
+                Interlocked.Decrement(ref this.executingCommandsCount);
+            }
+        }
+
+        public async Task WaitPendingCommandsAsync()
+        {
+            while (this.executingCommandsCount > 0)
+            {
+                await Task.Delay(100);
+            }
         }
 
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
