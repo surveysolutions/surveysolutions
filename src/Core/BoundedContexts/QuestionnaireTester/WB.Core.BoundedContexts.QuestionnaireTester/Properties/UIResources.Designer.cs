@@ -514,6 +514,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options will be available after answering referenced question.
+        /// </summary>
+        public static string Interview_LinkedQuestion_Empty {
+            get {
+                return ResourceManager.GetString("Interview_LinkedQuestion_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {

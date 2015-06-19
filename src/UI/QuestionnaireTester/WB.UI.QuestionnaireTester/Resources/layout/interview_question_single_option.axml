@@ -10,10 +10,12 @@
       <MvxLinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
+        <TextView style="@style/Interview_Question_EmptyOptions"
+                  local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Visible If(HasOptions, false, true)"/>
         <MvxLinearLayout
           style="@style/Interview_Question_Answer_Options"
           local:MvxItemTemplate="@layout/interview_question_single_option_item"
-          local:MvxBind="ItemsSource Options" />
+          local:MvxBind="ItemsSource Options; Visible HasOptions" />
 
       </MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />

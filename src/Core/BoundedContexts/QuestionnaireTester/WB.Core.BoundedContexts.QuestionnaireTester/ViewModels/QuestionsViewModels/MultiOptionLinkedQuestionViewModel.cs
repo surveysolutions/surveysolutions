@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid userId;
         private Identity questionIdentity;
         private bool areAnswersOrdered;
+        private ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> options;
         public QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
@@ -119,10 +120,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                         this.Options.Insert(actualOptionIndex, actualOption);
                     }
                 }
+
+                this.RaisePropertyChanged(() => HasOptions);
             });
         }
 
-        public ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; private set; }
+        public ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options
+        {
+            get { return this.options; }
+            private set { this.options = value; this.RaisePropertyChanged(() => HasOptions);}
+        }
+
+        public bool HasOptions
+        {
+            get { return this.Options.Any(); }
+        }
 
         public void Handle(AnswersRemoved @event)
         {
@@ -190,7 +202,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =
-                interview.FindAnswersOfLinkedToQuestionForLinkedQuestion(this.linkedToQuestionId, this.questionIdentity);
+                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(this.linkedToQuestionId, this.questionIdentity);
 
             List<MultiOptionLinkedQuestionOptionViewModel> options = new List<MultiOptionLinkedQuestionOptionViewModel>();
             foreach (var answer in linkedToQuestionAnswers)

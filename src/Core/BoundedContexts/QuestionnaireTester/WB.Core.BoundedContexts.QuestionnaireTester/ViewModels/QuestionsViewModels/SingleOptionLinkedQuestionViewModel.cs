@@ -64,8 +64,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Identity questionIdentity;
         private Guid interviewId;
         private Guid referencedQuestionId;
+        private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
 
-        public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options { get; private set; }
+        public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
+        {
+            get { return this.options; }
+            private set { this.options = value; this.RaisePropertyChanged(() => HasOptions);}
+        }
+
+        public bool HasOptions
+        {
+            get { return this.Options.Any(); }
+        }
+
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
         public AnswerNotifier ReferencedAnswerNotifier { get; private set; }
@@ -203,6 +214,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                         this.Options.Insert(actualOptionIndex, actualOption);
                     }
                 }
+
+                this.RaisePropertyChanged(() => HasOptions);
             });
         }
 

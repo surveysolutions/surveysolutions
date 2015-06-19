@@ -381,4 +381,7 @@
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Указан неверный адрес Survey Solutions Designer. Проверьте настройки.</value>
   </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Опции будут доступны после ответа на соответствующий вопрос</value>
+  </data>
 </root>
