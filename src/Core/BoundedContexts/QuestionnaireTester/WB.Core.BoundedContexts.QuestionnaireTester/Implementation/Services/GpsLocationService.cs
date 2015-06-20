@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 if (!this.locationWatcher.Started)
                 {
                     location = new GpsLocation();
-                    var locationOptions = new MvxLocationOptions();
+                    var locationOptions = new MvxLocationOptions() { Accuracy = MvxLocationAccuracy.Coarse };
                     this.locationWatcher.Start(locationOptions, this.OnSuccess, this.OnError);
                 }
             }
