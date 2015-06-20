@@ -165,7 +165,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
                 if (index >= 0)
                 {
-                    yield return model;
                     yield return new FilteredComboboxItemViewModel()
                     {
                         Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
