@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain.Storage;
@@ -15,7 +16,11 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         private readonly IAggregateRootRepository repository;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
-        private int executingCommandsCount;
+
+        private int executingCommandsCount = 0;
+        private readonly ConcurrentQueue<TaskCompletionSource<object>> executionAwaiters = new ConcurrentQueue<TaskCompletionSource<object>>();
+        private readonly object executionCountLock = new object();
+        private TaskCompletionSource<object> executionAwaiter = null;
 
         public CommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
         {
@@ -24,9 +29,9 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.snapshooter = snapshooter;
         }
 
-        public async Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
+        public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            await Task.Run(() => this.Execute(command, origin, cancellationToken));
+            return Task.Run(() => this.Execute(command, origin, cancellationToken));
         }
 
         public void Execute(ICommand command, string origin)
@@ -36,22 +41,51 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
         private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            Interlocked.Increment(ref this.executingCommandsCount);
+            lock (this.executionCountLock)
+            {
+                this.executingCommandsCount++;
+            }
+
             try
             {
                 this.ExecuteImpl(command, origin, cancellationToken);
             }
             finally
             {
-                Interlocked.Decrement(ref this.executingCommandsCount);
+                lock (this.executionCountLock)
+                {
+                    this.executingCommandsCount--;
+
+                    this.NotifyExecutionAwaiterIfNeeded();
+                }
             }
         }
 
-        public async Task WaitPendingCommandsAsync()
+        private void NotifyExecutionAwaiterIfNeeded()
         {
-            while (this.executingCommandsCount > 0)
+            if (this.executingCommandsCount > 0)
+                return;
+
+            if (this.executionAwaiter != null)
             {
-                await Task.Delay(100);
+                this.executionAwaiter.SetResult(new object());
+                this.executionAwaiter = null;
+            }
+        }
+
+        public Task WaitPendingCommandsAsync()
+        {
+            lock (this.executionCountLock)
+            {
+                if (this.executingCommandsCount == 0)
+                    return Task.FromResult(null as object);
+
+                if (this.executionAwaiter == null)
+                {
+                    this.executionAwaiter = new TaskCompletionSource<object>();
+                }
+
+                return this.executionAwaiter.Task;
             }
         }
 
