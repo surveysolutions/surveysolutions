@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -86,7 +88,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            var parentRosterVector = entityIdentity.RosterVector.Take(questionModel.RosterLevelDeepOfParentQuestion).ToArray();
+            var parentRosterVector = entityIdentity.RosterVector.Take(questionModel.RosterLevelDepthOfParentQuestion).ToArray();
             this.parentQuestionIdentity = new Identity(questionModel.CascadeFromQuestionId, parentRosterVector);
 
             var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
@@ -130,7 +132,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(this.FindMatchOptionAndSendAnswerQuestionCommand)); }
+            get
+            {
+                return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(enteredText => this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText)));
+            }
         }
 
         private CascadingComboboxItemViewModel selectedObject;
@@ -195,12 +200,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 yield break;
             }
 
-            var upperTextHint = textHint.ToUpper();
-
-            foreach (CascadingOptionModel model in Options.Where(x => x.ParentValue == answerOnParentQuestion.Value))
+            foreach (CascadingOptionModel model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
             {
-                string upperText = model.Title.ToUpper();
-                var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
+                var index = model.Title.IndexOf(textHint, StringComparison.CurrentCultureIgnoreCase);
                 if (index >= 0)
                 {
                     yield return CreateFormattedOptionModel(model, index, textHint.Length);
@@ -237,7 +239,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
         }
 
-        private void FindMatchOptionAndSendAnswerQuestionCommand(string enteredText)
+        private async Task FindMatchOptionAndSendAnswerQuestionCommand(string enteredText)
         {
             var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText);
 
@@ -255,10 +257,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (selectedObject!= null && answerValue == selectedObject.Value)
                 return;
 
-            SendAnswerFilteredComboboxQuestionCommand(answerValue);
+            await SendAnswerFilteredComboboxQuestionCommand(answerValue);
         }
 
-        private async void SendAnswerFilteredComboboxQuestionCommand(decimal answerValue)
+        private async Task SendAnswerFilteredComboboxQuestionCommand(decimal answerValue)
         {
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
@@ -299,7 +301,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             foreach (var question in @event.Questions)
             {
-                if (question.Id == questionIdentity.Id && question.RosterVector.SequenceEqual(questionIdentity.RosterVector))
+                if (question.Id == questionIdentity.Id && question.RosterVector.Identical(questionIdentity.RosterVector))
                 {
                     ResetTextInEditor = null;
                 }

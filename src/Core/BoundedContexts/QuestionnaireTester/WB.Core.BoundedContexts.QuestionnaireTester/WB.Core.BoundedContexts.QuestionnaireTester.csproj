@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Entities\QuestionModels\CascadingOptionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\CascadingSingleOptionQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\FilteredSingleOptionQuestionModel.cs" />
     <Compile Include="Implementation\Services\QuestionnaireTesterPreconditionsService.cs" />
