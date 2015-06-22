@@ -52,7 +52,6 @@ namespace WB.UI.QuestionnaireTester.CustomServices.Location
                 if (this.googleApiClient == null || this.locationRequest == null)
                     throw new MvxException("Location Client not started");
 
-                //var androidLocation = this._locationClient.LastLocation;
                 var androidLocation = LocationServices.FusedLocationApi.GetLastLocation(this.googleApiClient);
                 return androidLocation == null ? null : CreateLocation(androidLocation);
             }
@@ -75,7 +74,6 @@ namespace WB.UI.QuestionnaireTester.CustomServices.Location
                 ? LocationRequest.PriorityHighAccuracy
                 : LocationRequest.PriorityBalancedPowerAccuracy);
 
-            //this._locationClient = new LocationClient(this.Context, this._connectionCallBacks, this._connectionFailed);
             this.googleApiClient = new GoogleApiClientBuilder(Context)
                                     .AddApi(LocationServices.Api)
                                     .AddConnectionCallbacks(this.connectionCallbacksListener)
@@ -94,7 +92,6 @@ namespace WB.UI.QuestionnaireTester.CustomServices.Location
         {
             if (this.googleApiClient == null) return;
 
-            //this._locationClient.RemoveLocationUpdates(this._locationListener);
             LocationServices.FusedLocationApi.RemoveLocationUpdates(this.googleApiClient, this.mvxLocationListener);
             this.googleApiClient.Disconnect();
             this.googleApiClient = null;
@@ -164,7 +161,6 @@ namespace WB.UI.QuestionnaireTester.CustomServices.Location
 
         public void OnConnected(Bundle p0)
         {
-            //this._locationClient.RequestLocationUpdates(this._locationRequest, this._locationListener);
             LocationServices.FusedLocationApi.RequestLocationUpdates(
                 this.googleApiClient, 
                 this.locationRequest,
