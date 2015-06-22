@@ -64,13 +64,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector);
 
-        int GetQuestionsInGroupCount(Identity groupIdentity);
+        int GetInterviewerQuestionsInGroupCount(Identity groupIdentity);
 
         int GetGroupsInGroupCount(Identity groupIdentity);
 
-        int GetAnsweredQuestionsCount(Identity groupIdentity);
+        int GetAnsweredInterviewerQuestionsCount(Identity groupIdentity);
 
-        int GetInvalidAnswersCount(Identity groupIdentity);
+        int GetInvalidInterviewerAnswersCount(Identity groupIdentity);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
     }
