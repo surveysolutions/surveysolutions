@@ -502,10 +502,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public int GetQuestionsInGroupCount(Identity groupIdentity)
+        public int GetInterviewerQuestionsInGroupCount(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             return this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                 allQuestionsInGroup,
@@ -526,10 +526,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return result;
         }
 
-        public int GetAnsweredQuestionsCount(Identity groupIdentity)
+        public int GetAnsweredInterviewerQuestionsCount(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                 allQuestionsInGroup,
@@ -539,10 +539,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered);
         }
 
-        public int GetInvalidAnswersCount(Identity groupIdentity)
+        public int GetInvalidInterviewerAnswersCount(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingQuestions(groupIdentity.Id);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                 allQuestionsInGroup,

@@ -35,7 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
 
         internal QuestionnaireDocument QuestionnaireDocument
         {
@@ -373,6 +374,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfUnderlyingQuestions[groupId] = this.GetAllUnderlyingQuestionsImpl(groupId);
 
             return this.cacheOfUnderlyingQuestions[groupId];
+        }
+
+        public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingQuestions.ContainsKey(groupId))
+                this.cacheOfUnderlyingInterviewerQuestions[groupId] =  new ReadOnlyCollection<Guid>(this.GetGroupOrThrow(groupId)
+                    .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Interviewer)
+                    .Select(question => question.PublicKey)
+                    .ToList());
+
+            return this.cacheOfUnderlyingInterviewerQuestions[groupId];
         }
 
         public ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId)
