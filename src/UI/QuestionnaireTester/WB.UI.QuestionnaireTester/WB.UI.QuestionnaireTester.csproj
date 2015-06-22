@@ -39,6 +39,9 @@
     <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
+    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <JavaOptions />
+    <MonoDroidExtraArgs />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -299,7 +302,6 @@
     <Compile Include="CustomServices\Location\PlayConnectionCallbacksListener.cs" />
     <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
     <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
-    <Compile Include="CustomServices\Location\Plugin.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\DataCollectionModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using Android.Content;
 using Android.Support.V4.Widget;
@@ -9,10 +10,12 @@ using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
+using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
+using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
@@ -21,6 +24,7 @@ using WB.UI.QuestionnaireTester.Converters;
 using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.CustomControls;
 using WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl;
+using WB.UI.QuestionnaireTester.CustomServices.Location;
 using WB.UI.QuestionnaireTester.Ninject;
 using Xamarin;
 
@@ -140,6 +144,13 @@ namespace WB.UI.QuestionnaireTester
                 }
             };
             Insights.Initialize("24d22f99f3068798f24f20d297baaa0fbfe9f528", applicationContext);
+        }
+
+        protected override void InitializeLastChance()
+        {
+            base.InitializeLastChance();
+
+            Mvx.RegisterSingleton<IMvxLocationWatcher>(() => new PlayServicesLocationWatcher());
         }
     }
 }
