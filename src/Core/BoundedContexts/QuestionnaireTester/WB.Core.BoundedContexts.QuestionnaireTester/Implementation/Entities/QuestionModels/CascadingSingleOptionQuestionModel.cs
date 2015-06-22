@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Qu
 
         public Guid CascadeFromQuestionId { get; set; }
 
-        public int RosterLevelDeepOfParentQuestion { get; set; }
+        public int RosterLevelDepthOfParentQuestion { get; set; }
     }
 }

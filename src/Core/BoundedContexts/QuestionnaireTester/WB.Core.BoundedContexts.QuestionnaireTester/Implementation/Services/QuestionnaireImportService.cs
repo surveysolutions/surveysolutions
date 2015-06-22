@@ -55,12 +55,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionnaireModel.Title = questionnaireDocument.Title;
             questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
 
-            var questionIdToRosterLevelDeep = new Dictionary<Guid, int>();
-            questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDeep));
+            var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
+            questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
 
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
             
-            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDeep));
+            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
@@ -219,7 +219,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                                 questionModel = new CascadingSingleOptionQuestionModel
                                 {
                                     CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId.Value,
-                                    RosterLevelDeepOfParentQuestion = 0,
+                                    RosterLevelDepthOfParentQuestion = 0,
                                     Options = singleQuestion.Answers.Select(ToCascadingOptionModel).ToList(),
 
                                 };

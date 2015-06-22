@@ -1,13 +1,6 @@
 using System;
-
 using Machine.Specifications;
-
-using Moq;
-
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 using It = Machine.Specifications.It;
 
@@ -17,7 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
     {
         Establish context = () =>
         {
-            cascadingModel = CreateCascadingSingleOptionQuestionViewModel(QuestionStateMock.Object, AnsweringViewModelMock.Object);
+            cascadingModel = CreateCascadingSingleOptionQuestionViewModel();
         };
 
         Because of = () =>
@@ -32,11 +25,5 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
 
         static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static Exception exception;
-
-        private static readonly Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> QuestionStateMock =
-            new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-
-        private static readonly Mock<AnsweringViewModel> AnsweringViewModelMock =
-            new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
     }
 }

@@ -1,11 +1,5 @@
 using Machine.Specifications;
-
-using Moq;
-
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 using It = Machine.Specifications.It;
 
@@ -18,9 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         };
 
         Because of = () =>
-            cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
-                questionStateViewModel: QuestionStateMock.Object,
-                answering: AnsweringViewModelMock.Object);
+            cascadingModel = CreateCascadingSingleOptionQuestionViewModel();
 
         It should_set_QuestionState_with_non_null_value = () =>
             cascadingModel.QuestionState.ShouldNotBeNull();
@@ -29,11 +21,5 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             cascadingModel.Answering.ShouldNotBeNull();
 
         static CascadingSingleOptionQuestionViewModel cascadingModel;
-
-        private static readonly Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> QuestionStateMock =
-            new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-
-        private static readonly Mock<AnsweringViewModel> AnsweringViewModelMock =
-            new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
     }
 }
