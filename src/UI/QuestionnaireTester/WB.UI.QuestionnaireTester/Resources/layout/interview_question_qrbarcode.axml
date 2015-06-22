@@ -12,7 +12,7 @@
 
         <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
           <TextView style="@style/Interview_Question_TextAnswer"
-            local:MvxBind="Text Answer" /> />
+            local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" /> />
           <Button style="@style/Interview_Question_InputButton"
             local:MvxBind="HideKeyboardOnClick .; Click SaveAnswerCommand; Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); Enabled If(IsInProgress, false, true)" />
         </MvxLinearLayout>
