@@ -126,4 +126,7 @@
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Number of synchronized interviews, but unprocessed yet</value>
   </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
 </root>

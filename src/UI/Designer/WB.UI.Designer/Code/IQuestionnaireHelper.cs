@@ -7,19 +7,22 @@ namespace WB.UI.Designer.Code
     public interface IQuestionnaireHelper
     {
         IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            Guid viewerId, 
+            Guid viewerId,
+            bool isAdmin, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string filter = null);
 
         IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            Guid viewerId, 
+            Guid viewerId,
+            bool isAdmin, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string filter = null);
 
-        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId);
+        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId,
+            bool isAdmin);
     }
 }

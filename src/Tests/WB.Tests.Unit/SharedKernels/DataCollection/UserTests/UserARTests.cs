@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = false;
 
             // act
-            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, string.Empty, String.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLockedBySupervisor>().Count(), Is.EqualTo(1));
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = true;
 
             // act
-            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
@@ -124,7 +124,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             string specifiedEmail = "user@example.com";
 
             // act
-            user.ChangeUser(specifiedEmail, false, false, new UserRoles[] { }, string.Empty, Guid.Empty);
+            user.ChangeUser(specifiedEmail, false, false, new UserRoles[] { }, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<UserChanged>().Email, Is.EqualTo(specifiedEmail));
@@ -138,7 +138,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             IEnumerable<UserRoles> twoSpecifedRoles = new [] { UserRoles.Administrator, UserRoles.User };
 
             // act
-            user.ChangeUser("mail@domain.net", false, false, twoSpecifedRoles.ToArray(), string.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", false, false, twoSpecifedRoles.ToArray(), string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<UserChanged>().Roles, Is.EquivalentTo(twoSpecifedRoles));
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = false;
 
             // act
-            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", new UserRoles[] { }, isLockedBySupervisor, isLockedByHQ, null);
+            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", new UserRoles[] { }, isLockedBySupervisor, isLockedByHQ, null, string.Empty, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().IsLockedBySupervisor, Is.EqualTo(true));
@@ -165,7 +165,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             string specifiedName = "Green Lantern";
 
             // act
-            new User(Guid.NewGuid(), specifiedName, "pwd", "my@email.com", new UserRoles[] { }, false, false, null);
+            new User(Guid.NewGuid(), specifiedName, "pwd", "my@email.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Name, Is.EqualTo(specifiedName));
@@ -178,7 +178,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             string specifiedPassword = "hhg<8923s:0";
 
             // act
-            new User(Guid.NewGuid(), "name", specifiedPassword, "my@email.com", new UserRoles[] { }, false, false, null);
+            new User(Guid.NewGuid(), "name", specifiedPassword, "my@email.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Password, Is.EqualTo(specifiedPassword));
@@ -191,7 +191,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             string specifiedEmail = "gmail@chucknorris.com";
 
             // act
-            new User(Guid.NewGuid(), "name", "pwd", specifiedEmail, new UserRoles[] { }, false, false, null);
+            new User(Guid.NewGuid(), "name", "pwd", specifiedEmail, new UserRoles[] { }, false, false, null, string.Empty,string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Email, Is.EqualTo(specifiedEmail));
@@ -204,7 +204,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Guid specifiedPublicKey = Guid.NewGuid();
 
             // act
-            new User(specifiedPublicKey, "name", "pwd", "my@email.com", new UserRoles[] { }, false, false, null);
+            new User(specifiedPublicKey, "name", "pwd", "my@email.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().PublicKey, Is.EqualTo(specifiedPublicKey));
@@ -217,7 +217,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor, UserRoles.Operator, UserRoles.User };
 
             // act
-            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null);
+            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null,string.Empty,string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Roles, Is.EquivalentTo(threeSpecifedRoles));
@@ -226,7 +226,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         private static User CreateUserAR()
         {
             Guid id = Guid.Parse("11111111111111111111111111111111");
-            return new User(id, "name", "pwd", "e@example.com", new UserRoles[] { }, false, false, null);
+            return new User(id, "name", "pwd", "e@example.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
         }
 
         private T GetSingleRaisedEvent<T>()

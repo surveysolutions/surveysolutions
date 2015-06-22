@@ -74,6 +74,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         RosterScopeIds = new Guid[] {  },
                         ValidationExpression = "q1 > 10"
                     },
+                    new SingleOptionDetailsView
+                    {
+                        Id = q5Id,
+                        Title = "sINGLE 1",
+                        ParentGroupId = g2Id,
+                        VariableName = "qqqq",
+                        ParentGroupsIds = new [] { g2Id, g1Id },
+                        RosterScopeIds = new Guid[] {  },
+                    },
                      new MultiOptionDetailsView
                     {
                         Id = q3Id,
@@ -87,6 +96,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         ParentGroupsIds = new [] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] {  },
                         EnablementCondition = "q2 == \"aaaa\""
+                    },
+                    new SingleOptionDetailsView()
+                    {
+                        Id = q4Id,
+                        ParentGroupId = g3Id,
+                        Title = "single title",
+                        ParentGroupsIds = new [] { g3Id, g1Id },
+                        RosterScopeIds = new Guid[] {  },
+                        CascadeFromQuestionId = q5Id
                     },
                 },
                 StaticTexts = new List<StaticTextDetailsView>()

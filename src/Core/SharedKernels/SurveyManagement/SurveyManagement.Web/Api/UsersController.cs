@@ -13,12 +13,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class UsersController : BaseApiServiceController
     {
-        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
+        private readonly IInterviewersViewFactory interviewersFactory;
         private readonly IUserListViewFactory supervisorsFactory;
         private readonly IUserViewFactory userViewFactory;
 
-        public UsersController(ILogger logger, 
-            IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
+        public UsersController(ILogger logger,
+            IInterviewersViewFactory interviewersFactory,
             IUserListViewFactory supervisorsFactory,
             IUserViewFactory userViewFactory)
             :base(logger)

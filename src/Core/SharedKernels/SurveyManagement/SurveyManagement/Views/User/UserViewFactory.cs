@@ -55,7 +55,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                             Roles = userDocument.Roles,
                             Password = userDocument.Password,
                             Supervisor = userDocument.Supervisor,
-                            DeviceChangingHistory = userDocument.DeviceChangingHistory
+                            DeviceChangingHistory = userDocument.DeviceChangingHistory,
+                            PersonName = userDocument.PersonName,
+                            PhoneNumber = userDocument.PhoneNumber
                         }
                         : null;
                 });

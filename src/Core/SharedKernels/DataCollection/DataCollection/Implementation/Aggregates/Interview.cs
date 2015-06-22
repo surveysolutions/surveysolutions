@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -552,6 +553,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>(); }
         }
 
+        private IInterviewPreconditionsService InterviewPreconditionsService
+        {
+            get { return ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); }
+        }
+
         #endregion
 
         #region .ctors
@@ -588,6 +594,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewWithPreloadedData(Guid questionnaireId, long version, PreloadedDataDto preloadedData, Guid supervisorId, DateTime answersTime, Guid userId)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.SetQuestionnaireProperties(questionnaireId, version);
 
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
@@ -604,7 +612,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var orderedData = preloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
-
+            var expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
             foreach (var preloadedLevel in orderedData)
             {
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
@@ -624,7 +632,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     interviewChangeStructures.State.AnsweredQuestions.Add(key);
                 }
 
-                this.CalculateChangesByFeaturedQuestion(this.ExpressionProcessorStatePrototype, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+                this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                     answersTime,
                     newAnswers, preloadedLevel.RosterVector);
             }
@@ -652,6 +660,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -671,7 +681,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            this.CalculateChangesByFeaturedQuestion(this.ExpressionProcessorStatePrototype, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+            var expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
+            this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
@@ -700,6 +711,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewForTesting(Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.SetQuestionnaireProperties(questionnaireId, GetQuestionnaireOrThrow(questionnaireId).Version);
 
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(questionnaireId);
@@ -720,7 +733,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            this.CalculateChangesByFeaturedQuestion(this.ExpressionProcessorStatePrototype, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+            var expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
+            this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
@@ -752,6 +766,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewOnClient(Guid questionnaireId, long? questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.SetQuestionnaireProperties(questionnaireId, (questionnaireVersion.HasValue
                     ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
                     : GetQuestionnaireOrThrow(questionnaireId)).Version);
@@ -794,6 +810,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -808,12 +826,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : this(() => questionnaireId, () => questionnaireVersion, id)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : this(() => interviewDto.QuestionnaireId, () => interviewDto.QuestionnaireVersion, id)
         {
+            this.ThrowIfInterviewCountLimitReached();
+
             this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
         }
 
@@ -1818,6 +1840,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
+                ThrowIfInterviewCountLimitReached();
                 this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             }
             else
@@ -1840,7 +1863,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(
                     string.Format(
                         "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
-                        userId, interviewerId));
+                        userId, interviewerId), InterviewDomainExceptionType.OtherUserIsResponsible);
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
@@ -3119,6 +3142,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region ThrowIfs
 
+        private void ThrowIfInterviewCountLimitReached()
+        {
+            if (this.InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
+                throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
+                    this.InterviewPreconditionsService.GetMaxAllowedInterviewsCount()),
+                    InterviewDomainExceptionType.InterviewLimitReached);
+        }
+
         private void ThrowIfInterviewWasCompleted()
         {
             if (this.wasCompleted)
@@ -3393,13 +3424,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Interview status is {0}. But one of the following statuses was expected: {1}. InterviewId: {2}",
                     this.status, 
                     string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString())),
-                    EventSourceId));
+                    EventSourceId), InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         }
 
         private void ThrowIfInterviewHardDeleted()
         {
             if (this.wasHardDeleted)
-                throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId));
+                throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId), InterviewDomainExceptionType.InterviewHardDeleted);
         }
 
         private void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
@@ -3440,7 +3471,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             throw new InterviewException(string.Format(
                 "Status {0} not allowed to be changed with ApplySynchronizationMetadata command. InterviewId: {1}",
-                interviewStatus, EventSourceId));
+                interviewStatus, EventSourceId), InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         }
 
         #endregion
@@ -3450,7 +3481,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
 
             if (questionnaire == null)
-                throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version));
+                throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version), InterviewDomainExceptionType.QuestionnaireIsMissing);
 
             return questionnaire;
         }

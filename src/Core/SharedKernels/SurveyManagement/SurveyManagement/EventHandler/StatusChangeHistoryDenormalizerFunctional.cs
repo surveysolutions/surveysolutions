@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewStatus.Restarted,
-                evnt.Payload.RestartTime ?? evnt.EventTimeStamp,
+                 evnt.Payload.RestartTime ?? evnt.EventTimeStamp,
                 evnt.Payload.Comment,
                 GetResponsibleIdName(evnt.Payload.UserId));
         }
@@ -279,6 +279,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             string comment,
             string responsibleName)
         {
+            TimeSpan? timeSpanWithPreviousStatus = null;
+
+            if (interviewStatuses.InterviewCommentedStatuses.Any())
+            {
+                timeSpanWithPreviousStatus = timestamp - interviewStatuses.InterviewCommentedStatuses.Last().Timestamp;
+            }
+
             interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 userId,
                 supervisorId,
@@ -286,7 +293,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 status,
                 timestamp,
                 comment,
-                responsibleName));
+                responsibleName,
+                timeSpanWithPreviousStatus));
 
             return interviewStatuses;
         }

@@ -41,11 +41,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
+            exception = Catch.Only<InterviewException>(() =>
                 interview.HqApprove(userId,"my commet"));
 
         It should_raise_InterviewException = () =>
-            exception.ShouldBeOfExactType<InterviewException>();
+            exception.ShouldNotBeNull();
+
+        It should_raise_InterviewException_with_type_InterviewHardDeleted = () =>
+            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewHardDeleted);
 
         Cleanup stuff = () =>
         {
@@ -58,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionnaireId;
 
         private static EventContext eventContext;
-        private static Exception exception;
+        private static InterviewException exception;
         private static Interview interview;
     }
 }

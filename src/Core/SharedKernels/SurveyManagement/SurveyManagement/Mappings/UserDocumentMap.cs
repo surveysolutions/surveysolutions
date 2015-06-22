@@ -25,6 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.UserName);
             Property(x => x.LastChangeDate);
             Property(x => x.DeviceId);
+            Property(x => x.PersonName);
+            Property(x => x.PhoneNumber);
             Component(x => x.Supervisor, cmp =>
             {
                 cmp.Property(x => x.Id, ptp => ptp.Column("SupervisorId"));

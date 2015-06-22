@@ -215,6 +215,10 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 var isAllowWriteForUser = IsAllowWriteForIdentityReferance(authorizationRuleCollection, identityReferences);
                 return isAllowWriteForUser;
             }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
             catch (UnauthorizedAccessException)
             {
                 return false;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
@@ -8,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     {
         public QuestionnaireListViewItem()
         {
-            this.SharedPersons = new List<Guid>();
+            this.SharedPersons =new HashSet<Guid>();
         }
 
         public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic) : this()
@@ -20,25 +21,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
         }
-         
-        public DateTime CreationDate { get; set; }
 
-        public Guid PublicId { get; set; }
+        public virtual DateTime CreationDate { get; set; }
 
-        public DateTime LastEntryDate { get; set; }
+        public virtual string QuestionnaireId { get; set; }
 
-        public string Title { get;  set; }
+        public virtual Guid PublicId
+        {
+            get { return publicId; }
+            set
+            {
+                this.QuestionnaireId = value.FormatGuid();
+                publicId = value;
+            }
+        }
 
-        public Guid? CreatedBy { get; set; }
+        private Guid publicId;
 
-        public string CreatorName { get; set; }
+        public virtual DateTime LastEntryDate { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public virtual string Title { get; set; }
 
-        public bool IsPublic { get; set; }
+        public virtual Guid? CreatedBy { get; set; }
 
-        public List<Guid> SharedPersons { get; set; }
+        public virtual string CreatorName { get; set; }
 
-        public string Owner { get; set; }
+        public virtual bool IsDeleted { get; set; }
+
+        public virtual bool IsPublic { get; set; }
+
+        public virtual ISet<Guid> SharedPersons { get; set; }
+
+        public virtual string Owner { get; set; }
     }
 }
