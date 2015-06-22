@@ -123,7 +123,6 @@ namespace WB.UI.Supervisor.App_Start
 
             int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -149,13 +148,17 @@ namespace WB.UI.Supervisor.App_Start
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
+            var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
+            int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
                     new InterviewHistorySettings(basePath, false),
-                    isSupervisorFunctionsEnabled: true));
+                    isSupervisorFunctionsEnabled: true,
+                    interviewLimitCount: interviewCountLimit));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

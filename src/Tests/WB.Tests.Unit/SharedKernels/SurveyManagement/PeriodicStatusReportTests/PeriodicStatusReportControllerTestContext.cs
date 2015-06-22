@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -13,14 +8,14 @@ using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuantityControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
 {
-    [Subject(typeof(QuantityController))]
-    internal class QuantityControllerTestContext
+    [Subject(typeof(PeriodicStatusReportController))]
+    internal class PeriodicStatusReportControllerTestContext
     {
-        protected static QuantityController CreateQuantityController(IGlobalInfoProvider globalInfoProvider=null)
+        protected static PeriodicStatusReportController CreatePeriodicStatusReportController(IGlobalInfoProvider globalInfoProvider=null)
         {
-            return new QuantityController(Mock.Of<ICommandService>(),
+            return new PeriodicStatusReportController(Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(), Mock.Of<ILogger>(),
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(
                     _ =>

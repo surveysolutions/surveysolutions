@@ -35,10 +35,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => interview.HqReject(userId, String.Empty));
+            exception = Catch.Only<InterviewException>(() => interview.HqReject(userId, String.Empty));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfType<InterviewException>();
+            exception.ShouldNotBeNull();
+
+        It should_raise_InterviewException_with_type_StatusIsNotOneOfExpected = () =>
+            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         
         Cleanup stuff = () =>
         {
@@ -48,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static Guid userId;
 
-        private static Exception exception;
+        private static InterviewException exception;
         private static Guid questionnaireId;
         private static EventContext eventContext;
         private static Interview interview;

@@ -10,14 +10,16 @@
     Layout = "~/Views/Shared/Layout.cshtml";
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 }
-
+@section Scripts {
+    @Scripts.Render("~/list")
+}
 <table id="user-table-header" class="table table-header">
     <thead>
         <tr>
             @ShowTableHeaderCell("UserName", "Login", true)
             @ShowTableHeaderCell("Email", "Email")
-            @ShowTableHeaderCell("CreationDate", "Created date")
-            @ShowTableHeaderCell("IsApproved", "APPROVED?")
+            @ShowTableHeaderCell("CreatedAt", "Created date")
+            @ShowTableHeaderCell("IsConfirmed", "APPROVED?")
             @ShowTableHeaderCell("IsLockedOut", "LOCKED?")
             <th>
             </th>
@@ -32,7 +34,7 @@
         }
         else
         {
-            <table id="user-table-content" class="table table-content ">
+            <table id="user-table-content" class="table table-content">
                 <tbody>
                     @foreach (var user in Model)
                     {

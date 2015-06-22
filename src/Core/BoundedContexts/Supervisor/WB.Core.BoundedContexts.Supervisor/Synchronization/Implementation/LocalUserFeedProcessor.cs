@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
             catch (ApplicationException e)
             {
-                this.logger.Error(string.Format("Error occured while processing users feed event. EventId {0}. Event marked as processed with error.", changeThatShouldBeApplied.EntryId), e);
+                this.logger.Error(string.Format("Error occurred while processing users feed event. EventId {0}. Event marked as processed with error.", changeThatShouldBeApplied.EntryId), e);
 
                 this.headquartersPullContext.PushError(string.Format("Failed to process event {0}. Message: {1}. InnerMessage: {2}", changeThatShouldBeApplied.EntryId, e.Message, e.InnerException != null ? e.InnerException.Message : "No inner exception"));
                 changeThatShouldBeApplied.ProcessedWithError = true;
@@ -119,9 +119,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             ICommand userCommand =
                 (user == null)
                     ? new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                        userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor) as ICommand
+                        userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor, userDetails.PersonName, userDetails.PhoneNumber) as ICommand
                     : new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                        userRoles, null, userShouldBeLockedByHq, userDetails.Password, Guid.Empty) as ICommand;
+                        userRoles, null, userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber, Guid.Empty) as ICommand;
 
             this.executeCommand(userCommand);
         }

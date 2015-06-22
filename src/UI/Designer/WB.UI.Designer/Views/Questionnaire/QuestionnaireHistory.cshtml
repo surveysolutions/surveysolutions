@@ -1,0 +1,66 @@
+﻿@using System.Web.Mvc.Html
+@using Main.Core.Documents
+@using Main.Core.Entities.Composite
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
+@using WB.Core.GenericSubdomains.Utils
+@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Utils
+@using WB.UI.Designer.Resources
+@model WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory.QuestionnaireChangeHistory
+
+@{
+    ViewBag.Title = QuestionnaireHistoryResources.QuestionnaireChangeHistory;
+}
+@section Scripts {
+    @Scripts.Render("~/list")
+}
+<div id="edit-form" style="position: static;">
+    <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">@Html.ActionLink(QuestionnaireHistoryResources.Edit, "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
+</div>
+    <table id="questionnaire-table-header" class="table  table-header">
+        <thead>
+            <tr>
+                <th>
+                    @QuestionnaireHistoryResources.Change
+                </th>
+                <th>@QuestionnaireHistoryResources.UserName</th>
+                <th>@QuestionnaireHistoryResources.Timestamp</th>
+            </tr>
+        </thead>
+    </table>
+    <div id="table-content-holder" style="top: 77px;">
+    <div class="scroller-container">
+        @if (Model == null || Model.ChangeHistory.Count == 0)
+        {
+            <p class="text-center" style="line-height: 10em">@QuestionnaireHistoryResources.ThisListDoesNotContainAnyRecords</p>
+        }
+        else
+        {
+            var rows = Model.ChangeHistory.ToPagedList(page: Model.PageIndex, pageSize: Model.PageSize, totalCount: Model.TotalCount);
+            <table id="questionnaire-table-content" class="table table-content">
+                <tbody>
+                    @foreach (var listViewModel in rows)
+                    {
+
+                        <tr>
+                            <td class="search-value">
+                                @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
+                            </td>
+                            <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
+                            <td>@listViewModel.Timestamp</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.Pager(rows.PageIndex + 1, rows.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new
+            {
+                page = x,
+                id = Model.Id
+            }), 2)
+        }
+    </div>
+</div>
+
