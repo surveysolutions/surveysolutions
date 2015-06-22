@@ -441,7 +441,7 @@
                                     }, "");
 
                                     notificationService.notify({
-                                        title: 'Depended items might be broken',
+                                        title: 'Condition or cascading depended items might be broken',
                                         text: '<div class="broken-links"><p>One or more questions/sub-sections depend on<p>' + links + '</div>',
                                         hide: false,
                                         confirm: { confirm: true },

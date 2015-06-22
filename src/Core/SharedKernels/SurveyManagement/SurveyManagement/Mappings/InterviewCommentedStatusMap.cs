@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.StatusChangeOriginatorName);
             Property(x => x.Status);
             Property(x => x.Comment);
+            Property(x => x.TimeSpanWithPreviousStatus);
             ManyToOne(x => x.InterviewStatuses, mto =>
             {
                 mto.Index("InterviewStatuseses_InterviewCommentedStatuses");

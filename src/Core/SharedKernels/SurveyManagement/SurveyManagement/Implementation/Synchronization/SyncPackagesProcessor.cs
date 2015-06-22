@@ -3,6 +3,7 @@ using Quartz;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
@@ -36,7 +37,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
             catch (IncomingSyncPackageException e)
             {
-                brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+                brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId,
+                    e.InnerException);
+
                 incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
             }
 
@@ -47,18 +50,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             try
             {
-                var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId, 
-                    syncPackage.ResponsibleId, 
+                var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId,
+                    syncPackage.ResponsibleId,
                     syncPackage.QuestionnaireId,
                     syncPackage.QuestionnaireVersion,
-                    syncPackage.EventsToSynchronize, 
-                    syncPackage.InterviewStatus, 
+                    syncPackage.EventsToSynchronize,
+                    syncPackage.InterviewStatus,
                     syncPackage.CreatedOnClient);
                 commandService.Execute(command, syncPackage.Origin);
             }
             catch (Exception e)
             {
-                logger.Error(string.Format("package '{0}' wasn't processed. Reason: '{1}'", syncPackage.PathToPackage, e.Message), e);
+                logger.Error(
+                    string.Format("package '{0}' wasn't processed. Reason: '{1}'", syncPackage.PathToPackage, e.Message),
+                    e);
                 brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId, e);
             }
 

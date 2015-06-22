@@ -62,6 +62,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         /// </summary>
         public string Email = string.Empty;
 
+        public string Filter = string.Empty;
+
         /// <summary>
         /// Get accounts by role
         /// </summary>

@@ -183,8 +183,10 @@ namespace WB.UI.Designer.Api
             while (true)
             {
                 var questionnaireList =
-                    this.questionnaireHelper.GetQuestionnaires(viewerId: this.userHelper.WebUser.UserId,
-                        pageIndex: pageIndex);
+                    this.questionnaireHelper.GetQuestionnaires(
+                    viewerId: this.userHelper.WebUser.UserId,
+                    isAdmin: this.userHelper.WebUser.IsAdmin,
+                    pageIndex: pageIndex);
 
                 questionnaireItemList.AddRange(
                     questionnaireList.Select(q => new QuestionnaireListItem() {Id = q.Id, Title = q.Title}).ToList());

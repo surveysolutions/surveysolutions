@@ -67,20 +67,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             if (version.Major == 5)
                 return new CodeGenerationSettings(
+                    abstractConditionalLevelClassName:"AbstractConditionalLevel",
                     additionInterfaces: new string[0], 
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable");
 
+            if (version.Major == 6)
+                return new CodeGenerationSettings(
+                    abstractConditionalLevelClassName:"AbstractConditionalLevel",
+                    additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
+                    namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
+                        },
+                    areRosterServiceVariablesPresent: true,
+                    rosterType: "RosterRowList");
+
             return new CodeGenerationSettings(
-                additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
-                namespaces: new[]
+                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
+                    additionInterfaces: new[] { "IInterviewExpressionStateV2" },
+                    namespaces: new[]
                     {
                         "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
-                areRosterServiceVariablesPresent: true,
-                rosterType: "RosterRowList");
+                    areRosterServiceVariablesPresent: true,
+                    rosterType: "RosterRowList");
         }
 
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
@@ -254,7 +269,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 executorModel: template,
                 areRowSpecificVariablesPresent: codeGenerationSettings.AreRosterServiceVariablesPresent,
                 isIRosterLevelInherited: codeGenerationSettings.AreRosterServiceVariablesPresent,
-                rosterType: codeGenerationSettings.RosterType);
+                rosterType: codeGenerationSettings.RosterType,
+                abstractConditionalLevelClassName:codeGenerationSettings.AbstractConditionalLevelClassName);
 
             template.QuestionnaireLevelModel = questionnaireLevelModel;
 
@@ -278,17 +294,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var allParentsQuestionsToTop = new List<QuestionTemplateModel>();
                 var allParentsRostersToTop = new List<RosterTemplateModel>();
 
-                foreach (var rosterTemplateModel in rosterScopeModel.RostersInScope)
+                var parentScopeTypeName = rosterScopeModel.ParentTypeName;
+                while (rostersGroupedByScope.ContainsKey(parentScopeTypeName))
                 {
-                    if (rosterTemplateModel.ParentScope != null)
+                    var parentScope = rostersGroupedByScope[parentScopeTypeName];
+                    foreach (var parentRosters in parentScope.RostersInScope)
                     {
-                        allParentsQuestionsToTop.AddRange(rosterTemplateModel.ParentScope.Questions);
-                        allParentsQuestionsToTop.AddRange(rosterTemplateModel.ParentScope.GetAllQuestionsToTop());
-
-                        allParentsRostersToTop.AddRange(rosterTemplateModel.ParentScope.Rosters);
-                        allParentsRostersToTop.AddRange(rosterTemplateModel.ParentScope.GetAllRostersToTop());
+                        allParentsQuestionsToTop.AddRange(parentRosters.Questions);
+                        allParentsRostersToTop.AddRange(parentRosters.Rosters);
                     }
+                    parentScopeTypeName = parentScope.ParentTypeName;
                 }
+
+                allParentsQuestionsToTop.AddRange(questionnaireLevelModel.Questions);
+                allParentsRostersToTop.AddRange(questionnaireLevelModel.Rosters);
                 
                 rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop.Distinct();
                 rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop.Distinct();
@@ -445,10 +464,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 GeneratedTypeName =
                                     GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey.FormatGuid()), currentRosterScope, generatedScopesTypeNames),
                                 GeneratedStateName = "@__" + varName + "_state",
-                                ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
                                 GeneratedConditionsMethodName = "IsEnabled_" + varName,
                                 RosterScope = currentRosterScope,
+                                ParentGeneratedTypeName = currentScope.GeneratedTypeName,
                                 GeneratedRosterScopeName = "@__" + varName + "_scope",
                             };
 
@@ -492,6 +511,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
             var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
+
+            if (parentQuestion == null)
+                return childQuestion.ConditionExpression;
 
             string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
                 ? ""

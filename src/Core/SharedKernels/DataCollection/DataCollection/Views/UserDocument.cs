@@ -30,6 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views
         public virtual string DeviceId { get; set; }
         public virtual ISet<UserRoles> Roles { get; set; }
         public virtual ISet<DeviceInfo> DeviceChangingHistory { get; set; }
+        public virtual string PersonName { get; set; }
+        public virtual string PhoneNumber { get; set; }
 
         public virtual bool IsHq()
         {

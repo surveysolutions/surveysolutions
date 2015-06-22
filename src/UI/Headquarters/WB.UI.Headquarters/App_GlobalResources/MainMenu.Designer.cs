@@ -121,7 +121,7 @@ namespace Resources {
             get {
                 return ResourceManager.GetString("Observers", resourceCulture);
             }
-        }        
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Quantity.
@@ -156,6 +156,15 @@ namespace Resources {
         internal static string Reports {
             get {
                 return ResourceManager.GetString("Reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed.
+        /// </summary>
+        internal static string Speed {
+            get {
+                return ResourceManager.GetString("Speed", resourceCulture);
             }
         }
         

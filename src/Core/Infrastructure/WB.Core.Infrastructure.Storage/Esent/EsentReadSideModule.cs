@@ -1,6 +1,7 @@
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
@@ -52,7 +53,7 @@ namespace WB.Core.Infrastructure.Storage.Esent
         {
             protected override IReadSideKeyValueStorage<TEntity> CreateInstance(IContext context)
             {
-                var esentKeyValueStorage = new EsentKeyValueStorage<TEntity>(new EsentSettings(dataFolder));
+                var esentKeyValueStorage = new EsentKeyValueStorage<TEntity>(new EsentSettings(dataFolder), context.Kernel.Get<IFileSystemAccessor>());
 
                 return new MemoryCachedKeyValueStorage<TEntity>(
                     esentKeyValueStorage,

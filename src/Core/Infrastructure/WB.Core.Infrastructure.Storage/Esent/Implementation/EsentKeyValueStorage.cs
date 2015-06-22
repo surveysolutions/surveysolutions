@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Collections.Generic;
+using Microsoft.Isam.Esent.Interop;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -14,12 +17,17 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         private PersistentDictionary<string, string> storage;
         private readonly string collectionFolder;
 
-        public EsentKeyValueStorage(EsentSettings settings)
+        public EsentKeyValueStorage(EsentSettings settings, IFileSystemAccessor fileSystemAccessor)
         {
             if (settings == null) throw new ArgumentNullException("settings");
 
             string collectionName = typeof(TEntity).Name;
             this.collectionFolder = Path.Combine(settings.Folder, collectionName);
+
+            //if (!fileSystemAccessor.IsWritePermissionExists(this.collectionFolder))
+            //{
+            //    throw new ArgumentException(string.Format("Error initializing ESENT persistent dictionary because there are problems with write access to folder {0}", this.collectionFolder));
+            //}
 
             this.storage = new PersistentDictionary<string, string>(collectionFolder);
         }
