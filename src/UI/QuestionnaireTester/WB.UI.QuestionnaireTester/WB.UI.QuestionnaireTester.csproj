@@ -165,6 +165,10 @@
     <Reference Include="Cirrious.MvvmCross.Plugins.Visibility.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="GooglePlayServicesLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ExternalsMonodroid\GooglePlayServices\googleplayservices-22.0.0.0\lib\android\GooglePlayServicesLib.dll</HintPath>
+    </Reference>
     <Reference Include="IHS.MvvmCross.Plugins.Keychain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.dll</HintPath>
@@ -288,6 +292,14 @@
     <Compile Include="CustomControls\MvxRecyclerView.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
+    <Compile Include="CustomServices\Location\IMvxLocationReceiver.cs" />
+    <Compile Include="CustomServices\Location\IPlayConnectionCallbacksReceiver.cs" />
+    <Compile Include="CustomServices\Location\IPlayConnectionFailedReceiver.cs" />
+    <Compile Include="CustomServices\Location\MvxLocationListener.cs" />
+    <Compile Include="CustomServices\Location\PlayConnectionCallbacksListener.cs" />
+    <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
+    <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
+    <Compile Include="CustomServices\Location\Plugin.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\DataCollectionModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />
