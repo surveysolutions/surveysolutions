@@ -50,13 +50,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             var quatedTitle = string.Format("\"{0}\"", title);
 
             if (!isExist)
-                return helper.Label(quatedTitle);
+                return MvcHtmlString.Create(quatedTitle);
 
             if (type == QuestionnaireItemType.Questionnaire)
                 return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
 
             if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
-                return helper.Label(quatedTitle);
+                return MvcHtmlString.Create(quatedTitle);
 
             var url =
                 urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),

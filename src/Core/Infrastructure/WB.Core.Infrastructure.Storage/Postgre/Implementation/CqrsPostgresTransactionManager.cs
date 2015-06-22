@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public void RollbackCommandTransaction()
         {
             if (!this.triedToBeginCommandTransaction)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Command transaction is not started and therefore cannot be rolled back.");
 
             if (this.commandTransaction != null)
             {
@@ -84,7 +84,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public void RollbackQueryTransaction()
         {
             if (!this.triedToBeginQueryTransaction)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Query transaction is not started and therefore cannot be rolled back.");
 
             if (this.queryTransaction != null)
             {
