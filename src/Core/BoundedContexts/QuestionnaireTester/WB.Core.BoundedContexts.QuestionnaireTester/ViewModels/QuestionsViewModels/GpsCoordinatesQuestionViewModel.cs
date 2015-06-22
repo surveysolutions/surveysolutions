@@ -99,6 +99,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settingsProvider.GpsReceiveTimeoutSec));
                 var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
+                
+                if (mvxGeoLocation == null)
+                    QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.GpsQuestion_Timeout);
+
+
                 await this.SetGeoLocationAnswer(mvxGeoLocation);
             }
             catch (OperationCanceledException)
