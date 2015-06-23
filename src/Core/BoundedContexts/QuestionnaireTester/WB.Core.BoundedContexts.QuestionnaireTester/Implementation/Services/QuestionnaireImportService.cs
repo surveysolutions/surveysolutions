@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             if (item is IQuestion)
             {
-                var closestRosterReference = parents.LastOrDefault(x => x.IsRoster);
+                var closestRosterReference = parents.FirstOrDefault(x => x.IsRoster);
                 questionnaireModel.QuestionsNearestRosterIdMap.Add(
                     item.PublicKey,
                     closestRosterReference == null ? (Guid?)null : closestRosterReference.Id);
