@@ -99,7 +99,7 @@ namespace WB.UI.Designer.Api
                 IsPublic = isPublic,
                 Page = pageIndex,
                 PageSize = pageSize,
-                Order = sortBy,
+                Order = string.IsNullOrEmpty(sortBy) ? "LastEntryDate DESC" : sortBy,
                 Filter = filter
             });
 
