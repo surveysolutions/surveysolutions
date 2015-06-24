@@ -382,7 +382,7 @@
     <value>error</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
-    <value>Tap to take photo</value>
+    <value>Tap to take a photo</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>All {0} questions answered</value>
