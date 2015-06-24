@@ -6,8 +6,6 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 {
     public class ButtonGroupStyleBinding : BaseBinding<Button, GroupState>
     {
-        private MvxBindingMode defaultMode;
-
         public ButtonGroupStyleBinding(Button androidControl) : base(androidControl)
         {
         }
@@ -15,7 +13,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         public override MvxBindingMode DefaultMode
         {
             get { return MvxBindingMode.OneWay; }
-        }
+        } 
 
         protected override void SetValueToView(Button control, GroupState value)
         {

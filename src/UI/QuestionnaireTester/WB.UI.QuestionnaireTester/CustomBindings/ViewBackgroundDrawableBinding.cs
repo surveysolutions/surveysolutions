@@ -25,8 +25,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             if (backgroundId.HasValue)
             {
-                var backgroundDrawable = androidControl.Resources.GetDrawable(backgroundId.Value);
-                androidControl.SetBackgroundDrawable(backgroundDrawable);
+                androidControl.SetBackgroundResource(backgroundId.Value);
             }
         }
     }

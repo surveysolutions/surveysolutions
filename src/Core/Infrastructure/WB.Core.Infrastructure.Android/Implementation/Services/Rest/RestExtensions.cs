@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             var responseMessage = await response;
             var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
 
-            return await GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
+            return GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
         }
 
 
@@ -64,10 +64,10 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
                 }
             }
 
-            return await GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
+            return GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
         }
 
-        private static async Task<T> GetDecompressedJsonFromHttpResponseMessage<T>(HttpResponseMessage responseMessage, byte[] responseContent)
+        private static T GetDecompressedJsonFromHttpResponseMessage<T>(HttpResponseMessage responseMessage, byte[] responseContent)
         {
             var responseContentType = responseMessage.Content.Headers.ContentType.MediaType;
 

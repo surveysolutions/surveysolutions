@@ -84,7 +84,7 @@ namespace WB.UI.Capi
             {
                 Text = messge
             };
-            noAssignmentsMessage.SetBackgroundDrawable(this.Resources.GetDrawable(Resource.Drawable.errorwarningstyle));
+            noAssignmentsMessage.SetBackgroundResource(Resource.Drawable.errorwarningstyle);
             noAssignmentsMessage.SetPadding(10, 10, 10, 10);
             noAssignmentsMessage.LayoutParameters = layoutParameters;
             noAssignmentsMessage.SetTextColor(Color.Black);
