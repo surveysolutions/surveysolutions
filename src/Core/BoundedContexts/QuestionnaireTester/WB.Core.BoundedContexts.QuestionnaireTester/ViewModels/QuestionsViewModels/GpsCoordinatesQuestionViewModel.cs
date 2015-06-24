@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
-            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(() => SaveAnswer(), () => !this.IsInProgress)); }
+            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(async () => await SaveAnswer(), () => !this.IsInProgress)); }
         }
 
         private readonly IUserIdentity userIdentity;

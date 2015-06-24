@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 await this.designerApiService.GetQuestionnairesAsync(
                     isPublic: false,
                     token: tokenSource.Token,
-                    onPageReceived: async (batchOfServerQuestionnaires) =>
+                    onPageReceived: (batchOfServerQuestionnaires) =>
                     {
                         questionnaires.AddRange(batchOfServerQuestionnaires);
                     });
@@ -221,7 +221,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 await this.designerApiService.GetQuestionnairesAsync(
                     isPublic: true,
                     token: tokenSource.Token,
-                    onPageReceived: async (batchOfServerQuestionnaires) =>
+                    onPageReceived: (batchOfServerQuestionnaires) =>
                     {
                         questionnaires.AddRange(batchOfServerQuestionnaires);
                     });

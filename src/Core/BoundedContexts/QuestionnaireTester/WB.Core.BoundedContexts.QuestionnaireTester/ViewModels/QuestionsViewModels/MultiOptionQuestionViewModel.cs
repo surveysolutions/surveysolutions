@@ -37,7 +37,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid userId;
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
-        private bool inProgress;
         private bool areAnswersOrdered;
 
         public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
