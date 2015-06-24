@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
         }
 
-        async void navigationState_OnGroupChanged(Identity newGroupIdentity)
+        void navigationState_OnGroupChanged(Identity newGroupIdentity)
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 

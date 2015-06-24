@@ -55,7 +55,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private IMvxCommand navigateToGroupCommand;
         private string interviewId;
-        private GroupStatus status;
         private GroupState groupState;
 
         public IMvxCommand NavigateToGroupCommand
