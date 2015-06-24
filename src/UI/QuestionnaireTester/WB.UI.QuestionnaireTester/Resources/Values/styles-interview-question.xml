@@ -223,6 +223,7 @@
   <style name="Interview_Question_Errors" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
   </style>
 
   <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
