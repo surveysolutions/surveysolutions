@@ -213,6 +213,7 @@
     <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
     <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
     <item name="android:gravity">center_vertical|center_horizontal</item>
+    <item name="android:stateListAnimator">@null</item>
     <item name="android:paddingRight">@dimen/Interview_Question_InputButton_padding</item>
     <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
@@ -300,6 +301,7 @@
     <item name="android:layout_marginRight">@dimen/button_shadow_margin</item>
     <item name="android:layout_marginTop">@dimen/button_shadow_margin</item>
     <item name="android:layout_marginBottom">@dimen/button_shadow_margin</item>
+    <item name="android:stateListAnimator">@null</item>
   </style>
 
   <style name="Interview_Previous_Group_Navigation_Note">
