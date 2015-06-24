@@ -595,7 +595,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to take photo.
+        ///   Looks up a localized string similar to Tap to take a photo.
         /// </summary>
         public static string Interview_Questions_Multimedia_TapToTakePhoto {
             get {
