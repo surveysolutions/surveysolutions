@@ -315,12 +315,17 @@ namespace WB.Core.SharedKernels.DataCollection
             return !answer.HasValue;
         }
 
-        protected bool IsAnswerEmpty<TY>(TY answer) where TY : class
+        protected bool IsAnswerEmpty(GeoLocation answer) 
         {
             return answer == null;
         }
 
-        protected bool IsAnswerEmpty<TY>(TY[] answer)
+        protected bool IsAnswerEmpty(decimal[] answer)
+        {
+            return answer == null || answer.Length == 0;
+        }
+
+        protected bool IsAnswerEmpty(decimal[,] answer)
         {
             return answer == null || answer.Length == 0;
         }
