@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             {
                 if (interviewLimitReached)
                 {
-                    result.SetErrorMessage("You can't create more interviews because limit have been reached");
+                    result.SetErrorMessage("You can't create more interviews because limit has been reached");
                 }
                 else
                 {
