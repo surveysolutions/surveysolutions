@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -21,7 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel,
+         IInterviewEntityViewModel,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
          ILiteEventHandler<AnswersRemoved>
     {
@@ -134,7 +133,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get
             {
-                return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(enteredText => this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText)));
+                return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(enteredText => this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText).Wait()));
             }
         }
 
@@ -150,7 +149,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.selectedObject = value;
                 if (this.selectedObject != null)
                 {
-                    SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
+                    SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value).Wait();
                 }
                 RaisePropertyChanged();
             }
