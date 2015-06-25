@@ -23,6 +23,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -124,13 +125,21 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid)
             {
                 var questionnaireId = Guid.NewGuid();
-                this.commandService.Execute(
-                    new CreateQuestionnaireCommand(
-                        questionnaireId: questionnaireId,
-                        text: model.Title,
-                        createdBy: UserHelper.WebUser.UserId,
-                        isPublic: model.IsPublic));
-                return this.RedirectToAction("Open", "App", new { id = questionnaireId });
+                try
+                {
+                    this.commandService.Execute(
+                        new CreateQuestionnaireCommand(
+                            questionnaireId: questionnaireId,
+                            text: model.Title,
+                            createdBy: UserHelper.WebUser.UserId,
+                            isPublic: model.IsPublic));
+                    return this.RedirectToAction("Open", "App", new {id = questionnaireId});
+                }
+                catch (QuestionnaireException e)
+                {
+                    Error(e.Message);
+                    logger.Error("Error on questionnaire creation.", e);
+                }
             }
 
             return View(model);
