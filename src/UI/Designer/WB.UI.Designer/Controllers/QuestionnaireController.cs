@@ -27,6 +27,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
@@ -116,6 +117,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionnaireViewModel model)
         {
