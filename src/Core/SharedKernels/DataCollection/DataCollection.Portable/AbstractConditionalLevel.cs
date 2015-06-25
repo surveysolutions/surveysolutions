@@ -325,7 +325,7 @@ namespace WB.Core.SharedKernels.DataCollection
             return answer == null || answer.Length == 0;
         }
 
-        protected bool IsAnswerEmpty(decimal[,] answer)
+        protected bool IsAnswerEmpty(decimal[][] answer)
         {
             return answer == null || answer.Length == 0;
         }
