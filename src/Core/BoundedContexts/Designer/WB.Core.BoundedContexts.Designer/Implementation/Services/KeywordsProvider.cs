@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
-            "rowcode","rowname","rowindex","roster","Id", "self"
+            "rowcode","rowname","rowindex","roster","id", "self"
         };
         
         public string[] GetAllReservedKeywords()
