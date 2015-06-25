@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
         }
 
 
-        public void AddString(string addedString, int insertPosition, ref int selection)
+        public void AddString(string addedString, int insertPosition, ref int position)
         {
             if (addedString.IsNullOrEmpty())
                 return;
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
                 int currentPosition = startingPosition + count < this.rawToMask.Length
                     ? this.rawToMask[startingPosition + count]
                     : this.lastValidMaskPosition + 1;
-                selection = this.NextValidPosition(currentPosition);
+                position = this.NextValidPosition(currentPosition);
             }
         }
 
@@ -354,7 +354,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
 
         private string Clear(String str)
         {
-            str = str.Replace(this.maskFill, rawText.EmptyChar);
+            str = str.TrimEnd(this.maskFill).Replace(this.maskFill, rawText.EmptyChar);
             return str;
         }
 
