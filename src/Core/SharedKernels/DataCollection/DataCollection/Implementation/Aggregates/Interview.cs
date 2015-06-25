@@ -483,6 +483,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(AnswersRemoved @event)
         {
             this.interviewState.RemoveAnswers(@event.Questions);
+            foreach (var identity in @event.Questions)
+            {
+                // if single option question with this identity is absent, nothing will happen
+                this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(identity.Id, identity.RosterVector, null);
+            }
         }
 
         public InterviewState CreateSnapshot()
