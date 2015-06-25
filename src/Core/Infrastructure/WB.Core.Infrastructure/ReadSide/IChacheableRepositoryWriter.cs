@@ -4,7 +4,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.Infrastructure.ReadSide
 {
     /// <summary>
-    /// Interface which is implemented by each Raven-specific read side repository writer.
+    /// Interface which is implemented by each read side repository writer.
     /// </summary>
     public interface IChacheableRepositoryWriter : IReadSideStorage
     {

@@ -38,15 +38,15 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock.Setup(x => x.GetAllRegistredEventHandlers()).Returns(new[] { firstEventHandlerMock.Object, secondEventHandlerMock.Object });
 
           
-            ravenReadSideService = CreateReadSideService(eventDispatcher: eventDispatcherMock.Object);
+            readSideService = CreateReadSideService(eventDispatcher: eventDispatcherMock.Object);
         };
 
-        Because of = () => result = ravenReadSideService.GetAllAvailableHandlers();
+        Because of = () => result = readSideService.GetAllAvailableHandlers();
 
         It should_rebuild_all_view = () =>
             result.Select(x => x.Name).ToArray().ShouldEqual(new[] { FirstHandlerName, SecondHandlerName });
 
-        private static ReadSideService ravenReadSideService;
+        private static ReadSideService readSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IEventHandler> firstEventHandlerMock;
         private static Mock<IEventHandler> secondEventHandlerMock;
