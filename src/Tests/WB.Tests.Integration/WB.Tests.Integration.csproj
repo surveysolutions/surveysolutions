@@ -78,18 +78,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Database">
-      <HintPath>..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Database.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
       <Private>True</Private>
@@ -185,7 +173,6 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
-    <Compile Include="RavenMockUtils.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
@@ -197,16 +184,6 @@
     <Compile Include="InterviewTests\when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldExtensions.cs" />
-    <Compile Include="StorageTests\DocumentStoreFailedTests.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\RavenReadSideRepositoryWriterTestsContext.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_bulk_store_used.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_and_cache_is_disabled.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
