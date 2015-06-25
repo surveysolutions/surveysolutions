@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 
-namespace WB.Tests.CleanIntegration.EsentTests
+namespace WB.Tests.Integration.EsentTests
 {
     internal class when_item_removed : with_esent_store<TestStoredEntity>
     {

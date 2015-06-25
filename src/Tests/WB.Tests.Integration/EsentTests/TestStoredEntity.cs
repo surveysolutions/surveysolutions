@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.CleanIntegration.EsentTests
+namespace WB.Tests.Integration.EsentTests
 {
     class TestStoredEntity : IReadSideRepositoryEntity
     {

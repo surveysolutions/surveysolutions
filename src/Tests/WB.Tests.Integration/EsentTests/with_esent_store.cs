@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using Machine.Specifications;
-using Microsoft.Isam.Esent.Collections.Generic;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
+using Microsoft.Isam.Esent.Collections.Generic;
 
-namespace WB.Tests.CleanIntegration.EsentTests
+namespace WB.Tests.Integration.EsentTests
 {
     internal class with_esent_store<T> where T : class, IReadSideRepositoryEntity
     {
