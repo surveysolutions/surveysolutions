@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.V3.CustomFunctions
             return !IsAnswerEmpty(answer);
         }
 
-        public bool IsAnswered(decimal[,] answer)
+        public bool IsAnswered(decimal[][] answer)
         {
             return !IsAnswerEmpty(answer);
         }
