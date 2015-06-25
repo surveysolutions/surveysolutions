@@ -349,7 +349,7 @@
     <value>Нажмите для ввода даты</value>
   </data>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
-    <value>Отсканировать баркод</value>
+    <value>Отсканировать штрих-код </value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как цело число</value>
@@ -386,5 +386,8 @@
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
     <value>Ответ "{0}" не может быть сохранен, поскольку не совпадает ни с одной опцией</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Нажмите, чтобы сделать фото</value>
   </data>
 </root>
