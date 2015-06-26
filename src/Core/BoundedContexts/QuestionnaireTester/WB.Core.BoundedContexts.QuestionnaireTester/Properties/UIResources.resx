@@ -316,10 +316,10 @@
     <value>Internal application error</value>
   </data>
   <data name="Validity_ApplicationException_ErrorMessage" xml:space="preserve">
-    <value>You've entered an invalid answer. It can't be saved.</value>
+    <value>Invalid answer.</value>
   </data>
   <data name="Validity_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>You've entered an invalid answer. It can't be saved.</value>
+    <value>Invalid answer.</value>
   </data>
   <data name="Validity_Mandatory_ErrorCaption" xml:space="preserve">
     <value>Mandatory field.</value>

@@ -322,10 +322,10 @@
     <value>Ошибка сохранения</value>
   </data>
   <data name="Validity_ApplicationException_ErrorMessage" xml:space="preserve">
-    <value>Вы ввели неправильный ответ. Мы не можем сохранить его.</value>
+    <value>Неправильный ответ. </value>
   </data>
   <data name="Validity_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>Вы ввели неправильный ответ. Мы не можем сохранить его.</value>
+    <value>Неправильный ответ. </value>
   </data>
   <data name="Validity_Mandatory_ErrorCaption" xml:space="preserve">
     <value>Обязательное поле</value>
