@@ -101,6 +101,7 @@
         {#>        
         private bool <#=question.GeneratedValidationsMethodName#>()
         {
+			var self = <#=question.VariableName#>;
             return <#=question.Validations#>;
         }
         <# }#>
