@@ -919,7 +919,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You&apos;ve entered an invalid answer. It can&apos;t be saved..
+        ///   Looks up a localized string similar to Invalid answer..
         /// </summary>
         public static string Validity_ApplicationException_ErrorMessage {
             get {
@@ -928,7 +928,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You&apos;ve entered an invalid answer. It can&apos;t be saved..
+        ///   Looks up a localized string similar to Invalid answer..
         /// </summary>
         public static string Validity_InterviewException_ErrorCaption {
             get {
