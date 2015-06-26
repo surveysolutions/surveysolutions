@@ -429,7 +429,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            return keywordsProvider.GetAllReservedKeywords().Contains(question.StataExportCaption);
+            return question.StataExportCaption != null && keywordsProvider.GetAllReservedKeywords().Contains(question.StataExportCaption.ToLower());
         }
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
@@ -437,8 +437,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterGroup(roster))
                 return false;
 
-            var keywords = keywordsProvider.GetAllReservedKeywords();
-            return keywords.Contains(roster.VariableName);
+            return roster.VariableName != null && keywordsProvider.GetAllReservedKeywords().Contains(roster.VariableName.ToLower());
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)

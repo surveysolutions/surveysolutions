@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors = verifier.Verify(questionnaire);
 
         It should_return_5_error = () =>
-            resultErrors.Count().ShouldEqual(4);
+            resultErrors.Count().ShouldEqual(5);
 
         It should_return_all_errors_with_code__WB0058 = () =>
             resultErrors.ShouldEachConformTo(e=>e.Code=="WB0058");

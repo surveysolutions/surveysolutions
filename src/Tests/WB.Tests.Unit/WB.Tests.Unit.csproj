@@ -303,6 +303,8 @@
     <Compile Include="BoundedContexts\Capi\InterviewViewModelTests\when_setting_validity_to_answered_prefilled_question_in_interview.cs" />
     <Compile Include="BoundedContexts\Capi\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_question_condition_containing_self.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_nested_roster_with_condition_on_parents_sibling_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_5_with_questionnaire_with_roster.cs" />
