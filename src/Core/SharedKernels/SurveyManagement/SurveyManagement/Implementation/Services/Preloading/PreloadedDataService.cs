@@ -32,6 +32,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private const string ParentIdColumnName = "ParentId";
         private const string SupervisorNameColumnName = "_Supervisor";
 
+        private Dictionary<string, IQuestion> questionsCache = null;
+        private Dictionary<string, IQuestion> QuestionsCache {
+            get {
+                return questionsCache ??
+                       (questionsCache =
+                           questionnaireDocument.GetEntitiesByType<IQuestion>()
+                               .ToDictionary(x => x.StataExportCaption.ToLower(), x => x));
+            }
+        }
+
+        private Dictionary<Guid, IGroup> groupsCache = null;
+        private Dictionary<Guid, IGroup> GroupsCache
+        {
+            get
+            {
+                return groupsCache ??
+                       (groupsCache =
+                           questionnaireDocument.GetEntitiesByType<IGroup>()
+                               .ToDictionary(x => x.PublicKey, x => x));
+            }
+        }
+
+
         public PreloadedDataService(QuestionnaireExportStructure exportStructure, 
             QuestionnaireRosterStructure questionnaireRosterStructure,
             QuestionnaireDocument questionnaireDocument, 
@@ -97,9 +120,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.Fixed)
             {
-                return
-                    questionnaireDocument.FirstOrDefault<IGroup>(g => g.PublicKey == levelScopeVector.Last())
-                        .FixedRosterTitles.Select(x => x.Value).ToArray();
+                return GroupsCache.ContainsKey(levelScopeVector.Last()) 
+                    ? GroupsCache[levelScopeVector.Last()].FixedRosterTitles.Select(x => x.Value).ToArray() 
+                    : null;
             }
 
             var rosterSizeQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());
@@ -405,7 +428,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public IQuestion GetQuestionByVariableName(string variableName)
         {
-            return questionnaireDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption.Equals(variableName, StringComparison.InvariantCultureIgnoreCase));
+            var varName = variableName.ToLower();
+            return QuestionsCache.ContainsKey(varName) ? QuestionsCache[varName] : null;
+
+            //return questionnaireDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption.Equals(variableName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         protected UserView GetUserByName(string userName)

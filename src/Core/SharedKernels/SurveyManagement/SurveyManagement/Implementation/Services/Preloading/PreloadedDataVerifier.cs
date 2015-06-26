@@ -339,7 +339,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (idColumnIndex < 0 || parentIdColumnIndexes == null)
                 yield break;
 
-            var idAndParentContainer = new HashSet<KeyValuePair<string, string>>();
+            var idAndParentContainer = new HashSet<string>();
             for (int y = 0; y < levelData.Content.Length; y++)
             {
                 var idValue = levelData.Content[y][idColumnIndex];
@@ -351,15 +351,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     continue;
                 }
                 var parentIdValue = string.Join(",", parentIdColumnIndexes.Select(parentidIndex => levelData.Content[y][parentidIndex]));
-                var idAndParentPair = new KeyValuePair<string, string>(idValue, parentIdValue);
-                if (idAndParentContainer.Contains(idAndParentPair))
+                string itemKey = String.Format("{0}\t{1}", idValue, parentIdValue);
+                if (idAndParentContainer.Contains(itemKey))
                 {
                     yield return
                         new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                            string.Format("id:{0}, parentId: {1}", idAndParentPair.Key, idAndParentPair.Value), levelData.FileName);
+                            string.Format("id:{0}, parentId: {1}", idValue, parentIdValue), levelData.FileName);
                     continue;
                 }
-                idAndParentContainer.Add(idAndParentPair);
+                idAndParentContainer.Add(itemKey);
             }
         }
 
