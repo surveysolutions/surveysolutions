@@ -547,7 +547,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                     new CodeGenerator());
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndGroupContainingUsageOfSelf(Guid questionId)
+        public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndConditionContainingUsageOfSelf(Guid questionId)
         {
             return new QuestionnaireDocument()
             {
