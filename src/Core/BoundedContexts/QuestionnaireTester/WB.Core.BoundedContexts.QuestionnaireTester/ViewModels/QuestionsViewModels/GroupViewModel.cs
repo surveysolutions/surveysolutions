@@ -3,34 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public struct GroupState
-    {
-        public int AnsweredQuestionsCount { get; set; }
-
-        public int SubgroupsCount { get; set; }
-
-        public int QuestionsCount { get; set; }
-
-        public int InvalidAnswersCount { get; set; }
-
-        public GroupStatus Status { get; set; }
-
-    }
-
-    public class GroupViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel
+    public class GroupViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel, 
+        IInterviewAnchoredEntity
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -56,6 +40,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private IMvxCommand navigateToGroupCommand;
         private string interviewId;
         private GroupState groupState;
+
+        private Identity parentGroupIdentity;
 
         public IMvxCommand NavigateToGroupCommand
         {
@@ -89,11 +75,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.UpdateStats();
 
             Guid parentGroupId = questionnaire.GroupsParentIdMap[entityIdentity.Id].Value;
-            Identity parentGroupIdentity = new Identity(parentGroupId, entityIdentity.RosterVector.WithoutLast().ToArray());
-            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(parentGroupIdentity);
+            this.parentGroupIdentity = new Identity(parentGroupId, entityIdentity.RosterVector.WithoutLast().ToArray());
+            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(this.parentGroupIdentity);
 
             this.answerNotifier.Init(questionsToListen.ToArray());
             this.answerNotifier.QuestionAnswered += QuestionAnswered;
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return groupIdentity.Equals(identity) ? 0 : -1;
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
@@ -132,7 +123,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async Task NavigateToGroup()
         {
-            await this.navigationState.NavigateTo(this.groupIdentity);
+            await this.navigationState.LeaveAnchorAndNavigateTo(this.groupIdentity, parentGroupIdentity);
         }
     }
 }

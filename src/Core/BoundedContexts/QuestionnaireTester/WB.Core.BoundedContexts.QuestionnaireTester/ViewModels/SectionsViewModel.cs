@@ -55,9 +55,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             await this.navigationState.NavigateTo(item.SectionIdentity);
         }
 
-        void navigationState_OnGroupChanged(Identity newGroupIdentity)
+        void navigationState_OnGroupChanged(NavigationParams navigationParams)
         {
-            var sectionToBeSelected = Sections.FirstOrDefault(x => x.SectionIdentity.Equals(newGroupIdentity));
+            var sectionToBeSelected = Sections.FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
             if (sectionToBeSelected == null)
             {
                 return;

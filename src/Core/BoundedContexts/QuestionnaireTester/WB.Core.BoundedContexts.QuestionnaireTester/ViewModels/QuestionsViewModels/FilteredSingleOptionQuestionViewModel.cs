@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -23,7 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IInterviewAnchoredEntity
     {
         public class FilteredComboboxItemViewModel 
         {
@@ -46,7 +41,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public AnsweringViewModel Answering { get; private set; }
         public IList<FilteredComboboxItemViewModel> Options { get; set; }
 
-
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -65,8 +59,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
         }
-
-
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -93,6 +85,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var selectedValue = answerModel.Answer;
                 SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
             }
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private FilteredComboboxItemViewModel ToViewModel(OptionModel model)

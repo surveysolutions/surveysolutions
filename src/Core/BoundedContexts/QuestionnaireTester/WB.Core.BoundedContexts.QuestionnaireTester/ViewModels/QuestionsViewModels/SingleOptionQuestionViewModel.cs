@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -17,7 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IInterviewAnchoredEntity
     {
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -48,6 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public IList<SingleOptionQuestionOptionViewModel> Options { get; private set; }
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
+
         public bool HasOptions 
         {
             get { return true; }
@@ -73,6 +73,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 .Options
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)

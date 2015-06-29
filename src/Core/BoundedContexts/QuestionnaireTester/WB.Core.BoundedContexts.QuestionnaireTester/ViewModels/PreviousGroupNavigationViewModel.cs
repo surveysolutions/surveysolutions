@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -65,7 +57,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewRepository = interviewRepository;
         }
 
-
         public void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
@@ -107,7 +98,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private async Task SendNavigateToParentCommand()
         {
             var parentIdentity = GetParentIdentity();
-            await navigationState.NavigateTo(parentIdentity);
+            await navigationState.NavigateToGroupWithAnchor(parentIdentity, groupIdentity);
         }
 
         private Identity GetParentIdentity()

@@ -22,7 +22,9 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,
+    public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel, 
+        IInterviewAnchoredEntity,
         ILiteEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
@@ -104,6 +106,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
             this.eventRegistry.Subscribe(this);
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)

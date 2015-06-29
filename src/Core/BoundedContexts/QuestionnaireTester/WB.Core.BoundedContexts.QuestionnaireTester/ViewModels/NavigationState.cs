@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public string QuestionnaireId { get; private set; }
         public Identity CurrentGroup { get; private set; }
 
-        private readonly Stack<Identity> navigationStack = new Stack<Identity>();
+        private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
 
         protected NavigationState() { }
 
@@ -34,17 +34,47 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            while (this.navigationStack.Contains(groupIdentity))
+            var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
+
+            while (this.navigationStack.Contains(navigationItem))
             {
                 this.navigationStack.Pop();
             }
 
-            this.navigationStack.Push(groupIdentity);
+            this.navigationStack.Push(navigationItem);
 
-            this.CurrentGroup = groupIdentity;
+            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
+        }
 
-            if (OnGroupChanged != null)
-                OnGroupChanged(groupIdentity);
+        public async Task LeaveAnchorAndNavigateTo(Identity groupIdentity, Identity parentGroupIdentity = null)
+        {
+            await this.commandService.WaitPendingCommandsAsync();
+
+            if (parentGroupIdentity != null && this.navigationStack.Count > 0)
+            {
+                var previousNavigationItem = this.navigationStack.Peek();
+
+                if (previousNavigationItem != null && previousNavigationItem.TargetGroup.Equals(parentGroupIdentity))
+                {
+                    previousNavigationItem.AnchoredElementIdentity = groupIdentity;
+                }
+            }
+            var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
+
+            this.navigationStack.Push(navigationItem);
+
+            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
+        }
+
+        public async Task NavigateToGroupWithAnchor(Identity groupIdentity, Identity anchoredElementIdentity)
+        {
+            await this.commandService.WaitPendingCommandsAsync();
+
+            var navigationItem = new NavigationParams { TargetGroup = groupIdentity, AnchoredElementIdentity = anchoredElementIdentity };
+
+            this.navigationStack.Push(navigationItem);
+
+            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
         }
 
         public async Task NavigateBack(Action navigateToIfHistoryIsEmpty)
@@ -60,11 +90,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 navigateToIfHistoryIsEmpty.Invoke();
             else
             {
-                var previousGroupIdentity = this.navigationStack.Pop();
-                await this.NavigateTo(previousGroupIdentity);
+                var previousNavigationItem = this.navigationStack.Peek();
+
+                this.ChangeCurrentGroupAndFireEvent(previousNavigationItem.TargetGroup, previousNavigationItem);
+            }
+        }
+
+        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
+        {
+            this.CurrentGroup = groupIdentity;
+
+            if (this.OnGroupChanged != null)
+            {
+                this.OnGroupChanged(navigationParams);
             }
         }
     }
 
-    public delegate void GroupChanged(Identity newGroupIdentity);
+    public delegate void GroupChanged(NavigationParams newGroupIdentity);
 }

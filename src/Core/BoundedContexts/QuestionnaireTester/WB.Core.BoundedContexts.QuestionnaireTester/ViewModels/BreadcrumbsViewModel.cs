@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -74,9 +73,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             return changedRosterInstanceIdentity;
         }
 
-        void navigationState_OnGroupChanged(Identity newGroupIdentity)
+        void navigationState_OnGroupChanged(NavigationParams navigationParams)
         {
-            this.BuildBreadCrumbs(newGroupIdentity);
+            this.BuildBreadCrumbs(navigationParams.TargetGroup);
         }
 
         private void BuildBreadCrumbs(Identity newGroupIdentity)

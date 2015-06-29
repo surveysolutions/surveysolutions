@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -19,7 +17,8 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel,
+        IInterviewEntityViewModel, 
+        IInterviewAnchoredEntity,
         ILiteEventHandler<TextQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
@@ -48,7 +47,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.QuestionState = questionStateViewModel;
         }
 
-
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
@@ -63,6 +61,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             InitQuestionSettings();
             UpdateSelfFromModel();
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private string mask;
