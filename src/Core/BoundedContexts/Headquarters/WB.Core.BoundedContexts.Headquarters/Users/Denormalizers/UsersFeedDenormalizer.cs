@@ -7,6 +7,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 using WB.Core.SharedKernels.SurveyManagement.Views;
@@ -15,7 +16,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
 {
     internal class UsersFeedDenormalizer : BaseDenormalizer,
                                     IEventHandler<NewUserCreated>,
-                                    IEventHandler<UserChanged>
+                                    IEventHandler<UserChanged>,
+                                    IEventHandler<UserArchived>,
+                                    IEventHandler<UserUnarchived>
     {
         private readonly IReadSideRepositoryWriter<UserChangedFeedEntry> usersFeed;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -53,6 +56,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
         }
 
         public void Handle(IPublishedEvent<UserChanged> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            if (item.Roles.HasSupervisorApplicationRole())
+            {
+                var supervisorId = GetSupervisorId(item);
+
+                var eventId = evnt.EventIdentifier.FormatGuid();
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
+                {
+                    ChangedUserId = evnt.EventSourceId.FormatGuid(),
+                    Timestamp = evnt.EventTimeStamp
+                }, eventId);
+            }
+        }
+
+        public void Handle(IPublishedEvent<UserArchived> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            if (item.Roles.HasSupervisorApplicationRole())
+            {
+                var supervisorId = GetSupervisorId(item);
+
+                var eventId = evnt.EventIdentifier.FormatGuid();
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
+                {
+                    ChangedUserId = evnt.EventSourceId.FormatGuid(),
+                    Timestamp = evnt.EventTimeStamp
+                }, eventId);
+            }
+        }
+
+        public void Handle(IPublishedEvent<UserUnarchived> evnt)
         {
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 

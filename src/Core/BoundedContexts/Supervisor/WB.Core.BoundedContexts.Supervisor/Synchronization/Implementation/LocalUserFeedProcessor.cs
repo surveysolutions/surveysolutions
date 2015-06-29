@@ -110,19 +110,43 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void UpdateOrCreateUser(UserView userDetails)
         {
+            bool isArchived = userDetails.IsArchived;
             UserRoles[] userRoles = userDetails.Roles.ToArray();
             bool userShouldBeLockedByHq = userDetails.IsLockedByHQ || userRoles.Contains(UserRoles.Headquarter);
 
             UserDocument user = this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
                 this.users.GetById(userDetails.PublicKey));
 
-            ICommand userCommand =
-                (user == null)
-                    ? new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
-                        userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor, userDetails.PersonName, userDetails.PhoneNumber) as ICommand
-                    : new ChangeUserCommand(userDetails.PublicKey, userDetails.Email, null, userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber, Guid.Empty) as ICommand;
+            if (user == null)
+            {
+                if (!isArchived)
+                    this.executeCommand(new CreateUserCommand(userDetails.PublicKey, userDetails.UserName,
+                        userDetails.Password, userDetails.Email,
+                        userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor,
+                        userDetails.PersonName, userDetails.PhoneNumber));
+                return;
+            }
 
-            this.executeCommand(userCommand);
+            if (user.IsArchived && isArchived)
+                return;
+
+            if (!user.IsArchived && isArchived)
+            {
+                this.executeCommand(new ChangeUserCommand(userDetails.PublicKey, userDetails.Email, null,
+                    userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber,
+                    Guid.Empty));
+                this.executeCommand(new ArchiveUserCommad(userDetails.PublicKey));
+                return;
+            }
+
+            if (user.IsArchived && !isArchived)
+            {
+                this.executeCommand(new UnarchiveUserCommand(userDetails.PublicKey));
+            }
+
+            this.executeCommand(new ChangeUserCommand(userDetails.PublicKey, userDetails.Email, null,
+                userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber,
+                Guid.Empty));
         }
     }
 }
