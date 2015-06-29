@@ -194,6 +194,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.myQuestionnaires = questionnaires.Where(
                     qustionnaire => qustionnaire.OwnerName == this.principal.CurrentUserIdentity.Name && !qustionnaire.IsPublic)
+                    .OrderByDescending(x => x.LastEntryDate)
                     .ToList();
             this.publicQuestionnaires = questionnaires.Where(questionnaire => questionnaire.IsPublic).ToList();
 

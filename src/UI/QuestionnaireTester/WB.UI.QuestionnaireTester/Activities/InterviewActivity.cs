@@ -71,7 +71,8 @@ namespace WB.UI.QuestionnaireTester.Activities
             var offset = 0;
             if (msg.OffsetInsideOfAnchoredItemInPercentage > 0)
             {
-                var anchoredView = layoutManager.FindViewByPosition(msg.AnchorElementIndex);
+                // always null :(
+                var anchoredView = listOfInterviewQuestionsAndGroups.GetChildAt(msg.AnchorElementIndex);
                 
                 if (anchoredView!=null)
                 {
