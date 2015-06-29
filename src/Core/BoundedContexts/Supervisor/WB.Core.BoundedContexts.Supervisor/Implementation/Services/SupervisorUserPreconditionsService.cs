@@ -15,7 +15,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             return false;
         }
 
-        public int CountOfInterviewsUserResposibleFor(Guid userId)
+        public int CountOfInterviewsInterviewerResposibleFor(Guid interviewerId)
+        {
+            return 0;
+        }
+
+        public int CountOfActiveInterviewersForSupervisor(Guid spervisorId)
         {
             return 0;
         }

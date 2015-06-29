@@ -30,11 +30,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return users.Query(_ => _.Where(u => u.IsArchived && u.UserName.ToLower() == userName.ToLower()).Count() >0);
         }
 
-        public int CountOfInterviewsUserResposibleFor(Guid userId)
+        public int CountOfInterviewsInterviewerResposibleFor(Guid interviewerId)
         {
             return
                 interviews.Query(
-                    _ => _.Where(i => !i.IsDeleted && i.ResponsibleRole == UserRoles.Operator && i.ResponsibleId == userId && (i.Status == InterviewStatus.InterviewerAssigned || i.Status == InterviewStatus.RejectedBySupervisor)).Count());
+                    _ => _.Where(i => !i.IsDeleted && i.ResponsibleRole == UserRoles.Operator && i.ResponsibleId == interviewerId && (i.Status == InterviewStatus.InterviewerAssigned || i.Status == InterviewStatus.RejectedBySupervisor)).Count());
+        }
+
+        public int CountOfActiveInterviewersForSupervisor(Guid spervisorId)
+        {
+            return users.Query(_ => _.Where(u => !u.IsArchived && u.Supervisor.Id == spervisorId).Count());
         }
     }
 }

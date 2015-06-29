@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     {
         bool IsUserNameTakenByActiveUsers(string userName);
         bool IsUserNameTakenByArchivedUsers(string userName);
-        int CountOfInterviewsUserResposibleFor(Guid userId);
+        int CountOfInterviewsInterviewerResposibleFor(Guid interviewerId);
+        int CountOfActiveInterviewersForSupervisor(Guid spervisorId);
     }
 }
