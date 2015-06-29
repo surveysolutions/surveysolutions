@@ -430,8 +430,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             var varName = variableName.ToLower();
             return QuestionsCache.ContainsKey(varName) ? QuestionsCache[varName] : null;
-
-            //return questionnaireDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption.Equals(variableName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         protected UserView GetUserByName(string userName)
