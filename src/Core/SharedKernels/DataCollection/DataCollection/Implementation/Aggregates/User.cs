@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Microsoft.Practices.ServiceLocation;
@@ -15,6 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool isUserLockedBySupervisor;
         private bool isUserLockedByHQ;
         private bool isUserArchived;
+        private UserRoles[] roles = new UserRoles[0];
 
         public User(){}
 
@@ -117,15 +119,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Archive()
         {
             ThrowIfUserArchived();
-
-            var countOfInterviewsUserResposibleFor =
-                UserPreconditionsService.CountOfInterviewsUserResposibleFor(EventSourceId);
-
-            if (countOfInterviewsUserResposibleFor > 0)
+            if (roles.Contains(UserRoles.Operator))
             {
-                throw new UserException(String.Format(
-                    "User {0} is resposible for {1} interview(s) and can't be deleted", EventSourceId,
-                    countOfInterviewsUserResposibleFor), UserDomainExceptionType.UserHasAssigments);
+                var countOfInterviewsUserResposibleFor =
+                    UserPreconditionsService.CountOfInterviewsInterviewerResposibleFor(EventSourceId);
+
+                if (countOfInterviewsUserResposibleFor > 0)
+                {
+                    throw new UserException(String.Format(
+                        "Interviewer {0} is resposible for {1} interview(s) and can't be deleted", EventSourceId,
+                        countOfInterviewsUserResposibleFor), UserDomainExceptionType.UserHasAssigments);
+                }
+            }
+            else if (roles.Contains(UserRoles.Supervisor))
+            {
+                var countOfActiveInterviewersForSupervisor = UserPreconditionsService.CountOfActiveInterviewersForSupervisor(EventSourceId);
+                if (countOfActiveInterviewersForSupervisor > 0)
+                {
+                    throw new UserException(String.Format(
+                        "Supervisor {0} has {1} active interrviewers and can't be deleted", EventSourceId,
+                        countOfActiveInterviewersForSupervisor), UserDomainExceptionType.UserHasAssigments);
+                }
+            }
+            else
+            {
+                throw new UserException(String.Format("user in roles {0} can't be deleted", string.Join(",", roles)), UserDomainExceptionType.RoleDoesntSupportDelete);
             }
             this.ApplyEvent(new UserArchived());
         }
@@ -162,6 +180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.isUserLockedBySupervisor = e.IsLockedBySupervisor;
             this.isUserLockedByHQ = e.IsLocked;
+            this.roles = e.Roles;
         }
 
         protected void OnUserLocked(UserLockedBySupervisor @event)

@@ -7,6 +7,7 @@
         UserNameTakenByArchivedUsers,
         UserHasAssigments,
         UserArchived,
-        UserIsNotArchived
+        UserIsNotArchived,
+        RoleDoesntSupportDelete
     }
 }

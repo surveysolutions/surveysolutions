@@ -25,7 +25,12 @@ namespace WB.UI.Shared.Android.Services
             return false;
         }
 
-        public int CountOfInterviewsUserResposibleFor(Guid userId)
+        public int CountOfInterviewsInterviewerResposibleFor(Guid interviewerId)
+        {
+            return 0;
+        }
+
+        public int CountOfActiveInterviewersForSupervisor(Guid spervisorId)
         {
             return 0;
         }
