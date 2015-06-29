@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
             return new CascadingSingleOptionQuestionViewModel(
-                principal ?? Mock.Of<IPrincipal>(), 
+                principal, 
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
@@ -35,17 +35,25 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
                 EventRegistry.Object);
         }
 
+        protected static void SetUp()
+        {
+            navigationState = Create.NavigationState();
+            QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
+            AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
+            EventRegistry = new Mock<ILiteEventRegistry>();
+        }
+
         protected static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
+
         protected static Identity parentIdentity = Create.Identity(Guid.Parse("22222222222222222222222222222222"), new decimal[] { 1 });
-        protected static NavigationState navigationState = Create.NavigationState();
 
-        protected static readonly Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> QuestionStateMock =
-            new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
+        protected static NavigationState navigationState;
 
-        protected static readonly Mock<AnsweringViewModel> AnsweringViewModelMock =
-            new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
+        protected static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> QuestionStateMock;
 
-        protected static readonly Mock<ILiteEventRegistry> EventRegistry = new Mock<ILiteEventRegistry>();
+        protected static Mock<AnsweringViewModel> AnsweringViewModelMock;
+
+        protected static Mock<ILiteEventRegistry> EventRegistry;
 
         protected static List<CascadingOptionModel> Options = new List<CascadingOptionModel>
         {
@@ -58,8 +66,11 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         };
 
         protected static readonly string interviewId = "Some interviewId";
-        protected static readonly Guid interviewGuid = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
         protected static readonly string questionnaireId = "Questionnaire Id";
+
+        protected static Guid interviewGuid = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
     }
 }
