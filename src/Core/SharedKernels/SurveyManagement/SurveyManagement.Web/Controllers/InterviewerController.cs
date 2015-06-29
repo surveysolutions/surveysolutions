@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -40,15 +42,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                UserView user = this.GetUserByName(model.UserName);
-
-                if (user != null)
+                try
                 {
-                    this.Error("User name already exists. Please enter a different user name.");
+                    this.CreateInterviewer(model, model.SupervisorId);
+                }
+                catch (Exception e)
+                {
+                    this.Error(e.Message);
                     return this.View(model);
                 }
-
-                this.CreateInterviewer(model, model.SupervisorId);
+             
                 this.Success("Interviewer was successfully created");
                 return this.Back(model.SupervisorId);
             }

@@ -1,20 +1,10 @@
-using System;
+﻿using System;
 using WB.Core.SharedKernels.DataCollection.Services;
 
-namespace WB.UI.Shared.Android.Services
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 {
-    internal class AndroidPreconditionsService : IInterviewPreconditionsService, IUserPreconditionsService
+    internal class SupervisorUserPreconditionsService : IUserPreconditionsService
     {
-        public int? GetMaxAllowedInterviewsCount()
-        {
-            return null;
-        }
-
-        public int? GetInterviewsCountAllowedToCreateUntilLimitReached()
-        {
-            return null;
-        }
-
         public bool IsUserNameTakenByActiveUsers(string userName)
         {
             return false;

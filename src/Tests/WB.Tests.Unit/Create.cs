@@ -290,8 +290,7 @@ namespace WB.Tests.Unit
                 return new UserChanged
                 {
                     PasswordHash = password,
-                    Email = email,
-                    Roles = new [] { UserRoles.Operator }
+                    Email = email
                 }.ToPublishedEvent(eventSourceId: userId);
             }
 

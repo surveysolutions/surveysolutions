@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
         {
             List<UserDocument> userDocuments = this.users.Query(_ =>
             {
-                var all = _;
+                var all = _.Where(u => !u.IsArchived);
                 if (!string.IsNullOrWhiteSpace(searchBy))
                 {
                     all = all.Where(x => x.UserName.Contains(searchBy) || x.Email.Contains(searchBy));
@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 
         protected IQueryable<UserDocument> GetTeamMembersForHeadquarter()
         {
-            var result = this.users.Query(_ => _.Where(user => user.Roles.Any(role => role == UserRoles.Operator) ||
+            var result = this.users.Query(_ => _.Where(user => !user.IsArchived && user.Roles.Any(role => role == UserRoles.Operator) ||
                 user.Roles.Any(role => role == UserRoles.Supervisor)).ToList()
                 );
             return result.AsQueryable();

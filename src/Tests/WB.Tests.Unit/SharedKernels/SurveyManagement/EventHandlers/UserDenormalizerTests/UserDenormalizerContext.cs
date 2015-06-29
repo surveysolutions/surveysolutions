@@ -58,8 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.UserDenorma
         {
             return ToPublishedEvent(new UserChanged()
             {
-                 Email = "test",
-                 Roles = new UserRoles[0]{},
+                 Email = "test"
             }, eventSourceId);
         }
     }

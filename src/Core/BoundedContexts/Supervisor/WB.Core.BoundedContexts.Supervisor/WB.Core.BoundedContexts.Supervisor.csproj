@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Extensions\WebClientExtensions.cs" />
     <Compile Include="IHeadquartersSettings.cs" />
+    <Compile Include="Implementation\Services\SupervisorUserPreconditionsService.cs" />
     <Compile Include="Interviews\IHeadquartersInterviewReader.cs" />
     <Compile Include="Interviews\Implementation\EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizer.cs" />
     <Compile Include="Interviews\Implementation\HeadquartersInterviewReader.cs" />

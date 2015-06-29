@@ -49,15 +49,16 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.View(model);
             }
-            
-            UserView user = GetUserByName(model.UserName);
-            if (user != null)
+
+            try
             {
-                this.Error("User name already exists. Please enter a different user name.");
+                this.CreateSupervisor(model);
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
                 return this.View(model);
             }
-            
-            this.CreateSupervisor(model);
                
             this.Success("Supervisor was successfully created");
             return this.RedirectToAction("Index");

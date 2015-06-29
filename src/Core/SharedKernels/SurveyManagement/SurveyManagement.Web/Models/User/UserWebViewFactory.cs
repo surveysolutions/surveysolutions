@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 
         private static UserWebView ToWebView(UserDocument doc)
         {
-            if (doc == null || doc.IsDeleted) 
+            if (doc == null || doc.IsArchived) 
                 return null;
 
             return new UserWebView(doc.PublicKey, 
