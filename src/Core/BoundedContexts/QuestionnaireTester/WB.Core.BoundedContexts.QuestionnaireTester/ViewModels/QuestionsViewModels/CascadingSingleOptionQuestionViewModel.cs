@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get
             {
-                return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(enteredText => this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText).Wait()));
+                return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(async enteredText => await this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText)));
             }
         }
 
@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.selectedObject = value;
                 if (this.selectedObject != null)
                 {
-                    SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value).Wait();
+                    SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
                 }
                 RaisePropertyChanged();
             }
