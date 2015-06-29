@@ -320,7 +320,6 @@ namespace Main.Core.Documents
                 if (entity != null)
                 {
                     result.Add(entity);
-                    continue;
                 }
 
                 foreach (IComposite child in queueItem.Children)
