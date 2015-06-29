@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
+
+using Cirrious.CrossCore;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -25,14 +29,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
+
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+
+        private readonly IMvxMessenger messenger;
+
         private NavigationState navigationState;
 
-        public ActiveGroupViewModel(IInterviewViewModelFactory interviewViewModelFactory,
-             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository)
+        public ActiveGroupViewModel(
+            IInterviewViewModelFactory interviewViewModelFactory,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IMvxMessenger messenger)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
+            this.messenger = messenger;
         }
 
         public void Init(NavigationState navigationState)
@@ -44,15 +55,52 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
         }
 
-        void navigationState_OnGroupChanged(Identity newGroupIdentity)
+        void navigationState_OnGroupChanged(NavigationParams navigationParams)
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
-            var group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[newGroupIdentity.Id];
+            var group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
             this.Name = group.Title;
-            this.Items = this.interviewViewModelFactory.GetEntities(interviewId: this.navigationState.InterviewId,
-                groupIdentity: newGroupIdentity, navigationState: this.navigationState);
+
+            var listOfViewModels = this.interviewViewModelFactory.GetEntities(
+                interviewId: this.navigationState.InterviewId,
+                groupIdentity: navigationParams.TargetGroup, 
+                navigationState: this.navigationState);
+
+            this.AddToParentButton(listOfViewModels, navigationParams);
+
+            var anchoreElementIndex = 0;
+            var offsetInsideOfAnchoredItemInPercentage = 0;
+
+            if (navigationParams.AnchoredElementIdentity != null)
+            {
+                var item = listOfViewModels.Cast<IInterviewAnchoredEntity>()
+                            .Where(x => x != null)
+                            .FirstOrDefault(x => x.GetPositionOfAnchoredElement(navigationParams.AnchoredElementIdentity) >= 0);
+
+                anchoreElementIndex = item != null ? listOfViewModels.IndexOf(item) : 0;
+
+                var rosterViewModel = item as RosterViewModel;
+                if (rosterViewModel!=null)
+                {
+                    var anchoredRosterInstance = item.GetPositionOfAnchoredElement(navigationParams.AnchoredElementIdentity);
+                    if (rosterViewModel.Items.Count != 0)
+                    {
+                        offsetInsideOfAnchoredItemInPercentage = (100 * (anchoredRosterInstance + 1)) / rosterViewModel.Items.Count;
+                    }
+                }
+            }
+
+            this.Items = listOfViewModels;
+            messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex, offsetInsideOfAnchoredItemInPercentage));
+        }
+
+        private void AddToParentButton(IList listOfViewModels, NavigationParams navigationParams)
+        {
+            var previousGroupNavigationViewModel = Mvx.Resolve<PreviousGroupNavigationViewModel>();
+            previousGroupNavigationViewModel.Init(this.navigationState.InterviewId, navigationParams.TargetGroup, this.navigationState);
+            listOfViewModels.Add(previousGroupNavigationViewModel);
         }
     }
 }

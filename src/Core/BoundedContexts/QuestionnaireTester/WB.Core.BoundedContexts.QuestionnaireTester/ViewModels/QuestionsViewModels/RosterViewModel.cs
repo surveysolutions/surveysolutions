@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class RosterViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel,
+    public class RosterViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel, 
+        IInterviewAnchoredEntity,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>
@@ -23,11 +22,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private string interviewId;
-        private Identity groupIdendity;
+        private Identity groupIdentity;
         private NavigationState navigationState;
         public EnablementViewModel Enablement { get; private set; }
 
         private IList items;
+
         public IList Items
         {
             get { return items; }
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.groupIdendity = entityIdentity;
+            this.groupIdentity = entityIdentity;
             this.navigationState = navigationState;
 
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
@@ -57,6 +57,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.liteEventRegistry.Subscribe(this);
 
             this.ReadRosterInstancesFromModel();
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            var rosterModel = this.Items.Cast<RosterStateViewModel>().FirstOrDefault(x => x.GroupState.GetPositionOfAnchoredElement(identity) >= 0);
+            return this.Items.IndexOf(rosterModel);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
@@ -78,7 +84,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(this.groupIdendity.Id, this.groupIdendity.RosterVector);
+            var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(this.groupIdentity.Id, this.groupIdentity.RosterVector);
 
             if (!interview.RosterInstancesIds.ContainsKey(rosterKey))
             {

@@ -4,7 +4,6 @@ using System.Linq;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
@@ -18,8 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class TextListQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel
+    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IInterviewAnchoredEntity
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -61,6 +59,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private IMvxCommand valueChangeCommand;
+
         public IMvxCommand ValueChangeCommand
         {
             get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(AddNewItemCommand)); }
@@ -117,6 +116,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.maxAnswerCount = questionModel.MaxAnswerCount;
 
             this.IsAddNewItemVisible = !this.maxAnswerCount.HasValue || this.Answers.Count < this.maxAnswerCount.Value;
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private async void ListItemDeleted(object sender, EventArgs eventArgs)

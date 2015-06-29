@@ -1,6 +1,4 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
@@ -8,12 +6,9 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Plugins.Messenger;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.UI.QuestionnaireTester.CustomControls;
 
@@ -26,6 +21,13 @@ namespace WB.UI.QuestionnaireTester.Activities
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
+        private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
+
+        private LinearLayoutManager layoutManager;
+
+        private Toolbar toolbar;
+
+        private MvxRecyclerView listOfInterviewQuestionsAndGroups;
 
         protected override int ViewResourceId
         {
@@ -36,31 +38,47 @@ namespace WB.UI.QuestionnaireTester.Activities
         {
             base.OnCreate(bundle);
 
-            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             
-            var listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
+            this.listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
 
-            this.SetSupportActionBar(toolbar);
+            this.SetSupportActionBar(this.toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             this.SupportActionBar.SetHomeButtonEnabled(true);
 
-            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
+            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, this.toolbar, 0, 0);
 
             drawerLayout.SetDrawerListener(this.drawerToggle);
 
-            var layoutManager = new LinearLayoutManager(this);;
-            listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
-            listOfInterviewQuestionsAndGroups.HasFixedSize = true;
-            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+            this.layoutManager = new LinearLayoutManager(this);
+            this.listOfInterviewQuestionsAndGroups.SetLayoutManager(this.layoutManager);
+            this.listOfInterviewQuestionsAndGroups.HasFixedSize = true;
+            this.listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
 
              var messenger = Mvx.Resolve<IMvxMessenger>();
              sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
+             scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
         }
 
         private void OnSectionChange(SectionChangeMessage msg)
         {
             drawerLayout.CloseDrawers();
+        }
+
+        private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
+        {
+            var offset = 0;
+            if (msg.OffsetInsideOfAnchoredItemInPercentage > 0)
+            {
+                var anchoredView = layoutManager.FindViewByPosition(msg.AnchorElementIndex);
+                
+                if (anchoredView!=null)
+                {
+                    offset = anchoredView.Height * msg.OffsetInsideOfAnchoredItemInPercentage / 100;
+                }
+            }
+            this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, offset);
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)

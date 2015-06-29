@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IInterviewAnchoredEntity
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -28,6 +28,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.StaticText = questionnaire.StaticTexts[entityIdentity.Id].Title;
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return -1;
         }
 
         private string staticText;

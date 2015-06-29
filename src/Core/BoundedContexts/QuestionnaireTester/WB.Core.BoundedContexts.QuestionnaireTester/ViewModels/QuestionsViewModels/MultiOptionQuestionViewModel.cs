@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -24,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewAnchoredEntity, 
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>
     {
@@ -41,7 +41,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-
 
         public MultiOptionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
@@ -84,6 +83,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select((x, index) => ToViewModel(x, existingAnswer, index)).ToList());
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }

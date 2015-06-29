@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
@@ -16,8 +14,9 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class RealQuestionViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel
+    public class RealQuestionViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel, 
+        IInterviewAnchoredEntity
     {
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -46,11 +45,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         }
 
         private IMvxCommand valueChangeCommand;
+
         public IMvxCommand ValueChangeCommand
         {
             get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerRealQuestionCommand)); }
         }
-
 
         public int? CountOfDecimalPlaces
         {
@@ -94,6 +93,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
             }
+        }
+
+        public int GetPositionOfAnchoredElement(Identity identity)
+        {
+            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private async void SendAnswerRealQuestionCommand()

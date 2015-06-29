@@ -91,9 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     navigationState: navigationState))
                 .ToList();
 
-            var previousGroupNavigationViewModel = Load<PreviousGroupNavigationViewModel>();
-            previousGroupNavigationViewModel.Init(interviewId, groupIdentity, navigationState);
-            viewModels.Add(previousGroupNavigationViewModel);
+            
 
             return viewModels;
         }
@@ -128,7 +126,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
             if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
-                //throw new ArgumentOutOfRangeException("entityModelType", entityModelType, "View model is not registered");
                 var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
                 text.StaticText = entityModelType.ToString();
                 return text;
