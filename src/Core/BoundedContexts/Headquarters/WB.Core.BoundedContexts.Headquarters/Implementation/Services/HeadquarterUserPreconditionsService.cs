@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             return
                 interviews.Query(
-                    _ => _.Where(i =>!i.IsDeleted && i.ResponsibleRole == UserRoles.Operator && i.ResponsibleId == userId).Count());
+                    _ => _.Where(i => !i.IsDeleted && i.ResponsibleRole == UserRoles.Operator && i.ResponsibleId == userId && (i.Status == InterviewStatus.InterviewerAssigned || i.Status == InterviewStatus.RejectedBySupervisor)).Count());
         }
     }
 }
