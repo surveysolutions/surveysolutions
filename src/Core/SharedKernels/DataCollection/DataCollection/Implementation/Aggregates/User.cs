@@ -1,9 +1,12 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -11,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         private bool isUserLockedBySupervisor;
         private bool isUserLockedByHQ;
+        private bool isUserArchived;
 
         public User(){}
 
@@ -21,9 +25,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName, personName, phoneNumber);
         }
 
+        private IUserPreconditionsService UserPreconditionsService
+        {
+            get { return ServiceLocator.Current.GetInstance<IUserPreconditionsService>(); }
+        }
+
         public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
             string phoneNumber)
         {
+            if (UserPreconditionsService.IsUserNameTakenByActiveUsers(userName))
+                throw new UserException(String.Format("user name '{0}' is taken", userName), UserDomainExceptionType.UserNameTakenByActiveUsers);
+
+            if (UserPreconditionsService.IsUserNameTakenByArchivedUsers(userName))
+                throw new UserException(String.Format("user name '{0}' is taken by archived users", userName), UserDomainExceptionType.UserNameTakenByArchivedUsers);
+
             //// Check for uniqueness of person name and email!
             this.ApplyEvent(
                 new NewUserCreated
@@ -41,10 +56,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 });
         }
 
-        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, UserRoles[] roles, string passwordHash, 
+        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, string passwordHash, 
             string personName, string phoneNumber, Guid userId)
         {
-            this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash, PersonName = personName, PhoneNumber = phoneNumber});
+            ThrowIfUserArchived();
+            this.ApplyEvent(new UserChanged { Email = email, PasswordHash = passwordHash, PersonName = personName, PhoneNumber = phoneNumber});
 
             if (isLockedBySupervisor.HasValue && isLockedBySupervisor.Value && !this.isUserLockedBySupervisor)
             {
@@ -67,6 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void LinkUserToDevice(LinkUserToDevice command)
         {
+            ThrowIfUserArchived();
             this.ApplyEvent(new UserLinkedToDevice
                             {
                                 DeviceId = command.DeviceId
@@ -75,22 +92,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Lock()
         {
+            ThrowIfUserArchived();
             this.ApplyEvent(new UserLocked());
         }
 
         public void Unlock()
         {
+            ThrowIfUserArchived();
             this.ApplyEvent(new UserUnlocked());
         }
 
         public void LockBySupervisor()
         {
+            ThrowIfUserArchived();
             this.ApplyEvent(new UserLockedBySupervisor());
         }
 
         public void UnlockBySupervisor()
         {
+            ThrowIfUserArchived();
             this.ApplyEvent(new UserUnlockedBySupervisor());
+        }
+
+        public void Archive()
+        {
+            ThrowIfUserArchived();
+
+            var countOfInterviewsUserResposibleFor =
+                UserPreconditionsService.CountOfInterviewsUserResposibleFor(EventSourceId);
+
+            if (countOfInterviewsUserResposibleFor > 0)
+            {
+                throw new UserException(String.Format(
+                    "User {0} is resposible for {1} interview(s) and can't be deleted", EventSourceId,
+                    countOfInterviewsUserResposibleFor), UserDomainExceptionType.UserHasAssigments);
+            }
+            this.ApplyEvent(new UserArchived());
+        }
+
+        public void Unarchive()
+        {
+            if (!isUserArchived)
+                throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
+
+            this.ApplyEvent(new UserUnarchived());
+        }
+
+        private void ThrowIfUserArchived()
+        {
+            if (isUserArchived)
+                throw new UserException("User already archived", UserDomainExceptionType.UserArchived);
+        }
+
+        protected void OnUserUnarchived(UserUnarchived @event)
+        {
+            isUserArchived = false;
+        }
+
+        protected void OnUserArchived(UserArchived @event)
+        {
+            isUserArchived = true;
         }
 
         protected void Apply(UserLinkedToDevice @event)

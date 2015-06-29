@@ -33,11 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.userViewFactory.Load(new UserViewInputModel(id));
         }
 
-        protected UserView GetUserByName(string userName)
-        {
-            return this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
-        }
-
         protected void CreateInterviewer(UserModel interviewer, Guid supervisorId)
         {
             CreateUser(user: interviewer, role: UserRoles.Operator, supervisorId: supervisorId);
@@ -61,7 +56,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
-                roles: user.Roles.ToArray(),
                 isLockedBySupervisor: this.GlobalInfo.IsSurepvisor ? editModel.IsLocked : user.IsLockedBySupervisor,
                 isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
                 passwordHash:

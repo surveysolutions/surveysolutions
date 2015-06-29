@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
             {
                 var users = (from u in _
                     where
-                        (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor && !u.IsDeleted && u.Supervisor.Id == input.ViewerId)
+                        (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor && u.Supervisor.Id == input.ViewerId)
                      || (u.PublicKey == input.ViewerId)
                     select new UsersViewItem
                     {

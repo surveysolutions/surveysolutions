@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = false;
 
             // act
-            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, string.Empty, String.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, string.Empty, string.Empty, String.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLockedBySupervisor>().Count(), Is.EqualTo(1));
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = true;
 
             // act
-            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, string.Empty, string.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
@@ -124,24 +124,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             string specifiedEmail = "user@example.com";
 
             // act
-            user.ChangeUser(specifiedEmail, false, false, new UserRoles[] { }, string.Empty, string.Empty, string.Empty, Guid.Empty);
+            user.ChangeUser(specifiedEmail, false, false, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<UserChanged>().Email, Is.EqualTo(specifiedEmail));
-        }
-
-        [Test]
-        public void ChangeUser_When_two_roles_are_specified_Then_raised_UserChanged_event_with_specified_roles()
-        {
-            // arrange
-            User user = CreateUserAR();
-            IEnumerable<UserRoles> twoSpecifedRoles = new [] { UserRoles.Administrator, UserRoles.User };
-
-            // act
-            user.ChangeUser("mail@domain.net", false, false, twoSpecifedRoles.ToArray(), string.Empty, string.Empty, string.Empty, Guid.Empty);
-
-            // assert
-            Assert.That(this.GetSingleRaisedEvent<UserChanged>().Roles, Is.EquivalentTo(twoSpecifedRoles));
         }
 
         [Test]

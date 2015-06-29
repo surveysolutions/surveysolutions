@@ -48,7 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                             CreationDate = userDocument.CreationDate,
                             UserName = userDocument.UserName,
                             Email = userDocument.Email,
-                            IsDeleted = userDocument.IsDeleted,
                             IsLockedBySupervisor = userDocument.IsLockedBySupervisor,
                             IsLockedByHQ = userDocument.IsLockedByHQ,
                             PublicKey = userDocument.PublicKey,

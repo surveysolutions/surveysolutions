@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
         {
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
-            if (evnt.Payload.Roles.HasSupervisorApplicationRole())
+            if (item.Roles.HasSupervisorApplicationRole())
             {
                 var supervisorId = GetSupervisorId(item);
 

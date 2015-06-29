@@ -19,8 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views
         public virtual string UserId { get; set; }
         public virtual DateTime CreationDate { get; set; }
         public virtual string Email { get; set; }
-        public virtual bool IsDeleted { get; set; }
         public virtual bool IsLockedByHQ { get; set; }
+        public virtual bool IsArchived { get; set; }
         public virtual bool IsLockedBySupervisor { get; set; }
         public virtual string Password { get; set; }
         public virtual Guid PublicKey { get; set; }
