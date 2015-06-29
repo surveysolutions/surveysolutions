@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
         public AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input)
         {
             var allUsers = usersReader.Query(_ => 
-                _.Where(u => !u.IsLockedByHQ && u.Roles.Contains(UserRoles.Supervisor))
+                _.Where(u => !u.IsLockedByHQ  && !u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
                  .Select(x => new UsersViewItem { UserId = x.PublicKey, UserName = x.UserName })
                  .OrderBy(x => x.UserName)
                  .ToList());
