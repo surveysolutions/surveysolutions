@@ -9,6 +9,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
     {
         Establish context = () =>
         {
+            SetUp();
         };
 
         Because of = () =>

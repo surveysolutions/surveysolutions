@@ -10,6 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
     {
         Establish context = () =>
         {
+            SetUp();
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel();
         };
 
