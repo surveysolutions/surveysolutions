@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
                 input.InterviewStatus,
-                u => u.Roles.Contains(UserRoles.Operator) && u.Supervisor.Id == input.SupervisorId,
+                u => !u.IsArchived && u.Roles.Contains(UserRoles.Operator) && u.Supervisor.Id == input.SupervisorId,
                 i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value });
         }
 
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
                 input.InterviewStatus,
-                u => u.Roles.Contains(UserRoles.Supervisor),
+                u => !u.IsArchived && u.Roles.Contains(UserRoles.Supervisor),
                 i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value});
         }
 
