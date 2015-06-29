@@ -20,6 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
     {
         Establish context = () =>
         {
+            SetUp();
             var childAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 3);
             var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
 
@@ -27,7 +28,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             StatefulInterviewMock.Setup(x => x.QuestionnaireId).Returns(questionnaireId);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
-
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
 

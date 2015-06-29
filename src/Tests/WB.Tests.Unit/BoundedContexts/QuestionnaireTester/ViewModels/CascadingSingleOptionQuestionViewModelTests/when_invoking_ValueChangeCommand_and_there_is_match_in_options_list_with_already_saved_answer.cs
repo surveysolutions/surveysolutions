@@ -5,7 +5,6 @@ using Moq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
@@ -21,11 +20,10 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
     {
         Establish context = () =>
         {
+            SetUp();
+
             var childAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == answerOnChildQuestion);
             var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
-
-            var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
@@ -61,7 +59,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         It should_not_mark_question_as_invalid = () =>
             ValidityModelMock.Verify(x => x.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Never);
 
-        [Ignore("Slava will fix it")]
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
 
