@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (countOfActiveInterviewersForSupervisor > 0)
                 {
                     throw new UserException(String.Format(
-                        "Supervisor {0} has {1} active interrviewers and can't be deleted", EventSourceId,
+                        "Supervisor {0} has {1} active interrviewer(s) and can't be deleted", EventSourceId,
                         countOfActiveInterviewersForSupervisor), UserDomainExceptionType.UserHasAssigments);
                 }
             }
