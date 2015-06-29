@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.GenericSubdomains.Utils
 @using WB.UI.Headquarters.Code
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
@@ -57,53 +58,60 @@
 
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
-            <tr>
-                <th data-bind='sortby : "UserName"'>Name</th>
-                <th data-bind='sortby : "CreationDate"'>Creation date</th>
-                <th data-bind='sortby : "Email"'>Email</th>
-                <th></th>
+        <tr>
+            <th data-bind='sortby : "UserName"'>Name</th>
+            <th data-bind='sortby : "CreationDate"'>Creation date</th>
+            <th data-bind='sortby : "Email"'>Email</th>
+            <th></th>
 
-            </tr>
+        </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:Items -->
-            <tr>
-                <td data-bind="text: UserName"></td>
-                <td data-bind="text: CreationDate"></td>
-                <td data-bind="text: Email"></td>
-                <td>
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
-                    {
-                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
-                            <i class="glyphicon glyphicon-user"></i> Interviewers
-                        </a>
-                    }
+        <!-- ko foreach:Items -->
+        <tr>
+            <td data-bind="text: UserName"></td>
+            <td data-bind="text: CreationDate"></td>
+            <td data-bind="text: Email"></td>
+            <td>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                {
+                    <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
+                        <i class="glyphicon glyphicon-user"></i> Interviewers
+                    </a>
+                }
 
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
-                    {
-                        <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </a>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                {
+                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
+                        <i class="glyphicon glyphicon-edit"></i> Edit
+                    </a>
 
-                    } 
-                    @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
-                    {
-                        <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
-                            <i class="glyphicon glyphicon-user"></i>
+                }
+                @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
+                {
+                    <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
+                        <i class="glyphicon glyphicon-user"></i>
+                    </a>
+                }
+                @if (User.IsInRole("Administrator"))
+                {
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-danger" data-bind="click : $parent.deleteUser">
+                            <i class="glyphicon glyphicon-remove"></i>
                         </a>
-                    }
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $parent.deleteUser">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </a>
-                        </div>
-                    }
+                    </div>
+                }
 
-                </td>
-            </tr>
-            <!-- /ko -->
+            </td>
+        </tr>
+        <!-- /ko -->
         </tbody>
     </table>
+<script type="text/html" id="confirm-delete-template">
+    @Html.Raw("<h3>The supervisor will be deleted.</h3>".FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>"))
+</script>
+<script type="text/html" id="confirm-continue-message-template">
+    <br />Do you want to continue?
+</script>
 }
