@@ -157,7 +157,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.selectedObject = value;
                 if (this.selectedObject != null)
                 {
-                    SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
+                    Action sendCommand = async () => await SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
+                    sendCommand();
                 }
                 RaisePropertyChanged();
             }
