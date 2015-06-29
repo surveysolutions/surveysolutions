@@ -120,8 +120,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 (user == null)
                     ? new CreateUserCommand(userDetails.PublicKey, userDetails.UserName, userDetails.Password, userDetails.Email,
                         userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor, userDetails.PersonName, userDetails.PhoneNumber) as ICommand
-                    : new ChangeUserCommand(userDetails.PublicKey, userDetails.Email,
-                        userRoles, null, userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber, Guid.Empty) as ICommand;
+                    : new ChangeUserCommand(userDetails.PublicKey, userDetails.Email, null, userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber, Guid.Empty) as ICommand;
 
             this.executeCommand(userCommand);
         }
