@@ -36,8 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
-            updatedQuestionWithMaxValue = Mock.Of<IQuestion>(question
-                => question.PublicKey == questionId);
+            updatedQuestionWithMaxValue = CreateNumericQuestion(questionId, "title");
 
             var questionFactory = Mock.Of<IQuestionnaireEntityFactory>(factory
                 => factory.CreateQuestion(it.Is<QuestionData>(data => data.PublicKey == questionId && data.MaxValue == maxValue)) == updatedQuestionWithMaxValue);
