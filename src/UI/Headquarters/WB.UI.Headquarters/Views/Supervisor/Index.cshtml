@@ -12,8 +12,9 @@
         var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
         var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
         var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })', $commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -94,7 +95,7 @@
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $parent.deleteSupervisor">
+                            <a class="btn btn-danger" data-bind="click : $parent.deleteUser">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </a>
                         </div>

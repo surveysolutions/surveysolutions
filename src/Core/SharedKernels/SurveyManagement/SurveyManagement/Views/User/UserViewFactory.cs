@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
         
         public UserView Load(UserViewInputModel input)
         {
-            Expression<Func<UserDocument, bool>> query = (x) => false;
+            Expression<Func<UserDocument, bool>> query = (x) => !x.IsArchived;
             if (input.PublicKey != null)
             {
                 query = x => x.PublicKey == input.PublicKey;
