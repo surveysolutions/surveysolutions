@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     var anchoredRosterInstance = item.GetPositionOfAnchoredElement(navigationParams.AnchoredElementIdentity);
                     if (rosterViewModel.Items.Count != 0)
                     {
-                        offsetInsideOfAnchoredItemInPercentage = (100 * (anchoredRosterInstance + 1)) / rosterViewModel.Items.Count;
+                        offsetInsideOfAnchoredItemInPercentage = (100 * anchoredRosterInstance) / rosterViewModel.Items.Count;
                     }
                 }
             }
