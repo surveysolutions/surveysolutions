@@ -46,7 +46,7 @@
                 </a>
                 if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
-                    <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterviewers">Delete</button>
+                    <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.archiveInterviewers">Archive</button>
                 }
             }
 
@@ -116,7 +116,7 @@
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $parent.deleteUser">
+                            <a class="btn btn-danger" data-bind="click : $parent.archiveUser">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </a>
                         </div>
