@@ -391,5 +391,10 @@ namespace WB.Tests.Integration
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>());
         }
+
+        public static FileSystemIOAccessor FileSystemIOAccessor()
+        {
+            return new FileSystemIOAccessor();
+        }
     }
 }

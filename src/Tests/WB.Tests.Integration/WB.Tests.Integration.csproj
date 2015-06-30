@@ -135,6 +135,7 @@
     <Compile Include="EventStoreTests\when_storing_event_stream.cs" />
     <Compile Include="EventStoreTests\with_in_memory_event_store.cs" />
     <Compile Include="Execute.cs" />
+    <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_acreating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
