@@ -119,11 +119,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             if (user == null)
             {
-                if (!isArchived)
-                    this.executeCommand(new CreateUserCommand(userDetails.PublicKey, userDetails.UserName,
-                        userDetails.Password, userDetails.Email,
-                        userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor,
-                        userDetails.PersonName, userDetails.PhoneNumber));
+                this.executeCommand(new CreateUserCommand(userDetails.PublicKey, userDetails.UserName,
+                    userDetails.Password, userDetails.Email,
+                    userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor,
+                    userDetails.PersonName, userDetails.PhoneNumber));
+
+                if (isArchived) this.executeCommand(new ArchiveUserCommad(userDetails.PublicKey));
                 return;
             }
 
