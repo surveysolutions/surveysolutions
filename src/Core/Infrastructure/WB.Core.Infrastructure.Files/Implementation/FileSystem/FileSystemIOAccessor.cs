@@ -70,7 +70,29 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public void CreateDirectory(string path)
         {
-            ZlpIOHelper.CreateDirectory(path);
+            IEnumerable<string> intermediateDirectories = GetAllIntermediateDirectories(path);
+
+            foreach (string directory in intermediateDirectories)
+            {
+                if (!ZlpIOHelper.DirectoryExists(directory))
+                {
+                    ZlpIOHelper.CreateDirectory(directory);
+                }
+            }
+        }
+
+        private IEnumerable<string> GetAllIntermediateDirectories(string path)
+        {
+            string[] pathChunks = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var allChunksCount = pathChunks.Length;
+
+            for (int countOfChunksToTake = 1; countOfChunksToTake <= allChunksCount; countOfChunksToTake++)
+            {
+                var pathToIntermediateDirectory = string.Join(Path.DirectorySeparatorChar.ToString(), pathChunks.Take(countOfChunksToTake));
+
+                if (!string.IsNullOrEmpty(pathToIntermediateDirectory))
+                    yield return pathToIntermediateDirectory;
+            }
         }
 
         public void DeleteDirectory(string path)
