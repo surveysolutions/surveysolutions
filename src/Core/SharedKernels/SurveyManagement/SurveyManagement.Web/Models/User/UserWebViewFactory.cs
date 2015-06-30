@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 
         private static UserWebView ToWebView(UserDocument doc)
         {
-            if (doc == null || doc.IsArchived) 
+            if (doc == null) 
                 return null;
 
             return new UserWebView(doc.PublicKey, 
@@ -58,7 +58,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
                 doc.Supervisor,
                 doc.DeviceId,
                 doc.PersonName,
-                doc.PhoneNumber);
+                doc.PhoneNumber,
+                doc.IsArchived);
         }
     }
 }
