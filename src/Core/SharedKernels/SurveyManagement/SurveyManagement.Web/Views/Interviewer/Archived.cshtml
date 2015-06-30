@@ -36,6 +36,10 @@
 {
     <div class="btn-group">
         <div class="form-inline">
+            @if (User.IsInRole(UserRoles.Administrator.ToString()))
+            {
+                <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.unarchiveInterviewers">Unarchive</button>
+            }
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
                 <div class="input-group-btn">
@@ -49,7 +53,7 @@
     @if (!Model.IsArchived)
     {
         <div class="btn-group pull-right">
-            <a class="btn btn-default" href="@Url.Action("Interviewers", "Supervisor", new {area = string.Empty, id = Model.PublicKey})">
+            <a class="btn btn-default" href="@(User.IsInRole(UserRoles.Supervisor.ToString()) ? Url.Action("Index", "Interviewer", new { area = string.Empty }) : Url.Action("Interviewers", "Supervisor", new { area = string.Empty, id = Model.PublicKey }))">
                 Active interviewers
             </a>
         </div>
@@ -61,6 +65,11 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <th>
+                        <input type="checkbox" data-bind="click: $root.selectAll($element)" />
+                    </th>}
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
@@ -70,6 +79,12 @@
         <tbody>
             <!-- ko foreach:Items -->
             <tr>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <td>
+                        <input type="checkbox" data-bind="checked: IsSelected" />
+                    </td>
+                }
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>

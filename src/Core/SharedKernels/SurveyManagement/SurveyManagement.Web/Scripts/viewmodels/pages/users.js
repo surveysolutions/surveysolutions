@@ -8,19 +8,23 @@
         self.search();
     };
 
-    self.deleteUser = function (userViewItem) {
-        self.deleteInterviewersInternal([userViewItem], archiveUserCommad);
+    self.archiveUser = function (userViewItem) {
+        self.sendUserCommands([userViewItem], archiveUserCommad);
     };
 
     self.unarchiveUser = function (userViewItem) {
-        self.deleteInterviewersInternal([userViewItem], unArchiveUserCommad);
+        self.sendUserCommands([userViewItem], unArchiveUserCommad);
     };
 
-    self.DeleteInterviewers = function () {
-        self.deleteInterviewersInternal(self.GetSelectedItemsAfterFilter(function (item) { return true/*item.CanDelete()*/; }), archiveUserCommad);
+    self.unarchiveInterviewers = function () {
+        self.sendUserCommands(self.GetSelectedItemsAfterFilter(function (item) { return true; }), unArchiveUserCommad);
     };
 
-    self.deleteInterviewersInternal = function(filteredItems, commandName) {
+    self.archiveInterviewers = function () {
+        self.sendUserCommands(self.GetSelectedItemsAfterFilter(function (item) { return true; }), archiveUserCommad);
+    };
+
+    self.sendUserCommands = function(filteredItems, commandName) {
         var messageHtml = self.getBindedHtmlTemplate("#confirm-delete-template", filteredItems);
 
         if (filteredItems.length === 0) {
