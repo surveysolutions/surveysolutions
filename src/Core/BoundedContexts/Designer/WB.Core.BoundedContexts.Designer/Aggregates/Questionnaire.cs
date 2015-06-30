@@ -2486,6 +2486,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit or underscore");
             }
 
+            bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
+            if (endsWithUnderscore)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't end with underscore");
+            }
+
             var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
                 .Select(q => q.StataExportCaption);
