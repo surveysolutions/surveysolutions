@@ -5,6 +5,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class GroupsHierarchyModel
     {
+        public GroupsHierarchyModel()
+        {
+            this.Children = new List<GroupsHierarchyModel>();
+        }
+
         public Guid Id { get; set; }
         public string Title { get; set; }
         public bool IsRoster { get; set; }

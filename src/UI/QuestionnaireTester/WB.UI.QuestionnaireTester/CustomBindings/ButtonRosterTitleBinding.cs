@@ -23,10 +23,9 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         {
             if (value == null) return;
 
-            var rosterTitle = string.Format("{0} - {1}", value.GroupState.Title, string.IsNullOrEmpty(value.RosterTitle) ? SubstitutionService.DefaultSubstitutionText : value.RosterTitle);
+            var rosterTitle = this.SubstitutionService.GenerateRosterName(value.GroupState.Title, value.RosterTitle);
 
             var span = new SpannableString(rosterTitle);
-
             span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.GroupState.Title.Length, rosterTitle.Length, SpanTypes.ExclusiveExclusive);
 
             control.TextFormatted = span;

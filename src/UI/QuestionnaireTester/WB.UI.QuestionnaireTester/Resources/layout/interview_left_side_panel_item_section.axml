@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:local="http://schemas.android.com/apk/res-auto"
+                 style="@style/Interview_Sidebar_Sections_Section"
+                 local:MvxBind="HideKeyboardOnClick .; Click NavigateToSectionCommand; BackgroundStyle SectionStyleBackground(IsSelected)">
+  <TextView
+        style="@style/Interview_Sidebar_Sections_Section_Title"
+        local:MvxBind="Text Title" />
+
+  <MvxLinearLayout
+       style="@style/Interview_Sidebar_Sections"
+       local:MvxBind="ItemsSource Children"
+       local:MvxItemTemplate="@layout/interview_left_side_panel_item_group" />
+
+  <View style="@style/Interview_Entity_Divider" />
+
+</MvxLinearLayout>

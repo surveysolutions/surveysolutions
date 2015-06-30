@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         };
 
         Because of = () => 
-            sectionsModel.Init(questionnaireId, navigationState);
+            sectionsModel.Init(questionnaireId, "id", navigationState);
 
         It should_get_questionnaire_by_id_once = () =>
             questionnaireRepositoryMock.Verify(x => x.GetById(questionnaireId), Times.Once);

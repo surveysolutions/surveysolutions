@@ -184,6 +184,7 @@
   </style>
 
   <style name="Interview_Sidebar_Sections_Section" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:orientation">vertical</item>
   </style>
   
   <style name="Interview_Sidebar_Sections_Section_Title" parent="FullWidthWrappingLayout">

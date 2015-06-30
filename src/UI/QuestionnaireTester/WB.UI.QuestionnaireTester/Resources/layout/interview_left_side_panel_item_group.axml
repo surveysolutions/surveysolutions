@@ -7,5 +7,9 @@
         style="@style/Interview_Sidebar_Sections_Section_Title"
         local:MvxBind="Text Title" />
 
-  <View style="@style/Interview_Entity_Divider" />
+  <MvxLinearLayout
+       style="@style/Interview_Sidebar_Sections"
+       local:MvxBind="ItemsSource Children"
+       local:MvxItemTemplate="@layout/interview_left_side_panel_item_group" />
+  
 </MvxLinearLayout>

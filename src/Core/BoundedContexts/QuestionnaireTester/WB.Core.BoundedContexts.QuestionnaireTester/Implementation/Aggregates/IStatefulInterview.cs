@@ -73,5 +73,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         int GetInvalidInterviewerAnswersCount(Identity groupIdentity);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
+
+        IEnumerable<Identity> GetGroupInstances(Guid groupId, decimal[] parentRosterVector);
     }
 }

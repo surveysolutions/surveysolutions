@@ -598,7 +598,7 @@
     <AndroidResource Include="Resources\layout\interview_question_text.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel_item.axml">
+    <AndroidResource Include="Resources\layout\interview_left_side_panel_item_group.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
@@ -670,6 +670,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_cascading_single_option.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_left_side_panel_item_section.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
