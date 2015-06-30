@@ -42,6 +42,7 @@ using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
@@ -1653,6 +1654,11 @@ namespace WB.Tests.Unit
         public static Interview Interview()
         {
             return new Interview();
+        }
+
+        public static FileSystemIOAccessor FileSystemIOAccessor()
+        {
+            return new FileSystemIOAccessor();
         }
     }
 }
