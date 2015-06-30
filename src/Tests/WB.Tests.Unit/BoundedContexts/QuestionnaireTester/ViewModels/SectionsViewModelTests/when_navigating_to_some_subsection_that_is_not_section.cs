@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
             sectionsModel = CreateSectionsViewModel(questionnaireRepository: questionnaireRepositoryMock.Object);
 
-            sectionsModel.Init(questionnaireId, navigationState);
+            sectionsModel.Init(questionnaireId, "id", navigationState);
 
             navigationState.NavigateTo(selectedGroupIdentity).WaitAndUnwrapException();
         };

@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .ToList();
 
             this.Breadcrumbs.Init(interviewId, this.navigationState);
-            this.Sections.Init(questionnaire.Id.FormatGuid(), this.navigationState);
+            this.Sections.Init(questionnaire.Id.FormatGuid(), interviewId, this.navigationState);
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);

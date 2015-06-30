@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.SurveySolutions.Services
         string RosterTitleSubstitutionReference { get; }
         string DefaultSubstitutionText { get; }
         bool ContainsRosterTitle(string input);
+        string GenerateRosterName(string groupTitle, string rosterTitle);
     }
 }

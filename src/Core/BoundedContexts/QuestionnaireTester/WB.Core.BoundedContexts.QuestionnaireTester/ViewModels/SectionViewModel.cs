@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 
@@ -5,13 +8,15 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
+    [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
     public class SectionViewModel : MvxNotifyPropertyChanged
     {
-        private readonly SectionsViewModel parent;
+        private readonly SectionsViewModel root;
 
-        public SectionViewModel(SectionsViewModel parent)
+        public SectionViewModel(SectionsViewModel root)
         {
-            this.parent = parent;
+            this.root = root;
+            this.Children = new List<SectionViewModel>();
         }
 
         public Identity SectionIdentity { get; set; }
@@ -30,6 +35,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { this.isSelected = value; this.RaisePropertyChanged(); }
         }
 
+        public IList<SectionViewModel> Children { get; set; }
+
         private MvxCommand navigateToSectionCommand;
         public System.Windows.Input.ICommand NavigateToSectionCommand
         {
@@ -42,7 +49,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private async Task NavigateToSection()
         {
-            await this.parent.NavigateToSection(this);
+            await this.root.NavigateToSection(this);
         }
     }
 }

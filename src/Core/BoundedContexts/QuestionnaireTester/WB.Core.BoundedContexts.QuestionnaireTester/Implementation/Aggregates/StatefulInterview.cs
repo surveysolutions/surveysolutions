@@ -565,6 +565,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return questionInstances;
         }
 
+        public IEnumerable<Identity> GetGroupInstances(Guid groupId, decimal[] parentRosterVector)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            var resultInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, 
+                groupId, 
+                parentRosterVector, 
+                questionnaire, 
+                GetRosterInstanceIds);
+
+            return new ReadOnlyCollection<Identity>(resultInstances.Select(x => new Identity(x.Id, x.RosterVector)).ToList());
+        }
+
         public bool IsValid(Identity identity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);

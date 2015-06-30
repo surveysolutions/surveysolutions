@@ -1703,7 +1703,7 @@ namespace WB.Tests.Unit
         {
             return new QuestionnaireModel
             {
-                Questions = questions != null ? questions.ToDictionary(question => question.Id, question => question) : new Dictionary<Guid, BaseQuestionModel>()
+                Questions = questions != null ? questions.ToDictionary(question => question.Id, question => question) : new Dictionary<Guid, BaseQuestionModel>(),
             };
         }
 
