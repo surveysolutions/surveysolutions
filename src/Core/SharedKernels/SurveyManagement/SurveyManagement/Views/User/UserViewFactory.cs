@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
         
         public UserView Load(UserViewInputModel input)
         {
-            Expression<Func<UserDocument, bool>> query = (x) => !x.IsArchived;
+            Expression<Func<UserDocument, bool>> query = (x) => true;
             if (input.PublicKey != null)
             {
                 query = x => x.PublicKey == input.PublicKey;
@@ -56,7 +56,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                             Supervisor = userDocument.Supervisor,
                             DeviceChangingHistory = userDocument.DeviceChangingHistory,
                             PersonName = userDocument.PersonName,
-                            PhoneNumber = userDocument.PhoneNumber
+                            PhoneNumber = userDocument.PhoneNumber,
+                            IsArchived = userDocument.IsArchived
                         }
                         : null;
                 });

@@ -629,7 +629,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return supervisorCache[name];
             
             var user = userViewFactory.Load(new UserViewInputModel(UserName: name, UserEmail: null));
-            if (user == null)
+            if (user == null || user.IsArchived)
             {
                 supervisorCache.Add(name, null);
                 return null;

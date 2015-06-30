@@ -10,12 +10,10 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-        var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
-        var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
-        var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+        var $interviewersUrl = '@Url.Action("Archived", "Interviewer", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })', $commandExecutionUrl);
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchivedSupervisors" })', $commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -25,7 +23,7 @@
 @section header
 {
     <div class="page-header">
-        <h2 class="sinle-line-header">Supervisors</h2>
+        <h2 class="sinle-line-header">Archived supervisors</h2>
     </div>
 }
 
@@ -33,12 +31,6 @@
 {
     <div class="btn-group">
         <div class="form-inline">
-            @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
-            {
-                <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">
-                    <i class="glyphicon glyphicon-user"></i> Add supervisor
-                </a>
-            }
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
                 <div class="input-group-btn">
@@ -50,11 +42,11 @@
             </div>
         </div>
     </div>
-        <div class="btn-group pull-right">
-            <a class="btn btn-default" href="@Url.Action("Archived", "Supervisor", new {area = string.Empty})">
-                <i class="glyphicon glyphicon glyphicon-book"></i> Archived supervisors
-            </a>
-        </div>
+    <div class="btn-group pull-right">
+        <a class="btn btn-default" href="@Url.Action("Index", "Supervisor", new {area = string.Empty})">
+            Active supervisors
+        </a>
+    </div>
 }
 
 @section grid
@@ -83,25 +75,11 @@
                             <i class="glyphicon glyphicon-user"></i> Interviewers
                         </a>
                     }
-
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
-                    {
-                        <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </a>
-
-                    }
-                    @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
-                    {
-                        <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
-                            <i class="glyphicon glyphicon-user"></i>
-                        </a>
-                    }
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $parent.deleteUser">
-                                <i class="glyphicon glyphicon-remove"></i>
+                            <a class="btn btn-danger" data-bind="click : $parent.deleteUnarchiveUser">
+                                <i class="glyphicon glyphicon-plus"></i>
                             </a>
                         </div>
                     }
@@ -112,7 +90,7 @@
         </tbody>
     </table>
     <script type="text/html" id="confirm-delete-template">
-        @Html.Raw("<h3>The supervisor will be deleted.</h3>".FormatString(
+        @Html.Raw("<h3>The supervisor will be unarchived.</h3>".FormatString(
             "<span class='text-normal' data-bind='text: length'></span>"))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
