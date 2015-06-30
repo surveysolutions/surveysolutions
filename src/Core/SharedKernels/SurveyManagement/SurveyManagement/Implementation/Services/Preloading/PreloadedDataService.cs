@@ -436,7 +436,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
 
-            return cqrsTransactionManager.ExecuteInQueryTransaction(() => this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null)));
+            return cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+            {
+                var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
+                if (user == null || user.IsArchived)
+                    return null;
+                return user;
+            });
         }
 
         private Guid? GetSupervisorIdAndUpdateCache(Dictionary<string, Guid> cache, string name)

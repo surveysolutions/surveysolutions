@@ -45,21 +45,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                 return Enumerable.Empty<UserDocument>().AsQueryable();
 
             if (viewer.IsHq())
-                return this.GetTeamMembersForHeadquarter();
+                return this.GetTeamMembersForHeadquarter(input.Archived);
 
             bool isSupervisor = viewer.Roles.Any(role => role == UserRoles.Supervisor);
             if (isSupervisor)
-                return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy);
+                return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy, input.Archived);
 
             throw new ArgumentException(String.Format("Operation is allowed only for ViewerId and Hq users. Current viewer roles are {0}",
                 String.Concat(viewer.Roles)));
         }
 
-        protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy)
+        protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy, bool archived)
         {
             List<UserDocument> userDocuments = this.users.Query(_ =>
             {
-                var all = _.Where(u => !u.IsArchived);
+                var all = _.Where(u => u.IsArchived == archived);
                 if (!string.IsNullOrWhiteSpace(searchBy))
                 {
                     all = all.Where(x => x.UserName.Contains(searchBy) || x.Email.Contains(searchBy));
@@ -74,9 +74,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
             return userDocuments.AsQueryable();
         }
 
-        protected IQueryable<UserDocument> GetTeamMembersForHeadquarter()
+        protected IQueryable<UserDocument> GetTeamMembersForHeadquarter(bool archived)
         {
-            var result = this.users.Query(_ => _.Where(user => !user.IsArchived && user.Roles.Any(role => role == UserRoles.Operator) ||
+            var result = this.users.Query(_ => _.Where(user => user.IsArchived == archived && user.Roles.Any(role => role == UserRoles.Operator) ||
                 user.Roles.Any(role => role == UserRoles.Supervisor)).ToList()
                 );
             return result.AsQueryable();

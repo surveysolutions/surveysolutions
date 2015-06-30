@@ -58,10 +58,46 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public InterviewersView ArchivedInterviewers(UsersListViewModel data)
+        {
+            // Headquarter and Admin can view interviewers by any supervisor
+            // Supervisor can view only their interviewers
+            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
+                                 ? data.Request.SupervisorId
+                                 : this.GlobalInfo.GetCurrentUser().Id;
+            if (viewerId != null)
+            {
+                var input = new InterviewersInputModel(viewerId.Value)
+                {
+                    Orders = data.SortOrder,
+                    SearchBy = data.SearchBy,
+                    Archived = true
+                };
+                if (data.Pager != null)
+                {
+                    input.Page = data.Pager.Page;
+                    input.PageSize = data.Pager.PageSize;
+                }
+
+                return this.interviewersFactory.Load(input);
+            }
+
+            return null;
+        }
+
+        [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public UserListView Supervisors(UsersListViewModel data)
         {
             return GetUsers(data, UserRoles.Supervisor);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter, Observer")]
+        public UserListView ArchivedSupervisors(UsersListViewModel data)
+        {
+            return GetUsers(data, UserRoles.Supervisor, archived: true);
         }
 
         [HttpPost]
@@ -78,13 +114,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return GetUsers(data, UserRoles.Observer);
         }
 
-        private UserListView GetUsers(UsersListViewModel data, UserRoles role)
+        private UserListView GetUsers(UsersListViewModel data, UserRoles role, bool archived = false)
         {
             var input = new UserListViewInputModel
             {
                 Role = role,
                 Orders = data.SortOrder,
-                SearchBy = data.SearchBy
+                SearchBy = data.SearchBy,
+                Archived = archived
             };
 
             if (data.Pager != null)

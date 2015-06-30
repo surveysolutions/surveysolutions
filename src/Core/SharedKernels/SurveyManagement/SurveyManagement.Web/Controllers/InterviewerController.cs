@@ -65,6 +65,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(this.GlobalInfo.GetCurrentUser().Id);
         }
 
+        [Authorize(Roles = "Administrator, Supervisor")]
+        public ActionResult Archived(Guid id)
+        {
+            var supervisor = this.GetUserById(id);
+            if (supervisor == null)
+                throw new HttpException(404, string.Empty);
+            return this.View(supervisor);
+        }
+
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
         {

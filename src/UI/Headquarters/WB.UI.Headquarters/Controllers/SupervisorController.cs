@@ -72,6 +72,12 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
+        [Authorize(Roles = "Administrator, Headquarter, Observer")]
+        public ActionResult Archived()
+        {
+            return this.View();
+        }
+
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Edit(Guid id)
         {
