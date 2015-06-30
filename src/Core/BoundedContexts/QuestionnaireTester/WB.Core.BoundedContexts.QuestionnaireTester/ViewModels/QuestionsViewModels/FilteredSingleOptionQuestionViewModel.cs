@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private Guid interviewId;
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        public IList<FilteredComboboxItemViewModel> Options { get; set; }
+        public List<FilteredComboboxItemViewModel> Options { get; set; }
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -85,6 +85,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var selectedValue = answerModel.Answer;
                 SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
             }
+            else
+            {
+                this.AutoCompleteSuggestions = this.Options;
+            }
         }
 
         public int GetPositionOfAnchoredElement(Identity identity)
@@ -126,13 +130,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return this.filterText; }
             set
             {
-                if (value.IsNullOrEmpty())
-                {
-                    this.filterText = null;
-                    SetSuggestionsEmpty();
-                    return;
-                }
-                    
                 this.filterText = value;
 
                 var list = this.GetSuggestionsList(this.filterText).ToList();
@@ -196,7 +193,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             if (answerViewModel == null)
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError);
+                var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(text);
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(errorMessage);
                 return;
             }
 

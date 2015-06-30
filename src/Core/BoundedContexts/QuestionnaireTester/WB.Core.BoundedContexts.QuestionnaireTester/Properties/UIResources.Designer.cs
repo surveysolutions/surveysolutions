@@ -559,6 +559,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; cannot be saved, because it does not match any option..
+        /// </summary>
+        public static string Interview_Question_Filter_MatchError {
+            get {
+                return ResourceManager.GetString("Interview_Question_Filter_MatchError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
         /// </summary>
         public static string Interview_Question_Integer_ParsingError {
