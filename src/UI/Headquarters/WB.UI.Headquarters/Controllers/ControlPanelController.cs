@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             UserView userToCheck = 
                 this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-            if (userToCheck != null)
+            if (userToCheck != null && !userToCheck.IsArchived)
             {
                 try
                 {
