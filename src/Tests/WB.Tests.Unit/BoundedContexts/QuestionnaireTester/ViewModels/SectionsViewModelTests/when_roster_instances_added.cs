@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using NSubstitute;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
@@ -11,13 +12,13 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 {
-    public class when_initing : SectionsViewModelTestContext
+    public class when_roster_instances_added : SectionsViewModelTestContext
     {
         Establish context = () =>
         {
             QuestionnaireModel questionnaire = Create.QuestionnaireModel();
             var sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
             {
                 new GroupsHierarchyModel
@@ -36,9 +37,16 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                 }
             };
 
-            IStatefulInterview interview = Substitute.For<IStatefulInterview>();
+            questionnaire.GroupsParentIdMap = new Dictionary<Guid, Guid?>
+            {
+                {
+                    rosterId, sectionId
+                }
+            };
+
+            interview = Substitute.For<IStatefulInterview>();
             interview.GetEnabledGroupInstances(sectionId, Arg.Any<decimal[]>())
-                .Returns(new List<Identity> {new Identity(sectionId, Empty.RosterVector)});
+                .Returns(new List<Identity> { new Identity(sectionId, Empty.RosterVector) });
 
             interview.GetEnabledGroupInstances(rosterId, Arg.Any<decimal[]>())
                 .Returns(new List<Identity> {
@@ -47,19 +55,25 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                 });
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
+            viewModel.Init("", "", Create.NavigationState());
         };
 
-        Because of = () => viewModel.Init("questionnaire", "id", Create.NavigationState());
-
-        It should_fill_groups_tree = () =>
+        Because of = () =>
         {
-            viewModel.Sections.Count.ShouldEqual(1);
-            var firstSection = viewModel.Sections.First();
-            firstSection.Children.Count.ShouldEqual(2);
-            firstSection.Children.First().SectionIdentity.RosterVector.Identical(new[] {1m}).ShouldBeTrue();
+            interview.GetEnabledGroupInstances(rosterId, Arg.Any<decimal[]>())
+               .Returns(new List<Identity> {
+                    new Identity(rosterId, new []{1m}),
+                    new Identity(rosterId, new []{2m}),
+                    new Identity(rosterId, new []{3m})
+                });
+            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, new[] {3m}));
         };
+
+        It should_add_roster_into_a_tree = () => viewModel.Sections.First().Children.Count.ShouldEqual(3);
 
         static SectionsViewModel viewModel;
+        static Guid rosterId;
+        static IStatefulInterview interview;
     }
 }
 
