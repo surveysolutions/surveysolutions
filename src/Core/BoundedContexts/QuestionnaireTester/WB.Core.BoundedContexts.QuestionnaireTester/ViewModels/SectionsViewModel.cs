@@ -2,25 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class SectionsViewModel : MvxNotifyPropertyChanged
+    public class SectionsViewModel : MvxNotifyPropertyChanged,
+        ILiteEventHandler<RosterInstancesAdded>
     {
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IMvxMessenger messenger;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
@@ -32,16 +37,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IMvxMessenger messenger,
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            ISubstitutionService substitutionService)
+            ISubstitutionService substitutionService,
+            ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.messenger = messenger;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            eventRegistry.Subscribe(this);
         }
 
-        public void Init(string questionnaireId, 
-            string interviewId, 
+        public void Init(string questionnaireId,
+            string interviewId,
             NavigationState navigationState)
         {
             if (navigationState == null) throw new ArgumentNullException("navigationState");
@@ -67,7 +76,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 var sectionViewModel = this.BuildSectionViewModel(this, section);
                 foreach (var child in section.Children)
                 {
-                    this.ProcessSection(interview, sectionViewModel, child);
+                    this.BuildViewModelsForSection(interview, sectionViewModel, child);
                 }
 
                 sections.Add(sectionViewModel);
@@ -81,21 +90,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             return new SectionViewModel(root)
             {
                 Title = section.Title,
-                SectionIdentity = new Identity(section.Id, new decimal[]{})
+                SectionIdentity = new Identity(section.Id, new decimal[] { })
             };
         }
 
-        private void ProcessSection(IStatefulInterview statefulInterview, SectionViewModel parent, GroupsHierarchyModel @group)
+        private void BuildViewModelsForSection(IStatefulInterview statefulInterview, SectionViewModel parent, GroupsHierarchyModel @group)
         {
-            IEnumerable<Identity> groupInstances;
+            IEnumerable<Identity> groupInstances = Enumerable.Empty<Identity>(); ;
             if (group.IsRoster)
             {
-                groupInstances = statefulInterview.GetGroupInstances(group.Id, parent.SectionIdentity.RosterVector);
-
+                groupInstances = statefulInterview.GetEnabledGroupInstances(group.Id, parent.SectionIdentity.RosterVector);
             }
             else
             {
-                groupInstances = new Identity(group.Id, parent.SectionIdentity.RosterVector).ToEnumerable();
+                var identity = new Identity(@group.Id, parent.SectionIdentity.RosterVector);
+                if (statefulInterview.IsEnabled(identity))
+                {
+                    groupInstances = identity.ToEnumerable();
+                }
             }
 
             foreach (var groupInstance in groupInstances)
@@ -112,11 +124,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     SectionIdentity = groupInstance,
                     Title = title
                 };
-                parent.Children.Add(section);
+
+                mainThreadDispatcher.RequestMainThreadAction(() => parent.Children.Add(section));
 
                 foreach (var child in group.Children)
                 {
-                    this.ProcessSection(statefulInterview, section, child);
+                    this.BuildViewModelsForSection(statefulInterview, section, child);
                 }
             }
         }
@@ -129,7 +142,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 return;
             }
-            
+
             await this.navigationState.NavigateTo(item.SectionIdentity);
         }
 
@@ -143,6 +156,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
             sectionToBeSelected.IsSelected = true;
+        }
+
+        public void Handle(RosterInstancesAdded @event)
+        {
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            var questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+
+            var instance = @event.Instances.First();
+            if (questionnaire.GroupsParentIdMap.ContainsKey(instance.GroupId))
+            {
+                var parentGroupId = questionnaire.GroupsParentIdMap[instance.GroupId];
+                var sectionToAddTo = this.Sections.FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
+                if (sectionToAddTo != null)
+                {
+                    mainThreadDispatcher.RequestMainThreadAction(() => sectionToAddTo.Children.Clear());
+
+                    var groupToAddTo = questionnaire.GroupsHierarchy
+                        .TreeToEnumerable(x => x.Children)
+                        .First(x => x.Id == sectionToAddTo.SectionIdentity.Id);
+
+                    foreach (var childGroup in groupToAddTo.Children)
+                    {
+                        BuildViewModelsForSection(interview, sectionToAddTo, childGroup);
+                    }
+                }
+            }
         }
     }
 }
