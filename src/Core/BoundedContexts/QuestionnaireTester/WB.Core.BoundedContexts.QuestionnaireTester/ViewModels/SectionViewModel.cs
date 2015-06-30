@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public SectionViewModel(SectionsViewModel root)
         {
             this.root = root;
-            this.Children = new List<SectionViewModel>();
+            this.Children = new ObservableCollection<SectionViewModel>();
         }
 
         public Identity SectionIdentity { get; set; }
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { this.isSelected = value; this.RaisePropertyChanged(); }
         }
 
-        public IList<SectionViewModel> Children { get; set; }
+        public ObservableCollection<SectionViewModel> Children { get; set; }
 
         private MvxCommand navigateToSectionCommand;
         public System.Windows.Input.ICommand NavigateToSectionCommand

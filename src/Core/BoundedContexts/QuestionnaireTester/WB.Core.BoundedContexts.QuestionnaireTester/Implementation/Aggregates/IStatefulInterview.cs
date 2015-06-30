@@ -74,6 +74,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
 
-        IEnumerable<Identity> GetGroupInstances(Guid groupId, decimal[] parentRosterVector);
+        IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector);
     }
 }

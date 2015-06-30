@@ -24,7 +24,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                 messenger ?? Mock.Of<IMvxMessenger>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                substitutionService ?? Create.SubstitutionService());
+                substitutionService ?? Create.SubstitutionService(),
+                Create.LiteEventRegistry(),
+                Stub.MvxMainThreadDispatcher());
         }
 
 

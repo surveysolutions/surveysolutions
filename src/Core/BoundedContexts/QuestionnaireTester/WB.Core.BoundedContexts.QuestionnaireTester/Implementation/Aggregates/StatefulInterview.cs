@@ -565,7 +565,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return questionInstances;
         }
 
-        public IEnumerable<Identity> GetGroupInstances(Guid groupId, decimal[] parentRosterVector)
+        public IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
             var resultInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, 
@@ -574,7 +574,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 questionnaire, 
                 GetRosterInstanceIds);
 
-            return new ReadOnlyCollection<Identity>(resultInstances.Select(x => new Identity(x.Id, x.RosterVector)).ToList());
+            return resultInstances.Where(this.IsEnabled);
         }
 
         public bool IsValid(Identity identity)
