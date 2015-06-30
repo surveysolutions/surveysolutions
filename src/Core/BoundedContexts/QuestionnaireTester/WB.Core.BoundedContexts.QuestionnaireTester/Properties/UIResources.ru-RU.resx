@@ -390,4 +390,7 @@
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>Нажмите, чтобы сделать фото</value>
   </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>Ответ "{0}" не может быть сохранен, он не соответствует ни одной опции.</value>
+  </data>
 </root>

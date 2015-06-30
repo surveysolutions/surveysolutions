@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Android.Graphics;
 using Android.Text;
 using Android.Util;
@@ -21,7 +22,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(TextView view, string value)
         {
-            Target.Hint = value;
+            view.Hint = value;
+            SetupHintStyle(view.Text);
         }
 
 
@@ -33,13 +35,18 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             if (e.AfterCount == 0 && e.BeforeCount == 0 && Target.Typeface.IsItalic)
                 return;
 
-            if (e.Text.Any())
+            this.SetupHintStyle(e.Text);
+        }
+
+        private void SetupHintStyle(IEnumerable<char> text)
+        {
+            if (text.Any())
             {
-                Target.SetTypeface(null, TypefaceStyle.Bold);
+                this.Target.SetTypeface(null, TypefaceStyle.Bold);
             }
             else
             {
-                Target.SetTypeface(null, TypefaceStyle.Italic);
+                this.Target.SetTypeface(null, TypefaceStyle.Italic);
             }
         }
 

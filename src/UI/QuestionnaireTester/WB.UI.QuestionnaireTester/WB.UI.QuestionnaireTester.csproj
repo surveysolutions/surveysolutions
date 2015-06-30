@@ -275,6 +275,7 @@
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
+    <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
