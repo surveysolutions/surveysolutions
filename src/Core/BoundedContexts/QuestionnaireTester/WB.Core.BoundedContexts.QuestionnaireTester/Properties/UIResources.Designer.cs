@@ -901,7 +901,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your answer is invalid..
+        ///   Looks up a localized string similar to Invalid answer..
         /// </summary>
         public static string Validity_Answered_Invalid_ErrorCaption {
             get {

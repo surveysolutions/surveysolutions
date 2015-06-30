@@ -316,7 +316,7 @@
     <value>Да</value>
   </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Ваш ответ содержит ошибку</value>
+    <value>Неправильный ответ.</value>
   </data>
   <data name="Validity_ApplicationException_ErrorCaption" xml:space="preserve">
     <value>Ошибка сохранения</value>
