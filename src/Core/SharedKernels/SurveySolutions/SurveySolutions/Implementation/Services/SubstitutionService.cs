@@ -33,6 +33,11 @@ namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
             return input.Contains(string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference));
         }
 
+        public string GenerateRosterName(string groupTitle, string rosterTitle)
+        {
+            return string.Format("{0} - {1}", groupTitle, string.IsNullOrEmpty(rosterTitle) ? DefaultSubstitutionText : rosterTitle);
+        }
+
         public string DefaultSubstitutionText { get { return "[...]"; } }
     }
 }
