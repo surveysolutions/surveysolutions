@@ -310,7 +310,7 @@
     <value>Yes</value>
   </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Your answer is invalid.</value>
+    <value>Invalid answer.</value>
   </data>
   <data name="Validity_ApplicationException_ErrorCaption" xml:space="preserve">
     <value>Internal application error</value>
