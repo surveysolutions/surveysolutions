@@ -1,6 +1,7 @@
 ﻿Supervisor.VM.Users = function (listViewUrl) {
     Supervisor.VM.Users.superclass.constructor.apply(this, arguments);
     var archiveUserCommad = "ArchiveUserCommad";
+    var unArchiveUserCommad = "UnarchiveUserCommand";
     var self = this;
 
     self.load = function() {
@@ -8,13 +9,18 @@
     };
 
     self.deleteUser = function (userViewItem) {
-        self.deleteInterviewersInternal([userViewItem]);
-    };
-    self.DeleteInterviewers = function () {
-        self.deleteInterviewersInternal(self.GetSelectedItemsAfterFilter(function (item) { return true/*item.CanDelete()*/; }));
+        self.deleteInterviewersInternal([userViewItem], archiveUserCommad);
     };
 
-    self.deleteInterviewersInternal = function(filteredItems) {
+    self.unarchiveUser = function (userViewItem) {
+        self.deleteInterviewersInternal([userViewItem], unArchiveUserCommad);
+    };
+
+    self.DeleteInterviewers = function () {
+        self.deleteInterviewersInternal(self.GetSelectedItemsAfterFilter(function (item) { return true/*item.CanDelete()*/; }), archiveUserCommad);
+    };
+
+    self.deleteInterviewersInternal = function(filteredItems, commandName) {
         var messageHtml = self.getBindedHtmlTemplate("#confirm-delete-template", filteredItems);
 
         if (filteredItems.length === 0) {
@@ -31,7 +37,7 @@
                 });
 
                 var command = {
-                    type: archiveUserCommad,
+                    type: commandName,
                     commands: commands
                 };
                 self.SendCommands(command, function() {
