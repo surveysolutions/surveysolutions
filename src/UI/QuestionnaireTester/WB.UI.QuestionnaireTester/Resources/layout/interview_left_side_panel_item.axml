@@ -6,8 +6,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content">
     <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
-            local:MvxBind="Visible HasChildren; Click Toggle; Text If(Expanded, &quot;–&quot;,&quot;+&quot;)"/>
-
+            local:MvxBind="Visible HasChildren; Click Toggle; Text If(Expanded, '–','+')"/>
     <TextView
           style="@style/Interview_Sidebar_Sections_Section_Title"
           local:MvxBind="Text Title; Click NavigateToSectionCommand;" />
