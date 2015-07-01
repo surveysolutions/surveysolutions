@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-
-<ripple  xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/colorBlueThemePrimary">
-  <item>
-    <shape android:shape="rectangle" android:color="@color/sections_list_selected_background_color">
-      <solid android:color="@color/sections_list_selected_background_color" />
-    </shape>
-  </item>
-</ripple>

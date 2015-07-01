@@ -1,16 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:local="http://schemas.android.com/apk/res-auto">
-  <LinearLayout
+  <TableLayout
                 orientation="horizontal"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content">
-    <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
-            local:MvxBind="Shown HasChildren; Click Toggle; Text If(Expanded, '–','+')"/>
-    <TextView
-          style="@style/Interview_Sidebar_Sections_Section_Title"
-          local:MvxBind="Text Title;" />
-  </LinearLayout>
+                android:layout_width="match_parent"
+                >
+    <TableRow>
+      <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
+              local:MvxBind="Shown HasChildren; Click Toggle; Text If(Expanded, '–','+')"/>
+      <TextView
+            style="@style/Interview_Sidebar_Sections_Section_Title"
+            local:MvxBind="Text Title;" />
+    </TableRow>
+
+  </TableLayout>
 
   <MvxLinearLayout
         style="@style/Interview_Sidebar_Sections"

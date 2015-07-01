@@ -10,7 +10,7 @@
 
   <dimen name="Interview_BreadCrumbs_padding_top">20dp</dimen>
 
-  <dimen name="Interview_Sidebar_padding_right">48dp</dimen>
+  <dimen name="Interview_Sidebar_padding_right">32dp</dimen>
   <dimen name="Interview_Sidebar_padding_left">18dp</dimen>
   <dimen name="Interview_Sidebar_Group_margin_left">36dp</dimen>
   

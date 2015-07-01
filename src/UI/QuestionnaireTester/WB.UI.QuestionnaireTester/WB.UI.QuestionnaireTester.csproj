@@ -569,9 +569,6 @@
     <AndroidResource Include="Resources\drawable\interview_section_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable-v21\interview_section_background_selected.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\interview_section_background_selected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
