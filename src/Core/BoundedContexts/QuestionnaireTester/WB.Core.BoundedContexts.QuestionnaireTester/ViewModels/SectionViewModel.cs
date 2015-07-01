@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             this.root = root;
             this.Children = new ObservableCollection<SectionViewModel>();
+            this.Children.CollectionChanged += (sender, args) => this.RaisePropertyChanged(() => HasChildren);
+            this.Expanded = true;
         }
 
         public Identity SectionIdentity { get; set; }

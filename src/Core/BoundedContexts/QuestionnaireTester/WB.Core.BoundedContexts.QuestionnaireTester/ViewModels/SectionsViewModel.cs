@@ -11,15 +11,19 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class SectionsViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesAdded>
+        ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>,
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>
     {
         private NavigationState navigationState;
 
@@ -125,7 +129,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     Title = title
                 };
 
-                mainThreadDispatcher.RequestMainThreadAction(() => parent.Children.Add(section));
+                this.mainThreadDispatcher.RequestMainThreadAction(() => parent.Children.Add(section));
 
                 foreach (var child in group.Children)
                 {
@@ -148,37 +152,85 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         void navigationState_OnGroupChanged(NavigationParams navigationParams)
         {
-            var sectionToBeSelected = Sections.FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
-            if (sectionToBeSelected == null)
+            SectionViewModel groupToBeSelected = null;
+            foreach (var section in Sections)
+            {
+                SectionViewModel selectedGroup = section.TreeToEnumerable(x => x.Children)
+                                                         .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+                if (selectedGroup != null)
+                {
+                    groupToBeSelected = section;
+                    break;
+                }
+            }
+
+            
+            if (groupToBeSelected == null)
             {
                 return;
             }
 
             this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
-            sectionToBeSelected.IsSelected = true;
+            groupToBeSelected.IsSelected = true;
         }
 
         public void Handle(RosterInstancesAdded @event)
         {
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
-
-            var instance = @event.Instances.First();
-            if (questionnaire.GroupsParentIdMap.ContainsKey(instance.GroupId))
+            var groupsToUpdate = @event.Instances.Select(x => x.GroupId).Distinct().ToList();
+            foreach (var groupId in groupsToUpdate)
             {
-                var parentGroupId = questionnaire.GroupsParentIdMap[instance.GroupId];
-                var sectionToAddTo = this.Sections.FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
-                if (sectionToAddTo != null)
-                {
-                    mainThreadDispatcher.RequestMainThreadAction(() => sectionToAddTo.Children.Clear());
+                this.UpdateParentOfGroupWithId(groupId);
+            }
+        }
 
-                    var groupToAddTo = questionnaire.GroupsHierarchy
-                        .TreeToEnumerable(x => x.Children)
-                        .First(x => x.Id == sectionToAddTo.SectionIdentity.Id);
+        public void Handle(RosterInstancesRemoved @event)
+        {
+            var groupsToUpdate = @event.Instances.Select(x => x.GroupId).Distinct();
+            foreach (var groupId in groupsToUpdate)
+            {
+                this.UpdateParentOfGroupWithId(groupId);
+            }
+        }
+
+        public void Handle(GroupsEnabled @event)
+        {
+            var groupsToUpdate = @event.Groups.Select(x => x.Id).Distinct();
+            foreach (var groupId in groupsToUpdate)
+            {
+                this.UpdateParentOfGroupWithId(groupId);
+            }
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            var groupsToUpdate = @event.Groups.Select(x => x.Id).Distinct();
+            foreach (var groupId in groupsToUpdate)
+            {
+                this.UpdateParentOfGroupWithId(groupId);
+            }
+        }
+
+        private void UpdateParentOfGroupWithId(Guid groupId)
+        {
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+
+            if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
+            {
+                Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
+                SectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
+                                                                  .FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
+                if (viewModelToUpdate != null)
+                {
+                    this.mainThreadDispatcher.RequestMainThreadAction(() => viewModelToUpdate.Children.Clear());
+
+                    GroupsHierarchyModel groupToAddTo = questionnaire.GroupsHierarchy
+                                                                     .TreeToEnumerable(x => x.Children)
+                                                                     .First(x => x.Id == parentGroupId);
 
                     foreach (var childGroup in groupToAddTo.Children)
                     {
-                        BuildViewModelsForSection(interview, sectionToAddTo, childGroup);
+                        this.BuildViewModelsForSection(interview, viewModelToUpdate, childGroup);
                     }
                 }
             }
