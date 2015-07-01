@@ -271,6 +271,7 @@
     <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
     <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="CustomBindings\ShownBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />

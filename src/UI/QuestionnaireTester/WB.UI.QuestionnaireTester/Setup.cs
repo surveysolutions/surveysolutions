@@ -100,6 +100,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<MvxAutoCompleteTextView>("HidePopupOnDone", view => new MvxAutoCompleteTextViewHidePopupOnDoneBinding(view));
             registry.RegisterCustomBindingFactory<MvxAutoCompleteTextView>("ResetText", view => new MvxAutoCompleteTextViewResetTextBinding(view));
             registry.RegisterCustomBindingFactory<MvxAutoCompleteTextView>("ShowPopupOnFocus", view => new MvxAutoCompleteTextViewShowPopupOnFocusBinding(view));
+            registry.RegisterCustomBindingFactory<View>("Shown", view => new ShownBinding(view));
 
             base.FillTargetFactories(registry);
         }
