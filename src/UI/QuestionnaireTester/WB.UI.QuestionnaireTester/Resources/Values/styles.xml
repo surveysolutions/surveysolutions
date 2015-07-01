@@ -188,7 +188,7 @@
   </style>
 
   <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">
-    <!--<item name="android:background">@android:color/transparent</item>-->
+    <item name="android:background">@android:color/transparent</item>
     <item name="android:textColor">@color/sections_list_text_color</item>
     <item name="android:textSize">@dimen/textsize_14</item>
   </style>

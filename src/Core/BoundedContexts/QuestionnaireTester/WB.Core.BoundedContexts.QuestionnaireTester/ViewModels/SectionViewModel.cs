@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             get { return this.Expanded ? "-" : "+"; }
         }
 
-        public ObservableCollection<SectionViewModel> Children { get; set; }
+        public ObservableCollection<SectionViewModel> Children { get; private set; }
 
         private MvxCommand navigateToSectionCommand;
         private bool expanded;
@@ -80,11 +80,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return new MvxCommand(() =>
-                {
-                    Debug.WriteLine("Click");
-                    this.Expanded = !this.Expanded;
-                });
+                return new MvxCommand(() => this.Expanded = !this.Expanded, () => HasChildren);
             }
         }
 

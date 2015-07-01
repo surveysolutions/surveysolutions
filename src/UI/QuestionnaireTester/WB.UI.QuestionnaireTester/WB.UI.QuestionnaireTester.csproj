@@ -341,6 +341,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_left_side_panel_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <LinkDescription Include="linker.xml" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>

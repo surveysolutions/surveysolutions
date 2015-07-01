@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:local="http://schemas.android.com/apk/res-auto">
+  <LinearLayout
+                orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
+    <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
+            local:MvxBind="Visible HasChildren; Click Toggle; Text If(Expanded, &quot;–&quot;,&quot;+&quot;)"/>
+
+    <TextView
+          style="@style/Interview_Sidebar_Sections_Section_Title"
+          local:MvxBind="Text Title; Click NavigateToSectionCommand;" />
+  </LinearLayout>
+
+  <MvxLinearLayout
+        style="@style/Interview_Sidebar_Sections"
+        local:MvxBind="ItemsSource Children; Visible Expanded"
+        local:MvxItemTemplate="@layout/interview_left_side_panel_item_group" />
+</merge>
