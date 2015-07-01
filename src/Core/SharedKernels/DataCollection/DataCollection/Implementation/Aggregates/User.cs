@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool isUserLockedByHQ;
         private bool isUserArchived;
         private UserRoles[] roles = new UserRoles[0];
+        private Guid supervisorId;
 
         public User(){}
 
@@ -152,7 +153,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (!isUserArchived)
                 throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
-
+            if (roles.Contains(UserRoles.Operator))
+            {
+                if (!UserPreconditionsService.IsUserActive(supervisorId))
+                    throw new UserException("You can't unarchive interviewer until supervisor is archived", UserDomainExceptionType.SupervisorArchived);
+            }
             this.ApplyEvent(new UserUnarchived());
         }
 
@@ -181,6 +186,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.isUserLockedBySupervisor = e.IsLockedBySupervisor;
             this.isUserLockedByHQ = e.IsLocked;
             this.roles = e.Roles;
+            if (e.Supervisor != null)
+            {
+                this.supervisorId = e.Supervisor.Id;
+            }
         }
 
         protected void OnUserLocked(UserLockedBySupervisor @event)

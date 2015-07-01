@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
         bool IsUserNameTakenByArchivedUsers(string userName);
         int CountOfInterviewsInterviewerResposibleFor(Guid interviewerId);
         int CountOfActiveInterviewersForSupervisor(Guid spervisorId);
+        bool IsUserActive(Guid userId);
     }
 }
