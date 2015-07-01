@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.Sections = sectionsViewModel;
         }
 
-        public void Init(string interviewId)
+        public async Task Init(string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])).Wait();
+            await this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
         }
 
         private static BaseInterviewAnswer GetAnswerModel(IStatefulInterview interview, QuestionnaireReferenceModel referenceToQuestion)
