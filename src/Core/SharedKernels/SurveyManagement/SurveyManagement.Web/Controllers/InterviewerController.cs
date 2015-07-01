@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(this.GlobalInfo.GetCurrentUser().Id);
         }
 
-        [Authorize(Roles = "Administrator, Supervisor")]
+        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
         public ActionResult Archived(Guid id)
         {
             var supervisor = this.GetUserById(id);
