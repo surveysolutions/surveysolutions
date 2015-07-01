@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool isUserArchived;
         private UserRoles[] userRoles = new UserRoles[0];
         private Guid userSupervisorId;
-
+        private string loginName;
         public User(){}
 
         public User(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor,
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (countOfInterviewsUserResposibleFor > 0)
                 {
                     throw new UserException(String.Format(
-                        "Interviewer {0} is resposible for {1} interview(s) and can't be deleted", EventSourceId,
+                        "Interviewer {0} is resposible for {1} interview(s) and can't be deleted", loginName,
                         countOfInterviewsUserResposibleFor), UserDomainExceptionType.UserHasAssigments);
                 }
             }
@@ -189,6 +189,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.isUserLockedBySupervisor = e.IsLockedBySupervisor;
             this.isUserLockedByHQ = e.IsLocked;
             this.userRoles = e.Roles;
+            this.loginName = e.Name;
+
             if (e.Supervisor != null)
             {
                 this.userSupervisorId = e.Supervisor.Id;
