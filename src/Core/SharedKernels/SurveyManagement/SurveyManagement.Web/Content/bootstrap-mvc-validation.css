@@ -2,3 +2,7 @@
 {
     list-style-type: none;
 }
+.control-label.required:before {
+    content: '*';
+    color: #DA4F49;
+}
