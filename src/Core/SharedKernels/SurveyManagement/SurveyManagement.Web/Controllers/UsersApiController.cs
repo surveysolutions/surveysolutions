@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteSupervisor;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -16,17 +19,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IInterviewersViewFactory interviewersFactory;
         private readonly IUserListViewFactory supervisorsFactory;
+        public readonly IDeleteSupervisorService deleteSupervisorService;
 
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
             IInterviewersViewFactory interviewersFactory,
-            IUserListViewFactory supervisorsFactory)
+            IUserListViewFactory supervisorsFactory, 
+            IDeleteSupervisorService deleteSupervisorService)
             : base(commandService, provider, logger)
         {
             this.interviewersFactory = interviewersFactory;
             this.supervisorsFactory = supervisorsFactory;
+            this.deleteSupervisorService = deleteSupervisorService;
         }
 
         [HttpPost]
@@ -132,5 +138,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return this.supervisorsFactory.Load(input);
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public JsonCommandResponse DeleteSupervisor(DeleteSupervisorCommandRequest request)
+        {
+            var response = new JsonCommandResponse();
+            try
+            {
+                deleteSupervisorService.DeleteSupervisor(request.SupervisorId);
+                response.IsSuccess = true;
+            }
+            catch (Exception e)
+            {
+                this.Logger.Error(e.Message, e);
+
+                response.IsSuccess = false;
+                response.DomainException = e.Message;
+            }
+
+            return response;
+        }
+    }
+    public class DeleteSupervisorCommandRequest 
+    {
+        public Guid SupervisorId { get; set; }
     }
 }

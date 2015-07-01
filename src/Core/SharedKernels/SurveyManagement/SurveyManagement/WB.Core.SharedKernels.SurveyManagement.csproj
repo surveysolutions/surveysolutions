@@ -108,6 +108,7 @@
     <Compile Include="Implementation\Services\DataExport\TabFileReader.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
+    <Compile Include="Implementation\Services\DeleteSupervisor\DeleteSupervisorService.cs" />
     <Compile Include="Implementation\Services\SurveyManagementPreconditionsService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
     <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
+    <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
     <Compile Include="Services\Export\ExportDataType.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
