@@ -41,10 +41,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
         private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            lock (this.executionCountLock)
-            {
-                this.executingCommandsCount++;
-            }
+            this.RegisterCommandExecution();
 
             try
             {
@@ -52,24 +49,32 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             }
             finally
             {
-                lock (this.executionCountLock)
-                {
-                    this.executingCommandsCount--;
-
-                    this.NotifyExecutionAwaiterIfNeeded();
-                }
+                this.UnregisterCommandExecution();
             }
         }
 
-        private void NotifyExecutionAwaiterIfNeeded()
+        private void RegisterCommandExecution()
         {
-            if (this.executingCommandsCount > 0)
-                return;
-
-            if (this.executionAwaiter != null)
+            lock (this.executionCountLock)
             {
-                this.executionAwaiter.SetResult(new object());
-                this.executionAwaiter = null;
+                this.executingCommandsCount++;
+            }
+        }
+
+        private void UnregisterCommandExecution()
+        {
+            lock (this.executionCountLock)
+            {
+                this.executingCommandsCount--;
+
+                if (this.executingCommandsCount > 0)
+                    return;
+
+                if (this.executionAwaiter != null)
+                {
+                    this.executionAwaiter.SetResult(new object());
+                    this.executionAwaiter = null;
+                }
             }
         }
 
