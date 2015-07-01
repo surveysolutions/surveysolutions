@@ -51,14 +51,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 {
                     this.expanded = value;
                     this.RaisePropertyChanged();
-                    this.RaisePropertyChanged(() => ToggleButtonText);
                 }
             }
-        }
-
-        public string ToggleButtonText
-        {
-            get { return this.Expanded ? "-" : "+"; }
         }
 
         public ObservableCollection<SectionViewModel> Children { get; private set; }
