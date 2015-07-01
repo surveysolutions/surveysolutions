@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
 
 using WB.Core.SharedKernels.DataCollection;
@@ -36,15 +37,54 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { this.isSelected = value; this.RaisePropertyChanged(); }
         }
 
+        public bool HasChildren
+        {
+            get { return this.Children.Count > 0; }
+        }
+
+        public bool Expanded
+        {
+            get { return this.expanded; }
+            set
+            {
+                if (this.Expanded != value)
+                {
+                    this.expanded = value;
+                    this.RaisePropertyChanged();
+                    this.RaisePropertyChanged(() => ToggleButtonText);
+                }
+            }
+        }
+
+        public string ToggleButtonText
+        {
+            get { return this.Expanded ? "-" : "+"; }
+        }
+
         public ObservableCollection<SectionViewModel> Children { get; set; }
 
         private MvxCommand navigateToSectionCommand;
-        public System.Windows.Input.ICommand NavigateToSectionCommand
+        private bool expanded;
+        private string toggleButtonText;
+
+        public ICommand NavigateToSectionCommand
         {
             get
             {
                 this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand(async () => await this.NavigateToSection());
                 return this.navigateToSectionCommand;
+            }
+        }
+
+        public ICommand Toggle
+        {
+            get
+            {
+                return new MvxCommand(() =>
+                {
+                    Debug.WriteLine("Click");
+                    this.Expanded = !this.Expanded;
+                });
             }
         }
 

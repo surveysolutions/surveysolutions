@@ -171,33 +171,44 @@
 
   <style name="Interview_Sidebar_Sections" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_height">match_parent</item>
-    <item name="android:layout_weight">1</item>
-    <item name="android:scrollbarStyle">outsideOverlay</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:smoothScrollbar">true</item>
-    <item name="android:scrollingCache">false</item>
-    <item name="android:animationCache">false</item>
     <item name="android:divider">@null</item>
     <item name="android:dividerHeight">@dimen/zero</item>
-    <item name="android:choiceMode">singleChoice</item>
     <item name="android:textSize">@dimen/textsize_14</item>
   </style>
 
   <style name="Interview_Sidebar_Sections_Section" parent="VerticalFullWidthWrappingLayout">
     <item name="android:orientation">vertical</item>
   </style>
+
+  <style name="Interview_Sidebar_Sections_Group" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:orientation">vertical</item>
+    <item name="android:background">@android:color/transparent</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_Group_margin_left</item>
+  </style>
+
+  <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">
+    <!--<item name="android:background">@android:color/transparent</item>-->
+    <item name="android:textColor">@color/sections_list_text_color</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+  </style>
+  
+  
   
   <style name="Interview_Sidebar_Sections_Section_Title" parent="FullWidthWrappingLayout">
     <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
-    <item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>
+    <!--<item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>-->
     <item name="android:layout_height">@dimen/Interview_Sidebar_Sections_Item_height</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:textStyle">bold</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textColor">@color/sections_list_text_color</item>
     <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:singleLine">true</item>
   </style>
 
+    
   <style name="Interview_Sidebar_PrefilledQuestion_Question" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>

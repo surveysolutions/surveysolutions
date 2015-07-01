@@ -12,6 +12,7 @@
 
   <dimen name="Interview_Sidebar_padding_right">48dp</dimen>
   <dimen name="Interview_Sidebar_padding_left">18dp</dimen>
+  <dimen name="Interview_Sidebar_Group_margin_left">36dp</dimen>
   
   <dimen name="Interview_Sidebar_Body_margin_right">36dp</dimen>
   <dimen name="Interview_Sidebar_Header_padding_bottom">28dp</dimen>

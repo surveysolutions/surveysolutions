@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
-                 style="@style/Interview_Sidebar_Sections_Section"
-                 local:MvxBind="HideKeyboardOnClick .; Click NavigateToSectionCommand; BackgroundStyle SectionStyleBackground(IsSelected)">
-  <TextView
-        style="@style/Interview_Sidebar_Sections_Section_Title"
-        local:MvxBind="Text Title" />
+                 style="@style/Interview_Sidebar_Sections_Group"
+                 local:MvxBind="HideKeyboardOnClick .;">
 
+  <LinearLayout orientation="horizontal" 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
+    <Button style="@style/Interview_Sidebar_Sections_ToggleButton" 
+            MvxBind="Visible HasChildren; Click Toggle; Text ToggleButtonText"/>
+
+    <TextView
+          style="@style/Interview_Sidebar_Sections_Section_Title"
+          local:MvxBind="Text Title; Click NavigateToSectionCommand;" />
+  </LinearLayout>
+  
   <MvxLinearLayout
        style="@style/Interview_Sidebar_Sections"
-       local:MvxBind="ItemsSource Children"
+       local:MvxBind="ItemsSource Children; Visible Expanded"
        local:MvxItemTemplate="@layout/interview_left_side_panel_item_group" />
   
 </MvxLinearLayout>
