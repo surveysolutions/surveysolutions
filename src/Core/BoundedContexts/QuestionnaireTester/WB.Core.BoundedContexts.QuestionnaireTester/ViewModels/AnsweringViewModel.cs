@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class AnsweringViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
+
         private int inProgressDepth = 0;
 
         protected AnsweringViewModel() { }
