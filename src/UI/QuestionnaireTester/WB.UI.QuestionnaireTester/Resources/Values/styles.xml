@@ -175,6 +175,7 @@
     <item name="android:divider">@null</item>
     <item name="android:dividerHeight">@dimen/zero</item>
     <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:listSelector">@android:color/transparent</item>
   </style>
 
   <style name="Interview_Sidebar_Sections_Section" parent="VerticalFullWidthWrappingLayout">
@@ -190,14 +191,16 @@
   <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@android:color/transparent</item>
     <item name="android:textColor">@color/sections_list_text_color</item>
-    <item name="android:textSize">@dimen/textsize_14</item>
+    <!--<item name="android:textSize">@dimen/textsize_30</item>
+    <item name="android:fontFamily">Roboto</item>-->
   </style>
   
   
   
   <style name="Interview_Sidebar_Sections_Section_Title" parent="FullWidthWrappingLayout">
     <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
-    <!--<item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>-->
+    <item name="android:layout_width">match_parent</item>
+    
     <item name="android:layout_height">@dimen/Interview_Sidebar_Sections_Item_height</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:textStyle">bold</item>

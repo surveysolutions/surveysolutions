@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/Interview_Sidebar_Sections_Group"
-                 local:MvxBind="HideKeyboardOnClick .;">
+                 local:MvxBind="HideKeyboardOnClick .; Click NavigateToSectionCommand;">
   
   <include layout="@layout/interview_left_side_panel_item" />
 

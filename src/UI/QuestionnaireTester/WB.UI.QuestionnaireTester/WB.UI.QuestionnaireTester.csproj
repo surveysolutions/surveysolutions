@@ -566,9 +566,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\question_input_button_disabled.xml" />
-    <AndroidResource Include="Resources\drawable-v21\interview_section_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\interview_section_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>

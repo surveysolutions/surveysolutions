@@ -9,7 +9,7 @@
             local:MvxBind="Shown HasChildren; Click Toggle; Text If(Expanded, '–','+')"/>
     <TextView
           style="@style/Interview_Sidebar_Sections_Section_Title"
-          local:MvxBind="Text Title; Click NavigateToSectionCommand;" />
+          local:MvxBind="Text Title;" />
   </LinearLayout>
 
   <MvxLinearLayout
