@@ -85,20 +85,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private IMvxCommand valueChangeCommand;
         public IMvxCommand InterviewerCommentChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendCommentQuestionCommand)); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommand())); }
         }
 
 
-        
-
-        private void SendCommentQuestionCommand()
+        private async Task SendCommentQuestionCommand()
         {
-            Task.Run(() => SendCommentQuestionCommandImpl());
-        }
-
-        private void SendCommentQuestionCommandImpl()
-        {
-            commandService.Execute(
+            await commandService.ExecuteAsync(
                 new CommentAnswerCommand(
                     interviewId: Guid.Parse(interviewId),
                     userId: principal.CurrentUserIdentity.UserId,
@@ -106,7 +99,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                     rosterVector: this.questionIdentity.RosterVector,
                     commentTime: DateTime.UtcNow,
                     comment: InterviewerComment));
-           
 
             IsCommentInEditMode = false;
         }

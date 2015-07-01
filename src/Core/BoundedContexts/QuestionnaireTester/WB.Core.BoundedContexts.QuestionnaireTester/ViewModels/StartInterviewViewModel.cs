@@ -1,5 +1,8 @@
-﻿using Cirrious.MvvmCross.ViewModels;
+﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -7,6 +10,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class StartInterviewViewModel : MvxViewModel,
         IInterviewEntityViewModel
     {
+        private readonly ICommandService commandService;
+
+        public StartInterviewViewModel(ICommandService commandService)
+        {
+            this.commandService = commandService;
+        }
+
         private string interviewId;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -19,12 +29,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return startInterviewCommand ?? (startInterviewCommand = new MvxCommand(this.StartInterview));
+                return startInterviewCommand ?? (startInterviewCommand = new MvxCommand(async () => await this.StartInterview()));
             }
         }
 
-        private void StartInterview()
+        private async Task StartInterview()
         {
+            await this.commandService.WaitPendingCommandsAsync();
+
             this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
         }
     }

@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                     var interviewId = Guid.NewGuid();
 
-                    this.commandService.Execute(new CreateInterviewOnClientCommand(
+                    await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
                         interviewId: interviewId,
                         userId: this.principal.CurrentUserIdentity.UserId,
                         questionnaireId: questionnairePackage.Document.PublicKey,
