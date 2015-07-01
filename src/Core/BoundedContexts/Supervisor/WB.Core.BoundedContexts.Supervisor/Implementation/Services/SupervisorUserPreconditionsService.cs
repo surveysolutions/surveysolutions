@@ -24,5 +24,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
         {
             return 0;
         }
+
+        public bool IsUserActive(Guid userId)
+        {
+            return true;
+        }
     }
 }

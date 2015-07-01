@@ -89,7 +89,8 @@
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>
                 <td>
-                    @if (User.IsInRole("Administrator"))
+                    
+                    @if (User.IsInRole("Administrator") && !Model.IsArchived)
                     {
                         <div class="btn-group pull-right">
                             <a class="btn btn-success" data-bind="click : $parent.unarchiveUser">
