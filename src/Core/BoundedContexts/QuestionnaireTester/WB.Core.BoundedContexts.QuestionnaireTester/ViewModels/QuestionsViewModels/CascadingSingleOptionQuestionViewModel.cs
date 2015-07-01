@@ -105,6 +105,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 var selectedValue = answerModel.Answer;
                 selectedObject = CreateFormattedOptionModel(Options.SingleOrDefault(i => i.Value == selectedValue));
+                ResetTextInEditor = selectedObject.OriginalText;
                 FilterText = selectedObject.OriginalText;
             }
             else
@@ -312,6 +313,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 if (question.Id == questionIdentity.Id && question.RosterVector.Identical(questionIdentity.RosterVector))
                 {
                     ResetTextInEditor = null;
+                    this.QuestionState.IsAnswered = false;
+                    this.QuestionState.Validity.ExecutedWithoutExceptions();
                 }
             }
         }

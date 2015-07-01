@@ -20,15 +20,23 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(MvxAutoCompleteTextView control, string value)
         {
+            Target.ClearListSelection();
+            Target.DismissDropDown();
+
             if (value == null)
             {
-                Target.ClearListSelection();
-                Target.DismissDropDown();
                 Target.Text = string.Empty;
             }
             else
             {
+                // this is hack
+                var adaptor = Target.Adapter;
+                Target.Adapter = null;
+
                 Target.SetText(value, true);
+                Target.SetSelection(value.Length);
+                
+                Target.Adapter = adaptor;
             }
         }
 
