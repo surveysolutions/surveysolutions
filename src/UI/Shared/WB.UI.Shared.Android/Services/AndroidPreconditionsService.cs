@@ -34,5 +34,10 @@ namespace WB.UI.Shared.Android.Services
         {
             return 0;
         }
+
+        public bool IsUserActive(Guid userId)
+        {
+            return true;
+        }
     }
 }

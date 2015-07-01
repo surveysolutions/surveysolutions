@@ -41,5 +41,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             return users.Query(_ => _.Where(u => !u.IsArchived && u.Supervisor.Id == spervisorId).Count());
         }
+
+        public bool IsUserActive(Guid userId)
+        {
+            var user = users.GetById(userId);
+            if (user == null)
+                return false;
+            return !user.IsArchived;
+        }
     }
 }

@@ -8,6 +8,7 @@
         UserHasAssigments,
         UserArchived,
         UserIsNotArchived,
-        RoleDoesntSupportDelete
+        RoleDoesntSupportDelete,
+        SupervisorArchived
     }
 }
