@@ -101,6 +101,7 @@
     <Compile Include="Services\TypeSerializationSettings.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SyncStatusCode.cs" />
+    <Compile Include="Tasks\TaskExtensions.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSwitch.cs" />
