@@ -200,7 +200,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void ctor_When_three_roles_are_specified_Then_raised_NewUserCreated_event_with_specified_roles()
         {
             // arrange
-            IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor, UserRoles.Operator, UserRoles.User };
+            IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor,  UserRoles.User };
 
             // act
             new User(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null,string.Empty,string.Empty);

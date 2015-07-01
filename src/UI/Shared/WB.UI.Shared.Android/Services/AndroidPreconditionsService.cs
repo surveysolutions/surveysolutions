@@ -30,11 +30,6 @@ namespace WB.UI.Shared.Android.Services
             return 0;
         }
 
-        public int CountOfActiveInterviewersForSupervisor(Guid spervisorId)
-        {
-            return 0;
-        }
-
         public bool IsUserActive(Guid userId)
         {
             return true;

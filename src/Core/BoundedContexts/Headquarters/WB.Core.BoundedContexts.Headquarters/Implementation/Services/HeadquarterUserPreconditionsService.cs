@@ -37,11 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     _ => _.Where(i => !i.IsDeleted && i.ResponsibleRole == UserRoles.Operator && i.ResponsibleId == interviewerId && (i.Status == InterviewStatus.InterviewerAssigned || i.Status == InterviewStatus.RejectedBySupervisor)).Count());
         }
 
-        public int CountOfActiveInterviewersForSupervisor(Guid spervisorId)
-        {
-            return users.Query(_ => _.Where(u => !u.IsArchived && u.Supervisor.Id == spervisorId).Count());
-        }
-
         public bool IsUserActive(Guid userId)
         {
             var user = users.GetById(userId);

@@ -12,6 +12,14 @@
         self.sendUserCommands([userViewItem], archiveUserCommad);
     };
 
+    self.archiveSupervisor = function (userViewItem) {
+        self.AskConfirmationAndRunActionIfTrue(function (filteredItems) {
+            self.SendCommand({ supervisorId: userViewItem.UserId() }, function () {
+                setTimeout(function() { self.search(); }, 100);
+            });
+        }, [userViewItem]);
+    };
+
     self.unarchiveUser = function (userViewItem) {
         self.sendUserCommands([userViewItem], unArchiveUserCommad);
     };
@@ -25,6 +33,22 @@
     };
 
     self.sendUserCommands = function(filteredItems, commandName) {
+        self.AskConfirmationAndRunActionIfTrue(function(filteredItems) {
+            var commands = ko.utils.arrayMap(filteredItems, function (rawItem) {
+                return ko.toJSON({ userId: rawItem.UserId() });
+            });
+
+            var command = {
+                type: commandName,
+                commands: commands
+            };
+            self.SendCommands(command, function () {
+                setTimeout(function () { self.search(); }, 100);
+            });
+        }, filteredItems);
+    };
+
+    self.AskConfirmationAndRunActionIfTrue = function (action, filteredItems) {
         var messageHtml = self.getBindedHtmlTemplate("#confirm-delete-template", filteredItems);
 
         if (filteredItems.length === 0) {
@@ -34,22 +58,13 @@
 
         messageHtml += $("#confirm-continue-message-template").html();
 
-        bootbox.confirm(messageHtml, function(result) {
+        bootbox.confirm(messageHtml, function (result) {
             if (result) {
-                var commands = ko.utils.arrayMap(filteredItems, function(rawItem) {
-                    return ko.toJSON({ userId: rawItem.UserId() });
-                });
-
-                var command = {
-                    type: commandName,
-                    commands: commands
-                };
-                self.SendCommands(command, function() {
-                    setTimeout(function() { self.search(); }, 100);
-                });
+                action(filteredItems);
             }
         });
     };
+
     self.getBindedHtmlTemplate = function (templateId, bindObject) {
         var messageTemplate = $("<div/>").html($(templateId).html())[0];
         ko.applyBindings(bindObject, messageTemplate);
