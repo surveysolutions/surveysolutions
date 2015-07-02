@@ -4,9 +4,9 @@
   <TableLayout
                 style="@style/Interview_Sidebar_GroupRow"
                 local:MvxBind="Click NavigateToSectionCommand; PaddingLeft NodeDepth">
-    <TableRow>
+    <TableRow android:gravity="center_vertical">
       <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
-              local:MvxBind="Shown HasChildren; Click Toggle; Text If(Expanded, '–','+')"/>
+              local:MvxBind="Click Toggle; Text If(Expanded, '–','+'); Transparent Not(HasChildren);"/>
       <TextView
             style="@style/Interview_Sidebar_Sections_Section_Title"
             local:MvxBind="Text Title;" />
