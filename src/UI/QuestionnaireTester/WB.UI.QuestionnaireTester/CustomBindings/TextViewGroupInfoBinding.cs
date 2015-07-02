@@ -29,43 +29,54 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(TextView control, GroupState value)
         {
-            string groupInformationText;
+            string fullInfo = GetGroupInformationText(value);
+            string errorInfo = GetInformationByInvalidAnswers(value);
 
-            if (value.Status == GroupStatus.NotStarted)
+            var mainColor = GetGroupColorByStatus(value);
+            var errorColor = this.GetColorFromResources(Resource.Color.group_with_invalid_answers);
+
+            var spannableString = new SpannableString(fullInfo);
+
+            spannableString.SetSpan(new ForegroundColorSpan(mainColor), 0, spannableString.Length(), SpanTypes.ExclusiveExclusive);
+
+            if (fullInfo.Contains(errorInfo))
             {
-                groupInformationText = UIResources.Interview_Group_NotStarted;
-            }
-            else if (value.Status == GroupStatus.StartedInvalid || value.Status == GroupStatus.CompletedInvalid)
-            {
-                groupInformationText = string.Format("{0}, {1}", GetInformationByQuestionsAndAnswers(value),
-                    GetInformationByInvalidAnswers(value));
-            }
-            else
-            {
-                groupInformationText = GetInformationByQuestionsAndAnswers(value);
+                spannableString.SetSpan(new ForegroundColorSpan(errorColor), fullInfo.IndexOf(errorInfo), fullInfo.IndexOf(errorInfo) + errorInfo.Length, SpanTypes.ExclusiveExclusive);
             }
 
-            var spannableText = new SpannableString(groupInformationText);
-
-            var groupColorByStatus = GetGroupColorByStatus(value);
-            spannableText.SetSpan(new ForegroundColorSpan(groupColorByStatus), 0, spannableText.Length(), SpanTypes.ExclusiveExclusive);
-
-            if (value.Status == GroupStatus.StartedInvalid || value.Status == GroupStatus.CompletedInvalid)
-            {
-                var groupWithInvalidAnswersColor = this.GetColorFromResources(Resource.Color.group_with_invalid_answers);
-
-                spannableText.SetSpan(new ForegroundColorSpan(groupWithInvalidAnswersColor),
-                    GetInformationByQuestionsAndAnswers(value).Length + 1, groupInformationText.Length, SpanTypes.ExclusiveExclusive);
-            }
-                
-
-            control.TextFormatted = spannableText;
+            control.TextFormatted = spannableString;
         }
 
-        private Color GetGroupColorByStatus(GroupState value)
+        private static string GetGroupInformationText(GroupState groupState)
+        {
+            switch (groupState.Status)
+            {
+                case GroupStatus.NotStarted:
+                    return UIResources.Interview_Group_Status_NotStarted;
+
+                case GroupStatus.Started:
+                    return string.Format(UIResources.Interview_Group_Status_StartedIncompleteFormat, GetInformationByQuestionsAndAnswers(groupState));
+
+                case GroupStatus.Completed:
+                    return string.Format(UIResources.Interview_Group_Status_CompletedFormat, GetInformationByQuestionsAndAnswers(groupState));
+
+                case GroupStatus.StartedInvalid:
+                    return string.Format(UIResources.Interview_Group_Status_StartedIncompleteFormat,
+                        string.Format("{0}, {1}", GetInformationByQuestionsAndAnswers(groupState), GetInformationByInvalidAnswers(groupState)));
+
+                case GroupStatus.CompletedInvalid:
+                    return string.Format(UIResources.Interview_Group_Status_CompletedFormat,
+                        string.Format("{0}, {1}", GetInformationByQuestionsAndAnswers(groupState), GetInformationByInvalidAnswers(groupState)));
+
+                default:
+                    return GetInformationByQuestionsAndAnswers(groupState);
+            }
+        }
+
+        private Color GetGroupColorByStatus(GroupState groupState)
         {
             int groupTitleTextColorId;
-            switch (value.Status)
+            switch (groupState.Status)
             {
                 case GroupStatus.NotStarted:
                     groupTitleTextColorId = Resource.Color.group_not_started;
@@ -87,43 +98,39 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             return this.CurrentTopActivity.Activity.Resources.GetColor(resourceId);
         }
 
-        private static string GetInformationByInvalidAnswers(GroupState value)
-        {
-            return string.Format("{0} {1}", value.InvalidAnswersCount,
-                value.InvalidAnswersCount == 1
-                    ? UIResources.Interview_Group_OneInvalidAnswer
-                    : UIResources.Interview_Group_ManyInvalidAnswers);
-        }
-
         private static string GetInformationByQuestionsAndAnswers(GroupState value)
         {
             var subGroupsText = GetInformationBySubgroups(value);
 
-            if (value.QuestionsCount == value.AnsweredQuestionsCount)
-                return string.Format(UIResources.Interview_Group_CompletedFormat,
-                    value.QuestionsCount,
-                    value.QuestionsCount == 1
-                        ? UIResources.Interview_Group_OneQuestion_Answered
-                        : UIResources.Interview_Group_ManyQuestions_Answered,
-                    subGroupsText);
-
-            return string.Format(UIResources.Interview_Group_StartedFormat,
-                value.AnsweredQuestionsCount,
+            var details = string.Format("{0}, {1}",
                 value.AnsweredQuestionsCount == 1
-                    ? UIResources.Interview_Group_OneQuestion_Answered
-                    : UIResources.Interview_Group_ManyQuestions_Answered,
+                    ? UIResources.Interview_Group_AnsweredQuestions_One
+                    : string.Format(UIResources.Interview_Group_AnsweredQuestions_Many, value.AnsweredQuestionsCount),
                 subGroupsText);
 
+            return details;
+        }
+
+        private static string GetInformationByInvalidAnswers(GroupState value)
+        {
+            return value.InvalidAnswersCount == 1
+                ? UIResources.Interview_Group_InvalidAnswers_One
+                : string.Format(UIResources.Interview_Group_InvalidAnswers_ManyFormat, value.InvalidAnswersCount);
         }
 
         private static string GetInformationBySubgroups(GroupState value)
         {
-            return value.SubgroupsCount == 0
-                ? UIResources.Interview_Group_NoSubgroups
-                : string.Format("{0} {1}", value.SubgroupsCount,
-                    value.SubgroupsCount == 1
-                        ? UIResources.Interview_Group_OneSubgroup
-                        : UIResources.Interview_Group_ManySubgroups);
+            switch (value.SubgroupsCount)
+            {
+                case 0:
+                    return UIResources.Interview_Group_Subgroups_Zero;
+
+                case 1:
+                    return UIResources.Interview_Group_Subgroups_One;
+
+                default:
+                    return string.Format(UIResources.Interview_Group_Subgroups_ManyFormat, value.SubgroupsCount);
+            }
         }
     }
 }

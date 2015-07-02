@@ -2,7 +2,7 @@
 <resources>
   <string name="ApplicationName">Survey Solutions Tester</string>
 
-  <string name="MenuItem_Title_Dashboard">Dashboard</string>
+  <string name="MenuItem_Title_Dashboard">Questionnaires</string>
   <string name="MenuItem_Title_Settings">Settings</string>
   <string name="MenuItem_Title_SignOut">Sign out</string>
 </resources>

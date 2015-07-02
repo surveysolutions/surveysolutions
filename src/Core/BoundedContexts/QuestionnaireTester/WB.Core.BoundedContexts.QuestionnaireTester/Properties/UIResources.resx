@@ -165,9 +165,6 @@
   <data name="EngineVersionText" xml:space="preserve">
     <value>Engine version:</value>
   </data>
-  <data name="HttpResponseTimeoutText" xml:space="preserve">
-    <value>The time for waiting response from web server:</value>
-  </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Connecting to server</value>
   </data>
@@ -220,7 +217,7 @@
     <value>Sign in</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
-    <value>Survey Solutions Questionnaire Tester Application</value>
+    <value>Survey Solutions Questionnaire Tester</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience</value>
@@ -272,9 +269,6 @@
   </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Stay signed in</value>
-  </data>
-  <data name="TimeoutUnitsText" xml:space="preserve">
-    <value>in seconds</value>
   </data>
   <data name="TryAgainLink" xml:space="preserve">
     <value>Try again</value>
@@ -345,29 +339,29 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tap to take barcode</value>
   </data>
-  <data name="Interview_Group_CompletedFormat" xml:space="preserve">
-    <value>Completed. {0} {1}, {2}</value>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Section completed: {0}</value>
   </data>
-  <data name="Interview_Group_ManyQuestions_Answered" xml:space="preserve">
-    <value>Questions</value>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} answers</value>
   </data>
-  <data name="Interview_Group_ManySubgroups" xml:space="preserve">
-    <value>sub-sections</value>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} sub-sections</value>
   </data>
-  <data name="Interview_Group_NoSubgroups" xml:space="preserve">
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
     <value>no sub-sections</value>
   </data>
-  <data name="Interview_Group_NotStarted" xml:space="preserve">
-    <value>Not started</value>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Section not started</value>
   </data>
-  <data name="Interview_Group_OneQuestion_Answered" xml:space="preserve">
-    <value>Question</value>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>one answer</value>
   </data>
-  <data name="Interview_Group_OneSubgroup" xml:space="preserve">
-    <value>sub-section</value>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>one sub-section</value>
   </data>
-  <data name="Interview_Group_StartedFormat" xml:space="preserve">
-    <value>Started. {0} {1} answered, {2}</value>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Section started: {0}</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Entered value can not be parsed as integer value</value>
@@ -375,11 +369,11 @@
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
     <value>Entered value can not be parsed as decimal value</value>
   </data>
-  <data name="Interview_Group_ManyInvalidAnswers" xml:space="preserve">
-    <value>errors</value>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} errors</value>
   </data>
-  <data name="Interview_Group_OneInvalidAnswer" xml:space="preserve">
-    <value>error</value>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>one error</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>Tap to take a photo</value>

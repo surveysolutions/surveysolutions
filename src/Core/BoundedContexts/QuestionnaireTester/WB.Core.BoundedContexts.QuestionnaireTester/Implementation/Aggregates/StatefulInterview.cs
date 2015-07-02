@@ -531,13 +531,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         public int GetGroupsInGroupCount(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id);
-            var result = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                allQuestionsInGroup,
-                groupIdentity.RosterVector,
-                questionnaire,
-                GetRosterInstanceIds).Count();
-            return result;
+
+            IEnumerable<Guid> groupsAndRosters = Enumerable.Concat(
+                questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id),
+                questionnaire.GetAllUnderlyingChildRosters(groupIdentity.Id));
+
+            int instancesCount = this
+                .GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
+                    this.interviewState,
+                    groupsAndRosters,
+                    groupIdentity.RosterVector,
+                    questionnaire,
+                    GetRosterInstanceIds)
+                .Count();
+
+            return instancesCount;
         }
 
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
@@ -550,6 +558,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 groupIdentity.RosterVector,
                 questionnaire,
                 GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
+
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered);
         }
 
