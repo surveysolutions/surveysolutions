@@ -71,7 +71,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.AddToParentButton(listOfViewModels, navigationParams);
 
             var anchoreElementIndex = 0;
-            var offsetInsideOfAnchoredItemInPercentage = 0;
 
             if (navigationParams.AnchoredElementIdentity != null)
             {
@@ -80,20 +79,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                             .FirstOrDefault(x => x.GetPositionOfAnchoredElement(navigationParams.AnchoredElementIdentity) >= 0);
 
                 anchoreElementIndex = item != null ? listOfViewModels.IndexOf(item) : 0;
-
-                var rosterViewModel = item as RosterViewModel;
-                if (rosterViewModel!=null)
-                {
-                    var anchoredRosterInstance = item.GetPositionOfAnchoredElement(navigationParams.AnchoredElementIdentity);
-                    if (rosterViewModel.Items.Count != 0)
-                    {
-                        offsetInsideOfAnchoredItemInPercentage = (100 * anchoredRosterInstance) / rosterViewModel.Items.Count;
-                    }
-                }
             }
 
             this.Items = listOfViewModels;
-            messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex, offsetInsideOfAnchoredItemInPercentage));
+            messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex, 0));
         }
 
         private void AddToParentButton(IList listOfViewModels, NavigationParams navigationParams)
