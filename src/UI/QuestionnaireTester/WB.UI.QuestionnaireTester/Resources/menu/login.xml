@@ -4,5 +4,5 @@
   <item
       android:id="@+id/login_settings"
       local:showAsAction="never"
-      android:title="Settings" />
+      android:title="@string/MenuItem_Title_Settings" />
 </menu>
