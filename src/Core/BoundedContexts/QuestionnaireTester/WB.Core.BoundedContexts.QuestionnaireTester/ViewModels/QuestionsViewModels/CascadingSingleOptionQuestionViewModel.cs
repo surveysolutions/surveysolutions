@@ -263,8 +263,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             var answerValue = answerViewModel.Value;
-            if (selectedObject!= null && answerValue == selectedObject.Value)
+            if (selectedObject != null && answerValue == selectedObject.Value)
+            {
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
+            }
 
             await SendAnswerFilteredComboboxQuestionCommand(answerValue);
         }
@@ -302,6 +305,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 {
                     answerOnParentQuestion = parentAnswerModel.Answer;
                     ResetTextInEditor = null;
+                    FilterText = null;
                 }              
             }
         }

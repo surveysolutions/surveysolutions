@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+
+using Cirrious.CrossCore;
+
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -221,9 +224,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                                 questionModel = new CascadingSingleOptionQuestionModel
                                 {
                                     CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId.Value,
-                                    RosterLevelDepthOfParentQuestion = 0,
                                     Options = singleQuestion.Answers.Select(ToCascadingOptionModel).ToList(),
-
+                                    RosterLevelDepthOfParentQuestion = questionIdToRosterLevelDeep[singleQuestion.PublicKey],
                                 };
                             }
                             else
