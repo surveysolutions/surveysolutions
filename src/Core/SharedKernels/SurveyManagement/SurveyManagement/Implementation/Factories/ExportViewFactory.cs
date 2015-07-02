@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 }
 
                 dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
-                    this.GetQuestionsForExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
+                    this.GetQuestionsForExport(dataByLevel, headerStructureForLevel)));
             }
 
             return dataRecords.ToArray();
@@ -149,13 +149,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return string.Empty;
         }
 
-        private ExportedQuestion[] GetQuestionsForExport(IEnumerable<InterviewQuestion> availableQuestions,
+        private ExportedQuestion[] GetQuestionsForExport(InterviewLevel availableQuestions,
             HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<ExportedQuestion>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
-                var question = availableQuestions.FirstOrDefault(q => q.Id == headerItem.PublicKey);
+                var question = availableQuestions.GetQuestion(headerItem.PublicKey);
                 ExportedQuestion exportedQuestion = null;
                 if (question == null)
                 {
@@ -182,9 +182,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>()));
             return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
         }
-
-
-
 
         protected HeaderStructureForLevel CreateHeaderStructureForLevel(
             string levelTitle,

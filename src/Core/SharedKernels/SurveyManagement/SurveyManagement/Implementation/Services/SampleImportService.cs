@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         bigTemplate.PublicKey, version, 
                         interviewForCreate[interviewIndex].PreloadedDataDto,
                         DateTime.UtcNow,
-                        responsibleId));
+                        responsibleId), handleInBatch: true);
 
                     result.SetStatusMessage(string.Format(
                         @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",

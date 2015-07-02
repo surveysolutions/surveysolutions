@@ -6,7 +6,7 @@ namespace WB.Core.Infrastructure.ReadSide
     /// <summary>
     /// Interface which is implemented by each read side repository writer.
     /// </summary>
-    public interface IChacheableRepositoryWriter : IReadSideStorage
+    public interface ICacheableRepositoryWriter : IReadSideStorage
     {
         /// <summary>
         /// Enables caching of repository entities.

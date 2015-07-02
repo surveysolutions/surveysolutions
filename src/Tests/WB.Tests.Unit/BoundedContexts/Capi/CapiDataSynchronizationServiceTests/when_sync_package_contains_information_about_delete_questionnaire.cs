@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         It should_call_DeleteQuestionnaire_once =
             () => commandService.Verify(x => x.Execute(
                             Moq.It.Is<DeleteQuestionnaire>(
-                                param => param.QuestionnaireId == questionnaireMetadata.QuestionnaireId && param.QuestionnaireVersion == 1), null),
+                                param => param.QuestionnaireId == questionnaireMetadata.QuestionnaireId && param.QuestionnaireVersion == 1), null, false),
                     Times.Once);
 
         It should_delete_questionnaire_from_plaine_storage_once =
