@@ -10,6 +10,7 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
@@ -22,6 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void Init()
         {
             AssemblyContext.SetupServiceLocator();
+
+            Setup.InstanceToMockedServiceLocator(Mock.Of<IUserPreconditionsService>(_ => _.IsUserActive(Moq.It.IsAny<Guid>()) == true));
+
             this.eventContext = new EventContext();
         }
 
@@ -30,6 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             this.eventContext.Dispose();
             this.eventContext = null;
+            Setup.InstanceToMockedServiceLocator(Mock.Of<IUserPreconditionsService>());
         }
 
         [Test]
