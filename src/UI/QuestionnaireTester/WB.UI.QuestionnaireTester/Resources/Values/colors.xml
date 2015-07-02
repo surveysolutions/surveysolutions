@@ -73,4 +73,8 @@
   <color name="interviewHeaderInProgress">#2a81cb</color>
   <color name="interviewHeaderErrors">#f05a26</color>
   
+  <color name="interviewStatusBarComplited">#309211</color>
+  <color name="interviewStatusBarInProgress">#246EAD</color>
+  <color name="interviewStatusBarErrors">#CC4D20</color>
+  
 </resources>

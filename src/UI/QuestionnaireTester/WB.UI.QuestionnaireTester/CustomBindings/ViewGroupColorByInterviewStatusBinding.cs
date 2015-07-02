@@ -7,9 +7,9 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ViewGroupInterviewStatusBinding : BaseBinding<ViewGroup, GroupStatus>
+    public class ViewGroupColorByInterviewStatusBinding : BaseBinding<ViewGroup, GroupStatus>
     {
-        public ViewGroupInterviewStatusBinding(ViewGroup androidControl)
+        public ViewGroupColorByInterviewStatusBinding(ViewGroup androidControl)
             : base(androidControl)
         {
         }
