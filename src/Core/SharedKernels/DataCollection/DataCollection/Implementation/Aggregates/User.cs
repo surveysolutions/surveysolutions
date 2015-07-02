@@ -4,14 +4,16 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class User : AggregateRootMappedByConvention
+    public class User : AggregateRootMappedByConvention, ISnapshotable<UserState>
     {
         private bool isUserLockedBySupervisor;
         private bool isUserLockedByHQ;
@@ -221,6 +223,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
-       
+
+        public UserState CreateSnapshot()
+        {
+            return new UserState()
+            {
+                IsUserArchived = isUserArchived,
+                IsUserLockedByHQ = isUserLockedByHQ,
+                IsUserLockedBySupervisor = isUserLockedBySupervisor,
+                LoginName = loginName,
+                UserRoles = userRoles,
+                UserSupervisorId = userSupervisorId
+            };
+        }
+
+        public void RestoreFromSnapshot(UserState snapshot)
+        {
+            isUserArchived = snapshot.IsUserArchived;
+            isUserLockedByHQ = snapshot.IsUserLockedByHQ;
+            isUserLockedBySupervisor = snapshot.IsUserLockedBySupervisor;
+            loginName = snapshot.LoginName;
+            userRoles = snapshot.UserRoles;
+            userSupervisorId = snapshot.UserSupervisorId;
+        }
     }
 }
