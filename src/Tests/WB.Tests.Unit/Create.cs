@@ -1660,5 +1660,20 @@ namespace WB.Tests.Unit
         {
             return new FileSystemIOAccessor();
         }
+
+        public static UserLight UserLight()
+        {
+            return new UserLight(Guid.NewGuid(),"test");
+        }
+
+        public static NewUserCreated NewUserCreated(UserRoles role = UserRoles.Operator)
+        {
+            return new NewUserCreated() { Roles = new[] { role }, Supervisor = Create.UserLight() };
+        }
+
+        public static UserArchived UserArchived()
+        {
+           return new UserArchived();
+        }
     }
 }
