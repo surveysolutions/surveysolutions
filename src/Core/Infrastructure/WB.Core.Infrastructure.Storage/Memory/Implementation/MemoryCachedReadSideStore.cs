@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 {
-    internal class MemoryCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, IChacheableRepositoryWriter, IReadSideRepositoryCleaner
+    internal class MemoryCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> readSideStorage;
