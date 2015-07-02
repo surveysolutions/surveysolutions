@@ -68,18 +68,7 @@ namespace WB.UI.QuestionnaireTester.Activities
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
         {
-            var offset = 0;
-            if (msg.OffsetInsideOfAnchoredItemInPercentage > 0)
-            {
-                // always null :(
-                var anchoredView = listOfInterviewQuestionsAndGroups.GetChildAt(msg.AnchorElementIndex);
-                
-                if (anchoredView!=null)
-                {
-                    offset = anchoredView.Height * msg.OffsetInsideOfAnchoredItemInPercentage / 100;
-                }
-            }
-            this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, offset);
+            this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
