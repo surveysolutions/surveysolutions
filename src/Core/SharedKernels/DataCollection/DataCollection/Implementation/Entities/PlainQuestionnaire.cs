@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
 
         internal QuestionnaireDocument QuestionnaireDocument
@@ -378,11 +379,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
         {
-            if (!this.cacheOfUnderlyingQuestions.ContainsKey(groupId))
-                this.cacheOfUnderlyingInterviewerQuestions[groupId] =  new ReadOnlyCollection<Guid>(this.GetGroupOrThrow(groupId)
+            if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
+                this.cacheOfUnderlyingInterviewerQuestions[groupId] = this
+                    .GetGroupOrThrow(groupId)
                     .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Interviewer)
                     .Select(question => question.PublicKey)
-                    .ToList());
+                    .ToReadOnlyCollection();
 
             return this.cacheOfUnderlyingInterviewerQuestions[groupId];
         }
@@ -399,6 +401,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return this.cacheOfChildQuestions[groupId];
+        }
+
+        public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
+        {
+            var q = this.GetGroupOrThrow(groupId).Children.OfType<IQuestion>()
+                .Where(question => question.QuestionScope == QuestionScope.Interviewer);
+
+            if (!this.cacheOfChildInterviewerQuestions.ContainsKey(groupId))
+            {
+                this.cacheOfChildInterviewerQuestions[groupId] = 
+                    this.GetGroupOrThrow(groupId)
+                        .Children.OfType<IQuestion>()
+                        .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
+                        .Select(question => question.PublicKey)
+                        .ToReadOnlyCollection();
+            }
+
+            return this.cacheOfChildInterviewerQuestions[groupId];
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId)
