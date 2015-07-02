@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
             passwordHasherMock.Setup(_ => _.Hash(model.Password)).Returns(hashedPassword);
 
             commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
-                .Callback<ICommand, string>((command, origin) => executedCommand = command);
+                .Callback<ICommand, string, bool>((command, origin, isBulk) => executedCommand = command);
 
             controller = CreateController(commandService: commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
         };

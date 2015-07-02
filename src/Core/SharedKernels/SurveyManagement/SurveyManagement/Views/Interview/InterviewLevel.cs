@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.Questions = new List<InterviewQuestion>();
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
+            this.QuestionsSearchCahche = new Dictionary<Guid, InterviewQuestion>();
         }
         public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
             : this()
@@ -24,23 +25,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public decimal[] RosterVector { get; set; }
         public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; set; }
-        public List<InterviewQuestion> Questions { get; set; }
+        
         public HashSet<Guid> DisabledGroups { get; set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
 
-        private Dictionary<Guid, InterviewQuestion> questionsSearchCahche = null;
-        private Dictionary<Guid, InterviewQuestion> QuestionsSearchCahche
+
+        public List<InterviewQuestion> Questions 
         {
-            get
+            set
             {
-                return this.questionsSearchCahche ?? (this.questionsSearchCahche
-                    = this.Questions.ToDictionary(x => x.Id, x => x));
-            }
+                this.QuestionsSearchCahche = value.ToDictionary(x => x.Id, x => x);
+            } 
         }
+
+
+        public Dictionary<Guid, InterviewQuestion> QuestionsSearchCahche { set; get; }
+        
 
         public IEnumerable<InterviewQuestion> GetAllQuestions()
         {
-            return this.Questions;
+            return this.QuestionsSearchCahche.Values;
         }
 
         public InterviewQuestion GetQuestion(Guid questionId)
@@ -59,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (answeredQuestion == null)
             {
                 answeredQuestion = new InterviewQuestion(questionId);
-                this.Questions.Add(answeredQuestion);
+                this.QuestionsSearchCahche.Add(answeredQuestion.Id, answeredQuestion);
             }
             return answeredQuestion;
         }

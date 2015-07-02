@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Core.Synchronization
 
             commandServiceMock
                 .Setup(x => x.Execute(Moq.It.IsAny<RegisterTabletCommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
-                .Callback((ICommand command, string origin) => registerTabletCommand = command as RegisterTabletCommand);
+                .Callback((ICommand command, string origin, bool isBulk) => registerTabletCommand = command as RegisterTabletCommand);
 
             syncManager = CreateSyncManager(commandService: commandServiceMock.Object, devices: devices);
         };
