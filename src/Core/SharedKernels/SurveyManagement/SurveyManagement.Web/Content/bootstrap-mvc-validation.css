@@ -5,4 +5,5 @@
 .control-label.required:before {
     content: '*';
     color: #DA4F49;
+    padding-right: 5px;
 }
