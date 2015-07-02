@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var eventBus = Mock.Of<IEventBus>();
             Mock.Get(eventBus)
                 .Setup(bus => bus.PublishUncommitedEventsFromAggregateRoot(Moq.It.IsAny<IAggregateRoot>(), null, false))
-                .Callback<IAggregateRoot, string>((aggregate, origin) =>
+                .Callback<IAggregateRoot, string, bool>((aggregate, origin, inBatch) =>
                 {
                     publishedEvents = aggregate.GetUncommittedChanges();
                     constructedAggregateId = aggregate.EventSourceId;
