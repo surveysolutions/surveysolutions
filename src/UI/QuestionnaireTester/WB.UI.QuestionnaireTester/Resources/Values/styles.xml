@@ -198,11 +198,9 @@
     <item name="android:background">@android:color/transparent</item>
     <item name="android:textColor">@color/sections_list_text_color</item>
     <item name="android:textSize">@dimen/textsize_30</item>
-    <item name="android:fontFamily">Roboto</item>
-    <item name="android:textStyle">normal</item>
-    <item name="android:paddingRight">12dp</item>
-    <item name="android:layout_marginLeft">5dp</item>
-    <!--<item name="android:background">#ADD8E6</item>-->
+    <item name="android:paddingRight">@dimen/Interview_Sidebar_row_button_padding_right</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_row_button_margin_left</item>
+    <item name="android:fontFamily">sans-serif-light</item>
   </style>
   
   <style name="Interview_Sidebar_Sections_Section_Title">
@@ -213,11 +211,8 @@
     <item name="android:fontFamily">@string/font_fontFamily_medium</item>
     <item name="android:textColor">@color/sections_list_text_color</item>
     <item name="android:textSize">@dimen/textsize_16</item>
-    <item name="android:ellipsize">end</item>
-    <item name="android:singleLine">true</item>
-    <item name="android:minLines">1</item>
+    <item name="android:singleLine">false</item>
     <item name="android:layout_weight">1</item>
-    <!--<item name="android:background">#BFEFFF</item>-->
   </style>
 
     
