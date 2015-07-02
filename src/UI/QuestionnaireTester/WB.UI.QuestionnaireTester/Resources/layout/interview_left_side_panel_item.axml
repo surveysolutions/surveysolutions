@@ -5,7 +5,8 @@
                 orientation="horizontal"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                >
+                local:MvxBind="Click NavigateToSectionCommand; PaddingLeft NodeDepth"
+                android:paddingLeft="@dimen/Interview_Sidebar_Group_margin_left">
     <TableRow>
       <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
               local:MvxBind="Shown HasChildren; Click Toggle; Text If(Expanded, '–','+')"/>

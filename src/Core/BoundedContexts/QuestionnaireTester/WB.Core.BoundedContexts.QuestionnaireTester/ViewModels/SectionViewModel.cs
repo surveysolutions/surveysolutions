@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
-
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -15,8 +15,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly SectionsViewModel root;
 
-        public SectionViewModel(SectionsViewModel root)
+        public SectionViewModel(SectionsViewModel root, int nodeDepth)
         {
+            this.NodeDepth = nodeDepth;
             this.root = root;
             this.Children = new ObservableCollection<SectionViewModel>();
             this.Children.CollectionChanged += (sender, args) => this.RaisePropertyChanged(() => HasChildren);
@@ -55,6 +56,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     this.RaisePropertyChanged();
                 }
             }
+        }
+
+        public int NodeDepth
+        {
+            get;
+            set;
         }
 
         public ObservableCollection<SectionViewModel> Children { get; private set; }

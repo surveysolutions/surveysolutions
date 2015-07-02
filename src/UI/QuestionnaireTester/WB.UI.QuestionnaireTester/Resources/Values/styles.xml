@@ -185,7 +185,7 @@
   <style name="Interview_Sidebar_Sections_Group" parent="VerticalFullWidthWrappingLayout">
     <item name="android:orientation">vertical</item>
     <item name="android:background">@android:color/transparent</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_Group_margin_left</item>
+    <!--<item name="android:paddingLeft">@dimen/Interview_Sidebar_Group_margin_left</item>-->
   </style>
 
   <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">

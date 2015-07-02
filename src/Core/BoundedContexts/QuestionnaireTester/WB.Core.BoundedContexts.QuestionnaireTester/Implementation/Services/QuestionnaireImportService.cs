@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
 
-            questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(this.BuildGroupsHierarchy).ToList();
+            questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
             
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
@@ -76,19 +76,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             questionnaireRepository.StoreQuestionnaire(questionnaireDocument.PublicKey, 1, questionnaireDocument);
         }
 
-        private GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup)
+        private GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup, int layerIndex)
         {
             var childrenHierarchy = currentGroup.Children.OfType<Group>()
-                .Select(this.BuildGroupsHierarchy)
+                .Select(x => this.BuildGroupsHierarchy(x, layerIndex + 1))
                 .ToList();
 
-            return new GroupsHierarchyModel
+            var resultModel = new GroupsHierarchyModel
             {
                 Id = currentGroup.PublicKey,
                 Title = currentGroup.Title,
                 IsRoster = currentGroup.IsRoster,
+                ZeroBasedDepth = layerIndex,
                 Children = childrenHierarchy
             };
+            return resultModel;
         }
 
         private void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item, Dictionary<Guid, int> questionIdToRosterLevelDeep)
