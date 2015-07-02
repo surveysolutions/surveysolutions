@@ -62,6 +62,7 @@
   <color name="sections_list_background_color">#ffffff</color>
   <color name="sections_list_selected_background_color">#f3f3f3</color>
   <color name="sections_list_text_color">#000000</color>
+  <color name="sections_list_pressed_background_color">#E5E5E5</color>
   
   <color name="list_style_divider_color">#EDEDED</color>
 

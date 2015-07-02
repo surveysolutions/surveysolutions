@@ -330,6 +330,7 @@
     <Compile Include="Activities\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\layout\interview_question_gps.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -345,6 +346,11 @@
     <AndroidResource Include="Resources\layout\interview_left_side_panel_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\sidebar_row.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
     <LinkDescription Include="linker.xml" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
@@ -358,7 +364,6 @@
     <AndroidResource Include="Resources\values-v21\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\drawable\questionnaire_list_item_border.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -437,7 +442,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_focused_holo_light.9.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_holo_light.9.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_focused_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_activated_background_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\theme_blue_light_item_background_holo_light.xml" />
     <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_background_transition_holo_light.xml" />
