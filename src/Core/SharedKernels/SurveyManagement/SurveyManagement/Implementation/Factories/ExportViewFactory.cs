@@ -131,12 +131,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     interview.Levels.SingleOrDefault(
                         l => l.Key == CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
 
-                var questionToCheck = levelForVector.Value.GetQuestion(id);
+                var questionToCheck = levelForVector.Value.QuestionsSearchCahche.ContainsKey(id) ? levelForVector.Value.QuestionsSearchCahche[id] : null;
 
                 if (questionToCheck == null)
                     continue;
-                if (questionToCheck.Answer == null)
-                    return string.Empty;
+
                 var interviewTextListAnswer = questionToCheck.Answer as InterviewTextListAnswers;
 
                 if (interviewTextListAnswer == null)
@@ -149,13 +148,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return string.Empty;
         }
 
-        private ExportedQuestion[] GetQuestionsForExport(InterviewLevel availableQuestions,
+        private ExportedQuestion[] GetQuestionsForExport(InterviewLevel interviewLevel,
             HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<ExportedQuestion>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
-                var question = availableQuestions.GetQuestion(headerItem.PublicKey);
+                var question = interviewLevel.QuestionsSearchCahche.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCahche[headerItem.PublicKey] : null;
                 ExportedQuestion exportedQuestion = null;
                 if (question == null)
                 {
