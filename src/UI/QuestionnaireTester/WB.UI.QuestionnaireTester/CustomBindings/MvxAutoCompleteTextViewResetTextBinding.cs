@@ -23,21 +23,21 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             Target.ClearListSelection();
             Target.DismissDropDown();
 
+            // this is hack
+            var adaptor = Target.Adapter;
+            Target.Adapter = null;
+
             if (value == null)
             {
                 Target.Text = string.Empty;
             }
             else
             {
-                // this is hack
-                var adaptor = Target.Adapter;
-                Target.Adapter = null;
-
                 Target.SetText(value, true);
                 Target.SetSelection(value.Length);
-                
-                Target.Adapter = adaptor;
             }
+
+            Target.Adapter = adaptor;
         }
 
         public override void SubscribeToEvents()
