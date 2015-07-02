@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.root = root;
             this.Children = new ObservableCollection<SectionViewModel>();
             this.Children.CollectionChanged += (sender, args) => this.RaisePropertyChanged(() => HasChildren);
-            this.Expanded = true;
         }
 
         public Identity SectionIdentity { get; set; }
@@ -38,6 +37,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get { return this.isSelected; }
             set { this.isSelected = value; this.RaisePropertyChanged(); }
+        }
+
+        public bool IsCurrent
+        {
+            get { return this.isCurrent; }
+            set { this.isCurrent = value; this.RaisePropertyChanged(); }
         }
 
         public bool HasChildren
@@ -58,17 +63,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        public int NodeDepth
-        {
-            get;
-            set;
-        }
+        public int NodeDepth { get; set; }
 
         public ObservableCollection<SectionViewModel> Children { get; private set; }
 
         private MvxCommand navigateToSectionCommand;
         private bool expanded;
         private string toggleButtonText;
+        private bool isCurrent;
 
         public ICommand NavigateToSectionCommand
         {

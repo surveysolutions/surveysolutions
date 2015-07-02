@@ -9,7 +9,7 @@
               local:MvxBind="Click Toggle; Text If(Expanded, '–','+'); Transparent Not(HasChildren);"/>
       <TextView
             style="@style/Interview_Sidebar_Sections_Section_Title"
-            local:MvxBind="Text Title;" />
+            local:MvxBind="Text Title; Bold IsCurrent" />
     </TableRow>
   </TableLayout>
 
