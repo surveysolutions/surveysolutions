@@ -8,11 +8,12 @@
   <MvxLinearLayout android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:orientation="vertical">
-    <LinearLayout style="@style/Interview_BreadCrumbsContainer">
+    <LinearLayout style="@style/Interview_BreadCrumbsContainer"
+                  local:MvxBind="InterviewStatus Status;">
       <FlowLayout orienation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  local:MvxBind="ItemsSource Breadcrumbs.Items"
+                  local:MvxBind="ItemsSource Breadcrumbs.Items;"
                   local:MvxItemTemplate="@layout/interview_breadcrumb_item">
       </FlowLayout>
 
@@ -22,7 +23,8 @@
                                        android:layout_height="wrap_content"
                                        android:background="?attr/colorPrimary"
                                        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                                       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                                       local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       local:MvxBind="InterviewStatus Status;">
       <TextView style="@style/InterviewToolbarTitle"
                 local:MvxBind="Text CurrentGroup.Name" />
     </android.support.v7.widget.Toolbar>

@@ -69,4 +69,8 @@
   <color name="darkActionBar">#575757</color>
   <color name="interviewActionBar">#246EAD</color>
 
+  <color name="interviewHeaderComplited">#38ac14</color>
+  <color name="interviewHeaderInProgress">#2a81cb</color>
+  <color name="interviewHeaderErrors">#f05a26</color>
+  
 </resources>
