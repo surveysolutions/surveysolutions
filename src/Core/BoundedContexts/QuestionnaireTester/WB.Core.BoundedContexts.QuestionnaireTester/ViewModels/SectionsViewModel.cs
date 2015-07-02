@@ -152,26 +152,44 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         void navigationState_OnGroupChanged(NavigationParams navigationParams)
         {
-            SectionViewModel groupToBeSelected = null;
-            foreach (var section in Sections)
+            HighlightCurrentGroup(navigationParams);
+            HighlightCurrentSection(navigationParams);
+        }
+
+        private void HighlightCurrentGroup(NavigationParams navigationParams)
+        {
+            SectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
+                .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+
+            var oldSelectedGroups = this.Sections.TreeToEnumerable(x => x.Children)
+                .Where(x => x.IsCurrent);
+            oldSelectedGroups.ForEach(x => x.IsCurrent = false);
+
+            newCurrentGroup.IsCurrent = true;
+        }
+
+        private void HighlightCurrentSection(NavigationParams navigationParams)
+        {
+            SectionViewModel sectionToHighlight = null;
+            foreach (var section in this.Sections)
             {
                 SectionViewModel selectedGroup = section.TreeToEnumerable(x => x.Children)
-                                                         .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+                    .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+
                 if (selectedGroup != null)
                 {
-                    groupToBeSelected = section;
+                    sectionToHighlight = section;
                     break;
                 }
             }
 
-            
-            if (groupToBeSelected == null)
+            if (sectionToHighlight == null)
             {
                 return;
             }
 
             this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
-            groupToBeSelected.IsSelected = true;
+            sectionToHighlight.IsSelected = true;
         }
 
         public void Handle(RosterInstancesAdded @event)
