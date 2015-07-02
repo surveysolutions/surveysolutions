@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Graphics;
+using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
@@ -17,6 +18,9 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(ViewGroup target, GroupStatus value)
         {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
+                return;
+
             switch (value)
             {
                 case GroupStatus.CompletedInvalid:
