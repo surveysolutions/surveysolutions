@@ -87,9 +87,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             var interview = this.interviewRepository.Get(navigationState.InterviewId);
 
-            var questionsCount = interview.GetInterviewerQuestionsInGroupCount(groupIdentity);
-            var answeredQuestionsCount = interview.GetAnsweredInterviewerQuestionsCount(groupIdentity);
-            var invalidAnswersCount = interview.GetInvalidInterviewerAnswersCount(groupIdentity);
+            var questionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(groupIdentity);
+            var answeredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(groupIdentity);
+            var invalidAnswersCount = interview.CountInvalidInterviewerAnswersInGroupOnly(groupIdentity);
 
             var newState = GroupStatus.NotStarted;
 
@@ -118,7 +118,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public GroupStatus Status
         {
             get { return this.status; }
-            private set { this.status = value; this.RaisePropertyChanged(); }
+            private set
+            {
+                if (status != value)
+                {
+                    this.status = value;
+                    this.RaisePropertyChanged();
+                }
+            }
         }
 
         public BreadcrumbsViewModel Breadcrumbs { get; set; }

@@ -98,10 +98,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             var state = new GroupState();
 
-            state.QuestionsCount = interview.GetInterviewerQuestionsInGroupCount(groupIdentity);
+            state.QuestionsCount = interview.CountInterviewerQuestionsInGroupRecursively(groupIdentity);
             state.SubgroupsCount = interview.GetGroupsInGroupCount(groupIdentity);
-            state.AnsweredQuestionsCount = interview.GetAnsweredInterviewerQuestionsCount(groupIdentity);
-            state.InvalidAnswersCount = interview.GetInvalidInterviewerAnswersCount(groupIdentity);
+            state.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupRecursively(groupIdentity);
+            state.InvalidAnswersCount = interview.CountInvalidInterviewerAnswersInGroupRecursively(groupIdentity);
 
             var newState = GroupStatus.NotStarted;
 

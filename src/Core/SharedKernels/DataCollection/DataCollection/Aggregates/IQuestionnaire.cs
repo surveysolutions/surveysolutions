@@ -119,5 +119,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets first level child questions of a group
         /// </summary>
         ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
+
+        ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
     }
 }

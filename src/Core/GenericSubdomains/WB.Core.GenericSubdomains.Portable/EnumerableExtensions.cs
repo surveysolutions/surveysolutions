@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Portable
@@ -28,6 +29,16 @@ namespace WB.Core.GenericSubdomains.Portable
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
         {
             return new HashSet<T>(source);
+        }
+
+        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IList<T> source)
+        {
+            return new ReadOnlyCollection<T>(source);
+        }
+
+        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
+        {
+            return source.ToList().ToReadOnlyCollection();
         }
 
         public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
