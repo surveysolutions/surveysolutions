@@ -359,6 +359,9 @@
     <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
     <AndroidResource Include="Resources\values\fonts.xml" />
     <AndroidResource Include="Resources\values-v21\fonts.xml" />
+    <AndroidResource Include="Resources\drawable-v21\sidebar_row.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <LinkDescription Include="linker.xml" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
