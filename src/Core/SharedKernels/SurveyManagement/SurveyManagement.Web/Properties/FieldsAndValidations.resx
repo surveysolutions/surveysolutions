@@ -171,4 +171,7 @@
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>Input name is too long</value>
   </data>
+  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+    <value>Is locked by Supervisor</value>
+  </data>
 </root>
