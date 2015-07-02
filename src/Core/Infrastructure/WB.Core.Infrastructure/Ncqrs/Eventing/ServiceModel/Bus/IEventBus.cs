@@ -13,6 +13,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         void Publish(IEnumerable<IPublishableEvent> eventMessages);
 
-        void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin);
+        void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool isBulk = false);
     }
 }

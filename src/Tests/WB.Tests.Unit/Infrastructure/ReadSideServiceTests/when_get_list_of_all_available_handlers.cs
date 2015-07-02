@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         Establish context = () =>
         {
             readSideRepositoryCleanerMock = new Mock<IReadSideRepositoryCleaner>();
-            readSideRepositoryWriterMock = new Mock<IChacheableRepositoryWriter>();
+            readSideRepositoryWriterMock = new Mock<ICacheableRepositoryWriter>();
             readSideRepositoryWriterMock.Setup(x => x.ViewType).Returns(typeof(object));
 
             firstEventHandlerMock = new Mock<IEventHandler>();
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         private static Mock<IEventHandler> firstEventHandlerMock;
         private static Mock<IEventHandler> secondEventHandlerMock;
         private static Mock<IReadSideRepositoryCleaner> readSideRepositoryCleanerMock;
-        private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<ICacheableRepositoryWriter> readSideRepositoryWriterMock;
         private static IEnumerable<ReadSideEventHandlerDescription> result;
 
         private static string FirstHandlerName = "first handler";

@@ -28,6 +28,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public HashSet<Guid> DisabledGroups { get; set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
 
+        private Dictionary<Guid, InterviewQuestion> questionsSearchCahche = null;
+        private Dictionary<Guid, InterviewQuestion> QuestionsSearchCahche
+        {
+            get
+            {
+                return this.questionsSearchCahche ?? (this.questionsSearchCahche
+                    = this.Questions.ToDictionary(x => x.Id, x => x));
+            }
+        }
+
         public IEnumerable<InterviewQuestion> GetAllQuestions()
         {
             return this.Questions;
@@ -36,7 +46,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewQuestion GetQuestion(Guid questionId)
         {
             #warning TLK: I put all existing queries to this method to highlight that queries are not optimal
-            return this.Questions.FirstOrDefault(question => question.Id == questionId);
+            //return this.Questions.FirstOrDefault(question => question.Id == questionId);
+
+            return QuestionsSearchCahche.ContainsKey(questionId)
+                ? QuestionsSearchCahche[questionId]
+                : null;
         }
 
         public InterviewQuestion GetOrCreateQuestion(Guid questionId)

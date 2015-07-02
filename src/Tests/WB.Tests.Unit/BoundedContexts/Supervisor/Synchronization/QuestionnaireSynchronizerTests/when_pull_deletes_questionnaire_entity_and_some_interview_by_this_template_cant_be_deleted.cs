@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
                 Moq.It.Is<HardDeleteInterview>(
                     c =>
                         c.InterviewId == censusModeInterviewId),
-                Moq.It.IsAny<string>())).Throws<ArgumentException>();
+                Moq.It.IsAny<string>(), Moq.It.IsAny<bool>())).Throws<ArgumentException>();
 
             questionnaireSynchronizer = CreateQuestionnaireSynchronizer(plainStorage: plainStorageMock.Object,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object,
