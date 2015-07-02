@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private SectionViewModel BuildSectionViewModel(SectionsViewModel root, GroupsHierarchyModel section)
         {
-            return new SectionViewModel(root)
+            return new SectionViewModel(root, 0)
             {
                 Title = section.Title,
                 SectionIdentity = new Identity(section.Id, new decimal[] { })
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     title = substitutionService.GenerateRosterName(group.Title, rosterTitle);
                 }
 
-                var section = new SectionViewModel(this)
+                var section = new SectionViewModel(this, group.ZeroBasedDepth)
                 {
                     SectionIdentity = groupInstance,
                     Title = title
