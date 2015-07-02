@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Utils;
@@ -63,7 +64,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                             group => group));
             }
         }
-
+        
         #endregion
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
@@ -311,8 +312,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (parentRosterId.HasValue)
             {
                 var nestedRosters = this.GetNestedRostersOfGroupById(parentRosterId.Value);
-                return this
-                    .GetAllGroups()
+                return this.GetAllGroups()
                     .Where(x => nestedRosters.Contains(x.PublicKey) && x.RosterSizeSource == RosterSizeSourceType.FixedTitles)
                     .Select(x => x.PublicKey)
                     .ToList();
@@ -480,9 +480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 itemsAdded = false;
                 foreach (var foundItem in foundItems)
                 {
-                    foundItems = this.QuestionnaireDocument.Children
-                        .TreeToEnumerable(x => x.Children)
-                        .Where(x =>
+                    foundItems = questionCache.Values.Where(x =>
                         {
                             var question = x as SingleQuestion;
                             var isCascadingQuestion = question != null &&
@@ -504,8 +502,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id)
         {
-            return this.QuestionnaireDocument.Children.TreeToEnumerable(_ => _.Children)
-                .Where(x =>
+            return questionCache.Values.Where(x =>
                 {
                     var question = x as AbstractQuestion;
                     return question != null && question.CascadeFromQuestionId.HasValue && question.CascadeFromQuestionId.Value == id;
@@ -514,8 +511,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IEnumerable<Guid> GetAllChildCascadingQuestions()
         {
-            return this.QuestionnaireDocument.Children.TreeToEnumerable(_ => _.Children)
-                .Where(x =>
+            return questionCache.Values.Where(x =>
                 {
                     var question = x as AbstractQuestion;
                     return question != null && question.CascadeFromQuestionId.HasValue;

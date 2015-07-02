@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
             passwordHasherMock.Setup(_ => _.Hash(model.Password)).Returns(hashedPassword);
 
-            commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
+            commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Callback<ICommand, string>((command, origin) => executedCommand = command);
 
             controller = CreateController(commandService: commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
             controller.Finish(model);
 
         It should_execute_command_service_only_once = () =>
-            commandServiceMock.Verify(_ => _.Execute(executedCommand, null), Times.Once);
+            commandServiceMock.Verify(_ => _.Execute(executedCommand, null, false), Times.Once);
 
         It should_execute_command_be_type_of_CreateUserCommand = () =>
             executedCommand.ShouldBeOfExactType<CreateUserCommand>();

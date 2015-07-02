@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                                         param.UserName == userDocument.UserName && param.IsLockedByHQ == userDocument.IsLockedByHQ
                                         && param.IsLockedBySupervisor == userDocument.IsLockedBySupervisor &&
                                         param.Roles.SequenceEqual(userDocument.Roles)&&
-                                        param.Password==userDocument.Password), null),
+                                        param.Password==userDocument.Password), null, false),
                     Times.Once);
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;

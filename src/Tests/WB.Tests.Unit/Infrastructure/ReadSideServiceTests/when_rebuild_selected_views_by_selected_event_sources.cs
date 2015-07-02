@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     {
         Establish context = () =>
         {
-            readSideRepositoryWriterMock = new Mock<IChacheableRepositoryWriter>();
+            readSideRepositoryWriterMock = new Mock<ICacheableRepositoryWriter>();
             readSideRepositoryWriterMock.Setup(x => x.ViewType).Returns(typeof(object));
 
             eventHandlerMock = new Mock<IAtomicEventHandler>();
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
         private static Mock<IEventDispatcher> eventDispatcherMock;
         private static Mock<IStreamableEventStore> streamableEventStoreMock;
         private static Mock<IAtomicEventHandler> eventHandlerMock;
-        private static Mock<IChacheableRepositoryWriter> readSideRepositoryWriterMock;
+        private static Mock<ICacheableRepositoryWriter> readSideRepositoryWriterMock;
         private static Mock<ITransactionManagerProviderManager> transactionManagerProviderManagerMock;
 
         private static Guid eventSourceId = Guid.Parse("11111111111111111111111111111111");

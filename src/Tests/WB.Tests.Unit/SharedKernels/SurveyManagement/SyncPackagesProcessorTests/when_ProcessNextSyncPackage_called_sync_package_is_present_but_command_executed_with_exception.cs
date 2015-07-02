@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
                     InterviewStatus.Completed, new object[0], true, "", "path"));
 
             commandServiceMock = new Mock<ICommandService>();
-            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
+            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Throws<NullReferenceException>();
 
             syncPackagesProcessor = CreateSyncPackagesProcessor(commandService: commandServiceMock.Object, incomingSyncPackagesQueue: incomingSyncPackagesQueueMock.Object, brokenSyncPackagesStorage: unhandledPackageStorage.Object);

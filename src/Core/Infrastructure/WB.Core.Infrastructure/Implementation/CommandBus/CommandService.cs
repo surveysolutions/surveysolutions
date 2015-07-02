@@ -21,7 +21,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.snapshooter = snapshooter;
         }
 
-        public void Execute(ICommand command, string origin)
+        public void Execute(ICommand command, string origin, bool handleInBatch)
         {
             if (command == null) throw new ArgumentNullException("command");
 
@@ -48,7 +48,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             commandHandler.Invoke(command, aggregate);
 
-            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin);
+            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin, handleInBatch);
 
             this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
         }
