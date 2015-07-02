@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -19,6 +21,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly NavigationState navigationState;
+        private readonly AnswerNotifier answerNotifier;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -26,12 +29,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             SectionsViewModel sectionsViewModel, 
             BreadcrumbsViewModel breadcrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
-            NavigationState navigationState)
+            NavigationState navigationState,
+            AnswerNotifier answerNotifier)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
+            this.answerNotifier = answerNotifier;
 
             this.Breadcrumbs = breadcrumbsViewModel;
             this.CurrentGroup = groupViewModel;
@@ -58,13 +63,62 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
+            this.navigationState.OnGroupChanged += NavigationStateOnOnGroupChanged;
             await this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
+
+            this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
+        }
+
+        private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
+        {
+            this.UpdateInterviewStatus(navigationState.CurrentGroup);
+        }
+
+        private void NavigationStateOnOnGroupChanged(NavigationParams newGroupIdentity)
+        {
+            var interview = this.interviewRepository.Get(navigationState.InterviewId);
+            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
+            this.answerNotifier.Init(questionsToListen.ToArray());
+
+            this.UpdateInterviewStatus(newGroupIdentity.TargetGroup);
+        }
+
+        private void UpdateInterviewStatus(Identity groupIdentity)
+        {
+            var interview = this.interviewRepository.Get(navigationState.InterviewId);
+
+            var questionsCount = interview.GetInterviewerQuestionsInGroupCount(groupIdentity);
+            var answeredQuestionsCount = interview.GetAnsweredInterviewerQuestionsCount(groupIdentity);
+            var invalidAnswersCount = interview.GetInvalidInterviewerAnswersCount(groupIdentity);
+
+            var newState = GroupStatus.NotStarted;
+
+            if (answeredQuestionsCount > 0)
+                newState = GroupStatus.Started;
+
+            if (questionsCount == answeredQuestionsCount)
+                newState = GroupStatus.Completed;
+
+            if (invalidAnswersCount > 0)
+                newState = GroupStatus.StartedInvalid;
+
+            if (invalidAnswersCount > 0 && questionsCount == answeredQuestionsCount)
+                newState = GroupStatus.CompletedInvalid;
+
+            Status = newState;
         }
 
         private static BaseInterviewAnswer GetAnswerModel(IStatefulInterview interview, QuestionnaireReferenceModel referenceToQuestion)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             return interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
+        }
+
+        private GroupStatus status;
+        public GroupStatus Status
+        {
+            get { return this.status; }
+            private set { this.status = value; this.RaisePropertyChanged(); }
         }
 
         public BreadcrumbsViewModel Breadcrumbs { get; set; }
