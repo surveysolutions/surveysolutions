@@ -85,7 +85,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
+                    IsLocked = user.IsLockedByHQ,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
                     UserName = user.UserName,
                     DevicesHistory = user.DeviceChangingHistory.ToList(),
                     PersonName = user.PersonName,

@@ -1,10 +1,11 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 
 @Html.Partial("UserEditFormWithoutLock")
 <div class="form-group">
     @Html.LabelFor(x => x.IsLocked, new { @class = "col-sm-4 control-label" })
     <div class="col-sm-8">
-        @Html.CheckBoxFor(x => x.IsLocked)
+        @Html.CheckBoxFor(x => x.IsLocked, new { @class = (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator) ? "enabled" :"disabled" })
         @Html.ValidationMessageFor(x => x.IsLocked, null, new { @class = "help-block" })
     </div>
 </div>
