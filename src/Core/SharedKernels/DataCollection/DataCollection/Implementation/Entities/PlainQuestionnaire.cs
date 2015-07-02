@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IGroup> groupCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
+        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -429,6 +430,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfUnderlyingGroups[groupId];
         }
 
+        public IEnumerable<Guid> GetAllUnderlyingChildRosters(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingRosters.ContainsKey(groupId))
+                this.cacheOfUnderlyingRosters[groupId] = this.GetAllUnderlyingRostersImpl(groupId);
+
+            return this.cacheOfUnderlyingRosters[groupId];
+        }
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
@@ -674,6 +683,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Children
                 .Where(child => child is Group).Cast<Group>()
                 .Where(group => !group.IsRoster)
+                .Select(group => group.PublicKey)
+                .ToList();
+        }
+
+        private IEnumerable<Guid> GetAllUnderlyingRostersImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Children
+                .Where(child => child is Group).Cast<Group>()
+                .Where(group => group.IsRoster)
                 .Select(group => group.PublicKey)
                 .ToList();
         }

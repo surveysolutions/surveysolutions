@@ -159,23 +159,11 @@
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Опросники</value>
   </data>
-  <data name="EmptyQuestionnaireListBySearchText" xml:space="preserve">
-    <value>По Вашему запросу ничего не найдено</value>
-  </data>
-  <data name="EmptyQuestionnaireListText" xml:space="preserve">
-    <value>Нет опросников.  &lt;br/&gt; Потяните вниз, чтобы обновить список</value>
-  </data>
   <data name="EndpointText" xml:space="preserve">
     <value>Адрес веб-сервиса:</value>
   </data>
   <data name="EngineVersionText" xml:space="preserve">
     <value>Версия ядра:</value>
-  </data>
-  <data name="HttpResponseTimeoutText" xml:space="preserve">
-    <value>Время ожидания отвера от сервера:</value>
-  </data>
-  <data name="HttpResponseTimeoutUnitsText" xml:space="preserve">
-    <value>в секундах</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Подключение к серверу</value>
@@ -229,7 +217,7 @@
     <value>Войти</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
-    <value>Survey Solutions Questionnaire Tester Application</value>
+    <value>Survey Solutions Questionnaire Tester</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
@@ -337,7 +325,7 @@
     <value>Отмена</value>
   </data>
   <data name="ConfirmationTryAgainText" xml:space="preserve">
-    <value>Попробывать снова</value>
+    <value>Попробовать снова</value>
   </data>
   <data name="Interview_GeoLocation_Confirm_NoLocation" xml:space="preserve">
     <value>Не могу определить Ваше местоположение</value>
@@ -392,5 +380,40 @@
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
     <value>Ответ "{0}" не может быть сохранен, он не соответствует ни одной опции.</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>Опросники не обнаружены
+
+Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Секция не содержит ни одного ответа</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>вложенных секций: {0}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>вложенных секций нет</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>одна вложенная секция</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>одна ошибка</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>ошибок: {0}</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Секция заполнена ({0})</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Секция частично заполнена ({0})</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>один ответ</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>ответов: {0}</value>
   </data>
 </root>
