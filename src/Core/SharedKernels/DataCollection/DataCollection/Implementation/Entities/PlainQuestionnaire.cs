@@ -21,9 +21,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Func<long> getVersion;
         private readonly Guid? responsibleId;
 
-        private Dictionary<Guid, IQuestion> questionCache = null;
-        private Dictionary<Guid, IGroup> groupCache = null;
-
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -39,7 +36,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             get { return this.responsibleId; }
         }
 
-        internal Dictionary<Guid, IQuestion> QuestionCache
+        private Dictionary<Guid, IQuestion> questionCache = null;
+        private Dictionary<Guid, IGroup> groupCache = null;
+        
+        private Dictionary<Guid, IQuestion> QuestionCache
         {
             get
             {
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        internal Dictionary<Guid, IGroup> GroupCache
+        private Dictionary<Guid, IGroup> GroupCache
         {
             get
             {
@@ -480,7 +480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 itemsAdded = false;
                 foreach (var foundItem in foundItems)
                 {
-                    foundItems = questionCache.Values.Where(x =>
+                    foundItems = QuestionCache.Values.Where(x =>
                         {
                             var question = x as SingleQuestion;
                             var isCascadingQuestion = question != null &&
