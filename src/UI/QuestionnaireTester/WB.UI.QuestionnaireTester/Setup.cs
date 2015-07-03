@@ -104,6 +104,7 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByInterviewStatus", view => new ViewGroupStatusBarColorByInterviewStatusBinding(view));
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));
             registry.RegisterCustomBindingFactory<View>("PaddingLeft", view => new ViewPaddingLeftBinding(view));
+            registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
 
             base.FillTargetFactories(registry);
         }

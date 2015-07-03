@@ -260,6 +260,7 @@
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="Converters\IsPublicQuestionnaireToColorConverter.cs" />
+    <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
@@ -333,6 +334,9 @@
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable-v21\sidebar_row.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\layout\interview_question_gps.axml">
       <SubType>Designer</SubType>
@@ -359,7 +363,7 @@
     <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
     <AndroidResource Include="Resources\values\fonts.xml" />
     <AndroidResource Include="Resources\values-v21\fonts.xml" />
-    <AndroidResource Include="Resources\drawable-v21\sidebar_row.xml">
+    <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <LinkDescription Include="linker.xml" />

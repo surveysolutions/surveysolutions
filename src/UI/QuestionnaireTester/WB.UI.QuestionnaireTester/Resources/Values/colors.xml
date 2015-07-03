@@ -60,9 +60,10 @@
   <color name="previous_group_navigation_unanswered">#2A81CB</color>
 
   <color name="sections_list_background_color">#ffffff</color>
-  <color name="sections_list_selected_background_color">#f3f3f3</color>
+  <color name="sections_list_selected_background_color">#EFF1F3</color>
   <color name="sections_list_text_color">#000000</color>
-  <color name="sections_list_pressed_background_color">#E5E5E5</color>
+  <color name="sections_list_pressed_background_color">#EAEBEB</color>
+  <color name="sections_list_current_background_color">#EAEBEB</color>
   
   <color name="list_style_divider_color">#EDEDED</color>
 

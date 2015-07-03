@@ -3,7 +3,7 @@
        xmlns:local="http://schemas.android.com/apk/res-auto">
   <TableLayout
                 style="@style/Interview_Sidebar_GroupRow"
-                local:MvxBind="Click NavigateToSectionCommand; PaddingLeft NodeDepth">
+                local:MvxBind="Click NavigateToSectionCommand; PaddingLeft NodeDepth; Activated IsCurrent">
     <TableRow android:gravity="center_vertical">
       <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
               local:MvxBind="Click Toggle; Text If(Expanded, '–','+'); Transparent Not(HasChildren);"/>
