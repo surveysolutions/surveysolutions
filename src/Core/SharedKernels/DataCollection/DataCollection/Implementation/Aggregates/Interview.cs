@@ -2076,7 +2076,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var result = new List<ChangedRosterInstanceTitleDto>();
             foreach (var data in datas)
             {
-                if (data.TitlesForRosterInstancesToAdd != null)
+                if (data.AreTitlesForRosterInstancesSpecified())
                 {
                     var rosterRowTitlesChanged = new HashSet<RosterIdentity>(data.RosterInstancesToAdd, new RosterIdentityComparer());
                     if (data.RosterInstancesToChange != null)
@@ -2091,7 +2091,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         result.Add(
                             new ChangedRosterInstanceTitleDto(new RosterInstance(rosterIdentity.GroupId, rosterIdentity.OuterRosterVector,
-                                rosterIdentity.RosterInstanceId), data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId]));
+                                rosterIdentity.RosterInstanceId), data.GetRosterInstanceTitle(rosterIdentity.GroupId, rosterIdentity.RosterInstanceId)));
                     }
                 }
 
@@ -2134,9 +2134,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     foreach (var rosterIdentity in rosterInstancesToAdd)
                     {
-                        result[rosterIdentity] = data.TitlesForRosterInstancesToAdd == null || !data.TitlesForRosterInstancesToAdd.ContainsKey(rosterIdentity.RosterInstanceId)
-                            ? null
-                            : data.TitlesForRosterInstancesToAdd[rosterIdentity.RosterInstanceId];
+                        result[rosterIdentity] = data.GetRosterInstanceTitle(rosterIdentity.GroupId, rosterIdentity.RosterInstanceId);
                     }
                 }
 
@@ -2395,6 +2393,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer);
+
+            var rostersWithoutRosterTitleQuestions = rosterIds
+                .Where(rosterId => !questionnaire.IsRosterTitleQuestionAvailable(rosterId));
+
+            if (rostersWithoutRosterTitleQuestions.Any())
+            {
+                Dictionary<decimal, string> numericRosterTitles = Enumerable.Range(0, rosterSize).ToDictionary(
+                    index => (decimal) index,
+                    index => (index + 1).ToString(CultureInfo.InvariantCulture));
+
+                var rosterTitlesForRostersWithoutRosterTitleQuestions =
+                    rostersWithoutRosterTitleQuestions
+                        .ToDictionary(
+                            rosterId => rosterId,
+                            rosterId => numericRosterTitles);
+
+                rosterCalculationData.SetTitlesForRosterInstances(rosterTitlesForRostersWithoutRosterTitleQuestions);
+            }
 
             //Update State
             expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
@@ -2961,7 +2977,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, questionnare,
                 rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
 
-            rosterCalculationData.TitlesForRosterInstancesToAdd = rosterCalculationData.RosterInstancesToAdd
+            var titlesForRosterInstances = rosterCalculationData
+                .RosterInstancesToAdd
                 .Select(rosterInstance => rosterInstance.RosterInstanceId)
                 .Distinct()
                 .ToDictionary(
@@ -2970,12 +2987,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var changedAnswer in changedAnswers)
             {
-                rosterCalculationData.TitlesForRosterInstancesToAdd.Add(changedAnswer.Item1, changedAnswer.Item2);
+                titlesForRosterInstances.Add(changedAnswer.Item1, changedAnswer.Item2);
                 foreach (var rosterId in rosterIds)
                 {
                     rosterCalculationData.RosterInstancesToChange.Add(new RosterIdentity(rosterId, rosterVector, changedAnswer.Item1, null));
                 }
             }
+
+            rosterCalculationData.SetTitlesForRosterInstances(titlesForRosterInstances);
 
             return rosterCalculationData;
         }
@@ -2989,13 +3008,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, questionnaire,
                 rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
 
-            rosterCalculationData.TitlesForRosterInstancesToAdd =
-                rosterCalculationData.RosterInstancesToAdd
-                    .Select(rosterInstance => rosterInstance.RosterInstanceId)
-                    .Distinct()
-                    .ToDictionary(
-                        rosterInstanceId => rosterInstanceId,
-                        rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
+            var titlesForRosterInstances = rosterCalculationData
+                .RosterInstancesToAdd
+                .Select(rosterInstance => rosterInstance.RosterInstanceId)
+                .Distinct()
+                .ToDictionary(
+                    rosterInstanceId => rosterInstanceId,
+                    rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
+
+            rosterCalculationData.SetTitlesForRosterInstances(titlesForRosterInstances);
 
             return rosterCalculationData;
         }
@@ -3980,16 +4001,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId,
                             r.SortIndex);
-                        if (changes.RosterCalculationData.TitlesForRosterInstancesToAdd != null)
+
+                        var rosterInstanceTitle = changes.RosterCalculationData.GetRosterInstanceTitle(r.GroupId, r.RosterInstanceId);
+
+                        if (rosterInstanceTitle != null)
                         {
-                            if (
-                                changes.RosterCalculationData.TitlesForRosterInstancesToAdd.ContainsKey(
-                                    r.RosterInstanceId))
-                            {
-                                expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
-                                    r.RosterInstanceId,
-                                    changes.RosterCalculationData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]);
-                            }
+                            expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
+                                r.RosterInstanceId,
+                                rosterInstanceTitle);
                         }
                     }
                     changes.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
@@ -4000,16 +4019,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 foreach (var r in rosterData.RosterInstancesToAdd)
                 {
-                    expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId,
-                        r.SortIndex);
-                    if (rosterData.TitlesForRosterInstancesToAdd != null)
+                    expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex);
+
+                    var rosterInstanceTitle = rosterData.GetRosterInstanceTitle(r.GroupId, r.RosterInstanceId);
+
+                    if (rosterInstanceTitle != null)
                     {
-                        if (rosterData.TitlesForRosterInstancesToAdd.ContainsKey(r.RosterInstanceId))
-                        {
-                            expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
-                                r.RosterInstanceId,
-                                rosterData.TitlesForRosterInstancesToAdd[r.RosterInstanceId]);
-                        }
+                        expressionProcessorState.UpdateRosterTitle(r.GroupId, r.OuterRosterVector,
+                            r.RosterInstanceId,
+                            rosterInstanceTitle);
                     }
                 }
                 rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));

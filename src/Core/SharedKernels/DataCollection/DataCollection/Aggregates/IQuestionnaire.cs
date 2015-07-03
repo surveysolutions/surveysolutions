@@ -98,6 +98,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
 
+        bool IsRosterTitleQuestionAvailable(Guid rosterId);
+
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
         Guid? GetRosterSizeQuestion(Guid rosterId);
