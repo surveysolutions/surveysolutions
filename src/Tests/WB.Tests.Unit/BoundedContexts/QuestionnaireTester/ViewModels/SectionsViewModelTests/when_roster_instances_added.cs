@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
         It should_add_roster_into_a_tree = () => viewModel.Sections.First().Children.Count.ShouldEqual(3);
 
-        static SectionsViewModel viewModel;
+        static SideBarSectionsViewModel viewModel;
         static Guid rosterId;
         static IStatefulInterview interview;
     }

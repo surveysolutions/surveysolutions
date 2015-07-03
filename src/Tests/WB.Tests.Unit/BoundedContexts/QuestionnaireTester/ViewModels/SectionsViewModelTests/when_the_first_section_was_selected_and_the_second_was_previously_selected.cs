@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         It should_publish_message_that_section_was_changed = () =>
             messenger.Verify(x => x.Publish(Moq.It.IsAny<SectionChangeMessage>()), Times.Once);
 
-        private static SectionsViewModel sectionsModel;
+        private static SideBarSectionsViewModel sectionsModel;
         private const string questionnaireId = "questionnaire Id";
         private static readonly NavigationState navigationState = Create.NavigationState();
         private static readonly Mock<IMvxMessenger> messenger = new Mock<IMvxMessenger>();

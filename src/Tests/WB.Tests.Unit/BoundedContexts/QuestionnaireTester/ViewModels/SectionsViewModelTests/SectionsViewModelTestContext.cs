@@ -14,13 +14,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 {
     public class SectionsViewModelTestContext
     {
-        protected static SectionsViewModel CreateSectionsViewModel(
+        protected static SideBarSectionsViewModel CreateSectionsViewModel(
             IMvxMessenger messenger = null,
             IStatefulInterviewRepository interviewRepository = null,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             ISubstitutionService substitutionService = null)
         {
-            return new SectionsViewModel(
+            return new SideBarSectionsViewModel(
                 messenger ?? Mock.Of<IMvxMessenger>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         }
 
 
-        protected static SectionsViewModel CreateSectionsViewModel(QuestionnaireModel questionnaire, IStatefulInterview interview)
+        protected static SideBarSectionsViewModel CreateSectionsViewModel(QuestionnaireModel questionnaire, IStatefulInterview interview)
         {
             var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireRepository.SetReturnsDefault(questionnaire);
