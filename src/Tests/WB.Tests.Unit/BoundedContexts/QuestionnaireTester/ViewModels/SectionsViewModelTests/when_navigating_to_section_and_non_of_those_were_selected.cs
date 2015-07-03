@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         It should_select_section_that_was_navigated_to = () =>
             sectionsModel.Sections.First(x => x.IsSelected).SectionIdentity.ShouldEqual(toBeSelectedGroupIdentity);
 
-        private static SectionsViewModel sectionsModel;
+        private static SideBarSectionsViewModel sectionsModel;
         private const string questionnaireId = "questionnaire Id";
         private static readonly NavigationState navigationState = Create.NavigationState();
         private static readonly Mock<IPlainKeyValueStorage<QuestionnaireModel>> questionnaireRepositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();

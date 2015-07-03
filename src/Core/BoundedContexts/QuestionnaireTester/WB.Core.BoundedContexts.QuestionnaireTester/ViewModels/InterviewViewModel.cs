@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            SectionsViewModel sectionsViewModel, 
+            SideBarSectionsViewModel sectionsViewModel, 
             BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public ActiveGroupViewModel CurrentGroup { get; set; }
-        public SectionsViewModel Sections { get; set; }
+        public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable PrefilledQuestions { get; set; } 
 

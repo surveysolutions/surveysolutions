@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
         It should_substitute_roster_title = () => viewModel.Sections.First().Children[0].Title.ShouldEqual("Roster 1 - answer 1");
 
-        private static SectionsViewModel viewModel;
+        private static SideBarSectionsViewModel viewModel;
         private static Identity changedRosterIdentity;
     }
 }

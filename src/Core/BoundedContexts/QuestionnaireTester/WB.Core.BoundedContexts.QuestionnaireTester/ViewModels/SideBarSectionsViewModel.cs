@@ -20,7 +20,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class SectionsViewModel : MvxNotifyPropertyChanged,
+    public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
@@ -37,9 +37,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private string questionnaireId;
         private string interviewId;
 
-        public IList<SectionViewModel> Sections { get; set; }
+        public IList<SideBarSectionViewModel> Sections { get; set; }
 
-        public SectionsViewModel(
+        public SideBarSectionsViewModel(
             IMvxMessenger messenger,
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = this.questionnaireRepository.GetById(questionnaireId);
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
-            List<SectionViewModel> sections = new List<SectionViewModel>();
+            List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
             foreach (GroupsHierarchyModel section in questionnaire.GroupsHierarchy)
             {
@@ -91,16 +91,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.Sections = sections;
         }
 
-        private SectionViewModel BuildSectionViewModel(SectionsViewModel root, GroupsHierarchyModel section)
+        private SideBarSectionViewModel BuildSectionViewModel(SideBarSectionsViewModel root, GroupsHierarchyModel section)
         {
-            return new SectionViewModel(root, null, 0)
+            return new SideBarSectionViewModel(root, null, 0)
             {
                 Title = section.Title,
                 SectionIdentity = new Identity(section.Id, new decimal[] { })
             };
         }
 
-        private void BuildViewModelsForSection(IStatefulInterview statefulInterview, SectionViewModel parent, GroupsHierarchyModel @group)
+        private void BuildViewModelsForSection(IStatefulInterview statefulInterview, SideBarSectionViewModel parent, GroupsHierarchyModel @group)
         {
             IEnumerable<Identity> groupInstances = Enumerable.Empty<Identity>(); ;
             if (group.IsRoster)
@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     title = substitutionService.GenerateRosterName(group.Title, rosterTitle);
                 }
 
-                var section = new SectionViewModel(this, parent, group.ZeroBasedDepth)
+                var section = new SideBarSectionViewModel(this, parent, group.ZeroBasedDepth)
                 {
                     SectionIdentity = groupInstance,
                     Title = title
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        internal async Task NavigateToSection(SectionViewModel item)
+        internal async Task NavigateToSection(SideBarSectionViewModel item)
         {
             messenger.Publish(new SectionChangeMessage(this));
 
@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .Where(x => x.IsCurrent || x.Expanded);
             oldSelectedGroups.ForEach(x => x.IsCurrent = false);
 
-            SectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
+            SideBarSectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
                 .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
             newCurrentGroup.UnwrapReferences(x => x.Parent).ForEach(x => x.Expanded = true);
@@ -173,26 +173,26 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void HighlightCurrentSection(NavigationParams navigationParams)
         {
-            SectionViewModel sectionToHighlight = null;
+            SideBarSectionViewModel sideBarSectionToHighlight = null;
             foreach (var section in this.Sections)
             {
-                SectionViewModel selectedGroup = section.TreeToEnumerable(x => x.Children)
+                SideBarSectionViewModel selectedGroup = section.TreeToEnumerable(x => x.Children)
                     .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
                 if (selectedGroup != null)
                 {
-                    sectionToHighlight = section;
+                    sideBarSectionToHighlight = section;
                     break;
                 }
             }
 
-            if (sectionToHighlight == null)
+            if (sideBarSectionToHighlight == null)
             {
                 return;
             }
 
             this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
-            sectionToHighlight.IsSelected = true;
+            sideBarSectionToHighlight.IsSelected = true;
         }
 
         public void Handle(RosterInstancesAdded @event)
@@ -239,7 +239,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
             {
                 Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
-                SectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
+                SideBarSectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
                                                                   .FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
                 if (viewModelToUpdate != null)
                 {
