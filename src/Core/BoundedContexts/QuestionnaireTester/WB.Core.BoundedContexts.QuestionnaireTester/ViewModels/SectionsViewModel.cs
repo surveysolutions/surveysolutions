@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             SectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
                 .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
-            newCurrentGroup.UnwrapReferences(x => x.Parent).Skip(1).ForEach(x => x.Expanded = true);
+            newCurrentGroup.UnwrapReferences(x => x.Parent).ForEach(x => x.Expanded = true);
             newCurrentGroup.IsCurrent = true;
         }
 
