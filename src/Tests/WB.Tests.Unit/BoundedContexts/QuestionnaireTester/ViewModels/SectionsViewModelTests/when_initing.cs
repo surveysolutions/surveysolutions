@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             firstSection.Children.First().SectionIdentity.RosterVector.Identical(new[] {1m}).ShouldBeTrue();
         };
 
-        static SectionsViewModel viewModel;
+        static SideBarSectionsViewModel viewModel;
     }
 }
 

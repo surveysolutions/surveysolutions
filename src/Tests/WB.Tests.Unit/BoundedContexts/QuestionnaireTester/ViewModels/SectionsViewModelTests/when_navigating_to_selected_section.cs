@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         It should_not_change_selected_section = () =>
             sectionsModel.Sections.First(x => x.IsSelected).SectionIdentity.ShouldEqual(selectedGroupIdentity);
 
-        private static SectionsViewModel sectionsModel;
+        private static SideBarSectionsViewModel sectionsModel;
         private const string questionnaireId = "questionnaire Id";
         private static readonly NavigationState navigationState = Create.NavigationState();
         private static readonly Mock<IPlainKeyValueStorage<QuestionnaireModel>> questionnaireRepositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();

@@ -11,17 +11,17 @@ using WB.Core.SharedKernels.DataCollection;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
-    public class SectionViewModel : MvxNotifyPropertyChanged
+    public class SideBarSectionViewModel : MvxNotifyPropertyChanged
     {
-        private readonly SectionsViewModel root;
-        private readonly SectionViewModel parent;
+        private readonly SideBarSectionsViewModel root;
+        private readonly SideBarSectionViewModel parent;
 
-        public SectionViewModel(SectionsViewModel root, SectionViewModel parent, int nodeDepth)
+        public SideBarSectionViewModel(SideBarSectionsViewModel root, SideBarSectionViewModel parent, int nodeDepth)
         {
             this.NodeDepth = nodeDepth;
             this.root = root;
             this.parent = parent;
-            this.Children = new ObservableCollection<SectionViewModel>();
+            this.Children = new ObservableCollection<SideBarSectionViewModel>();
             this.Children.CollectionChanged += (sender, args) => this.RaisePropertyChanged(() => HasChildren);
         }
 
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public int NodeDepth { get; set; }
 
-        public ObservableCollection<SectionViewModel> Children { get; private set; }
+        public ObservableCollection<SideBarSectionViewModel> Children { get; private set; }
 
         private MvxCommand navigateToSectionCommand;
         private bool expanded;
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        public SectionViewModel Parent
+        public SideBarSectionViewModel Parent
         {
             get { return parent; }
         }

@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         It should_not_change_selected_section = () =>
             sectionsModel.Sections.First(x => x.IsSelected).SectionIdentity.ShouldEqual(selectedGroupIdentity);
 
-        private static SectionsViewModel sectionsModel;
+        private static SideBarSectionsViewModel sectionsModel;
         private static NavigationState navigationState;
         private static Guid Section2Id;
         private static Guid someGroupThatIsNotSectionId;

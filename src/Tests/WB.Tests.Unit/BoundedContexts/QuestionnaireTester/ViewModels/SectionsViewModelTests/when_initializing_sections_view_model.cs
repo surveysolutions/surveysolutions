@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         It should_section_views_same_titles_as_in_questionnaire_model = () =>
             sectionsModel.Sections.Select(x => x.Title).ShouldContainOnly(listOfSection.Select(x => x.Title));
 
-        static SectionsViewModel sectionsModel;
+        static SideBarSectionsViewModel sectionsModel;
 
         private const string questionnaireId = "questionnaire Id";
         private static readonly NavigationState navigationState = Mock.Of<NavigationState>();

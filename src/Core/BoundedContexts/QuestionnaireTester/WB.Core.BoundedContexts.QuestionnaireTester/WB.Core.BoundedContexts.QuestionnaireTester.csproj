@@ -127,7 +127,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionLinkedQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
-    <Compile Include="ViewModels\SectionViewModel.cs" />
+    <Compile Include="ViewModels\SideBarSectionViewModel.cs" />
     <Compile Include="ViewModels\PreviousGroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BreadCrumbItemViewModel.cs" />
@@ -136,7 +136,7 @@
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\EnablementViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
-    <Compile Include="ViewModels\SectionsViewModel.cs" />
+    <Compile Include="ViewModels\SideBarSectionsViewModel.cs" />
     <Compile Include="ViewModels\ActiveGroupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
