@@ -68,8 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 0));
 
         It should_not_raise_RosterInstancesRemoved_event = () =>
-            eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
-                => @event.Instances.Any(instance => instance.GroupId == rosterGroupId));
+            eventContext.ShouldNotContainEvent<RosterInstancesRemoved>();
 
         private static EventContext eventContext;
         private static Interview interview;
