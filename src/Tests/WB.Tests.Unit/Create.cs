@@ -260,12 +260,18 @@ namespace WB.Tests.Unit
                 });
             }
 
-            public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null)
+            public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
+                decimal[] rosterVector = null,
+                string rosterTitle = null)
             {
                 return new RosterInstancesTitleChanged(
                     new[]
                 {
-                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), "title")
+                    new ChangedRosterInstanceTitleDto(
+                        new RosterInstance(rosterId ?? Guid.NewGuid(), 
+                            rosterVector != null ? rosterVector.WithoutLast().ToArray() : new decimal[0], 
+                            rosterVector != null ? rosterVector.Last() : 0.0m), 
+                        rosterTitle ?? "title")
                 });
             }
 
