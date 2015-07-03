@@ -266,13 +266,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var affectedViewModels = this.Sections.TreeToEnumerable(x => x.Children)
                                          .Where(x => affectedRosterIdentities.Any(i => i.Equals(x.SectionIdentity)));
 
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
 
             foreach (var affectedViewModel in affectedViewModels)
             {
                 string groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[affectedViewModel.SectionIdentity.Id].Title;
-                string rosterTitle = interview.GetRosterTitle(affectedViewModel.SectionIdentity);
+                string rosterTitle = @event.ChangedInstances.Single(x => x.RosterInstance.GetIdentity().Equals(affectedViewModel.SectionIdentity)).Title;
 
                 string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
                 affectedViewModel.Title = sectionFullName;
