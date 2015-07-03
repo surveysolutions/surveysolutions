@@ -504,6 +504,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }
 
+        public bool IsRosterTitleQuestionAvailable(Guid rosterId)
+        {
+            IGroup @group = this.GetGroupOrThrow(rosterId);
+
+            return @group.RosterTitleQuestionId.HasValue;
+        }
+
         public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
