@@ -104,11 +104,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settingsProvider.GpsReceiveTimeoutSec));
                 var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
-                
-                if (mvxGeoLocation == null)
-                    QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.GpsQuestion_Timeout);
-
-
                 await this.SetGeoLocationAnswer(mvxGeoLocation);
             }
             catch (OperationCanceledException)
@@ -123,6 +118,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async Task SetGeoLocationAnswer(MvxGeoLocation location)
         {
+            if (location == null)
+            {
+                QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.GpsQuestion_Timeout);
+                return;
+            }
+
+
             var command = new AnswerGeoLocationQuestionCommand(
                 interviewId: interviewId,
                 userId: userIdentity.UserId,
