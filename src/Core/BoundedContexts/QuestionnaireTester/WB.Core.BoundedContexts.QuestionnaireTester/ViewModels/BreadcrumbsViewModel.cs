@@ -15,7 +15,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class BreadcrumbsViewModel : MvxNotifyPropertyChanged, 
+    public class BreadCrumbsViewModel : MvxNotifyPropertyChanged, 
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private NavigationState navigationState;
         private string interviewId;
 
-        public BreadcrumbsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+        public BreadCrumbsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             ISubstitutionService substitutionService)
@@ -122,7 +122,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private string GenerateRosterTitle(string groupTitle, string rosterInstanceTitle)
         {
-            return string.Format("{0} - {1} / ", groupTitle, string.IsNullOrEmpty(rosterInstanceTitle) ? this.substitutionService.DefaultSubstitutionText : rosterInstanceTitle);
+            var rosterTitle = this.substitutionService.GenerateRosterName(groupTitle, rosterInstanceTitle);
+            return rosterTitle + " / ";
         }
 
         private ReadOnlyCollection<BreadCrumbItemViewModel> items;

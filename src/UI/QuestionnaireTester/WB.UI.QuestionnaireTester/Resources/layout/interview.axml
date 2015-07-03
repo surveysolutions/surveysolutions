@@ -14,7 +14,7 @@
       <FlowLayout orienation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  local:MvxBind="ItemsSource Breadcrumbs.Items;"
+                  local:MvxBind="ItemsSource BreadCrumbs.Items;"
                   local:MvxItemTemplate="@layout/interview_breadcrumb_item">
       </FlowLayout>
 
