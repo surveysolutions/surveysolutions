@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
@@ -23,7 +24,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>
+        ILiteEventHandler<GroupsDisabled>,
+        ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private NavigationState navigationState;
 
@@ -91,7 +93,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private SectionViewModel BuildSectionViewModel(SectionsViewModel root, GroupsHierarchyModel section)
         {
-            return new SectionViewModel(root, 0)
+            return new SectionViewModel(root, null, 0)
             {
                 Title = section.Title,
                 SectionIdentity = new Identity(section.Id, new decimal[] { })
@@ -114,7 +116,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 }
             }
 
-            foreach (var groupInstance in groupInstances)
+            foreach (Identity groupInstance in groupInstances)
             {
                 string title = group.Title;
                 if (group.IsRoster)
@@ -123,7 +125,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     title = substitutionService.GenerateRosterName(group.Title, rosterTitle);
                 }
 
-                var section = new SectionViewModel(this, group.ZeroBasedDepth)
+                var section = new SectionViewModel(this, parent, group.ZeroBasedDepth)
                 {
                     SectionIdentity = groupInstance,
                     Title = title
@@ -142,7 +144,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             messenger.Publish(new SectionChangeMessage(this));
 
-            if (item.IsSelected)
+            if (item.IsCurrent)
             {
                 return;
             }
@@ -158,12 +160,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void HighlightCurrentGroup(NavigationParams navigationParams)
         {
+            var oldSelectedGroups = this.Sections.TreeToEnumerable(x => x.Children)
+                .Where(x => x.IsCurrent || x.Expanded);
+            oldSelectedGroups.ForEach(x => x.IsCurrent = false);
+
             SectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
                 .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
-            var oldSelectedGroups = this.Sections.TreeToEnumerable(x => x.Children)
-                .Where(x => x.IsCurrent);
-            oldSelectedGroups.ForEach(x => x.IsCurrent = false);
+            newCurrentGroup.UnwrapReferences(x => x.Parent).Skip(1).ForEach(x => x.Expanded = true);
+
+          
 
             newCurrentGroup.IsCurrent = true;
         }
@@ -251,6 +257,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         this.BuildViewModelsForSection(interview, viewModelToUpdate, childGroup);
                     }
                 }
+            }
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            var affectedRosterIdentities = @event.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToList();
+            var affectedViewModels = this.Sections.TreeToEnumerable(x => x.Children)
+                                         .Where(x => affectedRosterIdentities.Any(i => i.Equals(x.SectionIdentity)));
+
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+
+            foreach (var affectedViewModel in affectedViewModels)
+            {
+                string groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[affectedViewModel.SectionIdentity.Id].Title;
+                string rosterTitle = interview.GetRosterTitle(affectedViewModel.SectionIdentity);
+
+                string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
+                affectedViewModel.Title = sectionFullName;
             }
         }
     }

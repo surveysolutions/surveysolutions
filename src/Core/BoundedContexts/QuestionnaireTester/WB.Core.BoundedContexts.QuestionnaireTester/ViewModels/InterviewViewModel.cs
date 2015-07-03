@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             SectionsViewModel sectionsViewModel, 
-            BreadcrumbsViewModel breadcrumbsViewModel,
+            BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
             AnswerNotifier answerNotifier)
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
 
-            this.Breadcrumbs = breadcrumbsViewModel;
+            this.BreadCrumbs = breadCrumbsViewModel;
             this.CurrentGroup = groupViewModel;
             this.Sections = sectionsViewModel;
         }
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 })
                 .ToList();
 
-            this.Breadcrumbs.Init(interviewId, this.navigationState);
+            this.BreadCrumbs.Init(interviewId, this.navigationState);
             this.Sections.Init(questionnaire.Id.FormatGuid(), interviewId, this.navigationState);
             this.CurrentGroup.Init(this.navigationState);
 
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        public BreadcrumbsViewModel Breadcrumbs { get; set; }
+        public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public ActiveGroupViewModel CurrentGroup { get; set; }
         public SectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }

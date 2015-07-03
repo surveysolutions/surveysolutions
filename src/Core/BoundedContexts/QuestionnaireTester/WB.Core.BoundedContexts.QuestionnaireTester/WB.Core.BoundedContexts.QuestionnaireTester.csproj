@@ -131,7 +131,7 @@
     <Compile Include="ViewModels\PreviousGroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BreadCrumbItemViewModel.cs" />
-    <Compile Include="ViewModels\BreadcrumbsViewModel.cs" />
+    <Compile Include="ViewModels\BreadCrumbsViewModel.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\CommentsViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\QuestionStateViewModels\EnablementViewModel.cs" />

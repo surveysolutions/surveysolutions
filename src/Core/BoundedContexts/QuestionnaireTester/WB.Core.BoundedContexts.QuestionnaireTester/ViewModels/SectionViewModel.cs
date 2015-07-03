@@ -14,11 +14,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class SectionViewModel : MvxNotifyPropertyChanged
     {
         private readonly SectionsViewModel root;
+        private readonly SectionViewModel parent;
 
-        public SectionViewModel(SectionsViewModel root, int nodeDepth)
+        public SectionViewModel(SectionsViewModel root, SectionViewModel parent, int nodeDepth)
         {
             this.NodeDepth = nodeDepth;
             this.root = root;
+            this.parent = parent;
             this.Children = new ObservableCollection<SectionViewModel>();
             this.Children.CollectionChanged += (sender, args) => this.RaisePropertyChanged(() => HasChildren);
         }
@@ -87,6 +89,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 return new MvxCommand(() => this.Expanded = !this.Expanded, () => HasChildren);
             }
+        }
+
+        public SectionViewModel Parent
+        {
+            get { return parent; }
         }
 
         private async Task NavigateToSection()
