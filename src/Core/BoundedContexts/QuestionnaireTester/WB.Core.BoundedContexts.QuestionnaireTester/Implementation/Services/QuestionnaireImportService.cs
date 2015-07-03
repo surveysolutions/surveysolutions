@@ -123,7 +123,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             if (@group != null)
             {
                 parents.Reverse();
-                parents.Add(new GroupReferenceModel{ Id = @group.PublicKey, IsRoster = @group.IsRoster});
                 questionnaireModel.Parents.Add(item.PublicKey, parents);
                 questionnaireModel.GroupsRosterLevelDepth.Add(item.PublicKey, countOfRostersToTop);
                 questionnaireModel.GroupsParentIdMap.Add(item.PublicKey, closestParentGroupId);
