@@ -45,10 +45,12 @@
   <ItemGroup>
     <Compile Include="Aggregates\IAggregateRoot.cs" />
     <Compile Include="Aggregates\IAggregateRootRepository.cs" />
+    <Compile Include="CommandBus\CommandHandlerConfiguration.cs" />
     <Compile Include="CommandBus\CommandRegistry.cs" />
     <Compile Include="CommandBus\CommandServiceException.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
+    <Compile Include="CommandBus\ICommandValidator.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
@@ -190,9 +192,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
