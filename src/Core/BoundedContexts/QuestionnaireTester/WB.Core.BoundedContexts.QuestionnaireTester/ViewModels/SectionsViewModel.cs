@@ -168,9 +168,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
             newCurrentGroup.UnwrapReferences(x => x.Parent).Skip(1).ForEach(x => x.Expanded = true);
-
-          
-
             newCurrentGroup.IsCurrent = true;
         }
 
