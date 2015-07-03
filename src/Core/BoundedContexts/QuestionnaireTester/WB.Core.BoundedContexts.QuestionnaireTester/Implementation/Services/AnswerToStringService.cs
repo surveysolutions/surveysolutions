@@ -28,7 +28,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             if (answer is DateTimeAnswer)
             {
                 var dateTimeAnswer = (DateTimeAnswer)answer;
-                return Monads.Maybe(() => dateTimeAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern)) ?? String.Empty;
+                if (dateTimeAnswer.Answer.HasValue)
+                    return dateTimeAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+                return string.Empty;
             }
 
             if (answer is RealNumericAnswer)
