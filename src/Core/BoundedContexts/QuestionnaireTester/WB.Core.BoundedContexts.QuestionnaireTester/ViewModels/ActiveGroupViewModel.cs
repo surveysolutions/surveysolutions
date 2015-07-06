@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -74,11 +71,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             if (navigationParams.AnchoredElementIdentity != null)
             {
-                var item = listOfViewModels.Cast<IInterviewAnchoredEntity>()
-                            .Where(x => x != null)
-                            .FirstOrDefault(x => x.GetPositionOfAnchoredElement(navigationParams.AnchoredElementIdentity) >= 0);
-
-                anchoreElementIndex = item != null ? listOfViewModels.IndexOf(item) : 0;
+                var childItem = group.Children.FirstOrDefault(x => x.Id == navigationParams.AnchoredElementIdentity.Id);
+                anchoreElementIndex = childItem != null ? group.Children.IndexOf(childItem) : 0;
             }
 
             this.Items = listOfViewModels;
@@ -87,7 +81,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void AddToParentButton(IList listOfViewModels, GroupChangedEventArgs navigationParams)
         {
-            var previousGroupNavigationViewModel = Mvx.Resolve<GroupNavigationViewModel>();
+            var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
             previousGroupNavigationViewModel.Init(this.navigationState.InterviewId, navigationParams.TargetGroup, this.navigationState);
             listOfViewModels.Add(previousGroupNavigationViewModel);
         }

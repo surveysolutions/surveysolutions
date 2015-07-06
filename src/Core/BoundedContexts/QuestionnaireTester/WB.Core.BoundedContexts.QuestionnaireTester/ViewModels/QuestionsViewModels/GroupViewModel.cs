@@ -12,9 +12,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel, 
-        IInterviewAnchoredEntity
+    public class GroupViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -85,11 +83,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
         }
 
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return groupIdentity.Equals(identity) ? 0 : -1;
-        }
-
         private void QuestionAnswered(object sender, EventArgs e)
         {
             UpdateStats();
@@ -126,7 +119,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async Task NavigateToGroup()
         {
-            await this.navigationState.LeaveAnchorAndNavigateTo(this.groupIdentity, this.parentGroupIdentity);
+            await this.navigationState.NavigateTo(this.groupIdentity);
         }
     }
 }

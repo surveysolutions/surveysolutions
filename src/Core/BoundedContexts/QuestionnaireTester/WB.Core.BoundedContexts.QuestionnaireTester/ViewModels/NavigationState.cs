@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.QuestionnaireId = questionnaireId;
         }
 
-        public async Task NavigateTo(Identity groupIdentity)
+        public async Task NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
             await this.commandService.WaitPendingCommandsAsync();
 
@@ -41,36 +41,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 this.navigationStack.Pop();
             }
 
-            this.navigationStack.Push(navigationItem);
-
-            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
-        }
-
-        public async Task LeaveAnchorAndNavigateTo(Identity groupIdentity, Identity parentGroupIdentity = null)
-        {
-            await this.commandService.WaitPendingCommandsAsync();
-
-            if (parentGroupIdentity != null && this.navigationStack.Count > 0)
+            if (anchoredElementIdentity != null)
             {
-                var previousNavigationItem = this.navigationStack.Peek();
-
-                if (previousNavigationItem != null && previousNavigationItem.TargetGroup.Equals(parentGroupIdentity))
-                {
-                    previousNavigationItem.AnchoredElementIdentity = groupIdentity;
-                }
+                navigationItem.AnchoredElementIdentity = anchoredElementIdentity;
             }
-            var navigationItem = new GroupChangedEventArgs { TargetGroup = groupIdentity };
-
-            this.navigationStack.Push(navigationItem);
-
-            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
-        }
-
-        public async Task NavigateToGroupWithAnchor(Identity groupIdentity, Identity anchoredElementIdentity)
-        {
-            await this.commandService.WaitPendingCommandsAsync();
-
-            var navigationItem = new GroupChangedEventArgs { TargetGroup = groupIdentity, AnchoredElementIdentity = anchoredElementIdentity };
 
             this.navigationStack.Push(navigationItem);
 
@@ -91,6 +65,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             else
             {
                 var previousNavigationItem = this.navigationStack.Peek();
+                previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
                 this.ChangeCurrentGroupAndFireEvent(previousNavigationItem.TargetGroup, previousNavigationItem);
             }

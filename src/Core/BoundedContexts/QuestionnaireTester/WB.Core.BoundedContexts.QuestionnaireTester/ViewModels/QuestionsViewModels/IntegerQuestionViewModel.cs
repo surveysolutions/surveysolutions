@@ -16,9 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class IntegerQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel, 
-        IInterviewAnchoredEntity
+    public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -94,11 +92,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.previousAnswer = Monads.Maybe(() => answer);
             }
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private async void SendAnswerIntegerQuestionCommand()

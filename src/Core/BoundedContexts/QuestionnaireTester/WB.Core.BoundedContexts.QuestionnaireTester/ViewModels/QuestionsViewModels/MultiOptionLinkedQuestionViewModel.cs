@@ -24,7 +24,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewAnchoredEntity,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>
@@ -86,11 +85,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.answerNotifier.QuestionAnswered += this.LinkedToQuestionAnswered;
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.GenerateOptions(interview, questionnaire));
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private void LinkedToQuestionAnswered(object sender, EventArgs e)

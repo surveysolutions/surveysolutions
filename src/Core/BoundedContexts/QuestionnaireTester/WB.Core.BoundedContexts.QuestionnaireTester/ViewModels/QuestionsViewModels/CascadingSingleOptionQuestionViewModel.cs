@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
          IInterviewEntityViewModel,
-         IInterviewAnchoredEntity,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
          ILiteEventHandler<AnswersRemoved>
     {
@@ -114,11 +113,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             }
 
             this.eventRegistry.Subscribe(this);
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private string resetTextInEditor;
