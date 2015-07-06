@@ -8,7 +8,9 @@ namespace WB.Core.Infrastructure.CommandBus
     {
         private readonly List<Type> validators = new List<Type>();
 
-        public CommandHandlerConfiguration<TAggregateRoot> ValidatedBy<T>() where T : ICommandValidator<TAggregateRoot>
+        public CommandHandlerConfiguration<TAggregateRoot> ValidatedBy<T, TCommand>() 
+            where T : ICommandValidator<TAggregateRoot, TCommand>
+            where TCommand : ICommand
         {
             this.validators.Add(typeof (T));
             return this;
