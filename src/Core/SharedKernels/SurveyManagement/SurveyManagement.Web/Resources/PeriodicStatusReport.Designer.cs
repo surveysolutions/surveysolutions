@@ -106,6 +106,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of interviews approved by HQ.
+        /// </summary>
+        public static string NumberOfInterviewsApprovedByHQ {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewsApprovedByHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by HQ.
+        /// </summary>
+        public static string NumberOfInterviewTransactionsByHQ {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsByHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by Supervisor.
+        /// </summary>
+        public static string NumberOfInterviewTransactionsBySupervisor {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Period.
         /// </summary>
         public static string Period {
@@ -165,6 +192,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         public static string Total {
             get {
                 return ResourceManager.GetString("Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         

@@ -285,7 +285,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 timeSpanWithPreviousStatus = timestamp - interviewStatuses.InterviewCommentedStatuses.Last().Timestamp;
             }
-
+            var supervisorName = supervisorId.HasValue ? GetResponsibleIdName(supervisorId.Value) : "";
+            var interviewerName = interviewerId.HasValue ? GetResponsibleIdName(interviewerId.Value) : "";
             interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 userId,
                 supervisorId,
@@ -294,7 +295,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 timestamp,
                 comment,
                 responsibleName,
-                timeSpanWithPreviousStatus));
+                timeSpanWithPreviousStatus,
+                supervisorName,
+                interviewerName));
 
             return interviewStatuses;
         }

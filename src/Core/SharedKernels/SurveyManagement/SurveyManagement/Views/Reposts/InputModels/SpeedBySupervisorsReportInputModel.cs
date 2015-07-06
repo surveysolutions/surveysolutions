@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
     {
         public SpeedBySupervisorsReportInputModel()
         {
-            this.InterviewStatus = InterviewStatus.Completed;
+            this.InterviewStatuses = new[] {InterviewStatus.Completed};
         }
 
         public DateTime From { get; set; }
@@ -19,6 +19,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
         public long QuestionnaireVersion { get; set; }
         public string Period { get; set; }
         public int ColumnCount { get; set; }
-        public InterviewStatus InterviewStatus { get; set; }
+        public InterviewStatus[] InterviewStatuses { get; set; }
     }
 }

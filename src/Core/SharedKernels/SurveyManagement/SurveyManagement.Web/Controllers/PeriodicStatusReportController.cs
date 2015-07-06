@@ -46,16 +46,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Quantity",
-                ReportTitle = PeriodicStatusReport.NumberOfCompletedInterviews,
                 ResponsibleColumnName = PeriodicStatusReport.TeamMember,
-                SupervisorId = supervisorId
+                SupervisorId = supervisorId,
+                ReportTypes = new[] {PeriodiceReportType.NumberOfCompletedInterviews}
             };
 
             return this.View("PeriodicStatusReport", model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult QuantityBySupervisors()
+        public ActionResult QuantityBySupervisors(PeriodiceReportType? reportType)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
 
@@ -65,12 +65,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var model = new PeriodicStatusReportModel
             {
                 WebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors,
-                CanNavigateToQuantityByTeamMember = true,
+                CanNavigateToQuantityByTeamMember =
+                    !reportType.HasValue || reportType == PeriodiceReportType.NumberOfCompletedInterviews,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Quantity",
-                ReportTitle = PeriodicStatusReport.NumberOfCompletedInterviews,
-                ResponsibleColumnName = PeriodicStatusReport.Team
+                ResponsibleColumnName = PeriodicStatusReport.Team,
+                ReportTypes =
+                    new[]
+                    {
+                        PeriodiceReportType.NumberOfCompletedInterviews,
+                        PeriodiceReportType.NumberOfInterviewTransactionsByHQ,
+                        PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
+                        PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
+                    }
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -89,9 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
-                ReportTitle = PeriodicStatusReport.TimeSpentToCompleteInterviewInHours,
                 ResponsibleColumnName = PeriodicStatusReport.TeamMember,
-                SupervisorId = supervisorId
+                SupervisorId = supervisorId,
+                ReportTypes = new[] { PeriodiceReportType.AverageCaseAssignmentDuration}
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -112,8 +120,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
-                ReportTitle = PeriodicStatusReport.TimeSpentToCompleteInterviewInHours,
-                ResponsibleColumnName = PeriodicStatusReport.Team
+                ResponsibleColumnName = PeriodicStatusReport.Team,
+                ReportTypes = new[] { PeriodiceReportType.AverageCaseAssignmentDuration }
             };
 
             return this.View("PeriodicStatusReport", model);
