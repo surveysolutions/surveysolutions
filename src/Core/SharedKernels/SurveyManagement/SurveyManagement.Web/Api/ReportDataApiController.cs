@@ -4,6 +4,7 @@ using System.Web.Http;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -152,7 +153,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 input.Request.Page = input.Pager.Page;
                 input.Request.PageSize = input.Pager.PageSize;
             }
-
+            switch (input.Request.ReportType)
+            {
+                case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
+                    input.Request.InterviewStatuses = new[]
+                    {InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedBySupervisor};
+                    break;
+                case PeriodiceReportType.NumberOfCompletedInterviews:
+                    input.Request.InterviewStatuses = new[] {InterviewStatus.Completed};
+                    break;
+                case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
+                    input.Request.InterviewStatuses = new[]
+                    {InterviewStatus.ApprovedByHeadquarters, InterviewStatus.RejectedByHeadquarters};
+                    break;
+                case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
+                    input.Request.InterviewStatuses = new[] {InterviewStatus.ApprovedByHeadquarters};
+                    break;
+            }
             return this.quantityBySupervisorsReport.Load(input.Request);
         }
 

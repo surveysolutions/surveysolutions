@@ -132,6 +132,15 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Number of completed interviews</value>
   </data>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>Number of interviews approved by HQ</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>Number of interview transactions by HQ</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>Number of interview transactions by Supervisor</value>
+  </data>
   <data name="Period" xml:space="preserve">
     <value>Period</value>
   </data>
@@ -152,6 +161,9 @@
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>ver.</value>

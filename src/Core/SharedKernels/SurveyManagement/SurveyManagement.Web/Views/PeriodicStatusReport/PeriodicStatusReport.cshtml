@@ -47,7 +47,7 @@
 @section header
 {
 
-<h3>@Model.ReportTitle</h3>
+<h3 data-bind="text: ReportTypeName"></h3>
 }
 
 @section actionbar
@@ -62,6 +62,18 @@
 @section filters
 {
     <ul class="list-group">
+        <li class="list-group-item" style='display: @(Model.ReportTypes.Length > 1?"block":"none")'>
+            <h4 class="list-group-item-heading">@PeriodicStatusReport.Type</h4>
+            <p class="list-group-item-text">
+                <select id="reportTypeSelector" class="form-control" data-bind="value: SelectedType">
+                    @foreach (var item in Model.ReportTypes)
+                    {
+                        <option value='@((int)item)'>@PeriodicStatusReport.ResourceManager.GetString(@item.ToString())</option>
+                    }
+                </select>
+            </p>
+        </li>
+
         <li class="list-group-item">
             <h4 class="list-group-item-heading">
                 @PeriodicStatusReport.Questionnaire

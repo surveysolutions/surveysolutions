@@ -20,12 +20,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView>,
         IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> statuses;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> statuses, IQueryableReadSideRepositoryReader<UserDocument> users)
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage, IQueryableReadSideRepositoryReader<UserDocument> users)
         {
-            this.statuses = statuses;
+            this.interviewStatusesStorage = interviewStatusesStorage;
             this.users = users;
         }
 
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             int pageSize,
             Guid questionnaireId,
             long questionnaireVersion,
-            InterviewStatus status,
+            InterviewStatus[] statuses,
             Expression<Func<UserDocument, bool>> queryUsers,
             Expression<Func<InterviewCommentedStatus, UserAndTimestampAndTimespan>> userIdSelector)
         {
@@ -60,10 +60,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
             var userIds = userDetails.Select(u => u.UserId).ToHashSet();
 
-            var allInterviewsInStatus = statuses.Query(_ =>
+            var allInterviewsInStatus = interviewStatusesStorage.Query(_ =>
                 _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                     .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Where(ics => ics.Timestamp.Date > from && ics.Timestamp.Date <= to.Date && ics.Status == status && ics.TimeSpanWithPreviousStatus.HasValue)
+                    .Where(ics => ics.Timestamp.Date > from && ics.Timestamp.Date <= to.Date && statuses.Contains(ics.Status) && ics.TimeSpanWithPreviousStatus.HasValue)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
                     .Select(i => new {UserId = i.UserId.Value, i.Timestamp, i.Timespan})
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.PageSize,
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
-                input.InterviewStatus,
+                input.InterviewStatuses,
                 u => !u.IsArchived && u.Roles.Contains(UserRoles.Operator) && u.Supervisor.Id == input.SupervisorId,
                 i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value });
         }
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.PageSize,
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
-                input.InterviewStatus,
+                input.InterviewStatuses,
                 u => !u.IsArchived && u.Roles.Contains(UserRoles.Supervisor),
                 i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value});
         }
