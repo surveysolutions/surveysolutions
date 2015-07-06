@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure.Implementation.CommandBus
 {
@@ -13,12 +14,17 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         private readonly IAggregateRootRepository repository;
         private readonly IEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
+        private readonly IServiceLocator serviceLocator;
 
-        public CommandService(IAggregateRootRepository repository, IEventBus eventBus, IAggregateSnapshotter snapshooter)
+        public CommandService(IAggregateRootRepository repository, 
+            IEventBus eventBus, 
+            IAggregateSnapshotter snapshooter,
+            IServiceLocator serviceLocator)
         {
             this.repository = repository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
+            this.serviceLocator = serviceLocator;
         }
 
         public void Execute(ICommand command, string origin, bool handleInBatch)
@@ -32,6 +38,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             Func<IAggregateRoot> constructor = CommandRegistry.GetAggregateRootConstructor(command);
+            IEnumerable<Type> validators = CommandRegistry.GetValidators(command);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
@@ -46,10 +53,15 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
                 aggregate.SetId(aggregateId);
             }
 
+
+            foreach (var validator in validators)
+            {
+                dynamic validatorInstance = serviceLocator.GetInstance(validator);
+                validatorInstance.Validate(aggregate);
+            }
+
             commandHandler.Invoke(command, aggregate);
-
             this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin, handleInBatch);
-
             this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
         }
     }

@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -384,12 +385,16 @@ namespace WB.Tests.Integration
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
         }
 
-        public static CommandService CommandService(IAggregateRootRepository repository = null, IEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        public static CommandService CommandService(IAggregateRootRepository repository = null, 
+            IEventBus eventBus = null, 
+            IAggregateSnapshotter snapshooter = null,
+            IServiceLocator serviceLocator = null)
         {
             return new CommandService(
                 repository ?? Mock.Of<IAggregateRootRepository>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                snapshooter ?? Mock.Of<IAggregateSnapshotter>());
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public static FileSystemIOAccessor FileSystemIOAccessor()
