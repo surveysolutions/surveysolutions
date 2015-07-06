@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using System;
+using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -76,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
                 .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
                 .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire)
-                .Handles<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
+                .Handles<DisableQuestionnaire>                  (aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()
@@ -89,6 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
                 .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
                 .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
+
 
             CommandRegistry
                 .Setup<Interview>()
@@ -135,4 +137,5 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview));
         }
     }
+ 
 }
