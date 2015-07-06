@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             
         }
 
-        public LocalUserChangedFeedEntry(string supervisorId, string entryId)
-            : base(supervisorId, entryId) {}
+        public LocalUserChangedFeedEntry(string supervisorId, string entryId, UserFeedEntryType entryType)
+            : base(supervisorId, entryId, entryType) { }
 
         public virtual bool IsProcessed { get; set; }
 
