@@ -48,8 +48,12 @@ namespace WB.UI.QuestionnaireTester.Activities
             this.SupportActionBar.SetHomeButtonEnabled(true);
 
             this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, this.toolbar, 0, 0);
-
             drawerLayout.SetDrawerListener(this.drawerToggle);
+            drawerLayout.DrawerOpened += (sender, args) =>
+            {
+                this.RemoveFocusFromEditText();
+                this.HideKeyboard(drawerLayout.WindowToken);
+            };
 
             this.layoutManager = new LinearLayoutManager(this);
             this.listOfInterviewQuestionsAndGroups.SetLayoutManager(this.layoutManager);

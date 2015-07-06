@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/Interview_Sidebar_Sections_Section"
                  local:MvxBind="HideKeyboardOnClick .; BackgroundStyle SectionStyleBackground(IsSelected);  Click NavigateToSectionCommand;">
@@ -8,4 +8,4 @@
 
   <View style="@style/Interview_Entity_Divider" />
 
-</MvxLinearLayout>
+</LinearLayout>

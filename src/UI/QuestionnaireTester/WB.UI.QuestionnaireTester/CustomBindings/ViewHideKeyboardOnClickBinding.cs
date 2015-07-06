@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
+using WB.UI.QuestionnaireTester.Activities;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
@@ -47,25 +48,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             var view = (View) sender;
             var activity = (Activity) view.Context;
 
-            this.RemoveFocusFromEditText(activity);
-            this.HideKeyboard(activity, view.WindowToken);
-        }
-
-        private void RemoveFocusFromEditText(Activity activity)
-        {
-            View viewWithFocus = activity.CurrentFocus;
-
-            if (viewWithFocus is EditText)
-            {
-                viewWithFocus.ClearFocus();
-            }
-        }
-
-        private void HideKeyboard(Activity activity, IBinder windowToken)
-        {
-            var inputMethodManager = (InputMethodManager) activity.GetSystemService(Context.InputMethodService);
-
-            inputMethodManager.HideSoftInputFromWindow(windowToken, 0);
+            activity.RemoveFocusFromEditText();
+            activity.HideKeyboard(view.WindowToken);
         }
     }
 }
