@@ -32,11 +32,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public GroupNavigationViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
-            IStatefulInterviewRepository interviewRepository)
+        public GroupViewModel NavigateToGroupViewModel { get; private set; }
+
+        public GroupNavigationViewModel(
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            GroupViewModel navigateToGroupViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.NavigateToGroupViewModel = navigateToGroupViewModel;
         }
 
         public void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
@@ -49,6 +54,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             this.IsInSection = !questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue;
             this.NavigateToIdentity = this.GetNavigateToIdentity(this.IsInSection, questionnaire);
+
+            if (this.NavigateToIdentity != null)
+            {
+                this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, this.navigationState);
+            }
 
             this.Title = this.IsInSection ? UIResources.Interview_NextSection_ButtonText : UIResources.Interview_PreviousGroupNavigation_ButtonText;
         }

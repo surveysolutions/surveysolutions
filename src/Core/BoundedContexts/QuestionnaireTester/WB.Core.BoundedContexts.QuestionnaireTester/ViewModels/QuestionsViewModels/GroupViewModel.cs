@@ -74,12 +74,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.UpdateStats();
 
-            Guid parentGroupId = questionnaire.GroupsParentIdMap[entityIdentity.Id].Value;
-            this.parentGroupIdentity = new Identity(parentGroupId, entityIdentity.RosterVector.WithoutLast().ToArray());
-            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(this.parentGroupIdentity);
+            Guid? parentGroupId = questionnaire.GroupsParentIdMap[entityIdentity.Id];
 
-            this.answerNotifier.Init(questionsToListen.ToArray());
-            this.answerNotifier.QuestionAnswered += QuestionAnswered;
+            if (parentGroupId.HasValue)
+            {
+                this.parentGroupIdentity = new Identity(parentGroupId.Value, entityIdentity.RosterVector.WithoutLast().ToArray());
+                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(this.parentGroupIdentity);
+                this.answerNotifier.Init(questionsToListen.ToArray());
+                this.answerNotifier.QuestionAnswered += QuestionAnswered;
+            }
         }
 
         public int GetPositionOfAnchoredElement(Identity identity)
@@ -123,7 +126,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private async Task NavigateToGroup()
         {
-            await this.navigationState.LeaveAnchorAndNavigateTo(this.groupIdentity, parentGroupIdentity);
+            await this.navigationState.LeaveAnchorAndNavigateTo(this.groupIdentity, this.parentGroupIdentity);
         }
     }
 }
