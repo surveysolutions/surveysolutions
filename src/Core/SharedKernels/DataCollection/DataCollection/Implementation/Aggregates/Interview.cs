@@ -2652,7 +2652,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
 
-            return this.CalculateInterviewChangesOnAnswerQuestion(state, userId, questionId, rosterVector, answer, answer, AnswerChangeType.Text, answerTime, questionnaire, expressionProcessorState);
+            return this.CalculateInterviewChangesOnAnswerQuestion(state, userId, questionId, rosterVector, answer, answer, string.IsNullOrWhiteSpace(answer), AnswerChangeType.Text, answerTime, questionnaire, expressionProcessorState);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(IInterviewExpressionStateV2 expressionProcessorState, InterviewStateDependentOnAnswers state, Guid userId,
@@ -2743,6 +2743,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             object answer, string answerFormattedAsRosterTitle, AnswerChangeType answerChangeType, DateTime answerTime, IQuestionnaire questionnaire,
             IInterviewExpressionStateV2 expressionProcessorState)
         {
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state, userId, questionId, rosterVector, answer, answerFormattedAsRosterTitle, answer == null, answerChangeType, answerTime, questionnaire, expressionProcessorState);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(InterviewStateDependentOnAnswers state, Guid userId, Guid questionId, decimal[] rosterVector,
+            object answer, string answerFormattedAsRosterTitle, bool isNewAnswerEmpty, AnswerChangeType answerChangeType, DateTime answerTime, IQuestionnaire questionnaire,
+            IInterviewExpressionStateV2 expressionProcessorState)
+        {
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
             foreach (var rosterInstancesWithAffectedTitle in rosterInstancesWithAffectedTitles)
@@ -2755,6 +2763,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
+            IEnumerable<Identity> answersForLinkedQuestionsToRemoveByEmptyAnswer =
+                isNewAnswerEmpty
+                    ? this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
+                        state,
+                        new Identity(questionId, rosterVector).ToEnumerable(), 
+                        questionnaire,
+                        GetRosterInstanceIds)
+                    : Enumerable.Empty<Identity>();
+
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
                 .GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
                     state,
@@ -2762,6 +2779,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     enablementChanges.QuestionsToBeDisabled,
                     questionnaire,
                     GetRosterInstanceIds);
+
+            List<Identity> answersForLinkedQuestionsToRemove = Enumerable
+                .Union(answersForLinkedQuestionsToRemoveByEmptyAnswer, answersForLinkedQuestionsToRemoveByDisabling)
+                .ToList();
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2775,7 +2796,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 validationChanges,
                 null,
-                answersForLinkedQuestionsToRemoveByDisabling,
+                answersForLinkedQuestionsToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutedQuestions);
