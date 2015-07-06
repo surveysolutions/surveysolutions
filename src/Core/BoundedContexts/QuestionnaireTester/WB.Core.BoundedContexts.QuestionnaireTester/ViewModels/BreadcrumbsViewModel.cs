@@ -52,15 +52,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var lastBreadCrumb = Items.Last();
             foreach (var changedRosterInstance in @event.ChangedInstances)
             {
                 var changedRosterInstanceIdentity = GetChangedRosterIdentity(changedRosterInstance);
-                if (changedRosterInstanceIdentity.Equals(lastBreadCrumb.ItemId))
+                var breadCrumb = this.Items.SingleOrDefault(x => x.ItemId.Equals(changedRosterInstanceIdentity));
+
+                if (breadCrumb != null)
                 {
-                    var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[lastBreadCrumb.ItemId.Id].Title;
-                    lastBreadCrumb.Text = GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
-                    break;
+                    var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[changedRosterInstance.RosterInstance.GroupId].Title;
+                    breadCrumb.Text = GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
                 }
             }
         }
