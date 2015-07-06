@@ -173,18 +173,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 this.filterText = value;
 
-                var list = this.GetSuggestionsList(this.filterText).ToList();
-
-                if (list.Any())
-                {
-                    AutoCompleteSuggestions = list;
-                }
-                else
-                {
-                    SetSuggestionsEmpty();
-                }
+                this.UpdateSuggestionsList(this.filterText);
 
                 isInitialized = true;
+            }
+        }
+
+        private void UpdateSuggestionsList(string textHint)
+        {
+            var list = this.GetSuggestionsList(textHint).ToList();
+
+            if (list.Any())
+            {
+                this.AutoCompleteSuggestions = list;
+            }
+            else
+            {
+                this.SetSuggestionsEmpty();
             }
         }
 
@@ -298,8 +303,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 if (parentAnswerModel.IsAnswered)
                 {
                     answerOnParentQuestion = parentAnswerModel.Answer;
-                    ResetTextInEditor = null;
-                    FilterText = null;
+                    UpdateSuggestionsList(string.Empty);
                 }              
             }
         }
