@@ -15,8 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel, 
-        IInterviewAnchoredEntity
+        IInterviewEntityViewModel
     {
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -93,11 +92,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
             }
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private async void SendAnswerRealQuestionCommand()

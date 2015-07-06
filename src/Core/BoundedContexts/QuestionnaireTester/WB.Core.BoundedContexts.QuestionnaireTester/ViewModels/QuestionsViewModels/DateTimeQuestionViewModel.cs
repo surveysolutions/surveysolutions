@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IInterviewAnchoredEntity
+    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -53,11 +53,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 SetToView(answerModel.Answer.Value);
             }
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return this.questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         public IMvxCommand AnswerCommand

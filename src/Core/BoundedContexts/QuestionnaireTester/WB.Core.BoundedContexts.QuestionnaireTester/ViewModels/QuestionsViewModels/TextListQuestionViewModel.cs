@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
-    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IInterviewAnchoredEntity
+    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -116,11 +116,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.maxAnswerCount = questionModel.MaxAnswerCount;
 
             this.IsAddNewItemVisible = !this.maxAnswerCount.HasValue || this.Answers.Count < this.maxAnswerCount.Value;
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private async void ListItemDeleted(object sender, EventArgs eventArgs)

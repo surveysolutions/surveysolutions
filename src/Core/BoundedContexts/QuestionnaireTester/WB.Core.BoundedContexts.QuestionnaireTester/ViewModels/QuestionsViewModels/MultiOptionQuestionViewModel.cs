@@ -23,7 +23,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
-        IInterviewAnchoredEntity, 
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>
     {
@@ -83,11 +82,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select((x, index) => ToViewModel(x, existingAnswer, index)).ToList());
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }

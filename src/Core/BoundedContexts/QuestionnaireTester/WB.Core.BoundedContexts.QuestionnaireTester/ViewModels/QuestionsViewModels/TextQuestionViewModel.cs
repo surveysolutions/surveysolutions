@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
-        IInterviewAnchoredEntity,
         ILiteEventHandler<TextQuestionAnswered>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
@@ -61,11 +60,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             InitQuestionSettings();
             UpdateSelfFromModel();
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            return questionIdentity.Equals(identity) ? 0 : -1;
         }
 
         private string mask;

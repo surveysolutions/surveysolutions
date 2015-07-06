@@ -13,7 +13,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 {
     public class RosterViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
-        IInterviewAnchoredEntity,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>
@@ -57,12 +56,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.liteEventRegistry.Subscribe(this);
 
             this.ReadRosterInstancesFromModel();
-        }
-
-        public int GetPositionOfAnchoredElement(Identity identity)
-        {
-            var rosterModel = this.Items.Cast<RosterStateViewModel>().FirstOrDefault(x => x.GroupState.GetPositionOfAnchoredElement(identity) >= 0);
-            return this.Items.IndexOf(rosterModel);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
