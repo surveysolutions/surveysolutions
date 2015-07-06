@@ -419,4 +419,7 @@
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Следующая секция</value>
   </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
 </root>

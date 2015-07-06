@@ -9,6 +9,6 @@
     <LinearLayout style="@style/Dashboard_QuestionnaireListItem_Body">
       <TextView style="@style/Dashboard_QuestionnaireListItem_Title" local:MvxBind="Text Title"/>
       <TextView style="@style/Dashboard_QuestionnaireListItem_ModifiedDate"
-                local:MvxBind="Text Format('{0:dd MMM HH:mm}', LastEntryDate)"/>
+                local:MvxBind="Text Format(Localization('Dashboard_LastEntryDate_Format'), LastEntryDate)"/>
     </LinearLayout>
 </LinearLayout>

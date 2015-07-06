@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
-        private readonly IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor;
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly DesignerApiService designerApiService;
 
@@ -29,14 +28,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public DashboardViewModel(
             IPrincipal principal,
             ILogger logger,
-            IPlainStorageAccessor<QuestionnaireListItem> questionnairesStorageAccessor,
             DesignerApiService designerApiService, 
             ICommandService commandService, 
             IQuestionnaireImportService questionnaireImportService)
             : base(logger)
         {
             this.principal = principal;
-            this.questionnairesStorageAccessor = questionnairesStorageAccessor;
             this.designerApiService = designerApiService;
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
@@ -44,13 +41,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async void Init()
         {
-            var questionnaires = this.questionnairesStorageAccessor.Query(
-                query => query.Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic).ToList());
-
-            this.BindQuestionnaires(questionnaires);
-
-            if (!this.myQuestionnaires.Any() && !this.publicQuestionnaires.Any())
-                await this.GetServerQuestionnaires();
+            await this.GetServerQuestionnaires();
+            this.IsInitialized = true;
         }
 
         private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
@@ -58,6 +50,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get { return this.questionnaires; }
             set { this.questionnaires = value; RaisePropertyChanged(); }
+        }
+
+        private bool isInitialized;
+        public bool IsInitialized
+        {
+            get { return isInitialized; }
+            set { isInitialized = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
@@ -190,48 +189,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private void BindQuestionnaires(IEnumerable<QuestionnaireListItem> questionnaires)
-        {
-            this.myQuestionnaires = questionnaires.Where(
-                    qustionnaire => qustionnaire.OwnerName == this.principal.CurrentUserIdentity.Name && !qustionnaire.IsPublic)
-                    .OrderByDescending(x => x.LastEntryDate)
-                    .ToList();
-            this.publicQuestionnaires = questionnaires.Where(questionnaire => questionnaire.IsPublic).ToList();
-
-            this.MyQuestionnairesCount = this.myQuestionnaires.Count;
-            this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
-            this.ShowMyQuestionnaires();
-        }
-
         public async Task GetServerQuestionnaires()
         {
             this.IsInProgress = true;
 
             try
             {
-                var questionnaires = new List<QuestionnaireListItem>();
+                this.myQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
+                this.publicQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
 
-                await this.designerApiService.GetQuestionnairesAsync(
-                    isPublic: false,
-                    token: tokenSource.Token,
-                    onPageReceived: (batchOfServerQuestionnaires) =>
-                    {
-                        questionnaires.AddRange(batchOfServerQuestionnaires);
-                    });
+                this.MyQuestionnairesCount = this.myQuestionnaires.Count;
+                this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
 
-                await this.designerApiService.GetQuestionnairesAsync(
-                    isPublic: true,
-                    token: tokenSource.Token,
-                    onPageReceived: (batchOfServerQuestionnaires) =>
-                    {
-                        questionnaires.AddRange(batchOfServerQuestionnaires);
-                    });
-
-                await this.questionnairesStorageAccessor.RemoveAsync(this.publicQuestionnaires);
-                await this.questionnairesStorageAccessor.RemoveAsync(this.myQuestionnaires);
-                await this.questionnairesStorageAccessor.StoreAsync(questionnaires);
-
-                this.BindQuestionnaires(questionnaires);
+                this.ShowMyQuestionnaires();
             }
             finally
             {

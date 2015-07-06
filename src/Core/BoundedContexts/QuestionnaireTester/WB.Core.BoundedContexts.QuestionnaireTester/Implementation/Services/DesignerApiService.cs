@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -21,7 +22,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 
         public DesignerApiService(ILogger logger, 
             IRestService restService, 
-            ISettingsProvider settingsProvider, 
             IUserIdentity userIdentity, 
             IUserInteraction userInteraction)
         {
@@ -66,9 +66,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return isUserAuthrizedOnServer;
         }
 
-        public async Task GetQuestionnairesAsync(bool isPublic, Action<QuestionnaireListItem[]> onPageReceived, CancellationToken token)
+        public async Task<IList<QuestionnaireListItem>> GetQuestionnairesAsync(bool isPublic, CancellationToken token)
         {
             var pageIndex = 1;
+            var serverQuestionnaires = new List<QuestionnaireListItem>();
 
             try
             {
@@ -76,10 +77,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 do
                 {
                     batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(isPublic: isPublic, pageIndex: pageIndex++, token: token);
-                    if (onPageReceived != null)
-                    {
-                        onPageReceived(batchOfServerQuestionnaires);
-                    }
+                    serverQuestionnaires.AddRange(batchOfServerQuestionnaires);
 
                 } while (batchOfServerQuestionnaires.Any());
             }
@@ -91,6 +89,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     this.userInteraction.Alert(errorMessage);
                 else throw;
             }
+
+            return serverQuestionnaires;
         }
 
         public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<decimal> downloadProgress, CancellationToken token)

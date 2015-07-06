@@ -29,7 +29,7 @@
                 android:layout_height="match_parent">
 
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
-               local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList')"/>
+               local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible IsInitialized"/>
   </LinearLayout>
 </MvxLinearLayout>
 

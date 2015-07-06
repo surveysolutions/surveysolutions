@@ -5,10 +5,6 @@
       android:id="@+id/dashboard_refresh"
       local:showAsAction="ifRoom"
       android:icon="@drawable/dashboard_refresh_icon" />
-  <item
-      android:id="@+id/dashboard_search"
-      local:showAsAction="ifRoom"
-      android:icon="@drawable/dashboard_search_icon" />
  <item
       android:id="@+id/dashboard_settings"
       local:showAsAction="never"
