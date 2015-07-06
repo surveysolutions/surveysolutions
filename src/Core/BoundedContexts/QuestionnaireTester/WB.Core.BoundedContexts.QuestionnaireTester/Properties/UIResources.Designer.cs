@@ -181,6 +181,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0:dd MMM HH:mm}.
+        /// </summary>
+        public static string Dashboard_LastEntryDate_Format {
+            get {
+                return ResourceManager.GetString("Dashboard_LastEntryDate_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My questionnaires.
         /// </summary>
         public static string Dashboard_MyQuestionnairesLinkText {
