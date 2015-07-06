@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
                 var supervisorId = GetSupervisorId(evnt);
 
                 string eventId = evnt.EventIdentifier.FormatGuid();
-                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId, UserFeedEntryType.UpdateOrCreate)
                 {
                     ChangedUserId = evnt.Payload.PublicKey.FormatGuid(),
                     Timestamp = evnt.EventTimeStamp
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
                 var supervisorId = GetSupervisorId(item);
 
                 var eventId = evnt.EventIdentifier.FormatGuid();
-                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId, UserFeedEntryType.UpdateOrCreate)
                 {
                     ChangedUserId = evnt.EventSourceId.FormatGuid(),
                     Timestamp = evnt.EventTimeStamp
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
                 var supervisorId = GetSupervisorId(item);
 
                 var eventId = evnt.EventIdentifier.FormatGuid();
-                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId, UserFeedEntryType.Archive)
                 {
                     ChangedUserId = evnt.EventSourceId.FormatGuid(),
                     Timestamp = evnt.EventTimeStamp
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
                 var supervisorId = GetSupervisorId(item);
 
                 var eventId = evnt.EventIdentifier.FormatGuid();
-                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId)
+                usersFeed.Store(new UserChangedFeedEntry(supervisorId, eventId, UserFeedEntryType.Unarchive)
                 {
                     ChangedUserId = evnt.EventSourceId.FormatGuid(),
                     Timestamp = evnt.EventTimeStamp
