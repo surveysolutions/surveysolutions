@@ -23,8 +23,8 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             Target.ClearListSelection();
             Target.DismissDropDown();
 
-            // this is hack
-            var adaptor = Target.Adapter;
+            // this is hack. http://www.grokkingandroid.com/how-androids-autocompletetextview-nearly-drove-me-nuts/
+            var adapter = Target.Adapter;
             Target.Adapter = null;
 
             if (value == null)
@@ -37,7 +37,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
                 Target.SetSelection(value.Length);
             }
 
-            Target.Adapter = adaptor;
+            Target.Adapter = adapter;
         }
 
         public override void SubscribeToEvents()
