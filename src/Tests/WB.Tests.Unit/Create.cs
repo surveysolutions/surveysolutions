@@ -1576,9 +1576,9 @@ namespace WB.Tests.Unit
             return new ExportedQuestion() {Answers = new string[0]};
         }
 
-        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null)
+        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name")
         {
-            var user = new UserDocument() {PublicKey = userId ?? Guid.NewGuid()};
+            var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName };
             if (supervisorId.HasValue)
             {
                 user.Roles.Add(UserRoles.Operator);
@@ -1674,6 +1674,21 @@ namespace WB.Tests.Unit
         public static UserArchived UserArchived()
         {
            return new UserArchived();
+        }
+
+        public static ArchiveUserCommad ArchiveUserCommad(Guid userId)
+        {
+            return new ArchiveUserCommad(userId);
+        }
+
+        public static CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name")
+        {
+            return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(), "", ""); 
+        }
+
+        public static UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
+        {
+            return new UnarchiveUserCommand(userId);
         }
     }
 }

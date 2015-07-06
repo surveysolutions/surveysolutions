@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
@@ -56,8 +59,16 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             foreach (var validator in validators)
             {
-                dynamic validatorInstance = serviceLocator.GetInstance(validator);
-                validatorInstance.Validate(aggregate);
+                var validatorInstance = serviceLocator.GetInstance(validator);
+                var validateMethod = validator.GetMethod("Validate", new[] {aggregateType, command.GetType()});
+                try
+                {
+                    validateMethod.Invoke(validatorInstance, new object[] { aggregate, command });
+                }
+                catch (TargetInvocationException ex)
+                {
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                }
             }
 
             commandHandler.Invoke(command, aggregate);

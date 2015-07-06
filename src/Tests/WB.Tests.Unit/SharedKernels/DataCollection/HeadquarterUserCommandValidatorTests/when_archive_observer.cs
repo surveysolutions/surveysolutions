@@ -1,28 +1,23 @@
-﻿using System;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
+namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests
 {
-    internal class when_archive_observer : UserTestContext
+    internal class when_archive_observer : HeadquarterUserCommandValidatorTestContext
     {
         Establish context = () =>
         {
+            headquarterUserCommandValidatorser = CreateHeadquarterUserCommandValidator();
             user = CreateUser();
             user.ApplyEvent(Create.NewUserCreated(role: UserRoles.Observer));
         };
 
         Because of = () =>
-            exception = Catch.Only<UserException>(() => user.Archive());
-
-        Cleanup stuff = () =>
-        {
-        };
+            exception = Catch.Only<UserException>(() => headquarterUserCommandValidatorser.Validate(user, Create.ArchiveUserCommad(user.EventSourceId)));
 
         It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();
@@ -32,5 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 
         private static User user;
         private static UserException exception;
+
+        private static HeadquarterUserCommandValidator headquarterUserCommandValidatorser;
     }
 }

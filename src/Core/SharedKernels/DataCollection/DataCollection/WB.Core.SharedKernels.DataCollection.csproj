@@ -256,7 +256,6 @@
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Services\IInterviewPreconditionsService.cs" />
-    <Compile Include="Services\IUserPreconditionsService.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
