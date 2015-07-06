@@ -9,7 +9,6 @@ namespace Main.Core.Events.User
     /// <summary>
     /// The new user created.
     /// </summary>
-    [EventName("RavenQuestionnaire.Core:Events:UserCreated")]
     public class NewUserCreated
     {
         public string Email { get; set; }

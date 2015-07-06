@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
@@ -84,10 +85,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             LocalUserChangedFeedEntry changeThatShouldBeApplied = userChanges.Last();
             try
             {
-                UserView deserializedUserDetails = this.headquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri).Result;
-
-                this.headquartersPullContext.PushMessageFormat("Applying user changes for user {0} with id {1}", deserializedUserDetails.UserName, deserializedUserDetails.PublicKey);
-                this.UpdateOrCreateUser(deserializedUserDetails);
+                this.UpdateOrCreateUser(changeThatShouldBeApplied);
 
                 foreach (var appliedChange in userChanges)
                 {
@@ -108,14 +106,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-        private void UpdateOrCreateUser(UserView userDetails)
+        private void UpdateOrCreateUser(LocalUserChangedFeedEntry changeThatShouldBeApplied)
         {
-            bool isArchived = userDetails.IsArchived;
+            var userId = Guid.Parse(changeThatShouldBeApplied.ChangedUserId);
+
+            UserDocument user = this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                this.users.GetById(userId));
+
+            if (changeThatShouldBeApplied.EntryType == UserFeedEntryType.Archive)
+            {
+                if (user != null) this.executeCommand(new ArchiveUserCommad(userId));
+                return;
+            }
+
+            if (changeThatShouldBeApplied.EntryType == UserFeedEntryType.Unarchive)
+            {
+                if (user != null) this.executeCommand(new UnarchiveUserCommand(userId));
+                return;
+            }
+
+            UserView userDetails =
+                this.headquartersUserReader.GetUserByUri(changeThatShouldBeApplied.UserDetailsUri).Result;
+
             UserRoles[] userRoles = userDetails.Roles.ToArray();
             bool userShouldBeLockedByHq = userDetails.IsLockedByHQ || userRoles.Contains(UserRoles.Headquarter);
 
-            UserDocument user = this.cqrsTransactionManager.ExecuteInQueryTransaction(() =>
-                this.users.GetById(userDetails.PublicKey));
+            this.headquartersPullContext.PushMessageFormat("Applying user changes for user {0} with id {1}",
+                userDetails.UserName, userDetails.PublicKey);
 
             if (user == null)
             {
@@ -123,31 +140,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     userDetails.Password, userDetails.Email,
                     userRoles, userDetails.IsLockedBySupervisor, userShouldBeLockedByHq, userDetails.Supervisor,
                     userDetails.PersonName, userDetails.PhoneNumber));
-
-                if (isArchived) this.executeCommand(new ArchiveUserCommad(userDetails.PublicKey));
-                return;
             }
-
-            if (user.IsArchived && isArchived)
-                return;
-
-            if (!user.IsArchived && isArchived)
+            else
             {
                 this.executeCommand(new ChangeUserCommand(userDetails.PublicKey, userDetails.Email, null,
                     userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber,
                     Guid.Empty));
-                this.executeCommand(new ArchiveUserCommad(userDetails.PublicKey));
-                return;
             }
-
-            if (user.IsArchived && !isArchived)
-            {
-                this.executeCommand(new UnarchiveUserCommand(userDetails.PublicKey));
-            }
-
-            this.executeCommand(new ChangeUserCommand(userDetails.PublicKey, userDetails.Email, null,
-                userShouldBeLockedByHq, userDetails.Password, userDetails.PersonName, userDetails.PhoneNumber,
-                Guid.Empty));
         }
     }
 }
