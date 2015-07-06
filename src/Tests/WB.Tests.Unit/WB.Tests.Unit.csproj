@@ -407,6 +407,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_AnswersRemoved_for_cascading_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_SingleOptionQuestionAnswered_for_parent_question.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_initializing_cascading_view_model_and_child_and_parent_question_are_answered_and_question_2_level_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_initializing_cascading_view_model_and_interviewId_is_missing.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_initializing_cascading_view_model_and_interviewId_is_missing_entityIdentity.cs" />
