@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return new MvxCommand(() => this.Expanded = !this.Expanded, () => HasChildren);
+                return new MvxCommand(() => this.Expanded = !this.Expanded);
             }
         }
 
