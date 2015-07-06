@@ -190,6 +190,11 @@
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
+    <Compile Include="Resources\Archived.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Archived.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -341,6 +346,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Archived.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Archived.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\InterviewerSyncStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>

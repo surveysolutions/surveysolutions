@@ -3,6 +3,7 @@
 @using WB.Core.GenericSubdomains.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Resources
 @model WB.Core.SharedKernels.SurveyManagement.Views.User.UserView
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
@@ -28,7 +29,7 @@
 @section header
 {
     <h2 class="sinle-line-header">
-        @Model.UserName <small>archived interviewers</small>
+        @Model.UserName <small>@Archived.ArchivedInterviewers</small>
     </h2>
 }
 
@@ -38,7 +39,7 @@
         <div class="form-inline">
             @if (User.IsInRole(UserRoles.Administrator.ToString()))
             {
-                <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.unarchiveInterviewers">Unarchive</button>
+                <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Archived.Unarchive</button>
             }
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
@@ -54,7 +55,7 @@
     {
         <div class="btn-group pull-right">
             <a class="btn btn-default" href="@(User.IsInRole(UserRoles.Supervisor.ToString()) ? Url.Action("Index", "Interviewer", new { area = string.Empty }) : Url.Action("Interviewers", "Supervisor", new { area = string.Empty, id = Model.PublicKey }))">
-                Active interviewers
+                @Archived.ActiveInterviewers
             </a>
         </div>
     }
@@ -70,9 +71,9 @@
                     <th>
                         <input type="checkbox" data-bind="click: $root.selectAll($element)" />
                     </th>}
-                <th data-bind='sortby : "UserName"'>Name</th>
-                <th data-bind='sortby : "CreationDate"'>Creation date</th>
-                <th data-bind='sortby : "Email"'>Email</th>
+                <th data-bind='sortby : "UserName"'>@Archived.Name</th>
+                <th data-bind='sortby : "CreationDate"'>@Archived.CreationDate</th>
+                <th data-bind='sortby : "Email"'>@Archived.Email</th>
                 <th></th>
             </tr>
         </thead>
@@ -105,10 +106,10 @@
     </table>
 
     <script type="text/html" id="confirm-delete-template">
-        @Html.Raw("<h3>Interviewer will be unarchived.</h3>".FormatString(
+        @Html.Raw(String.Format("<h3>{0}</h3>", Archived.UnarchiveSupervisorWarning).FormatString(
             "<span class='text-normal' data-bind='text: length'></span>"))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        <br />Do you want to continue?
+        <br />@Archived.DoYouWantToContinue
     </script>
 }
