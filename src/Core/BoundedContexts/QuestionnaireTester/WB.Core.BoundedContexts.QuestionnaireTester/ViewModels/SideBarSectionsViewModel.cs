@@ -152,13 +152,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             await this.navigationState.NavigateTo(item.SectionIdentity);
         }
 
-        void navigationState_OnGroupChanged(NavigationParams navigationParams)
+        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             HighlightCurrentGroup(navigationParams);
             HighlightCurrentSection(navigationParams);
         }
 
-        private void HighlightCurrentGroup(NavigationParams navigationParams)
+        private void HighlightCurrentGroup(GroupChangedEventArgs navigationParams)
         {
             var oldSelectedGroups = this.Sections.TreeToEnumerable(x => x.Children)
                 .Where(x => x.IsCurrent || x.Expanded);
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             newCurrentGroup.IsCurrent = true;
         }
 
-        private void HighlightCurrentSection(NavigationParams navigationParams)
+        private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
         {
             SideBarSectionViewModel sideBarSectionToHighlight = null;
             foreach (var section in this.Sections)
