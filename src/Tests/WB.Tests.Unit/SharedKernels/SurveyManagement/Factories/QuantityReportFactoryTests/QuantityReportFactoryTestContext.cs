@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
@@ -48,7 +49,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                 Page = 0,
                 PageSize = 20,
                 QuestionnaireId = Guid.NewGuid(),
-                QuestionnaireVersion = 1
+                QuestionnaireVersion = 1,
+                InterviewStatuses = new[] {InterviewStatus.Completed}
             };
         }
     }
