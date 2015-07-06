@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
         }
 
-        void navigationState_OnGroupChanged(NavigationParams navigationParams)
+        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
@@ -85,9 +85,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex, 0));
         }
 
-        private void AddToParentButton(IList listOfViewModels, NavigationParams navigationParams)
+        private void AddToParentButton(IList listOfViewModels, GroupChangedEventArgs navigationParams)
         {
-            var previousGroupNavigationViewModel = Mvx.Resolve<PreviousGroupNavigationViewModel>();
+            var previousGroupNavigationViewModel = Mvx.Resolve<GroupNavigationViewModel>();
             previousGroupNavigationViewModel.Init(this.navigationState.InterviewId, navigationParams.TargetGroup, this.navigationState);
             listOfViewModels.Add(previousGroupNavigationViewModel);
         }

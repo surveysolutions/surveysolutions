@@ -416,4 +416,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
     <value>Answer "{0}" cannot be saved, because it does not match any option.</value>
   </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Next section</value>
+  </data>
 </root>

@@ -118,7 +118,7 @@
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="ViewModels\NavigationParams.cs" />
+    <Compile Include="ViewModels\GroupChangedEventArgs.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\CascadingSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\FilteredSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\GroupState.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\SideBarSectionViewModel.cs" />
-    <Compile Include="ViewModels\PreviousGroupNavigationViewModel.cs" />
+    <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BreadCrumbItemViewModel.cs" />
     <Compile Include="ViewModels\BreadCrumbsViewModel.cs" />

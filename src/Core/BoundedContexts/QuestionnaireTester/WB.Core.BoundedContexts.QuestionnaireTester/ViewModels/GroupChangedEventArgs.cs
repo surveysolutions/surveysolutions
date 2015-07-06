@@ -1,14 +1,15 @@
+using System;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class NavigationParams
+    public class GroupChangedEventArgs : EventArgs
     {
         public Identity TargetGroup { get; set; }
 
         public Identity AnchoredElementIdentity { get; set; }
 
-        protected bool Equals(NavigationParams other)
+        protected bool Equals(GroupChangedEventArgs other)
         {
             return Equals(this.TargetGroup, other.TargetGroup) && Equals(this.AnchoredElementIdentity, other.AnchoredElementIdentity);
         }
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 return false;
             }
-            return this.Equals((NavigationParams)obj);
+            return this.Equals((GroupChangedEventArgs)obj);
         }
     }
 }

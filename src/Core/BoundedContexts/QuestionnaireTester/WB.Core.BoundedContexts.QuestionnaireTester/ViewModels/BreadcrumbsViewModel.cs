@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             return changedRosterInstanceIdentity;
         }
 
-        void navigationState_OnGroupChanged(NavigationParams navigationParams)
+        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             this.BuildBreadCrumbs(navigationParams.TargetGroup);
         }

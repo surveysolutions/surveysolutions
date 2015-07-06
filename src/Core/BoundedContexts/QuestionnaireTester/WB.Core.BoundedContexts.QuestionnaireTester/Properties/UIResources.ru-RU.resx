@@ -416,4 +416,7 @@
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
     <value>ответов: {0}</value>
   </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Следующая секция</value>
+  </data>
 </root>

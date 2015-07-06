@@ -13,7 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class TextViewGroupStatusBinding : BaseBinding<TextView, PreviousGroupNavigationViewModel.GroupStatistics>
+    public class TextViewGroupStatusBinding : BaseBinding<TextView, GroupNavigationViewModel.GroupStatistics>
     {
         public TextViewGroupStatusBinding(TextView androidControl)
             : base(androidControl)
@@ -25,7 +25,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             get { return MvxBindingMode.OneWay; }
         } 
 
-        protected override void SetValueToView(TextView control, PreviousGroupNavigationViewModel.GroupStatistics value)
+        protected override void SetValueToView(TextView control, GroupNavigationViewModel.GroupStatistics value)
         {
             if (value == null) return;
 
@@ -36,7 +36,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             control.TextFormatted = spannableText;
         }
 
-        private SpannableString GetSpannableStringForUnansweredState(PreviousGroupNavigationViewModel.GroupStatistics statistics)
+        private SpannableString GetSpannableStringForUnansweredState(GroupNavigationViewModel.GroupStatistics statistics)
         {
             var unansweredQuestionsFormatString = UIResources.Interview_PreviousGroupNavigation_UnansweredQuestions;
             var groupStatisticsText = unansweredQuestionsFormatString.FormatString(statistics.UnansweredQuestionsCount);
@@ -53,7 +53,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             return spannableText;
         }
 
-        private SpannableString GetSpannableStringForAnsweredState(PreviousGroupNavigationViewModel.GroupStatistics statistics)
+        private SpannableString GetSpannableStringForAnsweredState(GroupNavigationViewModel.GroupStatistics statistics)
         {
             var groupStatisticsText = UIResources.Interview_PreviousGroupNavigation_AnsweredQuestions.FormatString(statistics.EnabledQuestionsCount);
             groupStatisticsText = groupStatisticsText.ToUpper();

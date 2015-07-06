@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.UpdateInterviewStatus(navigationState.CurrentGroup);
         }
 
-        private void NavigationStateOnOnGroupChanged(NavigationParams newGroupIdentity)
+        private void NavigationStateOnOnGroupChanged(GroupChangedEventArgs newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(navigationState.InterviewId);
             IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);

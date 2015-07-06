@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public string QuestionnaireId { get; private set; }
         public Identity CurrentGroup { get; private set; }
 
-        private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
+        private readonly Stack<GroupChangedEventArgs> navigationStack = new Stack<GroupChangedEventArgs>();
 
         protected NavigationState() { }
 
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
+            var navigationItem = new GroupChangedEventArgs { TargetGroup = groupIdentity };
 
             while (this.navigationStack.Contains(navigationItem))
             {
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     previousNavigationItem.AnchoredElementIdentity = groupIdentity;
                 }
             }
-            var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
+            var navigationItem = new GroupChangedEventArgs { TargetGroup = groupIdentity };
 
             this.navigationStack.Push(navigationItem);
 
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            var navigationItem = new NavigationParams { TargetGroup = groupIdentity, AnchoredElementIdentity = anchoredElementIdentity };
+            var navigationItem = new GroupChangedEventArgs { TargetGroup = groupIdentity, AnchoredElementIdentity = anchoredElementIdentity };
 
             this.navigationStack.Push(navigationItem);
 
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
+        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, GroupChangedEventArgs navigationParams)
         {
             this.CurrentGroup = groupIdentity;
 
@@ -107,5 +107,5 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
     }
 
-    public delegate void GroupChanged(NavigationParams newGroupIdentity);
+    public delegate void GroupChanged(GroupChangedEventArgs newGroupIdentity);
 }
