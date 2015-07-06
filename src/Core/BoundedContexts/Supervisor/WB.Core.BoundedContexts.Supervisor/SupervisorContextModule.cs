@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using Ninject;
 using Ninject.Modules;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers;
@@ -52,7 +51,6 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<HeadquartersPushContext>().ToSelf().InSingletonScope();
             this.Bind<SchedulerSettings>().ToConstant(this.schedulerSettings);
             this.Bind<BackgroundSyncronizationTasks>().ToSelf();
-            this.Bind<IUserPreconditionsService>().To<SupervisorUserPreconditionsService>();
 
             this.Bind<IEventHandler>().To<ReadyToSendToHeadquartersInterviewDenormalizer>().InSingletonScope();
 

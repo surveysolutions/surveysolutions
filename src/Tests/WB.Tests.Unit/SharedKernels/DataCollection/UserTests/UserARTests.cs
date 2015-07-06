@@ -24,8 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             AssemblyContext.SetupServiceLocator();
 
-            Setup.InstanceToMockedServiceLocator(Mock.Of<IUserPreconditionsService>(_ => _.IsUserActive(Moq.It.IsAny<Guid>()) == true));
-
             this.eventContext = new EventContext();
         }
 
@@ -34,7 +32,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             this.eventContext.Dispose();
             this.eventContext = null;
-            Setup.InstanceToMockedServiceLocator(Mock.Of<IUserPreconditionsService>());
         }
 
         [Test]

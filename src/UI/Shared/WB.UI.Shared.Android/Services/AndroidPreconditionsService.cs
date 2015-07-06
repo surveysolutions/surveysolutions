@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.UI.Shared.Android.Services
 {
-    internal class AndroidPreconditionsService : IInterviewPreconditionsService, IUserPreconditionsService
+    internal class AndroidPreconditionsService : IInterviewPreconditionsService
     {
         public int? GetMaxAllowedInterviewsCount()
         {
@@ -13,26 +13,6 @@ namespace WB.UI.Shared.Android.Services
         public int? GetInterviewsCountAllowedToCreateUntilLimitReached()
         {
             return null;
-        }
-
-        public bool IsUserNameTakenByActiveUsers(string userName)
-        {
-            return false;
-        }
-
-        public bool IsUserNameTakenByArchivedUsers(string userName)
-        {
-            return false;
-        }
-
-        public int CountOfInterviewsInterviewerResposibleFor(Guid interviewerId)
-        {
-            return 0;
-        }
-
-        public bool IsUserActive(Guid userId)
-        {
-            return true;
         }
     }
 }

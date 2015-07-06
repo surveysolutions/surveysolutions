@@ -30,25 +30,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName, personName, phoneNumber);
         }
 
-        private IUserPreconditionsService UserPreconditionsService
-        {
-            get { return ServiceLocator.Current.GetInstance<IUserPreconditionsService>(); }
-        }
-
         public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
             string phoneNumber)
         {
-            if (UserPreconditionsService.IsUserNameTakenByActiveUsers(userName))
-                throw new UserException(String.Format("user name '{0}' is taken", userName), UserDomainExceptionType.UserNameTakenByActiveUsers);
-
-            if (UserPreconditionsService.IsUserNameTakenByArchivedUsers(userName))
-                throw new UserException(String.Format("user name '{0}' is taken by archived users", userName), UserDomainExceptionType.UserNameTakenByArchivedUsers);
-
-            if (roles.Contains(UserRoles.Operator))
-            {
-                ThrowIfInterviewerSupervisorIsArchived(supervisor.Id);
-            }
-
             //// Check for uniqueness of person name and email!
             this.ApplyEvent(
                 new NewUserCreated
@@ -127,22 +111,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Archive()
         {
             ThrowIfUserArchived();
-            if (userRoles.Contains(UserRoles.Operator))
-            {
-                var countOfInterviewsUserResposibleFor =
-                    UserPreconditionsService.CountOfInterviewsInterviewerResposibleFor(EventSourceId);
-
-                if (countOfInterviewsUserResposibleFor > 0)
-                {
-                    throw new UserException(String.Format(
-                        "Interviewer {0} is resposible for {1} interview(s) and can't be deleted", loginName,
-                        countOfInterviewsUserResposibleFor), UserDomainExceptionType.UserHasAssigments);
-                }
-            }
-            else if (!userRoles.Contains(UserRoles.Supervisor))
-            {
-                throw new UserException(String.Format("user in roles {0} can't be deleted", string.Join(",", userRoles)), UserDomainExceptionType.RoleDoesntSupportDelete);
-            }
             this.ApplyEvent(new UserArchived());
         }
 
@@ -151,19 +119,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!isUserArchived)
                 throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
 
-            if (userRoles.Contains(UserRoles.Operator))
-            {
-                ThrowIfInterviewerSupervisorIsArchived(userSupervisorId);
-            }
-
             this.ApplyEvent(new UserUnarchived());
-        }
-
-        private void ThrowIfInterviewerSupervisorIsArchived(Guid supervisorId)
-        {
-            if (!UserPreconditionsService.IsUserActive(supervisorId))
-                throw new UserException("You can't unarchive interviewer until supervisor is archived",
-                    UserDomainExceptionType.SupervisorArchived);
         }
 
         private void ThrowIfUserArchived()
