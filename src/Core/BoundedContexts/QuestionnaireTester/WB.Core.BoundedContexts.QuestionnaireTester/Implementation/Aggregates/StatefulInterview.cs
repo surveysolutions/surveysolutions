@@ -469,10 +469,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
             Guid linkedToQuestionId, Identity linkedQuestion, IQuestionnaire questionnaire)
         {
+            Guid[] linkedToQuestionRosterSources = questionnaire.GetRosterSizeSourcesForQuestion(linkedToQuestionId);
+            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForQuestion(linkedQuestion.Id);
+
+            int commonRosterSourcesPartLength = Enumerable
+                .Zip(linkedToQuestionRosterSources, linkedQuestionRosterSources, AreEqual)
+                .TakeWhile(areEqual => areEqual)
+                .Count();
+
             int linkedToQuestionRosterLevel = questionnaire.GetRosterLevelForQuestion(linkedToQuestionId);
             int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
 
-            int targetRosterLevel = Math.Min(linkedToQuestionRosterLevel - 1, linkedQuestionRosterLevel);
+            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkedToQuestionRosterLevel - 1, linkedQuestionRosterLevel));
 
             return this.ShrinkRosterVector(linkedQuestion.RosterVector, targetRosterLevel);
         }
@@ -796,6 +804,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             var questionKey = ConversionHelper.ConvertIdentityToString(questionIdentity);
 
             return this.GetExistingAnswerOrNull(questionKey);
+        }
+
+        private static bool AreEqual(Guid first, Guid second)
+        {
+            return first == second;
         }
     }
 }

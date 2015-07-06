@@ -14,9 +14,11 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
                 => _.HasQuestion(linkedQuestionId) == true
                 && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
                 && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters
+                && _.GetRosterSizeSourcesForQuestion(linkedQuestionId) == linkedQuestionRosters
                 && _.HasQuestion(referencedQuestionId) == true
                 && _.GetRosterLevelForQuestion(referencedQuestionId) == referencedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters);
+                && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
+                && _.GetRosterSizeSourcesForQuestion(referencedQuestionId) == referencedQuestionRosters);
         }
 
         protected static void FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(StatefulInterview interview, Guid rosterId, Guid questionId)

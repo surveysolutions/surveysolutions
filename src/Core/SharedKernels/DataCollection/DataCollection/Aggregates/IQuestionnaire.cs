@@ -68,6 +68,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
+        Guid[] GetRosterSizeSourcesForQuestion(Guid questionId);
+
         int GetRosterLevelForQuestion(Guid questionId);
 
         int GetRosterLevelForGroup(Guid groupId);

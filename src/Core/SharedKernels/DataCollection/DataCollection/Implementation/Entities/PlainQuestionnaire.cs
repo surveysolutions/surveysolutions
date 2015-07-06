@@ -339,6 +339,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
+        public Guid[] GetRosterSizeSourcesForQuestion(Guid questionId)
+        {
+            this.ThrowIfQuestionDoesNotExist(questionId);
+
+            return this
+                .GetRostersFromTopToSpecifiedQuestion(questionId)
+                .Select(this.GetRosterSource)
+                .ToArray();
+        }
+
         public int GetRosterLevelForQuestion(Guid questionId)
         {
             this.ThrowIfQuestionDoesNotExist(questionId);
@@ -803,6 +813,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static bool IsRosterGroup(IGroup group)
         {
             return  group.IsRoster;
+        }
+
+        private Guid GetRosterSource(Guid rosterId)
+        {
+            IGroup roster = this.GetGroupOrThrow(rosterId);
+
+            return roster.RosterSizeQuestionId ?? roster.PublicKey;
         }
 
         private void ThrowIfQuestionDoesNotSupportRoster(Guid questionId)
