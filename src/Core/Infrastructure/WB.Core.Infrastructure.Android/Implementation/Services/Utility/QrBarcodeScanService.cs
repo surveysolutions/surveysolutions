@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Android.Content.PM;
 using Cirrious.CrossCore.Droid.Platform;
 using MWBarcodeScanner;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
@@ -16,6 +17,8 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Utility
         public async Task<ScanResult> ScanAsync()
         {
             var scanner = new Scanner(this.androidCurrentTopActivity.Activity);
+            scanner.setInterfaceOrientation(
+                this.androidCurrentTopActivity.Activity.RequestedOrientation.ToString());
 
             this.CustomizeScanner();
             var result = await scanner.Scan();
@@ -25,8 +28,6 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Utility
 
         private void CustomizeScanner()
         {
-            BarcodeConfig.MWB_setDirection(BarcodeConfig.MWB_SCANDIRECTION_HORIZONTAL);
-
             //old codes not covered by new license
             BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_AZTEC, "litvin.roma@gmail.com", "7FC6AA87757EAFEE193B7D71C0A19C826ADFEDD0F64383D2F84D30157AC45688");
             BarcodeConfig.MWB_registerCode(BarcodeConfig.MWB_CODE_MASK_RSS, "litvin.roma@gmail.com", "1F8366229BF68ADE7B9CA60C7668A100E786366FFC6482914E6F7205E6B85CCD");
