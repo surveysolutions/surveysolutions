@@ -82,12 +82,6 @@ namespace WB.UI.QuestionnaireTester.Activities
             this.drawerToggle.SyncState();
         }
 
-        public override void OnConfigurationChanged(Configuration newConfig)
-        {
-            base.OnConfigurationChanged(newConfig);
-            this.drawerToggle.OnConfigurationChanged(newConfig);
-        }
-
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.interview, menu);
