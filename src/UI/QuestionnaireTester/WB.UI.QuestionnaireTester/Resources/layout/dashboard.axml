@@ -14,14 +14,17 @@
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                local:MvxBind="ShowProgress IsInProgress" />
   <LinearLayout style="@style/Dashboard_Questionnaires_Header">
-    <TextView style="@style/Dashboard_MyQuestionnairesLink"
-              local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_MyQuestionnairesLinkText'), MyQuestionnairesCount); Click ShowMyQuestionnairesCommand" />
-    <TextView style="@style/Dashboard_PublicQuestionnairesLink"
-              local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_PublicQuestionnairesLinkText'), PublicQuestionnairesCount); Click ShowPublicQuestionnairesCommand" />
+    <LinearLayout  style="@style/Dashboard_Questionnaires_Header_Body">
+      <TextView style="@style/Dashboard_MyQuestionnairesLink"
+                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_MyQuestionnairesLinkText'), MyQuestionnairesCount); Click ShowMyQuestionnairesCommand" />
+      <TextView style="@style/Dashboard_PublicQuestionnairesLink"
+                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_PublicQuestionnairesLinkText'), PublicQuestionnairesCount); Click ShowPublicQuestionnairesCommand" />
+    </LinearLayout>
+    <View style="@style/Dashboard_Filters_Divider"></View>
   </LinearLayout>
   <MvxListView android:id="@+id/questionnairesList"
                style="@style/Dashboard_QuestionnairesList"
-               local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand;"
+               local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand; BackgroundStyle PublicBackground(IsPublicShowed)"
                local:MvxItemTemplate="@layout/questionnaire_list_item" />
   <!-- empty view -->
   <LinearLayout android:id="@+id/emptyView"

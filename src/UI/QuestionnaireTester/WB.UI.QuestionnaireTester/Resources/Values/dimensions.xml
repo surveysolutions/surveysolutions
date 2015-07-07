@@ -49,25 +49,11 @@
 
   <dimen name="Dashboard_QuestionnairesListItem_Title_margin_right">24dp</dimen>
   <dimen name="Dashboard_QuestionnairesListItem_Title_margin_left">14dp</dimen>
-  <dimen name="Dashboard_QuestionnairesListItem_Title_width">0dp</dimen>
-
-  <dimen name="Dashboard_QuestionnairesListItem_ModifiedDate_margin_top">4dp</dimen>
-  <dimen name="Dashboard_QuestionnairesListItem_ModifiedDate_width">128dp</dimen>
-  
-  <dimen name="Dashboard_QuestionnairesList_padding_top">1dp</dimen>
-  <dimen name="Dashboard_QuestionnairesList_Border_hack">-2dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Date_width">128dp</dimen>
 
   <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_left">32dp</dimen>
   <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_top">32dp</dimen>
   <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_right">46dp</dimen>
-
-  <dimen name="Questionnaires_Questionnaire_background_stroke_width">1dp</dimen>
-  <dimen name="Questionnaires_Questionnaire_background_padding">1dp</dimen>
-  <dimen name="Questionnaires_Questionnaire_background_corners_radius">2dp</dimen>
-
-  <dimen name="Questionnaires_Questionnaire_Description_padding">5dp</dimen>
-
-  <dimen name="Questionnaires_Questionnaire_Description_margin_horizontal_in_between">5dp</dimen>
 
   <dimen name="Interview_Question_List_Editor_margin_right">24dp</dimen>
   <dimen name="Interview_Question_List_Editor_margin_left">14dp</dimen>

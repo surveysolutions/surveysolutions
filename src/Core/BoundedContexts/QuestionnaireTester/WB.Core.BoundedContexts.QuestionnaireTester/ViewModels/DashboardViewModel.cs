@@ -136,11 +136,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private void ShowPublicQuestionnaires()
         {
             this.Questionnaires = publicQuestionnaires;
+            this.IsPublicShowed = true;
         }
 
         private void ShowMyQuestionnaires()
         {
             this.Questionnaires = myQuestionnaires;
+            this.IsPublicShowed = false;
         }
 
         private async Task LoadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)

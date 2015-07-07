@@ -259,7 +259,7 @@
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
-    <Compile Include="Converters\IsPublicQuestionnaireToColorConverter.cs" />
+    <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
@@ -368,6 +368,14 @@
     <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\values\styles-dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <LinkDescription Include="linker.xml" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
@@ -381,7 +389,7 @@
     <AndroidResource Include="Resources\values-v21\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\questionnaire_list_item_border.xml">
+    <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\dashboard.xml" />
@@ -568,12 +576,6 @@
     <AndroidResource Include="Resources\drawable-v21\question_input_button.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
     <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_questionnaire_list.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\questionnaire_list_border.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\delete_button.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -597,8 +599,8 @@
     <AndroidResource Include="Resources\drawable\default_input_button_disabled.xml" />
     <AndroidResource Include="Resources\drawable\default_input_button_pressed.xml" />
     <AndroidResource Include="Resources\drawable\default_input_button_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable\default_dashboard_item.xml" />
-    <AndroidResource Include="Resources\drawable\default_dashboard_item_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
