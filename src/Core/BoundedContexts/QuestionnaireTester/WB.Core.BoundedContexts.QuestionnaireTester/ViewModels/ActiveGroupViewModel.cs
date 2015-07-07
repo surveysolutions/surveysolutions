@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
@@ -8,8 +9,10 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Questi
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -93,15 +96,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.AddToParentButton(listOfViewModels, navigationParams);
 
             var anchoreElementIndex = 0;
-
+            var offset = 0;
             if (navigationParams.AnchoredElementIdentity != null)
             {
                 var childItem = group.Children.FirstOrDefault(x => x.Id == navigationParams.AnchoredElementIdentity.Id);
                 anchoreElementIndex = childItem != null ? group.Children.IndexOf(childItem) : 0;
+                offset = CalculateOffsetInsideAnchoredElement(navigationParams.AnchoredElementIdentity, listOfViewModels[anchoreElementIndex] as RosterViewModel);
             }
 
             this.Items = listOfViewModels;
-            messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex, 0));
+            messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex, offset));
+        }
+
+        private static int CalculateOffsetInsideAnchoredElement(
+            Identity anchoredElementIdentity,
+            RosterViewModel rosterViewModel)
+        {
+            if (rosterViewModel != null)
+            {
+                var listOfRosters = rosterViewModel.Items as List<RosterStateViewModel>;
+                if (listOfRosters != null)
+                {
+                    var rosterInstance = listOfRosters.SingleOrDefault(x => x.GroupState.Identity.Equals(anchoredElementIdentity));
+                    return 100 * (rosterInstance != null ? listOfRosters.LastIndexOf(rosterInstance) : 0) / listOfRosters.Count;
+                }
+            }
+            return 0;
         }
 
         private void AddToParentButton(IList listOfViewModels, GroupChangedEventArgs navigationParams)
