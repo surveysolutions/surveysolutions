@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private string GenerateOptionTitle(BaseQuestionModel referencedQuestion, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToString(referencedQuestion, referencedAnswer);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestion, referencedAnswer);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
