@@ -35,6 +35,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return this.GroupState.Status > GroupStatus.NotStarted; }
         }
 
+        public Identity Identity
+        {
+            get{ return groupIdentity; }
+        }
+
         private IMvxCommand navigateToGroupCommand;
         private string interviewId;
         private GroupState groupState;

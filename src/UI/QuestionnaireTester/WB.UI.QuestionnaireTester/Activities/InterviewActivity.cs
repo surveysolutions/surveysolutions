@@ -1,4 +1,7 @@
-﻿using Android.App;
+﻿using System;
+using System.Collections.Generic;
+
+using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
@@ -10,6 +13,7 @@ using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.Activities
@@ -28,7 +32,7 @@ namespace WB.UI.QuestionnaireTester.Activities
 
         private Toolbar toolbar;
 
-        private MvxRecyclerView listOfInterviewQuestionsAndGroups;
+        private MvxRecyclerView recyclerView;
 
         protected override int ViewResourceId
         {
@@ -41,8 +45,8 @@ namespace WB.UI.QuestionnaireTester.Activities
 
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
-            
-            this.listOfInterviewQuestionsAndGroups = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
+
+            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
 
             this.SetSupportActionBar(this.toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
@@ -57,13 +61,14 @@ namespace WB.UI.QuestionnaireTester.Activities
             };
 
             this.layoutManager = new LinearLayoutManager(this);
-            this.listOfInterviewQuestionsAndGroups.SetLayoutManager(this.layoutManager);
-            this.listOfInterviewQuestionsAndGroups.HasFixedSize = true;
-            this.listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+            this.recyclerView.SetLayoutManager(this.layoutManager);
+            this.recyclerView.HasFixedSize = true;
+            this.recyclerView.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
 
-             var messenger = Mvx.Resolve<IMvxMessenger>();
-             sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
-             scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            var messenger = Mvx.Resolve<IMvxMessenger>();
+
+            sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
+            scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
         }
 
         private void OnSectionChange(SectionChangeMessage msg)
@@ -73,7 +78,33 @@ namespace WB.UI.QuestionnaireTester.Activities
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
         {
-            this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
+            if (this.layoutManager != null)
+            {
+                // recyclerView's adapter contains new view models, but layoutManager contains views from previous screen.
+                this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
+                if (msg.OffsetInsideOfAnchoredItemInPercentage != 0)
+                {
+                    // we scrolled to AnchorElementIndex, so it might be the first in list of elements on screen
+                    View anchoredItemView = this.layoutManager.GetChildAt(0);
+
+                    //// tried this one too
+                    //var visibleItemPosition = this.layoutManager.FindFirstCompletelyVisibleItemPosition();
+                    //View anchoredItemView = this.layoutManager.GetChildAt(visibleItemPosition);
+
+                    // If you'll try this questionnaire
+                    // https://design-devalt.mysurvey.solutions/UpdatedDesigner/app/#/0d92c64c5cbb4cd4b8c9dd8d6fe73614
+                    // you'll always get null here while going back and forth with 'Section 1' and 'Numeric roster' items
+                    // try Section 2 for testing, because it contains elements with different heights and its easier to test.
+                    if (anchoredItemView != null)
+                    {
+                        // OffsetInsideOfAnchoredItemInPercentage is from 0 to 100
+                        int offset = anchoredItemView.Height * msg.OffsetInsideOfAnchoredItemInPercentage / 100;
+                        // negative offset scrolls down.
+                        // here we trying to scroll elements on current screen based on measurements from previous screen
+                        this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, -offset);
+                    }
+                }
+            }
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
