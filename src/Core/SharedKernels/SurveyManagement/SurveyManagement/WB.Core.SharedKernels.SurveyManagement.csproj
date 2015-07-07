@@ -109,7 +109,8 @@
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="Implementation\Services\DeleteSupervisor\DeleteSupervisorService.cs" />
-    <Compile Include="Implementation\Services\SurveyManagementPreconditionsService.cs" />
+    <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
+    <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
     <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
     <Compile Include="Mappings\InterviewCommentedStatusMap.cs" />

@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -558,11 +557,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>(); }
         }
 
-        private IInterviewPreconditionsService InterviewPreconditionsService
-        {
-            get { return ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); }
-        }
-
         #endregion
 
         #region .ctors
@@ -599,8 +593,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewWithPreloadedData(Guid questionnaireId, long version, PreloadedDataDto preloadedData, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, version);
 
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
@@ -665,8 +657,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -716,8 +706,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewForTesting(Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, GetQuestionnaireOrThrow(questionnaireId).Version);
 
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(questionnaireId);
@@ -771,8 +759,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewOnClient(Guid questionnaireId, long? questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, (questionnaireVersion.HasValue
                     ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
                     : GetQuestionnaireOrThrow(questionnaireId)).Version);
@@ -815,8 +801,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -831,16 +815,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : this(() => questionnaireId, () => questionnaireVersion, id)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : this(() => interviewDto.QuestionnaireId, () => interviewDto.QuestionnaireVersion, id)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
         }
 
@@ -1845,7 +1825,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                ThrowIfInterviewCountLimitReached();
                 this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             }
             else
@@ -3146,14 +3125,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         #region ThrowIfs
-
-        private void ThrowIfInterviewCountLimitReached()
-        {
-            if (this.InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
-                throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
-                    this.InterviewPreconditionsService.GetMaxAllowedInterviewsCount()),
-                    InterviewDomainExceptionType.InterviewLimitReached);
-        }
 
         private void ThrowIfInterviewWasCompleted()
         {

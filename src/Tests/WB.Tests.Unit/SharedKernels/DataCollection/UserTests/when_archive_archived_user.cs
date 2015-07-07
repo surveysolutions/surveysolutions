@@ -6,7 +6,6 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 

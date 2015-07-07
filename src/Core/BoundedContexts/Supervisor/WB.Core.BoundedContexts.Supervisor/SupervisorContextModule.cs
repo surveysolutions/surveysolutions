@@ -15,7 +15,6 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor
 {

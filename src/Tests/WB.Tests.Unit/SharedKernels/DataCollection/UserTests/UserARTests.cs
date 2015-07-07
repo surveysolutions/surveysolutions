@@ -10,7 +10,6 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
