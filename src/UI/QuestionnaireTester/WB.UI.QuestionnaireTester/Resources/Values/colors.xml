@@ -44,6 +44,8 @@
   <color name="dashboard_questionnaire_list_item_title">#3f3f3f</color>
   <color name="dashboard_questionnaire_list_item_bg">#FFFFFF</color>
   <color name="dashboard_questionnaire_list_item_modified_date">#5D6468</color>
+  <color name="dashboard_questionnaire_list_item_bg_pressed">#ECECEC</color>
+
 
   <color name="dashboard_my_questionnaire">#e8e8e8</color>
   <color name="dashboard_my_questionnaire_link">#666666</color>
