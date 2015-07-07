@@ -70,6 +70,51 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average case assignment duration.
+        /// </summary>
+        public static string AverageCaseAssignmentDuration {
+            get {
+                return ResourceManager.GetString("AverageCaseAssignmentDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average HQ processing time.
+        /// </summary>
+        public static string AverageHQProcessingTime {
+            get {
+                return ResourceManager.GetString("AverageHQProcessingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average interview duration.
+        /// </summary>
+        public static string AverageInterviewDuration {
+            get {
+                return ResourceManager.GetString("AverageInterviewDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average overall case processing time.
+        /// </summary>
+        public static string AverageOverallCaseProcessingTime {
+            get {
+                return ResourceManager.GetString("AverageOverallCaseProcessingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average supervisor processing time.
+        /// </summary>
+        public static string AverageSupervisorProcessingTime {
+            get {
+                return ResourceManager.GetString("AverageSupervisorProcessingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  Back to supervisors.
         /// </summary>
         public static string BackToSupervisors {

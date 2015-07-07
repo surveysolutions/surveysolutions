@@ -93,20 +93,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var model = new PeriodicStatusReportModel
             {
                 WebApiActionName = PeriodicStatusReportWebApiActionName.ByInterviewers,
-                CanNavigateToQuantityByTeamMember = false,
+                CanNavigateToQuantityByTeamMember =false,
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
                 ResponsibleColumnName = PeriodicStatusReport.TeamMember,
                 SupervisorId = supervisorId,
-                ReportTypes = new[] { PeriodiceReportType.AverageCaseAssignmentDuration}
+                ReportTypes =
+                    new[]
+                    {
+                        PeriodiceReportType.AverageInterviewDuration,/*,
+                        PeriodiceReportType.AverageCaseAssignmentDuration*/
+                    }
             };
 
             return this.View("PeriodicStatusReport", model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult SpeedBySupervisors()
+        public ActionResult SpeedBySupervisors(PeriodiceReportType? reportType)
         {
             this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
 
@@ -116,12 +121,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var model = new PeriodicStatusReportModel
             {
                 WebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors,
-                CanNavigateToQuantityByTeamMember = true,
+                CanNavigateToQuantityByTeamMember = !reportType.HasValue || reportType == PeriodiceReportType.AverageInterviewDuration,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
                 ResponsibleColumnName = PeriodicStatusReport.Team,
-                ReportTypes = new[] { PeriodiceReportType.AverageCaseAssignmentDuration }
+                ReportTypes =
+                    new[]
+                    {
+                        PeriodiceReportType.AverageInterviewDuration,
+                        PeriodiceReportType.AverageSupervisorProcessingTime,
+                        PeriodiceReportType.AverageHQProcessingTime/*,
+                        PeriodiceReportType.AverageCaseAssignmentDuration,
+                        PeriodiceReportType.AverageOverallCaseProcessingTime*/
+                    }
             };
 
             return this.View("PeriodicStatusReport", model);

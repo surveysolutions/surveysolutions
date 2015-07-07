@@ -7,6 +7,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         {
             return new StatusChangeHistoryDenormalizerFunctional(interviewStatuses?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(), Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
-                    _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()));
+                    _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()), Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>());
         }
     }
 }

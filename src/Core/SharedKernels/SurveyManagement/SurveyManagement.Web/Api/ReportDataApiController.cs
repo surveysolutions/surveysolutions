@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
@@ -156,18 +157,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             switch (input.Request.ReportType)
             {
                 case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
-                    input.Request.InterviewStatuses = new[]
-                    {InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedBySupervisor};
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedBySupervisor };
                     break;
                 case PeriodiceReportType.NumberOfCompletedInterviews:
-                    input.Request.InterviewStatuses = new[] {InterviewStatus.Completed};
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.Completed };
                     break;
                 case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
-                    input.Request.InterviewStatuses = new[]
-                    {InterviewStatus.ApprovedByHeadquarters, InterviewStatus.RejectedByHeadquarters};
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
                     break;
                 case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
-                    input.Request.InterviewStatuses = new[] {InterviewStatus.ApprovedByHeadquarters};
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter };
                     break;
             }
             return this.quantityBySupervisorsReport.Load(input.Request);
@@ -194,7 +193,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 input.Request.Page = input.Pager.Page;
                 input.Request.PageSize = input.Pager.PageSize;
             }
-
+            switch (input.Request.ReportType)
+            {
+                case PeriodiceReportType.AverageInterviewDuration:
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.Completed};
+                    break;
+                case PeriodiceReportType.AverageSupervisorProcessingTime:
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.ApprovedBySupervisor, InterviewExportedAction .RejectedBySupervisor};
+                    break;
+                case PeriodiceReportType.AverageHQProcessingTime:
+                    input.Request.InterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
+                    break;
+            }
             return this.speedBySupervisorsReport.Load(input.Request);
         }
 

@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             int pageSize,
             Guid questionnaireId,
             long questionnaireVersion,
-            InterviewStatus[] statuses,
+            InterviewExportedAction[] statuses,
             Expression<Func<InterviewCommentedStatus, Guid>> selectUser,
             Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
         {
@@ -93,7 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             long questionnaireVersion,
             DateTime from,
             DateTime to,
-            InterviewStatus[] statuses)
+            InterviewExportedAction[] statuses)
         {
            return interviewstatusStorage.Query(
              _ =>
