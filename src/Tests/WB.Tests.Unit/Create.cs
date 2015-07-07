@@ -1606,7 +1606,7 @@ namespace WB.Tests.Unit
         {
             return new InterviewCommentedStatus()
             {
-                Status = InterviewStatus.Completed,
+                Status = InterviewExportedAction.Completed,
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId??Guid.NewGuid(),
                 SupervisorId = supervisorId??Guid.NewGuid(),
