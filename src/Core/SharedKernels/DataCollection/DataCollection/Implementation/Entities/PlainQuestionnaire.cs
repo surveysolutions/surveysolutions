@@ -416,9 +416,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
         {
-            var q = this.GetGroupOrThrow(groupId).Children.OfType<IQuestion>()
-                .Where(question => question.QuestionScope == QuestionScope.Interviewer);
-
             if (!this.cacheOfChildInterviewerQuestions.ContainsKey(groupId))
             {
                 this.cacheOfChildInterviewerQuestions[groupId] = 
