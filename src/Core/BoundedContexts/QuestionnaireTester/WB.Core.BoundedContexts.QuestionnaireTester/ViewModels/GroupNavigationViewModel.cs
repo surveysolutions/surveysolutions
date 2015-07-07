@@ -49,23 +49,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             this.IsInSection = !questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue;
-            this.NavigateToIdentity = this.GetNavigateToIdentity(this.IsInSection, questionnaire);
+            this.NavigateToIdentity = this.GetNavigateToIdentity(questionnaire);
 
             if (this.NavigateToIdentity != null)
             {
                 this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, this.navigationState);
             }
-
-            this.Title = this.IsInSection ? UIResources.Interview_NextSection_ButtonText : UIResources.Interview_PreviousGroupNavigation_ButtonText;
         }
 
         private Identity NavigateToIdentity { get; set; }
-
-        public string Title
-        {
-            get { return this.title; }
-            set { this.title = value; this.RaisePropertyChanged(); }
-        }
 
         private bool isInSection;
         public bool IsInSection
@@ -73,8 +65,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             get { return this.isInSection; }
             set { this.isInSection = value; RaisePropertyChanged(); }
         }
-
-        private string title;
 
         public IMvxCommand NavigateCommand
         {
@@ -93,27 +83,37 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private Identity GetNavigateToIdentity(bool inSection, QuestionnaireModel questionnaire)
+        private Identity GetNavigateToIdentity(QuestionnaireModel questionnaire)
         {
-            if (inSection)
+            if (this.IsInSection)
             {
-                int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.groupIdentity.Id);
-
-                if (currentSectionIndex >= questionnaire.GroupsHierarchy.Count - 1)
-                {
-                    return null;
-                }
-                else
-                {
-                    return new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]);
-                }
+                return this.GetNextSectionIdentity(questionnaire);
             }
             else
             {
-                var parentId = questionnaire.GroupsParentIdMap[this.groupIdentity.Id].Value;
-                int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[this.groupIdentity.Id];
-                decimal[] parentRosterVector = this.groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
-                return new Identity(parentId, parentRosterVector);
+                return this.GetParentIdentity(questionnaire);
+            }
+        }
+
+        private Identity GetParentIdentity(QuestionnaireModel questionnaire)
+        {
+            var parentId = questionnaire.GroupsParentIdMap[this.groupIdentity.Id].Value;
+            int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[this.groupIdentity.Id];
+            decimal[] parentRosterVector = this.groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
+            return new Identity(parentId, parentRosterVector);
+        }
+
+        private Identity GetNextSectionIdentity(QuestionnaireModel questionnaire)
+        {
+            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.groupIdentity.Id);
+
+            if (currentSectionIndex >= questionnaire.GroupsHierarchy.Count - 1)
+            {
+                return null;
+            }
+            else
+            {
+                return new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]);
             }
         }
     }
