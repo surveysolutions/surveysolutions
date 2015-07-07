@@ -71,7 +71,6 @@ namespace WB.UI.QuestionnaireTester
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
-            registry.AddOrOverwrite("GetAnswer", new GetAnswerConverter());
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
@@ -84,6 +83,8 @@ namespace WB.UI.QuestionnaireTester
         {
             registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("SideBarPrefillQuestion", (view) => new TextViewSideBarPrefillQuestionBinding(view));
             registry.RegisterCustomBindingFactory<MaskedEditText>("IsMaskedQuestionAnswered", (editText) => new MaskedEditTextIsMaskedQuestionAnsweredBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("FocusValueChanged", (editText) => new EditTextFocusValueChangedBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));

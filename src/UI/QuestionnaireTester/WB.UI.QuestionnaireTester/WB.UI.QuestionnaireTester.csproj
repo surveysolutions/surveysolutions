@@ -259,8 +259,9 @@
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
-    <Compile Include="Converters\GetAnswerConverter.cs" />
     <Compile Include="Converters\IsPublicQuestionnaireToColorConverter.cs" />
+    <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
+    <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
@@ -623,7 +624,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
     <AndroidResource Include="Resources\layout\interview_question_single_option_item.axml" />
