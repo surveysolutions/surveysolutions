@@ -5,15 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
-    internal class SurveyManagementPreconditionsService : IInterviewPreconditionsService
+    internal class SurveyManagementInterviewCommandValidator : ICommandValidator<Interview, SynchronizeInterviewEventsCommand>,
+        ICommandValidator<Interview, CreateInterviewWithPreloadedData>,
+        ICommandValidator<Interview, CreateInterviewCommand>,
+        ICommandValidator<Interview, CreateInterviewOnClientCommand>,
+        ICommandValidator<Interview, CreateInterviewCreatedOnClientCommand>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
@@ -23,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
-        public SurveyManagementPreconditionsService(
+        public SurveyManagementInterviewCommandValidator(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, 
             InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings)
         {
@@ -31,12 +38,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             this.interviewPreconditionsServiceSettings = interviewPreconditionsServiceSettings;
         }
 
-        public int? GetMaxAllowedInterviewsCount()
+        private int? GetMaxAllowedInterviewsCount()
         {
             return interviewPreconditionsServiceSettings.InterviewLimitCount;
         }
 
-        public int? GetInterviewsCountAllowedToCreateUntilLimitReached()
+        private int? GetInterviewsCountAllowedToCreateUntilLimitReached()
         {
             if (!interviewPreconditionsServiceSettings.InterviewLimitCount.HasValue)
                 return null;
@@ -68,15 +75,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 }
             }
         }
-    }
 
-    internal class InterviewPreconditionsServiceSettings
-    {
-        public InterviewPreconditionsServiceSettings(int? interviewLimitCount)
+        public void Validate(Interview aggregate, SynchronizeInterviewEventsCommand command)
         {
-            InterviewLimitCount = interviewLimitCount;
+            if (command.CreatedOnClient)
+            {
+                this.ThrowIfInterviewCountLimitReached();
+            }
         }
 
-        public int? InterviewLimitCount { get; private set; }
+
+        private void ThrowIfInterviewCountLimitReached()
+        {
+            if (GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
+                throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
+                    GetMaxAllowedInterviewsCount()),
+                    InterviewDomainExceptionType.InterviewLimitReached);
+        }
+
+        public void Validate(Interview aggregate, CreateInterviewWithPreloadedData command)
+        {
+            this.ThrowIfInterviewCountLimitReached();
+        }
+
+        public void Validate(Interview aggregate, CreateInterviewCommand command)
+        {
+            this.ThrowIfInterviewCountLimitReached();
+        }
+
+        public void Validate(Interview aggregate, CreateInterviewOnClientCommand command)
+        {
+            this.ThrowIfInterviewCountLimitReached();
+        }
+
+        public void Validate(Interview aggregate, CreateInterviewCreatedOnClientCommand command)
+        {
+            this.ThrowIfInterviewCountLimitReached();
+        }
     }
 }
