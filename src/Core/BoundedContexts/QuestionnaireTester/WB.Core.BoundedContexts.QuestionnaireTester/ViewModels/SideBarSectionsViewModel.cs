@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore.Core;
@@ -11,12 +12,10 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
-using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -29,6 +28,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private NavigationState navigationState;
 
+        private static object Lock = new object();
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
@@ -131,6 +131,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     Title = title
                 };
 
+                Debug.WriteLine("adding to {0} item {1}", parent.SectionIdentity, section.SectionIdentity);
                 this.mainThreadDispatcher.RequestMainThreadAction(() => parent.Children.Add(section));
 
                 foreach (var child in group.Children)
@@ -166,9 +167,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             SideBarSectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
                 .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
-
-            newCurrentGroup.UnwrapReferences(x => x.Parent).ForEach(x => x.Expanded = true);
-            newCurrentGroup.IsCurrent = true;
+            if (newCurrentGroup != null)
+            {
+                newCurrentGroup.UnwrapReferences(x => x.Parent).ForEach(x => x.Expanded = true);
+                newCurrentGroup.IsCurrent = true;
+            }
+            else
+            {
+                throw new NullReferenceException(string.Format("Group with id {0} was not found in {1}", navigationParams.TargetGroup, typeof(SideBarSectionsViewModel)));
+            }
         }
 
         private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
@@ -236,22 +243,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
 
-            if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
+            lock (Lock)
             {
-                Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
-                SideBarSectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
-                                                                  .FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
-                if (viewModelToUpdate != null)
+                if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
                 {
-                    this.mainThreadDispatcher.RequestMainThreadAction(() => viewModelToUpdate.Children.Clear());
-
-                    GroupsHierarchyModel groupToAddTo = questionnaire.GroupsHierarchy
-                                                                     .TreeToEnumerable(x => x.Children)
-                                                                     .First(x => x.Id == parentGroupId);
-
-                    foreach (var childGroup in groupToAddTo.Children)
+                    Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
+                    SideBarSectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
+                                                                    .FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
+                    if (viewModelToUpdate != null)
                     {
-                        this.BuildViewModelsForSection(interview, viewModelToUpdate, childGroup);
+                        this.mainThreadDispatcher.RequestMainThreadAction(() => viewModelToUpdate.Children.Clear());
+                        GroupsHierarchyModel groupToAddTo = questionnaire.GroupsHierarchy
+                                                                         .TreeToEnumerable(x => x.Children)
+                                                                         .First(x => x.Id == parentGroupId);
+
+                        foreach (var childGroup in groupToAddTo.Children)
+                        {
+                            this.BuildViewModelsForSection(interview, viewModelToUpdate, childGroup);
+                        }
                     }
                 }
             }

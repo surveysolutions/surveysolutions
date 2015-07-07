@@ -79,6 +79,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 this.OnGroupChanged(navigationParams);
             }
+
+            GC.Collect();
         }
     }
 
