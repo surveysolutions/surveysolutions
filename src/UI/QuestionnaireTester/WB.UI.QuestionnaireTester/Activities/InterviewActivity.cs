@@ -14,7 +14,8 @@ using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.Activities
 {
-    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true, WindowSoftInputMode = SoftInput.StateAlwaysHidden, 
+    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
+        WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : BaseActivity<InterviewViewModel>
     {
