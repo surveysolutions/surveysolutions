@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private NavigationState navigationState;
 
-        private static object Lock = new object();
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
@@ -131,7 +130,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     Title = title
                 };
 
-                Debug.WriteLine("adding to {0} item {1}", parent.SectionIdentity, section.SectionIdentity);
                 this.mainThreadDispatcher.RequestMainThreadAction(() => parent.Children.Add(section));
 
                 foreach (var child in group.Children)
@@ -204,58 +202,54 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Handle(RosterInstancesAdded @event)
         {
-            var groupsToUpdate = @event.Instances.Select(x => x.GroupId).Distinct().ToList();
-            foreach (var groupId in groupsToUpdate)
+            foreach (var groupId in @event.Instances)
             {
-                this.UpdateParentOfGroupWithId(groupId);
+                this.UpdateParentOfGroupWithId(groupId.GroupId, groupId.OuterRosterVector);
             }
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            var groupsToUpdate = @event.Instances.Select(x => x.GroupId).Distinct();
-            foreach (var groupId in groupsToUpdate)
+            foreach (var groupId in @event.Instances)
             {
-                this.UpdateParentOfGroupWithId(groupId);
+                this.UpdateParentOfGroupWithId(groupId.GroupId, groupId.OuterRosterVector);
             }
         }
 
         public void Handle(GroupsEnabled @event)
         {
-            var groupsToUpdate = @event.Groups.Select(x => x.Id).Distinct();
-            foreach (var groupId in groupsToUpdate)
+            foreach (var groupId in @event.Groups)
             {
-                this.UpdateParentOfGroupWithId(groupId);
+                this.UpdateParentOfGroupWithId(groupId.Id, groupId.RosterVector.WithoutLast().ToArray());
             }
         }
 
         public void Handle(GroupsDisabled @event)
         {
-            var groupsToUpdate = @event.Groups.Select(x => x.Id).Distinct();
-            foreach (var groupId in groupsToUpdate)
+            foreach (var groupId in @event.Groups)
             {
-                this.UpdateParentOfGroupWithId(groupId);
+                this.UpdateParentOfGroupWithId(groupId.Id, groupId.RosterVector.WithoutLast().ToArray());
             }
         }
 
-        private void UpdateParentOfGroupWithId(Guid groupId)
+        private void UpdateParentOfGroupWithId(Guid groupId, decimal[] parentRosterVector)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
 
-            lock (Lock)
+            if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
             {
-                if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
+                Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
+                if (parentGroupId.HasValue)
                 {
-                    Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
                     SideBarSectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
-                                                                    .FirstOrDefault(x => x.SectionIdentity.Id == parentGroupId);
+                                                                    .SingleOrDefault(x => x.SectionIdentity.Equals(new Identity(parentGroupId.Value, parentRosterVector)));
                     if (viewModelToUpdate != null)
                     {
                         this.mainThreadDispatcher.RequestMainThreadAction(() => viewModelToUpdate.Children.Clear());
                         GroupsHierarchyModel groupToAddTo = questionnaire.GroupsHierarchy
                                                                          .TreeToEnumerable(x => x.Children)
-                                                                         .First(x => x.Id == parentGroupId);
+                                                                         .Single(x => x.Id == parentGroupId);
 
                         foreach (var childGroup in groupToAddTo.Children)
                         {
