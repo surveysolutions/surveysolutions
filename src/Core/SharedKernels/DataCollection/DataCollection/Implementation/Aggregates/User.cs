@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
-using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {

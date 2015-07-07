@@ -52,6 +52,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -1689,6 +1690,18 @@ namespace WB.Tests.Unit
         public static UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
         {
             return new UnarchiveUserCommand(userId);
+        }
+
+        public static CreateInterviewCommand CreateInterviewCommand()
+        {
+            return new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now,
+                Guid.NewGuid(), 1);
+        }
+
+        public static SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
+        {
+            return new SynchronizeInterviewEventsCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1,
+                new object[0], InterviewStatus.Completed, true);
         }
     }
 }
