@@ -4,12 +4,20 @@ using System.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
-    public class ActiveGroupViewModel : MvxNotifyPropertyChanged
+    public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
+        ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private string name;
         public string Name
@@ -28,6 +36,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly ISubstitutionService substitutionService;
 
         private readonly IMvxMessenger messenger;
 
@@ -36,11 +46,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public ActiveGroupViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            ISubstitutionService substitutionService,
+            ILiteEventRegistry eventRegistry,
             IMvxMessenger messenger)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
+            this.interviewRepository = interviewRepository;
+            this.substitutionService = substitutionService;
             this.messenger = messenger;
+            eventRegistry.Subscribe(this);
         }
 
         public void Init(NavigationState navigationState)
@@ -56,9 +72,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
-            var group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+            GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
-            this.Name = group.Title;
+            if (group is RosterModel)
+            {
+                string title = group.Title;
+                var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
+                this.Name = this.substitutionService.GenerateRosterName(title, interview.GetRosterTitle(navigationParams.TargetGroup));
+            }
+            else
+            {
+                this.Name = group.Title;
+            }
 
             var listOfViewModels = this.interviewViewModelFactory.GetEntities(
                 interviewId: this.navigationState.InterviewId,
@@ -84,6 +109,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
             previousGroupNavigationViewModel.Init(this.navigationState.InterviewId, navigationParams.TargetGroup, this.navigationState);
             listOfViewModels.Add(previousGroupNavigationViewModel);
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            foreach (ChangedRosterInstanceTitleDto rosterInstance in @event.ChangedInstances)
+            {
+                if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
+                {
+                    var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
+
+                    GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
+                    var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
+                    this.Name = this.substitutionService.GenerateRosterName(@group.Title, interview.GetRosterTitle(this.navigationState.CurrentGroup));
+                }
+            }
         }
     }
 }
