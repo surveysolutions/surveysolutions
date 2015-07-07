@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
 {
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
     {
         public SpeedByInterviewersReportInputModel()
         {
-            this.InterviewStatuses = new[] {InterviewStatus.Completed};
+            this.InterviewStatuses = new[] { InterviewExportedAction.Completed };
         }
 
         public Guid SupervisorId { get; set; }
@@ -20,6 +21,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
         public long QuestionnaireVersion { get; set; }
         public string Period { get; set; }
         public int ColumnCount { get; set; }
-        public InterviewStatus[] InterviewStatuses { get; set; }
+        public InterviewExportedAction[] InterviewStatuses { get; set; }
     }
 }

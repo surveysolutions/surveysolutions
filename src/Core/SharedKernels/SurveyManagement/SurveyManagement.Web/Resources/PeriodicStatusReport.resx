@@ -171,4 +171,19 @@
   <data name="Week" xml:space="preserve">
     <value>Week</value>
   </data>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>Average case assignment duration</value>
+  </data>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>Average HQ processing time</value>
+  </data>
+  <data name="AverageInterviewDuration" xml:space="preserve">
+    <value>Average interview duration</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>Average overall case processing time</value>
+  </data>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>Average supervisor processing time</value>
+  </data>
 </root>

@@ -13,8 +13,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewCommentedStatus(
             Guid statusChangeOriginatorId, 
             Guid? supervisorId,
-            Guid? interviewerId, 
-            InterviewStatus status, 
+            Guid? interviewerId,
+            InterviewExportedAction status, 
             DateTime timestamp, 
             string comment, 
             string statusChangeOriginatorName,
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual Guid StatusChangeOriginatorId { get; set; }
         public virtual string StatusChangeOriginatorName { get; set; }
 
-        public virtual InterviewStatus Status { get; set; }
+        public virtual InterviewExportedAction Status { get; set; }
         public virtual DateTime Timestamp { get; set; }
         public virtual TimeSpan? TimeSpanWithPreviousStatus { get; set; }
         public virtual string Comment { get; set; }
