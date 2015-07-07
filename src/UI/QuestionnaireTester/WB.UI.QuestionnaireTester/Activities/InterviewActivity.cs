@@ -93,7 +93,8 @@ namespace WB.UI.QuestionnaireTester.Activities
 
                     // If you'll try this questionnaire
                     // https://design-devalt.mysurvey.solutions/UpdatedDesigner/app/#/0d92c64c5cbb4cd4b8c9dd8d6fe73614
-                    // you'll always get null here while going back and forth with 'Section 1' and 'Numeric roster' items
+                    // you'll always get null here while going back and forth with 'Section 1' and 'Numeric roster' items if you'll try 
+                    // to get item by its position in adapter layoutManager.GetChildAt(msg.AnchorElementIndex)
                     // try Section 2 for testing, because it contains elements with different heights and its easier to test.
                     if (anchoredItemView != null)
                     {
@@ -105,6 +106,14 @@ namespace WB.UI.QuestionnaireTester.Activities
                     }
                 }
             }
+        }
+
+        protected override void OnStop()
+        {
+            var messenger = Mvx.Resolve<IMvxMessenger>();
+            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
+            messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
+            base.OnStop();
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
