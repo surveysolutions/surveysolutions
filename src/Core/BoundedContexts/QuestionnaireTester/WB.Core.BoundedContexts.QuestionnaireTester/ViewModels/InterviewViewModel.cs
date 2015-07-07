@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -30,10 +31,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
+        private readonly IAnswerToStringService answerToStringService;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
+            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
             BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
@@ -45,6 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
+            this.answerToStringService = answerToStringService;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.CurrentGroup = groupViewModel;
@@ -115,27 +119,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             Status = newState;
         }
 
-        private static string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)
+        private string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
-
-
-            string answerAsString = string.Empty;
-            if (interviewAnswer != null)
-            {
-                CultureInfo culture = CultureInfo.CurrentUICulture;
-
-                TypeSwitch.Do(interviewAnswer,
-                    TypeSwitch.Case<TextAnswer>((maskedTextAnswerModel) => answerAsString = maskedTextAnswerModel.Answer),
-                    TypeSwitch.Case<IntegerNumericAnswer>((integerAnswerModel) => answerAsString = GetAnswerOnIntegerQuestionAsString(integerAnswerModel, culture)),
-                    TypeSwitch.Case<RealNumericAnswer>((realAnswerModel) => answerAsString = GetAnswerOnRealQuestionAsString(realAnswerModel, culture)),
-                    TypeSwitch.Case<DateTimeAnswer>((dateAnswerModel) => answerAsString = GetAnswerOnDateTimeQuestionAsString(dateAnswerModel, culture)),
-                    TypeSwitch.Case<SingleOptionAnswer>((singleOptionAnswerModel) => answerAsString = GetAnswerOnSingleOptionQuestionAsString(questionnaire, singleOptionAnswerModel)),
-                    TypeSwitch.Case<MultiOptionAnswer>((multiOptionAnswerModel) => answerAsString = GetAnswerOnMultiOptionQuestionAsString(questionnaire, multiOptionAnswerModel)));
-            }
-
-            return answerAsString;
+            var questionModel = questionnaire.Questions[referenceToQuestion.Id];
+            return answerToStringService.AnswerToUIString(questionModel, interviewAnswer);
         }
 
         private GroupStatus status;
@@ -205,46 +194,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public override void NavigateToPreviousViewModel()
         {
             this.navigationState.NavigateBack(()=>this.ShowViewModel<DashboardViewModel>()).Wait();
-        }
-
-        private static string GetAnswerOnIntegerQuestionAsString(IntegerNumericAnswer integerAnswer, CultureInfo culture)
-        {
-            return integerAnswer != null && integerAnswer.Answer.HasValue ? integerAnswer.Answer.Value.ToString(culture) : string.Empty;
-        }
-
-        private static string GetAnswerOnRealQuestionAsString(RealNumericAnswer realAnswer, CultureInfo culture)
-        {
-            return realAnswer != null && realAnswer.Answer.HasValue ? realAnswer.Answer.Value.ToString(culture) : string.Empty;
-        }
-
-        private static string GetAnswerOnDateTimeQuestionAsString(DateTimeAnswer dateTimeAnswer, CultureInfo culture)
-        {
-            return dateTimeAnswer != null && dateTimeAnswer.Answer.HasValue ? dateTimeAnswer.Answer.Value.ToString("d", culture) : string.Empty;
-        }
-
-        private static string GetAnswerOnSingleOptionQuestionAsString(QuestionnaireModel questionnaire, SingleOptionAnswer singleOptionAnswer)
-        {
-            var question = questionnaire.Questions[singleOptionAnswer.Id];
-
-            var singleOptionQuestionModel = question as SingleOptionQuestionModel;
-            if (singleOptionQuestionModel != null)
-                return singleOptionQuestionModel.Options.FirstOrDefault(_ => _.Value == singleOptionAnswer.Answer).Title;
-
-            var filteredSingleOptionQuestionModel = question as FilteredSingleOptionQuestionModel;
-            if (filteredSingleOptionQuestionModel != null)
-                return filteredSingleOptionQuestionModel.Options.FirstOrDefault(_ => _.Value == singleOptionAnswer.Answer).Title;
-
-            return string.Empty;
-        }
-
-        private static string GetAnswerOnMultiOptionQuestionAsString(QuestionnaireModel questionnaire, MultiOptionAnswer multiOptionAnswer)
-        {
-            var multiOptionQuestionModel = questionnaire.Questions[multiOptionAnswer.Id] as MultiOptionQuestionModel;
-            return multiOptionQuestionModel != null
-                ? string.Join(",",
-                    multiOptionQuestionModel.Options.Where(
-                        _ => multiOptionAnswer.Answers.Contains(_.Value)).Select(_ => _.Title))
-                : string.Empty;
         }
     }
 }

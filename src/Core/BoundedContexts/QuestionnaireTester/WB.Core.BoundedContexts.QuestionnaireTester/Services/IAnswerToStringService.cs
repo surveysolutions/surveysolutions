@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
 {
     public interface IAnswerToStringService
     {
-        string AnswerToString(BaseQuestionModel question, BaseInterviewAnswer answer);
+        string AnswerToUIString(BaseQuestionModel question, BaseInterviewAnswer answer);
     }
 }

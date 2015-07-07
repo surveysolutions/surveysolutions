@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
     internal class AnswerToStringService : IAnswerToStringService
     {
-        public string AnswerToString(BaseQuestionModel question, BaseInterviewAnswer answer)
+        public string AnswerToUIString(BaseQuestionModel question, BaseInterviewAnswer answer)
         {
             if (answer == null || !answer.IsAnswered)
                 return string.Empty;
@@ -55,9 +55,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             if (answer is SingleOptionAnswer)
             {
                 var singleOptionAnswer = (SingleOptionAnswer) answer;
-                var singleOptionQuestion = (SingleOptionQuestionModel) question;
 
-                return singleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
+                var singleOptionQuestion = question as SingleOptionQuestionModel;
+                if (singleOptionQuestion != null)
+                    return singleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
+
+                var filteredSingleOptionQuestion = question as FilteredSingleOptionQuestionModel;
+                if (filteredSingleOptionQuestion != null)
+                    return filteredSingleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
             }
 
             if (answer is TextListAnswer)

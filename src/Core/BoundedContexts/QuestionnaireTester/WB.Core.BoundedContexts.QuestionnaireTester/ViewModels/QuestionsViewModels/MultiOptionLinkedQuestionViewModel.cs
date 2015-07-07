@@ -251,7 +251,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private string BuildOptionTitle(IStatefulInterview interview, BaseQuestionModel linkedToQuestion, BaseInterviewAnswer linkedToAnswer)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToString(linkedToQuestion, linkedToAnswer);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestion, linkedToAnswer);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
