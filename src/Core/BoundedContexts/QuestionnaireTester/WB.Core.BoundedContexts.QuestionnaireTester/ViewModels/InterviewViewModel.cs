@@ -98,25 +98,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             var interview = this.interviewRepository.Get(navigationState.InterviewId);
 
-            var questionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(groupIdentity);
-            var answeredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(groupIdentity);
-            var invalidAnswersCount = interview.CountInvalidInterviewerAnswersInGroupOnly(groupIdentity);
+            var state = new GroupState();
+            state.UpdateSelfFromGroupModelOnly(interview);
 
-            var newState = GroupStatus.NotStarted;
-
-            if (answeredQuestionsCount > 0)
-                newState = GroupStatus.Started;
-
-            if (questionsCount == answeredQuestionsCount)
-                newState = GroupStatus.Completed;
-
-            if (invalidAnswersCount > 0)
-                newState = GroupStatus.StartedInvalid;
-
-            if (invalidAnswersCount > 0 && questionsCount == answeredQuestionsCount)
-                newState = GroupStatus.CompletedInvalid;
-
-            Status = newState;
+            this.Status = state.Status;
         }
 
         private string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)

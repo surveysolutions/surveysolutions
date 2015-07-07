@@ -98,27 +98,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
 
             var state = new GroupState();
+            state.UpdateSelfFromGroupModelRecursively(interview);
 
-            state.QuestionsCount = interview.CountInterviewerQuestionsInGroupRecursively(groupIdentity);
-            state.SubgroupsCount = interview.GetGroupsInGroupCount(groupIdentity);
-            state.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupRecursively(groupIdentity);
-            state.InvalidAnswersCount = interview.CountInvalidInterviewerAnswersInGroupRecursively(groupIdentity);
-
-            var newState = GroupStatus.NotStarted;
-
-            if (state.AnsweredQuestionsCount > 0)
-                newState = GroupStatus.Started;
-
-            if (state.QuestionsCount == state.AnsweredQuestionsCount)
-                newState = GroupStatus.Completed;
-
-            if (state.InvalidAnswersCount > 0)
-                newState = GroupStatus.StartedInvalid;
-
-            if (state.InvalidAnswersCount > 0 && state.QuestionsCount == state.AnsweredQuestionsCount)
-                newState = GroupStatus.CompletedInvalid;
-
-            state.Status = newState;
             this.GroupState = state;
         }
 
