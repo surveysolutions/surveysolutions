@@ -565,9 +565,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
+                GetRosterInstanceIds);
 
-            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered);
+            return questionInstances.Count(this.WasAnswered);
         }
 
         public int CountAnsweredInterviewerQuestionsInGroupOnly(Identity groupIdentity)
@@ -676,6 +676,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
             if (!Answers.ContainsKey(questionKey))
+                return false;
+
+            if (!IsEnabled(entityIdentity))
                 return false;
 
             var interviewAnswerModel = Answers[questionKey];
