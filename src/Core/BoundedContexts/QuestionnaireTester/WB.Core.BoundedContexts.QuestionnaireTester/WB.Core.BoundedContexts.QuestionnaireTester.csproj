@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\QuestionsViewModels\GroupState.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionLinkedQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\MultiOptionLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionsViewModels\SimpleGroupStatus.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionLinkedQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionsViewModels\SingleOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\SectionChangeMessage.cs" />
