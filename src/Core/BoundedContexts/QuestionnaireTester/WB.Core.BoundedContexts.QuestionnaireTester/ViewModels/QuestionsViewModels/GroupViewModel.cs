@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
@@ -102,7 +103,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var interview = this.interviewRepository.Get(interviewId);
 
             var state = new GroupState(this.groupIdentity);
-            state.UpdateSelfFromGroupModelRecursively(interview);
+            state.UpdateSelfFromModel(interview);
 
             this.GroupState = state;
         }

@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var interview = this.interviewRepository.Get(navigationState.InterviewId);
 
             var state = new GroupState(groupIdentity);
-            state.UpdateSelfFromGroupModelOnly(interview);
+            state.UpdateSelfFromModel(interview);
 
             this.Status = state.Status;
         }
