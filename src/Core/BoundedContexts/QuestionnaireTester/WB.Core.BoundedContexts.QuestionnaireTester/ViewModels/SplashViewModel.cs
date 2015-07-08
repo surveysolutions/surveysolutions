@@ -1,15 +1,18 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class SplashViewModel : BaseViewModel
     {
         private readonly IPrincipal principal;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public SplashViewModel(IPrincipal principal)
+        public SplashViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
         {
             this.principal = principal;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public override async void Start()
@@ -18,10 +21,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             if (this.principal.IsAuthenticated)
             {
-                this.ShowViewModel<DashboardViewModel>();
+                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
             }
             else
-                this.ShowViewModel<LoginViewModel>();
+                this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()

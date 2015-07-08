@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -41,7 +42,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
-            AnswerNotifier answerNotifier)
+            AnswerNotifier answerNotifier,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -49,6 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
+            this.viewModelNavigationService = viewModelNavigationService;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.CurrentGroup = groupViewModel;
@@ -137,7 +140,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return navigateToDashboardCommand ?? (navigateToDashboardCommand = new MvxCommand(() => this.ShowViewModel<DashboardViewModel>()));
+                return navigateToDashboardCommand ?? (navigateToDashboardCommand = new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DashboardViewModel>()));
             }
         }
 
@@ -146,7 +149,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get
             {
-                return navigateToHelpCommand ?? (navigateToHelpCommand = new MvxCommand(() => this.ShowViewModel<HelpViewModel>()));
+                return navigateToHelpCommand ?? (navigateToHelpCommand = new MvxCommand(() => this.viewModelNavigationService.NavigateTo<HelpViewModel>()));
             }
         }
 
@@ -168,7 +171,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private void SignOut()
         {
             this.principal.SignOut();
-            this.ShowViewModel<LoginViewModel>();
+            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
         private void ChangeLanguage()
@@ -178,7 +181,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.navigationState.NavigateBack(()=>this.ShowViewModel<DashboardViewModel>()).Wait();
+            this.navigationState.NavigateBack(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).Wait();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
     {
         public override void Load()
         {
-            this.Bind<DesignerApiService>().ToSelf().InSingletonScope();
+            this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
 
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
             this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<Func<IUserInteraction>>().ToMethod(context => () => Mvx.Resolve<IUserInteraction>());
             this.Bind<IInterviewPreconditionsService>().To<QuestionnaireTesterPreconditionsService>();
+            this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
 
             CommandRegistry
                .Setup<StatefulInterview>()

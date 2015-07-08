@@ -2,18 +2,21 @@
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
         private readonly IPrincipal principal;
-        private readonly DesignerApiService designerApiService;
+        private readonly IDesignerApiService designerApiService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public LoginViewModel(IPrincipal principal, DesignerApiService designerApiService)
+        public LoginViewModel(IPrincipal principal, IDesignerApiService designerApiService, IViewModelNavigationService viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         private bool isInProgress = false;
@@ -58,7 +61,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
                     this.principal.SignIn(userName: LoginName, password: Password, rememberMe: StaySignedIn);
-                    this.ShowViewModel<DashboardViewModel>();   
+                    this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
                 }
             }
             finally
