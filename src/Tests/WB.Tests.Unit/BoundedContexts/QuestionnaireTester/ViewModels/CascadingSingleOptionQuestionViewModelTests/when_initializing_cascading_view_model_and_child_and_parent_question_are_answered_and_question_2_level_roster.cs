@@ -72,10 +72,10 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         It should_format_first_option_in_AutoCompleteSuggestions = () =>
         {
             var firstOption = cascadingModel.AutoCompleteSuggestions.ElementAt(0);
-            firstOption.Text.ShouldEqual("title klo 3");
+            firstOption.Text.ShouldContain("title klo 3");
             firstOption.Value.ShouldEqual(answerOnChildQuestion);
             firstOption.ParentValue.ShouldEqual(1);
-            firstOption.OriginalText.ShouldEqual("title klo 3");
+            firstOption.OriginalText.ShouldContain("title klo 3");
         };
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;

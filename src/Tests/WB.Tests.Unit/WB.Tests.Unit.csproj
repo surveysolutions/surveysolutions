@@ -415,7 +415,6 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_initializing_cascading_view_model_and_there_is_no_answers_in_interview_and_question_2_level_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_invoking_ValueChangeCommand_and_there_is_match_in_options_list.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_invoking_ValueChangeCommand_and_there_is_match_in_options_list_with_already_saved_answer.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_invoking_ValueChangeCommand_and_there_is_not_match_in_options_list.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_selecting_object_in_cascading_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_selecting_object_in_cascading_view_model_set_in_null.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_after_handling_SingleOptionQuestionAnswered_for_parent_question.cs" />
