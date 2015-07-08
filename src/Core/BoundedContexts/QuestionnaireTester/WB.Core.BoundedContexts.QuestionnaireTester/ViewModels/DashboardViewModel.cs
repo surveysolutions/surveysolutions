@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
@@ -24,6 +26,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IUserInteraction userInteraction;
+        private readonly IFriendlyMessageService friendlyMessageService;
 
         public DashboardViewModel(
             IPrincipal principal,
@@ -31,7 +35,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IDesignerApiService designerApiService, 
             ICommandService commandService, 
             IQuestionnaireImportService questionnaireImportService,
-            IViewModelNavigationService viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            IFriendlyMessageService friendlyMessageService,
+            IUserInteraction userInteraction)
             : base(logger)
         {
             this.principal = principal;
@@ -39,6 +45,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.userInteraction = userInteraction;
+            this.friendlyMessageService = friendlyMessageService;
         }
 
         public async void Init()
@@ -87,6 +95,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get { return publicQuestionnairesCount; }
             set { publicQuestionnairesCount = value; RaisePropertyChanged(); }
+        }
+
+        private bool isPublicShowed;
+        public bool IsPublicShowed
+        {
+            get { return isPublicShowed; }
+            set { isPublicShowed = value; RaisePropertyChanged(); }
         }
 
         private IMvxCommand signOutCommand;
@@ -180,6 +195,35 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
                 }
             }
+            catch (RestException ex)
+            {
+                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    switch (ex.StatusCode)
+                    {
+                        case HttpStatusCode.Forbidden:
+                            errorMessage = UIResources.ImportQuestionnaire_Error_Forbidden;
+                            break;
+                        case HttpStatusCode.PreconditionFailed:
+                            errorMessage = UIResources.ImportQuestionnaire_Error_PreconditionFailed;
+                            break;
+                        case HttpStatusCode.NotFound:
+                            errorMessage = UIResources.ImportQuestionnaire_Error_NotFound;
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                    this.userInteraction.Alert(errorMessage);
+                else 
+                    throw;
+            }
+            catch (OperationCanceledException)
+            {
+                // show here the message that loading questionnaire was canceled
+                // don't needed in the current implementation
+            }
             finally
             {
                 this.IsInProgress = false;   
@@ -199,6 +243,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
 
                 this.ShowMyQuestionnaires();
+            }
+            catch (RestException ex)
+            {
+                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                    this.userInteraction.Alert(errorMessage);
+                else
+                    throw;
             }
             finally
             {

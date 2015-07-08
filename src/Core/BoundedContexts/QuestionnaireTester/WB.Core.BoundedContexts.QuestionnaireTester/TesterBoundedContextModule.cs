@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
         public override void Load()
         {
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
+            this.Bind<IFriendlyMessageService>().To<FriendlyMessageService>().InSingletonScope();
 
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
             this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
