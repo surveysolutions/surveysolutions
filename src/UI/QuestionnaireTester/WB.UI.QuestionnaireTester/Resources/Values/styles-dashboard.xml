@@ -61,7 +61,7 @@
 
   <style name="Dashboard_QuestionnaireListItem_Title">
     <item name="android:singleLine">false</item>
-    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_width">@dimen/zero</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_weight">1</item>
     <item name="android:textColor">@color/dashboard_questionnaire_list_item_title</item>
@@ -82,16 +82,16 @@
   </style>
 
   <style name="Dashboard_Filters_Divider">
-    <item name="android:layout_height">1dp</item>
+    <item name="android:layout_height">@dimen/ListStyle_Divider_height</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:background">@color/dashboard_questionnairelist_border_top</item>
   </style>
   
   <style name="Dashboard_Questionnaires_Divider">
-    <item name="android:layout_height">1dp</item>
+    <item name="android:layout_height">@dimen/ListStyle_Divider_height</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:background">@color/dashboard_questionnairelistitem_border_bottom</item>
-    <item name="android:layout_marginLeft">2dp</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_QuestionnairesListItem_Divider_margin</item>
   </style>
 
 </resources>

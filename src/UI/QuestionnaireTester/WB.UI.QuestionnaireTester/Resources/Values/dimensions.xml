@@ -48,6 +48,7 @@
   <dimen name="Dashboard_QuestionnairesListItem_Body_padding">12dp</dimen>
 
   <dimen name="Dashboard_QuestionnairesListItem_Title_margin_right">24dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Divider_margin">2dp</dimen>
   <dimen name="Dashboard_QuestionnairesListItem_Title_margin_left">14dp</dimen>
   <dimen name="Dashboard_QuestionnairesListItem_Date_width">128dp</dimen>
 
