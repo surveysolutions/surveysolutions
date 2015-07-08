@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             if (this.NavigateToIdentity != null)
             {
-                this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, this.navigationState);
+                this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, groupIdentity, this.navigationState);
             }
         }
 

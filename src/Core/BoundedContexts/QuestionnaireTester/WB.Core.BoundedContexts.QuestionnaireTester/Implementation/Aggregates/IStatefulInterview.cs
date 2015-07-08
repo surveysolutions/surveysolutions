@@ -82,6 +82,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         bool HasUnansweredInterviewerQuestionsInGroupOnly(Identity group);
 
+        Identity GetParentGroup(Identity groupOrQuestion);
+
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
 
         IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector);

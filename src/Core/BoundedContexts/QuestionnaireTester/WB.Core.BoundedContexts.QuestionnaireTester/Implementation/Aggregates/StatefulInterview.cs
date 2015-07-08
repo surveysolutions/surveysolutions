@@ -441,7 +441,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             int questionRosterLevel = questionnaire.GetRosterLevelForQuestion(questionId);
             var rosterVector = this.ShrinkRosterVector(targetRosterVector, questionRosterLevel);
@@ -452,7 +452,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedQuestionId, linkedQuestion, questionnaire);
 
@@ -487,7 +487,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             int grosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
             var rosterVector = this.ShrinkRosterVector(targetRosterVector, grosterLevel);
@@ -498,7 +498,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             IEnumerable<Guid> parentRosters = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).WithoutLast();
 
@@ -512,7 +512,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public int CountInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             return this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
@@ -538,7 +538,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
@@ -559,7 +559,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public int CountInvalidInterviewerAnswersInGroupRecursively(Identity groupIdentity)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
 
             var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
@@ -591,9 +591,21 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 .Any(question => !this.WasAnswered(question));
         }
 
+        public Identity GetParentGroup(Identity groupOrQuestion)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            Guid? parentId = questionnaire.GetParentGroup(groupOrQuestion.Id);
+
+            if (!parentId.HasValue)
+                return null;
+
+            return this.GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(parentId.Value, groupOrQuestion.RosterVector, questionnaire);
+        }
+
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetChildQuestions(groupIdentity.Id);
 
             IEnumerable<Identity> questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
@@ -606,7 +618,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         public IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var resultInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, 
                 groupId, 
                 parentRosterVector, 
@@ -688,7 +700,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity groupIdentity)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             IEnumerable<Guid> groupsAndRosters = Enumerable.Concat(
                 questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id),
@@ -700,7 +712,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         private IEnumerable<Identity> GetEnabledInterviewerChildQuestions(Identity group)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             IEnumerable<Guid> questionIds = questionnaire.GetChildInterviewerQuestions(group.Id);
 
@@ -801,6 +813,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
             this.groups[groupKey] = groupOrRoster;
             return groupOrRoster;
+        }
+
+        private IQuestionnaire GetQuestionnaireOrThrow()
+        {
+            return GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion);
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)
