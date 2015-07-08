@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Dashboard
 
         Because of = () => viewModel.ShowPublicQuestionnairesCommand.Execute();
 
+        It should_set_IsPublicShowed_to_true = () => viewModel.IsPublicShowed.ShouldBeTrue();
         It should_Questionnaires_have_3_questionnaires = () => viewModel.Questionnaires.Count.ShouldEqual(3);
         It should_contains_only_public_questionnares = () => viewModel.Questionnaires.All(_ => _.IsPublic).ShouldBeTrue();
 
