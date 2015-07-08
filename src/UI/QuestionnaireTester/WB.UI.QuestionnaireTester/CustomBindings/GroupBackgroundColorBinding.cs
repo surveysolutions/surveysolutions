@@ -17,23 +17,27 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(Button control, GroupState value)
         {
-            int groupBackgroundResourceId;
+            GroupStatus? groupStatus = value != null ? value.Status : null as GroupStatus?;
 
-            switch (value.Status)
-            {
-                case GroupStatus.Completed:
-                    groupBackgroundResourceId = Resource.Drawable.group_completed;
-                    break;
-                case GroupStatus.StartedInvalid:
-                case GroupStatus.CompletedInvalid:
-                    groupBackgroundResourceId = Resource.Drawable.group_with_invalid_answers;
-                    break;
-                default:
-                    groupBackgroundResourceId = Resource.Drawable.group_started;
-                    break;
-            }
+            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByState(groupStatus);
 
             control.SetBackgroundResource(groupBackgroundResourceId);
+        }
+
+        private static int GetGroupBackgroundResourceIdByState(GroupStatus? groupStatus)
+        {
+            switch (groupStatus)
+            {
+                case GroupStatus.Completed:
+                    return Resource.Drawable.group_completed;
+
+                case GroupStatus.StartedInvalid:
+                case GroupStatus.CompletedInvalid:
+                    return Resource.Drawable.group_with_invalid_answers;
+
+                default:
+                    return Resource.Drawable.group_started;
+            }
         }
     }
 }

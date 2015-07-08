@@ -29,6 +29,12 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
         protected override void SetValueToView(TextView control, GroupState value)
         {
+            if (value == null)
+            {
+                control.TextFormatted = new SpannableString(string.Empty);
+                return;
+            }
+
             string fullInfo = GetGroupInformationText(value);
             string errorInfo = GetInformationByInvalidAnswers(value);
 
