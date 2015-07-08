@@ -69,6 +69,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set { isInitialized = value; RaisePropertyChanged(); }
         }
 
+        private bool isPublicShowed;
+        public bool IsPublicShowed
+        {
+            get { return isPublicShowed; }
+            set { isPublicShowed = value; RaisePropertyChanged(); }
+        }
+
         private bool isInProgress;
         public bool IsInProgress
         {
