@@ -4,5 +4,8 @@
                  style="@style/Interview_Previous_Group_Navigation_Layout"
                  local:MvxBind="HideKeyboardOnClick .">
   <Button style="@style/Interview_Previous_Group_Navigation_Button"
-    local:MvxBind="Click NavigateCommand; HideKeyboardOnClick .; ButtonGroupStyle NavigateToGroupViewModel.GroupState; Text If(IsInSection, Localization('Interview_NextSection_ButtonText'), Localization('Interview_PreviousGroupNavigation_ButtonText'))"/>
+    local:MvxBind="HideKeyboardOnClick .; 
+                   Click NavigateCommand; 
+                   ButtonGroupStyle NavigateToGroupViewModel.GroupState; 
+                   Text If(IsInSection, Localization('Interview_NextSection_ButtonText'), Localization('Interview_PreviousGroupNavigation_ButtonText'))"/>
 </MvxLinearLayout>

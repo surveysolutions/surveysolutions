@@ -83,7 +83,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                SelectedObject = Options.SingleOrDefault(i => i.Value == selectedValue);
+                var answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
+                SelectedObject = answerOption;
+                DefaultText = answerOption == null ? String.Empty : answerOption.Text;
             }
             else
             {
@@ -118,6 +120,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 RaisePropertyChanged();
             }
         }
+
+        public string DefaultText { get; set; } 
 
         private string filterText;
         public string FilterText

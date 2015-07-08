@@ -16,6 +16,7 @@
           android:inputType="textVisiblePassword"
           local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
           local:MvxBind="FocusValueChanged ValueChangeCommand; 
+                         Text DefaultText;
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
                          SelectedObject SelectedObject; 
