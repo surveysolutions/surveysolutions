@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.DataCollection.UserTests;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -18,13 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
     {
         Establish context = () =>
         {
+            user = Create.User();
             var summaries = new TestInMemoryWriter<InterviewSummary>();
-            summaries.Store(Create.InterviewSummary(), "id");
+            summaries.Store(Create.InterviewSummary(responsibleId: user.EventSourceId,status:InterviewStatus.InterviewerAssigned), "id");
 
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidator(
                     interviews: summaries);
-            user = Create.User();
             user.ApplyEvent(Create.NewUserCreated());
         };
 
