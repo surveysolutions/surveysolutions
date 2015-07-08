@@ -21,47 +21,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public GroupStatus Status { get; private set; }
         public SimpleGroupStatus SimpleStatus { get; private set; }
 
-        public void UpdateSelfFromGroupModelRecursively(IStatefulInterview interview)
-        {
-            this.UpdateSelfFromModel(interview);
-
-//            this.QuestionsCount = interview.CountInterviewerQuestionsInGroupRecursively(this.groupIdentity);
-//            this.SubgroupsCount = interview.GetGroupsInGroupCount(this.groupIdentity);
-//            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupRecursively(this.groupIdentity);
-//            this.InvalidAnswersCount = interview.CountInvalidInterviewerAnswersInGroupRecursively(this.groupIdentity);
-//
-//            this.UpdateStatus();
-        }
-
-        public void UpdateSelfFromGroupModelOnly(IStatefulInterview interview)
-        {
-            this.UpdateSelfFromModel(interview);
-
-//            this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.groupIdentity);
-//            this.SubgroupsCount = interview.GetGroupsInGroupCount(this.groupIdentity);
-//            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.groupIdentity);
-//            this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.groupIdentity);
-//
-//            this.UpdateStatus();
-        }
-
-        private void UpdateStatus()
-        {
-            this.Status = GroupStatus.NotStarted;
-
-            if (this.AnsweredQuestionsCount > 0)
-                this.Status = GroupStatus.Started;
-
-            if (this.QuestionsCount == this.AnsweredQuestionsCount)
-                this.Status = GroupStatus.Completed;
-
-            if (this.InvalidAnswersCount > 0)
-                this.Status = GroupStatus.StartedInvalid;
-
-            if (this.InvalidAnswersCount > 0 && this.QuestionsCount == this.AnsweredQuestionsCount)
-                this.Status = GroupStatus.CompletedInvalid;
-        }
-
         public void UpdateSelfFromModel(IStatefulInterview interview)
         {
             this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.groupIdentity);
