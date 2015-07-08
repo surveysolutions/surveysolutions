@@ -26,6 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Dashboard
 
         Because of = () => viewModel.RefreshQuestionnairesCommand.Execute();
 
+        It should_set_IsPublicShowed_to_false = () => viewModel.IsPublicShowed.ShouldBeFalse();
         It should_Questionnaires_have_2_questionnaires = () => viewModel.Questionnaires.Count.ShouldEqual(2);
         It should_contains_only_my_questionnares = () => viewModel.Questionnaires.All(_ => !_.IsPublic).ShouldBeTrue();
         It should_set_MyQuestionnairesCount_to_2 = () => viewModel.MyQuestionnairesCount.ShouldEqual(2);
