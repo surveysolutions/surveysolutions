@@ -1662,14 +1662,14 @@ namespace WB.Tests.Unit
             return new FileSystemIOAccessor();
         }
 
-        public static UserLight UserLight()
+        public static UserLight UserLight(Guid? userId=null)
         {
-            return new UserLight(Guid.NewGuid(),"test");
+            return new UserLight(userId ?? Guid.NewGuid(), "test");
         }
 
-        public static NewUserCreated NewUserCreated(UserRoles role = UserRoles.Operator)
+        public static NewUserCreated NewUserCreated(UserRoles role = UserRoles.Operator, Guid? supervisorId=null)
         {
-            return new NewUserCreated() { Roles = new[] { role }, Supervisor = Create.UserLight() };
+            return new NewUserCreated() { Roles = new[] { role }, Supervisor = Create.UserLight(supervisorId) };
         }
 
         public static UserArchived UserArchived()
@@ -1682,9 +1682,9 @@ namespace WB.Tests.Unit
             return new ArchiveUserCommad(userId);
         }
 
-        public static CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name")
+        public static CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId=null)
         {
-            return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(), "", ""); 
+            return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(supervisorId), "", ""); 
         }
 
         public static UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
@@ -1702,6 +1702,11 @@ namespace WB.Tests.Unit
         {
             return new SynchronizeInterviewEventsCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1,
                 new object[0], InterviewStatus.Completed, true);
+        }
+
+        public static User User()
+        {
+            return new User();
         }
     }
 }

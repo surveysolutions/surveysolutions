@@ -30,10 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public void Validate(User aggregate,CreateUserCommand command)
         {
             if (IsActiveUserExists(command.UserName))
-                throw new UserException(String.Format("user name '{0}' is taken", command.UserName), UserDomainExceptionType.UserNameTakenByActiveUsers);
+                throw new UserException(String.Format("user name '{0}' is taken", command.UserName), UserDomainExceptionType.UserNameUsedByActiveUser);
 
             if (IsArchivedUserExists(command.UserName))
-                throw new UserException(String.Format("user name '{0}' is taken by archived users", command.UserName), UserDomainExceptionType.UserNameTakenByArchivedUsers);
+                throw new UserException(String.Format("user name '{0}' is taken by archived users", command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
 
 
             if (command.Roles.Contains(UserRoles.Operator))
@@ -72,14 +72,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        private bool IsUserActive(Guid userId)
-        {
-            var user = users.GetById(userId);
-            if (user == null)
-                return false;
-            return !user.IsArchived;
-        }
-
         private bool IsActiveUserExists(string userName)
         {
             return users.Query(_ => _.Where(u => !u.IsArchived && u.UserName.ToLower() == userName.ToLower()).Count() > 0);
@@ -92,7 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private void ThrowIfInterviewerSupervisorIsArchived(Guid supervisorId)
         {
-            if (!IsUserActive(supervisorId))
+            var user = users.GetById(supervisorId);
+            if (user == null || user.IsArchived)
                 throw new UserException("You can't unarchive interviewer until supervisor is archived",
                     UserDomainExceptionType.SupervisorArchived);
         }

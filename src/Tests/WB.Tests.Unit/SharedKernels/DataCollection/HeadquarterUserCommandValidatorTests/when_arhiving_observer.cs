@@ -7,12 +7,12 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests
 {
-    internal class when_archive_observer : HeadquarterUserCommandValidatorTestContext
+    internal class when_arhiving_observer : HeadquarterUserCommandValidatorTestContext
     {
         Establish context = () =>
         {
             headquarterUserCommandValidatorser = CreateHeadquarterUserCommandValidator();
-            user = CreateUser();
+            user = Create.User();
             user.ApplyEvent(Create.NewUserCreated(role: UserRoles.Observer));
         };
 

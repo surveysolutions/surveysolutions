@@ -131,6 +131,11 @@
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
     <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
+    <Compile Include="Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
@@ -466,6 +471,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
