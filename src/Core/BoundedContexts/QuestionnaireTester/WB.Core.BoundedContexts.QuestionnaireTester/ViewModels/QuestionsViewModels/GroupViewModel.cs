@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var interview = this.interviewRepository.Get(interviewId);
 
-            var state = new GroupState();
+            var state = new GroupState(this.groupIdentity);
             state.UpdateSelfFromGroupModelRecursively(interview);
 
             this.GroupState = state;

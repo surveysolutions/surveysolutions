@@ -66,20 +66,26 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         int CountInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
 
-        int CountActiveInterviewerQuestionsInGroupOnly(Identity groupIdentity);
+        int CountActiveInterviewerQuestionsInGroupOnly(Identity group);
 
-        int GetGroupsInGroupCount(Identity groupIdentity);
+        int GetGroupsInGroupCount(Identity group);
 
         int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
 
-        int CountAnsweredInterviewerQuestionsInGroupOnly(Identity groupIdentity);
+        int CountAnsweredInterviewerQuestionsInGroupOnly(Identity group);
 
         int CountInvalidInterviewerAnswersInGroupRecursively(Identity groupIdentity);
 
-        int CountInvalidInterviewerAnswersInGroupOnly(Identity groupIdentity);
+        int CountInvalidInterviewerQuestionsInGroupOnly(Identity group);
+
+        bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group);
+
+        bool HasUnansweredInterviewerQuestionsInGroupOnly(Identity group);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
 
         IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector);
+
+        IEnumerable<Identity> GetEnabledSubgroups(Identity group);
     }
 }

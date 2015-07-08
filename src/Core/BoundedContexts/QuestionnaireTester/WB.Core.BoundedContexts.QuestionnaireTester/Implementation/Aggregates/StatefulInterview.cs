@@ -522,38 +522,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 GetRosterInstanceIds).Count();
         }
 
-        public int CountActiveInterviewerQuestionsInGroupOnly(Identity groupIdentity)
+        public int CountActiveInterviewerQuestionsInGroupOnly(Identity group)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetChildInterviewerQuestions(groupIdentity.Id);
-
-            var questionIdentities = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                allQuestionsInGroup,
-                groupIdentity.RosterVector,
-                questionnaire,
-                GetRosterInstanceIds);
-
-            return questionIdentities.Count(this.IsEnabled);
+            return this
+                .GetEnabledInterviewerChildQuestions(group)
+                .Count(this.IsEnabled);
         }
 
-        public int GetGroupsInGroupCount(Identity groupIdentity)
+        public int GetGroupsInGroupCount(Identity group)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-
-            IEnumerable<Guid> groupsAndRosters = Enumerable.Concat(
-                questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id),
-                questionnaire.GetAllUnderlyingChildRosters(groupIdentity.Id));
-
-            int instancesCount = this
-                .GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
-                    this.interviewState,
-                    groupsAndRosters,
-                    groupIdentity.RosterVector,
-                    questionnaire,
-                    GetRosterInstanceIds)
+            return this
+                .GetGroupsAndRostersInGroup(group)
                 .Count();
-
-            return instancesCount;
         }
 
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
@@ -570,18 +550,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return questionInstances.Count(this.WasAnswered);
         }
 
-        public int CountAnsweredInterviewerQuestionsInGroupOnly(Identity groupIdentity)
+        public int CountAnsweredInterviewerQuestionsInGroupOnly(Identity group)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetChildInterviewerQuestions(groupIdentity.Id);
-
-            var questionIdentities = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                allQuestionsInGroup,
-                groupIdentity.RosterVector,
-                questionnaire,
-                GetRosterInstanceIds);
-
-            return questionIdentities.Count(this.WasAnswered);
+            return this
+                .GetEnabledInterviewerChildQuestions(group)
+                .Count(this.WasAnswered);
         }
 
         public int CountInvalidInterviewerAnswersInGroupRecursively(Identity groupIdentity)
@@ -597,18 +570,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered && !x.Value.IsValid);
         }
 
-        public int CountInvalidInterviewerAnswersInGroupOnly(Identity groupIdentity)
+        public int CountInvalidInterviewerQuestionsInGroupOnly(Identity group)
         {
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(QuestionnaireId), QuestionnaireVersion);
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetChildInterviewerQuestions(groupIdentity.Id);
+            return this
+                .GetEnabledInterviewerChildQuestions(group)
+                .Count(question => !this.IsValid(question));
+        }
 
-            var questionIdentities = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                allQuestionsInGroup,
-                groupIdentity.RosterVector,
-                questionnaire,
-                GetRosterInstanceIds);
+        public bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group)
+        {
+            return this
+                .GetEnabledInterviewerChildQuestions(group)
+                .Any(question => !this.IsValid(question));
+        }
 
-            return questionIdentities.Count(identity => !this.IsValid(identity));
+        public bool HasUnansweredInterviewerQuestionsInGroupOnly(Identity group)
+        {
+            return this
+                .GetEnabledInterviewerChildQuestions(group)
+                .Any(question => !this.WasAnswered(question));
         }
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
@@ -634,6 +614,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
                 GetRosterInstanceIds);
 
             return resultInstances.Where(this.IsEnabled);
+        }
+
+        public IEnumerable<Identity> GetEnabledSubgroups(Identity group)
+        {
+            return this
+                .GetGroupsAndRostersInGroup(group)
+                .Where(this.IsEnabled);
         }
 
         public bool IsValid(Identity identity)
@@ -697,6 +684,30 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
             var interviewAnswerModel = Answers[questionKey];
             return interviewAnswerModel.InterviewerComment;
+        }
+
+        private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion);
+
+            IEnumerable<Guid> groupsAndRosters = Enumerable.Concat(
+                questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id),
+                questionnaire.GetAllUnderlyingChildRosters(groupIdentity.Id));
+
+            return this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, groupsAndRosters, groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds);
+        }
+
+        private IEnumerable<Identity> GetEnabledInterviewerChildQuestions(Identity group)
+        {
+            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion);
+
+            IEnumerable<Guid> questionIds = questionnaire.GetChildInterviewerQuestions(group.Id);
+
+            IEnumerable<Identity> questions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, questionIds, @group.RosterVector, questionnaire, GetRosterInstanceIds);
+
+            return questions.Where(this.IsEnabled);
         }
 
         private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer, new()
