@@ -22,11 +22,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
     {
         Establish context = () =>
         {
+            var summaries = new TestInMemoryWriter<InterviewSummary>();
+            summaries.Store(Create.InterviewSummary(), "id1");
+            summaries.Store(Create.InterviewSummary(), "id2");
+
             surveyManagementInterviewCommandValidator =
               CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,
-                  interviewSummaryStorage:
-                      Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(
-                          _ => _.Query<int>(Moq.It.IsAny<Func<IQueryable<InterviewSummary>, int>>()) == 2));
+                  interviewSummaryStorage: summaries);
 
             interview = Create.Interview();
         };
@@ -41,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewLimitReached);
 
         It should_throw_exception_that_contains_such_words = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("max", "number", "interviews", "'" + maxNumberOfInterviews + "'", "reached");
+            exception.Message.ToLower().ToSeparateWords().ShouldContain("limit", "interviews", "allowed", maxNumberOfInterviews.ToString(), "reached");
 
         private static Interview interview;
 

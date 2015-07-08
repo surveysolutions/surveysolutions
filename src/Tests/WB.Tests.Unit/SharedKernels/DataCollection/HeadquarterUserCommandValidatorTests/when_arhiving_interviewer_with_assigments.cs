@@ -9,20 +9,22 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.DataCollection.UserTests;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests
 {
-    internal class when_archive_interviewer_with_assigments : HeadquarterUserCommandValidatorTestContext
+    internal class when_arhiving_interviewer_with_assigments : HeadquarterUserCommandValidatorTestContext
     {
         Establish context = () =>
         {
+            var summaries = new TestInMemoryWriter<InterviewSummary>();
+            summaries.Store(Create.InterviewSummary(), "id");
+
             headquarterUserCommandValidatorser =
                 CreateHeadquarterUserCommandValidator(
-                    interviews:
-                        Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(
-                            _ => _.Query<int>(Moq.It.IsAny<Func<IQueryable<InterviewSummary>, int>>()) == 1));
-            user = CreateUser();
+                    interviews: summaries);
+            user = Create.User();
             user.ApplyEvent(Create.NewUserCreated());
         };
 

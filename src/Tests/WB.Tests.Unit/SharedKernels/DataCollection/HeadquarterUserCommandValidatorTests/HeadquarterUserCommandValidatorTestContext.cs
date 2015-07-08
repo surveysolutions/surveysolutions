@@ -5,6 +5,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests
 {
@@ -21,9 +22,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
                     interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
-        protected static User CreateUser()
+        protected static HeadquarterUserCommandValidator CreateHeadquarterUserCommandValidatorWithUsers(
+            params UserDocument[] users)
         {
-            return new User();
+            var userStorage = new TestInMemoryWriter<UserDocument>();
+            foreach (var user in users)
+            {
+                userStorage.Store(user, user.PublicKey);
+            }
+            return
+                new HeadquarterUserCommandValidator(
+                    userStorage, Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
     }
 }

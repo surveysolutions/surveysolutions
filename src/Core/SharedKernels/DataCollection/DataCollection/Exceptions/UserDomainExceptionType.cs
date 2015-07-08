@@ -3,8 +3,8 @@
     public enum UserDomainExceptionType
     {
         Undefined,
-        UserNameTakenByActiveUsers,
-        UserNameTakenByArchivedUsers,
+        UserNameUsedByActiveUser,
+        UserNameUsedByArchivedUser,
         UserHasAssigments,
         UserArchived,
         UserIsNotArchived,
