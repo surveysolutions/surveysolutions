@@ -74,6 +74,7 @@
     <Compile Include="Implementation\EventDispatcher\NcqrCompatibleEventDispatcher.cs" />
     <Compile Include="Implementation\InMemoryPlainStorageAccessor.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
+    <Compile Include="Implementation\Storage\InMemoryCachedSnapshotStore.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="Modularity\IIocRegistry.cs" />
