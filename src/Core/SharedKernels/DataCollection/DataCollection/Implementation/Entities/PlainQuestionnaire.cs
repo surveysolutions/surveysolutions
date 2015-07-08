@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
@@ -244,6 +245,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
         {
             return this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
+        }
+
+        public Guid? GetParentGroup(Guid groupOrQuestionId)
+        {
+            var groupOrQuestion = this.GetGroupOrQuestionOrThrow(groupOrQuestionId);
+
+            IComposite parent = groupOrQuestion.GetParent();
+
+            if (parent == this.innerDocument)
+                return null;
+
+            return parent.PublicKey;
         }
 
         public string GetCustomEnablementConditionForQuestion(Guid questionId)
@@ -828,6 +841,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private void ThrowIfGroupDoesNotExist(Guid groupId, string customExceptionMessage = null)
         {
             this.GetGroupOrThrow(groupId, customExceptionMessage);
+        }
+
+        private IComposite GetGroupOrQuestionOrThrow(Guid groupOrQuestionId)
+        {
+            var groupOrQuestion = (IComposite) this.GetGroup(groupOrQuestionId) ?? this.GetQuestion(groupOrQuestionId);
+
+            if (groupOrQuestion == null)
+                throw new QuestionnaireException(string.Format("Group or question with id '{0}' is not found.", groupOrQuestionId));
+
+            return groupOrQuestion;
         }
 
         private IGroup GetGroupOrThrow(Guid groupId, string customExceptionMessage = null)

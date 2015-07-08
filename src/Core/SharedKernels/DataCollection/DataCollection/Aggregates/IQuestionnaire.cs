@@ -50,6 +50,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
 
+        Guid? GetParentGroup(Guid groupOrQuestionId);
+
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
