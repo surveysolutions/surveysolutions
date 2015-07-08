@@ -197,21 +197,22 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
             catch (RestException ex)
             {
-                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
-                if (string.IsNullOrEmpty(errorMessage))
+                string errorMessage;
+
+                switch (ex.StatusCode)
                 {
-                    switch (ex.StatusCode)
-                    {
-                        case HttpStatusCode.Forbidden:
-                            errorMessage = UIResources.ImportQuestionnaire_Error_Forbidden;
-                            break;
-                        case HttpStatusCode.PreconditionFailed:
-                            errorMessage = UIResources.ImportQuestionnaire_Error_PreconditionFailed;
-                            break;
-                        case HttpStatusCode.NotFound:
-                            errorMessage = UIResources.ImportQuestionnaire_Error_NotFound;
-                            break;
-                    }
+                    case HttpStatusCode.Forbidden:
+                        errorMessage = UIResources.ImportQuestionnaire_Error_Forbidden;
+                        break;
+                    case HttpStatusCode.PreconditionFailed:
+                        errorMessage = UIResources.ImportQuestionnaire_Error_PreconditionFailed;
+                        break;
+                    case HttpStatusCode.NotFound:
+                        errorMessage = UIResources.ImportQuestionnaire_Error_NotFound;
+                        break;
+                    default:
+                        errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                        break;
                 }
 
                 if (!string.IsNullOrEmpty(errorMessage))

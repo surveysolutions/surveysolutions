@@ -74,15 +74,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
             catch (RestException ex)
             {
-                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
-                if (string.IsNullOrEmpty(errorMessage))
+                string errorMessage;
+
+                switch (ex.StatusCode)
                 {
-                    switch (ex.StatusCode)
-                    {
-                        case HttpStatusCode.NotFound:
-                            errorMessage = UIResources.Login_Error_NotFound;
-                            break;
-                    }
+                    case HttpStatusCode.NotFound:
+                        errorMessage = UIResources.Login_Error_NotFound;
+                        break;
+                    default:
+                        errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                        break;
                 }
 
                 if (!string.IsNullOrEmpty(errorMessage))
