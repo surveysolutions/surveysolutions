@@ -1219,21 +1219,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
             IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnaire)
         {
+            return groupIds.Select(groupId => this.GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(groupId, rosterVector, questionnaire));
+        }
+
+        protected Identity GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(Guid groupId, decimal[] rosterVector, IQuestionnaire questionnaire)
+        {
             int vectorRosterLevel = rosterVector.Length;
 
-            foreach (Guid groupId in groupIds)
-            {
-                int groupRosterLevel = questionnaire.GetRosterLevelForGroup(groupId);
+            int groupRosterLevel = questionnaire.GetRosterLevelForGroup(groupId);
 
-                if (groupRosterLevel > vectorRosterLevel)
-                    throw new InterviewException(string.Format(
-                        "Group {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
-                        FormatGroupForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, EventSourceId));
+            if (groupRosterLevel > vectorRosterLevel)
+                throw new InterviewException(string.Format(
+                    "Group {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
+                    FormatGroupForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, this.EventSourceId));
 
-                decimal[] groupRosterVector = ShrinkRosterVector(rosterVector, groupRosterLevel);
+            decimal[] groupRosterVector = this.ShrinkRosterVector(rosterVector, groupRosterLevel);
 
-                yield return new Identity(groupId, groupRosterVector);
-            }
+            return new Identity(groupId, groupRosterVector);
         }
 
         private static bool IsQuestionUnderRosterGroup(IQuestionnaire questionnaire, Guid questionId)

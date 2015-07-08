@@ -44,8 +44,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string interviewId;
         private GroupState groupState;
 
-        private Identity parentGroupIdentity;
-
         public IMvxCommand NavigateToGroupCommand
         {
             get { return navigateToGroupCommand ?? (navigateToGroupCommand = new MvxCommand(async () => await NavigateToGroup())); }
@@ -65,6 +63,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
+            var interview = this.interviewRepository.Get(interviewId);
+
+            Identity groupWithAnswersToMonitor = interview.GetParentGroup(entityIdentity);
+
+            this.Init(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
+        }
+
+        public void Init(string interviewId, Identity entityIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
+        {
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
@@ -77,12 +84,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             this.UpdateStats();
 
-            Guid? parentGroupId = questionnaire.GroupsParentIdMap[entityIdentity.Id];
-
-            if (parentGroupId.HasValue)
+            if (groupWithAnswersToMonitor != null)
             {
-                this.parentGroupIdentity = new Identity(parentGroupId.Value, entityIdentity.RosterVector.WithoutLast().ToArray());
-                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(this.parentGroupIdentity);
+                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
                 this.answerNotifier.Init(questionsToListen.ToArray());
                 this.answerNotifier.QuestionAnswered += QuestionAnswered;
             }
