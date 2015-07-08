@@ -13,7 +13,7 @@ using QuestionnaireListItem = WB.Core.BoundedContexts.QuestionnaireTester.Views.
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
 {
-    public class DesignerApiService
+    internal class DesignerApiService : IDesignerApiService
     {
         private readonly ILogger logger;
         private readonly IRestService restService;
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             return isUserAuthrizedOnServer;
         }
 
-        public async Task<IList<QuestionnaireListItem>> GetQuestionnairesAsync(bool isPublic, CancellationToken token)
+        public async virtual Task<IList<QuestionnaireListItem>> GetQuestionnairesAsync(bool isPublic, CancellationToken token)
         {
             var pageIndex = 1;
             var serverQuestionnaires = new List<QuestionnaireListItem>();

@@ -14,17 +14,20 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IViewModelNavigationService viewModelNavigationService;
         private string interviewId;
 
         public PrefilledQuestionsViewModel(ILogger logger,
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository,
+            IViewModelNavigationService viewModelNavigationService)
             : base(logger)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public string QuestionnaireTitle { get; set; }
@@ -47,7 +50,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.PrefilledQuestions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
             if (this.NoPrefiiledQuestionsExists())
             {
-                this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
+                this.viewModelNavigationService.NavigateTo<InterviewViewModel>(new { interviewId = this.interviewId });
             }
         }
 
@@ -58,7 +61,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.ShowViewModel<DashboardViewModel>();
+            this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
         }
     }
 }

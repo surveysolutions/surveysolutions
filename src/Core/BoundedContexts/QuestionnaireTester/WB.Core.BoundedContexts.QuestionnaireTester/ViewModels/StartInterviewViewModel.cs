@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,10 +12,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         IInterviewEntityViewModel
     {
         private readonly ICommandService commandService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public StartInterviewViewModel(ICommandService commandService)
+        public StartInterviewViewModel(ICommandService commandService, IViewModelNavigationService viewModelNavigationService)
         {
             this.commandService = commandService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         private string interviewId;
@@ -37,7 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            this.ShowViewModel<InterviewViewModel>(new { interviewId = this.interviewId });
+            this.viewModelNavigationService.NavigateTo<InterviewViewModel>(new { interviewId = this.interviewId });
         }
     }
 }

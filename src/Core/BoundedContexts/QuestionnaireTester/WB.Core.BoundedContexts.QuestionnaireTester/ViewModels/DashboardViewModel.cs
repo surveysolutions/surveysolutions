@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
@@ -21,22 +20,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IPrincipal principal;
 
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private readonly DesignerApiService designerApiService;
+        private readonly IDesignerApiService designerApiService;
 
         private readonly IQuestionnaireImportService questionnaireImportService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public DashboardViewModel(
             IPrincipal principal,
             ILogger logger,
-            DesignerApiService designerApiService, 
+            IDesignerApiService designerApiService, 
             ICommandService commandService, 
-            IQuestionnaireImportService questionnaireImportService)
+            IQuestionnaireImportService questionnaireImportService,
+            IViewModelNavigationService viewModelNavigationService)
             : base(logger)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public async void Init()
@@ -64,13 +66,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             get { return isInProgress; }
             set { isInProgress = value; RaisePropertyChanged(); }
-        }
-
-        private bool isPublicShowed;
-        public bool IsPublicShowed
-        {
-            get { return isPublicShowed; }
-            set { isPublicShowed = value; RaisePropertyChanged(); }
         }
 
         private string progressIndicator;
@@ -130,7 +125,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private void SignOut()
         {
             this.principal.SignOut();
-            this.ShowViewModel<LoginViewModel>();
+            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
         private void ShowPublicQuestionnaires()
@@ -182,7 +177,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
-                    this.ShowViewModel<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
+                    this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
                 }
             }
             finally
@@ -191,7 +186,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        public async Task GetServerQuestionnaires()
+        private async Task GetServerQuestionnaires()
         {
             this.IsInProgress = true;
 
