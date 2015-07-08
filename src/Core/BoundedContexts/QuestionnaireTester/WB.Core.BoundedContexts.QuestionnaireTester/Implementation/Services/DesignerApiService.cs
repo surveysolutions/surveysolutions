@@ -18,52 +18,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         private readonly ILogger logger;
         private readonly IRestService restService;
         private readonly IUserIdentity userIdentity;
-        private readonly IUserInteraction userInteraction;
 
         public DesignerApiService(ILogger logger, 
             IRestService restService, 
-            IUserIdentity userIdentity, 
-            IUserInteraction userInteraction)
+            IUserIdentity userIdentity)
         {
             this.logger = logger;
             this.restService = restService;
             this.userIdentity = userIdentity;
-            this.userInteraction = userInteraction;
         }
 
         public async Task<bool> Authorize(string login, string password)
         {
-            bool isUserAuthrizedOnServer = false;
-            try
-            {
-                await this.restService.GetAsync(
-                    url: "login",
-                    credentials: new RestCredentials()
-                    {
-                        Login = login,
-                        Password = password
-                    });
-                isUserAuthrizedOnServer = true;
-            }
-            catch (RestException ex)
-            {
-                string errorMessage = this.GetErrorMessageByGeneralHttpStatuses(ex);
-                if (string.IsNullOrEmpty(errorMessage))
+            await this.restService.GetAsync(
+                url: "login",
+                credentials: new RestCredentials()
                 {
-                    switch (ex.StatusCode)
-                    {
-                        case HttpStatusCode.NotFound:
-                            errorMessage = UIResources.Login_Error_NotFound;
-                            break;
-                    }
-                }
+                    Login = login,
+                    Password = password
+                });
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteraction.Alert(errorMessage);
-                else throw;
-            }
-
-            return isUserAuthrizedOnServer;
+            return true;
         }
 
         public async virtual Task<IList<QuestionnaireListItem>> GetQuestionnairesAsync(bool isPublic, CancellationToken token)
@@ -71,24 +46,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
             var pageIndex = 1;
             var serverQuestionnaires = new List<QuestionnaireListItem>();
 
-            try
+            QuestionnaireListItem[] batchOfServerQuestionnaires;
+            do
             {
-                QuestionnaireListItem[] batchOfServerQuestionnaires;
-                do
-                {
-                    batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(isPublic: isPublic, pageIndex: pageIndex++, token: token);
-                    serverQuestionnaires.AddRange(batchOfServerQuestionnaires);
+                batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(isPublic: isPublic, pageIndex: pageIndex++, token: token);
+                serverQuestionnaires.AddRange(batchOfServerQuestionnaires);
 
-                } while (batchOfServerQuestionnaires.Any());
-            }
-            catch (RestException ex)
-            {
-                string errorMessage = this.GetErrorMessageByGeneralHttpStatuses(ex);
-
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteraction.Alert(errorMessage);
-                else throw;
-            }
+            } while (batchOfServerQuestionnaires.Any());
 
             return serverQuestionnaires;
         }
@@ -96,47 +60,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
         public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<decimal> downloadProgress, CancellationToken token)
         {
             Questionnaire downloadedQuestionnaire = null;
-            try
-            {
 
-                downloadedQuestionnaire = await this.restService.GetWithProgressAsync<Questionnaire>(
-                    url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
-                    credentials:
-                        new RestCredentials()
-                        {
-                            Login = this.userIdentity.Name,
-                            Password = this.userIdentity.Password
-                        },
-                    progressPercentage: downloadProgress, token: token);
-            }
-            catch (RestException ex)
-            {
-                string errorMessage = this.GetErrorMessageByGeneralHttpStatuses(ex);
-                if (string.IsNullOrEmpty(errorMessage))
-                {
-                    switch (ex.StatusCode)
+            downloadedQuestionnaire = await this.restService.GetWithProgressAsync<Questionnaire>(
+                url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
+                credentials:
+                    new RestCredentials()
                     {
-                        case HttpStatusCode.Forbidden:
-                            errorMessage = UIResources.ImportQuestionnaire_Error_Forbidden;
-                            break;
-                        case HttpStatusCode.PreconditionFailed:
-                            errorMessage = UIResources.ImportQuestionnaire_Error_PreconditionFailed;
-                            break;
-                        case HttpStatusCode.NotFound:
-                            errorMessage = UIResources.ImportQuestionnaire_Error_NotFound;
-                            break;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteraction.Alert(errorMessage);
-                else throw;
-            }
-            catch (OperationCanceledException)
-            {
-                // show here the message that loading questionnaire was canceled
-                // don't needed in the current implementation
-            }
+                        Login = this.userIdentity.Name,
+                        Password = this.userIdentity.Password
+                    },
+                progressPercentage: downloadProgress, token: token);
 
             return downloadedQuestionnaire;
         }
@@ -162,36 +95,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 IsPublic = isPublic,
                 OwnerName = this.userIdentity.Name
             }).ToArray();
-        }
-
-        private string GetErrorMessageByGeneralHttpStatuses(RestException ex)
-        {
-            string errorMessage = string.Empty;
-
-            switch (ex.StatusCode)
-            {
-                case HttpStatusCode.Unauthorized:
-                    errorMessage = ex.Message.Contains("lock") ? UIResources.AccountIsLockedOnServer : UIResources.Unauthorized;
-                    break;
-                case HttpStatusCode.ServiceUnavailable:
-                    errorMessage = ex.Message.Contains("maintenance") ? UIResources.Maintenance : UIResources.ServiceUnavailable;
-                    break;
-                case HttpStatusCode.RequestTimeout:
-                    errorMessage = UIResources.RequestTimeout;
-                    break;
-                case HttpStatusCode.UpgradeRequired:
-                    errorMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
-                    break;
-                case HttpStatusCode.BadRequest:
-                    errorMessage = UIResources.InvalidEndpoint;
-                    break;
-                case HttpStatusCode.InternalServerError:
-                    this.logger.Error("Internal server error when login.", ex);
-                    errorMessage = UIResources.InternalServerError;
-                    break;
-            }
-
-            return errorMessage;
         }
     }
 }
