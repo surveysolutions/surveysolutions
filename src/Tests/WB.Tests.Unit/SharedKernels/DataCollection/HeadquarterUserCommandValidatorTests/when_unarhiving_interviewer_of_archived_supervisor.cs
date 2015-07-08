@@ -5,23 +5,22 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests
 {
-    internal class when_unarchive_interviewer_of_archived_supervisor : HeadquarterUserCommandValidatorTestContext
+    internal class when_unarhiving_interviewer_of_archived_supervisor : HeadquarterUserCommandValidatorTestContext
     {
         Establish context = () =>
         {
             var supervisor = Create.UserDocument(isArchived: true);
-            headquarterUserCommandValidatorser =
-                CreateHeadquarterUserCommandValidator(
-                    users:
-                        Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(
-                            _ => _.GetById(Moq.It.IsAny<string>()) == supervisor));
 
-            user = CreateUser();
-            user.ApplyEvent(Create.NewUserCreated());
+            headquarterUserCommandValidatorser =
+                CreateHeadquarterUserCommandValidatorWithUsers(supervisor);
+
+            user = Create.User();
+            user.ApplyEvent(Create.NewUserCreated(supervisorId: supervisor.PublicKey));
             user.ApplyEvent(Create.UserArchived());
         };
 
@@ -36,7 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
 
         private static User user;
         private static UserException exception;
-
         private static HeadquarterUserCommandValidator headquarterUserCommandValidatorser;
     }
 }

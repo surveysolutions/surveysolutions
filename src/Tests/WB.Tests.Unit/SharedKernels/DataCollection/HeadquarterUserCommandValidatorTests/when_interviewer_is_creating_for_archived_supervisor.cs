@@ -9,34 +9,34 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Tests.Unit.SharedKernels.DataCollection.UserTests;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests
 {
     internal class when_interviewer_is_creating_for_archived_supervisor : HeadquarterUserCommandValidatorTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
-            var supervisor = Create.UserDocument(isArchived: true);
+            supervisor = Create.UserDocument(isArchived: true);
+
             headquarterUserCommandValidatorser =
-                CreateHeadquarterUserCommandValidator(
-                    users:
-                        Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(
-                            _ => _.GetById(Moq.It.IsAny<string>()) == supervisor));
+                CreateHeadquarterUserCommandValidatorWithUsers(supervisor);
         };
 
-        private Because of = () =>
+        Because of = () =>
             exception =
                 Catch.Only<UserException>(
-                    () => headquarterUserCommandValidatorser.Validate(null, Create.CreateUserCommand()));
+                    () => headquarterUserCommandValidatorser.Validate(null, Create.CreateUserCommand(userName:"inter", supervisorId: supervisor.PublicKey)));
 
-        private It should_raise_UserException_event = () =>
+        It should_raise_UserException_event = () =>
             exception.ShouldNotBeNull();
 
-        private It should_raise_UserException_with_type_equal_SupervisorArchived = () =>
+        It should_raise_UserException_with_type_equal_SupervisorArchived = () =>
             exception.ExceptionType.ShouldEqual(UserDomainExceptionType.SupervisorArchived);
 
         private static UserException exception;
+        private static UserDocument supervisor;
         private static HeadquarterUserCommandValidator headquarterUserCommandValidatorser;
     }
 }

@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -88,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private void ThrowIfInterviewCountLimitReached()
         {
             if (GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
-                throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
+                throw new InterviewException(string.Format(SurveyManagementInterviewCommandValidatorMessages.LimitIsReachedErrorMessageFormat,
                     GetMaxAllowedInterviewsCount()),
                     InterviewDomainExceptionType.InterviewLimitReached);
         }
