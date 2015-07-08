@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             public string OriginalText { get; set; }
             public decimal Value { get; set; }
             public decimal ParentValue { get; set; }
+            public bool Selected { get; set; }
 
             public override string ToString()
             {
@@ -200,7 +202,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             if (textHint.IsNullOrEmpty())
             {
-                var options = this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value).Select(x => CreateFormattedOptionModel(x));
+                var options = this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value)
+                                          .Select(x => CreateFormattedOptionModel(x));
                 foreach (var option in options)
                 {
                     yield return option;
@@ -213,23 +216,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var index = model.Title.IndexOf(textHint, StringComparison.CurrentCultureIgnoreCase);
                 if (index >= 0)
                 {
-                    yield return CreateFormattedOptionModel(model, index, textHint.Length);
+                    yield return CreateFormattedOptionModel(model, textHint);
                 }
             }
         }
 
-        private static CascadingComboboxItemViewModel CreateFormattedOptionModel(CascadingOptionModel model, int index = -1, int length = 0)
+        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CascadingOptionModel model, string hint = null)
         {
-            var text = index > 0 
-                ? model.Title.Insert(index + length, "</b>").Insert(index, "<b>") 
-                : model.Title;
+            var text = !string.IsNullOrEmpty(hint) ? 
+                Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
+                model.Title;
 
             return new CascadingComboboxItemViewModel
                    {
                        Text = text,
                        OriginalText = model.Title,
                        Value = model.Value,
-                       ParentValue = model.ParentValue
+                       ParentValue = model.ParentValue,
+                       Selected = SelectedObject != null && model.Value == SelectedObject.Value
                    };
         }
 
@@ -257,7 +261,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 {
                     ResetTextInEditor = this.selectedObject.OriginalText;
                 }
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
             }
 
