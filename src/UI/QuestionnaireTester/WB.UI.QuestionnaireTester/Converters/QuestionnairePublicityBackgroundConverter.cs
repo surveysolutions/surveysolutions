@@ -10,11 +10,12 @@ namespace WB.UI.QuestionnaireTester.Converters
         {
             if (value)
             {
-                return Resource.Drawable.dashboard_my_questionnaires_bg;
+                return Resource.Drawable.dashboard_public_questionnaires_bg;
+
             }
             else
             {
-                return Resource.Drawable.dashboard_public_questionnaires_bg;
+                return Resource.Drawable.dashboard_my_questionnaires_bg;
             }
         }
     }
