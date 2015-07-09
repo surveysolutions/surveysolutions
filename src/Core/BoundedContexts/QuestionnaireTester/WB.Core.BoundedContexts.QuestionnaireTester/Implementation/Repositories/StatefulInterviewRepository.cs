@@ -19,8 +19,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Repositorie
 
         public IStatefulInterview Get(string interviewId)
         {
-            var statefullInterview = (StatefulInterview) this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), Guid.Parse(interviewId));
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
 
+            var statefullInterview = (StatefulInterview) this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), Guid.Parse(interviewId));
             return statefullInterview;
         }
     }

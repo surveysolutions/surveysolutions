@@ -13,6 +13,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public event GroupChanged OnGroupChanged;
+        public event BeforeGroupChanged OnBeforeGroupChanged;
+
         public string InterviewId { get; private set; }
         public string QuestionnaireId { get; private set; }
         public Identity CurrentGroup { get; private set; }
@@ -86,6 +88,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
         {
+            if (this.OnBeforeGroupChanged != null)
+            {
+                this.OnBeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationParams.TargetGroup));
+            }
+
             this.CurrentGroup = groupIdentity;
 
             if (this.OnGroupChanged != null)
@@ -102,6 +109,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             GC.Collect();
         }
     }
+
+    public delegate void BeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs);
 
     public delegate void GroupChanged(GroupChangedEventArgs newGroupIdentity);
 }

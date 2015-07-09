@@ -20,9 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             ISubstitutionService substitutionService = null)
         {
-            return new SideBarSectionsViewModel(
-                messenger ?? Mock.Of<IMvxMessenger>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+            return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 substitutionService ?? Create.SubstitutionService(),
                 Create.LiteEventRegistry(),

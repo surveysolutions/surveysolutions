@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,33 +11,25 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
-        ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>,
-        ILiteEventHandler<RosterInstancesTitleChanged>
+        ILiteEventHandler<GroupsEnabled>
     {
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
-        private readonly IMvxMessenger messenger;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
-        private string interviewId;
 
         public IList<SideBarSectionViewModel> Sections { get; set; }
 
-        public SideBarSectionsViewModel(
-            IMvxMessenger messenger,
-            IStatefulInterviewRepository statefulInterviewRepository,
+        public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
@@ -49,7 +38,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.messenger = messenger;
             this.statefulInterviewRepository = statefulInterviewRepository;
             eventRegistry.Subscribe(this);
         }
@@ -61,7 +49,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (navigationState == null) throw new ArgumentNullException("navigationState");
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
 
-            this.interviewId = interviewId;
             this.navigationState = navigationState;
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
             this.questionnaireId = questionnaireId;
@@ -72,108 +59,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private void BuildSectionsList()
         {
             var questionnaire = this.questionnaireRepository.GetById(questionnaireId);
-            var interview = this.statefulInterviewRepository.Get(interviewId);
-
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
             foreach (GroupsHierarchyModel section in questionnaire.GroupsHierarchy)
             {
-                var sectionViewModel = this.BuildSectionViewModel(this, section);
-                foreach (var child in section.Children)
-                {
-                    this.BuildViewModelsForSection(interview, sectionViewModel, child);
-                }
-
+                var sectionViewModel = this.BuildSectionViewModel(section);
                 sections.Add(sectionViewModel);
             }
 
             this.Sections = sections;
         }
 
-        private SideBarSectionViewModel BuildSectionViewModel(SideBarSectionsViewModel root, GroupsHierarchyModel section)
+        private SideBarSectionViewModel BuildSectionViewModel(GroupsHierarchyModel section)
         {
-            return new SideBarSectionViewModel(root, null, 0)
-            {
-                Title = section.Title,
-                SectionIdentity = new Identity(section.Id, new decimal[] { })
-            };
-        }
+            var vm = Mvx.Create<SideBarSectionViewModel>();
+            vm.Init(this.navigationState);
+            vm.Title = section.Title;
+            vm.SectionIdentity = new Identity(section.Id, new decimal[] {});
+            vm.HasChildren = section.Children.Count > 0;
 
-        private void BuildViewModelsForSection(IStatefulInterview statefulInterview, SideBarSectionViewModel parent, GroupsHierarchyModel @group)
-        {
-            IEnumerable<Identity> groupInstances = Enumerable.Empty<Identity>(); ;
-            if (group.IsRoster)
-            {
-                groupInstances = statefulInterview.GetEnabledGroupInstances(group.Id, parent.SectionIdentity.RosterVector);
-            }
-            else
-            {
-                var identity = new Identity(@group.Id, parent.SectionIdentity.RosterVector);
-                if (statefulInterview.IsEnabled(identity))
-                {
-                    groupInstances = identity.ToEnumerable();
-                }
-            }
-
-            foreach (Identity groupInstance in groupInstances)
-            {
-                string title = group.Title;
-                if (group.IsRoster)
-                {
-                    var rosterTitle = statefulInterview.GetRosterTitle(groupInstance);
-                    title = substitutionService.GenerateRosterName(group.Title, rosterTitle);
-                }
-
-                var section = new SideBarSectionViewModel(this, parent, group.ZeroBasedDepth)
-                {
-                    SectionIdentity = groupInstance,
-                    Title = title
-                };
-
-                this.mainThreadDispatcher.RequestMainThreadAction(() => parent.Children.Add(section));
-
-                foreach (var child in group.Children)
-                {
-                    this.BuildViewModelsForSection(statefulInterview, section, child);
-                }
-            }
-        }
-
-        internal async Task NavigateToSection(SideBarSectionViewModel item)
-        {
-            messenger.Publish(new SectionChangeMessage(this));
-
-            if (item.IsCurrent)
-            {
-                return;
-            }
-
-            await this.navigationState.NavigateTo(item.SectionIdentity);
+            return vm;
         }
 
         void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            HighlightCurrentGroup(navigationParams);
             HighlightCurrentSection(navigationParams);
-        }
-
-        private void HighlightCurrentGroup(GroupChangedEventArgs navigationParams)
-        {
-            var oldSelectedGroups = this.Sections.TreeToEnumerable(x => x.Children)
-                .Where(x => x.IsCurrent || x.Expanded);
-            oldSelectedGroups.ForEach(x => x.IsCurrent = false);
-
-            SideBarSectionViewModel newCurrentGroup = this.Sections.TreeToEnumerable(x => x.Children)
-                .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
-            if (newCurrentGroup != null)
-            {
-                newCurrentGroup.UnwrapReferences(x => x.Parent).ForEach(x => x.Expanded = true);
-                newCurrentGroup.IsCurrent = true;
-            }
-            else
-            {
-                throw new NullReferenceException(string.Format("Group with id {0} was not found in {1}", navigationParams.TargetGroup, typeof(SideBarSectionsViewModel)));
-            }
         }
 
         private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
@@ -204,77 +114,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             foreach (var groupId in @event.Instances)
             {
-                this.UpdateParentOfGroupWithId(groupId.GroupId, groupId.OuterRosterVector);
+                //this.UpdateParentOfGroupWithId(groupId.GroupId, groupId.OuterRosterVector);
             }
         }
 
-        public void Handle(RosterInstancesRemoved @event)
-        {
-            foreach (var groupId in @event.Instances)
-            {
-                this.UpdateParentOfGroupWithId(groupId.GroupId, groupId.OuterRosterVector);
-            }
-        }
 
         public void Handle(GroupsEnabled @event)
         {
             foreach (var groupId in @event.Groups)
             {
-                this.UpdateParentOfGroupWithId(groupId.Id, groupId.RosterVector.WithoutLast().ToArray());
-            }
-        }
-
-        public void Handle(GroupsDisabled @event)
-        {
-            foreach (var groupId in @event.Groups)
-            {
-                this.UpdateParentOfGroupWithId(groupId.Id, groupId.RosterVector.WithoutLast().ToArray());
-            }
-        }
-
-        private void UpdateParentOfGroupWithId(Guid groupId, decimal[] parentRosterVector)
-        {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
-
-            if (questionnaire.GroupsParentIdMap.ContainsKey(groupId))
-            {
-                Guid? parentGroupId = questionnaire.GroupsParentIdMap[groupId];
-                if (parentGroupId.HasValue)
-                {
-                    SideBarSectionViewModel viewModelToUpdate = this.Sections.TreeToEnumerable(x => x.Children)
-                                                                    .SingleOrDefault(x => x.SectionIdentity.Equals(new Identity(parentGroupId.Value, parentRosterVector)));
-                    if (viewModelToUpdate != null)
-                    {
-                        this.mainThreadDispatcher.RequestMainThreadAction(() => viewModelToUpdate.Children.Clear());
-                        GroupsHierarchyModel groupToAddTo = questionnaire.GroupsHierarchy
-                                                                         .TreeToEnumerable(x => x.Children)
-                                                                         .Single(x => x.Id == parentGroupId);
-
-                        foreach (var childGroup in groupToAddTo.Children)
-                        {
-                            this.BuildViewModelsForSection(interview, viewModelToUpdate, childGroup);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void Handle(RosterInstancesTitleChanged @event)
-        {
-            var affectedRosterIdentities = @event.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToList();
-            var affectedViewModels = this.Sections.TreeToEnumerable(x => x.Children)
-                                         .Where(x => affectedRosterIdentities.Any(i => i.Equals(x.SectionIdentity)));
-
-            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
-
-            foreach (var affectedViewModel in affectedViewModels)
-            {
-                string groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[affectedViewModel.SectionIdentity.Id].Title;
-                string rosterTitle = @event.ChangedInstances.Single(x => x.RosterInstance.GetIdentity().Equals(affectedViewModel.SectionIdentity)).Title;
-
-                string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
-                affectedViewModel.Title = sectionFullName;
+                //this.UpdateParentOfGroupWithId(groupId.Id, groupId.RosterVector.WithoutLast().ToArray());
             }
         }
     }
