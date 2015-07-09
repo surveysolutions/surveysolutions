@@ -382,6 +382,7 @@
     <AndroidResource Include="Resources\drawable\question_input_button_pressed_answered.xml" />
     <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />
     <LinkDescription Include="linker.xml" />
+    <Content Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
