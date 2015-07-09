@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
@@ -66,7 +67,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string Mask
         {
             get { return mask; }
-            private set { mask = value; RaisePropertyChanged(); }
+            private set { mask = value; RaisePropertyChanged(); RaisePropertyChanged(() => MaskedHint); }
+        }
+
+        public string MaskedHint
+        {
+            get { return Mask.IsNullOrEmpty() ? String.Empty : " ({0})".FormatString(Mask); }
         }
 
         public bool IsMaskedQuestionAnswered { get; set; }
