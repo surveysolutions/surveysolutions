@@ -16,12 +16,13 @@
         function GetInterviewersUrl(supervisorId) {
             var url = new Url(window.location.href);
             return '@Url.Action(Model.ReportName + "ByInterviewers", "PeriodicStatusReport")'
-                    + '?questionnaireId=' + url.query['questionnaireId']
-                    + '&questionnaireVersion=' + url.query['questionnaireVersion']
-                    + '&from=' + url.query['from']
-                    + '&period=' + url.query['period']
-                    + '&columnCount=' + url.query['columnCount']
-                    + '&supervisorId=' + supervisorId;
+                + '?questionnaireId=' + url.query['questionnaireId']
+                + '&questionnaireVersion=' + url.query['questionnaireVersion']
+                + '&from=' + url.query['from']
+                + '&period=' + url.query['period']
+                + '&columnCount=' + url.query['columnCount']
+                + '&reportType=' + url.query['reportType']
+                + '&supervisorId=' + supervisorId;
         }
         function GetSupervisorsUrl() {
             var url = new Url(window.location.href);
@@ -30,6 +31,7 @@
                 + '&questionnaireVersion=' + url.query['questionnaireVersion']
                 + '&from=' + url.query['from']
                 + '&period=' + url.query['period']
+                + '&reportType=' + url.query['reportType']
                 + '&columnCount=' + url.query['columnCount'];
         }
         $(function () {
@@ -56,7 +58,8 @@
 {
     <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
 }
-<h4 class="sinle-line-header text-italic" data-bind="text: QuestionnaireName"></h4>
+    <h4 class="sinle-line-header text-italic" data-bind="text: QuestionnaireName"></h4>
+    <h5 class="sinle-line-header">@Model.ReportNameDescription</h5>
 }
 
 @section filters

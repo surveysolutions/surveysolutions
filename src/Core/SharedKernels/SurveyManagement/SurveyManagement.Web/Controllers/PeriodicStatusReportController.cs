@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
         }
 
-        public ActionResult QuantityByInterviewers(Guid? supervisorId)
+        public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
 
@@ -51,14 +51,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ReportName = "Quantity",
                 ResponsibleColumnName = PeriodicStatusReport.TeamMember,
                 SupervisorId = supervisorId,
-                ReportTypes = new[] {PeriodiceReportType.NumberOfCompletedInterviews}
+                ReportTypes =
+                    new[]
+                    {
+                        PeriodiceReportType.NumberOfCompletedInterviews,
+                        PeriodiceReportType.NumberOfInterviewTransactionsByHQ,
+                        PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
+                        PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
+                    },
+                ReportNameDescription = String.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.TeamMember)
             };
 
             return this.View("PeriodicStatusReport", model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult QuantityBySupervisors(PeriodiceReportType? reportType)
+        public ActionResult QuantityBySupervisors(PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
 
@@ -68,8 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var model = new PeriodicStatusReportModel
             {
                 WebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors,
-                CanNavigateToQuantityByTeamMember =
-                    !reportType.HasValue || reportType == PeriodiceReportType.NumberOfCompletedInterviews,
+                CanNavigateToQuantityByTeamMember = true,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Quantity",
@@ -81,22 +88,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         PeriodiceReportType.NumberOfInterviewTransactionsByHQ,
                         PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
                         PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
-                    }
+                    },
+                ReportNameDescription = String.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team)
             };
 
             return this.View("PeriodicStatusReport", model);
         }
-        public ActionResult SpeedByInterviewers(Guid? supervisorId)
+        public ActionResult SpeedByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
+            var periodicStatusReportWebApiActionName =
+             reportTypesWhichShouldBeReroutedToCustomStatusController.Contains(reportType)
+                 ? PeriodicStatusReportWebApiActionName.BetweenStatusesByInterviewers
+                 : PeriodicStatusReportWebApiActionName.ByInterviewers;
+
             var model = new PeriodicStatusReportModel
             {
-                WebApiActionName = PeriodicStatusReportWebApiActionName.ByInterviewers,
-                CanNavigateToQuantityByTeamMember =false,
+                WebApiActionName = periodicStatusReportWebApiActionName,
+                CanNavigateToQuantityByTeamMember = false,
                 CanNavigateToQuantityBySupervisors = this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
@@ -105,33 +118,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ReportTypes =
                     new[]
                     {
-                        PeriodiceReportType.AverageInterviewDuration,/*,
-                        PeriodiceReportType.AverageCaseAssignmentDuration*/
-                    }
+                        PeriodiceReportType.AverageInterviewDuration,
+                        PeriodiceReportType.AverageSupervisorProcessingTime,
+                        PeriodiceReportType.AverageHQProcessingTime,
+                        PeriodiceReportType.AverageCaseAssignmentDuration,
+                        PeriodiceReportType.AverageOverallCaseProcessingTime
+                    },
+                ReportNameDescription =  GetReportDescriptionByType(reportType)
             };
 
             return this.View("PeriodicStatusReport", model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult SpeedBySupervisors(PeriodiceReportType? reportType)
+        public ActionResult SpeedBySupervisors(PeriodiceReportType reportType = PeriodiceReportType.AverageInterviewDuration)
         {
             this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
-            var periodicStatusReportWebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors;
-            if (reportType.HasValue && reportTypesWhichShouldBeReroutedToCustomStatusController.Contains(reportType.Value))
-            {
-                periodicStatusReportWebApiActionName =
-                    PeriodicStatusReportWebApiActionName.BetweenStatusesBySupervisors;
-            }
+            var periodicStatusReportWebApiActionName =
+                reportTypesWhichShouldBeReroutedToCustomStatusController.Contains(reportType)
+                    ? PeriodicStatusReportWebApiActionName.BetweenStatusesBySupervisors
+                    : PeriodicStatusReportWebApiActionName.BySupervisors;
 
             var model = new PeriodicStatusReportModel
             {
                 WebApiActionName = periodicStatusReportWebApiActionName,
-                CanNavigateToQuantityByTeamMember = !reportType.HasValue || reportType == PeriodiceReportType.AverageInterviewDuration,
+                CanNavigateToQuantityByTeamMember = true,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
                 ReportName = "Speed",
@@ -144,10 +159,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         PeriodiceReportType.AverageHQProcessingTime,
                         PeriodiceReportType.AverageCaseAssignmentDuration,
                         PeriodiceReportType.AverageOverallCaseProcessingTime
-                    }
+                    },
+                ReportNameDescription = GetReportDescriptionByType(reportType)
             };
 
             return this.View("PeriodicStatusReport", model);
+        }
+
+        private string GetReportDescriptionByType(PeriodiceReportType reportType)
+        {
+            return PeriodicStatusReport.ResourceManager.GetString(reportType + "Description");
         }
     }
 }

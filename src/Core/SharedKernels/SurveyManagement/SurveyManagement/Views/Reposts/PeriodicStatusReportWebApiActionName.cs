@@ -4,6 +4,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
     {
         BySupervisors,
         ByInterviewers,
-        BetweenStatusesBySupervisors
+        BetweenStatusesBySupervisors,
+        BetweenStatusesByInterviewers
     }
 }
