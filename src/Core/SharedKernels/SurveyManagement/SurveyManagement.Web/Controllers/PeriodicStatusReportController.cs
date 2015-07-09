@@ -21,6 +21,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
 
+        private readonly PeriodiceReportType[] reportTypesWhichShouldBeReroutedToCustomStatusController = new[]
+        {PeriodiceReportType.AverageOverallCaseProcessingTime, PeriodiceReportType.AverageCaseAssignmentDuration};
+
         public PeriodicStatusReportController(
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
@@ -118,9 +121,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
+            var periodicStatusReportWebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors;
+            if (reportType.HasValue && reportTypesWhichShouldBeReroutedToCustomStatusController.Contains(reportType.Value))
+            {
+                periodicStatusReportWebApiActionName =
+                    PeriodicStatusReportWebApiActionName.BetweenStatusesBySupervisors;
+            }
+
             var model = new PeriodicStatusReportModel
             {
-                WebApiActionName = PeriodicStatusReportWebApiActionName.BySupervisors,
+                WebApiActionName = periodicStatusReportWebApiActionName,
                 CanNavigateToQuantityByTeamMember = !reportType.HasValue || reportType == PeriodiceReportType.AverageInterviewDuration,
                 CanNavigateToQuantityBySupervisors = false,
                 Questionnaires = usersAndQuestionnaires.Questionnaires.ToArray(),
@@ -131,9 +141,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     {
                         PeriodiceReportType.AverageInterviewDuration,
                         PeriodiceReportType.AverageSupervisorProcessingTime,
-                        PeriodiceReportType.AverageHQProcessingTime/*,
+                        PeriodiceReportType.AverageHQProcessingTime,
                         PeriodiceReportType.AverageCaseAssignmentDuration,
-                        PeriodiceReportType.AverageOverallCaseProcessingTime*/
+                        PeriodiceReportType.AverageOverallCaseProcessingTime
                     }
             };
 

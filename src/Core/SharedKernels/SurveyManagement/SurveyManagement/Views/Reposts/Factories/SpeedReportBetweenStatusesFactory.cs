@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -17,17 +13,15 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class SpeedReportFactory:
-        IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView>,
-        IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView>
+    public class SpeedReportBetweenStatusesFactory:
+        IViewFactory<SpeedBetweenStatusesByInterviewersReportInputModel, SpeedByResponsibleReportView>,
+        IViewFactory<SpeedBetweenStatusesBySupervisorsReportInputModel, SpeedByResponsibleReportView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusesStorage;
 
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage, IQueryableReadSideRepositoryReader<UserDocument> users)
+        public SpeedReportBetweenStatusesFactory(IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusesStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
-            this.users = users;
         }
 
         private SpeedByResponsibleReportView Load(
@@ -38,9 +32,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             int pageSize,
             Guid questionnaireId,
             long questionnaireVersion,
-            InterviewExportedAction[] statuses,
-            Expression<Func<InterviewCommentedStatus, Guid>> selectUser,
-            Expression<Func<InterviewCommentedStatus, UserAndTimestampAndTimespan>> userIdSelector)
+            InterviewExportedAction[] beginStatuses,
+            InterviewExportedAction[] endStatuses,
+            Expression<Func<TimeSpanBetweenStatuses, Guid>> selectUser,
+            Expression<Func<TimeSpanBetweenStatuses, UserAndTimestampAndTimespan>> userIdSelector)
         {
             var to = reportStartDate.Date;
             var from = AddPeriod(to, period, -columnCount);
@@ -51,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .ToArray();
 
             var users =
-                QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, statuses)
+                QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, beginStatuses, endStatuses)
                     .Select(selectUser)
                     .Distinct();
 
@@ -61,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 .Take(pageSize).ToArray();
 
             var allInterviewsInStatus =
-                QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, statuses)
+                QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, beginStatuses, endStatuses)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
                     .Select(i => new {UserId = i.UserId.Value, i.UserName, i.Timestamp, i.Timespan})
@@ -97,23 +92,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             return new SpeedByResponsibleReportView(rows, dateTimeRanges, usersCount);
         }
 
-        private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
+        private IQueryable<TimeSpanBetweenStatuses> QueryInterviewStatuses(
             Guid questionnaireId,
             long questionnaireVersion,
             DateTime from,
             DateTime to,
-            InterviewExportedAction[] statuses)
+            InterviewExportedAction[] beginStatuses,
+            InterviewExportedAction[] endStatuses)
         {
             return interviewStatusesStorage.Query(_ =>
                 _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
-                    .SelectMany(x => x.InterviewCommentedStatuses)
+                    .SelectMany(x => x.TimeSpansBetweenStatuses)
                     .Where(
                         ics =>
-                            ics.Timestamp.Date > from && ics.Timestamp.Date <= to.Date && statuses.Contains(ics.Status) &&
-                            ics.TimeSpanWithPreviousStatus.HasValue));
+                            ics.EndStatusTimestamp.Date > from && ics.EndStatusTimestamp.Date <= to.Date && endStatuses.Contains(ics.EndStatus) && beginStatuses.Contains(ics.BeginStatus)));
         }
 
-        public SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input)
+        public SpeedByResponsibleReportView Load(SpeedBetweenStatusesByInterviewersReportInputModel input)
         {
             return Load(
                 input.From,
@@ -123,12 +118,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.PageSize,
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
-                input.InterviewStatuses,
-                 u => u.InterviewerId.Value,
-                i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.InterviewerName});
+                input.BeginInterviewStatuses,
+                input.EndInterviewStatuses,
+                u => u.InterviewerId.Value,
+                i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.InterviewerName });
         }
 
-        public SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input)
+        public SpeedByResponsibleReportView Load(SpeedBetweenStatusesBySupervisorsReportInputModel input)
         {
             return Load(
                 input.From,
@@ -138,9 +134,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.PageSize,
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
-                input.InterviewStatuses,
+                 input.BeginInterviewStatuses,
+                input.EndInterviewStatuses,
                 u => u.SupervisorId.Value,
-                i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.SupervisorName});
+                i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.SupervisorName});
         }
 
         private DateTime AddPeriod(DateTime d, string period, int value)

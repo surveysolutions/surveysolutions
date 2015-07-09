@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private readonly IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport;
         private readonly IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport;
+        private readonly IViewFactory<SpeedBetweenStatusesBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBetweenStatusesBySupervisorsReport;
 
         public ReportDataApiController(
             ICommandService commandService,
@@ -57,7 +58,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, 
             IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView> quantityBySupervisorsReport, 
             IViewFactory<SpeedByInterviewersReportInputModel, SpeedByResponsibleReportView> speedByInterviewersReport, 
-            IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport)
+            IViewFactory<SpeedBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBySupervisorsReport, 
+            IViewFactory<SpeedBetweenStatusesBySupervisorsReportInputModel, SpeedByResponsibleReportView> speedBetweenStatusesBySupervisorsReport)
             : base(commandService, provider, logger)
         {
             this.surveysAndStatusesReport = surveysAndStatusesReport;
@@ -71,6 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.quantityBySupervisorsReport = quantityBySupervisorsReport;
             this.speedByInterviewersReport = speedByInterviewersReport;
             this.speedBySupervisorsReport = speedBySupervisorsReport;
+            this.speedBetweenStatusesBySupervisorsReport = speedBetweenStatusesBySupervisorsReport;
         }
 
         [HttpPost]
@@ -184,6 +187,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
             }
             return this.speedByInterviewersReport.Load(input.Request);
+        }
+
+        public SpeedByResponsibleReportView SpeedBetweenStatusesBySupervisors(SpeedBySupervisorsReportModel input)
+        {
+            var inputParameters = new SpeedBetweenStatusesBySupervisorsReportInputModel()
+            {
+                ColumnCount = input.Request.ColumnCount,
+                From = input.Request.From,
+                Order = input.Request.Order,
+                Orders = input.Request.Orders,
+                Period = input.Request.Period,
+                QuestionnaireId = input.Request.QuestionnaireId,
+                QuestionnaireVersion = input.Request.QuestionnaireVersion
+            };
+
+            if (input.Pager != null)
+            {
+                inputParameters.Page = input.Pager.Page;
+                inputParameters.PageSize = input.Pager.PageSize;
+            }
+
+            switch (input.Request.ReportType)
+            {
+                case PeriodiceReportType.AverageOverallCaseProcessingTime:
+                    inputParameters.BeginInterviewStatuses = new[] { InterviewExportedAction.InterviewerAssigned };
+                    inputParameters.EndInterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter };
+                    break;
+                case PeriodiceReportType.AverageCaseAssignmentDuration:
+                    inputParameters.BeginInterviewStatuses = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
+                    inputParameters.EndInterviewStatuses = new[] { InterviewExportedAction.Completed };
+                    break;
+            }
+            return this.speedBetweenStatusesBySupervisorsReport.Load(inputParameters);
         }
 
         public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel input)
