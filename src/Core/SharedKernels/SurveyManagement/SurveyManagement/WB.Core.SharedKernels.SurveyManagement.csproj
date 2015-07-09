@@ -349,7 +349,6 @@
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
     <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\SpeedReportBetweenStatusesFactory.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
