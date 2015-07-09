@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public string QuestionnaireId { get; private set; }
         public Identity CurrentGroup { get; private set; }
 
-        private readonly Stack<GroupChangedEventArgs> navigationStack = new Stack<GroupChangedEventArgs>();
+        private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
 
         protected NavigationState() { }
 
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            var navigationItem = new GroupChangedEventArgs { TargetGroup = groupIdentity };
+            var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
 
             while (this.navigationStack.Contains(navigationItem))
             {
@@ -71,13 +71,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, GroupChangedEventArgs navigationParams)
+        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
         {
             this.CurrentGroup = groupIdentity;
 
             if (this.OnGroupChanged != null)
             {
-                this.OnGroupChanged(navigationParams);
+                var groupChangedEventArgs = new GroupChangedEventArgs
+                {
+                    TargetGroup = navigationParams.TargetGroup,
+                    AnchoredElementIdentity = navigationParams.AnchoredElementIdentity
+                };
+
+                this.OnGroupChanged(groupChangedEventArgs);
             }
 
             GC.Collect();
