@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Group and question status and validity
 
-        public virtual void Apply(AnswersRemoved @event)
+        public override void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             );
         }
 
-        public virtual void Apply(AnswersDeclaredValid @event)
+        public override void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -192,7 +192,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public virtual void Apply(GroupsDisabled @event)
+        public override void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x =>
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public virtual void Apply(GroupsEnabled @event)
+        public override void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x =>
@@ -212,7 +212,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public virtual void Apply(QuestionsDisabled @event)
+        public override void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         }
 
 
-        public virtual void Apply(QuestionsEnabled @event)
+        public override void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Roster instances and titles
 
-        public virtual void Apply(RosterInstancesTitleChanged @event)
+        public override void Apply(RosterInstancesTitleChanged @event)
         {
             base.Apply(@event);
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
@@ -264,7 +264,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public virtual void Apply(RosterInstancesAdded @event)
+        public override void Apply(RosterInstancesAdded @event)
         {
             base.Apply(@event);
 
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public virtual void Apply(RosterInstancesRemoved @event)
+        public override void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
             foreach (var rosterInstance in @event.Instances)
@@ -311,25 +311,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Interview status and validity
 
-        public virtual void Apply(InterviewCompleted @event)
+        public override void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
             this.IsCompleted = true;
         }
 
-        public virtual void Apply(InterviewRestarted @event)
+        public override void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
             this.IsCompleted = false;
         }
 
-        public virtual void Apply(InterviewDeclaredValid @event)
+        public override void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
             this.HasErrors = false;
         }
 
-        public virtual void Apply(InterviewDeclaredInvalid @event)
+        public override void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
             this.HasErrors = true;
