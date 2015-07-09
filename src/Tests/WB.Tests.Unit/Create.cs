@@ -1598,7 +1598,7 @@ namespace WB.Tests.Unit
         {
             return new InterviewStatuses()
             {
-                InterviewCommentedStatuses = statuses.ToHashSet(),
+                InterviewCommentedStatuses = statuses.ToList(),
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1
             };
