@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
         public string ResponsibleColumnName { get; set; }
         public Guid? SupervisorId { get; set; }
         public PeriodiceReportType[] ReportTypes { get; set; }
+        public string ReportNameDescription { get; set; }
     }
 
     public enum PeriodiceReportType

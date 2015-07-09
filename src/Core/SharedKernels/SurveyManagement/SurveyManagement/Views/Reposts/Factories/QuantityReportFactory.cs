@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 input.PageSize,
                 input.QuestionnaireId,
                 input.QuestionnaireVersion,
-                new []{input.InterviewStatus},
+                input.InterviewStatuses,
                 u => u.InterviewerId.Value,
                 i => new UserAndTimestamp() {UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.Timestamp});
         }

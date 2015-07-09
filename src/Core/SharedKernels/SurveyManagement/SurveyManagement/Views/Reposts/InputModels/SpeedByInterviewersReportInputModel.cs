@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
     {
         public SpeedByInterviewersReportInputModel()
         {
-            this.InterviewStatuses = new[] { InterviewExportedAction.Completed };
+            this.InterviewStatuses = new InterviewExportedAction[0];
         }
 
         public Guid SupervisorId { get; set; }
@@ -22,5 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
         public string Period { get; set; }
         public int ColumnCount { get; set; }
         public InterviewExportedAction[] InterviewStatuses { get; set; }
+        public PeriodiceReportType ReportType { get; set; }
     }
 }
