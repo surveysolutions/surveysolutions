@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         protected bool Equals(Identity other)
         {
-            return this.Id.Equals(other.Id) && this.RosterVector.SequenceEqual(other.RosterVector);
+            return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
         }
 
         public override int GetHashCode()
