@@ -5,7 +5,7 @@
 
   <stroke
     android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
-    android:color="#D0D0D0"/>
+    android:color="@color/editorAnsweredBorder"/>
 
   <padding
     android:left="@dimen/Interview_Question_Answer_Input_background_padding"

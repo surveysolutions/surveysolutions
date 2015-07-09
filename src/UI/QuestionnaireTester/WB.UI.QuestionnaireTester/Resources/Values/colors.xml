@@ -18,6 +18,7 @@
   <color name="emptyOptionsText">#a5a5a5</color>
   
   <color name="editorTextColor">#FF3F3F3F</color>
+  <color name="editorAnsweredBorder">#D0D0D0</color>
   <color name="editorHintTextColor">#FFB2B2B2</color>
   <color name="btn_default">#2a81cb</color>
   <color name="button_pressed">#0d6dbf</color>

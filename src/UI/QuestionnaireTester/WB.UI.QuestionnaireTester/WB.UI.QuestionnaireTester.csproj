@@ -259,6 +259,7 @@
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
+    <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
@@ -376,6 +377,10 @@
     <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\question_input_button_answered.xml" />
+    <AndroidResource Include="Resources\drawable\question_input_button_unpressed_answered.xml" />
+    <AndroidResource Include="Resources\drawable\question_input_button_pressed_answered.xml" />
+    <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />
     <LinkDescription Include="linker.xml" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>

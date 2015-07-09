@@ -75,6 +75,7 @@ namespace WB.UI.QuestionnaireTester
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
+            registry.AddOrOverwrite("MediaButtonStyleStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("PublicBackground", new QuestionnairePublicityBackgroundConverter());
         }
