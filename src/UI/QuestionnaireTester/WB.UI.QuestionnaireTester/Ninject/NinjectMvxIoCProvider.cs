@@ -147,6 +147,7 @@ namespace WB.UI.QuestionnaireTester.Ninject
 
         void IMvxIoCProvider.RegisterType<TFrom, TTo>()
         {
+            kernel.Unbind<TFrom>();
             kernel.Bind<TFrom>().To<TTo>();
         }
 

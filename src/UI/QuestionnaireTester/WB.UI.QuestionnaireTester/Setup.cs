@@ -7,6 +7,9 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+
+using Chance.MvvmCross.Plugins.UserInteraction;
+
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
@@ -25,6 +28,7 @@ using WB.UI.QuestionnaireTester.CustomBindings;
 using WB.UI.QuestionnaireTester.CustomControls;
 using WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl;
 using WB.UI.QuestionnaireTester.CustomServices.Location;
+using WB.UI.QuestionnaireTester.CustomServices.UserInteraction;
 using WB.UI.QuestionnaireTester.Ninject;
 using Xamarin;
 
@@ -109,6 +113,8 @@ namespace WB.UI.QuestionnaireTester
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
 
             base.FillTargetFactories(registry);
+
+            Mvx.RegisterType<IUserInteraction, WbUserInteraction>();
         }
 
         protected override IDictionary<string, string> ViewNamespaceAbbreviations
