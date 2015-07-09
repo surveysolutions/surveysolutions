@@ -1,4 +1,8 @@
 ﻿using Machine.Specifications;
+
+using Moq;
+
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 
@@ -8,9 +12,10 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Navigatio
 {
     public class NavigationStateTestContext
     {
-        public static NavigationState CreateNavigationState(ICommandService commandService = null)
+        public static NavigationState CreateNavigationState(ICommandService commandService = null, 
+            IStatefulInterviewRepository interviewRepository = null)
         {
-            return new NavigationState(commandService);
+            return new NavigationState(commandService, interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
 
         protected static readonly string interviewId = "Some interviewId";
