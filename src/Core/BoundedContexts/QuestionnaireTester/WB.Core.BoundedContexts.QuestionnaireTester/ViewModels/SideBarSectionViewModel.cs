@@ -71,7 +71,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private MvxCommand navigateToSectionCommand;
         private bool expanded;
-        private string toggleButtonText;
         private bool isCurrent;
 
         public ICommand NavigateToSectionCommand
