@@ -42,6 +42,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
 
+        bool HasGroup(Identity group);
+
         bool IsValid(Identity identity);
 
         bool IsEnabled(Identity entityIdentity);

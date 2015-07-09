@@ -428,6 +428,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
         }
 
+        public bool HasGroup(Identity group)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            if (!questionnaire.HasGroup(group.Id))
+                return false;
+
+            Guid[] rosterIdsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(@group.Id).ToArray();
+
+            if (!DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(group.RosterVector, rosterIdsStartingFromTop))
+                return false;
+
+            if (!this.DoesRosterInstanceExist(this.interviewState, group.RosterVector, rosterIdsStartingFromTop))
+                return false;
+
+            return true;
+        }
+
         public string GetRosterTitle(Identity rosterIdentity)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
