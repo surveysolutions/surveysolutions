@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Group and question status and validity
 
-        public override void Apply(AnswersRemoved @event)
+        public new void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             );
         }
 
-        public override void Apply(AnswersDeclaredValid @event)
+        public new void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -174,7 +174,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public override void Apply(AnswersDeclaredInvalid @event)
+        public new void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -192,7 +192,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public override void Apply(GroupsDisabled @event)
+        public new void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x =>
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public override void Apply(GroupsEnabled @event)
+        public new void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
             @event.Groups.ForEach(x =>
@@ -212,7 +212,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             });
         }
 
-        public override void Apply(QuestionsDisabled @event)
+        public new void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         }
 
 
-        public override void Apply(QuestionsEnabled @event)
+        public new void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
             @event.Questions.ForEach(x =>
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Roster instances and titles
 
-        public override void Apply(RosterInstancesTitleChanged @event)
+        public new void Apply(RosterInstancesTitleChanged @event)
         {
             base.Apply(@event);
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
@@ -264,7 +264,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public override void Apply(RosterInstancesAdded @event)
+        public new void Apply(RosterInstancesAdded @event)
         {
             base.Apply(@event);
 
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
             }
         }
 
-        public override void Apply(RosterInstancesRemoved @event)
+        public new void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
             foreach (var rosterInstance in @event.Instances)
@@ -311,25 +311,25 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
 
         #region Interview status and validity
 
-        public override void Apply(InterviewCompleted @event)
+        public new void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
             this.IsCompleted = true;
         }
 
-        public override void Apply(InterviewRestarted @event)
+        public new void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
             this.IsCompleted = false;
         }
 
-        public override void Apply(InterviewDeclaredValid @event)
+        public new void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
             this.HasErrors = false;
         }
 
-        public override void Apply(InterviewDeclaredInvalid @event)
+        public new void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
             this.HasErrors = true;
