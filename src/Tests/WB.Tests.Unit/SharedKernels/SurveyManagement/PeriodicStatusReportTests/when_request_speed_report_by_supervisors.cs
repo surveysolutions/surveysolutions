@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         };
 
         Because of = () =>
-            result = periodicStatusReportController.SpeedBySupervisors(null) as ViewResult;
+            result = periodicStatusReportController.SpeedBySupervisors() as ViewResult;
 
         It should_active_page_be_SpeedOfCompletedInterviews = () =>
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.SpeedOfCompletingInterviews);

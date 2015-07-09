@@ -33,9 +33,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                 From = new DateTime(1984, 4, 18),
                 Page = 0,
                 PageSize = 20,
-                SupervisorId = supervisorId?? Guid.NewGuid(),
+                SupervisorId = supervisorId ?? Guid.NewGuid(),
                 QuestionnaireId = Guid.NewGuid(),
-                QuestionnaireVersion = 1
+                QuestionnaireVersion = 1,
+                InterviewStatuses = new[] {InterviewExportedAction.Completed}
             };
         }
 
