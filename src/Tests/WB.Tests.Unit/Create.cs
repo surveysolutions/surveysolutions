@@ -1720,7 +1720,7 @@ namespace WB.Tests.Unit
 
         public static NavigationState NavigationState()
         {
-            return new NavigationState(Mock.Of<ICommandService>());
+            return new NavigationState(Mock.Of<ICommandService>(), Mock.Of<IStatefulInterviewRepository>());
         }
 
         public static TextAnswer TextAnswer(string answer)
