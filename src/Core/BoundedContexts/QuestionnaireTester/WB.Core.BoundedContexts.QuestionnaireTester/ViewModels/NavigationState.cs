@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -9,6 +11,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     public class NavigationState
     {
         private readonly ICommandService commandService;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
         public event GroupChanged OnGroupChanged;
         public string InterviewId { get; private set; }
@@ -17,11 +20,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
 
-        protected NavigationState() { }
+        protected NavigationState(){}
 
-        public NavigationState(ICommandService commandService)
+        public NavigationState(ICommandService commandService, IStatefulInterviewRepository interviewRepository)
         {
             this.commandService = commandService;
+            this.interviewRepository = interviewRepository;
         }
 
         public void Init(string interviewId, string questionnaireId)
@@ -33,6 +37,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public async Task NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
             await this.commandService.WaitPendingCommandsAsync();
+
+            if (!this.CanNavigateTo(groupIdentity))
+                return;
 
             var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
 
@@ -49,6 +56,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationStack.Push(navigationItem);
 
             this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
+        }
+
+        private bool CanNavigateTo(Identity group)
+        {
+            var interview = this.interviewRepository.Get(this.InterviewId);
+
+            return interview.HasGroup(group) && interview.IsEnabled(group);
         }
 
         public async Task NavigateBack(Action navigateToIfHistoryIsEmpty)
