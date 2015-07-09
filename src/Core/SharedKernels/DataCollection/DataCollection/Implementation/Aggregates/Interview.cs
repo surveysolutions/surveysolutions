@@ -3320,11 +3320,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(
             Guid questionId, decimal[] rosterVector, Guid[] parentRosterGroups, IQuestionnaire questionnaire)
         {
-            if (rosterVector.Length != parentRosterGroups.Length)
+            if (!DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(rosterVector, parentRosterGroups))
                 throw new InterviewException(string.Format(
                     "Roster information for question {0} is incorrect. " +
                         "Roster vector has {1} elements, but parent roster groups count is {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroups.Length, EventSourceId));
+                    FormatQuestionForException(questionId, questionnaire), rosterVector.Length, parentRosterGroups.Length, this.EventSourceId));
         }
 
         private void ThrowIfSomeOfRosterVectorValuesAreInvalid(InterviewStateDependentOnAnswers state,
@@ -3336,7 +3336,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid rosterGroupId = parentRosterGroupIdsStartingFromTop[indexOfRosterVectorElement];
 
                 int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
-                decimal[] rosterGroupOuterScopeRosterVector = ShrinkRosterVector(rosterVector, rosterGroupOuterScopeRosterLevel);
+                decimal[] rosterGroupOuterScopeRosterVector = this.ShrinkRosterVector(rosterVector, rosterGroupOuterScopeRosterLevel);
                 DistinctDecimalList rosterInstanceIds = GetRosterInstanceIds(state,
                     groupId: rosterGroupId,
                     outerRosterVector: rosterGroupOuterScopeRosterVector);
@@ -3348,8 +3348,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             "but roster group has only following roster instances: {4}. InterviewId: {5}",
                         FormatQuestionForException(questionId, questionnaire), indexOfRosterVectorElement,
                         FormatGroupForException(rosterGroupId, questionnaire), rosterInstanceId,
-                        string.Join(", ", rosterInstanceIds), EventSourceId));
+                        string.Join(", ", rosterInstanceIds), this.EventSourceId));
             }
+        }
+
+        protected bool DoesRosterInstanceExist(InterviewStateDependentOnAnswers state, decimal[] rosterVector, Guid[] parentRosterIdsStartingFromTop)
+        {
+            for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
+            {
+                decimal rosterInstanceId = rosterVector[indexOfRosterVectorElement];
+                Guid rosterGroupId = parentRosterIdsStartingFromTop[indexOfRosterVectorElement];
+
+                int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
+                decimal[] rosterGroupOuterScopeRosterVector = this.ShrinkRosterVector(rosterVector, rosterGroupOuterScopeRosterLevel);
+                DistinctDecimalList rosterInstanceIds = GetRosterInstanceIds(state,
+                    groupId: rosterGroupId,
+                    outerRosterVector: rosterGroupOuterScopeRosterVector);
+
+                var rosterInstanceExists = rosterInstanceIds.Contains(rosterInstanceId);
+                if (!rosterInstanceExists)
+                    return false;
+            }
+
+            return true;
+        }
+
+        protected static bool DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(decimal[] rosterVector, Guid[] parentRosterGroups)
+        {
+            return rosterVector.Length == parentRosterGroups.Length;
         }
 
         private void ThrowIfQuestionTypeIsNotOneOfExpected(Guid questionId, IQuestionnaire questionnaire,
