@@ -52,7 +52,11 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             this.editingOnChanged = true;
             this.editingAfter = true;
 
-            if (Text.IsNullOrEmpty())
+            if (this.HasHint && !this.maskedText.HasAnyText)
+            {
+                this.EditableText.Clear();
+            }
+            else
             {
                 var newMaskedText = this.maskedText.MakeMaskedText();
                 if (newMaskedText != this.Text)
@@ -83,11 +87,12 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             {
                 if (maskedText.Mask != value)
                 {
+                    this.Text = null; // clear text value before change mask
                     this.maskedText.Mask = value;
                     this.CleanUp();
-
-                    this.UpdatetInputType();
                 }
+
+                this.UpdatetInputType();
             }
         }
 
@@ -126,10 +131,9 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
 
         private bool HasHint
         {
-            get { return this.Hint != null; }
+            get { return !string.IsNullOrEmpty(this.Hint); }
         }
 
-   
         private void Init()
         {
             this.SetFilters(new IInputFilter[] { this });
@@ -211,9 +215,12 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 if (!this.maskedText.HasAnyText && this.HasHint) 
                 {
                     this.selection = 0;
+                    this.EditableText.Clear();
                 }
-
-                this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
+                else
+                {
+                    this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
+                }
 
                 this.IsMaskedFormAnswered = this.maskedText.IsMaskedFormAnswered;
             
