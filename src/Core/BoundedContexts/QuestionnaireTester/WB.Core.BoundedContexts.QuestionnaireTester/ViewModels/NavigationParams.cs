@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public Identity AnchoredElementIdentity { get; set; }
 
-        protected bool Equals(GroupChangedEventArgs other)
+        protected bool Equals(NavigationParams other)
         {
             return Equals(this.TargetGroup, other.TargetGroup) && Equals(this.AnchoredElementIdentity, other.AnchoredElementIdentity);
         }
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 return false;
             }
-            return this.Equals((GroupChangedEventArgs)obj);
+            return this.Equals((NavigationParams)obj);
         }
     }
 }
