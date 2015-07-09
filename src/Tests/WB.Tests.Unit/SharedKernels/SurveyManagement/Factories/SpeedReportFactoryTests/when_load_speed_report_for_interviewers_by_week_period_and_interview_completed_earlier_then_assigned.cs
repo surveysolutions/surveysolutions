@@ -19,8 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
 
             var user = Create.UserDocument(supervisorId: supervisorId);
-            userDocuments = new TestInMemoryWriter<UserDocument>();
-            userDocuments.Store(user, "1");
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
@@ -33,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     }), "2");
 
-            quantityReportFactory = CreateSpeedReportFactory(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
@@ -54,7 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
         private static SpeedReportFactory quantityReportFactory;
         private static SpeedByInterviewersReportInputModel input;
         private static SpeedByResponsibleReportView result;
-        private static TestInMemoryWriter<UserDocument> userDocuments;
         private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }
