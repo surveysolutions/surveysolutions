@@ -7,6 +7,7 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Views.InputMethods;
+using WB.UI.QuestionnaireTester.Activities;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
@@ -47,7 +48,7 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
 
             TrySendAnswerTextQuestionCommand();
 
-            HideKeyboard();
+            HideKeyboard(sender);
         }
 
         private void TrySendAnswerTextQuestionCommand()
@@ -100,13 +101,13 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
         }
 
 
-        private void HideKeyboard()
+        private void HideKeyboard(object sender)
         {
-            var activity = (Activity)Target.Context;
-            var windowToken = Target.WindowToken;
+            var view = (View)sender;
+            var activity = (Activity)view.Context;
 
-            var inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
-            inputMethodManager.HideSoftInputFromWindow(windowToken, 0);
+            activity.RemoveFocusFromEditText();
+            activity.HideKeyboard(view.WindowToken);
         }
     }
 }
