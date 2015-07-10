@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string AnswerAsString
         {
             get { return answerAsString; }
-            private set
+            set
             {
                 if (answerAsString != value)
                 {
@@ -106,9 +106,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 return;
             }
 
+            if (isRosterSizeQuestion && answer < 0)
+            {
+                var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, AnswerAsString);
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
+                return;
+            }
+
             if (isRosterSizeQuestion && previousAnswer.HasValue && answer < previousAnswer)
             {
-                var amountOfRostersToRemove = previousAnswer - Math.Max(answer, 0);
+                var amountOfRostersToRemove = previousAnswer - answer;
                 var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                 if (!(await userInteraction.ConfirmAsync(message)))
                 {
