@@ -1722,7 +1722,8 @@ namespace WB.Tests.Unit
         {
             return new NavigationState(
                 Mock.Of<ICommandService>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IUserInteractionAwaiter>());
         }
 
         public static TextAnswer TextAnswer(string answer)
