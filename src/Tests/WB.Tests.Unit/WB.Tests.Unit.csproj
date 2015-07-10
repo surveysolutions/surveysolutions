@@ -416,8 +416,7 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_archive_archived_user.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_arhiving_interviewer_with_assigments.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_arhiving_observer.cs" />
+    <Compile Include="SharedKernels\DataCollection\UserTests\when_arhiving_observer.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_archive_user.cs" />
     <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_interviewer_is_creating_for_archived_supervisor.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_unarchive_active_user.cs" />
