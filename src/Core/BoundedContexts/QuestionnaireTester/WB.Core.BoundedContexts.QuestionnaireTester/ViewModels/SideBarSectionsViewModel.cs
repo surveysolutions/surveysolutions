@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
@@ -36,10 +37,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
+            ISideBarSectionViewModelsFactory modelsFactory,
             IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
+            this.modelsFactory = modelsFactory;
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.statefulInterviewRepository = statefulInterviewRepository;
             eventRegistry.Subscribe(this);
@@ -70,7 +73,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             {
                 var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[section.Id];
                 var groupIdentity = new Identity(section.Id, new decimal[] { });
-                var sectionViewModel = this.BuildSectionItem(null, groupModel,groupIdentity, interview);
+                var sectionViewModel = this.BuildSectionItem(null, groupModel, groupIdentity, interview);
                 sections.Add(sectionViewModel);
             }
 
@@ -135,34 +138,37 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
             var sectionToAddTo = this.Sections.TreeToEnumerable(x => x.Children)
-                .SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+                                              .SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
 
-            List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            if (sectionToAddTo != null)
             {
-                for (int i = 0; i < enabledSubgroups.Count; i++)
+                List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var enabledSubgroupIdentity = enabledSubgroups[i];
-                    var model = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id];
-                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                    for (int i = 0; i < enabledSubgroups.Count; i++)
                     {
-                        var sideBarItem = this.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview);
-                        if (i < sectionToAddTo.Children.Count)
+                        var enabledSubgroupIdentity = enabledSubgroups[i];
+                        var model = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id];
+                        if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
                         {
-                            sectionToAddTo.Children.Insert(i, sideBarItem);
-                        }
-                        else
-                        {
-                            sectionToAddTo.Children.Add(sideBarItem);
+                            var sideBarItem = this.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview);
+                            if (i < sectionToAddTo.Children.Count)
+                            {
+                                sectionToAddTo.Children.Insert(i, sideBarItem);
+                            }
+                            else
+                            {
+                                sectionToAddTo.Children.Add(sideBarItem);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, GroupModel model, Identity enabledSubgroupIdentity, IStatefulInterview interview)
         {
-            return SideBarSectionViewModel.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview, substitutionService, navigationState);
+            return this.modelsFactory.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview, substitutionService, navigationState);
         }
     }
 }

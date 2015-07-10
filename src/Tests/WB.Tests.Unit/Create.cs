@@ -1851,5 +1851,14 @@ namespace WB.Tests.Unit
                        ParentValue = parentValue
                    };
         }
+
+        public static GroupModel GroupModel(Guid id, string title)
+        {
+            return new GroupModel
+            {
+                Id = id,
+                Title = title
+            };
+        }
     }
 }
