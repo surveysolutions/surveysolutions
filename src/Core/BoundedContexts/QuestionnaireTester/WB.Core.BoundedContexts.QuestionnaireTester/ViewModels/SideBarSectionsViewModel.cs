@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -27,9 +25,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
-        private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
-        private readonly IMvxMessenger messenger;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
         private string interviewId;
@@ -40,14 +36,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher,
-            IMvxMessenger messenger)
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
-            this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.messenger = messenger;
             this.statefulInterviewRepository = statefulInterviewRepository;
             eventRegistry.Subscribe(this);
         }
@@ -151,10 +144,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 {
                     var enabledSubgroupIdentity = enabledSubgroups[i];
                     var model = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id];
-                    if (i > sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
                     {
                         var sideBarItem = this.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview);
-                        sectionToAddTo.Children.Insert(i, sideBarItem);
+                        if (i < sectionToAddTo.Children.Count)
+                        {
+                            sectionToAddTo.Children.Insert(i, sideBarItem);
+                        }
+                        else
+                        {
+                            sectionToAddTo.Children.Add(sideBarItem);
+                        }
                     }
                 }
             });
@@ -162,24 +162,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, GroupModel model, Identity enabledSubgroupIdentity, IStatefulInterview interview)
         {
-            var sideBarItem = new SideBarSectionViewModel(this.statefulInterviewRepository,
-                this.questionnaireRepository,
-                this.substitutionService,
-                this.eventRegistry,
-                this.mainThreadDispatcher,
-                this.messenger);
-            sideBarItem.Init(this.navigationState);
-
-            sideBarItem.Parent = sectionToAddTo;
-            sideBarItem.Title = model.Title;
-            sideBarItem.SectionIdentity = enabledSubgroupIdentity;
-            sideBarItem.HasChildren = interview.GetEnabledSubgroups(enabledSubgroupIdentity).Any();
-            if (model is RosterModel)
-            {
-                string rosterTitle = interview.GetRosterTitle(enabledSubgroupIdentity);
-                sideBarItem.Title = this.substitutionService.GenerateRosterName(model.Title, rosterTitle);
-            }
-            return sideBarItem;
+            return SideBarSectionViewModel.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview, substitutionService, navigationState);
         }
     }
 }

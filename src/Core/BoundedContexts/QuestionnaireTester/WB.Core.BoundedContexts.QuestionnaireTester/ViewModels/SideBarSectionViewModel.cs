@@ -11,6 +11,7 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -35,6 +36,29 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IMvxMessenger messenger;
+
+        public static SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, 
+            GroupModel model, 
+            Identity enabledSubgroupIdentity, 
+            IStatefulInterview interview,
+            ISubstitutionService substitutionService,
+            NavigationState navigationState)
+        {
+            var sideBarItem = Mvx.Create<SideBarSectionViewModel>();
+            sideBarItem.Init(navigationState);
+
+            sideBarItem.Parent = sectionToAddTo;
+            sideBarItem.Title = model.Title;
+            sideBarItem.SectionIdentity = enabledSubgroupIdentity;
+            sideBarItem.HasChildren = interview.GetEnabledSubgroups(enabledSubgroupIdentity).Any();
+            sideBarItem.NodeDepth = sideBarItem.UnwrapReferences(x => x.Parent).Count() - 1;
+            if (model is RosterModel)
+            {
+                string rosterTitle = interview.GetRosterTitle(enabledSubgroupIdentity);
+                sideBarItem.Title = substitutionService.GenerateRosterName(model.Title, rosterTitle);
+            }
+            return sideBarItem;
+        }
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -190,22 +214,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             foreach (Identity groupInstance in enabledChildGroups)
             {
                 var group = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[groupInstance.Id];
-                string titleWithRosterTitle = group.Title;
-                if (group is RosterModel)
-                {
-                    var rosterTitle = interview.GetRosterTitle(groupInstance);
-                    titleWithRosterTitle = substitutionService.GenerateRosterName(group.Title, rosterTitle);
-                }
-
-                var section = Mvx.Create<SideBarSectionViewModel>();
-
-                section.SectionIdentity = groupInstance;
-                section.Title = titleWithRosterTitle;
-                section.navigationState = this.navigationState;
-                section.HasChildren = interview.GetEnabledSubgroups(groupInstance).Any();
-                section.Parent = this;
-                section.NodeDepth = section.UnwrapReferences(x => x.Parent).Count() - 1;
-                section.Init(this.navigationState);
+                var section = BuildSectionItem(this, group, groupInstance, interview, substitutionService, navigationState);
 
                 result.Add(section);
             }
