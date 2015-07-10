@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
             this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
+            this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelsFactory>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
