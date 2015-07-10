@@ -191,7 +191,8 @@
                     var modalInstance = confirmService.open({
                         title: "To open options editor all unsaved changes must be saved. Should we save them now?",
                         okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later"
+                        cancelButtonTitle: "No, later",
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -212,7 +213,8 @@
                     var modalInstance = confirmService.open({
                         title: "To open options editor all unsaved changes must be saved. Should we save them now?",
                         okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later"
+                        cancelButtonTitle: "No, later",
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
                     modalInstance.result.then(function (confirmResult) {

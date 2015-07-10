@@ -6,6 +6,6 @@
     {{ item.title }}
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-lg" ng-click="ok()">{{item.okButtonTitle}}</button>
+    <button class="btn btn-primary btn-lg" ng-show="!item.isReadOnly" ng-click="ok()">{{item.okButtonTitle}}</button>
     <button class="btn btn-warning btn-link" ng-click="cancel()">{{item.cancelButtonTitle}}</button>
 </div>
