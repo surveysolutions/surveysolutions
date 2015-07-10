@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
 
+        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -442,6 +443,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildInterviewerQuestions[groupId];
         }
 
+        public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
+                this.cacheOfUnderlyingGroupsAndRosters[groupId] = this.GetAllUnderlyingGroupsAndRostersImpl(groupId);
+
+            return this.cacheOfUnderlyingGroupsAndRosters[groupId];
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroups.ContainsKey(groupId))
@@ -700,6 +709,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .GetGroupOrThrow(groupId)
                 .Find<IQuestion>(_ => true)
                 .Select(question => question.PublicKey)
+                .ToList();
+        }
+
+        private IEnumerable<Guid> GetAllUnderlyingGroupsAndRostersImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Children
+                .Where(child => child is Group).Cast<Group>()
+                .Select(group => group.PublicKey)
                 .ToList();
         }
 
