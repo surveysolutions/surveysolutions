@@ -360,6 +360,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
 
         private string ReplaceCharRepresentation(string originalString, char replaceChar)
         {
+            if (originalString.IsNullOrEmpty())
+                return originalString;
+
             return this.charRepresentationArray.Aggregate(
                 originalString,
                 (current, charRepresentation) => current.Replace(charRepresentation, replaceChar)
