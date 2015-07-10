@@ -1,5 +1,6 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.NavigationStateTests
 {

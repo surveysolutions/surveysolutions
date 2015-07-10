@@ -106,10 +106,14 @@ namespace WB.Tests.Unit
 
         public static IStatefulInterviewRepository StatefulInterviewRepositoryWithInterviewsWithAllGroupsEnabledAndExisting()
         {
-            var interview = Mock.Of<IStatefulInterview>(_
-                => _.HasGroup(It.IsAny<Identity>()) == true
-                && _.IsEnabled(It.IsAny<Identity>()) == true);
+            return Setup.StatefulInterviewRepository(
+                Mock.Of<IStatefulInterview>(_
+                    => _.HasGroup(It.IsAny<Identity>()) == true
+                    && _.IsEnabled(It.IsAny<Identity>()) == true));
+        }
 
+        public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)
+        {
             return Mock.Of<IStatefulInterviewRepository>(_
                 => _.Get(It.IsAny<string>()) == interview);
         }
