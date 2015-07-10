@@ -720,9 +720,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            IEnumerable<Guid> groupsAndRosters = Enumerable.Concat(
-                questionnaire.GetAllUnderlyingChildGroups(groupIdentity.Id),
-                questionnaire.GetAllUnderlyingChildRosters(groupIdentity.Id));
+            IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(groupIdentity.Id);
 
             return this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, groupsAndRosters, groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds);
