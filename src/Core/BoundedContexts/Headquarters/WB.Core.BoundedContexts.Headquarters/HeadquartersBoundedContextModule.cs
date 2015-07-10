@@ -34,7 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             }
 
             CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, CreateUserCommand>());
-            CommandRegistry.Configure<User, ArchiveUserCommad>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, ArchiveUserCommad>());
             CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, UnarchiveUserCommand>());
         }
     }

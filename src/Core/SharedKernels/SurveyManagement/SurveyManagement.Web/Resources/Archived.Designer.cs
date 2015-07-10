@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer will be unarchived..
+        ///   Looks up a localized string similar to interviewer(s) will be unarchived..
         /// </summary>
         public static string UnarchiveInterviewerWarning {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The supervisor will be unarchived..
+        ///   Looks up a localized string similar to supervisor will be unarchived..
         /// </summary>
         public static string UnarchiveSupervisorWarning {
             get {
