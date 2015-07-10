@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,6 +13,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
@@ -23,9 +26,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
+        private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMessenger messenger;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
+        private string interviewId;
 
         public IList<SideBarSectionViewModel> Sections { get; set; }
 
@@ -33,11 +39,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadDispatcher mainThreadDispatcher,
+            IMvxMessenger messenger)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
+            this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
+            this.messenger = messenger;
             this.statefulInterviewRepository = statefulInterviewRepository;
             eventRegistry.Subscribe(this);
         }
@@ -52,6 +61,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState = navigationState;
             this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
             this.questionnaireId = questionnaireId;
+            this.interviewId = interviewId;
 
             BuildSectionsList();
         }
@@ -72,12 +82,23 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private SideBarSectionViewModel BuildSectionViewModel(GroupsHierarchyModel section)
         {
-            var vm = Mvx.Create<SideBarSectionViewModel>();
+            var vm = this.NewSideBarSectionViewModel();
             vm.Init(this.navigationState);
             vm.Title = section.Title;
             vm.SectionIdentity = new Identity(section.Id, new decimal[] {});
             vm.HasChildren = section.Children.Count > 0;
 
+            return vm;
+        }
+
+        private SideBarSectionViewModel NewSideBarSectionViewModel()
+        {
+            var vm = new SideBarSectionViewModel(this.statefulInterviewRepository,
+                this.questionnaireRepository,
+                this.substitutionService,
+                this.eventRegistry,
+                this.mainThreadDispatcher,
+                this.messenger);
             return vm;
         }
 
@@ -112,13 +133,42 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Handle(RosterInstancesAdded @event)
         {
-            foreach (var groupId in @event.Instances)
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+            QuestionnaireModel questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
+
+            foreach (var rosterInstance in @event.Instances)
             {
-                //this.UpdateParentOfGroupWithId(groupId.GroupId, groupId.OuterRosterVector);
+                var addedIdentity = rosterInstance.GetIdentity();
+                Identity parentId = interview.GetParentGroup(addedIdentity);
+                var sectionToAddTo = this.Sections.TreeToEnumerable(x => x.Children)
+                    .SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+
+                List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
+
+                for (int i = 0; i < enabledSubgroups.Count; i++)
+                {
+                    var enabledSubgroupIdentity = enabledSubgroups[i];
+                    if (i < sectionToAddTo.Children.Count)
+                    {
+                        if (!sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                        {
+                            var sideBarItem = this.NewSideBarSectionViewModel();
+                            sideBarItem.Title =
+                                questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id].Title;
+                            mainThreadDispatcher.RequestMainThreadAction(()=> sectionToAddTo.Children.Insert(i, sideBarItem));
+                        }
+                    }
+                    else
+                    {
+                        var sideBarItem = this.NewSideBarSectionViewModel();
+                        sideBarItem.Title =
+                            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id].Title;
+                        mainThreadDispatcher.RequestMainThreadAction(()=> sectionToAddTo.Children.Insert(i, sideBarItem));
+                    }
+                }
             }
         }
-
-
+    
         public void Handle(GroupsEnabled @event)
         {
             foreach (var groupId in @event.Groups)
