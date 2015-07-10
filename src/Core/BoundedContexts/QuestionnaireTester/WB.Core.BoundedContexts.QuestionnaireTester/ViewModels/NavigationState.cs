@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -11,6 +12,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
     {
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IUserInteractionAwaiter userInteractionAwaiter;
 
         public event GroupChanged OnGroupChanged;
         public event BeforeGroupChanged OnBeforeGroupChanged;
@@ -21,12 +23,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
 
-        protected NavigationState(){}
+        protected NavigationState(IUserInteractionAwaiter userInteractionAwaiter)
+        {
+            this.userInteractionAwaiter = userInteractionAwaiter;
+        }
 
-        public NavigationState(ICommandService commandService, IStatefulInterviewRepository interviewRepository)
+        public NavigationState(ICommandService commandService, IStatefulInterviewRepository interviewRepository, IUserInteractionAwaiter userInteractionAwaiter)
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;
+            this.userInteractionAwaiter = userInteractionAwaiter;
         }
 
         public void Init(string interviewId, string questionnaireId)
@@ -37,6 +43,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async Task NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
+            await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync();
             await this.commandService.WaitPendingCommandsAsync();
 
             if (!this.CanNavigateTo(groupIdentity))
@@ -68,6 +75,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async Task NavigateBack(Action navigateToIfHistoryIsEmpty)
         {
+            await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync();
             await this.commandService.WaitPendingCommandsAsync();
 
             if (navigateToIfHistoryIsEmpty == null) throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
