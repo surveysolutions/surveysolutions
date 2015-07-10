@@ -428,4 +428,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative.</value>
   </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>Answer '{0}' is incorrect because answer is greater than Roster upper bound '{1}'.</value>
+  </data>
 </root>

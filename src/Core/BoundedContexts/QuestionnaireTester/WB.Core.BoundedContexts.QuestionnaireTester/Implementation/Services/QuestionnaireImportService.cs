@@ -263,7 +263,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion.IsInteger)
                     {
-                        questionModel = new IntegerNumericQuestionModel { IsRosterSizeQuestion = isRosterSizeQuestion };
+                        questionModel = new IntegerNumericQuestionModel
+                                        {
+                                            IsRosterSizeQuestion = isRosterSizeQuestion,
+                                            MaxValue = numericQuestion.MaxValue
+                                        };
                     }
                     else
                     {
