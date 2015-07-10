@@ -18,7 +18,6 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         private readonly IAggregateSnapshotter snapshooter;
 
         private int executingCommandsCount = 0;
-        private readonly ConcurrentQueue<TaskCompletionSource<object>> executionAwaiters = new ConcurrentQueue<TaskCompletionSource<object>>();
         private readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
 

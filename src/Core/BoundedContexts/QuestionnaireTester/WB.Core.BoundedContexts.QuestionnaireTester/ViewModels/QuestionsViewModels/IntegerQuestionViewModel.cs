@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -49,7 +50,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerIntegerQuestionCommand)); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommand())); }
         }
 
         public IntegerQuestionViewModel(
@@ -94,7 +95,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
         }
 
-        private async void SendAnswerIntegerQuestionCommand()
+        private async Task SendAnswerIntegerQuestionCommand()
         {
             if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
 
