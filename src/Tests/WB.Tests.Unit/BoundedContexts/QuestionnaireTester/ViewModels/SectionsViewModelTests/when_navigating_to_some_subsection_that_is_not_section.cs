@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.GroupsHierarchy == listOfSection);
 
             Section2Id = Guid.Parse("22222222222222222222222222222222");
-            navigationState = Create.NavigationState();
+            navigationState = Create.NavigationState(interviewRepository: Setup.StatefulInterviewRepositoryWithInterviewsWithAllGroupsEnabledAndExisting());
 
             var questionnaireRepositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             questionnaireRepositoryMock

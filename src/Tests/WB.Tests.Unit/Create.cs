@@ -1718,9 +1718,11 @@ namespace WB.Tests.Unit
             return new MultiOptionAnswer(questionId, rosterVector);
         }
 
-        public static NavigationState NavigationState()
+        public static NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {
-            return new NavigationState(Mock.Of<ICommandService>(), Mock.Of<IStatefulInterviewRepository>());
+            return new NavigationState(
+                Mock.Of<ICommandService>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
 
         public static TextAnswer TextAnswer(string answer)
