@@ -45,6 +45,7 @@
     <Compile Include="Services\IFriendlyMessageService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireTesterPreconditionsService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
+    <Compile Include="Services\IUserInteractionAwaiter.cs" />
     <Compile Include="Services\IViewModelNavigationService.cs" />
     <Compile Include="ViewModels\AnswerNotifier.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />

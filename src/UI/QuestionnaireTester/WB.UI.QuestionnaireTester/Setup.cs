@@ -114,7 +114,7 @@ namespace WB.UI.QuestionnaireTester
 
             base.FillTargetFactories(registry);
 
-            Mvx.RegisterType<IUserInteraction, WbUserInteraction>();
+            Mvx.RegisterType<IUserInteraction, UserInteractionService>();
         }
 
         protected override IDictionary<string, string> ViewNamespaceAbbreviations

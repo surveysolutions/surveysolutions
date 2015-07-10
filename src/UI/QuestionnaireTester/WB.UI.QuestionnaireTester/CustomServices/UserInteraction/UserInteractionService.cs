@@ -5,10 +5,11 @@ using Android.Widget;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
+using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 
 namespace WB.UI.QuestionnaireTester.CustomServices.UserInteraction
 {
-    public class WbUserInteraction : IUserInteraction
+    public class UserInteractionService : IUserInteraction, IUserInteractionAwaiter
     {
         protected Activity CurrentActivity
         {
@@ -187,6 +188,11 @@ namespace WB.UI.QuestionnaireTester.CustomServices.UserInteraction
                 cancelButton,
                 initialText);
             return tcs.Task;
+        }
+
+        public Task WaitPendingUserInteractionsAsync()
+        {
+            return Task.FromResult(null as object);
         }
     }
 }
