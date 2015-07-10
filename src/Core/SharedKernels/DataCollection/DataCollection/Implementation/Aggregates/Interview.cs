@@ -2255,14 +2255,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
-            ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+            this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            {
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(questionId, selectedValues.Length, questionnaire);
+            }
+
             if (applyStrongChecks)
             {
-                ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
+                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
             }
         }
 
@@ -2279,35 +2285,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, decimal[] rosterVector, int answer, IQuestionnaire questionnaire,
             Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
+
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            {
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(questionId, answer, questionnaire);
+            }
+
             if (applyStrongChecks)
             {
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-
-                if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
-                {
-                    ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
-                }
+                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
             }
         }
 
         private void CheckTextListInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
 
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            {
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(questionId, answers.Length, questionnaire);
+            }
+
             if (applyStrongChecks)
             {
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-                ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
-                ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
+                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                this.ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
+                this.ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
-                ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+                this.ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
             }
         }
 
@@ -3366,13 +3378,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private void ThrowIfRosterSizeAnswerIsNegative(Guid questionId, int answer, IQuestionnaire questionnaire)
+        private void ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(Guid questionId, int answer,
+            IQuestionnaire questionnaire)
         {
-            bool answerIsNegative = answer < 0;
-
-            if (answerIsNegative)
+            if (answer < 0)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster group and specified answer is negative. InterviewId: {2}",
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {2}",
+                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
+
+            if (answer > 40)
+                throw new InterviewException(string.Format(
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater then 40. InterviewId: {2}",
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
