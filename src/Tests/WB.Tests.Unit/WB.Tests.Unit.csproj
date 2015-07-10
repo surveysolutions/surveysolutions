@@ -452,6 +452,9 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_creating_filtered_single_option_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer_and_user_rejects_reduce_roster_size.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\NavigationStateTests\when_initializing_navigation_state.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\NavigationStateTests\when_navigating_to_disabled_group.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\NavigationStateTests\when_navigating_to_existing_enabled_group.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\NavigationStateTests\when_navigating_to_not_existing_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
