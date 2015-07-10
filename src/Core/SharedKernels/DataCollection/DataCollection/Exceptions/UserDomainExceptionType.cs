@@ -5,7 +5,6 @@
         Undefined,
         UserNameUsedByActiveUser,
         UserNameUsedByArchivedUser,
-        UserHasAssigments,
         UserArchived,
         UserIsNotArchived,
         RoleDoesntSupportDelete,

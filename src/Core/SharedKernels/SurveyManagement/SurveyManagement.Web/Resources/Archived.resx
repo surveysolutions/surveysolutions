@@ -148,9 +148,9 @@
     <value>Unarchive</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
-    <value>Interviewer will be unarchived.</value>
+    <value>interviewer(s) will be unarchived.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>The supervisor will be unarchived.</value>
+    <value>supervisor will be unarchived.</value>
   </data>
 </root>

@@ -90,8 +90,14 @@
         </tbody>
     </table>
     <script type="text/html" id="confirm-delete-template">
-        @Html.Raw(String.Format("<h3>{0}</h3>", Archived.UnarchiveSupervisorWarning).FormatString(
-            "<span class='text-normal' data-bind='text: length'></span>"))
+        <h3>
+            <b>
+                <!-- ko foreach:$data -->
+                '<span class='text-normal' data-bind='text: UserName'></span>'
+                <!-- /ko -->
+            </b>
+            @Archived.UnarchiveSupervisorWarning
+        </h3>
     </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Archived.DoYouWantToContinue

@@ -20,6 +20,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private UserRoles[] userRoles = new UserRoles[0];
         private Guid userSupervisorId;
         private string loginName;
+
+        private readonly UserRoles[] userRolesWhichAllowToBeDeleted = new[] {UserRoles.Operator, UserRoles.Supervisor};
+        
         public User(){}
 
         public User(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor,
@@ -110,6 +113,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Archive()
         {
             ThrowIfUserArchived();
+
+            if (userRoles.Except(userRolesWhichAllowToBeDeleted).Any())
+                throw new UserException(
+                    String.Format("user in roles {0} can't be deleted", string.Join(",", userRoles)),
+                    UserDomainExceptionType.RoleDoesntSupportDelete);
+
             this.ApplyEvent(new UserArchived());
         }
 
