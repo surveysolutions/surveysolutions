@@ -141,62 +141,68 @@ namespace WB.UI.QuestionnaireTester.CustomServices.UserInteraction
             return Task.FromResult(null as object);
         }
 
-        private void ConfirmThreeButtonsImpl(string message, Action<ConfirmThreeButtonsResponse> answer, string title, string positive, string negative, string neutral)
+        private void ConfirmThreeButtonsImpl(string message, Action<ConfirmThreeButtonsResponse> callback, string title, string positive, string negative, string neutral)
         {
             Application.SynchronizationContext.Post(
                 ignored =>
                 {
                     if (this.CurrentActivity == null) return;
-                    new AlertDialog.Builder(this.CurrentActivity).SetMessage(message)
+
+                    HandleDialogOpen();
+
+                    new AlertDialog.Builder(this.CurrentActivity)
+                        .SetMessage(message)
                         .SetTitle(title)
-                        .SetPositiveButton(
-                            positive,
-                            delegate { if (answer != null) answer(ConfirmThreeButtonsResponse.Positive); })
-                        .SetNegativeButton(
-                            negative,
-                            delegate { if (answer != null) answer(ConfirmThreeButtonsResponse.Negative); })
-                        .SetNeutralButton(
-                            neutral,
-                            delegate { if (answer != null) answer(ConfirmThreeButtonsResponse.Neutral); })
+                        .SetPositiveButton(positive, delegate { HandleDialogClose(() => { if (callback != null) callback(ConfirmThreeButtonsResponse.Positive); }); })
+                        .SetNegativeButton(negative, delegate { HandleDialogClose(() => { if (callback != null) callback(ConfirmThreeButtonsResponse.Negative); }); })
+                        .SetNeutralButton(neutral, delegate { HandleDialogClose(() => { if (callback != null) callback(ConfirmThreeButtonsResponse.Neutral); }); })
                         .SetCancelable(false)
                         .Show();
                 },
                 null);
         }
 
-        private void ConfirmImpl(string message, Action<bool> answer, string title, string okButton, string cancelButton)
+        private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton)
         {
             //Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction();
             Application.SynchronizationContext.Post(
                 ignored =>
                 {
                     if (this.CurrentActivity == null) return;
-                    new AlertDialog.Builder(this.CurrentActivity).SetMessage(message)
+
+                    HandleDialogOpen();
+
+                    new AlertDialog.Builder(this.CurrentActivity)
+                        .SetMessage(message)
                         .SetTitle(title)
-                        .SetPositiveButton(okButton, delegate { if (answer != null) answer(true); })
-                        .SetNegativeButton(cancelButton, delegate { if (answer != null) answer(false); })
+                        .SetPositiveButton(okButton, delegate { HandleDialogClose(() => { if (callback != null) callback(true); }); })
+                        .SetNegativeButton(cancelButton, delegate { HandleDialogClose(() => { if (callback != null) callback(false); }); })
                         .SetCancelable(false)
                         .Show();
                 },
                 null);
         }
 
-        private void AlertImpl(string message, Action done, string title, string okButton)
+        private void AlertImpl(string message, Action callback, string title, string okButton)
         {
             Application.SynchronizationContext.Post(
                 ignored =>
                 {
                     if (this.CurrentActivity == null) return;
-                    new AlertDialog.Builder(this.CurrentActivity).SetMessage(message)
+
+                    HandleDialogOpen();
+
+                    new AlertDialog.Builder(this.CurrentActivity)
+                        .SetMessage(message)
                         .SetTitle(title)
-                        .SetPositiveButton(okButton, delegate { if (done != null) done(); })
+                        .SetPositiveButton(okButton, delegate { HandleDialogClose(() => { if (callback != null) callback(); }); })
                         .SetCancelable(false)
                         .Show();
                 },
                 null);
         }
 
-        private void InputImpl(string message, Action<bool, string> answer, string hint, string title, string okButton, string cancelButton, string initialText)
+        private void InputImpl(string message, Action<bool, string> callback, string hint, string title, string okButton, string cancelButton, string initialText)
         {
             Application.SynchronizationContext.Post(
                 ignored =>
@@ -204,15 +210,28 @@ namespace WB.UI.QuestionnaireTester.CustomServices.UserInteraction
                     if (this.CurrentActivity == null) return;
                     var input = new EditText(this.CurrentActivity) { Hint = hint, Text = initialText };
 
-                    new AlertDialog.Builder(this.CurrentActivity).SetMessage(message)
+                    HandleDialogOpen();
+
+                    new AlertDialog.Builder(this.CurrentActivity)
+                        .SetMessage(message)
                         .SetTitle(title)
                         .SetView(input)
-                        .SetPositiveButton(okButton, delegate { if (answer != null) answer(true, input.Text); })
-                        .SetNegativeButton(cancelButton, delegate { if (answer != null) answer(false, input.Text); })
+                        .SetPositiveButton(okButton, delegate { HandleDialogClose(() => { if (callback != null) callback(true, input.Text); }); })
+                        .SetNegativeButton(cancelButton, delegate { HandleDialogClose(() => { if (callback != null) callback(false, input.Text); }); })
                         .SetCancelable(false)
                         .Show();
                 },
                 null);
+        }
+
+        private static void HandleDialogOpen()
+        {
+            
+        }
+
+        private static void HandleDialogClose(Action callback)
+        {
+            callback.Invoke();
         }
     }
 }
