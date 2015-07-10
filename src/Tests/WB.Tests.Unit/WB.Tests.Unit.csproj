@@ -837,18 +837,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_NumericQuestionAdded_event_and_max_value_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_NumericQuestionAdded_event_and_triggers_are_not_empty.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_max_value_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_NumericQuestionChanged_event_and_triggers_are_not_empty.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_max_value_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_NumericQuestionCloned_event_and_triggers_are_not_empty.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QuestionAdded_event_and_triggers_are_not_empty.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QuestionChanged_event_and_triggers_are_not_empty.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_and_triggers_are_not_empty.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
@@ -1198,8 +1189,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_that_has_text_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_that_have_roster_title_question_not_in_groups_by_roster_size.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_size_question_inside_dependent_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_size_question_that_max_value_not_in_range_1_and_40.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_size_question_without_max_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_that_have_roster_level_more_than_4_and_rosters_have_different_roster_size_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_that_have_roster_level_more_than_4_and_rosters_have_the_same_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_which_size_source_is_text_list_question.cs" />
@@ -1586,7 +1575,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_geolocation_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_with_14400_and_max_value_is_3600.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
@@ -1606,7 +1594,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_with_incorrect_roster_vector.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_qu___.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_1_with_a_half.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_with_1000_and_max_value_is_567.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_with_allowed_3_decimal_places_but_answer_has_4_decimal_places.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_absent.cs" />
@@ -1909,7 +1896,6 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_decimal_value.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_geo_location_value.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_type.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_linked_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_multimedia_question.cs" />
@@ -1938,11 +1924,9 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_multy_option_question_and_answer_cant_is_not_decimal.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_nonexistent_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_numeric_int_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_numeric_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_numeric_real_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_cant_be_parsed.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />

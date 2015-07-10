@@ -273,10 +273,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var fixedRosterGroups =
                 document.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles);
 
-            IEnumerable<INumericQuestion> rosterSizeNumericQuestions =
-                rosterGroups.Select(@group => document.Find<INumericQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null && question.MaxValue.HasValue).Distinct();
-
             IEnumerable<IMultyOptionsQuestion> rosterSizeMultyOptionQuestions =
                 rosterGroups.Select(@group => document.Find<IMultyOptionsQuestion>(@group.RosterSizeQuestionId.Value))
                     .Where(question => question != null).Distinct();
@@ -286,11 +282,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     .Where(question => question != null).Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
-
-            foreach (INumericQuestion rosterSizeNumericQuestion in rosterSizeNumericQuestions)
-            {
-                collectedMaxValues.Add(rosterSizeNumericQuestion.PublicKey, rosterSizeNumericQuestion.MaxValue.Value);
-            }
 
             foreach (IMultyOptionsQuestion rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
             {
@@ -458,7 +449,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         {
             var rosterSizeQuestionId =
                 referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope.Last();
-
+            
+            if (!maxValuesForRosterSizeQuestions.ContainsKey(rosterSizeQuestionId))
+                return 40;
+            
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
 

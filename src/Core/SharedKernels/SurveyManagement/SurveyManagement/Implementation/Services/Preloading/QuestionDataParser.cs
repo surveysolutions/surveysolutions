@@ -80,9 +80,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                         parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, intNumericValue);
 
-                        if (numericQuestion.MaxValue.HasValue && intNumericValue > numericQuestion.MaxValue.Value)
-                            return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
-
                         if (intNumericValue < 0 &&
                             questionnaire.FirstOrDefault<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey) != null)
                             return ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative;
@@ -96,9 +93,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                         {
                             parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalNumericValue);
-                         
-                            if (numericQuestion.MaxValue.HasValue && decimalNumericValue > numericQuestion.MaxValue.Value)
-                                return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
 
                             return ValueParsingResult.OK;
                         }

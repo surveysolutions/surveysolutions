@@ -127,14 +127,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             };
         }
 
-        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null, int? maxValue = null)
+        protected static NumericQuestion CreateNumericQuestion(Guid? questionId = null, string title = null)
         {
             return new NumericQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
-                QuestionType = QuestionType.Numeric,
-                MaxValue = maxValue
+                QuestionType = QuestionType.Numeric
             };
         }
 
@@ -199,26 +198,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             });
         }
 
-        protected static IPublishedEvent<NewQuestionAdded> CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X", List<Guid> triggers = null)
+        protected static IPublishedEvent<NewQuestionAdded> CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X")
         {
             return ToPublishedEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
                 QuestionText = title,
-                QuestionType = QuestionType.Numeric,
-                Triggers = triggers ?? new List<Guid>()
+                QuestionType = QuestionType.Numeric
             });
         }
 
-        protected static IPublishedEvent<QuestionChanged> CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric, List<Guid> triggers = null)
+        protected static IPublishedEvent<QuestionChanged> CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
         {
             return ToPublishedEvent(new QuestionChanged
             {
                 PublicKey = questionId,
                 QuestionType = questionType,
-                QuestionText = title,
-                Triggers = triggers ?? new List<Guid>()
+                QuestionText = title
             });
         }
 
@@ -255,14 +252,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         }
 
         protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(
-            Guid questionId, Guid? parentGroupId = null, int? maxValue = null, List<Guid> triggers = null)
+            Guid questionId, Guid? parentGroupId = null)
         {
             return ToPublishedEvent(new NumericQuestionAdded
             {
                 PublicKey = questionId,
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
-                MaxAllowedValue = maxValue,
-                Triggers = triggers ?? new List<Guid>()
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid()
             });
         }
 
@@ -293,39 +288,34 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             });
         }
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
-            Guid questionId, int? maxValue = null, List<Guid> triggers = null)
+            Guid questionId)
         {
             return ToPublishedEvent(new NumericQuestionChanged
             {
-                PublicKey = questionId,
-                MaxAllowedValue = maxValue,
-                Triggers = triggers ?? new List<Guid>()
+                PublicKey = questionId
             });
         }
 
         protected static IPublishedEvent<NumericQuestionCloned> CreateNumericQuestionClonedEvent(
-            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null, List<Guid> triggers = null)
+            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null)
         {
             return ToPublishedEvent(new NumericQuestionCloned
             {
                 PublicKey = questionId,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
-                MaxAllowedValue = maxValue,
-                Triggers = triggers ?? new List<Guid>()
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid()
             });
         }
 
         protected static IPublishedEvent<QuestionCloned> CreateQuestionClonedEvent(
-            Guid questionId, QuestionType questionType = QuestionType.Numeric, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null, List<Guid> triggers = null)
+            Guid questionId, QuestionType questionType = QuestionType.Numeric, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null)
         {
             return ToPublishedEvent(new QuestionCloned
             {
                 PublicKey = questionId,
                 QuestionType = questionType,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid(),
-                Triggers = triggers ?? new List<Guid>()
+                GroupPublicKey = parentGroupId ?? Guid.NewGuid()
             });
         }
 
