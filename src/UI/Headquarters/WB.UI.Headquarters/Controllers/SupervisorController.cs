@@ -16,9 +16,10 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
+
+    [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter, Observer")]
-    public class 
-        SupervisorController : TeamController
+    public class SupervisorController : TeamController
     {
         public SupervisorController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
