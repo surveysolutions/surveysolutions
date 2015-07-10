@@ -4,6 +4,7 @@ using System.Linq;
 using Android.Content;
 using Android.Text;
 using Android.Util;
+using Android.Views;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
@@ -52,7 +53,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             this.editingOnChanged = true;
             this.editingAfter = true;
 
-            if (this.HasHint && !this.maskedText.HasAnyText)
+            if (this.HasHint && !this.maskedText.HasAnyText && !this.HasFocus)
             {
                 this.EditableText.Clear();
             }
@@ -142,6 +143,28 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
 
             this.UpdatetInputType();
+
+            this.FocusChange += OnFocusChangeHandle;
+        }
+
+        private void OnFocusChangeHandle(object sender, FocusChangeEventArgs args)
+        {
+            if (this.Mask.IsNullOrEmpty())
+                return;
+
+            if (!this.maskedText.HasAnyText && this.HasHint)
+            {
+                if (args.HasFocus)
+                {
+                    this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
+                    this.SetSelection(this.maskedText.FindFirstValidMaskPosition());
+                }
+                else
+                {
+                    this.selection = 0;
+                    this.EditableText.Clear();
+                }
+            }
         }
 
         protected override void OnTextChanged(ICharSequence s, int start, int before, int count)
@@ -212,7 +235,7 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
             if(!this.editingAfter && this.editingBefore && this.editingOnChanged) 
             {
                 this.editingAfter = true;
-                if (!this.maskedText.HasAnyText && this.HasHint) 
+                if (!this.maskedText.HasAnyText && this.HasHint && !this.HasFocus) 
                 {
                     this.selection = 0;
                     this.EditableText.Clear();
