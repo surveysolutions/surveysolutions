@@ -1,4 +1,6 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -25,18 +27,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.accountsDocumentReader = accountsDocumentReader;
         }
 
-        public QuestionnaireInfoView Load(string questionnaireId)
+        public QuestionnaireInfoView Load(string questionnaireId, Guid personId)
         {
             QuestionnaireInfoView questionnaireInfoView = this.questionnaireStorage.GetById(questionnaireId);
 
             if (questionnaireInfoView == null)
                 return null;
 
-            QuestionnaireSharedPersons questionnaireSharedPersons = sharedPersons.GetById(questionnaireId);
-            if (questionnaireSharedPersons != null)
-            {
-                questionnaireInfoView.SharedPersons = questionnaireSharedPersons.SharedPersons;
-            }
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
             questionnaireDocument.Children.TreeToEnumerable(item => item.Children).ForEach(item =>
             {
@@ -59,15 +56,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 }
             });
 
+            var sharedPersonsList = new List<SharedPerson>();
+
+            QuestionnaireSharedPersons questionnaireSharedPersons = sharedPersons.GetById(questionnaireId);
+            if (questionnaireSharedPersons != null)
+            {
+                sharedPersonsList = questionnaireSharedPersons.SharedPersons;
+            }
+
             if (questionnaireDocument.CreatedBy.HasValue)
             {
                 var owner = accountsDocumentReader.GetById(questionnaireDocument.CreatedBy.Value);
                 if (owner != null)
                 {
-                    questionnaireInfoView.SharedPersons.Insert(0,
+                    sharedPersonsList.Insert(0,
                         new SharedPerson() { Email = owner.Email, Id = questionnaireDocument.CreatedBy.Value, IsOwner = true });
                 }
             }
+
+            if (sharedPersonsList.Exists(x => x.Id == personId))
+            {
+                questionnaireInfoView.SharedPersons = sharedPersonsList;
+                questionnaireInfoView.IsReadOnlyForUser = false;
+            }
+            else
+            {
+                questionnaireInfoView.IsReadOnlyForUser = true;
+            }
+
             return questionnaireInfoView;
         }
     }

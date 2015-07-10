@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
                 accountsDocumentReader: userRepositoryMock);
         };
 
-        Because of = () => view = factory.Load(questionnaireId);
+        Because of = () => view = factory.Load(questionnaireId, userId);
 
         It should_count_number_of_questions_in_questionnaire = () => view.QuestionsCount.ShouldEqual(1);
 
