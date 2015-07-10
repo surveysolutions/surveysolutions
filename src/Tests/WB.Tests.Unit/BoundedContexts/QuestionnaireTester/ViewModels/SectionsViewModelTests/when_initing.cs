@@ -51,13 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
         Because of = () => viewModel.Init("questionnaire", "id", Create.NavigationState());
 
-        It should_fill_groups_tree = () =>
-        {
-            viewModel.Sections.Count.ShouldEqual(1);
-            var firstSection = viewModel.Sections.First();
-            firstSection.Children.Count.ShouldEqual(2);
-            firstSection.Children.First().SectionIdentity.RosterVector.Identical(new[] {1m}).ShouldBeTrue();
-        };
+        It should_fill_sections_list = () => viewModel.Sections.Count.ShouldEqual(1);
 
         static SideBarSectionsViewModel viewModel;
     }
