@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Widget;
@@ -11,6 +12,10 @@ namespace WB.UI.QuestionnaireTester.CustomServices.UserInteraction
 {
     public class UserInteractionService : IUserInteraction, IUserInteractionAwaiter
     {
+        private static HashSet<Guid> userInteractions = new HashSet<Guid>();
+        private static readonly object UserInteractionsLock = new object();
+        private static TaskCompletionSource<object> userInteractionsAwaiter = null;
+
         protected Activity CurrentActivity
         {
             get
@@ -138,100 +143,192 @@ namespace WB.UI.QuestionnaireTester.CustomServices.UserInteraction
 
         public Task WaitPendingUserInteractionsAsync()
         {
-            return Task.FromResult(null as object);
+            lock (UserInteractionsLock)
+            {
+                if (userInteractions.Count == 0)
+                    return Task.FromResult(null as object);
+
+                if (userInteractionsAwaiter == null)
+                {
+                    userInteractionsAwaiter = new TaskCompletionSource<object>();
+                }
+
+                return userInteractionsAwaiter.Task;
+            }
         }
 
         private void ConfirmThreeButtonsImpl(string message, Action<ConfirmThreeButtonsResponse> callback, string title, string positive, string negative, string neutral)
         {
-            Application.SynchronizationContext.Post(
-                ignored =>
-                {
-                    if (this.CurrentActivity == null) return;
+            var userInteractionId = Guid.NewGuid();
 
-                    HandleDialogOpen();
+            try
+            {
+                HandleDialogOpen(userInteractionId);
 
-                    new AlertDialog.Builder(this.CurrentActivity)
-                        .SetMessage(message)
-                        .SetTitle(title)
-                        .SetPositiveButton(positive, delegate { HandleDialogClose(() => { if (callback != null) callback(ConfirmThreeButtonsResponse.Positive); }); })
-                        .SetNegativeButton(negative, delegate { HandleDialogClose(() => { if (callback != null) callback(ConfirmThreeButtonsResponse.Negative); }); })
-                        .SetNeutralButton(neutral, delegate { HandleDialogClose(() => { if (callback != null) callback(ConfirmThreeButtonsResponse.Neutral); }); })
-                        .SetCancelable(false)
-                        .Show();
-                },
-                null);
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        new AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(message)
+                            .SetTitle(title)
+                            .SetPositiveButton(positive, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(ConfirmThreeButtonsResponse.Positive); }); })
+                            .SetNegativeButton(negative, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(ConfirmThreeButtonsResponse.Negative); }); })
+                            .SetNeutralButton(neutral, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(ConfirmThreeButtonsResponse.Neutral); }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
         }
 
         private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton)
         {
-            //Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction();
-            Application.SynchronizationContext.Post(
-                ignored =>
-                {
-                    if (this.CurrentActivity == null) return;
+            var userInteractionId = Guid.NewGuid();
 
-                    HandleDialogOpen();
+            try
+            {
+                HandleDialogOpen(userInteractionId);
 
-                    new AlertDialog.Builder(this.CurrentActivity)
-                        .SetMessage(message)
-                        .SetTitle(title)
-                        .SetPositiveButton(okButton, delegate { HandleDialogClose(() => { if (callback != null) callback(true); }); })
-                        .SetNegativeButton(cancelButton, delegate { HandleDialogClose(() => { if (callback != null) callback(false); }); })
-                        .SetCancelable(false)
-                        .Show();
-                },
-                null);
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        new AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(message)
+                            .SetTitle(title)
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(true); }); })
+                            .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(false); }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
         }
 
         private void AlertImpl(string message, Action callback, string title, string okButton)
         {
-            Application.SynchronizationContext.Post(
-                ignored =>
-                {
-                    if (this.CurrentActivity == null) return;
+            var userInteractionId = Guid.NewGuid();
 
-                    HandleDialogOpen();
+            try
+            {
+                HandleDialogOpen(userInteractionId);
 
-                    new AlertDialog.Builder(this.CurrentActivity)
-                        .SetMessage(message)
-                        .SetTitle(title)
-                        .SetPositiveButton(okButton, delegate { HandleDialogClose(() => { if (callback != null) callback(); }); })
-                        .SetCancelable(false)
-                        .Show();
-                },
-                null);
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        new AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(message)
+                            .SetTitle(title)
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(); }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
         }
 
         private void InputImpl(string message, Action<bool, string> callback, string hint, string title, string okButton, string cancelButton, string initialText)
         {
-            Application.SynchronizationContext.Post(
-                ignored =>
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        var input = new EditText(this.CurrentActivity) { Hint = hint, Text = initialText };
+
+                        new AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(message)
+                            .SetTitle(title)
+                            .SetView(input)
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(true, input.Text); }); })
+                            .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(false, input.Text); }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }
+
+        private static void HandleDialogOpen(Guid userInteractionId)
+        {
+            lock (UserInteractionsLock)
+            {
+                userInteractions.Add(userInteractionId);
+            }
+        }
+
+        private static void HandleDialogClose(Guid userInteractionId, Action callback = null)
+        {
+            try
+            {
+                if (callback != null)
                 {
-                    if (this.CurrentActivity == null) return;
-                    var input = new EditText(this.CurrentActivity) { Hint = hint, Text = initialText };
+                    callback.Invoke();
+                }
+            }
+            finally
+            {
+                lock (UserInteractionsLock)
+                {
+                    userInteractions.Remove(userInteractionId);
 
-                    HandleDialogOpen();
-
-                    new AlertDialog.Builder(this.CurrentActivity)
-                        .SetMessage(message)
-                        .SetTitle(title)
-                        .SetView(input)
-                        .SetPositiveButton(okButton, delegate { HandleDialogClose(() => { if (callback != null) callback(true, input.Text); }); })
-                        .SetNegativeButton(cancelButton, delegate { HandleDialogClose(() => { if (callback != null) callback(false, input.Text); }); })
-                        .SetCancelable(false)
-                        .Show();
-                },
-                null);
-        }
-
-        private static void HandleDialogOpen()
-        {
-            
-        }
-
-        private static void HandleDialogClose(Action callback)
-        {
-            callback.Invoke();
+                    if (userInteractions.Count == 0)
+                    {
+                        if (userInteractionsAwaiter != null)
+                        {
+                            userInteractionsAwaiter.SetResult(new object());
+                            userInteractionsAwaiter = null;
+                        }
+                    }
+                }
+            }
         }
     }
 }
