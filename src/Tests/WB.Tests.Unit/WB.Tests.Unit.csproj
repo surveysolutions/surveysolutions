@@ -435,6 +435,9 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\DashboardViewModelTests\when_signed_out.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\IntegerQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_numeric_question_with_negative_value.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_big_value_and_question_has_no_set_MaxValue.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_big_value_and_question_was_answered.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_big_value_and_question_was_not_answered_before.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_answered.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />

@@ -595,6 +595,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because answer is greater than Roster upper bound &apos;{1}&apos;..
+        /// </summary>
+        public static string Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue {
+            get {
+                return ResourceManager.GetString("Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
         /// </summary>
         public static string Interview_Question_Real_ParsingError {

@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private bool isRosterSizeQuestion;
 
         private int? previousAnswer;
+        private int maxAnswer;
 
         private string answerAsString;
         public string AnswerAsString
@@ -93,6 +94,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.previousAnswer = Monads.Maybe(() => answer);
             }
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
+            this.maxAnswer = questionModel.MaxValue ?? 40;
         }
 
         private async Task SendAnswerIntegerQuestionCommand()
@@ -106,21 +108,32 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 return;
             }
 
-            if (isRosterSizeQuestion && answer < 0)
+            if (isRosterSizeQuestion)
             {
-                var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, AnswerAsString);
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
-                return;
-            }
-
-            if (isRosterSizeQuestion && previousAnswer.HasValue && answer < previousAnswer)
-            {
-                var amountOfRostersToRemove = previousAnswer - answer;
-                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                if (!(await userInteraction.ConfirmAsync(message)))
+                if (answer < 0)
                 {
+                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, AnswerAsString);
+                    this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
+                    return;
+                }
+
+                if (answer > maxAnswer)
+                {
+                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, AnswerAsString, this.maxAnswer);
+                    this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
                     AnswerAsString = NullableIntToAnswerString(previousAnswer);
                     return;
+                }
+
+                if (previousAnswer.HasValue && answer < previousAnswer)
+                {
+                    var amountOfRostersToRemove = previousAnswer - answer;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                    if (!(await userInteraction.ConfirmAsync(message)))
+                    {
+                        AnswerAsString = NullableIntToAnswerString(previousAnswer);
+                        return;
+                    }
                 }
             }
 
