@@ -65,6 +65,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                 Title = "Group 2",
                 Id = group2Id
             };
+            questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionId] = new GroupModel
+            {
+                Title = "Section 1",
+                Id = sectionId
+            };
 
             questionnaire.GroupsParentIdMap = new Dictionary<Guid, Guid?> {{ rosterId, sectionId }};
 
@@ -84,6 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
             viewModel.Init("", "", Create.NavigationState());
+            viewModel.Sections[0].SectionIdentity = new Identity(sectionId, Empty.RosterVector);
         };
 
         Because of = () =>

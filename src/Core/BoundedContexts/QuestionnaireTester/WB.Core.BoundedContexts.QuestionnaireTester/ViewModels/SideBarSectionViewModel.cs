@@ -35,30 +35,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly ISubstitutionService substitutionService;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
-
-        public static SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, 
-            GroupModel model, 
-            Identity enabledSubgroupIdentity, 
-            IStatefulInterview interview,
-            ISubstitutionService substitutionService,
-            NavigationState navigationState)
-        {
-            var sideBarItem = Mvx.Create<SideBarSectionViewModel>();
-            sideBarItem.Init(navigationState);
-
-            sideBarItem.Parent = sectionToAddTo;
-            sideBarItem.Title = model.Title;
-            sideBarItem.SectionIdentity = enabledSubgroupIdentity;
-            sideBarItem.HasChildren = interview.GetEnabledSubgroups(enabledSubgroupIdentity).Any();
-            sideBarItem.NodeDepth = sideBarItem.UnwrapReferences(x => x.Parent).Count() - 1;
-            if (model is RosterModel)
-            {
-                string rosterTitle = interview.GetRosterTitle(enabledSubgroupIdentity);
-                sideBarItem.Title = substitutionService.GenerateRosterName(model.Title, rosterTitle);
-            }
-            return sideBarItem;
-        }
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -66,6 +44,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher, 
+            ISideBarSectionViewModelsFactory modelsFactory,
             IMvxMessenger messenger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -73,6 +52,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
+            this.modelsFactory = modelsFactory;
             this.messenger = messenger;
             this.Children = new ObservableCollection<SideBarSectionViewModel>();
             this.Children.CollectionChanged += (sender, args) => this.HasChildren = this.Children.Count > 0;
@@ -117,7 +97,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             set
             {
                 if (this.isSelected == value) return;
-                this.isSelected = value; 
+                this.isSelected = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -131,6 +111,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 if (this.isCurrent == value) return;
                 this.isCurrent = value; 
                 this.RaisePropertyChanged();
+                if (this.IsCurrent)
+                {
+                    this.Expanded = true;
+                }
             }
         }
 
@@ -214,7 +198,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             foreach (Identity groupInstance in enabledChildGroups)
             {
                 var group = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[groupInstance.Id];
-                var section = BuildSectionItem(this, group, groupInstance, interview, substitutionService, navigationState);
+                var section = modelsFactory.BuildSectionItem(this, group, groupInstance, interview, substitutionService, navigationState);
 
                 result.Add(section);
             }
