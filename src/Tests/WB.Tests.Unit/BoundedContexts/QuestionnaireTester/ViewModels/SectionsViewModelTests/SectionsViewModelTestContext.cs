@@ -24,8 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 substitutionService ?? Create.SubstitutionService(),
                 Create.LiteEventRegistry(),
-                Stub.MvxMainThreadDispatcher(),
-                Mock.Of<IMvxMessenger>());
+                Stub.MvxMainThreadDispatcher());
         }
 
 
