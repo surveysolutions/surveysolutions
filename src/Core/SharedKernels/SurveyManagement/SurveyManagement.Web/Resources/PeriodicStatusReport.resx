@@ -196,7 +196,7 @@
     <value>A time difference between the moment when the first answer is recorded on a tablet and when the complete button is pressed.</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>A time difference between the first assignment and the moment when the interview is approved by HQ</value>
+    <value>A time difference between the first assignment and the moment when the interview is approved by HQ.</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
     <value>A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire.</value>
@@ -208,9 +208,9 @@
     <value>Number of interviews collected by the {0} that were approved by HQ.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Number of approvals and rejections performed by a HQ on questionnaires collected by an {0}</value>
+    <value>Number of approvals and rejections performed by a HQ on questionnaires collected by an {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by an {0}</value>
+    <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by an {0}.</value>
   </data>
 </root>
