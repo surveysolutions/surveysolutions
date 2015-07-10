@@ -459,7 +459,6 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_initing.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\SingleOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event.cs" />
