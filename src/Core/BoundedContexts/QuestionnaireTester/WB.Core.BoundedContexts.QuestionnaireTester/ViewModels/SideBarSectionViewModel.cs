@@ -51,7 +51,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.messenger = messenger;
             this.Children = new ObservableCollection<SideBarSectionViewModel>();
-            this.Children.CollectionChanged += (sender, args) => HasChildren = this.Children.Count > 0;
+            this.Children.CollectionChanged += (sender, args) =>
+            {
+                Debug.WriteLine("Collection changed for {0}", this.SectionIdentity);
+                this.HasChildren = this.Children.Count > 0;
+            };
             eventRegistry.Subscribe(this);
         }
 
@@ -64,10 +68,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         void navigationState_OnBeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs)
         {
-            if (this.IsCurrent)
-            {
-                this.IsCurrent = false;
-            }
+            this.IsCurrent = false;
         }
 
         void NavigationState_OnGroupChanged(GroupChangedEventArgs newGroupIdentity)
@@ -93,21 +94,36 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public bool IsSelected
         {
             get { return this.isSelected; }
-            set { this.isSelected = value; this.RaisePropertyChanged(); }
+            set
+            {
+                if (this.isSelected == value) return;
+                this.isSelected = value; 
+                this.RaisePropertyChanged();
+            }
         }
 
         private bool isCurrent;
         public bool IsCurrent
         {
             get { return this.isCurrent; }
-            set { this.isCurrent = value; this.RaisePropertyChanged(); }
+            set
+            {
+                if (this.isCurrent == value) return;
+                this.isCurrent = value; 
+                this.RaisePropertyChanged();
+            }
         }
 
         private bool hasChildren;
         public bool HasChildren
         {
             get { return hasChildren; }
-            set { this.hasChildren = value; this.RaisePropertyChanged(); }
+            set
+            {
+                if (this.HasChildren == value) return;
+                this.hasChildren = value; 
+                this.RaisePropertyChanged();
+            }
         }
 
         private bool expanded;

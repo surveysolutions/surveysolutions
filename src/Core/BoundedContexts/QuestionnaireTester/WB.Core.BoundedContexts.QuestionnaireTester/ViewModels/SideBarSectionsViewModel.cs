@@ -7,6 +7,7 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -85,7 +86,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             var vm = this.NewSideBarSectionViewModel();
             vm.Init(this.navigationState);
             vm.Title = section.Title;
-            vm.SectionIdentity = new Identity(section.Id, new decimal[] {});
+            vm.SectionIdentity = new Identity(section.Id, new decimal[] { });
             vm.HasChildren = section.Children.Count > 0;
 
             return vm;
@@ -144,31 +145,47 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     .SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
 
                 List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
-
-                for (int i = 0; i < enabledSubgroups.Count; i++)
+                mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var enabledSubgroupIdentity = enabledSubgroups[i];
-                    if (i < sectionToAddTo.Children.Count)
+                    for (int i = 0; i < enabledSubgroups.Count; i++)
                     {
-                        if (!sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                        var enabledSubgroupIdentity = enabledSubgroups[i];
+                        var model = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id];
+                        if (i < sectionToAddTo.Children.Count)
                         {
-                            var sideBarItem = this.NewSideBarSectionViewModel();
-                            sideBarItem.Title =
-                                questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id].Title;
-                            mainThreadDispatcher.RequestMainThreadAction(()=> sectionToAddTo.Children.Insert(i, sideBarItem));
+                            if (!sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                            {
+                                var sideBarItem = this.BuildSectionItem(model, enabledSubgroupIdentity, interview);
+                                sectionToAddTo.Children.Insert(i, sideBarItem);
+                            }
+                        }
+                        else
+                        {
+                            var sideBarItem = this.BuildSectionItem(model, enabledSubgroupIdentity, interview);
+                            sectionToAddTo.Children.Insert(i, sideBarItem);
                         }
                     }
-                    else
-                    {
-                        var sideBarItem = this.NewSideBarSectionViewModel();
-                        sideBarItem.Title =
-                            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id].Title;
-                        mainThreadDispatcher.RequestMainThreadAction(()=> sectionToAddTo.Children.Insert(i, sideBarItem));
-                    }
-                }
+                });
             }
         }
-    
+
+        private SideBarSectionViewModel BuildSectionItem(GroupModel model, Identity enabledSubgroupIdentity,
+            IStatefulInterview interview)
+        {
+            var sideBarItem = this.NewSideBarSectionViewModel();
+            sideBarItem.Init(this.navigationState);
+
+            sideBarItem.Title = model.Title;
+            sideBarItem.SectionIdentity = enabledSubgroupIdentity;
+            sideBarItem.HasChildren = interview.GetEnabledSubgroups(enabledSubgroupIdentity).Any();
+            if (model is RosterModel)
+            {
+                string rosterTitle = interview.GetRosterTitle(enabledSubgroupIdentity);
+                sideBarItem.Title = this.substitutionService.GenerateRosterName(model.Title, rosterTitle);
+            }
+            return sideBarItem;
+        }
+
         public void Handle(GroupsEnabled @event)
         {
             foreach (var groupId in @event.Groups)
