@@ -57,8 +57,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
-        int? GetMaxValueForNumericQuestion(Guid questionId);
-
         int? GetListSizeForListQuestion(Guid questionId);
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);

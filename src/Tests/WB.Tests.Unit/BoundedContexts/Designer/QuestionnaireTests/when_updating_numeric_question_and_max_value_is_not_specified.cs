@@ -26,8 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Because of = () =>
             questionnaire.UpdateNumericQuestion(questionId, "title",
                 "var1",null, false, false, QuestionScope.Interviewer, null, null, null, null,
-                responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
-                maxValue: null);
+                responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null);
 
         Cleanup stuff = () =>
         {
@@ -41,10 +40,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_raise_NumericQuestionChanged_event_with_PublicKey_equal_to_question_id = () =>
             eventContext.GetSingleEvent<NumericQuestionChanged>()
                 .PublicKey.ShouldEqual(questionId);
-
-        It should_raise_NumericQuestionChanged_event_with_MaxAllowedValue_equal_null = () =>
-            eventContext.GetSingleEvent<NumericQuestionChanged>()
-                .MaxAllowedValue.ShouldBeNull();
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;

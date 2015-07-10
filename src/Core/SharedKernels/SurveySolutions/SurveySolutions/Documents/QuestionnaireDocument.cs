@@ -502,14 +502,6 @@ namespace Main.Core.Documents
             return doc;
         }
 
-        public void UpdateRosterGroupsIfNeeded(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
-        {
-            if (triggeredGroupIds != null && triggeredGroupIds.Count > 0)
-            {
-                this.MarkGroupsAsRosterAndSetRosterSizeQuestion(triggeredGroupIds, rosterSizeQuestionId);
-            }
-        }
-
         public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
         {
             IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;

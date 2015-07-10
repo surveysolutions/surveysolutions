@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             {
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
-                MaxValue = 4,
                 StataExportCaption = "var1"
             });
             var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId };

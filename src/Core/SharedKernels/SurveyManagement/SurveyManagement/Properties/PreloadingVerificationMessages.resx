@@ -175,10 +175,6 @@
     <value>Categorical question cannot have non-numeric values.</value>
     <comment>Non-numeric value found for categorical question</comment>
   </data>
-  <data name="PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue" xml:space="preserve">
-    <value>Value cannot be greater than the roster upper bound.</value>
-    <comment>Integer numeric questions with specified Roster upper bound</comment>
-  </data>
   <data name="PL0021_MultyOptionQuestionHasDuplicateAnswers" xml:space="preserve">
     <value>Categorical multiple answers question has duplicate values.</value>
   </data>

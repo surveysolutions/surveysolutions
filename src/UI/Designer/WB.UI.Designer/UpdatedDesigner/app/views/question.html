@@ -376,15 +376,6 @@
                             Only integers are allowed
                         </p>
                     </div>
-                    <div class="form-group" ng-show="activeQuestion.isInteger" ng-class="{'has-error': !questionForm.maxValue.$valid}">
-                        <label for="edit-question-max-value">Roster upper bound</label>
-                        <input id="edit-question-max-value"
-                               ng-pattern="/^\d+$/"
-                               type="text" name="maxValue" ng-model="activeQuestion.maxValue" class="form-control  small-numeric-input">
-                        <p class="help-block ng-cloak" ng-show="questionForm.maxValue.$error.pattern">
-                            Only integers are allowed
-                        </p>
-                    </div>
                 </div>
             </div>
         </script>

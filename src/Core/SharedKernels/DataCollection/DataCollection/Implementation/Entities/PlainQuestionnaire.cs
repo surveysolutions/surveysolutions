@@ -263,18 +263,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
         }
 
-        public int? GetMaxValueForNumericQuestion(Guid questionId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-            this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
-
-            var numericQuestion = question as INumericQuestion;
-            if (numericQuestion != null)
-                return numericQuestion.MaxValue;
-
-            return null;
-        }
-
         public int? GetListSizeForListQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);

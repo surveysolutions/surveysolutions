@@ -35,8 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Capital,
                 data.Instructions,
                 data.Mask,
-                data.Triggers,
-                data.MaxValue,
                 data.LinkedToQuestionId,
                 data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
@@ -136,8 +134,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool capital,
             string instructions,
             string mask,
-            IEnumerable<Guid> triggers,
-            int? maxValue,
             Guid? linkedToQuestionId,
             bool? isInteger,
             int? countOfDecimalPlaces,
@@ -169,7 +165,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             {
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
-                numericQuestion.MaxValue = maxValue;
                 numericQuestion.QuestionType = QuestionType.Numeric;
             }
 

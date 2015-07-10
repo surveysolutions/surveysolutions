@@ -1061,7 +1061,7 @@ namespace WB.Tests.Unit
         }
 
         public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool isInteger = false, int? countOfDecimalPlaces = null, int? maxValue = null)
+            bool isInteger = false, int? countOfDecimalPlaces = null)
         {
             return new NumericQuestion("Question N")
             {
@@ -1069,8 +1069,7 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 IsInteger = isInteger,
-                CountOfDecimalPlaces = countOfDecimalPlaces,
-                MaxValue = maxValue,
+                CountOfDecimalPlaces = countOfDecimalPlaces
             };
         }
 
