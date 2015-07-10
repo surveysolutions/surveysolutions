@@ -159,7 +159,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public ObservableCollection<SideBarSectionViewModel> Children
         {
             get { return this.children; }
-            private set { this.children = value; this.RaisePropertyChanged();}
+            set
+            {
+                this.children = value; 
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(() => HasChildren);
+            }
         }
 
         private MvxCommand navigateToSectionCommand;
