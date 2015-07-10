@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             var rosterSizeQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 5, StataExportCaption = "var"},
+                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, StataExportCaption = "var"},
                 new Group()
                 {
                     PublicKey = Guid.NewGuid(),

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             var childRosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4, StataExportCaption ="var1"},
+                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, StataExportCaption ="var1"},
                 new Group()
                 {
                     PublicKey = rosterGroupId,
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new NumericQuestion() {PublicKey = childRosterSizeQuestionId, IsInteger = true, MaxValue = 4, StataExportCaption = "var2"},
+                        new NumericQuestion() {PublicKey = childRosterSizeQuestionId, IsInteger = true, StataExportCaption = "var2"},
                         new SingleQuestion()
                         {
                             PublicKey = questionWithSubstitutionsId,

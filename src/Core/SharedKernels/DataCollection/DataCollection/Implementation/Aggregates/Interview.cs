@@ -2223,7 +2223,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
             {
-                ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
                 ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
             }
@@ -2286,7 +2285,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
             if (applyStrongChecks)
             {
-                ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
 
                 if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
@@ -3366,21 +3364,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Format(
                         "Answer '{0}' for question {1}  is incorrect because has more decimal places then allowed by questionnaire. InterviewId: {2}", answer,
                         FormatQuestionForException(questionId, questionnaire), EventSourceId));
-        }
-
-        private void ThrowIfNumericAnswerExceedsMaxValue(Guid questionId, decimal answer, IQuestionnaire questionnaire)
-        {
-            int? maxValue = questionnaire.GetMaxValueForNumericQuestion(questionId);
-
-            if (!maxValue.HasValue)
-                return;
-
-            bool answerExceedsMaxValue = answer > maxValue.Value;
-
-            if (answerExceedsMaxValue)
-                throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because answer is greater than Roster upper bound '{2}'. InterviewId: {3}",
-                    answer, FormatQuestionForException(questionId, questionnaire), maxValue.Value, EventSourceId));
         }
 
         private void ThrowIfRosterSizeAnswerIsNegative(Guid questionId, int answer, IQuestionnaire questionnaire)

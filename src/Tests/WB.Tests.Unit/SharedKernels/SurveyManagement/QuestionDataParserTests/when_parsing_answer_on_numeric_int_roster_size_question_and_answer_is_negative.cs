@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 PublicKey = questionId,
                 QuestionType = QuestionType.Numeric,
                 IsInteger = true,
-                MaxValue = 3,
                 StataExportCaption = questionVarName
             };
         };
