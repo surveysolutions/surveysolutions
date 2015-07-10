@@ -10,7 +10,7 @@ namespace WB.Core.GenericSubdomains.Portable
             if (vector1 == null) throw new ArgumentNullException("vector1");
             if (vector2 == null) return false;
 
-            if (vector1.Length == 0 && vector2.Length == 0)
+            if (vector1.Length == 0 && vector2.Length == 0 || ReferenceEquals(vector1, vector2))
             {
                 return true;
             }
