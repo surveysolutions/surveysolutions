@@ -892,6 +892,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to enter text  ({0}).
+        /// </summary>
+        public static string TextQuestion_MaskHint {
+            get {
+                return ResourceManager.GetString("TextQuestion_MaskHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try again.
         /// </summary>
         public static string TryAgainLink {

@@ -422,4 +422,7 @@
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>Нажмите для ввода текста  ({0})</value>
+  </data>
 </root>

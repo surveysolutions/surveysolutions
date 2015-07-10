@@ -12,7 +12,7 @@
 
         <MaskedEditText
           style="@style/Interview_Question_Answer_TextEditor"
-          local:MvxBind="Hint Localization('TextQuestion_Hint') + MaskedHint; 
+          local:MvxBind="Hint Hint; 
                          Mask Mask; 
                          Text Answer; 
                          FocusValueChanged ValueChangeCommand; 

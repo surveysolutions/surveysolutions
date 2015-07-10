@@ -67,12 +67,19 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public string Mask
         {
             get { return mask; }
-            private set { mask = value; RaisePropertyChanged(); RaisePropertyChanged(() => MaskedHint); }
+            private set { mask = value; RaisePropertyChanged(); RaisePropertyChanged(() => Hint); }
         }
 
-        public string MaskedHint
+        public string Hint
         {
-            get { return Mask.IsNullOrEmpty() ? String.Empty : " ({0})".FormatString(Mask); }
+            get
+            {
+                if (this.Mask.IsNullOrEmpty()) 
+                    return UIResources.TextQuestion_Hint;
+
+                string maskHint = this.Mask.Replace('*', '_').Replace('#', '_').Replace('~', '_');
+                return UIResources.TextQuestion_MaskHint.FormatString(maskHint);
+            }
         }
 
         public bool IsMaskedQuestionAnswered { get; set; }
