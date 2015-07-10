@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A time difference between the first assignment and the moment when the interview is approved by HQ.
+        ///   Looks up a localized string similar to A time difference between the first assignment and the moment when the interview is approved by HQ..
         /// </summary>
         public static string AverageOverallCaseProcessingTimeDescription {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by an {0}.
+        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by an {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsByHQDescription {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by an {0}.
+        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by an {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsBySupervisorDescription {
             get {
