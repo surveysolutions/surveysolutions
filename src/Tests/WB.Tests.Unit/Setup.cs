@@ -6,6 +6,8 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -100,6 +102,16 @@ namespace WB.Tests.Unit
                 .Throws<Exception>();
 
             return eventHandlerMock.Object;
+        }
+
+        public static IStatefulInterviewRepository StatefulInterviewRepositoryWithInterviewsWithAllGroupsEnabledAndExisting()
+        {
+            var interview = Mock.Of<IStatefulInterview>(_
+                => _.HasGroup(It.IsAny<Identity>()) == true
+                && _.IsEnabled(It.IsAny<Identity>()) == true);
+
+            return Mock.Of<IStatefulInterviewRepository>(_
+                => _.Get(It.IsAny<string>()) == interview);
         }
     }
 }
