@@ -1069,7 +1069,8 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 IsInteger = isInteger,
-                CountOfDecimalPlaces = countOfDecimalPlaces
+                CountOfDecimalPlaces = countOfDecimalPlaces,
+                QuestionType = QuestionType.Numeric
             };
         }
 
@@ -1082,6 +1083,7 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
+                QuestionType = QuestionType.TextList
             };
         }
 
@@ -1099,7 +1101,7 @@ namespace WB.Tests.Unit
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null)
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
             {
@@ -1108,6 +1110,8 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
+                QuestionType = QuestionType.MultyOption,
+                Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
         }
 
