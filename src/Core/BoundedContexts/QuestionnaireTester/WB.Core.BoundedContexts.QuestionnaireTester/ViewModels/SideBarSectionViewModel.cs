@@ -76,6 +76,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (this.SectionIdentity.Equals(newGroupIdentity.TargetGroup))
             {
                 this.IsCurrent = true;
+                if (!this.Expanded)
+                {
+                    this.Expanded = true;
+                }
             }
         }
 
@@ -111,10 +115,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 if (this.isCurrent == value) return;
                 this.isCurrent = value; 
                 this.RaisePropertyChanged();
-                if (this.IsCurrent)
-                {
-                    this.Expanded = true;
-                }
             }
         }
 
@@ -145,7 +145,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     }
                     else
                     {
-                        this.TreeToEnumerable(x => x.Children).ForEach(x => x.Dispose());
+                        this.TreeToEnumerable(x => x.Children)
+                            .Skip(1) // Skip self
+                            .ForEach(x => x.Dispose());
                         this.Children.Clear();
                     }
 
