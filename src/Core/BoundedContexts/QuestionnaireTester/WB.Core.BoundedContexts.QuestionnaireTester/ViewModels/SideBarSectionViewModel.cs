@@ -51,11 +51,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.messenger = messenger;
             this.Children = new ObservableCollection<SideBarSectionViewModel>();
-            this.Children.CollectionChanged += (sender, args) =>
-            {
-                Debug.WriteLine("Collection changed for {0}", this.SectionIdentity);
-                this.HasChildren = this.Children.Count > 0;
-            };
+            this.Children.CollectionChanged += (sender, args) => this.HasChildren = this.Children.Count > 0;
             eventRegistry.Subscribe(this);
         }
 
