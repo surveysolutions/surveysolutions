@@ -425,4 +425,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="TextQuestion_MaskHint" xml:space="preserve">
     <value>Tap to enter text  ({0})</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative.</value>
+  </data>
 </root>

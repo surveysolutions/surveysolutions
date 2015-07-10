@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
 {
     public class IntegerNumericAnswer : BaseInterviewAnswer
     {
-        public int? Answer { get; private set; }
+        public virtual int? Answer { get; private set; }
 
         public IntegerNumericAnswer() { }
         public IntegerNumericAnswer(Guid id, decimal[] rosterVector)

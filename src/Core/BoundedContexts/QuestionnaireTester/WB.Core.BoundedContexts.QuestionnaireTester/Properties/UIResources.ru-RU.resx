@@ -425,4 +425,7 @@
   <data name="TextQuestion_MaskHint" xml:space="preserve">
     <value>Нажмите для ввода текста  ({0})</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
+  </data>
 </root>

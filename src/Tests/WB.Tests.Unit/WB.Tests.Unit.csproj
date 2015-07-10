@@ -433,6 +433,9 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\DashboardViewModelTests\when_showed_public_questionnaires.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\DashboardViewModelTests\when_load_questionnaire_and_previous_request_is_in_progress.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\DashboardViewModelTests\when_signed_out.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\IntegerQuestionViewModelTestContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_answered.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
