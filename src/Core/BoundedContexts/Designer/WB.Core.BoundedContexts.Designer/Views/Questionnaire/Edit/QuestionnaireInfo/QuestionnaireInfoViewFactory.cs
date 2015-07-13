@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -74,10 +75,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 }
             }
 
-            if (sharedPersonsList.Exists(x => x.Id == personId))
+            var person = sharedPersonsList.FirstOrDefault(x => x.Id == personId);
+
+            if (person != null)
             {
                 questionnaireInfoView.SharedPersons = sharedPersonsList;
-                questionnaireInfoView.IsReadOnlyForUser = false;
+                questionnaireInfoView.IsReadOnlyForUser = !person.IsOwner && person.ShareType != 0;
             }
             else
             {
