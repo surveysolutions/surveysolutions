@@ -2,6 +2,17 @@
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
+    public class UpdateQuestionStateMessage : MvxMessage
+    {
+        public UpdateQuestionStateMessage(object sender, int elementPosition)
+            : base(sender)
+        {
+            this.ElementPosition = elementPosition;
+        }
+
+        public int ElementPosition { get; private set; }
+    }
+
     public class ScrollToAnchorMessage: MvxMessage
     {
         public ScrollToAnchorMessage(object sender, int anchorElementIndex)
