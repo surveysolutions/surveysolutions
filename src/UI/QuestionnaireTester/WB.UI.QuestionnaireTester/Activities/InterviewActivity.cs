@@ -84,12 +84,12 @@ namespace WB.UI.QuestionnaireTester.Activities
             }
         }
 
-        protected override void OnStop()
+        protected override void OnDestroy()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
-            base.OnStop();
+            base.OnDestroy();
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
