@@ -46,12 +46,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
          Expression<Func<T, Guid>> selectUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
-            var to = reportStartDate.Date;
-            var from = AddPeriod(to, period, -columnCount);
+            var from = reportStartDate.Date;
+            var to = AddPeriod(from, period, columnCount);
 
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(AddPeriod(to, period, -(i + 1)).Date, AddPeriod(to, period, -i).Date))
+                    .Select(i => new DateTimeRange(AddPeriod(from, period, i).Date, AddPeriod(from, period, i + 1).Date))
                     .ToArray();
 
             var users =
@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 {
                     var interviewsInPeriod =
                         interviewsForUser.Where(
-                            ics => ics.Timestamp.Date > dateTimeRange.From && ics.Timestamp.Date <= dateTimeRange.To).ToArray();
+                            ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To).ToArray();
                     if (interviewsInPeriod.Any())
                     {
                         speedByPeriod.Add(Math.Round(interviewsInPeriod.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Average(), 2));
@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .SelectMany(x => x.InterviewCommentedStatuses)
                     .Where(
                         ics =>
-                            ics.Timestamp.Date > from && ics.Timestamp.Date <= to.Date && statuses.Contains(ics.Status) &&
+                            ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date && statuses.Contains(ics.Status) &&
                             ics.TimeSpanWithPreviousStatus.HasValue));
         }
 

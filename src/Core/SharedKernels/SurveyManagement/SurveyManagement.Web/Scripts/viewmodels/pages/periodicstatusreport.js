@@ -25,7 +25,7 @@
     self.GetPeriodName = function (period) {
         return ko.computed({
             read: function () {
-                return moment(period.To()).format(dateFormat) + "-" + moment(period.From()).format(dateFormat);
+                return moment(period.From()).format(dateFormat) + "-" + moment(period.To()).format(dateFormat);
             }
         }, this);
     };
@@ -40,11 +40,11 @@
         return data;
     };
     self.load = function () {
-        var today = moment().format(dateFormat);
+        var todayMinus7Days = moment().add(-7, 'days').format(dateFormat);
 
         self.Url.query['questionnaireId'] = self.QueryString['questionnaireId'] || "";
         self.Url.query['questionnaireVersion'] = self.QueryString['questionnaireVersion'] || "";
-        self.Url.query['from'] = self.QueryString['from'] || today;
+        self.Url.query['from'] = self.QueryString['from'] || todayMinus7Days;
         self.Url.query['period'] = self.QueryString['period'] || "d";
         self.Url.query['columnCount'] = self.QueryString['columnCount'] || "7";
         self.Url.query['reportType'] = self.QueryString['reportType'] || "";

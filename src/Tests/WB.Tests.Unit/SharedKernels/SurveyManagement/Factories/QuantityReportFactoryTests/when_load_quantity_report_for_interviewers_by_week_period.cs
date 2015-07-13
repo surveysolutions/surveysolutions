@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddHours(1)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddDays(1)),
+                            timestamp: input.From.Date.AddDays(15)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddDays(-15))
                     }), "2");
