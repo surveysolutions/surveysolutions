@@ -88,7 +88,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (navigateToIfHistoryIsEmpty == null) throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
 
             // remove current group from stack
-            this.navigationStack.Pop();
+            if (this.navigationStack.Count != 0)
+            {
+                this.navigationStack.Pop();
+            }
 
             if (this.navigationStack.Count == 0)
                 navigateToIfHistoryIsEmpty.Invoke();
