@@ -387,6 +387,9 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_2.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_3.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Aggregates\when_getting_question_answer.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\AnswerToStringServiceTests\when_passing_single_option_question.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\Services\AnswerToStringServiceTests\when_passing_filtered_single_option_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\MaskTextTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_making_text_after_setting_mask.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\Services\MaskTextTests\when_making_text_for_not_filled_mask.cs" />
