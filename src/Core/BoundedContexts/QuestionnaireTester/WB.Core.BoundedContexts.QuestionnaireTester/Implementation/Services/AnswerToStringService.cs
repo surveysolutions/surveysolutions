@@ -52,10 +52,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
                 return string.Join(", ", stringAnswers);
             }
 
-            if (answer is SingleOptionAnswer)
+            var singleOptionAnswer = answer as SingleOptionAnswer;
+            if (singleOptionAnswer != null)
             {
-                var singleOptionAnswer = (SingleOptionAnswer) answer;
-
                 var singleOptionQuestion = question as SingleOptionQuestionModel;
                 if (singleOptionQuestion != null)
                     return singleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
