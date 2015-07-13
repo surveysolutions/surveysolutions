@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State
 {
     public class EnablementViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
@@ -51,8 +51,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private bool enabled;
         public bool Enabled
         {
-            get { return enabled; }
-            private set { enabled = value; this.RaisePropertyChanged(); }
+            get { return this.enabled; }
+            private set { this.enabled = value; this.RaisePropertyChanged(); }
         }
 
         private void UpdateSelfFromModel()

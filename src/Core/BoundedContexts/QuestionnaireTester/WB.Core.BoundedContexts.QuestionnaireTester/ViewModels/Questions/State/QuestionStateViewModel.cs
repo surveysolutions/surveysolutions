@@ -2,12 +2,12 @@
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
@@ -36,10 +36,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
-            Validity = validityViewModel;
-            Header = questionHeaderViewModel;
-            Enablement = enablementViewModel;
-            Comments = commentsViewModel;
+            this.Validity = validityViewModel;
+            this.Header = questionHeaderViewModel;
+            this.Enablement = enablementViewModel;
+            this.Comments = commentsViewModel;
         }
 
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -64,24 +64,24 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private bool isAnswered;
         public bool IsAnswered
         {
-            get { return isAnswered; }
-            set { isAnswered = value; RaisePropertyChanged(); }
+            get { return this.isAnswered; }
+            set { this.isAnswered = value; this.RaisePropertyChanged(); }
         }
 
         public void Handle(TAnswerEvent @event)
         {
-            if (@event.QuestionId == questionIdentity.Id &&
-                @event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.PropagationVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                var interview = this.interviewRepository.Get(interviewId);
-                IsAnswered = interview.WasAnswered(questionIdentity);
+                var interview = this.interviewRepository.Get(this.interviewId);
+                this.IsAnswered = interview.WasAnswered(this.questionIdentity);
             }
         }
 
         private IMvxCommand showCommentEditorCommand;
         public IMvxCommand ShowCommentEditorCommand
         {
-            get { return showCommentEditorCommand ?? (showCommentEditorCommand = new MvxCommand(ShowCommentsCommand)); }
+            get { return this.showCommentEditorCommand ?? (this.showCommentEditorCommand = new MvxCommand(this.ShowCommentsCommand)); }
         }
 
         private void ShowCommentsCommand()

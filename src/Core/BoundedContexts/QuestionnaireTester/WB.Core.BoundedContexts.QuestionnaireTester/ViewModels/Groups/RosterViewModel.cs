@@ -4,12 +4,14 @@ using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 {
     public class RosterViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
@@ -29,8 +31,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public IList Items
         {
-            get { return items; }
-            set { items = value; RaisePropertyChanged(); }
+            get { return this.items; }
+            set { this.items = value; this.RaisePropertyChanged(); }
         }
 
         public RosterViewModel(
@@ -94,7 +96,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             var rosterItemViewModel = this.interviewViewModelFactory.GetNew<RosterStateViewModel>();
 
-            rosterItemViewModel.Init(interviewId: this.interviewId, rosterIdentity: rosterIdentity, navigationState: navigationState);
+            rosterItemViewModel.Init(interviewId: this.interviewId, rosterIdentity: rosterIdentity, navigationState: this.navigationState);
 
             return rosterItemViewModel;
         }

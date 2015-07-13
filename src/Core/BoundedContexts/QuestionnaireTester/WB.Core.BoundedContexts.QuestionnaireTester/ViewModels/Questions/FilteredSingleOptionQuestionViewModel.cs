@@ -7,7 +7,8 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Questi
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -16,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
 {
     public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {

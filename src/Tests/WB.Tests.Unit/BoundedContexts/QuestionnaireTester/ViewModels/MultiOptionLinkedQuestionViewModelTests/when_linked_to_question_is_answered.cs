@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 

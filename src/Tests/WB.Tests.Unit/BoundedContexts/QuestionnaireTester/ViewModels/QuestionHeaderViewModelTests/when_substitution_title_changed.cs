@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;

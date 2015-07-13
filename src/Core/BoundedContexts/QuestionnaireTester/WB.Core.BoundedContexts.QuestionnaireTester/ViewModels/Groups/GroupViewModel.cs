@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 {
     public class GroupViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public Identity Identity
         {
-            get{ return groupIdentity; }
+            get{ return this.groupIdentity; }
         }
 
         private IMvxCommand navigateToGroupCommand;
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public IMvxCommand NavigateToGroupCommand
         {
-            get { return navigateToGroupCommand ?? (navigateToGroupCommand = new MvxCommand(async () => await NavigateToGroup())); }
+            get { return this.navigateToGroupCommand ?? (this.navigateToGroupCommand = new MvxCommand(async () => await this.NavigateToGroup())); }
         }
 
         public GroupViewModel(
@@ -89,18 +89,18 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             {
                 IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
                 this.answerNotifier.Init(questionsToListen.ToArray());
-                this.answerNotifier.QuestionAnswered += QuestionAnswered;
+                this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
         {
-            UpdateStats();
+            this.UpdateStats();
         }
 
         private void UpdateStats()
         {
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.Get(this.interviewId);
 
             var state = new GroupState(this.groupIdentity);
             state.UpdateSelfFromModel(interview);

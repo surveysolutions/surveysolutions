@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 

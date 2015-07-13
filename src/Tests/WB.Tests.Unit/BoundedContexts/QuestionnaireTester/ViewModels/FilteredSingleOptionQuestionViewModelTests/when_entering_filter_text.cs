@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using It = Machine.Specifications.It;
 

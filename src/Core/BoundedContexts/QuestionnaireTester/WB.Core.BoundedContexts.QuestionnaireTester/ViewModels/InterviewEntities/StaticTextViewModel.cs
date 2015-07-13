@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities
 {
     public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -33,8 +33,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         private string staticText;
         public string StaticText
         {
-            get { return staticText; }
-            set { staticText = value; RaisePropertyChanged(); }
+            get { return this.staticText; }
+            set { this.staticText = value; this.RaisePropertyChanged(); }
         }
     }
 }

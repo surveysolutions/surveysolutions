@@ -9,7 +9,8 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.Questi
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -18,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
 {
     public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
          IInterviewEntityViewModel,
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
             public override string ToString()
             {
-                return OriginalText;
+                return this.OriginalText;
             }
         }
 
@@ -94,10 +95,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             var parentRosterVector = entityIdentity.RosterVector.Take(questionModel.RosterLevelDepthOfParentQuestion).ToArray();
             this.parentQuestionIdentity = new Identity(questionModel.CascadeFromQuestionId, parentRosterVector);
 
-            var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
+            var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
             if (parentAnswerModel.IsAnswered)
             {
-                answerOnParentQuestion = parentAnswerModel.Answer;
+                this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
             this.Options = questionModel.Options.ToList();
@@ -105,13 +106,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                selectedObject = CreateFormattedOptionModel(Options.SingleOrDefault(i => i.Value == selectedValue));
-                ResetTextInEditor = selectedObject.OriginalText;
-                FilterText = selectedObject.OriginalText;
+                this.selectedObject = this.CreateFormattedOptionModel(this.Options.SingleOrDefault(i => i.Value == selectedValue));
+                this.ResetTextInEditor = this.selectedObject.OriginalText;
+                this.FilterText = this.selectedObject.OriginalText;
             }
             else
             {
-                FilterText = null;
+                this.FilterText = null;
             }
 
             this.eventRegistry.Subscribe(this);
@@ -126,8 +127,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.resetTextInEditor = value;
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    SelectedObject = null;
-                    FilterText = null;
+                    this.SelectedObject = null;
+                    this.FilterText = null;
                 }
                 this.RaisePropertyChanged(); 
             }
@@ -138,7 +139,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             get
             {
-                return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(async enteredText => await this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText)));
+                return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(async enteredText => await this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText)));
             }
         }
 
@@ -154,10 +155,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 this.selectedObject = value;
                 if (this.selectedObject != null)
                 {
-                    Action sendCommand = async () => await SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
+                    Action sendCommand = async () => await this.SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
                     sendCommand();
                 }
-                RaisePropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
 
@@ -168,7 +169,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
             get { return this.filterText; }
             set
             {
-                if (value == this.filterText && isInitialized)
+                if (value == this.filterText && this.isInitialized)
                 {
                     return;
                 }
@@ -177,7 +178,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
                 this.UpdateSuggestionsList(this.filterText);
 
-                isInitialized = true;
+                this.isInitialized = true;
             }
         }
 
@@ -197,13 +198,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         private IEnumerable<CascadingComboboxItemViewModel> GetSuggestionsList(string textHint)
         {
-            if (!answerOnParentQuestion.HasValue) 
+            if (!this.answerOnParentQuestion.HasValue) 
                 yield break;
 
             if (textHint.IsNullOrEmpty())
             {
                 var options = this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value)
-                                          .Select(x => CreateFormattedOptionModel(x));
+                                          .Select(x => this.CreateFormattedOptionModel(x));
                 foreach (var option in options)
                 {
                     yield return option;
@@ -216,7 +217,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                 var index = model.Title.IndexOf(textHint, StringComparison.CurrentCultureIgnoreCase);
                 if (index >= 0)
                 {
-                    yield return CreateFormattedOptionModel(model, textHint);
+                    yield return this.CreateFormattedOptionModel(model, textHint);
                 }
             }
         }
@@ -233,13 +234,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
                        OriginalText = model.Title,
                        Value = model.Value,
                        ParentValue = model.ParentValue,
-                       Selected = SelectedObject != null && model.Value == SelectedObject.Value
+                       Selected = this.SelectedObject != null && model.Value == this.SelectedObject.Value
                    };
         }
 
         private void SetSuggestionsEmpty()
         {
-            AutoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
+            this.AutoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
         }
 
         private List<CascadingComboboxItemViewModel> autoCompleteSuggestions = new List<CascadingComboboxItemViewModel>();
@@ -248,31 +249,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         public List<CascadingComboboxItemViewModel> AutoCompleteSuggestions
         {
             get { return this.autoCompleteSuggestions; }
-            set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
+            set { this.autoCompleteSuggestions = value; this.RaisePropertyChanged(); }
         }
 
         private async Task FindMatchOptionAndSendAnswerQuestionCommand(string enteredText)
         {
             var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText);
 
-            if (answerViewModel == null || answerViewModel.ParentValue != answerOnParentQuestion)
+            if (answerViewModel == null || answerViewModel.ParentValue != this.answerOnParentQuestion)
             {
                 if (this.selectedObject != null)
                 {
-                    ResetTextInEditor = this.selectedObject.OriginalText;
+                    this.ResetTextInEditor = this.selectedObject.OriginalText;
                 }
                 this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
             }
 
             var answerValue = answerViewModel.Value;
-            if (selectedObject != null && answerValue == selectedObject.Value)
+            if (this.selectedObject != null && answerValue == this.selectedObject.Value)
             {
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
             }
 
-            await SendAnswerFilteredComboboxQuestionCommand(answerValue);
+            await this.SendAnswerFilteredComboboxQuestionCommand(answerValue);
         }
 
         private async Task SendAnswerFilteredComboboxQuestionCommand(decimal answerValue)
@@ -299,15 +300,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
 
         public void Handle(SingleOptionQuestionAnswered @event)
         {
-            if (@event.QuestionId == parentQuestionIdentity.Id
-                && @event.PropagationVector.SequenceEqual(parentQuestionIdentity.RosterVector))
+            if (@event.QuestionId == this.parentQuestionIdentity.Id
+                && @event.PropagationVector.SequenceEqual(this.parentQuestionIdentity.RosterVector))
             {
-                var interview = this.interviewRepository.Get(interviewId.FormatGuid());
-                var parentAnswerModel = interview.GetSingleOptionAnswer(parentQuestionIdentity);
+                var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+                var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
                 if (parentAnswerModel.IsAnswered)
                 {
-                    answerOnParentQuestion = parentAnswerModel.Answer;
-                    UpdateSuggestionsList(string.Empty);
+                    this.answerOnParentQuestion = parentAnswerModel.Answer;
+                    this.UpdateSuggestionsList(string.Empty);
                 }              
             }
         }
@@ -316,9 +317,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewMo
         {
             foreach (var question in @event.Questions)
             {
-                if (question.Id == questionIdentity.Id && question.RosterVector.Identical(questionIdentity.RosterVector))
+                if (question.Id == this.questionIdentity.Id && question.RosterVector.Identical(this.questionIdentity.RosterVector))
                 {
-                    ResetTextInEditor = null;
+                    this.ResetTextInEditor = null;
                     this.QuestionState.IsAnswered = false;
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
                 }

@@ -7,7 +7,8 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,7 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
 {
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {

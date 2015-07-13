@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State
 {
     public class CommentsViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
@@ -44,9 +44,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             this.questionIdentity = entityIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
-            InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
+            this.InterviewerComment = interview.GetInterviewerAnswerComment(entityIdentity);
 
-            HasComments = !string.IsNullOrWhiteSpace(InterviewerComment);
+            this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }
 
         private bool hasComments;
@@ -74,10 +74,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             get { return this.interviewerComment; }
             set
             {
-                if (interviewerComment != value)
+                if (this.interviewerComment != value)
                 {
-                    interviewerComment = value;
-                    RaisePropertyChanged();
+                    this.interviewerComment = value;
+                    this.RaisePropertyChanged();
                 }
             }
         }
@@ -85,27 +85,27 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private IMvxCommand valueChangeCommand;
         public IMvxCommand InterviewerCommentChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommand())); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommand())); }
         }
 
 
         private async Task SendCommentQuestionCommand()
         {
-            await commandService.ExecuteAsync(
+            await this.commandService.ExecuteAsync(
                 new CommentAnswerCommand(
-                    interviewId: Guid.Parse(interviewId),
-                    userId: principal.CurrentUserIdentity.UserId,
+                    interviewId: Guid.Parse(this.interviewId),
+                    userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.questionIdentity.Id,
                     rosterVector: this.questionIdentity.RosterVector,
                     commentTime: DateTime.UtcNow,
-                    comment: InterviewerComment));
+                    comment: this.InterviewerComment));
 
-            IsCommentInEditMode = false;
+            this.IsCommentInEditMode = false;
         }
 
         public void ShowCommentInEditor()
         {
-            IsCommentInEditMode = true;
+            this.IsCommentInEditMode = true;
         }
     }
 }

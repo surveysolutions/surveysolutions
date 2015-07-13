@@ -1,8 +1,9 @@
 using System.Linq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 {
     public class GroupState
     {
