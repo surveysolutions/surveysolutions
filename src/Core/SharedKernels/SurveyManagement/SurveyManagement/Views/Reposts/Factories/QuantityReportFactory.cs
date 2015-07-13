@@ -45,12 +45,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             Expression<Func<InterviewCommentedStatus, Guid>> selectUser,
             Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
         {
-            var to = reportStartDate.Date;
-            var from = AddPeriod(to, period, -columnCount);
+            var from = reportStartDate.Date;
+            var to = AddPeriod(from, period, columnCount);
 
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
-                    .Select(i => new DateTimeRange(AddPeriod(to, period, -(i + 1)).Date, AddPeriod(to, period, -i).Date))
+                    .Select(i => new DateTimeRange(AddPeriod(from, period, i).Date, AddPeriod(from, period, i + 1).Date))
                     .ToArray();
 
             var users =
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 {
                     var count =
                         interviewsForUser.Count(
-                            ics => ics.Timestamp.Date > dateTimeRange.From && ics.Timestamp.Date <= dateTimeRange.To);
+                            ics => ics.Timestamp.Date >= dateTimeRange.From && ics.Timestamp.Date < dateTimeRange.To);
                     quantityByPeriod.Add(count);
                 }
                 return new QuantityByResponsibleReportRow(u, quantityByPeriod.ToArray(),
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                      x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                      .SelectMany(x => x.InterviewCommentedStatuses)
                      .Where(ics =>
-                         ics.Timestamp.Date > from && ics.Timestamp.Date <= to.Date &&
+                         ics.Timestamp.Date >= from && ics.Timestamp.Date < to.Date &&
                          statuses.Contains(ics.Status)));
         }
 
