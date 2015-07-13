@@ -20,6 +20,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
 {
     public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
+        const int RosterUpperBoundDefaultValue = 40;
+
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -33,7 +35,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
         private bool isRosterSizeQuestion;
 
         private int? previousAnswer;
-        private int maxAnswer;
+        private int answerMaxValue;
 
         private string answerAsString;
         public string AnswerAsString
@@ -95,12 +97,16 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
                 this.previousAnswer = Monads.Maybe(() => answer);
             }
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
-            this.maxAnswer = questionModel.MaxValue ?? 40;
+            this.answerMaxValue = questionModel.MaxValue ?? RosterUpperBoundDefaultValue;
         }
 
         private async Task SendAnswerIntegerQuestionCommand()
         {
-            if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
+            if (string.IsNullOrWhiteSpace(AnswerAsString))
+            {
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                return;
+            }
 
             int answer;
             if (!int.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
@@ -118,9 +124,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
                     return;
                 }
 
-                if (answer > maxAnswer)
+                if (answer > this.answerMaxValue)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, AnswerAsString, this.maxAnswer);
+                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, AnswerAsString, this.answerMaxValue);
                     this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
                     AnswerAsString = NullableIntToAnswerString(previousAnswer);
                     return;

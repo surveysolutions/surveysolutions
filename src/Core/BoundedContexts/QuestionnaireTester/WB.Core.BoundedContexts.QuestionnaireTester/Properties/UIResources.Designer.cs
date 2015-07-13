@@ -577,6 +577,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty value cannot be saved.
+        /// </summary>
+        public static string Interview_Question_Integer_EmptyValueError {
+            get {
+                return ResourceManager.GetString("Interview_Question_Integer_EmptyValueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because question is used as size of roster and specified answer is negative..
         /// </summary>
         public static string Interview_Question_Integer_NegativeRosterSizeAnswer {
