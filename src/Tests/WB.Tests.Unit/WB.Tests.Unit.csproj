@@ -467,6 +467,8 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SideBarSectionViewModelTests\SideBarSectionViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SideBarSectionViewModelTests\when_roster_title_changed.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\SingleOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_initializing.cs" />
