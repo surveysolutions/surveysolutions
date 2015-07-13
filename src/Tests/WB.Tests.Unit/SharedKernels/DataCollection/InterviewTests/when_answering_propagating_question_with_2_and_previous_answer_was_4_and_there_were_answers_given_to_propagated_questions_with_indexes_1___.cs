@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -29,6 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>(_
 
                 => _.HasQuestion(propagatingQuestionId) == true
+                && _.GetMaxRosterRowCount() == Constants.MaxRosterRowCount
                 && _.GetQuestionType(propagatingQuestionId) == QuestionType.AutoPropagate
                 && _.IsQuestionInteger(propagatingQuestionId) == true
                 && _.ShouldQuestionSpecifyRosterSize(propagatingQuestionId) == true

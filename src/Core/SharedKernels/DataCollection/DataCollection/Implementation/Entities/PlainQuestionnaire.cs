@@ -216,6 +216,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
         }
 
+        public int GetMaxRosterRowCount()
+        {
+            return Constants.MaxRosterRowCount;
+        }
+
         public bool IsCustomValidationDefined(Guid questionId)
         {
             var validationExpression = this.GetCustomValidationExpression(questionId);
