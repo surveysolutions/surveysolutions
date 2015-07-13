@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Content.Res;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
@@ -13,7 +9,6 @@ using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.UI.QuestionnaireTester.CustomControls;
 
 namespace WB.UI.QuestionnaireTester.Activities
@@ -28,11 +23,11 @@ namespace WB.UI.QuestionnaireTester.Activities
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
 
-        private LinearLayoutManager layoutManager;
-
         private Toolbar toolbar;
 
         private MvxRecyclerView recyclerView;
+
+        private LinearLayoutManager layoutManager;
 
         protected override int ViewResourceId
         {
@@ -64,11 +59,14 @@ namespace WB.UI.QuestionnaireTester.Activities
             this.recyclerView.SetLayoutManager(this.layoutManager);
             this.recyclerView.HasFixedSize = true;
             this.recyclerView.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+        }
 
+        protected override void OnStart()
+        {
             var messenger = Mvx.Resolve<IMvxMessenger>();
-
             sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            base.OnStart();
         }
 
         private void OnSectionChange(SectionChangeMessage msg)
@@ -84,12 +82,12 @@ namespace WB.UI.QuestionnaireTester.Activities
             }
         }
 
-        protected override void OnDestroy()
+        protected override void OnStop()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
-            base.OnDestroy();
+            base.OnStop();
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
