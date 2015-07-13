@@ -1,6 +1,7 @@
 ﻿using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {

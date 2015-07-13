@@ -8,7 +8,8 @@ using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {

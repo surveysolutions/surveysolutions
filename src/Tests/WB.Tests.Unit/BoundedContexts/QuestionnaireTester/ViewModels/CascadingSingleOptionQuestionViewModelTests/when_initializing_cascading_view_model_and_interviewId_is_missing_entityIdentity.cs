@@ -1,7 +1,6 @@
 using System;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.CascadingSingleOptionQuestionViewModelTests

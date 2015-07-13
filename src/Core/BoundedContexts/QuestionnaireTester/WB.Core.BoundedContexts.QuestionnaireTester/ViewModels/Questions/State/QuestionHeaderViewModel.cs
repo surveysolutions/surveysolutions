@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<SubstitutionTitlesChanged>
@@ -21,8 +21,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private string title;
         public string Title
         {
-            get { return title; }
-            set { title = value; RaisePropertyChanged(); }
+            get { return this.title; }
+            set { this.title = value; this.RaisePropertyChanged(); }
         }
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             this.questionIdentity = questionIdentity;
             this.interviewId = interviewId;
 
-            CalculateSubstitutions(questionnaire, interview);
+            this.CalculateSubstitutions(questionnaire, interview);
 
             this.registry.Subscribe(this);
         }
@@ -89,9 +89,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             BaseQuestionModel questionModel = questionnaire.Questions[this.questionIdentity.Id];
 
             string questionTitle = questionModel.Title;
-            if (substitutionService.ContainsRosterTitle(questionTitle))
+            if (this.substitutionService.ContainsRosterTitle(questionTitle))
             {
-                questionTitle = rosterTitleSubstitutionService.Substitute(questionModel.Title,
+                questionTitle = this.rosterTitleSubstitutionService.Substitute(questionModel.Title,
                     this.questionIdentity, this.interviewId);
             }
             string[] variablesToReplace = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                 string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
-                    questionTitle, variable, answerString ?? substitutionService.DefaultSubstitutionText);
+                    questionTitle, variable, answerString ?? this.substitutionService.DefaultSubstitutionText);
             }
 
             this.Title = questionTitle;

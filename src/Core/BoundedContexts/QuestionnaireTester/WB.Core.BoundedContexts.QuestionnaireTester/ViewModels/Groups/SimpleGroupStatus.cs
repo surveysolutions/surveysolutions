@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 {
     public enum SimpleGroupStatus
     {

@@ -4,15 +4,14 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
-
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateViewModels
+namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State
 {
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
@@ -23,8 +22,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             public ErrorMessage(string caption, string message)
             {
-                Message = message;
-                Caption = caption;
+                this.Message = message;
+                this.Caption = caption;
             }
 
             public string Message { get; private set; }
@@ -59,7 +58,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
             this.questionIdentity = entityIdentity;
             this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
-            liteEventRegistry.Subscribe(this);
+            this.liteEventRegistry.Subscribe(this);
 
             this.UpdateValidState();
         }
@@ -69,15 +68,15 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         private bool isInvalid;
         public bool IsInvalid
         {
-            get { return isInvalid; }
-            private set { isInvalid = value; RaisePropertyChanged(); }
+            get { return this.isInvalid; }
+            private set { this.isInvalid = value; this.RaisePropertyChanged(); }
         }
 
         private ErrorMessage error;
         public ErrorMessage Error
         {
             get { return this.error; }
-            private set { this.error = value; RaisePropertyChanged(); }
+            private set { this.error = value; this.RaisePropertyChanged(); }
         }
 
         private void UpdateValidState()
@@ -89,8 +88,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
             if (isInvalidAnswer)
             {
-                var questionnaireModel = plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
-                var questionModel = questionnaireModel.Questions[questionIdentity.Id];
+                var questionnaireModel = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
+                var questionModel = questionnaireModel.Questions[this.questionIdentity.Id];
                 this.Error = new ErrorMessage(
                     UIResources.Validity_Answered_Invalid_ErrorCaption, 
                     questionModel.ValidationMessage);
@@ -106,17 +105,17 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
 
         public void Handle(AnswersDeclaredValid @event)
         {
-            if (@event.Questions.Contains(identityForEvents))
+            if (@event.Questions.Contains(this.identityForEvents))
             {
-                UpdateValidState();
+                this.UpdateValidState();
             }
         }
 
         public void Handle(AnswersDeclaredInvalid @event)
         {
-            if (@event.Questions.Contains(identityForEvents))
+            if (@event.Questions.Contains(this.identityForEvents))
             {
-                UpdateValidState();
+                this.UpdateValidState();
             }
         }
 
@@ -128,7 +127,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                     UIResources.Validity_InterviewException_ErrorCaption,
                     exception.Message);
 
-                UpdateValidState();
+                this.UpdateValidState();
             }
         }
 
@@ -136,7 +135,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
         {
             this.errorFromViewModel = null;
 
-            UpdateValidState();
+            this.UpdateValidState();
         }
 
         public virtual void MarkAnswerAsInvalidWithMessage(string errorMessageText)
@@ -145,7 +144,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionStateVi
                 UIResources.Validity_InterviewException_ErrorCaption,
                 errorMessageText);
 
-            UpdateValidState();
+            this.UpdateValidState();
         }
     }
 }

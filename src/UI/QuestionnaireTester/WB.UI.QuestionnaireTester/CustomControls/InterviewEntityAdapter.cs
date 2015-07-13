@@ -4,8 +4,10 @@ using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels;
-using GroupViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.QuestionsViewModels.GroupViewModel;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using GroupViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups.GroupViewModel;
 
 namespace WB.UI.QuestionnaireTester.CustomControls
 {
