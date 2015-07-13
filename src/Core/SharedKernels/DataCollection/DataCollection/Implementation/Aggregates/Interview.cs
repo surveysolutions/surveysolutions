@@ -2262,7 +2262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(questionId, selectedValues.Length, questionnaire);
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Length, questionnaire);
             }
 
             if (applyStrongChecks)
@@ -2292,7 +2292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(questionId, answer, questionnaire);
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answer, questionnaire);
             }
 
             if (applyStrongChecks)
@@ -2310,7 +2310,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(questionId, answers.Length, questionnaire);
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answers.Length, questionnaire);
             }
 
             if (applyStrongChecks)
@@ -3378,7 +3378,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private void ThrowIfRosterSizeAnswerIsNegativeOrGreaterThen40(Guid questionId, int answer,
+        private void ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(Guid questionId, int answer,
             IQuestionnaire questionnaire)
         {
             if (answer < 0)
@@ -3386,10 +3386,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {2}",
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
 
-            if (answer > 40)
+            var maxRosterRowCount = questionnaire.GetMaxRosterRowCount();
+            if (answer > maxRosterRowCount)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater then 40. InterviewId: {2}",
-                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater then {3}. InterviewId: {2}",
+                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId, maxRosterRowCount));
         }
 
         private void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)

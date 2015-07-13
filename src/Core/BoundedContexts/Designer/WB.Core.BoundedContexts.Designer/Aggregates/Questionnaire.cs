@@ -1937,8 +1937,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, responsibleId);
 
-            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
-
             this.ApplyEvent(new TextListQuestionChanged
             {
                 PublicKey = questionId,
@@ -2664,16 +2662,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!isCascade && !AreElementsUnique(options.Select(x => x.Title)))
             {
                 throw new QuestionnaireException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
-            }
-        }
-
-        private static void ThrowIfMaxAnswerCountNotInRange1to40(int? maxAnswerCount)
-        {
-            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 40).Contains(maxAnswerCount.Value))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.MaxAnswerCountNotInRange,
-                    "Maximum number of answers should be in range from 1 to 40");
             }
         }
 

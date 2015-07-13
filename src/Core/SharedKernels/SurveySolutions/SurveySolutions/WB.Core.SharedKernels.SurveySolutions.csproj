@@ -46,6 +46,7 @@
     <Compile Include="Documents\Answer.cs" />
     <Compile Include="Documents\AnswerType.cs" />
     <Compile Include="Documents\CompositeException.cs" />
+    <Compile Include="Documents\Constants.cs" />
     <Compile Include="Documents\FixedRosterTitle.cs" />
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />

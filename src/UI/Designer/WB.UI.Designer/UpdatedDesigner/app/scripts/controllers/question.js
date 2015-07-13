@@ -58,7 +58,6 @@
 
                 $scope.activeQuestion.wereOptionsTruncated = question.wereOptionsTruncated || false;
                 $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
-                $scope.activeQuestion.maxValue = question.maxValue;
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
                 $scope.activeQuestion.questionScope = question.isPreFilled ? 'Prefilled' : question.questionScope;
@@ -327,7 +326,6 @@
             };
 
             $scope.isIntegerChange = function () {
-                $scope.activeQuestion.maxValue = null;
                 $scope.activeQuestion.countOfDecimalPlaces = null;
             };
 
