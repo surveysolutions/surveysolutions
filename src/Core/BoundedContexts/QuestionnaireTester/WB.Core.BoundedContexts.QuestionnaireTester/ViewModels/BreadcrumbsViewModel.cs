@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
             this.navigationState = navigationState;
             this.interviewId = interviewId;
-            this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
+            this.navigationState.GroupChanged += navigationState_OnGroupChanged;
             this.eventRegistry.Subscribe(this);
         }
 

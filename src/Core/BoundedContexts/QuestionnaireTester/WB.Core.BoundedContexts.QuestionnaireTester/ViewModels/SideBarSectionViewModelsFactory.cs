@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Cirrious.CrossCore;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
@@ -11,6 +12,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     internal class SideBarSectionViewModelsFactory : ISideBarSectionViewModelsFactory
     {
+        readonly IServiceLocator serviceLocator;
+
+        public SideBarSectionViewModelsFactory(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+        }
+
         public SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo,
             GroupModel model,
             Identity enabledSubgroupIdentity,
@@ -18,7 +26,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             ISubstitutionService substitutionService,
             NavigationState navigationState)
         {
-            var sideBarItem = Mvx.Create<SideBarSectionViewModel>();
+            var sideBarItem = serviceLocator.GetInstance<SideBarSectionViewModel>();
             sideBarItem.Init(navigationState);
 
             sideBarItem.Parent = sectionToAddTo;

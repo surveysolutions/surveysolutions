@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
 
             this.navigationState = navigationState;
-            this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
+            this.navigationState.GroupChanged += this.NavigationStateGroupChanged;
             this.questionnaireId = questionnaireId;
             this.interviewId = interviewId;
 
@@ -74,13 +74,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[section.Id];
                 var groupIdentity = new Identity(section.Id, new decimal[] { });
                 var sectionViewModel = this.BuildSectionItem(null, groupModel, groupIdentity, interview);
+
                 sections.Add(sectionViewModel);
             }
 
             this.Sections = sections;
         }
 
-        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
         {
             HighlightCurrentSection(navigationParams);
         }
@@ -106,7 +107,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
 
             this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
+
             sideBarSectionToHighlight.IsSelected = true;
+            sideBarSectionToHighlight.Expanded = true;
         }
 
         public void Handle(RosterInstancesAdded @event)

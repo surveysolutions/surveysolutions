@@ -14,8 +14,12 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionAwaiter userInteractionAwaiter;
 
-        public event GroupChanged OnGroupChanged;
-        public event BeforeGroupChanged OnBeforeGroupChanged;
+        protected NavigationState()
+        {
+        }
+
+        public virtual event GroupChanged GroupChanged;
+        public virtual event BeforeGroupChanged BeforeGroupChanged;
 
         public string InterviewId { get; private set; }
         public string QuestionnaireId { get; private set; }
@@ -99,14 +103,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
         {
-            if (this.OnBeforeGroupChanged != null)
+            if (this.BeforeGroupChanged != null)
             {
-                this.OnBeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationParams.TargetGroup));
+                this.BeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationParams.TargetGroup));
             }
 
             this.CurrentGroup = groupIdentity;
 
-            if (this.OnGroupChanged != null)
+            if (this.GroupChanged != null)
             {
                 var groupChangedEventArgs = new GroupChangedEventArgs
                 {
@@ -114,7 +118,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     AnchoredElementIdentity = navigationParams.AnchoredElementIdentity
                 };
 
-                this.OnGroupChanged(groupChangedEventArgs);
+                this.GroupChanged(groupChangedEventArgs);
             }
 
             GC.Collect();
