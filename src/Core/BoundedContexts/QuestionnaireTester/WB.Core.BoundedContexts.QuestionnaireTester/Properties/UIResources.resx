@@ -121,7 +121,7 @@
     <value>About</value>
   </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Your account was locked. Please, contact to the Survey Solutions team</value>
+    <value>Your user account is locked. Please contact the the support team at support@mysurvey.solutions.</value>
   </data>
   <data name="ApplicationNameText" xml:space="preserve">
     <value>Application name:</value>
@@ -175,16 +175,16 @@
     <value>Downloading questionnaire -  {0}%</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>You don't have permission to access this questionnaire</value>
+    <value>Can't open the questionnaire "{0}". Your Designer user account is not authorized. Please check your login and password.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Requested questionnaire is no longer available</value>
+    <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Requested questionnaire has errors.  Please verify the questionnaire in designer of questionnaires and try again</value>
+    <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
   </data>
   <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Your version of application does not support of this questionnaire. Please, update application</value>
+    <value>Your version of application does not support of this questionnaire. Please, update application.</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
     <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
@@ -202,7 +202,7 @@
     <value>Checking questionnaire for errors on the server</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>At the moment, the server is unavailable. We apologize for any inconvenience</value>
+    <value>Server error. Please contact the support team at support@mysurvey.solutions.</value>
   </data>
   <data name="LastModifiedDateTitle" xml:space="preserve">
     <value>Modified on:</value>

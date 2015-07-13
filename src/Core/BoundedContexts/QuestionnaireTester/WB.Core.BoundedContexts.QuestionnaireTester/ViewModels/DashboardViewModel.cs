@@ -202,13 +202,13 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
-                        errorMessage = UIResources.ImportQuestionnaire_Error_Forbidden;
+                        errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden, selectedQuestionnaire.Title);
                         break;
                     case HttpStatusCode.PreconditionFailed:
-                        errorMessage = UIResources.ImportQuestionnaire_Error_PreconditionFailed;
+                        errorMessage = String.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed, selectedQuestionnaire.Title);
                         break;
                     case HttpStatusCode.NotFound:
-                        errorMessage = UIResources.ImportQuestionnaire_Error_NotFound;
+                        errorMessage = String.Format(UIResources.ImportQuestionnaire_Error_NotFound, selectedQuestionnaire.Title);
                         break;
                     default:
                         errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);

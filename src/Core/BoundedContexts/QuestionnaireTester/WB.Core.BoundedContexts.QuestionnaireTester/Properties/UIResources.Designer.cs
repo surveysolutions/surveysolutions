@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account was locked. Please, contact to the Survey Solutions team.
+        ///   Looks up a localized string similar to Your user account is locked. Please contact the the support team at support@mysurvey.solutions..
         /// </summary>
         public static string AccountIsLockedOnServer {
             get {
@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permission to access this questionnaire.
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password..
         /// </summary>
         public static string ImportQuestionnaire_Error_Forbidden {
             get {
@@ -307,7 +307,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire is no longer available.
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. The questionnaire cannot be found. Please refresh the list of questionnaires..
         /// </summary>
         public static string ImportQuestionnaire_Error_NotFound {
             get {
@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested questionnaire has errors.  Please verify the questionnaire in designer of questionnaires and try again.
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. The questionnaire has errors. Please fix this in Designer..
         /// </summary>
         public static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application.
+        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application..
         /// </summary>
         public static string ImportQuestionnaire_Error_UpgradeRequired {
             get {
@@ -388,7 +388,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to At the moment, the server is unavailable. We apologize for any inconvenience.
+        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions..
         /// </summary>
         public static string InternalServerError {
             get {
