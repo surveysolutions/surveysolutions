@@ -47,13 +47,12 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             e.Handled = true;
 
             TrySendAnswerTextQuestionCommand();
-
-            HideKeyboard(sender);
         }
 
         private void TrySendAnswerTextQuestionCommand()
         {
             var isTextChanged = oldEditTextValue != Target.Text;
+            HideKeyboard(Target);
 
             if (!isTextChanged)
                 return;
