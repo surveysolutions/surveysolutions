@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.CurrentGroup.Init(this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.OnGroupChanged += NavigationStateOnOnGroupChanged;
+            this.navigationState.GroupChanged += NavigationStateOnOnGroupChanged;
             await this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
 
             this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;

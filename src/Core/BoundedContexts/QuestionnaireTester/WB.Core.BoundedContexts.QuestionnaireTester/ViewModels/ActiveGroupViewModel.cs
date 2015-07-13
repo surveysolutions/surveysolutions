@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
 
             this.navigationState = navigationState;
-            this.navigationState.OnGroupChanged += navigationState_OnGroupChanged;
+            this.navigationState.GroupChanged += navigationState_OnGroupChanged;
         }
 
         void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)

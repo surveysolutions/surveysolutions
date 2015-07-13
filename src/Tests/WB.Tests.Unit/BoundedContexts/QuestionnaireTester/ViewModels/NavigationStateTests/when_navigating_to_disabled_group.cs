@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Navigatio
             navigationState = Create.NavigationState(
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
-            navigationState.OnGroupChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
+            navigationState.GroupChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
         };
 
         Because of = () =>
