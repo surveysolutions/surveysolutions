@@ -54,6 +54,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             if (navigationState == null) throw new ArgumentNullException("navigationState");
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (questionnaireId == null) throw new ArgumentNullException("questionnaireId"); 
 
             this.navigationState = navigationState;
             this.navigationState.GroupChanged += this.NavigationStateGroupChanged;
