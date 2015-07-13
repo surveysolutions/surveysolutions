@@ -2087,7 +2087,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Shared Person command handlers
 
-        public void AddSharedPerson(Guid personId, string email, Guid responsibleId)
+        public void AddSharedPerson(Guid personId, string email, ShareType shareType, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -2109,6 +2109,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PersonId = personId,
                 Email = email,
+                ShareType = shareType,
                 ResponsibleId = responsibleId
             });
         }

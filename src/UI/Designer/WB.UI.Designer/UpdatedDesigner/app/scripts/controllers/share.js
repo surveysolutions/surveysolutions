@@ -10,8 +10,11 @@
             $scope.viewModel = {
                 shareWith: '',
                 shareForm: {},
+                shareType: 'Edit',
                 doesUserExist: true
             };
+
+            $scope.shareTypeOptions = [{ name: "Edit" }, { name: "View" }];
 
             $scope.cancel = function () {
                 //$scope.questionnaire.title = $scope.initialTitle;
@@ -24,10 +27,10 @@
                     $scope.viewModel.doesUserExist = data.doesUserExist;
 
                     if (data.doesUserExist) {
-                        var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId);
+                        var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType);
                         shareRequest.success(function() {
                             if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
-                                $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith });
+                                $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, sharedType: $scope.viewModel.shareType });
                             }
 
                             $scope.viewModel.shareWith = '';
@@ -60,6 +63,9 @@
                     $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
                 });
             };
+            $scope.changeShareType = function (shareType) {
+                $scope.viewModel.shareType = shareType.name;
+            }
         }
     ]);
 })();

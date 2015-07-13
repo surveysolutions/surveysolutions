@@ -9,17 +9,20 @@
             if (hotkeys.get(saveQuestion) === false) {
                 hotkeys.del(saveQuestion);
             }
-            hotkeys.bindTo($scope)
-              .add({
-                  combo: saveQuestion,
-                  description: 'Save changes',
-                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                  callback: function (event) {
-                      $scope.saveQuestion();
-                      $scope.questionForm.$setPristine();
-                      event.preventDefault();
-                  }
-              });
+
+            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: saveQuestion,
+                        description: 'Save changes',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event) {
+                            $scope.saveQuestion();
+                            $scope.questionForm.$setPristine();
+                            event.preventDefault();
+                        }
+                    });
+            }
 
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
