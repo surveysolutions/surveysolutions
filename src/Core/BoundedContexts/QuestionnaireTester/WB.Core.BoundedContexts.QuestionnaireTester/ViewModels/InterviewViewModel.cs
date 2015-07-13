@@ -16,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -64,6 +65,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public async Task Init(string interviewId)
         {
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
@@ -154,15 +156,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private IMvxCommand changeLanguageCommand;
-        public IMvxCommand ChangeLanguageCommand
-        {
-            get
-            {
-                return changeLanguageCommand ?? (changeLanguageCommand = new MvxCommand(this.ChangeLanguage));
-            }
-        }
-
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
@@ -175,14 +168,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        private void ChangeLanguage()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void NavigateToPreviousViewModel()
         {
-            this.navigationState.NavigateBack(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).Wait();
+            this.navigationState.NavigateBack(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).WaitAndUnwrapException();
         }
     }
 }
