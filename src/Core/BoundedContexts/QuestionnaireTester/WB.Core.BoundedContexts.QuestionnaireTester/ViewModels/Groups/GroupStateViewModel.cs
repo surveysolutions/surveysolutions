@@ -32,14 +32,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
         public int QuestionsCount { get; private set; }
         public int InvalidAnswersCount { get; private set; }
 
-        GroupStatus status;
+        private GroupStatus status;
         public GroupStatus Status
         {
             get { return this.status; }
             private set { this.RaiseAndSetIfChanged(ref this.status, value); }
         }
 
-        SimpleGroupStatus simpleStatus;
+        private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
             get { return this.simpleStatus; }
