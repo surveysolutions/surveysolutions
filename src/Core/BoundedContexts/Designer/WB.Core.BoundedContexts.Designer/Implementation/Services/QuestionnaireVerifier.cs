@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -611,13 +612,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.FixedRosterTitles.Length > 40;
+            return group.FixedRosterTitles.Length > SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount;
         }
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options(IQuestion question)
         {
             var multyOptionQuestion = question as IMultyOptionsQuestion;
-            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count>40)
+            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount)
                 return multyOptionQuestion.MaxAllowedAnswers;
             return null;
         }
@@ -639,7 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var rosterSizeQuestionMaxValue = getRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
-            return !Enumerable.Range(1, 40).Contains(rosterSizeQuestionMaxValue.Value);
+            return !Enumerable.Range(1, SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)

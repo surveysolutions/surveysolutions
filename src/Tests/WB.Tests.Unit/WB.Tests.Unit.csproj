@@ -1055,7 +1055,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_roster_group_by_question_and_roster_size_question_is_under_another_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_roster_group_by_question_which_has_a_subgroup.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_text_list_question_and_max_answer_count_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\parent_cascading_question_should_exist.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_form_roster_references_parent_from_parent_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_has_10001_options.cs" />

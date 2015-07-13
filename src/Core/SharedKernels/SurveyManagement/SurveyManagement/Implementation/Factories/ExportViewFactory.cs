@@ -451,7 +451,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope.Last();
             
             if (!maxValuesForRosterSizeQuestions.ContainsKey(rosterSizeQuestionId))
-                return 40;
+                return SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount;
             
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
