@@ -37,6 +37,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public void Init(string interviewId, string questionnaireId)
         {
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
+
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
         }
