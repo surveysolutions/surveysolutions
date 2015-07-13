@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Microsoft.CSharp.RuntimeBinder;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
+
 using GroupViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups.GroupViewModel;
 
 namespace WB.UI.QuestionnaireTester.CustomControls
@@ -49,7 +52,30 @@ namespace WB.UI.QuestionnaireTester.CustomControls
 
             var typeOfViewModel = source.GetType();
 
+            if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
+            {
+                var enablementModel = GetEnablementViewModel(source);
+                if (enablementModel != null && !enablementModel.Enabled)
+                {
+                    return Resource.Layout.interview_disabled_question;
+                }
+            }
+
             return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
+        }
+
+        private EnablementViewModel GetEnablementViewModel(dynamic item)
+        {
+            try
+            {
+                var enablementModel = item.QuestionState.Enablement;
+                return enablementModel as EnablementViewModel;
+            }
+            catch (RuntimeBinderException)
+            {
+                
+            }
+            return null;
         }
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)

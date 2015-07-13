@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
@@ -11,6 +13,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.Services;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -22,7 +25,9 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
     public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesTitleChanged>
+        ILiteEventHandler<RosterInstancesTitleChanged>,
+        ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<QuestionsDisabled>
     {
         private string name;
         public string Name
@@ -73,12 +78,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.navigationState.GroupChanged += navigationState_OnGroupChanged;
         }
 
+        List<Guid> listOfChildrenIdOfCurrentGroup = new List<Guid>();
+
         void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
             GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
-
+            
             if (group is RosterModel)
             {
                 string title = group.Title;
@@ -105,6 +112,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
 
             this.Items = listOfViewModels;
+            listOfChildrenIdOfCurrentGroup = group.Children.Select(x => x.Id).ToList();
             messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex));
         }
 
@@ -126,6 +134,34 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
                     var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
                     this.Name = this.substitutionService.GenerateRosterName(@group.Title, interview.GetRosterTitle(this.navigationState.CurrentGroup));
+                }
+            }
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            this.NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(@event.Questions);
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            this.NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(@event.Questions);
+        }
+
+        private void NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] questionIdentities)
+        {
+            if (this.listOfChildrenIdOfCurrentGroup == null || this.listOfChildrenIdOfCurrentGroup.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var questionIdentity in questionIdentities)
+            {
+                if (this.listOfChildrenIdOfCurrentGroup.Contains(questionIdentity.Id)
+                    && questionIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
+                {
+                    var questionIndex = this.listOfChildrenIdOfCurrentGroup.IndexOf(questionIdentity.Id);
+                    this.messenger.Publish(new UpdateQuestionStateMessage(questionIdentity, questionIndex));
                 }
             }
         }

@@ -22,12 +22,15 @@ namespace WB.UI.QuestionnaireTester.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
+        private MvxSubscriptionToken updateQuestionStateSubscriptionToken;
 
         private Toolbar toolbar;
 
         private MvxRecyclerView recyclerView;
 
         private LinearLayoutManager layoutManager;
+
+        private InterviewEntityAdapter adapter;
 
         protected override int ViewResourceId
         {
@@ -58,7 +61,10 @@ namespace WB.UI.QuestionnaireTester.Activities
             this.layoutManager = new LinearLayoutManager(this);
             this.recyclerView.SetLayoutManager(this.layoutManager);
             this.recyclerView.HasFixedSize = true;
-            this.recyclerView.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+
+            this.adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+
+            this.recyclerView.Adapter = this.adapter;
         }
 
         protected override void OnStart()
@@ -66,12 +72,18 @@ namespace WB.UI.QuestionnaireTester.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            updateQuestionStateSubscriptionToken = messenger.Subscribe<UpdateQuestionStateMessage>(this.OnUpdateQuestionState);
             base.OnStart();
         }
 
         private void OnSectionChange(SectionChangeMessage msg)
         {
             drawerLayout.CloseDrawers();
+        }
+
+        private void OnUpdateQuestionState(UpdateQuestionStateMessage msg)
+        {
+            adapter.NotifyItemChanged(msg.ElementPosition);
         }
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
@@ -87,6 +99,7 @@ namespace WB.UI.QuestionnaireTester.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
+            messenger.Unsubscribe<UpdateQuestionStateMessage>(updateQuestionStateSubscriptionToken);
             base.OnStop();
         }
 
