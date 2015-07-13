@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
