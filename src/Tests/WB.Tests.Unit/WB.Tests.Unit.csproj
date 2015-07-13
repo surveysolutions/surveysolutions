@@ -143,9 +143,9 @@
       <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute">
+      <HintPath>..\..\..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -467,6 +467,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SectionsViewModelTests\when_section_is_expanded_while_other_section_is_expanded.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SideBarSectionViewModelTests\SideBarSectionViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SideBarSectionViewModelTests\when_roster_title_changed.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTester\ViewModels\SingleOptionLinkedQuestionViewModelTests\SingleOptionLinkedQuestionViewModelTestsContext.cs" />
