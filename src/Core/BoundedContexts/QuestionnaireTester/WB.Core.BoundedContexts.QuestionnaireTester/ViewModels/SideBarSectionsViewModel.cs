@@ -106,7 +106,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                 return;
             }
 
-            this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
+            this.Sections.Where(x => x != sideBarSectionToHighlight && x.IsSelected).ForEach(x => x.IsSelected = false);
+            this.Sections.Where(x => x != sideBarSectionToHighlight && x.Expanded).ForEach(x => x.Expanded = false);
 
             sideBarSectionToHighlight.IsSelected = true;
             sideBarSectionToHighlight.Expanded = true;
