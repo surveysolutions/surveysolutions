@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Text;
 using Android.Util;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
@@ -158,6 +159,9 @@ namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
                 {
                     this.EditableText.Replace(0, this.Text.Length, this.maskedText.MakeMaskedText());
                     this.SetSelection(this.maskedText.FindFirstValidMaskPosition());
+
+                    InputMethodManager imm = (InputMethodManager)this.Context.GetSystemService(Context.InputMethodService);
+                    imm.ShowSoftInput(this, ShowFlags.Implicit);
                 }
                 else
                 {
