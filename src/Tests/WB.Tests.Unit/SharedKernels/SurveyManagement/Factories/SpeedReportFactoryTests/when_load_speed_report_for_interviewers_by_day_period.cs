@@ -31,10 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                             timestamp: input.From.Date.AddHours(1), 
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddDays(1)),
+                            timestamp: input.From.Date.AddDays(1),
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(10)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             timestamp: input.From.Date.AddDays(-1),
-                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(10))
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(333))
                     }), "2");
 
             speedReportFactory = CreateSpeedReportFactory(interviewStatuses: interviewStatuses);
