@@ -80,31 +80,7 @@ namespace WB.UI.QuestionnaireTester.Activities
         {
             if (this.layoutManager != null)
             {
-                // recyclerView's adapter contains new view models, but layoutManager contains views from previous screen.
                 this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
-                if (msg.OffsetInsideOfAnchoredItemInPercentage != 0)
-                {
-                    // we scrolled to AnchorElementIndex, so it might be the first in list of elements on screen
-                    View anchoredItemView = this.layoutManager.GetChildAt(0);
-
-                    //// tried this one too
-                    //var visibleItemPosition = this.layoutManager.FindFirstCompletelyVisibleItemPosition();
-                    //View anchoredItemView = this.layoutManager.GetChildAt(visibleItemPosition);
-
-                    // If you'll try this questionnaire
-                    // https://design-devalt.mysurvey.solutions/UpdatedDesigner/app/#/0d92c64c5cbb4cd4b8c9dd8d6fe73614
-                    // you'll always get null here while going back and forth with 'Section 1' and 'Numeric roster' items if you'll try 
-                    // to get item by its position in adapter layoutManager.GetChildAt(msg.AnchorElementIndex)
-                    // try Section 2 for testing, because it contains elements with different heights and its easier to test.
-                    if (anchoredItemView != null)
-                    {
-                        // OffsetInsideOfAnchoredItemInPercentage is from 0 to 100
-                        int offset = anchoredItemView.Height * msg.OffsetInsideOfAnchoredItemInPercentage / 100;
-                        // negative offset scrolls down.
-                        // here we trying to scroll elements on current screen based on measurements from previous screen
-                        this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, -offset);
-                    }
-                }
             }
         }
 
