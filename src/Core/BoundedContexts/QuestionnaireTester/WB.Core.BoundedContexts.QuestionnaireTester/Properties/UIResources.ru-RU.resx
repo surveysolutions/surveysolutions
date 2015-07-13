@@ -431,4 +431,7 @@
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку он больше значения максимального количества элементов в списке: '{1}'.</value>
   </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>Нельзя сохранить пустое значение</value>
+  </data>
 </root>

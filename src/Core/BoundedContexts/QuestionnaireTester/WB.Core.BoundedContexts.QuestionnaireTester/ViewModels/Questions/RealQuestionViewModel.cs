@@ -97,7 +97,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
 
         private async void SendAnswerRealQuestionCommand()
         {
-            if (string.IsNullOrWhiteSpace(AnswerAsString)) return;
+            if (string.IsNullOrWhiteSpace(AnswerAsString))
+            {
+                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                return;
+            }
 
             decimal answer;
             if (!Decimal.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
