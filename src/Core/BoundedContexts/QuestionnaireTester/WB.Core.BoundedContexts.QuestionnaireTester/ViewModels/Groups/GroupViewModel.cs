@@ -25,10 +25,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
         public EnablementViewModel Enablement { get; private set; }
         public string Title { get; private set; }
 
-        public GroupState GroupState
+        private readonly GroupStateViewModel groupState;
+        public GroupStateViewModel GroupState
         {
             get { return this.groupState; }
-            private set { this.groupState = value; this.RaisePropertyChanged();}
         }
 
         public bool IsStarted
@@ -43,7 +43,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 
         private IMvxCommand navigateToGroupCommand;
         private string interviewId;
-        private GroupState groupState;
 
         public IMvxCommand NavigateToGroupCommand
         {
@@ -54,12 +53,14 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
             IStatefulInterviewRepository interviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             EnablementViewModel enablement,
-            AnswerNotifier answerNotifier)
+            AnswerNotifier answerNotifier,
+            GroupStateViewModel groupState)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.answerNotifier = answerNotifier;
+            this.groupState = groupState;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -81,9 +82,10 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
             this.groupIdentity = entityIdentity;
 
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
+            this.GroupState.Init(interviewId, entityIdentity);
+
             this.Title = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id].Title;
 
-            this.UpdateStats();
 
             if (groupWithAnswersToMonitor != null)
             {
@@ -95,17 +97,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 
         private void QuestionAnswered(object sender, EventArgs e)
         {
-            this.UpdateStats();
-        }
-
-        private void UpdateStats()
-        {
-            var interview = this.interviewRepository.Get(this.interviewId);
-
-            var state = new GroupState(this.groupIdentity);
-            state.UpdateSelfFromModel(interview);
-
-            this.GroupState = state;
+            this.GroupState.UpdateFromModel();
+            this.RaisePropertyChanged(() => this.GroupState);
         }
 
         private async Task NavigateToGroup()

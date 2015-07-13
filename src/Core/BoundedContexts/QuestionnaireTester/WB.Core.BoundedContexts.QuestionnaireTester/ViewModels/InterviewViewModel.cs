@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly GroupStateViewModel groupState;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -44,7 +45,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
-            IViewModelNavigationService viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            GroupStateViewModel groupState)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -53,6 +55,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.groupState = groupState;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.CurrentGroup = groupViewModel;
@@ -100,12 +103,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         private void UpdateInterviewStatus(Identity groupIdentity)
         {
-            var interview = this.interviewRepository.Get(navigationState.InterviewId);
+            this.groupState.Init(this.navigationState.InterviewId, groupIdentity);
 
-            var state = new GroupState(groupIdentity);
-            state.UpdateSelfFromModel(interview);
-
-            this.Status = state.Status;
+            this.Status = this.groupState.Status;
         }
 
         private string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)

@@ -1,34 +1,61 @@
+using System;
 using System.Linq;
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
 {
-    public class GroupState
+    public class GroupStateViewModel : MvxNotifyPropertyChanged
     {
-        private readonly Identity groupIdentity;
+        private readonly IStatefulInterviewRepository interviewRepository;
 
-        public GroupState(Identity groupIdentity)
+        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository)
         {
-            this.groupIdentity = groupIdentity;
+            this.interviewRepository = interviewRepository;
+        }
+
+        private string interviewId;
+        private Identity group;
+
+        public void Init(string interviewId, Identity groupIdentity)
+        {
+            this.interviewId = interviewId;
+            this.group = groupIdentity;
+
+            this.UpdateFromModel();
         }
 
         public int AnsweredQuestionsCount { get; private set; }
         public int SubgroupsCount { get; private set; }
         public int QuestionsCount { get; private set; }
         public int InvalidAnswersCount { get; private set; }
-        public GroupStatus Status { get; private set; }
-        public SimpleGroupStatus SimpleStatus { get; private set; }
 
-        public void UpdateSelfFromModel(IStatefulInterview interview)
+        GroupStatus status;
+        public GroupStatus Status
         {
-            this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.groupIdentity);
-            this.SubgroupsCount = interview.GetGroupsInGroupCount(this.groupIdentity);
-            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.groupIdentity);
-            this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.groupIdentity);
+            get { return this.status; }
+            private set { this.RaiseAndSetIfChanged(ref this.status, value); }
+        }
 
-            this.SimpleStatus = CalculateSimpleStatus(this.groupIdentity, interview);
+        SimpleGroupStatus simpleStatus;
+        public SimpleGroupStatus SimpleStatus
+        {
+            get { return this.simpleStatus; }
+            private set { this.RaiseAndSetIfChanged(ref this.simpleStatus, value); }
+        }
+
+        public void UpdateFromModel()
+        {
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+
+            this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
+            this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
+            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
+            this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.group);
+
+            this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
 
             this.Status = this.CalculateDetailedStatus();
         }
@@ -42,7 +69,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
                 return SimpleGroupStatus.Other;
 
             bool isSomeSubgroupNotCompleted = interview
-                .GetEnabledSubgroups(@group)
+                .GetEnabledSubgroups(group)
                 .Select(subgroup => CalculateSimpleStatus(subgroup, interview))
                 .Any(status => status != SimpleGroupStatus.Completed);
 
