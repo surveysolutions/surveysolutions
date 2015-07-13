@@ -1333,12 +1333,15 @@ namespace WB.Tests.Unit
                 });
         }
 
-        public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, string rosterTitle = null)
+        public static RosterInstancesTitleChanged RosterInstancesTitleChanged(Guid? rosterId = null, 
+            string rosterTitle = null,
+            decimal[] outerRosterVector = null,
+            decimal? instanceId= null)
         {
             return new RosterInstancesTitleChanged(
                 new[]
                 {
-                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), new decimal[0], 0.0m), rosterTitle ?? "title")
+                    new ChangedRosterInstanceTitleDto(new RosterInstance(rosterId ?? Guid.NewGuid(), outerRosterVector ?? new decimal[0], instanceId ?? 0.0m), rosterTitle ?? "title")
                 });
         }
 
@@ -1720,10 +1723,11 @@ namespace WB.Tests.Unit
 
         public static NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {
-            return new NavigationState(
+            var result = new NavigationState(
                 Mock.Of<ICommandService>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IUserInteractionAwaiter>());
+            return result;
         }
 
         public static TextAnswer TextAnswer(string answer)
