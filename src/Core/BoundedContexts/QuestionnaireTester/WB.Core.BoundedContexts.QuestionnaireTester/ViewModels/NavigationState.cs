@@ -120,8 +120,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
                 this.GroupChanged(groupChangedEventArgs);
             }
-
-            GC.Collect();
         }
     }
 
