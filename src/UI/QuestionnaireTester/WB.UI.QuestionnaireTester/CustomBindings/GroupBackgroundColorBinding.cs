@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
 
 namespace WB.UI.QuestionnaireTester.CustomBindings
 {
-    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupState>
+    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupStateViewModel>
     {
         public ButtonGroupStyleBinding(Button androidControl) : base(androidControl)
         {
@@ -16,24 +16,23 @@ namespace WB.UI.QuestionnaireTester.CustomBindings
             get { return MvxBindingMode.OneWay; }
         } 
 
-        protected override void SetValueToView(Button control, GroupState value)
+        protected override void SetValueToView(Button control, GroupStateViewModel value)
         {
-            GroupStatus? groupStatus = value != null ? value.Status : null as GroupStatus?;
+            SimpleGroupStatus status = value != null ? value.SimpleStatus : SimpleGroupStatus.Other;
 
-            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByState(groupStatus);
+            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(status);
 
             control.SetBackgroundResource(groupBackgroundResourceId);
         }
 
-        private static int GetGroupBackgroundResourceIdByState(GroupStatus? groupStatus)
+        private static int GetGroupBackgroundResourceIdByStatus(SimpleGroupStatus? status)
         {
-            switch (groupStatus)
+            switch (status)
             {
-                case GroupStatus.Completed:
+                case SimpleGroupStatus.Completed:
                     return Resource.Drawable.group_completed;
 
-                case GroupStatus.StartedInvalid:
-                case GroupStatus.CompletedInvalid:
+                case SimpleGroupStatus.Invalid:
                     return Resource.Drawable.group_with_invalid_answers;
 
                 default:

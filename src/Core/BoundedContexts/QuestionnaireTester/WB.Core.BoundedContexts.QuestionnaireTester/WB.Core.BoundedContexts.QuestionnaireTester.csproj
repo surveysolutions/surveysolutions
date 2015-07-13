@@ -126,7 +126,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\BeforeGroupChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupChangedEventArgs.cs" />
-    <Compile Include="ViewModels\Groups\GroupState.cs" />
+    <Compile Include="ViewModels\Groups\GroupStateViewModel.cs" />
     <Compile Include="ViewModels\Groups\GroupStatus.cs" />
     <Compile Include="ViewModels\Groups\SimpleGroupStatus.cs" />
     <Compile Include="ViewModels\InterviewEntities\IInterviewEntityViewModel.cs" />
