@@ -63,6 +63,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             UpdateSelfFromModel();
         }
 
+        private string answer;
+        public string Answer
+        {
+            get { return answer; }
+            set
+            {
+                answer = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private string mask;
         public string Mask
         {
@@ -84,19 +95,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         public bool IsMaskedQuestionAnswered { get; set; }
 
-        private string answer;
-        public string Answer
-        {
-            get { return answer; }
-            set
-            {
-                if (answer != value)
-                {
-                    answer = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
 
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
@@ -145,10 +143,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             var interview = this.interviewRepository.Get(interviewId);
 
             var answerModel = interview.GetTextAnswer(questionIdentity);
-            if (answerModel.IsAnswered)
-            {
-                this.Answer = answerModel.Answer;
-            }
+            this.Answer = answerModel.Answer;
         }
 
         public void Handle(TextQuestionAnswered @event)

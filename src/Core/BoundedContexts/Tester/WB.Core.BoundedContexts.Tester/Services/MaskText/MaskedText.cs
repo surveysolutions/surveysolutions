@@ -29,11 +29,8 @@ namespace WB.Core.BoundedContexts.Tester.Services.MaskText
             get { return this.mask; }
             set
             {
-                if (this.mask != value)
-                {
-                    this.mask = value;
-                    this.Init();
-                }
+                this.mask = value;
+                this.Init();
             }
         }
 
