@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
                         PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
                     },
-                ReportNameDescription = String.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.TeamMember)
+                ReportNameDescription = String.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.TeamMember.ToLower())
             };
 
             return this.View("PeriodicStatusReport", model);
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
                         PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
                     },
-                ReportNameDescription = String.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team)
+                ReportNameDescription = String.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower())
             };
 
             return this.View("PeriodicStatusReport", model);

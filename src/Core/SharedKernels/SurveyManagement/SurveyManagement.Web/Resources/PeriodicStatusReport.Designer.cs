@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interview completions by the {0}. Rejected and then completed interviews are counted as separate completion events..
+        ///   Looks up a localized string similar to Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events..
         /// </summary>
         public static string NumberOfCompletedInterviewsDescription {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviews collected by the {0} that were approved by HQ..
+        ///   Looks up a localized string similar to Number of interviews collected by a {0} that were approved by HQ..
         /// </summary>
         public static string NumberOfInterviewsApprovedByHQDescription {
             get {
