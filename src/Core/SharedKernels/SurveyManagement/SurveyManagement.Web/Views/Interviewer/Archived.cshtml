@@ -8,6 +8,7 @@
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
     ViewBag.Title = string.Format("{0}: Interviewers", Model.UserName);
+    var allowUnarchive = User.IsInRole(UserRoles.Administrator.ToString()) && !Model.IsArchived;
 }
 
 @section scripts
@@ -37,7 +38,7 @@
 {
     <div class="btn-group">
         <div class="form-inline">
-            @if (User.IsInRole(UserRoles.Administrator.ToString()))
+            @if (allowUnarchive)
             {
                 <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Archived.Unarchive</button>
             }
@@ -66,7 +67,7 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (allowUnarchive)
                 {
                     <th>
                         <input type="checkbox" data-bind="click: $root.selectAll($element)" />
@@ -74,13 +75,16 @@
                 <th data-bind='sortby : "UserName"'>@Archived.Name</th>
                 <th data-bind='sortby : "CreationDate"'>@Archived.CreationDate</th>
                 <th data-bind='sortby : "Email"'>@Archived.Email</th>
-                <th></th>
+                @if (User.IsInRole("Administrator") && !Model.IsArchived)
+                {
+                    <th></th>
+                }
             </tr>
         </thead>
         <tbody>
             <!-- ko foreach:Items -->
             <tr>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (allowUnarchive)
                 {
                     <td>
                         <input type="checkbox" data-bind="checked: IsSelected" />
@@ -88,18 +92,17 @@
                 }
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
-                <td data-bind="text: Email"></td>
-                <td>
-                    
-                    @if (User.IsInRole("Administrator") && !Model.IsArchived)
-                    {
+                <td data-bind="text: Email"></td>@if (allowUnarchive)
+                {
+                    <td>
+
                         <div class="btn-group pull-right">
                             <a class="btn btn-success" data-bind="click : $parent.unarchiveUser">
                                 <i class="glyphicon glyphicon-plus"></i>
                             </a>
                         </div>
-                    }
-                </td>
+
+                    </td> }
             </tr>
             <!-- /ko -->
         </tbody>
@@ -109,6 +112,7 @@
         <h3>
             <b>
                 <!-- ko foreach:$data -->
+                <!-- ko if: $index() > 0 -->,<!-- /ko -->
                 '<span class='text-normal' data-bind='text: UserName'></span>'
                 <!-- /ko -->
             </b>

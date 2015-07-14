@@ -131,6 +131,7 @@
         <h3>
             <b>
                 <!-- ko foreach:$data -->
+                <!-- ko if: $index() > 0 -->,<!-- /ko -->
                 '<span class='text-normal' data-bind='text: UserName'></span>'
                 <!-- /ko -->
             </b>
