@@ -31,7 +31,7 @@
             local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
                            Text Localization('Interview_Questions_Gps_SaveAnswer');
-                           BackgroundStyle MediaButtonStyleStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
         </MvxLinearLayout>
 
       </MvxLinearLayout>
