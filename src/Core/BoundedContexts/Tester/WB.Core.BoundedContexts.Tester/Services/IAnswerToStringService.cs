@@ -1,7 +1,7 @@
-﻿using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
+﻿using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IAnswerToStringService
     {

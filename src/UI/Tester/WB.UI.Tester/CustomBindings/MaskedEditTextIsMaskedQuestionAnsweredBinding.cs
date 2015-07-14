@@ -2,9 +2,9 @@
 using Android.Locations;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl;
+using WB.UI.Tester.CustomControls.MaskedEditTextControl;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class MaskedEditTextIsMaskedQuestionAnsweredBinding : BaseBinding<MaskedEditText, bool>
     {

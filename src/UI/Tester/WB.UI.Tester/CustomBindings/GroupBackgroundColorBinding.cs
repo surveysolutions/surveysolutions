@@ -1,9 +1,9 @@
 ﻿using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ButtonGroupStyleBinding : BaseBinding<Button, GroupStateViewModel>
     {

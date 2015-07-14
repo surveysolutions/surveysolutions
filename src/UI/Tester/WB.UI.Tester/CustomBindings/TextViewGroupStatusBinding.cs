@@ -6,12 +6,12 @@ using Android.Widget;
 using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class TextViewGroupStatusBinding : BaseBinding<TextView, GroupNavigationViewModel.GroupStatistics>
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     internal class SideBarSectionViewModelFactory : ISideBarSectionViewModelsFactory
     {

@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F18F9422-2624-44C6-934D-B5F48C9587C1}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <RootNamespace>WB.UI.QuestionnaireTester</RootNamespace>
+    <RootNamespace>WB.UI.Tester</RootNamespace>
     <AssemblyName>WB.UI.Tester</AssemblyName>
     <OutputType>Library</OutputType>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>

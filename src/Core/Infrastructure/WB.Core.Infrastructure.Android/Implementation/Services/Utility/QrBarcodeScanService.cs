@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Android.Content.PM;
 using Cirrious.CrossCore.Droid.Platform;
 using MWBarcodeScanner;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Utility
 {

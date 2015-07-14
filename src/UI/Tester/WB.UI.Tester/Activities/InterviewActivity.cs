@@ -8,10 +8,10 @@ using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.UI.QuestionnaireTester.CustomControls;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Tester.CustomControls;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,

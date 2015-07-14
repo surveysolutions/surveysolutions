@@ -8,7 +8,7 @@
 
 using ILocationListener = Android.Gms.Location.ILocationListener;
 
-namespace WB.UI.QuestionnaireTester.CustomServices.Location
+namespace WB.UI.Tester.CustomServices.Location
 {
     public class MvxLocationListener
         : Java.Lang.Object

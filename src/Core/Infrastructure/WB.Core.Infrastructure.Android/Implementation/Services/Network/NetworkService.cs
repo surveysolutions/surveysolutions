@@ -1,6 +1,6 @@
 ﻿using System;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Network
 {

@@ -1,6 +1,6 @@
 ﻿using Cirrious.MvvmCross.Plugins.Messenger;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class UpdateQuestionStateMessage : MvxMessage
     {

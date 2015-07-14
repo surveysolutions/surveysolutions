@@ -2,7 +2,7 @@ using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.OS;
 
-namespace WB.UI.QuestionnaireTester.CustomServices.Location
+namespace WB.UI.Tester.CustomServices.Location
 {
     public class PlayConnectionCallbacksListener
             : Java.Lang.Object

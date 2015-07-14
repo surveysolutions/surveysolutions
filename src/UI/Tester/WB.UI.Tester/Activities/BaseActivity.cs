@@ -1,6 +1,6 @@
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     public abstract class BaseActivity<TViewModel> : BaseMvxActivity where TViewModel : BaseViewModel
     {

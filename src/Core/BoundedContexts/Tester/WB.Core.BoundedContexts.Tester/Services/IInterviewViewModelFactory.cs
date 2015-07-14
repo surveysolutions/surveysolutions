@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IInterviewViewModelFactory
     {

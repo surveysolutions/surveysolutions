@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State
+namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
 {
     public class CommentsViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel

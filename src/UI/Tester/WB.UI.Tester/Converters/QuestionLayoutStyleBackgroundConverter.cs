@@ -3,7 +3,7 @@ using System.Globalization;
 using Android.Provider;
 using Cirrious.CrossCore.Converters;
 
-namespace WB.UI.QuestionnaireTester.Converters
+namespace WB.UI.Tester.Converters
 {
     public class QuestionLayoutStyleBackgroundConverter : MvxValueConverter<QuestionStateStyle, int>
     {

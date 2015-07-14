@@ -1,6 +1,6 @@
 //using Cirrious.CrossCore.Plugins;
 //
-//namespace WB.UI.QuestionnaireTester.Bootstrap
+//namespace WB.UI.Tester.Bootstrap
 //{
 //    public class LocationPluginBootstrap
 //        : MvxPluginBootstrapAction<Cirrious.MvvmCross.Plugins.Location.PluginLoader>

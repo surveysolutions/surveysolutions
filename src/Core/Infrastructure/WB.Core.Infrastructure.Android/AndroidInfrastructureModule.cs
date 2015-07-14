@@ -4,7 +4,7 @@ using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
 using Sqo;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure.Android.Implementation.Services.FileSystem;
 using WB.Core.Infrastructure.Android.Implementation.Services.Json;
 using WB.Core.Infrastructure.Android.Implementation.Services.Log;

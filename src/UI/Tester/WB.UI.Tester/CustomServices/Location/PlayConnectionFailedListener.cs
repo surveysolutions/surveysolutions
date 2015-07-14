@@ -1,7 +1,7 @@
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 
-namespace WB.UI.QuestionnaireTester.CustomServices.Location
+namespace WB.UI.Tester.CustomServices.Location
 {
     public class PlayConnectionFailedListener
         : Java.Lang.Object

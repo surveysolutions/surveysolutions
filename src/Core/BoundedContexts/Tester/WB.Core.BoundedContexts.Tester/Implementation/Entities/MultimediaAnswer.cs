@@ -2,7 +2,7 @@ using System;
 
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
+namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 {
     public class MultimediaAnswer : BaseInterviewAnswer
     {

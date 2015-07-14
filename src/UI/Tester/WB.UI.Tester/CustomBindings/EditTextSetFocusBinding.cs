@@ -4,7 +4,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class EditTextSetFocusBinding : BaseBinding<EditText, bool>
     {

@@ -8,7 +8,7 @@
     <ProjectGuid>{689346D7-30AC-420E-BC5B-588CC186A466}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContexts.QuestionnaireTester</RootNamespace>
+    <RootNamespace>WB.Core.BoundedContexts.Tester</RootNamespace>
     <AssemblyName>WB.Core.BoundedContexts.Tester</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

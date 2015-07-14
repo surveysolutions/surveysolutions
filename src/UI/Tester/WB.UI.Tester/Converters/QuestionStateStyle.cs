@@ -1,4 +1,4 @@
-namespace WB.UI.QuestionnaireTester.Converters
+namespace WB.UI.Tester.Converters
 {
     public enum QuestionStateStyle
     {

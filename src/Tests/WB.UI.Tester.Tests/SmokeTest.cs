@@ -8,7 +8,7 @@ using NUnit.Framework;
 using Xamarin.UITest;
 using Xamarin.UITest.Android;
 
-namespace WB.UI.QuestionnaireTester.Tests
+namespace WB.UI.Tester.Tests
 {
     [Ignore]
     [TestFixture]

@@ -1,7 +1,7 @@
 using System;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public abstract class BaseBinding<TControl, TValue> : MvxAndroidTargetBinding
         where TControl : class

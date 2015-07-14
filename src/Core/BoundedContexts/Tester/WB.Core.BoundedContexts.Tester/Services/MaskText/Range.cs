@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
+namespace WB.Core.BoundedContexts.Tester.Services.MaskText
 {
     public class Range
     {
