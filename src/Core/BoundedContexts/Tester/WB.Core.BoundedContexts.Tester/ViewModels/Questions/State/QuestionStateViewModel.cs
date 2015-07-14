@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
-            this.liteEventRegistry.Subscribe(this);
+            this.liteEventRegistry.Subscribe(this, interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
             this.IsAnswered = interview.WasAnswered(entityIdentity);

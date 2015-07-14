@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             firstOption.Value.ShouldEqual(1m);
         };
 
-        It should_subscribe_model_in_events_registry = () => eventRegistry.Verify(x => x.Subscribe(viewModel));
+        It should_subscribe_model_in_events_registry = () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
 
         static MultiOptionQuestionViewModel viewModel;
         static string interviewId;

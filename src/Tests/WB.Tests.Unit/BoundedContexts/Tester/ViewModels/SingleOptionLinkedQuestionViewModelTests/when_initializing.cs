@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
             questionStateMock.Verify(state => state.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_subsribe_self_to_event_registry = () =>
-            eventRegistryMock.Verify(registry => registry.Subscribe(viewModel), Times.Once);
+            eventRegistryMock.Verify(registry => registry.Subscribe(viewModel, Moq.It.IsAny<string>()), Times.Once);
 
         It should_fill_options_with_answers_from_linked_to_question = () =>
             viewModel.Options.Select(option => option.Title).ShouldContainOnly("answer1", "answer2");

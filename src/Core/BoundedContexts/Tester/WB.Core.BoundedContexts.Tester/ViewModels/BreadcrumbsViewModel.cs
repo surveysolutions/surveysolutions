@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.navigationState = navigationState;
             this.interviewId = interviewId;
             this.navigationState.GroupChanged += navigationState_OnGroupChanged;
-            this.eventRegistry.Subscribe(this);
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)

@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ILiteEventRegistry registry;
         private Guid? questionId;
         private Identity[] questions = { };
+        string interviewId;
 
         public event EventHandler QuestionAnswered;
 
@@ -33,18 +34,35 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public AnswerNotifier(ILiteEventRegistry registry)
         {
             this.registry = registry;
-            this.registry.Subscribe(this);
         }
 
-        public void Init(Guid questionId)
+        public virtual void Init(string interviewId, Guid questionId)
         {
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
+
+            if (this.interviewId != null)
+            {
+                this.registry.Unsubscribe(this, this.interviewId);
+            }
+
+            this.interviewId = interviewId;
             this.questionId = questionId;
+            this.registry.Subscribe(this, interviewId);
         }
 
-        public void Init(params Identity[] questions)
+        public virtual void Init(string interviewId, params Identity[] questions)
         {
+            if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questions == null) throw new ArgumentNullException("questions");
+
+            if (this.interviewId != null)
+            {
+                this.registry.Unsubscribe(this, this.interviewId);
+            }
+
+            this.interviewId = interviewId;
             this.questions = questions;
+            this.registry.Subscribe(this, interviewId);
         }
 
         private void RaiseEventIfNeeded(QuestionAnswered @event)

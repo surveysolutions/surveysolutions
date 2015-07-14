@@ -1,59 +1,64 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventRegistry : ILiteEventRegistry
     {
-        private readonly Dictionary<string, List<WeakReference<ILiteEventHandler>>> handlers = new Dictionary<string, List<WeakReference<ILiteEventHandler>>>();
+        private readonly ConcurrentDictionary<string, List<WeakReference<ILiteEventHandler>>> handlers = new ConcurrentDictionary<string, List<WeakReference<ILiteEventHandler>>>();
         
         private static readonly object LockObject = new object();
 
-        public void Subscribe(ILiteEventHandler handler)
+        public void Subscribe(ILiteEventHandler handler, string eventSourceId)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
             foreach (Type eventType in eventTypes)
             {
-                RegisterHandlerForEvent(handler, eventType);
+                RegisterHandlerForEvent(handler, eventType, eventSourceId);
             }
         }
 
-        public void Unsubscribe(ILiteEventHandler handler)
+        public void Unsubscribe(ILiteEventHandler handler, string eventSourceId)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
             foreach (Type eventType in eventTypes)
             {
-                UnregisterHandlerForEvent(eventType, handler);
+                UnregisterHandlerForEvent(eventType, handler, eventSourceId);
             }
         }
 
-        public IEnumerable<Action<object>> GetHandlers(object @event)
+        public IEnumerable<Action<object>> GetHandlers(UncommittedEvent @event)
         {
-            Type eventType = @event.GetType();
+            Type eventType = @event.Payload.GetType();
+            string eventKey = GetEventKey(eventType, @event.EventSourceId.FormatGuid());
 
             lock (LockObject)
             {
                 List<WeakReference<ILiteEventHandler>> handlersForEventType;
-                if (!handlers.TryGetValue(eventType.Name, out handlersForEventType))
+                if (!handlers.TryGetValue(eventKey, out handlersForEventType))
+                {
                     return Enumerable.Empty<Action<object>>();
+                }
 
-                var actualHandlers = GetExistingHandlers(@event, handlersForEventType);
+                var actualHandlers = GetExistingHandlers(eventKey, handlersForEventType);
 
                 return actualHandlers.Select(GetActionHandler);
             }
         }
 
-        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType)
+        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, string eventSourceId)
         {
             lock (LockObject)
             {
-                List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(eventType.Name, () => new List<WeakReference<ILiteEventHandler>>());
+                var handlerKey = GetEventKey(eventType, eventSourceId);
+                List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(handlerKey, new List<WeakReference<ILiteEventHandler>>());
 
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
                     throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
@@ -62,13 +67,19 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler = null)
+        static string GetEventKey(Type eventType, string eventSourceId)
+        {
+            return eventType.Name + "$" + eventSourceId;
+        }
+
+        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler, string eventSourceId)
         {
             lock (LockObject)
             {
-                if (this.handlers.ContainsKey(eventType.Name))
+                var eventName = GetEventKey(eventType, eventSourceId);
+                if (this.handlers.ContainsKey(eventName))
                 {
-                    this.handlers[eventType.Name].RemoveAll(registeredHandler => ShouldRemoveHandler(registeredHandler, handler));
+                    this.handlers[eventName].RemoveAll(registeredHandler => ShouldRemoveHandler(registeredHandler, handler));
                 }
             }
         }
@@ -81,7 +92,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return handlerNoLongerExists || unregisteringHandler == handlerFromWeakReference;
         }
 
-        private IEnumerable<ILiteEventHandler> GetExistingHandlers(object @event, List<WeakReference<ILiteEventHandler>> handlersForEventType)
+        private IEnumerable<ILiteEventHandler> GetExistingHandlers(string eventKey, List<WeakReference<ILiteEventHandler>> handlersForEventType)
         {
             var registeredHandlers = handlersForEventType.ToList();
 
@@ -95,7 +106,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 }
                 else
                 {
-                    this.handlers[@event.GetType().Name].Remove(weakReference);
+                    this.handlers[eventKey].Remove(weakReference);
                 }
             }
         }

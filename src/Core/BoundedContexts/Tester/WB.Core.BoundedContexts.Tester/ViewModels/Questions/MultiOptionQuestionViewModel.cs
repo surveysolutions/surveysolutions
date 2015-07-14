@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
-            this.eventRegistry.Subscribe(this);
+            this.eventRegistry.Subscribe(this, interviewId);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;

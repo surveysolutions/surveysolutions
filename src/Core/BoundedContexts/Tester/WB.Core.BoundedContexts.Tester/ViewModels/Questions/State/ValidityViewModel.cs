@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
             this.questionIdentity = entityIdentity;
             this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
-            this.liteEventRegistry.Subscribe(this);
+            this.liteEventRegistry.Subscribe(this, interviewId);
 
             this.UpdateValidState();
         }

@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 this.FilterText = null;
             }
 
-            this.eventRegistry.Subscribe(this);
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private string resetTextInEditor;

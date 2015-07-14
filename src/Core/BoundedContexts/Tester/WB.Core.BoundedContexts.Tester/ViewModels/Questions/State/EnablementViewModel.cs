@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
 
             this.UpdateSelfFromModel();
 
-            this.eventRegistry.Subscribe(this);
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private bool enabled;
