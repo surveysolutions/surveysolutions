@@ -40,7 +40,7 @@
         return data;
     };
     self.load = function () {
-        var todayMinus7Days = moment().add(-7, 'days').format(dateFormat);
+        var todayMinus7Days = moment().add(-6, 'days').format(dateFormat);
 
         self.Url.query['questionnaireId'] = self.QueryString['questionnaireId'] || "";
         self.Url.query['questionnaireVersion'] = self.QueryString['questionnaireVersion'] || "";
