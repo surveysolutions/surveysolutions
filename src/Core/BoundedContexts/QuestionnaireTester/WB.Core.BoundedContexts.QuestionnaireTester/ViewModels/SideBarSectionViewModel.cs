@@ -5,13 +5,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -221,13 +219,8 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
-            List<SideBarSectionViewModel> result = new List<SideBarSectionViewModel>();
-            foreach (Identity groupInstance in interview.GetEnabledSubgroups(this.SectionIdentity))
-            {
-                var section = this.modelsFactory.BuildSectionItem(this, groupInstance, this.NavigationState, this.NavigationState.InterviewId);
-
-                result.Add(section);
-            }
+            var result = interview.GetEnabledSubgroups(this.SectionIdentity)
+                                  .Select(groupInstance =>  this.modelsFactory.BuildSectionItem(this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
 
             return new ObservableCollection<SideBarSectionViewModel>(result);
         }
