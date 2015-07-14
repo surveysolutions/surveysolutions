@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSe
             questionnaire.GroupsWithFirstLevelChildrenAsReferences[rosterGroupId] = new GroupModel { Title = "group title" };
 
             viewModel = CreateViewModel(questionnaire: questionnaire);
-            viewModel.Init(Create.NavigationState());
 
             sectionIdentity = new Identity(rosterGroupId, new[]{0m});
+            viewModel.Init("", sectionIdentity, null,  Create.NavigationState());
 
             viewModel.SectionIdentity = sectionIdentity;
         };
