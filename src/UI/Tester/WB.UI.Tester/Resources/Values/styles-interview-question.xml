@@ -300,15 +300,9 @@
     <item name="android:paddingLeft">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
     <item name="android:paddingTop">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
     <item name="android:paddingBottom">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
     <item name="android:stateListAnimator">@null</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textStyle">bold</item>
-  </style>
-
-  <style name="Interview_Previous_Group_Navigation_Note">
-    <item name="android:layout_height">fill_parent</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Previous_Group_Navigation_Note_margin_left</item>
-    <item name="android:gravity">center_vertical</item>
   </style>
 </resources>
