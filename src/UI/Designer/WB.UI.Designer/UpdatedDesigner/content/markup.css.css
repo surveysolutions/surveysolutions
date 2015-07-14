@@ -8650,9 +8650,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog input[type="text"]::-webkit-input-placeholder {
   font-style: italic;
 }
-.share-question-dialog .form-group {
-  vertical-align: top;
-}
 .share-question-dialog .form-group .questionaire-title {
   width: 650px;
 }
