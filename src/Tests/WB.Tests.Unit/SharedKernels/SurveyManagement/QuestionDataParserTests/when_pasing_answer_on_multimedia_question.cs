@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse("some answer", question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
+                    questionDataParser.TryParse("some answer",questionVarName, question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         It should_result_be_UnsupportedLinkedQuestion = () =>
             parsingResult.ShouldEqual(ValueParsingResult.UnsupportedMultimediaQuestion);

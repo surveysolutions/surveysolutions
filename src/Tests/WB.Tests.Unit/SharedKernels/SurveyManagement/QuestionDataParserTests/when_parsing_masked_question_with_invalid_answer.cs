@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         Because of =
           () =>
               parseResult =
-                  questionDataParser.TryParse("aa",
+                  questionDataParser.TryParse("aa",questionVarName,
                       question, CreateQuestionnaireDocumentWithOneChapter(question), out parsedValue);
 
         It should_return__ParsedValueIsNotAllowed__error = () => parseResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);

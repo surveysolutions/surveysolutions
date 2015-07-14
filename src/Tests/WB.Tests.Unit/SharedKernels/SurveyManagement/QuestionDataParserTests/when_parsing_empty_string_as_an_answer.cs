@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
 
         private Because of =
-            () => parsingResult = questionDataParser.TryParse(string.Empty, null, new QuestionnaireDocument(), out parcedValue);
+            () => parsingResult = questionDataParser.TryParse(string.Empty,"va", null, new QuestionnaireDocument(), out parcedValue);
 
         private It should_result_be_ValueIsNullOrEmpty = () =>
             parsingResult.ShouldEqual(ValueParsingResult.ValueIsNullOrEmpty);
