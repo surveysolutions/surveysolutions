@@ -61,6 +61,15 @@ namespace WB.UI.Tester.CustomControls
                 }
             }
 
+            if (typeOfViewModel == typeof(GroupViewModel))
+            {
+                var enablementModel = GetEnablementViewModel(source);
+                if (enablementModel != null && !enablementModel.Enabled)
+                {
+                    return Resource.Layout.interview_disabled_group;
+                }
+            }
+
             return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
         }
 

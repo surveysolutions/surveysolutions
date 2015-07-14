@@ -1,15 +1,22 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
+
+using Java.Lang;
+
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Tester.CustomControls;
+
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
@@ -22,7 +29,7 @@ namespace WB.UI.Tester.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
-        private MvxSubscriptionToken updateQuestionStateSubscriptionToken;
+        private MvxSubscriptionToken updateEntityStateSubscriptionToken;
 
         private Toolbar toolbar;
 
@@ -63,7 +70,7 @@ namespace WB.UI.Tester.Activities
             this.recyclerView.HasFixedSize = true;
 
             this.adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
-
+            
             this.recyclerView.Adapter = this.adapter;
         }
 
@@ -72,7 +79,7 @@ namespace WB.UI.Tester.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
-            updateQuestionStateSubscriptionToken = messenger.Subscribe<UpdateQuestionStateMessage>(this.OnUpdateQuestionState);
+            this.updateEntityStateSubscriptionToken = messenger.Subscribe<UpdateInterviewEntityStateMessage>(this.OnUpdateQuestionState);
             base.OnStart();
         }
 
@@ -81,9 +88,13 @@ namespace WB.UI.Tester.Activities
             drawerLayout.CloseDrawers();
         }
 
-        private void OnUpdateQuestionState(UpdateQuestionStateMessage msg)
+        private void OnUpdateQuestionState(UpdateInterviewEntityStateMessage msg)
         {
-            adapter.NotifyItemChanged(msg.ElementPosition);
+            try
+            {
+                adapter.NotifyItemChanged(msg.ElementPosition);
+            }
+            catch (IllegalStateException exception){ }
         }
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
@@ -99,7 +110,7 @@ namespace WB.UI.Tester.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
-            messenger.Unsubscribe<UpdateQuestionStateMessage>(updateQuestionStateSubscriptionToken);
+            messenger.Unsubscribe<UpdateInterviewEntityStateMessage>(this.updateEntityStateSubscriptionToken);
             base.OnStop();
         }
 
