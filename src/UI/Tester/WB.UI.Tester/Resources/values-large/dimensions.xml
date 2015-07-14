@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+
+  <dimen name="textsize_12">12sp</dimen>
+  <dimen name="textsize_14">14sp</dimen>
+  <dimen name="textsize_16">16sp</dimen>
+  <dimen name="textsize_18">18sp</dimen>
+  <dimen name="textsize_20">20sp</dimen>
+  <dimen name="textsize_28">28sp</dimen>
+  <dimen name="textsize_30">30sp</dimen>
+
+  <dimen name="button_corners_radius">8dp</dimen>
+
+</resources>

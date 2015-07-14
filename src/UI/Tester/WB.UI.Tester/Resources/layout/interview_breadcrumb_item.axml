@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:local="http://schemas.android.com/apk/res-auto"
+          style="@style/Interview_BreadCrumbs"
+          local:MvxBind="HideKeyboardOnClick .; Text Text; Click NavigateCommand"/>
+

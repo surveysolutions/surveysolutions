@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:local="http://schemas.android.com/apk/res-auto"
+                 style="@style/VerticalFullWidthWrappingLayout">
+  <MvxLinearLayout style="@style/Interview_Roster"
+                   local:MvxBind="ItemsSource Items"
+                   local:MvxItemTemplate="@layout/interview_roster_item" />
+
+  <View style="@style/Interview_Question_Divider" android:layout_gravity="bottom"/>
+</MvxLinearLayout>

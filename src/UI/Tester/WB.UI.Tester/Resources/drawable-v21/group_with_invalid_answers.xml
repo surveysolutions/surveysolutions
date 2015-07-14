@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+  <item>
+    <selector>
+      <item android:state_enabled="true" android:drawable="@drawable/group_with_invalid_answers_unpressed" />
+      <item android:state_enabled="false" android:drawable="@drawable/group_disabled" />
+      <item android:drawable="@drawable/group_with_invalid_answers_unpressed" android:state_pressed="true" />
+      <item android:drawable="@drawable/group_with_invalid_answers_unpressed" android:state_selected="true" />
+      <item android:drawable="@drawable/group_with_invalid_answers_pressed" />
+    </selector>
+  </item>
+</ripple>

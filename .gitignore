@@ -55,4 +55,4 @@ src/UI/Designer/WB.UI.Designer/App_Data/ReadSide/Esent
 
 Thumbs.db
 /src/Core/Infrastructure/WB.Core.Infrastructure.Android/Resources/Resource.Designer.cs
-/src/UI/QuestionnaireTester/WB.UI.QuestionnaireTester/Resources/Resource.designer.cs
+/src/UI/Tester/WB.UI.Tester/Resources/Resource.designer.cs

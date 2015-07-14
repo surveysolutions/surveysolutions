@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="Interview_GroupWithDivider" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:background">@drawable/group_background</item>
+  </style>
+
+  <style name="Interview_Group"  parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Group_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Group_margin_bottom</item>
+  </style>
+
+  <style name="Interview_Roster" parent="VerticalFullWidthWrappingLayout">
+    
+  </style>
+
+  <style name="Interview_Group_Description">
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_background_padding</item>
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Interview_Group_Button" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:gravity">left|center_vertical</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+    <item name="android:stateListAnimator">@null</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+  </style>
+</resources>

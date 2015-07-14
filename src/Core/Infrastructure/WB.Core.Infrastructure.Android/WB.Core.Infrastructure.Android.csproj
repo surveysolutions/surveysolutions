@@ -181,9 +181,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
+    <ProjectReference Include="..\..\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
       <Project>{689346D7-30AC-420E-BC5B-588CC186A466}</Project>
-      <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
+      <Name>WB.Core.BoundedContexts.Tester</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
