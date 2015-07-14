@@ -262,6 +262,7 @@
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
+    <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
@@ -383,6 +384,9 @@
     <AndroidResource Include="Resources\drawable\question_input_button_unpressed_answered.xml" />
     <AndroidResource Include="Resources\drawable\question_input_button_pressed_answered.xml" />
     <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />
+    <AndroidResource Include="Resources\drawable\question_option_background_answered.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">

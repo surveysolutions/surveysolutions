@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 Title = model.Title,
                 Selected = isSelected,
             };
-
+            optionViewModel.QuestionState = this.QuestionState;
             optionViewModel.BeforeSelected += this.OptionSelected;
 
             return optionViewModel;
