@@ -1,12 +1,12 @@
 ﻿using System.Linq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     internal class RosterTitleSubstitutionService : IRosterTitleSubstitutionService
     {

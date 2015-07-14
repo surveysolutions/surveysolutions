@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
+namespace WB.Core.BoundedContexts.Tester.Properties {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.QuestionnaireTester.Properties.UIResources", typeof(UIResources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Tester.Properties.UIResources", typeof(UIResources).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

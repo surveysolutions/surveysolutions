@@ -2,11 +2,11 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;

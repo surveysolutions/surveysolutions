@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class PrefilledQuestionsViewModel : BaseViewModel
     {

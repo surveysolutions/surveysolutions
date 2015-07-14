@@ -3,9 +3,9 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
     public class LoginActivity : BaseActivity<LoginViewModel>

@@ -7,9 +7,9 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Views.InputMethods;
-using WB.UI.QuestionnaireTester.Activities;
+using WB.UI.Tester.Activities;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class EditTextFocusValueChangedBinding : BaseBinding<EditText, IMvxCommand>
     {

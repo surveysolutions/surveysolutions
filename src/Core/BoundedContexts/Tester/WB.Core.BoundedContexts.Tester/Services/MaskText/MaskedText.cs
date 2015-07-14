@@ -2,7 +2,7 @@
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
+namespace WB.Core.BoundedContexts.Tester.Services.MaskText
 {
     public class MaskedText
     {

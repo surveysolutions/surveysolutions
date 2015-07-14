@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 
-namespace WB.UI.QuestionnaireTester.CustomControls
+namespace WB.UI.Tester.CustomControls
 {
     public class DatePickerDialogFragment : DialogFragment
     {

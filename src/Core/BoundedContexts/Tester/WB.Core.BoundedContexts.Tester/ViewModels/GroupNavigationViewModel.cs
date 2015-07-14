@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class GroupNavigationViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {

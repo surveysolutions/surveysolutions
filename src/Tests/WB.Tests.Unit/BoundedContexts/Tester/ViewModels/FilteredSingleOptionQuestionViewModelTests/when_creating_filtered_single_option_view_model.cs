@@ -1,8 +1,8 @@
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using It = Machine.Specifications.It;
 

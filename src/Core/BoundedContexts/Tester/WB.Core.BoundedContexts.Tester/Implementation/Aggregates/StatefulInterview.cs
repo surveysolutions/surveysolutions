@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates
+namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 {
     public class StatefulInterview : Interview, IStatefulInterview
     {

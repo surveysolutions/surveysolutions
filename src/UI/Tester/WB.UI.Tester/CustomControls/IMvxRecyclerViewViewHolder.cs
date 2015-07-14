@@ -1,6 +1,6 @@
 using Cirrious.MvvmCross.Binding.BindingContext;
 
-namespace WB.UI.QuestionnaireTester.CustomControls
+namespace WB.UI.Tester.CustomControls
 {
     public interface IMvxRecyclerViewViewHolder : IMvxBindingContextOwner
     {

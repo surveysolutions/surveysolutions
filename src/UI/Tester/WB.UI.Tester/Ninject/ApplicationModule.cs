@@ -1,7 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 
-namespace WB.UI.QuestionnaireTester.Ninject
+namespace WB.UI.Tester.Ninject
 {
     public class ApplicationModule : NinjectModule
     {

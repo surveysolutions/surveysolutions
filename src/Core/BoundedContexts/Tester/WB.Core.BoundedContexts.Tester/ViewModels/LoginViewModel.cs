@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.Properties;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {

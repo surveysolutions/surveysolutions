@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
 {

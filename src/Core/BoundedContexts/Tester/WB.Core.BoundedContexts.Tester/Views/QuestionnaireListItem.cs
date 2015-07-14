@@ -1,7 +1,7 @@
 ﻿using System;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Views
+namespace WB.Core.BoundedContexts.Tester.Views
 {
     public class QuestionnaireListItem : IPlainStorageEntity
     {

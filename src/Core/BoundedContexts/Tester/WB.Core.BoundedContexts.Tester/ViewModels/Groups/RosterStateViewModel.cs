@@ -1,8 +1,8 @@
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
+using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups
+namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
 {
     public class RosterStateViewModel : MvxNotifyPropertyChanged
     {

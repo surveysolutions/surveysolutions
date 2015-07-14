@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Location;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     internal class GpsLocationService : IGpsLocationService
     {

@@ -1,5 +1,5 @@
 ﻿using Machine.Specifications;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
+using WB.Core.BoundedContexts.Tester.Services.MaskText;
 using It = Machine.Specifications.It;
 
 

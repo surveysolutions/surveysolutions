@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
-using WB.Core.BoundedContexts.QuestionnaireTester;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Android;
 
-namespace WB.UI.QuestionnaireTester.Ninject
+namespace WB.UI.Tester.Ninject
 {
     public class NinjectIoCAdapterSetup
     {

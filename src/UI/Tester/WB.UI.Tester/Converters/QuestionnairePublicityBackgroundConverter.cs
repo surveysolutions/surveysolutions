@@ -2,7 +2,7 @@
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
 
-namespace WB.UI.QuestionnaireTester.Converters
+namespace WB.UI.Tester.Converters
 {
     public class QuestionnairePublicityBackgroundConverter : MvxValueConverter<bool, int>
     {

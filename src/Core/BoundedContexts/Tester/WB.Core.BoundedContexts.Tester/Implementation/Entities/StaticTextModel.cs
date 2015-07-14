@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
+namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 {
     public class StaticTextModel
     {

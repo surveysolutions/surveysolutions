@@ -3,11 +3,11 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using Cirrious.CrossCore;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ButtonRosterTitleBinding : BaseBinding<Button, RosterStateViewModel>
     {

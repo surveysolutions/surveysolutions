@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText
+namespace WB.Core.BoundedContexts.Tester.Services.MaskText
 {
 
     /**

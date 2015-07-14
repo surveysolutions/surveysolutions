@@ -4,10 +4,10 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.Views;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     [Activity(Label = "", Theme = "@style/GrayAppTheme", WindowSoftInputMode = SoftInput.StateHidden, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>

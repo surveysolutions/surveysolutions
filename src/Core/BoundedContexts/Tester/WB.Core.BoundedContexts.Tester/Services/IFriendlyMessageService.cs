@@ -1,6 +1,6 @@
-﻿using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+﻿using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IFriendlyMessageService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels
+namespace WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels
 {
     public class MultiOptionQuestionModel : BaseQuestionModel
     {

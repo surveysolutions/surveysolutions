@@ -4,10 +4,10 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 

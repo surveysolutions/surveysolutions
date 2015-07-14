@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure.Android.Implementation.Services.Compression;
 using WB.Core.Infrastructure.Android.Implementation.Services.Json;
 

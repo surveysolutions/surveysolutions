@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IRosterTitleSubstitutionService
     {

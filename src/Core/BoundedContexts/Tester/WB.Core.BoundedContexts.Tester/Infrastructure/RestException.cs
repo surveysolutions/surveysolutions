@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
+namespace WB.Core.BoundedContexts.Tester.Infrastructure
 {
     public class RestException : Exception
     {

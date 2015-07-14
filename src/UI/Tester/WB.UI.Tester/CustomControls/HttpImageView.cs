@@ -8,7 +8,7 @@ using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
 using Cirrious.MvvmCross.Plugins.DownloadCache;
 
-namespace WB.UI.QuestionnaireTester.CustomControls
+namespace WB.UI.Tester.CustomControls
 {
     public class HttpImageView : ImageView
     {

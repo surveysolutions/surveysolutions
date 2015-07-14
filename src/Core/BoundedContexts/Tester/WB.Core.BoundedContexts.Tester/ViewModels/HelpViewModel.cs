@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class HelpViewModel : BaseViewModel
     {

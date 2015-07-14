@@ -5,7 +5,7 @@ using Cirrious.CrossCore.IoC;
 using Ninject;
 using Ninject.Modules;
 
-namespace WB.UI.QuestionnaireTester.Ninject
+namespace WB.UI.Tester.Ninject
 {
     public class NinjectMvxIocProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
     {

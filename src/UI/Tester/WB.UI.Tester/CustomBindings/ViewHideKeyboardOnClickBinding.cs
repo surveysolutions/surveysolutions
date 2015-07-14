@@ -7,9 +7,9 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using WB.UI.QuestionnaireTester.Activities;
+using WB.UI.Tester.Activities;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ViewHideKeyboardOnClickBinding : BaseBinding<View, object>
     {

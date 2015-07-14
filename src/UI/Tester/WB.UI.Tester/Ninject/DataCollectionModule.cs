@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 
-namespace WB.UI.QuestionnaireTester.Ninject
+namespace WB.UI.Tester.Ninject
 {
     public class DataCollectionModule: NinjectModule
     {

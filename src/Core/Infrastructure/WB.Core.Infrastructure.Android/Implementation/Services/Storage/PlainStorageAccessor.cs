@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
 using Sqo.Transactions;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
 {

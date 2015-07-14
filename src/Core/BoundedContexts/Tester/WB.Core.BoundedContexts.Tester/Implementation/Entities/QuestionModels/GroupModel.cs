@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels
+namespace WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels
 {
     public class GroupModel
     {

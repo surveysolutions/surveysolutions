@@ -8,9 +8,9 @@ using Chance.MvvmCross.Plugins.UserInteraction;
 using Cirrious.MvvmCross.Binding.Bindings.Target;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
-using WB.UI.QuestionnaireTester.CustomControls;
+using WB.UI.Tester.CustomControls;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class EditTextDateBinding : MvxAndroidTargetBinding
     {

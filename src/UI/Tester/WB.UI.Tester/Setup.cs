@@ -21,19 +21,19 @@ using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.UI.QuestionnaireTester.Activities;
-using WB.UI.QuestionnaireTester.Converters;
-using WB.UI.QuestionnaireTester.CustomBindings;
-using WB.UI.QuestionnaireTester.CustomControls;
-using WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl;
-using WB.UI.QuestionnaireTester.CustomServices.Location;
-using WB.UI.QuestionnaireTester.CustomServices.UserInteraction;
-using WB.UI.QuestionnaireTester.Ninject;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Tester.Activities;
+using WB.UI.Tester.Converters;
+using WB.UI.Tester.CustomBindings;
+using WB.UI.Tester.CustomControls;
+using WB.UI.Tester.CustomControls.MaskedEditTextControl;
+using WB.UI.Tester.CustomServices.Location;
+using WB.UI.Tester.CustomServices.UserInteraction;
+using WB.UI.Tester.Ninject;
 using Xamarin;
 
 
-namespace WB.UI.QuestionnaireTester
+namespace WB.UI.Tester
 {
     public class Setup : MvxAndroidSetup
     {
@@ -122,7 +122,7 @@ namespace WB.UI.QuestionnaireTester
             get
             {
                 var namespaceAbbreviations = base.ViewNamespaceAbbreviations;
-                namespaceAbbreviations["Wb"] = "WB.UI.QuestionnaireTester.Controls";
+                namespaceAbbreviations["Wb"] = "WB.UI.Tester.Controls";
                 return namespaceAbbreviations;
             }
         }

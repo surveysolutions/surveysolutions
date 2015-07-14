@@ -5,7 +5,7 @@ using Android.Text;
 using Java.Lang;
 using Math = System.Math;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class DecimalPlacesFilter : Java.Lang.Object, IInputFilter
     {

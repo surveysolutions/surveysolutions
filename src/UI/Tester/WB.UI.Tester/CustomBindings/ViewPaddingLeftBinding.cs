@@ -1,6 +1,6 @@
 ﻿using Android.Views;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ViewPaddingLeftBinding : BaseBinding<View, int>
     {

@@ -7,11 +7,11 @@ using Android.Widget;
 using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class TextViewGroupInfoBinding : BaseBinding<TextView, GroupStateViewModel>
     {

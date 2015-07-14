@@ -1,7 +1,7 @@
 ﻿using Android.Graphics;
 using Android.Widget;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class TextViewBoldBinding : BaseBinding<TextView, bool>
     {
