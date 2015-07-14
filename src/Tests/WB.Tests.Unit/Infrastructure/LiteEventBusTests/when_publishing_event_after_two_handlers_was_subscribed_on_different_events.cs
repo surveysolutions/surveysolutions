@@ -1,5 +1,7 @@
+using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
@@ -11,15 +13,16 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         Establish context = () =>
         {
             eventStub = CreateDummyEvent();
-            aggregateRoot = SetupAggregateRootWithEventReadyForPublishing(eventStub);
+            Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            aggregateRoot = SetupAggregateRootWithEventReadyForPublishing(eventSourceId, eventStub);
             var eventRegistry = Create.LiteEventRegistry();
             eventBus = Create.LiteEventBus(eventRegistry);
 
             handlerOnFiredEventMock = new Mock<ILiteEventHandler<DummyEvent>>();
-            eventRegistry.Subscribe(handlerOnFiredEventMock.Object, "id");
+            eventRegistry.Subscribe(handlerOnFiredEventMock.Object, eventSourceId.FormatGuid());
 
             handlerOnDifferentEventMock = new Mock<ILiteEventHandler<DifferentDummyEvent>>();
-            eventRegistry.Subscribe(handlerOnDifferentEventMock.Object, "id");
+            eventRegistry.Subscribe(handlerOnDifferentEventMock.Object, eventSourceId.FormatGuid());
         };
 
         Because of = () =>
