@@ -559,7 +559,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; cannot be saved, because it does not match any option.
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any option.
         /// </summary>
         public static string Interview_Question_Cascading_NoMatchingValue {
             get {
@@ -568,7 +568,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; cannot be saved, because it does not match any option..
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any option.
         /// </summary>
         public static string Interview_Question_Filter_MatchError {
             get {

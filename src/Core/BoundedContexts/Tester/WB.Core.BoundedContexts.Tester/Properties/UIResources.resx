@@ -399,10 +399,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Options will be available after answering referenced question</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Answer "{0}" cannot be saved, because it does not match any option</value>
+    <value>Answer "{0}" does not match any option</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Answer "{0}" cannot be saved, because it does not match any option.</value>
+    <value>Answer "{0}" does not match any option</value>
   </data>
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Next section</value>
