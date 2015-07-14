@@ -4,15 +4,15 @@ using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Microsoft.CSharp.RuntimeBinder;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 
-using GroupViewModel = WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups.GroupViewModel;
+using GroupViewModel = WB.Core.BoundedContexts.Tester.ViewModels.Groups.GroupViewModel;
 
-namespace WB.UI.QuestionnaireTester.CustomControls
+namespace WB.UI.Tester.CustomControls
 {
     public class InterviewEntityAdapter : MvxRecyclerViewAdapter
     {

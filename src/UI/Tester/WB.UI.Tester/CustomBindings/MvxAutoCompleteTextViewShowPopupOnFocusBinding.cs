@@ -2,7 +2,7 @@
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class MvxAutoCompleteTextViewShowPopupOnFocusBinding : BaseBinding<MvxAutoCompleteTextView, object>
     {

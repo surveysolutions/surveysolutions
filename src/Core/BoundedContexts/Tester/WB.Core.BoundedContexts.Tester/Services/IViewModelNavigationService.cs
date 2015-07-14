@@ -1,6 +1,6 @@
 using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IViewModelNavigationService
     {

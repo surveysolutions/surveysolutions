@@ -1,7 +1,7 @@
 ﻿using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ProgressBarIndeterminateBinding : BaseBinding<ProgressBar, bool>
     {

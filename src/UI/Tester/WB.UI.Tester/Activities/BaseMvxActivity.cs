@@ -10,7 +10,7 @@ using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Droid.Views;
 using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     public class BaseMvxActivity : AppCompatActivity, IMvxEventSourceActivity, IMvxAndroidView
     {

@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     public class FriendlyMessageService : IFriendlyMessageService
     {

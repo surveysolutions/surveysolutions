@@ -4,11 +4,11 @@ using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Groups;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ViewGroupStatusBarColorByInterviewStatusBinding : BaseBinding<ViewGroup, GroupStatus>
     {

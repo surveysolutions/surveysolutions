@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.InterviewEntities
+namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities
 {
     public interface IInterviewEntityViewModel
     {

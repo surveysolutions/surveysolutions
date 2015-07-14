@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Views;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Views;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests

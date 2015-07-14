@@ -1,7 +1,7 @@
 ﻿using System;
 using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using IHS.MvvmCross.Plugins.Keychain;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Security
 {

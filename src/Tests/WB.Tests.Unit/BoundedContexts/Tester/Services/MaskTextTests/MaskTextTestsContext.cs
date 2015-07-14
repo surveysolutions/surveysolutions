@@ -1,4 +1,4 @@
-﻿using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
+﻿using WB.Core.BoundedContexts.Tester.Services.MaskText;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTests
 {

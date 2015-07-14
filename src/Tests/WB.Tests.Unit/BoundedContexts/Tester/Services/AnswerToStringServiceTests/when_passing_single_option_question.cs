@@ -1,8 +1,8 @@
 ﻿using Machine.Specifications;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.Services.MaskText;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
 {

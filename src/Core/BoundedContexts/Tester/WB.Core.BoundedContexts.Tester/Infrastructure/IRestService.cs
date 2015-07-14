@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
+namespace WB.Core.BoundedContexts.Tester.Infrastructure
 {
     public interface IRestService
     {

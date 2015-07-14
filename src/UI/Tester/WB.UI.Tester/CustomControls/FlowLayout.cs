@@ -10,7 +10,7 @@ using Cirrious.MvvmCross.Binding.Attributes;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 
-namespace WB.UI.QuestionnaireTester.CustomControls
+namespace WB.UI.Tester.CustomControls
 {
     class FlowLayout : ViewGroup, IMvxWithChangeAdapter
     {

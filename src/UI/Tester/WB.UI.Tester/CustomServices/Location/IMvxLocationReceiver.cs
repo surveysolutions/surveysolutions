@@ -1,4 +1,4 @@
-namespace WB.UI.QuestionnaireTester.CustomServices.Location
+namespace WB.UI.Tester.CustomServices.Location
 {
     public interface IMvxLocationReceiver
     {

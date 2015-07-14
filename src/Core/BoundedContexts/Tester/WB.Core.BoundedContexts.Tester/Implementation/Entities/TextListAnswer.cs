@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities
+namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 {
     public class TextListAnswer : BaseInterviewAnswer
     {

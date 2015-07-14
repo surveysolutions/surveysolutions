@@ -3,9 +3,9 @@ using Android.OS;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class TextViewSideBarPrefillQuestionBinding : BaseBinding<TextView, SideBarPrefillQuestion>
     {

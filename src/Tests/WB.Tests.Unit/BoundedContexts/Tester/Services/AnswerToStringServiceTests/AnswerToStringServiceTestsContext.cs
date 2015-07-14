@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
 {

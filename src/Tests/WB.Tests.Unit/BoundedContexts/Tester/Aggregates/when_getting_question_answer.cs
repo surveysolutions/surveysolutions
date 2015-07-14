@@ -1,8 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;

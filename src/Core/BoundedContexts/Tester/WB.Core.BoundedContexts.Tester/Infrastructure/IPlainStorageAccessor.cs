@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure
+namespace WB.Core.BoundedContexts.Tester.Infrastructure
 {
     public interface IPlainStorageAccessor<TEntity> where TEntity : class, IPlainStorageEntity
     {

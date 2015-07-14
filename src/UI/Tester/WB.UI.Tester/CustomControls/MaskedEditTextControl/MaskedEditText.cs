@@ -8,11 +8,11 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services.MaskText;
+using WB.Core.BoundedContexts.Tester.Services.MaskText;
 using WB.Core.GenericSubdomains.Portable;
 
 
-namespace WB.UI.QuestionnaireTester.CustomControls.MaskedEditTextControl
+namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 {
     public class MaskedEditText : EditText, IInputFilter
     {

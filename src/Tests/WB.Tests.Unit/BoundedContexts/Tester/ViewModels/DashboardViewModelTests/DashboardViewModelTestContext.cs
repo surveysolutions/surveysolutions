@@ -1,8 +1,8 @@
 ﻿using Chance.MvvmCross.Plugins.UserInteraction;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests

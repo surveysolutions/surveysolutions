@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class AnswerNotifier :
         ILiteEventHandler<TextQuestionAnswered>,

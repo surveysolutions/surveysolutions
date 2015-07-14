@@ -1,6 +1,6 @@
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class SearchQuestionnairesViewModel : BaseViewModel
     {

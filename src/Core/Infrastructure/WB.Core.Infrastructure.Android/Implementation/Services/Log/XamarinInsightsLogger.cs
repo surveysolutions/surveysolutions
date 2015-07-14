@@ -1,5 +1,5 @@
 using System;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 using Xamarin;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Log

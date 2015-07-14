@@ -1,8 +1,8 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions.State;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels.Questions
+namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 {
     public class SingleOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
     {

@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using Android.Views;
 using Android.Widget;
 
-namespace WB.UI.QuestionnaireTester
+namespace WB.UI.Tester
 {
     public class LinkerPleaseInclude
     {

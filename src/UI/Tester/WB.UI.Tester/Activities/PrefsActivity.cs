@@ -4,9 +4,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Preferences;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     [Activity(Label = "Preferences activity", NoHistory = false)]
     public class PrefsActivity : PreferenceActivity

@@ -2,7 +2,7 @@
 using Android.Views;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.QuestionnaireTester.CustomBindings
+namespace WB.UI.Tester.CustomBindings
 {
     public class ViewBackgroundDrawableBinding : BaseBinding<View, int?>
     {

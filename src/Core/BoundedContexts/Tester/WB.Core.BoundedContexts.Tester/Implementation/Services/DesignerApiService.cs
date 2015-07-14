@@ -6,12 +6,12 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Chance.MvvmCross.Plugins.UserInteraction;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Properties;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using QuestionnaireListItem = WB.Core.BoundedContexts.QuestionnaireTester.Views.QuestionnaireListItem;
+using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     internal class DesignerApiService : IDesignerApiService
     {

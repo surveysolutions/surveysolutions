@@ -1,7 +1,7 @@
 using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
-namespace WB.UI.QuestionnaireTester.Ninject
+namespace WB.UI.Tester.Ninject
 {
     public class NinjectModuleAdapter<TModule> : NinjectModule, IIocRegistry
         where TModule : IModule

@@ -13,7 +13,7 @@ using Cirrious.CrossCore.Exceptions;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
 
-namespace WB.UI.QuestionnaireTester.CustomServices.Location
+namespace WB.UI.Tester.CustomServices.Location
 {
     public class PlayServicesLocationWatcher
         : MvxLocationWatcher

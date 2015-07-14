@@ -1,6 +1,6 @@
 using System;
-using WB.Core.BoundedContexts.QuestionnaireTester.Infrastructure;
-using WB.Core.BoundedContexts.QuestionnaireTester.Services;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
 {

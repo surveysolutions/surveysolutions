@@ -5,7 +5,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 
-namespace WB.UI.QuestionnaireTester.Activities
+namespace WB.UI.Tester.Activities
 {
     public static class ActivityExtensions
     {

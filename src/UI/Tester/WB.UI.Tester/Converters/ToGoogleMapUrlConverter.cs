@@ -3,7 +3,7 @@ using System.Globalization;
 using Cirrious.CrossCore.Converters;
 using Cirrious.MvvmCross.Plugins.Location;
 
-namespace WB.UI.QuestionnaireTester.Converters
+namespace WB.UI.Tester.Converters
 {
     public class ToGoogleMapUrlConverter : MvxValueConverter<MvxCoordinates, string>
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Services;
 
-namespace WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     internal class QuestionnaireTesterPreconditionsService : IInterviewPreconditionsService
     {
