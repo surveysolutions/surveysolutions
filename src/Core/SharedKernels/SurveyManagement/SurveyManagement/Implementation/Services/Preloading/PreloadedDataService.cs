@@ -156,9 +156,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return null;
         }
 
-        public ValueParsingResult ParseQuestion(string answer, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult ParseQuestion(string answer, string columnName, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
         {
-            return dataParser.TryParse(answer, question, questionnaireDocument, out parsedValue);
+            return dataParser.TryParse(answer, columnName, question, questionnaireDocument, out parsedValue);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
@@ -280,19 +280,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return exportStructure.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0).LevelName;
         }
 
-        public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
+        public Dictionary<string,Tuple<string,int>[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
         {
             var levelExportStructure = FindLevelInPreloadedData(parentDataFile.FileName);
             if (levelExportStructure == null)
                 return null;
-            var presentQuestions = new Dictionary<string, int[]>();
+            var presentQuestions = new Dictionary<string, Tuple<string, int>[]>();
             foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
             {
-                var headerIndexes = new List<int>();
+                var headerIndexes = new List<Tuple<string, int>>();
                 for (int i = 0; i < parentDataFile.Header.Length; i++)
                 {
                     if (exportedHeaderItem.ColumnNames.Contains(parentDataFile.Header[i]))
-                        headerIndexes.Add(i);
+                        headerIndexes.Add(new Tuple<string, int>(parentDataFile.Header[i], i));
                 }
                 if (!headerIndexes.Any())
                     continue;
@@ -383,19 +383,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (exportedHeaderItem == null)
                 return null;
 
-            var headerIndexes = new List<int>();
+            var headerIndexes = new List<Tuple<string, string>>();
 
             for (int i = 0; i < header.Length; i++)
             {
-                if (exportedHeaderItem.ColumnNames.Contains(header[i]))
-                    headerIndexes.Add(i);
+                if (exportedHeaderItem.ColumnNames.Contains(header[i]) && !string.IsNullOrEmpty(row[i]))
+                    headerIndexes.Add(new Tuple<string, string>(header[i], row[i]));
             }
             if (!headerIndexes.Any())
                 return null;
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
 
-            return dataParser.BuildAnswerFromStringArray(row.Where((v, i) => headerIndexes.Contains(i)).ToArray(), question, questionnaireDocument);
+            return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question, questionnaireDocument);
         }
 
         private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)

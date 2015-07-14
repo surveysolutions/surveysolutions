@@ -62,16 +62,20 @@ using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -1712,6 +1716,50 @@ namespace WB.Tests.Unit
         public static User User()
         {
             return new User();
+        }
+
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1")
+        {
+            return new GpsCoordinateQuestion()
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = variableName,
+                QuestionType = QuestionType.GpsCoordinates
+            };
+        }
+
+        public static InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
+        {
+            var interviewData = new InterviewData() { InterviewId = Guid.NewGuid() };
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            foreach (var interviewQuestion in topLevelQuestions)
+            {
+                interviewData.Levels["#"].QuestionsSearchCahche.Add(interviewQuestion.Id, interviewQuestion);
+            }
+            return interviewData;
+        }
+
+        public static InterviewQuestion InterviewQuestion(Guid? questionId = null, object answer = null)
+        {
+            var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid());
+            interviewQuestion.Answer = answer;
+            return interviewQuestion;
+        }
+
+        public static GeoPosition GeoPosition()
+        {
+            return new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984,4,18)));
+        }
+
+        public static PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
+        {
+            return new PreloadedDataService(
+                    new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
+                        new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
+                        .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
+                    new QuestionDataParser(),
+                    new UserViewFactory(new TestInMemoryWriter<UserDocument>()));
+
         }
     }
 }
