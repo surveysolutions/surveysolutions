@@ -175,7 +175,7 @@
     <Compile Include="ViewModels\Questions\State\ValidityViewModel.cs" />
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
     <Compile Include="ViewModels\AnsweringViewModel.cs" />
-    <Compile Include="ViewModels\SideBarSectionViewModelsFactory.cs" />
+    <Compile Include="ViewModels\SideBarSectionViewModelFactory.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
