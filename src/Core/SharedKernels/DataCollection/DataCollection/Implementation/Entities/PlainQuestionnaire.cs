@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -19,8 +18,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     internal class PlainQuestionnaire : IQuestionnaire
     {
-        private static readonly object LockObject = new object();
-
         public ISubstitutionService SubstitutionService
         {
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
@@ -32,8 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Func<long> getVersion;
         private readonly Guid? responsibleId;
 
-        private ConcurrentDictionary<Guid, IQuestion> questionCache = null;
-        private ConcurrentDictionary<Guid, IGroup> groupCache = null;
+        private Dictionary<Guid, IQuestion> questionCache = null;
+        private Dictionary<Guid, IGroup> groupCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -55,44 +52,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             get { return this.responsibleId; }
         }
 
-        internal ConcurrentDictionary<Guid, IQuestion> QuestionCache
+        internal Dictionary<Guid, IQuestion> QuestionCache
         {
             get
             {
-                if (this.questionCache == null)
-                {
-                    lock (LockObject)
-                    {
-                        if (this.questionCache == null)
-                        {
-                            this.questionCache = new ConcurrentDictionary<Guid, IQuestion>(this.innerDocument
-                                                                                               .Find<IQuestion>(_ => true)
-                                                                                               .ToDictionary(question => question.PublicKey, question => question));
-                        }
-                    }
-                }
-
-                return this.questionCache;
+                return this.questionCache ?? (this.questionCache
+                    = this.innerDocument
+                        .Find<IQuestion>(_ => true)
+                        .ToDictionary(
+                            question => question.PublicKey,
+                            question => question));
             }
         }
 
-        internal ConcurrentDictionary<Guid, IGroup> GroupCache
+        internal Dictionary<Guid, IGroup> GroupCache
         {
             get
             {
-                if (this.groupCache == null)
-                {
-                    lock (LockObject)
-                    {
-                        if (this.groupCache == null)
-                        {
-                            this.groupCache = 
-                                new ConcurrentDictionary<Guid, IGroup>(this.innerDocument.Find<IGroup>(_ => true).ToDictionary(group => @group.PublicKey, group => @group));
-                        }
-                    }
-                }
-
-                return this.groupCache;
+                return this.groupCache ?? (this.groupCache
+                    = this.innerDocument
+                        .Find<IGroup>(_ => true)
+                        .ToDictionary(
+                            group => group.PublicKey,
+                            group => group));
             }
         }
 
@@ -117,8 +99,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
             : this(document, getVersion, responsibleId)
         {
-            this.groupCache = new ConcurrentDictionary<Guid, IGroup>(groupCache);
-            this.questionCache = new ConcurrentDictionary<Guid, IQuestion>(questionCache);
+            this.groupCache = groupCache;
+            this.questionCache = questionCache;
         }
 
 
@@ -715,9 +697,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 where this.IsRosterGroup(@group.PublicKey) && @group.RosterTitleQuestionId == questionId
                 select @group.PublicKey;
 
-            return (rosterAffectedByBackwardCompatibility.HasValue
-                ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
-                : rostersAffectedByCurrentDomain).ToList();
+            return Enumerable.ToList(
+                rosterAffectedByBackwardCompatibility.HasValue
+                    ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
+                    : rostersAffectedByCurrentDomain);
         }
 
         private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
@@ -874,6 +857,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not a roster size question.", questionId));
         }
 
+        private void ThrowIfGroupDoesNotExist(Guid groupId, string customExceptionMessage = null)
+        {
+            this.GetGroupOrThrow(groupId, customExceptionMessage);
+        }
+
         private IComposite GetGroupOrQuestionOrThrow(Guid groupOrQuestionId)
         {
             var groupOrQuestion = (IComposite) this.GetGroup(groupOrQuestionId) ?? this.GetQuestion(groupOrQuestionId);
@@ -929,7 +917,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             source.ConnectChildrenWithParent();
         }
 
-        private static IQuestion GetQuestionOrThrow(ConcurrentDictionary<Guid, IQuestion> questions, Guid questionId)
+        private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)
         {
             IQuestion question = GetQuestion(questions, questionId);
 
@@ -939,21 +927,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question;
         }
 
-        private static IQuestion GetQuestion(ConcurrentDictionary<Guid, IQuestion> questions, Guid questionId)
+        private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
         {
             return questions.ContainsKey(questionId)
                 ? questions[questionId]
                 : null;
         }
 
-        private static IGroup GetGroup(ConcurrentDictionary<Guid, IGroup> groups, Guid groupId)
+        private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId)
         {
             return groups.ContainsKey(groupId)
                 ? groups[groupId]
                 : null;
         }
 
-        private static IQuestion GetQuestionByStataCaption(ConcurrentDictionary<Guid, IQuestion> questions, string identifier)
+        private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
         }
