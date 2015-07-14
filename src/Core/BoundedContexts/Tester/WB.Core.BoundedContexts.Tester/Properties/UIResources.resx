@@ -304,22 +304,10 @@
     <value>Yes</value>
   </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Invalid answer.</value>
+    <value>Answer is invalid</value>
   </data>
-  <data name="Validity_ApplicationException_ErrorCaption" xml:space="preserve">
-    <value>Internal application error</value>
-  </data>
-  <data name="Validity_ApplicationException_ErrorMessage" xml:space="preserve">
-    <value>Invalid answer.</value>
-  </data>
-  <data name="Validity_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>Invalid answer.</value>
-  </data>
-  <data name="Validity_Mandatory_ErrorCaption" xml:space="preserve">
-    <value>Mandatory field.</value>
-  </data>
-  <data name="Validity_Mandatory_ErrorMessage" xml:space="preserve">
-    <value>This field is mandatory. You have to fill it in.</value>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Answer was not saved</value>
   </data>
   <data name="ConfirmationCancelText" xml:space="preserve">
     <value>Cancel</value>

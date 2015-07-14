@@ -99,14 +99,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             if (string.IsNullOrWhiteSpace(AnswerAsString))
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
             }
 
             decimal answer;
             if (!Decimal.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Real_ParsingError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Real_ParsingError);
                 return;
             }
 

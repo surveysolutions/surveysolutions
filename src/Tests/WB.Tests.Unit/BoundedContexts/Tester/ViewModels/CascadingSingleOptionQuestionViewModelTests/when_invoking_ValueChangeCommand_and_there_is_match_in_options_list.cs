@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             cascadingModel.ValueChangeCommand.Execute("title klo 3");
 
         It should_not_mark_question_as_invalid = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Never);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Never);
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);

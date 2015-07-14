@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             if (!Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Text_MaskError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
                 return;
             }
 
