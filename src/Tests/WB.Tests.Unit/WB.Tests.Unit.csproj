@@ -1551,7 +1551,6 @@
     <Compile Include="SharedKernels\DataCollection\Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_numeric_roster_group.cs" />
     <Compile Include="SharedKernels\DataCollection\Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_roster_title_question_inside_roster___.cs" />
     <Compile Include="SharedKernels\DataCollection\Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_textlist_roster_group.cs" />
-    <Compile Include="SharedKernels\DataCollection\GeoPositionTests\when_parsing_string_i_order_to_create_GeoPosition_object.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStatePrototypeProviderTests\InterviewExpressionStatePrototypeProviderTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStatePrototypeProviderTests\when_getting_expression_state.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\MetodInfo.cs" />
