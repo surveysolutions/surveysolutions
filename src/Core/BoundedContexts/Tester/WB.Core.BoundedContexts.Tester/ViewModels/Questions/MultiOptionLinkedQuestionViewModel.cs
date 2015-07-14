@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private readonly IAnswerToStringService answerToStringService;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IPrincipal userIdentity;
+        readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private Guid linkedToQuestionId;
         private int? maxAllowedAnswers;
@@ -60,16 +61,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.answerToStringService = answerToStringService;
             this.questionnaireStorage = questionnaireStorage;
             this.userIdentity = userIdentity;
+            this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.QuestionState = questionState;
             this.Answering = answering;
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
-            eventRegistry.Subscribe(this);
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            eventRegistry.Subscribe(this, interviewId);
 
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
@@ -82,7 +84,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.questionIdentity = entityIdentity;
             this.areAnswersOrdered = linkedQuestionModel.AreAnswersOrdered;
 
-            this.answerNotifier.Init(this.linkedToQuestionId);
+            this.answerNotifier.Init(interviewId, this.linkedToQuestionId);
 
             this.answerNotifier.QuestionAnswered += this.LinkedToQuestionAnswered;
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.GenerateOptions(interview, questionnaire));

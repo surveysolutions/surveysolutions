@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IAnswerToStringService answerToStringService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly GroupStateViewModel groupState;
+        private string interviewId;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -66,6 +67,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public async Task Init(string interviewId)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
+            this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
@@ -80,7 +82,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
             this.Sections.Init(questionnaire.Id.FormatGuid(), interviewId, this.navigationState);
-            this.CurrentGroup.Init(this.navigationState);
+            this.CurrentGroup.Init(interviewId, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.GroupChanged += NavigationStateOnOnGroupChanged;
@@ -98,7 +100,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             var interview = this.interviewRepository.Get(navigationState.InterviewId);
             IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
-            this.answerNotifier.Init(questionsToListen.ToArray());
+
+            this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
 
             this.UpdateInterviewStatus(newGroupIdentity.TargetGroup);
         }
@@ -119,6 +122,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private GroupStatus status;
+
         public GroupStatus Status
         {
             get { return this.status; }
@@ -136,9 +140,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public ActiveGroupViewModel CurrentGroup { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public IEnumerable PrefilledQuestions { get; set; } 
+        public IEnumerable PrefilledQuestions { get; set; }
 
         private IMvxCommand navigateToDashboardCommand;
+
         public IMvxCommand NavigateToDashboardCommand
         {
             get
@@ -148,6 +153,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private IMvxCommand navigateToHelpCommand;
+
         public IMvxCommand NavigateToHelpCommand
         {
             get
@@ -157,6 +163,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private IMvxCommand signOutCommand;
+
         public IMvxCommand SignOutCommand
         {
             get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }

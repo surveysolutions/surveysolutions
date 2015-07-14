@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
 
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
 
-            this.liteEventRegistry.Subscribe(this);
+            this.liteEventRegistry.Subscribe(this, interviewId);
 
             this.ReadRosterInstancesFromModel();
         }

@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
@@ -37,10 +38,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
+            this.eventRegistry = eventRegistry;
             this.modelsFactory = modelsFactory;
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            eventRegistry.Subscribe(this);
         }
 
         public void Init(string questionnaireId,
@@ -50,7 +51,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (navigationState == null) throw new ArgumentNullException("navigationState");
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
             if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionnaireId == null) throw new ArgumentNullException("questionnaireId"); 
+            if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
+
+            eventRegistry.Subscribe(this, interviewId);
 
             this.navigationState = navigationState;
             this.navigationState.GroupChanged += this.NavigationStateGroupChanged;

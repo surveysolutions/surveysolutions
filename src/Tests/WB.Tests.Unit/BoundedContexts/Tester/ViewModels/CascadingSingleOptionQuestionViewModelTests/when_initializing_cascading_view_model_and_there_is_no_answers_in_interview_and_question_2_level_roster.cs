@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_subscribe_for_events = () =>
-            EventRegistry.Verify(x => x.Subscribe(cascadingModel), Times.Once);
+            EventRegistry.Verify(x => x.Subscribe(cascadingModel, Moq.It.IsAny<string>()), Times.Once);
 
         It should_not_set_selected_object = () => 
             cascadingModel.SelectedObject.ShouldBeNull();

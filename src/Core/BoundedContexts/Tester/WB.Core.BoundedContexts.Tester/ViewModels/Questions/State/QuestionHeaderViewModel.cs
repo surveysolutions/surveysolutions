@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
 
             this.CalculateSubstitutions(questionnaire, interview);
 
-            this.registry.Subscribe(this);
+            this.registry.Subscribe(this, interviewId);
         }
 
         protected QuestionHeaderViewModel() { }

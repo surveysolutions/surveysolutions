@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             aggregateRoot = SetupAggregateRootWithOneEventReadyForPublishing<DummyEvent>();
 
             handlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
-            liteEventRegistry.Subscribe(handlerMock.Object);
-            liteEventRegistry.Unsubscribe(handlerMock.Object);
+            liteEventRegistry.Subscribe(handlerMock.Object, "id");
+            liteEventRegistry.Unsubscribe(handlerMock.Object, "id");
         };
 
         Because of = () =>
