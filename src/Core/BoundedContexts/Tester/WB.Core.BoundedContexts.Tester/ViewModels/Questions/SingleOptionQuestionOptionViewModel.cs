@@ -1,6 +1,7 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 {
@@ -14,6 +15,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         public string Title { get; set; }
 
         private bool selected;
+
         public bool Selected
         {
             get { return this.selected; }
@@ -29,6 +31,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 this.RaisePropertyChanged();
             }
         }
+
+        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; set; }
 
         private void OnBeforeSelected()
         {

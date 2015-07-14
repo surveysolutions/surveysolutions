@@ -1,5 +1,7 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 {
@@ -43,6 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         }
 
         private int? checkedOrder;
+
         public int? CheckedOrder
         {
             get { return this.checkedOrder; }
@@ -62,5 +65,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 return new MvxCommand(async () => await QuestionViewModel.ToggleAnswer(this));
             }
         }
+
+        public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; set; }
     }
 }

@@ -112,7 +112,6 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
-    <item name="android:background">@drawable/question_option_background</item>
   </style>
 
   <style name="Interview_Question_Answer_Option_Input" parent="Interview_Entity_BasicFont">
