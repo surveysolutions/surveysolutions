@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your user account is locked. Please contact the the support team at support@mysurvey.solutions..
+        ///   Looks up a localized string similar to Your user account is locked. Please contact the support team at support@mysurvey.solutions..
         /// </summary>
         public static string AccountIsLockedOnServer {
             get {

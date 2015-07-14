@@ -121,7 +121,7 @@
     <value>About</value>
   </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Your user account is locked. Please contact the the support team at support@mysurvey.solutions.</value>
+    <value>Your user account is locked. Please contact the support team at support@mysurvey.solutions.</value>
   </data>
   <data name="ApplicationNameText" xml:space="preserve">
     <value>Application name:</value>
