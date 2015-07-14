@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                substitutionService ?? Create.SubstitutionService(),
                 Create.LiteEventRegistry(),
                 sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory(),
                 Stub.MvxMainThreadDispatcher());
@@ -58,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             serviceLocatorMock.Setup(x => x.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
 
-            var sideBarSectionViewModelsFactory =  new SideBarSectionViewModelsFactory(serviceLocatorMock.Object);
+            var sideBarSectionViewModelsFactory =  new SideBarSectionViewModelFactory(serviceLocatorMock.Object);
            
             return CreateSectionsViewModel(questionnaireRepository: questionnaireRepository.Object,
                 interviewRepository: interviewsRepository.Object,
