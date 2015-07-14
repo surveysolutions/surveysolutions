@@ -55,7 +55,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.messenger = messenger;
             this.Children = new ObservableCollection<SideBarSectionViewModel>();
             this.Children.CollectionChanged += (sender, args) => this.HasChildren = this.Children.Count > 0;
-            eventRegistry.Subscribe(this);
         }
 
         public void Init(string interviewId, 
@@ -64,6 +63,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
+
+            this.eventRegistry.Subscribe(this, interviewId);
 
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaireModel = this.questionnaireRepository.GetById(interview.QuestionnaireId);
@@ -261,7 +262,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void RemoveMe()
         {
-            this.eventRegistry.Unsubscribe(this);
+            this.eventRegistry.Unsubscribe(this, this.interviewId);
             this.mainThreadDispatcher.RequestMainThreadAction(() => this.Parent.Children.Remove(this));
             this.Dispose();
         }

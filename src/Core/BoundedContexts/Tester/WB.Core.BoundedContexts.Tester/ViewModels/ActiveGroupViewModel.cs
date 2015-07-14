@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
+        readonly ILiteEventRegistry eventRegistry;
 
         private readonly IMvxMessenger messenger;
 
@@ -65,15 +66,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.substitutionService = substitutionService;
+            this.eventRegistry = eventRegistry;
             this.messenger = messenger;
-            eventRegistry.Subscribe(this);
         }
 
-        public void Init(NavigationState navigationState)
+        public void Init(string interviewId, NavigationState navigationState)
         {
             if (navigationState == null) throw new ArgumentNullException("navigationState");
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
 
+            eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.navigationState.GroupChanged += navigationState_OnGroupChanged;
         }

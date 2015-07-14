@@ -99,13 +99,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
             this.referencedQuestionId = questionModel.LinkedToQuestionId;
 
-            this.ReferencedAnswerNotifier.Init(this.referencedQuestionId);
+            this.ReferencedAnswerNotifier.Init(interviewId, this.referencedQuestionId);
             this.ReferencedAnswerNotifier.QuestionAnswered += this.ReferencedQuestionAnswered;
 
             var options = this.GenerateOptionsFromModel(interview, questionnaire);
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
-            this.eventRegistry.Subscribe(this);
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)

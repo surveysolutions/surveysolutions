@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
-            liteEventRegistry.Subscribe(this);
+            liteEventRegistry.Subscribe(this, interviewId);
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 

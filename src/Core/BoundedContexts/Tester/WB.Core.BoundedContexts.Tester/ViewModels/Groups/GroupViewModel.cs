@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly AnswerNotifier answerNotifier;
+        private string interviewId;
 
         private NavigationState navigationState;
         private Identity groupIdentity;
@@ -42,8 +43,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
         }
 
         private IMvxCommand navigateToGroupCommand;
-        private string interviewId;
-
         public IMvxCommand NavigateToGroupCommand
         {
             get { return this.navigateToGroupCommand ?? (this.navigateToGroupCommand = new MvxCommand(async () => await this.NavigateToGroup())); }
@@ -90,7 +89,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
             if (groupWithAnswersToMonitor != null)
             {
                 IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
-                this.answerNotifier.Init(questionsToListen.ToArray());
+                this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
         }

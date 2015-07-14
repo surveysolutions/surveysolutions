@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
         {
             foreach (var uncommittedChange in uncommittedChanges)
             {
-                var handlers = this.liteEventRegistry.GetHandlers(uncommittedChange.Payload);
+                var handlers = this.liteEventRegistry.GetHandlers(uncommittedChange);
 
                 var exceptions = new List<Exception>();
 
