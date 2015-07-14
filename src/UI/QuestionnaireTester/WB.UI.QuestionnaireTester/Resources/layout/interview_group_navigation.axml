@@ -8,6 +8,5 @@
       HideKeyboardOnClick .; 
       Click NavigateCommand; 
       ButtonGroupStyle NavigateToGroupViewModel.GroupState; 
-      Text If(IsInSection, Localization('Interview_NextSection_ButtonText'), Localization('Interview_PreviousGroupNavigation_ButtonText'))
-    "/>
+      Text If(IsInSection, Localization('Interview_NextSection_ButtonText'), Localization('Interview_PreviousGroupNavigation_ButtonText'))"/>
 </MvxLinearLayout>

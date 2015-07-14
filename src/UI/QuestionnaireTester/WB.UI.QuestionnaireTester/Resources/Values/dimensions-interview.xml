@@ -66,6 +66,7 @@
   <dimen name="Interview_Previous_Group_Navigation_Layout_margin_top">28dp</dimen>
   <dimen name="Interview_Previous_Group_Navigation_Layout_margin_bottom">28dp</dimen>
   <dimen name="Interview_Previous_Group_Navigation_Note_margin_left">10dp</dimen>
-  <dimen name="Interview_Previous_Group_Navigation_Button_padding">10dp</dimen>
+  <dimen name="Interview_Previous_Group_Navigation_Button_padding">16dp</dimen>
+  <dimen name="Interview_Previous_Group_Navigation_Button_paddingTop">18dp</dimen>
 
 </resources>
