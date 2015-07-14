@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using NSubstitute;
+using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.ViewModels;
@@ -18,7 +20,9 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSe
             questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
             questionnaire.GroupsWithFirstLevelChildrenAsReferences[rosterGroupId] = new GroupModel { Title = "group title" };
 
-            viewModel = CreateViewModel(questionnaire: questionnaire);
+            var interview = Substitute.For<IStatefulInterview>();
+
+            viewModel = CreateViewModel(questionnaire: questionnaire, interview: interview);
 
             sectionIdentity = new Identity(rosterGroupId, new[]{0m});
             viewModel.Init("", sectionIdentity, null,  Create.NavigationState());
