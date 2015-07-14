@@ -104,14 +104,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             if (string.IsNullOrWhiteSpace(AnswerAsString))
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
             }
 
             int answer;
             if (!int.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
             {
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.Interview_Question_Integer_ParsingError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_ParsingError);
                 return;
             }
 
@@ -120,14 +120,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 if (answer < 0)
                 {
                     var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, AnswerAsString);
-                    this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
+                    this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
                 if (answer > this.answerMaxValue)
                 {
                     var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, AnswerAsString, this.answerMaxValue);
-                    this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(message);
+                    this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     AnswerAsString = NullableIntToAnswerString(previousAnswer);
                     return;
                 }

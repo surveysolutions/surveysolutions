@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             }
             catch (OperationCanceledException)
             {
-                QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.GpsQuestion_Timeout);
+                QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
             }
             finally
             {
@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             if (location == null)
             {
-                QuestionState.Validity.MarkAnswerAsInvalidWithMessage(UIResources.GpsQuestion_Timeout);
+                QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
                 return;
             }
 

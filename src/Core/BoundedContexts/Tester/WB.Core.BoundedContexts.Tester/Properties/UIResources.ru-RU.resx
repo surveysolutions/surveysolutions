@@ -304,22 +304,10 @@
     <value>Да</value>
   </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Неправильный ответ.</value>
+    <value>Ответ недействителен</value>
   </data>
-  <data name="Validity_ApplicationException_ErrorCaption" xml:space="preserve">
-    <value>Ошибка сохранения</value>
-  </data>
-  <data name="Validity_ApplicationException_ErrorMessage" xml:space="preserve">
-    <value>Неправильный ответ. </value>
-  </data>
-  <data name="Validity_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>Неправильный ответ. </value>
-  </data>
-  <data name="Validity_Mandatory_ErrorCaption" xml:space="preserve">
-    <value>Обязательное поле</value>
-  </data>
-  <data name="Validity_Mandatory_ErrorMessage" xml:space="preserve">
-    <value>Это поле обязательное. Заполните его.</value>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Ответ не сохранён</value>
   </data>
   <data name="ConfirmationCancelText" xml:space="preserve">
     <value>Отмена</value>
