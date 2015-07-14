@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Tester.Services.MaskText
             if (!range.Start.HasValue || !range.End.HasValue)
                 throw new ArgumentException("range contains don't defined value");
 
-            for (int i = range.Start.Value; i <= range.End.Value && i < this.text.Length; i++)
+            for (int i = range.Start.Value; i < range.End.Value && i < this.text.Length; i++)
             {
                 this.text[i] = this.EmptyChar;
             }

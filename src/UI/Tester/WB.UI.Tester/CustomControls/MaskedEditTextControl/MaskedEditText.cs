@@ -16,7 +16,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 {
     public class MaskedEditText : EditText, IInputFilter
     {
-        private readonly MaskedText maskedText = new MaskedText();
+        private MaskedText maskedText = new MaskedText();
 
         private bool editingBefore;
         private bool editingOnChanged;
@@ -39,7 +39,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
             this.CleanUp();
         }
 
-        private void CleanUp() 
+        private void CleanUp()
         {
             if (this.Mask.IsNullOrEmpty()) 
                 return;
@@ -50,7 +50,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 
             this.selection = this.maskedText.FindFirstValidMaskPosition();
 
-            this.editingBefore = true;
+            /*this.editingBefore = true;
             this.editingOnChanged = true;
             this.editingAfter = true;
 
@@ -69,7 +69,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 
             this.editingBefore = false;
             this.editingOnChanged = false;
-            this.editingAfter = false;
+            this.editingAfter = false;*/
         
             this.lastValidMaskPosition = maskedText.FindLastValidMaskPosition();
             this.initialized = true;
@@ -87,12 +87,9 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
             get { return maskedText.Mask; }
             set
             {
-                if (maskedText.Mask != value)
-                {
-                    this.Text = null; // clear text value before change mask
-                    this.maskedText.Mask = value;
-                    this.CleanUp();
-                }
+                this.maskedText = new MaskedText();
+                this.maskedText.Mask = value;
+                this.CleanUp();
 
                 this.UpdatetInputType();
             }
