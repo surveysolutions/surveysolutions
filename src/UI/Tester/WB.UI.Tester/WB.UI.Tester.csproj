@@ -6,7 +6,7 @@
     <ProjectGuid>{F18F9422-2624-44C6-934D-B5F48C9587C1}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <RootNamespace>WB.UI.QuestionnaireTester</RootNamespace>
-    <AssemblyName>WB.UI.QuestionnaireTester</AssemblyName>
+    <AssemblyName>WB.UI.Tester</AssemblyName>
     <OutputType>Library</OutputType>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -712,9 +712,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
       <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
-      <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
+      <Name>WB.Core.BoundedContexts.Tester</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>

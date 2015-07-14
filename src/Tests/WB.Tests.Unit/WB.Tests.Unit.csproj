@@ -2236,9 +2236,9 @@
       <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj">
+    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
       <Project>{689346D7-30AC-420E-BC5B-588CC186A466}</Project>
-      <Name>WB.Core.BoundedContexts.QuestionnaireTester</Name>
+      <Name>WB.Core.BoundedContexts.Tester</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
