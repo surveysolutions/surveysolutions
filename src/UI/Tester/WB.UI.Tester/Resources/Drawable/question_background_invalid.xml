@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"   >
+
+  <solid android:color="#FFF6D6D0" />
+
+  <padding
+    android:left="@dimen/Interview_Question_Answer_background_padding"
+    android:top="@dimen/Interview_Question_Answer_background_padding"
+    android:right="@dimen/Interview_Question_Answer_background_padding"
+    android:bottom="@dimen/Interview_Question_Answer_background_padding"/>
+
+  <corners android:radius="@dimen/Interview_Question_Answer_background_corners_radius"/>
+
+</shape>

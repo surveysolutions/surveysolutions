@@ -88,7 +88,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Shared.Android", "UI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi", "UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj", "{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuestionnaireTester", "QuestionnaireTester", "{53C6176D-C1EA-4D37-B282-A862AC874779}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tester", "Tester", "{53C6176D-C1EA-4D37-B282-A862AC874779}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Files.Android", "Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj", "{8CEACD5D-AB0E-4104-8BCE-DDD7900887E0}"
 EndProject
@@ -124,15 +124,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SurveySolutions", "SurveySo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.SurveySolutions", "Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj", "{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.QuestionnaireTester.Tests", "Tests\WB.UI.QuestionnaireTester.Tests\WB.UI.QuestionnaireTester.Tests.csproj", "{2DA00710-008B-499D-A704-E1EB62D07E82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Tester.Tests", "Tests\WB.UI.Tester.Tests\WB.UI.Tester.Tests.csproj", "{2DA00710-008B-499D-A704-E1EB62D07E82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.CleanIntegration", "Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj", "{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuestionnaireTester", "QuestionnaireTester", "{C183CD0B-E1F0-4776-B3AC-CB2510C29208}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tester", "Tester", "{C183CD0B-E1F0-4776-B3AC-CB2510C29208}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.QuestionnaireTester", "UI\QuestionnaireTester\WB.UI.QuestionnaireTester\WB.UI.QuestionnaireTester.csproj", "{F18F9422-2624-44C6-934D-B5F48C9587C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Tester", "UI\Tester\WB.UI.Tester\WB.UI.Tester.csproj", "{F18F9422-2624-44C6-934D-B5F48C9587C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.QuestionnaireTester", "Core\BoundedContexts\QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester\WB.Core.BoundedContexts.QuestionnaireTester.csproj", "{689346D7-30AC-420E-BC5B-588CC186A466}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Tester", "Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj", "{689346D7-30AC-420E-BC5B-588CC186A466}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Android", "Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj", "{C6B1BA38-E58E-4E3D-BA59-5289FA10CCBB}"
 EndProject

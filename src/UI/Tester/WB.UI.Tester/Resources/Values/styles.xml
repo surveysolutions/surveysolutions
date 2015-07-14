@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="FullWidthWrappingLayout">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="VerticalFullWidthWrappingLayout" parent="FullWidthWrappingLayout">
+    <item name="android:orientation">vertical</item>
+  </style>
+  
+  <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:ellipsize">end</item>
+  </style>
+
+  <style name="InterviewToolbarTitle" parent="ToolbarTitle">
+    <item name="android:maxLines">4</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:layout_marginLeft">@dimen/zero</item>
+    <item name="android:layout_marginRight">@dimen/zero</item>
+  </style>
+
+  <style name="ToolbarTitle" parent="AppTheme">
+    <item name="android:textColor">@color/colorToolbarText</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:layout_centerVertical">true</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Toolbar_margin_horizontal</item>
+    <item name="android:layout_marginRight">@dimen/Toolbar_margin_horizontal</item>
+  </style>
+
+  <style name="Interview_List" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:smoothScrollbar">true</item>
+    <item name="android:scrollingCache">false</item>
+    <item name="android:animationCache">false</item>
+  </style>
+
+  <style name="Interview_Sidebar_PrefilledQuestions" parent="FullWidthWrappingLayout">
+    <item name="android:orientation">vertical</item>
+    <item name="android:divider">@null</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_PrefilledQuestions_margin_top</item>
+  </style>
+
+  <style name="PrefilledQuestions_List" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:smoothScrollbar">true</item>
+    <item name="android:scrollingCache">false</item>
+    <item name="android:animationCache">false</item>
+    <item name="android:scrollbars">vertical</item>
+  </style>
+
+  <style name="PrefilledQuestions_QuestionnaireTitle" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">sans-serif-thin</item>
+    <item name="android:textSize">@dimen/PrefilledQuestions_QuestionnaireTitle_textsize</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_centerVertical">true</item>
+    <item name="android:maxLines">5</item>
+    <item name="android:ellipsize">end</item>
+  </style>
+
+  <style name="PrefilledQuestions_StartButton" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_centerVertical">true</item>
+  </style>
+
+  <style name="Interview_Sidebar" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_gravity">left|start</item>
+    <item name="android:fitsSystemWindows">true</item>
+    <item name="android:background">#FFFFFFFF</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Interview_Sidebar_Body" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_height">match_parent</item>
+  </style>
+
+  <style name="Interview_Sidebar_Header" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
+    <item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>
+    <item name="android:paddingTop">@dimen/Interview_Sidebar_Header_padding_top</item>
+    <item name="android:paddingBottom">@dimen/Interview_Sidebar_Header_padding_bottom</item>
+  </style>
+
+  <style name="Interview_Sidebar_Sections" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:divider">@null</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:listSelector">@android:color/transparent</item>
+  </style>
+
+  <style name="Interview_Sidebar_Sections_Section" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Interview_Sidebar_GroupRow">
+    <item name="android:orientation">horizontal</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:background">@drawable/sidebar_row</item>
+  </style>
+  
+  <style name="Interview_Sidebar_Sections_Group" parent="VerticalFullWidthWrappingLayout">
+    
+    <item name="android:background">@android:color/transparent</item>
+  </style>
+
+  <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:background">@android:color/transparent</item>
+    <item name="android:textColor">@color/sections_list_text_color</item>
+    <item name="android:textSize">@dimen/textsize_30</item>
+    <item name="android:paddingRight">@dimen/Interview_Sidebar_row_button_padding_right</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_row_button_margin_left</item>
+    <item name="android:fontFamily">sans-serif-light</item>
+  </style>
+  
+  <style name="Interview_Sidebar_Sections_Section_Title">
+    <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
+    <item name="android:layout_height">@dimen/Interview_Sidebar_Sections_Item_height</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:fontFamily">@string/font_fontFamily_medium</item>
+    <item name="android:textColor">@color/sections_list_text_color</item>
+    <item name="android:textSize">@dimen/textsize_16</item>
+    <item name="android:singleLine">false</item>
+    <item name="android:layout_weight">1</item>
+  </style>
+    
+  <style name="Interview_Sidebar_PrefilledQuestion" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/sideBarPrefilledQuestionText</item>
+  </style>
+
+  <style name="Interview_Sidebar_Title" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:singleLine">false</item>
+  </style>
+
+
+  <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+    <item name="spinBars">true</item>
+    <item name="color">@android:color/white</item>
+  </style>
+
+  <style name="ProgressBarTheme_Blue_Light" parent="android:Widget.ProgressBar.Horizontal">
+    <item name="android:progressDrawable">@drawable/theme_blue_light_progress_horizontal_holo_light</item>
+    <item name="android:indeterminateDrawable">@drawable/theme_blue_light_progress_indeterminate_horizontal_holo_light</item>
+    <item name="android:minHeight">@dimen/Theme_ProgressBar_height</item>
+    <item name="android:maxHeight">@dimen/Theme_ProgressBar_height</item>
+  </style>
+
+  <style name="SeekBarTheme_Blue_Light" parent="android:Widget.SeekBar">
+    <item name="android:progressDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
+    <item name="android:indeterminateDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
+    <item name="android:minHeight">@dimen/Theme_SeekBar_height</item>
+    <item name="android:maxHeight">@dimen/Theme_SeekBar_height</item>
+    <item name="android:thumb">@drawable/theme_blue_light_scrubber_control_selector_holo_light</item>
+    <item name="android:thumbOffset">@dimen/Theme_SeekBar_padding</item>
+    <item name="android:paddingLeft">@dimen/Theme_SeekBar_padding</item>
+    <item name="android:paddingRight">@dimen/Theme_SeekBar_padding</item>
+  </style>
+
+  <style name="ImageButtonTheme_Blue_Light" parent="android:Widget.ImageButton">
+    <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
+  </style>
+
+
+
+
+
+  <!-- application theme -->
+
+  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="android:windowBackground">@color/applicationBackground</item>
+    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    <item name="colorPrimaryDark">@color/darkActionBar</item>
+
+    <!-- elements -->
+    <item name="android:checkboxStyle">@style/CheckBoxTheme</item>
+    <item name="android:editTextStyle">@style/EditTextTheme</item>
+    <item name="android:radioButtonStyle">@style/RadioButtonTheme</item>
+    <item name="android:buttonStyle">@style/ButtonAppTheme</item>
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme</item>
+    <item name="android:spinnerStyle">@style/SpinnerTheme</item>
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
+    <item name="android:dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
+
+  </style>
+
+  <style name="GrayAppTheme" parent="AppTheme">
+    <item name="colorPrimary">#FF666666</item>
+    <item name="android:textColorHighlight">#9936aee5</item>
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+    <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
+  </style>
+
+  <style name="BlueAppTheme" parent="AppTheme">
+    <item name="colorPrimary">@color/colorBlueThemePrimary</item>
+    <item name="colorPrimaryDark">@color/interviewActionBar</item>
+    <item name="android:textColorHighlight">#9936aee5</item>
+    <item name="android:imageButtonStyle">@style/ImageButtonTheme_Blue_Light</item>
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+    <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
+    <item name="android:dropDownListViewStyle">@style/Divider_ListStyle</item>
+  </style>
+
+  <style name="Divider_ListStyle">
+    <item name="android:divider">@color/list_style_divider_color</item>
+    <item name="android:dividerHeight">@dimen/ListStyle_Divider_height</item>
+  </style>
+
+  <style name="ButtonAppTheme" parent="android:Widget.Button">
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+    <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
+    <item name="android:gravity">center_vertical|center_horizontal</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="CheckBoxTheme" parent="android:Widget.CompoundButton.CheckBox">
+    <item name="android:button">@drawable/theme_blue_light_btn_check_holo_light</item>
+  </style>
+
+  <style name="RadioButtonTheme" parent="android:style/Widget.CompoundButton.RadioButton">
+    <item name="android:button">@drawable/theme_blue_light_btn_radio_holo_light</item>
+  </style>
+
+  <style name="EditTextTheme" parent="android:Widget.EditText">
+    <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
+    <item name="android:textColor">@android:color/black</item>
+    <item name="android:textCursorDrawable">@null</item>
+  </style>
+
+  <style name="AutoCompleteTextViewTheme" parent="EditTextTheme"/>
+
+  <style name="SpinnerTheme" parent="android:Widget.Holo.Light.Spinner">
+    <item name="android:background">@drawable/theme_blue_light_spinner_background_holo_light</item>
+    <item name="android:dropDownSelector">@drawable/theme_blue_light_list_selector_holo_light</item>
+  </style>
+
+  <style name="SpinnerDropDownItemTheme" parent="android:Widget.Holo.Light.DropDownItem.Spinner">
+    <item name="android:checkMark">@drawable/theme_blue_light_btn_radio_holo_light</item>
+  </style>
+
+  <style name="DropDownListViewStyleTheme" parent="android:Widget.ListView">
+    <item name="android:divider">@android:color/transparent</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
+    <item name="android:listSelector">@android:color/transparent</item>
+  </style>
+
+
+</resources>

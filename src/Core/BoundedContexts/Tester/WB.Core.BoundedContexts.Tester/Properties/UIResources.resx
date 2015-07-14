@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Your user account is locked. Please contact the support team at support@mysurvey.solutions.</value>
+  </data>
+  <data name="ApplicationNameText" xml:space="preserve">
+    <value>Application name:</value>
+  </data>
+  <data name="ApplicationVersionText" xml:space="preserve">
+    <value>Application version:</value>
+  </data>
+  <data name="BufferSizeText" xml:space="preserve">
+    <value>Buffer size for receiving/transmitting data stream:</value>
+  </data>
+  <data name="BufferSizeUnitsText" xml:space="preserve">
+    <value>in bytes</value>
+  </data>
+  <data name="CheckForUpdatesText" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="ConfirmationNoText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ConfirmationText" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="ConfirmationYesText" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>My questionnaires</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Public questionnaires</value>
+  </data>
+  <data name="Dashboard_SearchText" xml:space="preserve">
+    <value>Search (by name, author)</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Questionnaires</value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>Web Service Endpoint:</value>
+  </data>
+  <data name="EngineVersionText" xml:space="preserve">
+    <value>Engine version:</value>
+  </data>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Connecting to server</value>
+  </data>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>Creating interview</value>
+  </data>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>Downloading questionnaire -  {0}%</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>Can't open the questionnaire "{0}". Your Designer user account is not authorized. Please check your login and password.</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
+    <value>Your version of application does not support of this questionnaire. Please, update application.</value>
+  </data>
+  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
+    <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
+  </data>
+  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
+    <value>Preparing questionnaire to creating interview</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
+    <value>Saving interview dynamic link library to local storage</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>Saving questionnaire to local storage</value>
+  </data>
+  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
+    <value>Checking questionnaire for errors on the server</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Server error. Please contact the support team at support@mysurvey.solutions.</value>
+  </data>
+  <data name="LastModifiedDateTitle" xml:space="preserve">
+    <value>Modified on:</value>
+  </data>
+  <data name="LegacyText" xml:space="preserve">
+    <value>@ 2015 The World Bank Group, All Rights Reserved.</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>Your login</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>Survey Solutions Questionnaire Tester</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>START</value>
+  </data>
+  <data name="OSVersionText" xml:space="preserve">
+    <value>Android version:</value>
+  </data>
+  <data name="OwnerNameTitle" xml:space="preserve">
+    <value>Owner:</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PrefilledQuestions_ToolbarTitle" xml:space="preserve">
+    <value>Survey initial information</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Timeout when connecting to the Survey Solutions Designer website. Check your internet connection.</value>
+  </data>
+  <data name="ResetSettingsConfirmationText" xml:space="preserve">
+    <value>Are you sure to reset all settings to default parameters?</value>
+  </data>
+  <data name="ResetSettingsSuccessText" xml:space="preserve">
+    <value>All parameters were successfully reset to default state</value>
+  </data>
+  <data name="ResetSettingsText" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="SaveSettingsSuccessText" xml:space="preserve">
+    <value>Your setting parameters successfully saved</value>
+  </data>
+  <data name="SaveSettingsText" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>No connection to the Survey Solutions Designer. Please make sure that the website is available.</value>
+  </data>
+  <data name="SettingsText" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
+    <value>Allow to send an anonymous information about crashes of application</value>
+  </data>
+  <data name="SignOutText" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>Stay signed in</value>
+  </data>
+  <data name="TryAgainLink" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Your login or password is incorrect</value>
+  </data>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
+  </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Tap to record GPS</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter text</value>
+  </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter number</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter decimal</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Are you sure you want to remove {0} row(s) from dependent roster?</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Invalid answer.</value>
+  </data>
+  <data name="Validity_ApplicationException_ErrorCaption" xml:space="preserve">
+    <value>Internal application error</value>
+  </data>
+  <data name="Validity_ApplicationException_ErrorMessage" xml:space="preserve">
+    <value>Invalid answer.</value>
+  </data>
+  <data name="Validity_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Invalid answer.</value>
+  </data>
+  <data name="Validity_Mandatory_ErrorCaption" xml:space="preserve">
+    <value>Mandatory field.</value>
+  </data>
+  <data name="Validity_Mandatory_ErrorMessage" xml:space="preserve">
+    <value>This field is mandatory. You have to fill it in.</value>
+  </data>
+  <data name="ConfirmationCancelText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ConfirmationTryAgainText" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Interview_GeoLocation_Confirm_NoLocation" xml:space="preserve">
+    <value>Could not locate your position</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Your comment</value>
+  </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter date</value>
+  </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Tap to take barcode</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Section completed: {0}</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} answers</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} sub-sections</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>no sub-sections</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Section not started</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>one answer</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>one sub-section</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Section started: {0}</value>
+  </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Entered value can not be parsed as integer value</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Entered value can not be parsed as decimal value</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} errors</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>one error</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Tap to take a photo</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>All {0} questions answered</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_ButtonText" xml:space="preserve">
+    <value>To parent </value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>Note: {0} questions is unanswered</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>No questionnaires yet
+
+You can create or edit your questionnaires in Survey Solutions Designer</value>
+  </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter new item</value>
+  </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Please, fill in all the required values</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>Tap to enter text</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting.</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Options will be available after answering referenced question</value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>Answer "{0}" cannot be saved, because it does not match any option</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>Answer "{0}" cannot be saved, because it does not match any option.</value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Next section</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>Tap to enter text  ({0})</value>
+  </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative.</value>
+  </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>Answer '{0}' is incorrect because answer is greater than Roster upper bound '{1}'.</value>
+  </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>Empty value cannot be saved</value>
+  </data>
+</root>

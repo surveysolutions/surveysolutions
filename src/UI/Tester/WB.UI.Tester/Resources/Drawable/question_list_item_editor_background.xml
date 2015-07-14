@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+  <solid android:color="@android:color/transparent"  />
+
+  <stroke android:width="@dimen/Interview_Question_List_Editor_border" />
+
+  <padding 
+    android:left="@dimen/Interview_Question_List_Editor_padding" 
+    android:top="@dimen/Interview_Question_List_Editor_padding" 
+    android:right="@dimen/Interview_Question_List_Editor_padding" 
+    android:bottom="@dimen/Interview_Question_List_Editor_padding"/>
+
+</shape>

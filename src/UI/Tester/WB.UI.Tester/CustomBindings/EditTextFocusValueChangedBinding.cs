@@ -1,0 +1,112 @@
+﻿using Android.Views;
+using Android.Widget;
+using Cirrious.MvvmCross.Binding;
+using Cirrious.MvvmCross.Binding.Droid.Target;
+using Cirrious.MvvmCross.ViewModels;
+using System;
+using Android.App;
+using Android.Content;
+using Android.Views.InputMethods;
+using WB.UI.QuestionnaireTester.Activities;
+
+namespace WB.UI.QuestionnaireTester.CustomBindings
+{
+    public class EditTextFocusValueChangedBinding : BaseBinding<EditText, IMvxCommand>
+    {
+        private IMvxCommand command;
+
+        private string oldEditTextValue;
+
+        public EditTextFocusValueChangedBinding(EditText target)
+            : base(target)
+        {
+            target.ImeOptions = ImeAction.Done;
+        }
+
+        public override void SubscribeToEvents()
+        {
+            this.Target.FocusChange += FocusChange;
+            this.Target.EditorAction += HandleEditorAction;
+        }
+
+        private void FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if (e.HasFocus)
+                oldEditTextValue = Target.Text;
+            else
+                TrySendAnswerTextQuestionCommand();
+        }
+
+        private void HandleEditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            e.Handled = false;
+
+            if (e.ActionId != ImeAction.Done) 
+                return;
+
+            e.Handled = true;
+
+            TrySendAnswerTextQuestionCommand();
+        }
+
+        private void TrySendAnswerTextQuestionCommand()
+        {
+            var isTextChanged = oldEditTextValue != Target.Text;
+            HideKeyboard(Target);
+
+            if (!isTextChanged)
+                return;
+
+            if (Target == null)
+                return;
+
+            if (Target.Visibility != ViewStates.Visible)
+                return;
+
+            if (this.command == null)
+                return;
+
+            if (!this.command.CanExecute())
+                return;
+
+            this.command.Execute(Target.Text);
+            this.oldEditTextValue = Target.Text;
+        }
+
+        protected override void SetValueToView(EditText control, IMvxCommand value)
+        {
+            if (Target == null)
+                return;
+
+            this.command = value;
+        }
+
+        public override MvxBindingMode DefaultMode
+        {
+            get { return MvxBindingMode.TwoWay; }
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (isDisposing)
+            {
+                if (Target != null)
+                {
+                    this.Target.FocusChange -= FocusChange;
+                    this.Target.EditorAction -= HandleEditorAction;
+                }
+            }
+            base.Dispose(isDisposing);
+        }
+
+
+        private void HideKeyboard(object sender)
+        {
+            var view = (View)sender;
+            var activity = (Activity)view.Context;
+
+            activity.RemoveFocusFromEditText();
+            activity.HideKeyboard(view.WindowToken);
+        }
+    }
+}
