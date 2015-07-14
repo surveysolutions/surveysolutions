@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
             if (exception is InterviewException)
             {
                 this.errorFromViewModel = new ErrorMessage(
-                    UIResources.Validity_InterviewException_ErrorCaption,
+                    UIResources.Validity_NotAnswered_InterviewException_ErrorCaption,
                     exception.Message);
 
                 this.UpdateValidState();
@@ -138,10 +138,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
             this.UpdateValidState();
         }
 
-        public virtual void MarkAnswerAsInvalidWithMessage(string errorMessageText)
+        public virtual void MarkAnswerAsNotSavedWithMessage(string errorMessageText)
         {
             this.errorFromViewModel = new ErrorMessage(
-                UIResources.Validity_InterviewException_ErrorCaption,
+                UIResources.Validity_NotAnswered_InterviewException_ErrorCaption,
                 errorMessageText);
 
             this.UpdateValidState();

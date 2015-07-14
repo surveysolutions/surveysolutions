@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             if (answerViewModel == null)
             {
                 var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(text);
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(errorMessage);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
                 return;
             }
 

@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
         };
 
         It should_not_mark_question_as_invalid_with_message = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsInvalidWithMessage(Moq.It.IsAny<string>()), Times.Never);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage(Moq.It.IsAny<string>()), Times.Never);
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Once);

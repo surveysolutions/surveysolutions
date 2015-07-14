@@ -262,7 +262,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 {
                     this.ResetTextInEditor = this.selectedObject.OriginalText;
                 }
-                this.QuestionState.Validity.MarkAnswerAsInvalidWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
             }
 
