@@ -36,10 +36,10 @@
                     </li>
                 </ul>
             </div>
-            <form role="form" class="form-inline row" name="viewModel.shareForm" novalidate>
-                <h3>Invite collaborators by e-mail:</h3>
-                <div class="form-group">
-                <div class=" form-group pull-left" ng-class="{'has-error': !viewModel.shareForm.shareWithInput.$valid && viewModel.doesUserExist  }">
+        <form role="form" class="form-inline row" name="viewModel.shareForm" novalidate>
+            <h3>Invite collaborators by e-mail:</h3>
+            <div class="form-group">
+                <div class=" form-group" ng-class="{'has-error': !viewModel.shareForm.shareWithInput.$valid && viewModel.doesUserExist  }">
 
                     <input type="text" ng-pattern="/^([a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$/" class="form-control share-with-email"
                            name="shareWithInput" ng-model="viewModel.shareWith" />
@@ -50,26 +50,26 @@
                         Provide a valid email
                     </p>
                 </div>
-                    <div class="form-group pull-left">
-                        <div class="btn-group dropup" dropdown>
-                            <button class="btn dropdown-toggle" id="Share-type" dropdown-toggle type="button" name="shareType">
-                                {{viewModel.shareType}}
-                                <span class="dropdown-arrow"></span>
-                            </button>
+                <div class="form-group">
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-link" data-toggle="dropdown" name="shareType" id="Share-type">
+                            {{viewModel.shareType}}
+                            <span class="caret"></span>
+                        </button>
 
-                            <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
-                                <li role="presentation" ng-repeat="shareType in shareTypeOptions">
-                                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeShareType(shareType)">
-                                        {{shareType.name}}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
-                        </div>
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation" ng-repeat="shareType in shareTypeOptions">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeShareType(shareType)">
+                                    {{shareType.name}}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
                     </div>
-</form>
+                </div>
+            </div>
+        </form>
         </div>
     </div>
