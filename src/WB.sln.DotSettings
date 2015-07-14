@@ -9,6 +9,6 @@
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=8E509EE0BE889D44A6D193FC61EC4D17/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=8E509EE0BE889D44A6D193FC61EC4D17/AbsolutePath/@EntryValue">D:\Projects\MIS_Copy\src\WB.sln.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File4884E75A77A2664489F9D8EDD6D939DE/@KeyIndexDefined">True</s:Boolean>
-	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File4884E75A77A2664489F9D8EDD6D939DE/RelativePriority/@EntryValue">2</s:Double>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File4884E75A77A2664489F9D8EDD6D939DE/RelativePriority/@EntryValue">0.5</s:Double>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File8E509EE0BE889D44A6D193FC61EC4D17/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File8E509EE0BE889D44A6D193FC61EC4D17/RelativePriority/@EntryValue">1</s:Double></wpf:ResourceDictionary>

@@ -5,7 +5,6 @@ using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities;
-using WB.Core.BoundedContexts.QuestionnaireTester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.QuestionnaireTester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -13,7 +12,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 {
@@ -24,7 +22,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        private readonly ISubstitutionService substitutionService;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
@@ -35,13 +32,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
-            ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
             IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.substitutionService = substitutionService;
             this.modelsFactory = modelsFactory;
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -68,14 +63,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private void BuildSectionsList()
         {
             var questionnaire = this.questionnaireRepository.GetById(questionnaireId);
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
-
             foreach (GroupsHierarchyModel section in questionnaire.GroupsHierarchy)
             {
-                var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[section.Id];
                 var groupIdentity = new Identity(section.Id, new decimal[] { });
-                var sectionViewModel = this.BuildSectionItem(null, groupModel, groupIdentity, interview);
+                var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
 
                 sections.Add(sectionViewModel);
             }
@@ -118,29 +110,26 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         public void Handle(RosterInstancesAdded @event)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            QuestionnaireModel questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
 
             foreach (var rosterInstance in @event.Instances)
             {
                 var addedIdentity = rosterInstance.GetIdentity();
-                this.RefreshListWithNewItemAdded(addedIdentity, interview, questionnaireModel);
+                this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
         }
 
         public void Handle(GroupsEnabled @event)
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            QuestionnaireModel questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
 
             foreach (var groupId in @event.Groups)
             {
                 var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);
-                this.RefreshListWithNewItemAdded(addedIdentity, interview, questionnaireModel);
+                this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
         }
 
-        private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview,
-            QuestionnaireModel questionnaireModel)
+        private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
             var sectionToAddTo = this.Sections.TreeToEnumerable(x => x.Children)
@@ -154,10 +143,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
                     for (int i = 0; i < enabledSubgroups.Count; i++)
                     {
                         var enabledSubgroupIdentity = enabledSubgroups[i];
-                        var model = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[enabledSubgroupIdentity.Id];
                         if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
                         {
-                            var sideBarItem = this.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview);
+                            var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
                             if (i < sectionToAddTo.Children.Count)
                             {
                                 sectionToAddTo.Children.Insert(i, sideBarItem);
@@ -172,9 +160,9 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             }
         }
 
-        private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, GroupModel model, Identity enabledSubgroupIdentity, IStatefulInterview interview)
+        private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
         {
-            return this.modelsFactory.BuildSectionItem(sectionToAddTo, model, enabledSubgroupIdentity, interview, substitutionService, navigationState);
+            return this.modelsFactory.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
         }
     }
 }

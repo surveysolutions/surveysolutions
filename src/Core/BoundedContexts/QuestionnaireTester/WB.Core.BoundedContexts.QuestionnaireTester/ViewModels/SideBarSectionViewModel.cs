@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
+        private string interviewId;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -59,8 +60,31 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
             eventRegistry.Subscribe(this);
         }
 
-        public void Init(NavigationState navigationState)
+        public void Init(string interviewId, 
+            Identity sectionIdentity,
+            SideBarSectionViewModel parent, 
+            NavigationState navigationState)
         {
+            this.interviewId = interviewId;
+
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            var questionnaireModel = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
+
+            this.Parent = parent;
+            this.SectionIdentity = sectionIdentity;
+            this.HasChildren = interview.GetEnabledSubgroups(sectionIdentity).Any();
+            this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
+            if (groupModel is RosterModel)
+            {
+                string rosterTitle = interview.GetRosterTitle(sectionIdentity);
+                this.Title = substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
+            }
+            else
+            {
+                this.Title = groupModel.Title;
+            }
+
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged += navigationState_OnBeforeGroupChanged;
@@ -84,7 +108,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         public NavigationState NavigationState {get; set; }
-
         public Identity SectionIdentity { get; set; }
 
         private string title;
@@ -158,6 +181,7 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
 
         public int NodeDepth { get; set; }
 
+        private ObservableCollection<SideBarSectionViewModel> children;
         public ObservableCollection<SideBarSectionViewModel> Children
         {
             get { return this.children; }
@@ -170,8 +194,6 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         }
 
         private MvxCommand navigateToSectionCommand;
-        private ObservableCollection<SideBarSectionViewModel> children;
-
         public ICommand NavigateToSectionCommand
         {
             get
@@ -198,13 +220,11 @@ namespace WB.Core.BoundedContexts.QuestionnaireTester.ViewModels
         private ObservableCollection<SideBarSectionViewModel> GenerateChildNodes()
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
-            QuestionnaireModel questionnaireModel = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             List<SideBarSectionViewModel> result = new List<SideBarSectionViewModel>();
             foreach (Identity groupInstance in interview.GetEnabledSubgroups(this.SectionIdentity))
             {
-                var group = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[groupInstance.Id];
-                var section = this.modelsFactory.BuildSectionItem(this, group, groupInstance, interview, this.substitutionService, this.NavigationState);
+                var section = this.modelsFactory.BuildSectionItem(this, groupInstance, this.NavigationState, this.NavigationState.InterviewId);
 
                 result.Add(section);
             }
