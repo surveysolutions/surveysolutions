@@ -2,9 +2,9 @@
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class UpdateQuestionStateMessage : MvxMessage
+    public class UpdateInterviewEntityStateMessage : MvxMessage
     {
-        public UpdateQuestionStateMessage(object sender, int elementPosition)
+        public UpdateInterviewEntityStateMessage(object sender, int elementPosition)
             : base(sender)
         {
             this.ElementPosition = elementPosition;

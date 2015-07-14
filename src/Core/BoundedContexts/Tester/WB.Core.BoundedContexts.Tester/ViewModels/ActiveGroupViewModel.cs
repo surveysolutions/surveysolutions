@@ -2,17 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,6 +22,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
         ILiteEventHandler<QuestionsDisabled>
     {
@@ -150,6 +148,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(@event.Questions);
         }
 
+        public void Handle(GroupsEnabled @event)
+        {
+            List<int> positionToUpdate = CalculatePositionsToUpdate(@event.Groups).Distinct().ToList();
+            positionToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            List<int> positionToUpdate = CalculatePositionsToUpdate(@event.Groups).Distinct().ToList();
+            positionToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
+        }
+
         private void NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] questionIdentities)
         {
             if (this.listOfChildrenIdOfCurrentGroup == null || this.listOfChildrenIdOfCurrentGroup.Count == 0)
@@ -163,9 +173,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     && questionIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
                 {
                     var questionIndex = this.listOfChildrenIdOfCurrentGroup.IndexOf(questionIdentity.Id);
-                    this.messenger.Publish(new UpdateQuestionStateMessage(questionIdentity, questionIndex));
+                    this.messenger.Publish(new UpdateInterviewEntityStateMessage(questionIdentity, questionIndex));
                 }
             }
+        }
+
+        List<int> CalculatePositionsToUpdate(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] groupIdentities)
+        {
+            var result = new List<int>();
+            foreach (var groupIdentity in groupIdentities)
+            {
+                if (this.listOfChildrenIdOfCurrentGroup.Contains(groupIdentity.Id)
+                    && groupIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
+                {
+                    result.Add(this.listOfChildrenIdOfCurrentGroup.IndexOf(groupIdentity.Id));
+                }
+            }
+            return result;
         }
     }
 }
