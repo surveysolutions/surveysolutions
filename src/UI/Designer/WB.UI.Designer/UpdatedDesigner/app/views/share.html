@@ -23,7 +23,7 @@
                 <h3>Who has access:</h3>
                 <ul class="accounts">
                     <li ng-repeat="s in questionnaire.sharedPersons">
-                        <a href="mailto:{{s.email}}">{{s.email}}</a> <i class="text-muted" ng-if="s.isOwner">(you)</i> -
+                        <a href="mailto:{{s.email}}">{{s.email}}</a> -
                         <div class="btn-group">
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
                                Can {{s.shareType === 'View' ? 'View' : 'Edit'}}<span class="caret"></span>
