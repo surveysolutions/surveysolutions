@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
     internal class when_getting_xml_based_resources_which_contain_hardcoded_dimensions : TesterResourcesTestsContext
     {
         Because of = () =>
-            resources = GetXmlResourcesHavingHardcodedDimensions("UI/QuestionnaireTester/WB.UI.Tester/Resources").ToArray();
+            resources = GetXmlResourcesHavingHardcodedDimensions("UI/Tester/WB.UI.Tester/Resources").ToArray();
 
         It should_return_only_dimensions_xmls_from_values_folders = () =>
             resources.ShouldEachConformTo(resource => resource.ToLower().StartsWith("values") && resource.ToLower().Contains("dimensions"));
