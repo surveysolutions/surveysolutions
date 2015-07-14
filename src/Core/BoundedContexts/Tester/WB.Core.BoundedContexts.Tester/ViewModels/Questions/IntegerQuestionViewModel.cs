@@ -128,7 +128,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 {
                     var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, AnswerAsString, this.answerMaxValue);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
-                    AnswerAsString = NullableIntToAnswerString(previousAnswer);
                     return;
                 }
 
