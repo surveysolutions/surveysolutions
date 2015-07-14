@@ -208,9 +208,9 @@
     <value>Number of interviews collected by the {0} that were approved by HQ.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Number of approvals and rejections performed by a HQ on questionnaires collected by an {0}.</value>
+    <value>Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by an {0}.</value>
+    <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}.</value>
   </data>
 </root>

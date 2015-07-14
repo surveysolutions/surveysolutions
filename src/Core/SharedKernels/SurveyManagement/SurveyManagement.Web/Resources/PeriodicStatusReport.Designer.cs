@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by an {0}..
+        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsByHQDescription {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by an {0}..
+        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}..
         /// </summary>
         public static string NumberOfInterviewTransactionsBySupervisorDescription {
             get {
