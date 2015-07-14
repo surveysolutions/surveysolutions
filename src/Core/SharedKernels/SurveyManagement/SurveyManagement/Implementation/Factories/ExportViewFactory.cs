@@ -378,10 +378,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     }
                     else if (this.IsQuestionTextList(question))
                     {
-                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
+                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question,
+                            referenceInfoForLinkedQuestions);
                     }
                     else
-                        this.AddHeaderForNotMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
+                    {
+                        if (question is GpsCoordinateQuestion)
+                            AddHeadersForGpsQuestion(headerStructureForLevel.HeaderItems, question,
+                                referenceInfoForLinkedQuestions);
+                        else
+                            this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel.HeaderItems, question,
+                                referenceInfoForLinkedQuestions);
+                    }
                     continue;
                 }
 
@@ -416,7 +424,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeaderForNotMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
+        protected void AddHeaderForSingleColumnExportQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             headerItems.Add(question.PublicKey,
@@ -442,6 +450,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             headerItems.Add(question.PublicKey,
                 CreateExportedHeaderItem(question, maxCount,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
+        }
+
+        protected void AddHeadersForGpsQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
+            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+        {
+            var gpsColumns = GeoPosition.PropertyNames;
+            var gpsQuestionExportHeader = this.CreateExportedHeaderItem(question,
+                this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions));
+            gpsQuestionExportHeader.ColumnNames = new string[gpsColumns.Length];
+            gpsQuestionExportHeader.Titles = new string[gpsColumns.Length];
+
+            for (int i = 0; i < gpsColumns.Length; i++)
+            {
+                gpsQuestionExportHeader.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption,
+                    gpsColumns[i]);
+
+                gpsQuestionExportHeader.Titles[i] += string.Format("{0}", gpsColumns[i]);
+            }
+
+            headerItems.Add(question.PublicKey, gpsQuestionExportHeader);
         }
 
         private int GetRosterSizeForLinkedQuestion(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,

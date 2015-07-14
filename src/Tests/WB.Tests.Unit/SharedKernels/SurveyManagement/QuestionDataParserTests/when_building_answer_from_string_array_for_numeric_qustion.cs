@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 result =
-                    questionDataParser.BuildAnswerFromStringArray(new string[] { answer }, question, CreateQuestionnaireDocumentWithOneChapter(question));
+                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName, answer) }, question, CreateQuestionnaireDocumentWithOneChapter(question));
 
         private It should_result_be_equal_to_1 = () =>
             result.Value.Value.ShouldEqual(1);

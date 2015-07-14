@@ -1,22 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Main.Core.Entities.SubEntities
 {
     public class GeoPosition
     {
-        public DateTimeOffset Timestamp { get; set; }
+        private static string[] propertyNames = new[] {"Latitude", "Longitude", "Accuracy", "Altitude", "Timestamp"};
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Accuracy { get; set; }
-
         public double Altitude { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format("{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
-        }
+        public DateTimeOffset Timestamp { get; set; }
 
         public GeoPosition(){}
+
+        public GeoPosition(dynamic propertyAnswerMap)
+        {
+            this.Latitude = propertyAnswerMap.Latitude;
+
+            this.Longitude = propertyAnswerMap.Longitude;
+
+            if (IsPropertyExist(propertyAnswerMap, "Accuracy"))
+                this.Accuracy = propertyAnswerMap.Accuracy;
+
+            if (IsPropertyExist(propertyAnswerMap, "Timestamp"))
+                this.Timestamp = propertyAnswerMap.Timestamp;
+
+            if (IsPropertyExist(propertyAnswerMap, "Altitude"))
+                this.Altitude = propertyAnswerMap.Altitude;
+        }
+
+        private bool IsPropertyExist(dynamic propertyAnswerMap, string name)
+        {
+            return ((IDictionary<String, object>)propertyAnswerMap).ContainsKey(name);
+        }
 
         public GeoPosition(double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp)
         {
@@ -26,49 +44,26 @@ namespace Main.Core.Entities.SubEntities
             this.Timestamp = timestamp;
             this.Altitude = altitude;
         }
-        
-        public static GeoPosition Parse(string value)
+
+        public override string ToString()
         {
-            //supports string with and without altitude
-
-            if (string.IsNullOrEmpty(value))
-                return null;
-
-            
-            var properties = value.Split('[', ']');
-            if (properties.Length != 3)
-                return null;
-            
-            var coordinates = properties[0].Split(',');
-            if (coordinates.Length != 2)
-                return null;
-
-            double latitude;
-            if(!double.TryParse(coordinates[0], out latitude))
-                return null;
-
-            double longitude;
-            if (!double.TryParse(coordinates[1], out longitude))
-                return null;
-
-            double accuracy;
-            if (!double.TryParse(properties[1], out accuracy))
-                return null;
-
-
-            double altitude;
-            if (!String.IsNullOrEmpty(properties[2]))
-            {
-                if (!double.TryParse(properties[2], out altitude))
-                    return null;
-            }
-            else
-            {
-                altitude = 0;
-            }
-
-            
-            return new GeoPosition(latitude, longitude, accuracy, altitude, new DateTimeOffset(DateTime.Now));
+            return string.Format("{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
         }
+
+        public static object ParseProperty(string value, string propertyName)
+        {
+            if (!PropertyNames.Contains(propertyName))
+                throw new ArgumentException(
+                    String.Format("{0} property is missing at GeoPosition object. Value {1} can't be parsed",
+                        propertyName,
+                        value));
+
+            if (propertyName == "Timestamp")
+                return DateTimeOffset.Parse(value);
+
+            return double.Parse(value);
+        }
+
+        public static string[] PropertyNames { get { return propertyNames; } }
     }
 }

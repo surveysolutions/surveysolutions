@@ -380,16 +380,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     foreach (var presentQuestion in presentQuestions)
                     {
                         var question = preloadedDataService.GetQuestionByVariableName(presentQuestion.Key);
-                        var values = new List<decimal>(); 
+                        var values = new List<decimal>();
 
-                        foreach (var answerIndex in presentQuestion.Value)
+                        foreach (var coulumnNameWithindex in presentQuestion.Value)
                         {
+                            var columnName = coulumnNameWithindex.Item1;
+                            var answerIndex = coulumnNameWithindex.Item2;
                             var answer = row[answerIndex];
                             if (string.IsNullOrEmpty(answer))
                                 continue;
 
                             KeyValuePair<Guid, object> parsedValue;
-                            var parsedResult = preloadedDataService.ParseQuestion(answer, question, out parsedValue);
+                            var parsedResult = preloadedDataService.ParseQuestion(answer, columnName, question, out parsedValue);
 
                             switch (parsedResult)
                             {
