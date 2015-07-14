@@ -14,8 +14,8 @@
           local:MvxBind="Hint Hint; 
                          Mask Mask; 
                          Text Answer; 
-                         FocusValueChanged ValueChangeCommand; 
                          IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 
+                         FocusValueChanged ValueChangeCommand; 
                          BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
       </MvxLinearLayout>
