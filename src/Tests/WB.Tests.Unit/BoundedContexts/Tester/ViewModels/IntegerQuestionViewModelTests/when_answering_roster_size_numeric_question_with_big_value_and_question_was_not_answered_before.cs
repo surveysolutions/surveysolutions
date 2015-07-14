@@ -59,8 +59,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
-        It should_reset_AnswerAsString_to_null = () =>
-            integerModel.AnswerAsString.ShouldBeNull();
+        It should_not_reset_AnswerAsString_to_previous_value = () =>
+            integerModel.AnswerAsString.ShouldEqual("50");
 
         private static IntegerQuestionViewModel integerModel;
     }

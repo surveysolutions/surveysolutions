@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
         It should_reset_AnswerAsString_to_previous_value = () =>
-            integerModel.AnswerAsString.ShouldEqual("1");
+            integerModel.AnswerAsString.ShouldEqual("50");
 
         private static IntegerQuestionViewModel integerModel;
     }
