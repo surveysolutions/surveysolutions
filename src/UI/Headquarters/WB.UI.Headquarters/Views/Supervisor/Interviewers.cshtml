@@ -130,21 +130,28 @@
     <script type="text/html" id="confirm-delete-template">
         <h3>
             <b>
+                <!-- ko if: $data.length>5 -->
+
+                <span class='text-normal' data-bind='text: length'></span>
+
+                <!-- /ko -->
+                <!-- ko if: $data.length<=5 -->
                 <!-- ko foreach:$data -->
                 <!-- ko if: $index() > 0 -->,<!-- /ko -->
                 '<span class='text-normal' data-bind='text: UserName'></span>'
-                <!-- /ko -->
+                <!-- /ko --> <!-- /ko -->
             </b>
             interviewer(s) will be archived.
         </h3>
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        <br />     
+        <br />
         <b>
             <span style="color: red;">
                 If the interviewer has completed interviews in census mode on his tablet then the data will be lost.
             </span>
         </b>
-        <br /><br />Do you want to continue?
+        <br />
+        <br />Do you want to continue?
     </script>
 }
