@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             catch (AggregateException) { }
         };
 
-        It should_execute_all_5_commands = () =>
+        It should_execute_all_2_commands = () =>
             executedCommands.ShouldContainOnly("first", "second");
 
         private static List<string> executedCommands = new List<string>();
