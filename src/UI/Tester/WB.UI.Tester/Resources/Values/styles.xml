@@ -125,16 +125,16 @@
   </style>
 
   <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:background">@android:color/transparent</item>
+    <item name="android:background">@drawable/sidebar_button</item>
     <item name="android:textColor">@color/sections_list_text_color</item>
     <item name="android:textSize">@dimen/textsize_30</item>
-    <item name="android:paddingRight">@dimen/Interview_Sidebar_row_button_padding_right</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Sidebar_row_button_margin_left</item>
     <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:stateListAnimator">@null</item>
   </style>
   
   <style name="Interview_Sidebar_Sections_Section_Title">
     <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
+    <item name="android:paddingLeft">@dimen/Interview_Sidebar_row_button_padding_right</item>
     <item name="android:layout_height">@dimen/Interview_Sidebar_Sections_Item_height</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:gravity">center_vertical</item>
