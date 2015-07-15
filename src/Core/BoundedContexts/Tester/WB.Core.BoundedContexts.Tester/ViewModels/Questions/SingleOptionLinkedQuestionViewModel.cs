@@ -127,10 +127,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
-            await OptionSelectedImpl(sender);
+            await this.OptionSelectedAsync(sender);
         }
 
-        internal async Task OptionSelectedImpl(object sender)
+        internal async Task OptionSelectedAsync(object sender)
         {
             var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
             var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     previousOption.Selected = false;
                 }
 
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }

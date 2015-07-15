@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
             ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '50' is incorrect because answer is greater than Roster upper bound '40'."), Times.Once);
 
         It should_not_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
         It should_not_reset_AnswerAsString_to_previous_value = () =>
             integerModel.AnswerAsString.ShouldEqual("50");

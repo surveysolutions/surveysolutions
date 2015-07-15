@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
             listModel.Answers.Count.ShouldEqual(0);
 
         It should_not_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
 
         private static TextListQuestionViewModel listModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);

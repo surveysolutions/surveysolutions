@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand(async () => await this.NavigateToSection());
+                this.navigateToSectionCommand = this.navigateToSectionCommand ?? new MvxCommand(async () => await this.NavigateToSectionAsync());
                 return this.navigateToSectionCommand;
             }
         }
@@ -209,10 +209,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private async Task NavigateToSection()
+        private async Task NavigateToSectionAsync()
         {
             messenger.Publish(new SectionChangeMessage(this));
-            await this.NavigationState.NavigateTo(this.SectionIdentity);
+            await this.NavigationState.NavigateToAsync(this.SectionIdentity);
         }
 
         private ObservableCollection<SideBarSectionViewModel> GenerateChildNodes()

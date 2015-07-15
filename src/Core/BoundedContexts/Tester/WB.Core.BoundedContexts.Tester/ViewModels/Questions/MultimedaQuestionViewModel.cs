@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
                         try
                         {
-                            await this.Answering.SendAnswerQuestionCommand(command);
+                            await this.Answering.SendAnswerQuestionCommandAsync(command);
                             this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
                             this.QuestionState.Validity.ExecutedWithoutExceptions();
                         }

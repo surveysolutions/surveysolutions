@@ -37,10 +37,10 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SingleOpt
         };
 
         Because of = () =>
-            viewModel.OptionSelectedImpl(viewModel.Options.First()).WaitAndUnwrapException();
+            viewModel.OptionSelectedAsync(viewModel.Options.First()).WaitAndUnwrapException();
 
         It should_execute_AnswerSingleOptionLinkedQuestionCommand_command = () =>
-            answeringMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
+            answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
 
         private static SingleOptionLinkedQuestionViewModel viewModel;
         private static string interviewId = "11111111111111111111111111111111";

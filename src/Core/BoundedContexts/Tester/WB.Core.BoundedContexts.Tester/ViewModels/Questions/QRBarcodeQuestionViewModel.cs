@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                         answerTime: DateTime.UtcNow,
                         answer: scanCode.Code);
 
-                    await this.Answering.SendAnswerQuestionCommand(command);
+                    await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
                     this.Answer = scanCode.Code;
                 }

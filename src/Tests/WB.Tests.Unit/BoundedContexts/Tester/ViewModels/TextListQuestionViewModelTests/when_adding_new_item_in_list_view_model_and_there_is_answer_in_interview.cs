@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
             listModel.NewListItem.ShouldBeEmpty();
 
         It should_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
 
         private static TextListQuestionViewModel listModel;
         private static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);

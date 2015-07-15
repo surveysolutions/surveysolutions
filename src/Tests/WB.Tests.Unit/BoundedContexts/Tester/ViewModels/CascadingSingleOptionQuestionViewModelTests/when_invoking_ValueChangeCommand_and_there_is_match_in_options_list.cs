@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError), Times.Never);
 
         It should_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
 
