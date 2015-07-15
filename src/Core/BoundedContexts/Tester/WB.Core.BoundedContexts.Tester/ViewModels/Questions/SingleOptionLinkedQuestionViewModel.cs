@@ -178,6 +178,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     if (optionToRemove != null)
                     {
                         this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
+                        this.RaisePropertyChanged(() => HasOptions);
                     }
                 }
             }
