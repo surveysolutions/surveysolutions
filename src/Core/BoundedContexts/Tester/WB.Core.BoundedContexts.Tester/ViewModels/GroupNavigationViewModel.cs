@@ -2,11 +2,9 @@
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -30,7 +28,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public GroupViewModel NavigateToGroupViewModel { get; private set; }
+        protected GroupViewModel NavigateToGroupViewModel { get; private set; }
+
+        public GroupNavigationViewModel(){}
 
         public GroupNavigationViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.NavigateToGroupViewModel = navigateToGroupViewModel;
         }
 
-        public void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             this.groupIdentity = groupIdentity;

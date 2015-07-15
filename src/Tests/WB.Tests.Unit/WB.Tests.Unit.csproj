@@ -402,6 +402,9 @@
     <Compile Include="BoundedContexts\Tester\Services\MaskTextTests\when_filtering_text_partialy_coincidents_with_part_of_mask.cs" />
     <Compile Include="BoundedContexts\Tester\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Tester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\ActiveGroupViewModelTestContext.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_disabled_event.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_AnswersRemoved_for_cascading_question.cs" />
