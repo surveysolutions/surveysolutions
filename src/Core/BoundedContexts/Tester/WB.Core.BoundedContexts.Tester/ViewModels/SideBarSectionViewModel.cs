@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.SectionIdentity = sectionIdentity;
             this.HasChildren = interview.GetEnabledSubgroups(sectionIdentity).Any();
             this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
+            this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
             if (groupModel is RosterModel)
             {
                 string rosterTitle = interview.GetRosterTitle(sectionIdentity);
