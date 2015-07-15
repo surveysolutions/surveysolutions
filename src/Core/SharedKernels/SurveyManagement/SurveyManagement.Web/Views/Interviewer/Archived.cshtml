@@ -111,10 +111,16 @@
     <script type="text/html" id="confirm-delete-template">
         <h3>
             <b>
+                <!-- ko if: $data.length>5 -->
+
+                <span class='text-normal' data-bind='text: length'></span>
+
+                <!-- /ko -->
+                <!-- ko if: $data.length<=5 -->
                 <!-- ko foreach:$data -->
                 <!-- ko if: $index() > 0 -->,<!-- /ko -->
                 '<span class='text-normal' data-bind='text: UserName'></span>'
-                <!-- /ko -->
+                <!-- /ko --> <!-- /ko -->
             </b>
             @Archived.UnarchiveInterviewerWarning
         </h3>
