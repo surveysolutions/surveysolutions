@@ -250,6 +250,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 RosterVector = referencedAnswer.RosterVector,
                 Title = title,
                 Selected = isSelected,
+                QuestionState = this.QuestionState
             };
 
             optionViewModel.BeforeSelected += this.OptionSelected;
