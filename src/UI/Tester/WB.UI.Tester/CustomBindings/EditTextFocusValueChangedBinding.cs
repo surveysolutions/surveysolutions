@@ -32,9 +32,14 @@ namespace WB.UI.Tester.CustomBindings
         private void FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
+            {
                 oldEditTextValue = Target.Text;
+            }
             else
+            {
                 TrySendAnswerTextQuestionCommand();
+                HideKeyboard(Target);
+            }
         }
 
         private void HandleEditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -47,13 +52,12 @@ namespace WB.UI.Tester.CustomBindings
             e.Handled = true;
 
             TrySendAnswerTextQuestionCommand();
+            HideKeyboard(Target);
         }
 
         private void TrySendAnswerTextQuestionCommand()
         {
             var isTextChanged = oldEditTextValue != Target.Text;
-            HideKeyboard(Target);
-
             if (!isTextChanged)
                 return;
 
