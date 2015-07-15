@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             get
             {
-                return new MvxCommand(async () => await QuestionViewModel.ToggleAnswer(this));
+                return new MvxCommand(async () => await QuestionViewModel.ToggleAnswerAsync(this));
             }
         }
 

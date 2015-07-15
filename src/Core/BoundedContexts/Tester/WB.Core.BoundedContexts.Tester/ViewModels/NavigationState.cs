@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireId = questionnaireId;
         }
 
-        public async Task NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity = null)
+        public async Task NavigateToAsync(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
             await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return interview.HasGroup(group) && interview.IsEnabled(group);
         }
 
-        public async Task NavigateBack(Action navigateToIfHistoryIsEmpty)
+        public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
             await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);

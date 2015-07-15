@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public async void Init()
         {
-            await this.GetServerQuestionnaires();
+            await this.LoadServerQuestionnairesAsync();
             this.IsInitialized = true;
         }
 
@@ -113,13 +113,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand loadQuestionnaireCommand;
         public IMvxCommand LoadQuestionnaireCommand
         {
-            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaire(questionnaire))); }
+            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire))); }
         }
 
         private IMvxCommand refreshQuestionnairesCommand;
         public IMvxCommand RefreshQuestionnairesCommand
         {
-            get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async () => await this.GetServerQuestionnaires(), () => !this.IsInProgress)); }
+            get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress)); }
         }
 
         private IMvxCommand showMyQuestionnairesCommand;
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsPublicShowed = false;
         }
 
-        private async Task LoadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
+        private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
         {
             if (this.IsInProgress) return;
 
@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private async Task GetServerQuestionnaires()
+        private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
 

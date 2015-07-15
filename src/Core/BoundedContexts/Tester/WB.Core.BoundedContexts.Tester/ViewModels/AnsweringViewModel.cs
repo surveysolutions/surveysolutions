@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        public virtual async Task SendAnswerQuestionCommand(AnswerQuestionCommand answerCommand)
+        public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 

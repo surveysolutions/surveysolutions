@@ -85,11 +85,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
         private IMvxCommand valueChangeCommand;
         public IMvxCommand InterviewerCommentChangeCommand
         {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommand())); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommandAsync())); }
         }
 
 
-        private async Task SendCommentQuestionCommand()
+        private async Task SendCommentQuestionCommandAsync()
         {
             await this.commandService.ExecuteAsync(
                 new CommentAnswerCommand(

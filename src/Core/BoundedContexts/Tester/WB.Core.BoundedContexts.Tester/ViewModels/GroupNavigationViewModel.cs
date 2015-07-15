@@ -70,18 +70,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand NavigateCommand
         {
-            get { return new MvxCommand(async () => await this.Navigate(), () => NavigateToIdentity != null); }
+            get { return new MvxCommand(async () => await this.NavigateAsync(), () => NavigateToIdentity != null); }
         }
 
-        private async Task Navigate()
+        private async Task NavigateAsync()
         {
             if (IsInSection)
             {
-                await navigationState.NavigateTo(NavigateToIdentity);
+                await navigationState.NavigateToAsync(NavigateToIdentity);
             }
             else
             {
-                await navigationState.NavigateTo(NavigateToIdentity, groupIdentity);
+                await navigationState.NavigateToAsync(NavigateToIdentity, groupIdentity);
             }
         }
 

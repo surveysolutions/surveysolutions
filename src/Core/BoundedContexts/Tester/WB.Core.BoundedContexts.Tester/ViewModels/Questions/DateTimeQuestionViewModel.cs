@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     answerTime: DateTime.UtcNow,
                     answer: answerValue
                     );
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.SetToView(answerValue);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }

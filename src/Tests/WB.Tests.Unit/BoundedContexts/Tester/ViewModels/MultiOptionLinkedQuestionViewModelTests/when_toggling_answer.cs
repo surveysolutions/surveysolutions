@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
         };
 
         private It should_send_command_with_selected_roster_vectors = () =>
-            answering.Verify(x => x.SendAnswerQuestionCommand(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
+            answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
                 c.QuestionId == questionId.Id && c.SelectedPropagationVectors.Any(pv => pv.SequenceEqual(viewModel.Options.First().Value)))));
 
         static MultiOptionLinkedQuestionViewModel viewModel;

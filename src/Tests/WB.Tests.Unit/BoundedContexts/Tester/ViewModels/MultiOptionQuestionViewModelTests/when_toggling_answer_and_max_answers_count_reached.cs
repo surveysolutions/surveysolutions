@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
             viewModel.Options.Second().Checked = true;
         };
 
-        private Because of = async () => await viewModel.ToggleAnswer(viewModel.Options.Second());
+        private Because of = async () => await viewModel.ToggleAnswerAsync(viewModel.Options.Second());
 
         private It should_undo_checked_property = () => viewModel.Options.Second().Checked.ShouldBeFalse();
 

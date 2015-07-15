@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
         private IMvxCommand navigateToGroupCommand;
         public IMvxCommand NavigateToGroupCommand
         {
-            get { return this.navigateToGroupCommand ?? (this.navigateToGroupCommand = new MvxCommand(async () => await this.NavigateToGroup())); }
+            get { return this.navigateToGroupCommand ?? (this.navigateToGroupCommand = new MvxCommand(async () => await this.NavigateToGroupAsync())); }
         }
 
         public GroupViewModel(
@@ -100,9 +100,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
             this.RaisePropertyChanged(() => this.GroupState);
         }
 
-        private async Task NavigateToGroup()
+        private async Task NavigateToGroupAsync()
         {
-            await this.navigationState.NavigateTo(this.groupIdentity);
+            await this.navigationState.NavigateToAsync(this.groupIdentity);
         }
     }
 }

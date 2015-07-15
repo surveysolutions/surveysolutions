@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.GroupChanged += NavigationStateOnOnGroupChanged;
-            await this.navigationState.NavigateTo(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
+            await this.navigationState.NavigateToAsync(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
 
             this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
         }
@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.navigationState.NavigateBack(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).WaitAndUnwrapException();
+            this.navigationState.NavigateBackAsync(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).WaitAndUnwrapException();
         }
     }
 }

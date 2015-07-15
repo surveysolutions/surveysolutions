@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
             cascadingModel.SelectedObject = cascadingModel.AutoCompleteSuggestions[1];
 
         It should_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
 
         It should_set_not_null_SelectedObject = () =>
             cascadingModel.SelectedObject.ShouldNotBeNull();

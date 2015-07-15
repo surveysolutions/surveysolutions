@@ -55,10 +55,10 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.MultiOpti
         {
             Thread.Sleep(1);
             viewModel.Options.Second().Checked = true;
-            viewModel.ToggleAnswer(viewModel.Options.Second()).WaitAndUnwrapException();
+            viewModel.ToggleAnswerAsync(viewModel.Options.Second()).WaitAndUnwrapException();
         };
 
-        It should_send_command_to_service = () => answeringMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => 
+        It should_send_command_to_service = () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => 
             c.SelectedValues.SequenceEqual(new []{1m,2m}))));
 
         static MultiOptionQuestionViewModel viewModel;

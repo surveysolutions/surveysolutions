@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommand())); }
+            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync())); }
         }
 
         public IntegerQuestionViewModel(
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.answerMaxValue = questionModel.MaxValue ?? RosterUpperBoundDefaultValue;
         }
 
-        private async Task SendAnswerIntegerQuestionCommand()
+        private async Task SendAnswerIntegerQuestionCommandAsync()
         {
             if (string.IsNullOrWhiteSpace(AnswerAsString))
             {
@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
                 this.previousAnswer = answer;
