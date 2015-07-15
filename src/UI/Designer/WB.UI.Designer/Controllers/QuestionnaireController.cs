@@ -423,15 +423,13 @@ namespace WB.UI.Designer.Controllers
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            IPagedList<QuestionnaireListViewModel> questionnaireListViewModels = this.questionnaireHelper.GetQuestionnaires(
+            return this.questionnaireHelper.GetQuestionnaires(
                 pageIndex: pageIndex,
                 sortBy: sortBy,
                 sortOrder: sortOrder,
                 filter: filter,
-                viewerId: this.UserHelper.WebUser.UserId,
-                isAdmin: this.UserHelper.WebUser.IsAdmin);
-
-            return questionnaireListViewModels;
+                viewerId: UserHelper.WebUser.UserId,
+                isAdmin: UserHelper.WebUser.IsAdmin);
         }
         
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
