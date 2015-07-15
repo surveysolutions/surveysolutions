@@ -135,8 +135,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = this.Sections.TreeToEnumerable(x => x.Children)
-                                              .SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children);
+            var sectionToAddTo = allVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
@@ -160,6 +160,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         }
                     }
                 });
+            }
+
+            foreach (var section in allVisibleSections)
+            {
+                section.RefreshHasChildrenFlag();
             }
         }
 

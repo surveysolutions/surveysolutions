@@ -54,7 +54,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
             this.Children = new ObservableCollection<SideBarSectionViewModel>();
-            this.Children.CollectionChanged += (sender, args) => this.HasChildren = this.Children.Count > 0;
         }
 
         public void Init(string interviewId, 
@@ -146,9 +145,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return hasChildren; }
             set
             {
-                if (this.HasChildren == value) return;
-                this.hasChildren = value; 
-                this.RaisePropertyChanged();
+                this.RaiseAndSetIfChanged(ref hasChildren, value);
             }
         }
 
@@ -186,10 +183,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return this.children; }
             set
             {
-                this.children = value; 
+                this.children = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(() => HasChildren);
             }
+        }
+
+        private void NotifyParents()
+        {
+            this.UnwrapReferences(x => x.Parent).ForEach(x => x.RaisePropertyChanged(() => x.HasChildren));
         }
 
         private MvxCommand navigateToSectionCommand;
@@ -264,6 +265,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.eventRegistry.Unsubscribe(this, this.interviewId);
             this.mainThreadDispatcher.RequestMainThreadAction(() => this.Parent.Children.Remove(this));
+            this.RefreshHasChildrenFlag();
             this.Dispose();
         }
 
@@ -271,6 +273,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.NavigationState.GroupChanged -= this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged -= this.navigationState_OnBeforeGroupChanged;
+        }
+
+        public void RefreshHasChildrenFlag()
+        {
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            this.HasChildren = interview.GetEnabledSubgroups(this.SectionIdentity).Any();
         }
     }
 }
