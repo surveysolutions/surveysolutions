@@ -387,6 +387,10 @@
     <AndroidResource Include="Resources\drawable\question_option_background_answered.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\sidebar_button.xml" />
+    <AndroidResource Include="Resources\drawable\sidebar_button_bg_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\sidebar_button_bg.xml" />
+    <AndroidResource Include="Resources\drawable-v21\sidebar_button.xml" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
