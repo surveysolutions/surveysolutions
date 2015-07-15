@@ -50,8 +50,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public async Task NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
-            await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync();
-            await this.commandService.WaitPendingCommandsAsync();
+            await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
 
             if (!this.CanNavigateTo(groupIdentity))
                 return;
@@ -82,8 +82,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public async Task NavigateBack(Action navigateToIfHistoryIsEmpty)
         {
-            await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync();
-            await this.commandService.WaitPendingCommandsAsync();
+            await this.userInteractionAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
 
             if (navigateToIfHistoryIsEmpty == null) throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
 
