@@ -266,10 +266,11 @@
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedAction.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedActionUtils.cs" />
     <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\InterviewHistory.cs" />
-    <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\PeriodiceReportType.cs" />
     <Compile Include="Views\Reposts\PeriodicStatusReportModel.cs" />
     <Compile Include="Views\Reposts\PeriodicStatusReportWebApiActionName.cs" />
     <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />

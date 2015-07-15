@@ -15,18 +15,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
         public PeriodiceReportType[] ReportTypes { get; set; }
         public string ReportNameDescription { get; set; }
     }
-
-    public enum PeriodiceReportType
-    {
-        NumberOfCompletedInterviews,
-        NumberOfInterviewTransactionsBySupervisor,
-        NumberOfInterviewTransactionsByHQ,
-        NumberOfInterviewsApprovedByHQ,
-        
-        AverageCaseAssignmentDuration,
-        AverageInterviewDuration,
-        AverageSupervisorProcessingTime,
-        AverageHQProcessingTime,
-        AverageOverallCaseProcessingTime
-    }
 }

@@ -48,8 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
 
-        private readonly IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
-
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
         public override object[] Readers
@@ -57,28 +55,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] {this.users, this.interviewSummares}; }
         }
 
-        public override object[] Writers
-        {
-            get
-            {
-                var baseWriters = base.Writers;
-                var result = new List<object>();
-                result.AddRange(baseWriters);
-                result.Add(recordFirstAnswerMarkerViewWriter);
-                return result.ToArray();
-            }
-        }
-
-        public override void CleanWritersByEventSource(Guid eventSourceId)
-        {
-            base.CleanWritersByEventSource(eventSourceId);
-            this.recordFirstAnswerMarkerViewWriter.Remove(eventSourceId);
-        }
-
         private InterviewStatuses RecordFirstAnswerIfNeeded(InterviewStatuses interviewStatuses, Guid interviewId, Guid userId, DateTime answerTime)
         {
-            var recordFirstAnswerMarkerView = this.recordFirstAnswerMarkerViewWriter.GetById(interviewId);
-            if (recordFirstAnswerMarkerView == null)
+            if(!interviewStatuses.InterviewCommentedStatuses.Any())
+                   return interviewStatuses;
+
+            if (!listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewStatuses.InterviewCommentedStatuses.Last().Status))
                 return interviewStatuses;
 
             UserDocument responsible = this.users.GetById(userId);
@@ -86,7 +68,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
                 return interviewStatuses;
 
-       //     this.dataExportWriter.AddInterviewAction(InterviewExportedAction.FirstAnswerSet, interviewId, userId, answerTime);
             var interviewSummary = interviewSummares.GetById(interviewId);
             if (interviewSummary == null)
                 return interviewStatuses;
@@ -101,21 +82,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                "",
                GetResponsibleIdName(userId));
 
-            this.recordFirstAnswerMarkerViewWriter.Remove(interviewId);
-
             return interviewStatuses;
         }
 
         public StatusChangeHistoryDenormalizerFunctional(
             IReadSideRepositoryWriter<InterviewStatuses> statuses,
             IReadSideRepositoryWriter<UserDocument> users,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummares, 
-            IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
             : base(statuses)
         {
             this.users = users;
             this.interviewSummares = interviewSummares;
-            this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
@@ -367,13 +344,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 timeSpanWithPreviousStatus,
                 supervisorName,
                 interviewerName));
-
-            if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(status))
-                recordFirstAnswerMarkerViewWriter.Store(
-                    new RecordFirstAnswerMarkerView(Guid.Parse(interviewStatuses.InterviewId)),
-                    interviewStatuses.InterviewId);
-            else
-                recordFirstAnswerMarkerViewWriter.Remove(interviewStatuses.InterviewId);
 
             return interviewStatuses;
         }

@@ -14,11 +14,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 {
     internal class StatusChangeHistoryDenormalizerFunctionalTestContext
     {
-        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer(IReadSideRepositoryWriter<InterviewStatuses> interviewStatuses=null)
+        public static StatusChangeHistoryDenormalizerFunctional CreateDenormalizer(IReadSideRepositoryWriter<InterviewStatuses> interviewStatuses = null)
         {
-            return new StatusChangeHistoryDenormalizerFunctional(interviewStatuses?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(), Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
-                    _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()), Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>());
+            var defultUserDocument = Create.UserDocument(supervisorId: Guid.NewGuid());
+            return
+                new StatusChangeHistoryDenormalizerFunctional(
+                    interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
+                    Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(Moq.It.IsAny<string>()) == defultUserDocument),
+                    Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
+                        _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()));
         }
     }
 }

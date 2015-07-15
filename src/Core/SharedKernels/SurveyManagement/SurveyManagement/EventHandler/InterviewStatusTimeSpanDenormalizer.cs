@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             var lastAssignOfRejectStatus =
-                statusHistory.InterviewCommentedStatuses.OrderBy(x => x.Timestamp).FirstOrDefault(
+                statusHistory.InterviewCommentedStatuses.FirstOrDefault(
                     s =>
                         s.Status == InterviewExportedAction.InterviewerAssigned);
 
