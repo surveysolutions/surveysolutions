@@ -165,9 +165,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
                     else
                     {
-                        this.TreeToEnumerable(x => x.Children)
-                            .Skip(1) // Skip self
-                            .ForEach(x => x.Dispose());
+                        Children.TreeToEnumerable(x => x.Children)
+                                .ToList() 
+                                .ForEach(x => x.Dispose());
                         this.Children.Clear();
                     }
 
