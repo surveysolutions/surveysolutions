@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.NavigationStateTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests
 {
     public class when_navigating_to_not_existing_group
     {

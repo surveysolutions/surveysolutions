@@ -97,8 +97,19 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 navigateToIfHistoryIsEmpty.Invoke();
             else
             {
-                var previousNavigationItem = this.navigationStack.Peek();
+                NavigationParams previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
+
+                while (!CanNavigateTo(previousNavigationItem.TargetGroup) || previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
+                {
+                    if (this.navigationStack.Count == 0)
+                    {
+                        navigateToIfHistoryIsEmpty.Invoke();
+                        return;
+                    }
+
+                    previousNavigationItem = this.navigationStack.Pop();
+                } 
 
                 this.ChangeCurrentGroupAndFireEvent(previousNavigationItem.TargetGroup, previousNavigationItem);
             }
