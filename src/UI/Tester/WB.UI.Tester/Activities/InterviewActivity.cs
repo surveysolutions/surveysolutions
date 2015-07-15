@@ -83,16 +83,24 @@ namespace WB.UI.Tester.Activities
 
         private void OnSectionChange(SectionChangeMessage msg)
         {
-            drawerLayout.CloseDrawers();
+            Application.SynchronizationContext.Post(_ =>
+            {
+                drawerLayout.CloseDrawers();
+            },
+            null);
         }
 
         private void OnUpdateQuestionState(UpdateInterviewEntityStateMessage msg)
         {
-            try
+            Application.SynchronizationContext.Post(_ =>
             {
-                adapter.NotifyItemChanged(msg.ElementPosition);
-            }
-            catch (IllegalStateException){ }
+                try
+                {
+                    adapter.NotifyItemChanged(msg.ElementPosition);
+                }
+                catch (IllegalStateException){}
+            },
+            null);
         }
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
