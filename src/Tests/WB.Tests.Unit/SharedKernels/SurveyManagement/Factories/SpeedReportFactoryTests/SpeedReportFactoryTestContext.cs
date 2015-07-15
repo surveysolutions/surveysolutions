@@ -18,11 +18,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
     internal class SpeedReportFactoryTestContext
     {
         protected static SpeedReportFactory CreateSpeedReportFactory(
-          IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null)
+          IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null, IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpans=null)
         {
             return new SpeedReportFactory(
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans>>());
+                interviewStatusTimeSpans??Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans>>());
         }
 
         protected static SpeedByInterviewersReportInputModel CreateSpeedByInterviewersReportInputModel(
@@ -39,6 +39,39 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                 QuestionnaireId = Guid.NewGuid(),
                 QuestionnaireVersion = 1,
                 InterviewStatuses = new []{InterviewExportedAction.Completed }
+            };
+        }
+
+        protected static SpeedBetweenStatusesByInterviewersReportInputModel CreateSpeedBetweenStatusesByInterviewersReportInputModel(string period = "d", Guid? supervisorId = null)
+        {
+            return new SpeedBetweenStatusesByInterviewersReportInputModel()
+            {
+                Period = period,
+                ColumnCount = 2,
+                From = new DateTime(1984, 4, 18),
+                Page = 0,
+                PageSize = 20,
+                SupervisorId = supervisorId ?? Guid.NewGuid(),
+                QuestionnaireId = Guid.NewGuid(),
+                QuestionnaireVersion = 1,
+                BeginInterviewStatuses =  new[] { InterviewExportedAction.InterviewerAssigned },
+                EndInterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter }
+            };
+        }
+
+        protected static SpeedBetweenStatusesBySupervisorsReportInputModel CreateSpeedBetweenStatusesBySupervisorsReportInputModel(string period = "d")
+        {
+            return new SpeedBetweenStatusesBySupervisorsReportInputModel()
+            {
+                Period = period,
+                ColumnCount = 2,
+                From = new DateTime(1984, 4, 18),
+                Page = 0,
+                PageSize = 20,
+                QuestionnaireId = Guid.NewGuid(),
+                QuestionnaireVersion = 1,
+                BeginInterviewStatuses = new[] { InterviewExportedAction.InterviewerAssigned },
+                EndInterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter }
             };
         }
 

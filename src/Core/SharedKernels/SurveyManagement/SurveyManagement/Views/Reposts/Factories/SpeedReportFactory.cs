@@ -114,7 +114,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .SelectMany(x => x.TimeSpansBetweenStatuses)
                     .Where(
                         ics =>
-                            ics.EndStatusTimestamp.Date > from && ics.EndStatusTimestamp.Date <= to.Date && endStatuses.Contains(ics.EndStatus) && beginStatuses.Contains(ics.BeginStatus)));
+                            ics.EndStatusTimestamp.Date >= from && ics.EndStatusTimestamp.Date < to.Date && endStatuses.Contains(ics.EndStatus) && beginStatuses.Contains(ics.BeginStatus)));
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
