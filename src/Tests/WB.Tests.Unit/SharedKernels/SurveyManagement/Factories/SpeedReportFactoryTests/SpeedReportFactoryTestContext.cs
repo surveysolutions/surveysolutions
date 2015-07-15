@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -17,12 +18,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
     internal class SpeedReportFactoryTestContext
     {
         protected static SpeedReportFactory CreateSpeedReportFactory(
-          IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
-          IQueryableReadSideRepositoryReader<UserDocument> userDocuments = null)
+          IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null, IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpans=null)
         {
             return new SpeedReportFactory(
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
-                userDocuments ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>());
+                interviewStatusTimeSpans??Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans>>());
         }
 
         protected static SpeedByInterviewersReportInputModel CreateSpeedByInterviewersReportInputModel(
@@ -37,7 +37,41 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                 PageSize = 20,
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
                 QuestionnaireId = Guid.NewGuid(),
-                QuestionnaireVersion = 1
+                QuestionnaireVersion = 1,
+                InterviewStatuses = new []{InterviewExportedAction.Completed }
+            };
+        }
+
+        protected static SpeedBetweenStatusesByInterviewersReportInputModel CreateSpeedBetweenStatusesByInterviewersReportInputModel(string period = "d", Guid? supervisorId = null)
+        {
+            return new SpeedBetweenStatusesByInterviewersReportInputModel()
+            {
+                Period = period,
+                ColumnCount = 2,
+                From = new DateTime(1984, 4, 18),
+                Page = 0,
+                PageSize = 20,
+                SupervisorId = supervisorId ?? Guid.NewGuid(),
+                QuestionnaireId = Guid.NewGuid(),
+                QuestionnaireVersion = 1,
+                BeginInterviewStatuses =  new[] { InterviewExportedAction.InterviewerAssigned },
+                EndInterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter }
+            };
+        }
+
+        protected static SpeedBetweenStatusesBySupervisorsReportInputModel CreateSpeedBetweenStatusesBySupervisorsReportInputModel(string period = "d")
+        {
+            return new SpeedBetweenStatusesBySupervisorsReportInputModel()
+            {
+                Period = period,
+                ColumnCount = 2,
+                From = new DateTime(1984, 4, 18),
+                Page = 0,
+                PageSize = 20,
+                QuestionnaireId = Guid.NewGuid(),
+                QuestionnaireVersion = 1,
+                BeginInterviewStatuses = new[] { InterviewExportedAction.InterviewerAssigned },
+                EndInterviewStatuses = new[] { InterviewExportedAction.ApprovedByHeadquarter }
             };
         }
 
@@ -52,7 +86,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                 Page = 0,
                 PageSize = 20,
                 QuestionnaireId = Guid.NewGuid(),
-                QuestionnaireVersion = 1
+                QuestionnaireVersion = 1,
+                InterviewStatuses = new[] { InterviewExportedAction.Completed }
             };
         }
     }

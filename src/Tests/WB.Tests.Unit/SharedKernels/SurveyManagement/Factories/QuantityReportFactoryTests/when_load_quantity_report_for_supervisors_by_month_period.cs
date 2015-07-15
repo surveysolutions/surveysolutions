@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                         Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
                             timestamp: input.From.Date.AddHours(1)),
                         Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
-                            timestamp: input.From.Date.AddDays(1)),
+                            timestamp: input.From.Date.AddMonths(2)),
                         Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
                             timestamp: input.From.Date.AddMonths(-2))
                     }), "2");

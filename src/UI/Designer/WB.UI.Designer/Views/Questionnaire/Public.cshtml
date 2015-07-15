@@ -44,7 +44,8 @@
                         var actionModel = listViewModel as IActionItem;
                         <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                             <td class="search-value">
-                                @if  (actionModel.CanEdit) {
+                                @if (actionModel.CanOpen)
+                                {
                                     @Html.ActionLink(listViewModel.Title, "Open", "App", routevalues, null)
                                 }
                                 else {
@@ -73,8 +74,9 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        @if (actionModel.CanEdit) {
-                                            <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
+                                        @if (actionModel.CanOpen)
+                                        {
+                                            <li>@Html.ActionLink("View", "Open", "App", routevalues, null)</li>
                                         }
                                         @{if (actionModel.CanSynchronize) {
                                             <li>@Html.ActionLink("Export to HQ", "Export", "Admin", routevalues, null)</li>

@@ -9,12 +9,8 @@ namespace Main.Core.Events.User
     /// <summary>
     /// The new user created.
     /// </summary>
-    [EventName("RavenQuestionnaire.Core:Events:UserCreated")]
-    public class NewUserCreated : UserBaseEvent
+    public class NewUserCreated
     {
-        #region Public Properties
-
-
         public string Email { get; set; }
 
         //means locked by HQ. For Backward compatibility
@@ -50,13 +46,5 @@ namespace Main.Core.Events.User
         public string PersonName { get; set; }
 
         public string PhoneNumber { get; set; }
-
-        #endregion
-
-        protected override bool DoCheckIsAssignedRole(UserRoles role)
-        {
-            return Roles != null && Roles.Where(r => r == role).Count() > 0;
-        }
-
     }
 }

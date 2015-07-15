@@ -1,5 +1,8 @@
 ﻿@using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.GenericSubdomains.Utils
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Headquarters.Code
 @model WB.Core.SharedKernels.SurveyManagement.Views.User.UserView
 @{
@@ -13,8 +16,9 @@
     <script type="text/javascript">
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
         var $deviceUrl = '@Url.Action("Device", "TabletReport", new { area = string.Empty })';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})', $commandExecutionUrl);
             model.GetFilterMethod = function () {
                 return { SupervisorId: '@Model.PublicKey' };
             };
@@ -37,9 +41,13 @@
         <div class="form-inline">
             @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
             {
-                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new { supervisorId = Model.PublicKey, area = string.Empty })">
+                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new {supervisorId = Model.PublicKey, area = string.Empty})">
                     <i class="glyphicon glyphicon-user"></i> Create
                 </a>
+                if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.archiveInterviewers">Archive</button>
+                }
             }
 
             <div class="input-group">
@@ -52,6 +60,11 @@
             </div>
         </div>
     </div>
+    <div class="btn-group pull-right">
+        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model.PublicKey })">
+            <i class="glyphicon glyphicon glyphicon-book"></i> Archived interviewers
+        </a>
+    </div>
 }
 
 @section grid
@@ -59,6 +72,11 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <th>
+                        <input type="checkbox" data-bind="click: $root.selectAll($element)" />
+                    </th>}
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
@@ -72,6 +90,12 @@
         <tbody>
             <!-- ko foreach:Items -->
             <tr>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <td>
+                        <input type="checkbox" data-bind="checked: IsSelected" />
+                    </td>
+                }
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
                 <td data-bind="text: Email"></td>
@@ -85,13 +109,49 @@
                     </a>
                     @if (LegacyOptions.SupervisorFunctionsEnabled)
                     {
-                        <!-- ko if:DeviceId()!=null -->
+                    <!-- ko if:DeviceId()!=null -->
                         <a class="btn btn-info" data-bind="attr: { href: $deviceUrl + '/' + DeviceId() }"><span class="glyphicon glyphicon-list"></span> Show sync log</a>
-                        <!-- /ko -->
+                    <!-- /ko -->
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-danger" data-bind="click : $parent.archiveUser">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </a>
+                        </div>
                     }
                 </td>
             </tr>
             <!-- /ko -->
         </tbody>
     </table>
+
+    <script type="text/html" id="confirm-delete-template">
+        <h3>
+            <b>
+                <!-- ko if: $data.length>5 -->
+
+                <span class='text-normal' data-bind='text: length'></span>
+
+                <!-- /ko -->
+                <!-- ko if: $data.length<=5 -->
+                <!-- ko foreach:$data -->
+                <!-- ko if: $index() > 0 -->,<!-- /ko -->
+                '<span class='text-normal' data-bind='text: UserName'></span>'
+                <!-- /ko --> <!-- /ko -->
+            </b>
+            interviewer(s) will be archived.
+        </h3>
+    </script>
+    <script type="text/html" id="confirm-continue-message-template">
+        <br />
+        <b>
+            <span style="color: red;">
+                If the interviewer has completed interviews in census mode on his tablet then the data will be lost.
+            </span>
+        </b>
+        <br />
+        <br />Do you want to continue?
+    </script>
 }

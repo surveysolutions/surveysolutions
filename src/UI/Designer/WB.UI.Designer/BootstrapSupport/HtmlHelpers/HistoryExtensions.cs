@@ -21,7 +21,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         {
             var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType),
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
-                    record.TargetTitle, record.TargetType),
+                    record.TargetTitle, true, record.TargetType),
                 GetActionStringRepresentations(record.ActionType, record.TargetType,
                     record.HistoricalRecordReferences.Any()));
 
@@ -31,7 +31,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     GetStringRepresentation(historicalRecordReference.Type).ToLower(),
                     BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, historicalRecordReference.Id,
                         historicalRecordReference.ParentId,
-                        historicalRecordReference.Title, historicalRecordReference.Type));
+                        historicalRecordReference.Title, historicalRecordReference.IsExist,
+                        historicalRecordReference.Type));
             }
 
             return MvcHtmlString.Create(mainRecord);
@@ -43,16 +44,20 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             Guid questionnaireId, 
             Guid itemId, 
             Guid? chapterId, 
-            string title, 
+            string title,
+            bool isExist,
             QuestionnaireItemType type)
         {
             var quatedTitle = string.Format("\"{0}\"", title);
+
+            if (!isExist)
+                return MvcHtmlString.Create(quatedTitle);
 
             if (type == QuestionnaireItemType.Questionnaire)
                 return helper.ActionLink(quatedTitle, "Open", "App", new { id = itemId.FormatGuid() }, null);
 
             if (type == QuestionnaireItemType.Person || !chapterId.HasValue)
-                return helper.Label(quatedTitle);
+                return MvcHtmlString.Create(quatedTitle);
 
             var url =
                 urlHelper.Content(string.Format("~/UpdatedDesigner/app/#/{0}/chapter/{1}/{3}/{2}", questionnaireId.FormatGuid(),

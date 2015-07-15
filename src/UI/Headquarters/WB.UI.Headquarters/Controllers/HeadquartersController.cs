@@ -46,19 +46,20 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                UserView user = GetUserByName(model.UserName);
-                if (user != null)
+                try
                 {
-                    this.Error("User name already exists. Please enter a different user name.");
-                    return this.View(model);   
+                    this.CreateHeadquarters(model);
+                }
+                catch (Exception e)
+                {
+                    this.Error(e.Message);
+                    return this.View(model);
                 }
 
-                this.CreateHeadquarters(model);
-                
                 this.Success("Headquarters user was successfully created");
                 return this.RedirectToAction("Index");
             }
-            
+
             return this.View(model);
         }
 

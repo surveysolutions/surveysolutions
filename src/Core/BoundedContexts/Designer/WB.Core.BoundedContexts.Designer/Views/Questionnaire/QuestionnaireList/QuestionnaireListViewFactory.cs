@@ -18,6 +18,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         {
             var count = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input).Count());
 
+            var sortOrder = input.Order.IsNullOrEmpty() ? "LastEntryDate  Desc" : input.Order;
+
             var records = questionnaireListViewItemStorage.Query(_ =>
                 FilterQuestionnaires(_, input).Select(x => new QuestionnaireListViewItem()
                 {
@@ -31,9 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     PublicId = x.PublicId,
                     QuestionnaireId = x.QuestionnaireId,
                     Title = x.Title,
-                    SharedPersons = x.SharedPersons
                 })
-                    .OrderUsingSortExpression(input.Order)
+                    .OrderUsingSortExpression(sortOrder)
                     .Skip((input.Page - 1)*input.PageSize)
                     .Take(input.PageSize)
                     .ToList());

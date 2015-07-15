@@ -546,5 +546,46 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                         }, new FileSystemIOAccessor()),
                     new CodeGenerator());
         }
+
+        public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndConditionContainingUsageOfSelf(Guid questionId)
+        {
+            return new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    new Group("Chapter")
+                    {
+                        Children = new List<IComposite>()
+                        {
+                            new NumericQuestion("Numeric")
+                            {
+                                QuestionType = QuestionType.Numeric,
+                                PublicKey = questionId,
+                                ConditionExpression = "self > 0"
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        public static QuestionnaireDocument CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionWithValidationUsingSelf(Guid questionnaireId,
+            Guid questionId)
+        {
+            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
+            Guid chapterId = Guid.Parse("23232323232323232323232323232323");
+            
+            questionnaireDocument.AddChapter(chapterId);
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = questionId,
+                StataExportCaption = "test",
+                IsInteger = true,
+                ValidationExpression = "self >= 1"
+            }, chapterId, null);
+
+            return questionnaireDocument;
+        }
     }
 }

@@ -123,31 +123,23 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserView userToCheck =
-                    this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-                if (userToCheck == null)
+                try
                 {
-                    try
-                    {
-                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
-                            userName: model.UserName,
-                            password: passwordHasher.Hash(model.Password), email: model.Email,
-                            isLockedBySupervisor: false,
-                            isLockedByHQ: false, roles: new[] { role }, supervsor: null,
-                            personName:model.PersonName,
-                            phoneNumber:model.PhoneNumber));
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName, role);
-                        this.Error(userErrorMessage);
-                        this.Logger.Fatal(userErrorMessage, ex);
-                    }
+                    this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
+                        userName: model.UserName,
+                        password: passwordHasher.Hash(model.Password), email: model.Email,
+                        isLockedBySupervisor: false,
+                        isLockedByHQ: false, roles: new[] {role}, supervsor: null,
+                        personName: model.PersonName,
+                        phoneNumber: model.PhoneNumber));
+                    return true;
                 }
-                else
+                catch (Exception ex)
                 {
-                    this.Error("User name already exists. Please enter a different user name.");
+                    var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName,
+                        role);
+                    this.Error(userErrorMessage);
+                    this.Logger.Fatal(userErrorMessage, ex);
                 }
             }
             return false;
@@ -164,7 +156,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             UserView userToCheck = 
                 this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-            if (userToCheck != null)
+            if (userToCheck != null && !userToCheck.IsArchived)
             {
                 try
                 {
@@ -172,7 +164,6 @@ namespace WB.UI.Headquarters.Controllers
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
-                        roles: userToCheck.Roles.ToArray(),
                         personName:userToCheck.PersonName, phoneNumber:userToCheck.PhoneNumber));
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
