@@ -234,6 +234,24 @@ namespace WB.Tests.Unit
                 return new QuestionsDisabled(identities);
             }
 
+            public static GroupsEnabled GroupsEnabled(Guid? id = null, decimal[] rosterVector = null)
+            {
+                var identities = new[]
+                {
+                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
+                };
+                return new GroupsEnabled(identities);
+            }
+
+            public static QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
+            {
+                var identities = new[]
+                {
+                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
+                };
+                return new QuestionsEnabled(identities);
+            }
+
             public static RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params decimal[][] fullRosterVectors)
             {
                 AddedRosterInstance[] instances =

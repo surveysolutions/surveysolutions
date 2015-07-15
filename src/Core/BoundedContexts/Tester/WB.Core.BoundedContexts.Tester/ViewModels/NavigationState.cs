@@ -21,9 +21,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public virtual event GroupChanged GroupChanged;
         public virtual event BeforeGroupChanged BeforeGroupChanged;
 
-        public string InterviewId { get; private set; }
-        public string QuestionnaireId { get; private set; }
-        public Identity CurrentGroup { get; private set; }
+        public virtual string InterviewId { get; private set; }
+        public virtual string QuestionnaireId { get; private set; }
+        public virtual Identity CurrentGroup { get; private set; }
 
         private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
 
@@ -32,7 +32,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionAwaiter = userInteractionAwaiter;
         }
 
-        public NavigationState(ICommandService commandService, IStatefulInterviewRepository interviewRepository, IUserInteractionAwaiter userInteractionAwaiter)
+        public NavigationState(
+            ICommandService commandService, 
+            IStatefulInterviewRepository interviewRepository, 
+            IUserInteractionAwaiter userInteractionAwaiter)
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;
@@ -131,7 +134,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     TargetGroup = navigationParams.TargetGroup,
                     AnchoredElementIdentity = navigationParams.AnchoredElementIdentity
                 };
-
+                
                 this.GroupChanged(groupChangedEventArgs);
             }
         }

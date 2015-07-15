@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         List<Guid> listOfChildrenIdOfCurrentGroup = new List<Guid>();
 
-        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        public void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
 
@@ -112,7 +112,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
 
             this.Items = listOfViewModels;
-            listOfChildrenIdOfCurrentGroup = group.Children.Select(x => x.Id).ToList();
+            listOfChildrenIdOfCurrentGroup = group.Children
+                .Where(x => x.ModelType != typeof(RosterModel))
+                .Select(x => x.Id)
+                .ToList();
+
             messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex));
         }
 
