@@ -146,7 +146,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return hasChildren; }
             set
             {
-                this.RaiseAndSetIfChanged(ref hasChildren, value);
+                if (hasChildren == value) return;
+                hasChildren = value;
+                this.RaisePropertyChanged();
             }
         }
 
@@ -187,11 +189,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.children = value;
                 this.RaisePropertyChanged();
             }
-        }
-
-        private void NotifyParents()
-        {
-            this.UnwrapReferences(x => x.Parent).ForEach(x => x.RaisePropertyChanged(() => x.HasChildren));
         }
 
         private MvxCommand navigateToSectionCommand;
