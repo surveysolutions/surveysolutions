@@ -1302,6 +1302,14 @@ namespace WB.Tests.Unit
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: questionnaireVersion), eventSourceId: interviewId);
         }
 
+        public static IPublishedEvent<TextQuestionAnswered> TextQuestionAnsweredEvent(Guid? interviewId = null, string userId = null)
+        {
+            return
+                ToPublishedEvent(new TextQuestionAnswered(GetGuidIdByStringId(userId), Guid.NewGuid(), new decimal[0],
+                    DateTime.Now, "tttt"));
+        }
+
+
         public static IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreatedEvent(Guid? interviewId = null, string userId = null,
             string questionnaireId = null, long questionnaireVersion = 0)
         {
@@ -1601,21 +1609,22 @@ namespace WB.Tests.Unit
             return user;
         }
 
-        public static InterviewStatuses InterviewStatuses(Guid? questionnaireId=null, long? questionnaireVersion=null,params InterviewCommentedStatus[] statuses)
+        public static InterviewStatuses InterviewStatuses(Guid? interviewid=null, Guid? questionnaireId=null, long? questionnaireVersion=null,params InterviewCommentedStatus[] statuses)
         {
             return new InterviewStatuses()
             {
+                InterviewId = (interviewid??Guid.NewGuid()).FormatGuid(),
                 InterviewCommentedStatuses = statuses.ToList(),
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1
             };
         }
 
-        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus=null)
+        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null, InterviewExportedAction status = InterviewExportedAction.Completed)
         {
             return new InterviewCommentedStatus()
             {
-                Status = InterviewExportedAction.Completed,
+                Status = status,
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId??Guid.NewGuid(),
                 SupervisorId = supervisorId??Guid.NewGuid(),
@@ -1760,6 +1769,29 @@ namespace WB.Tests.Unit
                     new QuestionDataParser(),
                     new UserViewFactory(new TestInMemoryWriter<UserDocument>()));
 
+        }
+
+        public static InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null, long? questionnaireVersion = null, params TimeSpanBetweenStatuses[] timeSpans)
+        {
+            return new InterviewStatusTimeSpans()
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                TimeSpansBetweenStatuses = timeSpans.ToHashSet()
+            };
+        }
+
+        public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null)
+        {
+            return new TimeSpanBetweenStatuses()
+            {
+                BeginStatus = InterviewExportedAction.InterviewerAssigned,
+                EndStatus = InterviewExportedAction.ApprovedByHeadquarter,
+                EndStatusTimestamp = timestamp ?? DateTime.Now,
+                InterviewerId = interviewerId ?? Guid.NewGuid(),
+                SupervisorId = supervisorId ?? Guid.NewGuid(),
+                TimeSpan = timeSpanWithPreviousStatus?? new TimeSpan()
+            };
         }
     }
 }
