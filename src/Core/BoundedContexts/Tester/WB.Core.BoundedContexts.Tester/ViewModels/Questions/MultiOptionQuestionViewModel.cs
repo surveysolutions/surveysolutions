@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             return result;
         }
 
-        public async Task ToggleAnswer(MultiOptionQuestionOptionViewModel changedModel)
+        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModel changedModel)
         {
             List<MultiOptionQuestionOptionViewModel> allSelectedOptions = 
                 this.areAnswersOrdered ?
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)

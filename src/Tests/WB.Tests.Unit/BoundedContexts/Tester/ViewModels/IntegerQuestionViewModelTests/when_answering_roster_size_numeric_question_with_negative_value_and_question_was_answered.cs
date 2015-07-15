@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
             ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '-4' is incorrect because question is used as size of roster and specified answer is negative."), Times.Once);
         
         It should_not_send_answer_command = () =>
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommand(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
+            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
 
         private static IntegerQuestionViewModel integerModel;

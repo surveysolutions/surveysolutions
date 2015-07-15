@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests
                      .Returns(true);
 
             navigationState = Create.NavigationState(Setup.StatefulInterviewRepository(interview));
-            navigationState.NavigateTo(rosterIdentity).WaitAndUnwrapException();
+            navigationState.NavigateToAsync(rosterIdentity).WaitAndUnwrapException();
 
             emptyHistoryHandler = () => emptyHandlerCalled = true;
         };
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests
         Because of = () =>
         {
             interview.HasGroup(rosterIdentity).Returns(false);
-            navigationState.NavigateBack(emptyHistoryHandler).WaitAndUnwrapException();
+            navigationState.NavigateBackAsync(emptyHistoryHandler).WaitAndUnwrapException();
         };
 
         It should_skip_removed_group = () => emptyHandlerCalled.ShouldBeTrue();

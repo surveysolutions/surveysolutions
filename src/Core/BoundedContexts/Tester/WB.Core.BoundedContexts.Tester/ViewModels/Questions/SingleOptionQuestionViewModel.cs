@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     previousOption.Selected = false;
                 }
 
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }

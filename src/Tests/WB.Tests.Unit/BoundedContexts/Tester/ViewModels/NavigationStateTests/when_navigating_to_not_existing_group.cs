@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests
         };
 
         Because of = () =>
-            navigationState.NavigateTo(notExistingGroup);
+            navigationState.NavigateToAsync(notExistingGroup);
 
         It should_not_navigate = () =>
             navigatedTo.ShouldBeNull();

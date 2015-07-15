@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return new MvxCommand(async () => await this.navigationState.NavigateTo(this.ItemId));
+                return new MvxCommand(async () => await this.navigationState.NavigateToAsync(this.ItemId));
             }
         }
     }

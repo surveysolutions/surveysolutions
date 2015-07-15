@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
-            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(async () => await SaveAnswer(), () => !this.IsInProgress)); }
+            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(async () => await this.SaveAnswerAsync(), () => !this.IsInProgress)); }
         }
 
         private readonly IUserIdentity userIdentity;
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             }
         }
 
-        private async Task SaveAnswer()
+        private async Task SaveAnswerAsync()
         {
             this.IsInProgress = true;
 
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settingsProvider.GpsReceiveTimeoutSec));
                 var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
-                await this.SetGeoLocationAnswer(mvxGeoLocation);
+                await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }
             catch (OperationCanceledException)
             {
@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             }
         }
 
-        private async Task SetGeoLocationAnswer(MvxGeoLocation location)
+        private async Task SetGeoLocationAnswerAsync(MvxGeoLocation location)
         {
             if (location == null)
             {
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                 this.Answer = location.Coordinates;
             }

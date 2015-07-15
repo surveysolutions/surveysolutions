@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             get
             {
-                return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(async enteredText => await this.FindMatchOptionAndSendAnswerQuestionCommand(enteredText)));
+                return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(async enteredText => await this.FindMatchOptionAndSendAnswerQuestionCommandAsync(enteredText)));
             }
         }
 
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 this.selectedObject = value;
                 if (this.selectedObject != null)
                 {
-                    Action sendCommand = async () => await this.SendAnswerFilteredComboboxQuestionCommand(this.selectedObject.Value);
+                    Action sendCommand = async () => await this.SendAnswerFilteredComboboxQuestionCommandAsync(this.selectedObject.Value);
                     sendCommand();
                 }
                 this.RaisePropertyChanged();
@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             set { this.autoCompleteSuggestions = value; this.RaisePropertyChanged(); }
         }
 
-        private async Task FindMatchOptionAndSendAnswerQuestionCommand(string enteredText)
+        private async Task FindMatchOptionAndSendAnswerQuestionCommandAsync(string enteredText)
         {
             var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText);
 
@@ -273,10 +273,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 return;
             }
 
-            await this.SendAnswerFilteredComboboxQuestionCommand(answerValue);
+            await this.SendAnswerFilteredComboboxQuestionCommandAsync(answerValue);
         }
 
-        private async Task SendAnswerFilteredComboboxQuestionCommand(decimal answerValue)
+        private async Task SendAnswerFilteredComboboxQuestionCommandAsync(decimal answerValue)
         {
             var command = new AnswerSingleOptionQuestionCommand(
                 this.interviewId,
@@ -288,7 +288,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommand(command);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }

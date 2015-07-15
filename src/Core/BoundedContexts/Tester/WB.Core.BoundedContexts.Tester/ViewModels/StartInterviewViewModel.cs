@@ -33,11 +33,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return startInterviewCommand ?? (startInterviewCommand = new MvxCommand(async () => await this.StartInterview()));
+                return startInterviewCommand ?? (startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
             }
         }
 
-        private async Task StartInterview()
+        private async Task StartInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
 
