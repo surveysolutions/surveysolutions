@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public QuestionnaireListView Load(QuestionnaireListInputModel input)
         {
             var count = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input).Count());
+            var usedSortExpression = string.IsNullOrEmpty(input.Order) ? "LastEntryDate DESC" : input.Order;
 
             var records = questionnaireListViewItemStorage.Query(_ =>
                 FilterQuestionnaires(_, input).Select(x => new QuestionnaireListViewItem()
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     Title = x.Title,
                     SharedPersons = x.SharedPersons
                 })
-                    .OrderUsingSortExpression(input.Order)
+                    .OrderUsingSortExpression(usedSortExpression)
                     .Skip((input.Page - 1)*input.PageSize)
                     .Take(input.PageSize)
                     .ToList());
@@ -41,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             records.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "you" : x.CreatorName);
             return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
                 items: records,
-                order: input.Order);
+                order: usedSortExpression);
         }
 
         private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> _,
