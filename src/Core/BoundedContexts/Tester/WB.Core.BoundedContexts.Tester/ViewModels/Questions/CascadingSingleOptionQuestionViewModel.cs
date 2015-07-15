@@ -258,10 +258,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
             if (answerViewModel == null || answerViewModel.ParentValue != this.answerOnParentQuestion)
             {
-                if (this.selectedObject != null)
-                {
-                    this.ResetTextInEditor = this.selectedObject.OriginalText;
-                }
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
             }
