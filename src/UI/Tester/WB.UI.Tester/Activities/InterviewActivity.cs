@@ -1,12 +1,10 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
@@ -94,7 +92,7 @@ namespace WB.UI.Tester.Activities
             {
                 adapter.NotifyItemChanged(msg.ElementPosition);
             }
-            catch (IllegalStateException exception){ }
+            catch (IllegalStateException){ }
         }
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
