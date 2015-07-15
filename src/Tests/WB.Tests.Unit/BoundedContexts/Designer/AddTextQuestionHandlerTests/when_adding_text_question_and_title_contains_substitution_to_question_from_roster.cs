@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                 PublicKey = rosterSizeQuestionId,
                 GroupPublicKey = chapterId,
                 IsInteger = true,
-                MaxAllowedValue = 5,
                 StataExportCaption = "roster_size_question"
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });

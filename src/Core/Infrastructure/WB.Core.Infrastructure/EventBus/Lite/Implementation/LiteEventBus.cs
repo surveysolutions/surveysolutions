@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             this.eventStore = eventStore;
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
+        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool isBulk = false)
         {
             UncommittedEvent[] uncommittedChanges = aggregateRoot.GetUncommittedChanges().ToArray();
             var eventStream = new UncommittedEventStream(origin);

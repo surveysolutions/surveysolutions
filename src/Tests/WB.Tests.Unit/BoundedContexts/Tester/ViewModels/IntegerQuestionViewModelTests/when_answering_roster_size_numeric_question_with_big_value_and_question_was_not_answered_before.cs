@@ -33,8 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
 
             var cascadingQuestionModel = Mock.Of<IntegerNumericQuestionModel>(_
                 => _.Id == questionIdentity.Id
-                   && _.IsRosterSizeQuestion == true
-                   && _.MaxValue == null);
+                   && _.IsRosterSizeQuestion == true);
 
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, cascadingQuestionModel } });
 

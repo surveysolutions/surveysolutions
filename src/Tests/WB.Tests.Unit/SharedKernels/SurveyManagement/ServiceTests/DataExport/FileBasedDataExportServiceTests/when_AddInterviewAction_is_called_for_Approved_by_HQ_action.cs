@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            fileBasedDataExportRepositoryWriter.AddInterviewAction(InterviewExportedAction.ApproveByHeadquarter, interviewId, Guid.NewGuid(), DateTime.Now);
+            fileBasedDataExportRepositoryWriter.AddInterviewAction(InterviewExportedAction.ApprovedByHeadquarter, interviewId, Guid.NewGuid(), DateTime.Now);
 
         It should_pass_InterviewerAssigned_action_to_data_export_writer = () =>
             interviewExportServiceMock.Verify(
-                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.ApproveByHeadquarter), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once);
+                x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.ApprovedByHeadquarter), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once);
 
         It should_delete_All_Data_folder = () =>
             fileSystemAccessorMock.Verify(

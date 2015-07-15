@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             {
                 UserWebView person =
                     this.ViewFactory.Load(new UserWebViewInputModel(username, null));
-                if (person == null)
+                if (person == null || person.IsArchived)
                 {
                     return null;
                 }

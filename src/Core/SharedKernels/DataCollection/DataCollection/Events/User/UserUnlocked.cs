@@ -5,7 +5,7 @@ using Ncqrs.Eventing.Storage;
 namespace Main.Core.Events.User
 {
     [EventName("RavenQuestionnaire.Core:Events:UserUnlocked")]
-    public class UserUnlocked : UserBaseEvent
+    public class UserUnlocked
     {
         public Guid PublicKey { get; set; }
     }

@@ -74,19 +74,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public void EnableCache()
         {
-            var packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
+            var packageMetaCacheableWriter = packageMetaWriter as ICacheableRepositoryWriter;
             if (packageMetaCacheableWriter != null)
             {
                 packageMetaCacheableWriter.EnableCache();
             }
 
-            var packageContentCacheableWriter = this.packageContentWriter as IChacheableRepositoryWriter;
+            var packageContentCacheableWriter = this.packageContentWriter as ICacheableRepositoryWriter;
             if (packageContentCacheableWriter != null)
             {
                 packageContentCacheableWriter.EnableCache();
             }
 
-            var counterCacheableWriter = this.counterStorage as IChacheableRepositoryWriter;
+            var counterCacheableWriter = this.counterStorage as ICacheableRepositoryWriter;
             if (counterCacheableWriter != null)
             {
                 counterCacheableWriter.EnableCache();
@@ -95,19 +95,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
 
         public void DisableCache()
         {
-            var packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
+            var packageMetaCacheableWriter = packageMetaWriter as ICacheableRepositoryWriter;
             if (packageMetaCacheableWriter != null)
             {
                 packageMetaCacheableWriter.DisableCache();
             }
 
-            var packageContentCacheableWriter = this.packageContentWriter as IChacheableRepositoryWriter;
+            var packageContentCacheableWriter = this.packageContentWriter as ICacheableRepositoryWriter;
             if (packageContentCacheableWriter != null)
             {
                 packageContentCacheableWriter.DisableCache();
             }
 
-            var counterCacheableWriter = this.counterStorage as IChacheableRepositoryWriter;
+            var counterCacheableWriter = this.counterStorage as ICacheableRepositoryWriter;
             if (counterCacheableWriter != null)
             {
                 counterCacheableWriter.DisableCache();
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
         {
             get
             {
-                var packageMetaCacheableWriter = packageMetaWriter as IChacheableRepositoryWriter;
+                var packageMetaCacheableWriter = packageMetaWriter as ICacheableRepositoryWriter;
 
                 return packageMetaCacheableWriter != null && packageMetaCacheableWriter.IsCacheEnabled;
             }

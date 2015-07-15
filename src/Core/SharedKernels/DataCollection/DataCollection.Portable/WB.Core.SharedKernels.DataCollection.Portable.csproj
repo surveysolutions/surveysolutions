@@ -47,6 +47,7 @@
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="IInterviewExpressionStateUpgrader.cs" />
+    <Compile Include="InterviewExpressionStateExtensions.cs" />
     <Compile Include="InterviewExpressionStateUpgrader.cs" />
     <Compile Include="QuestionnaireVersion.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />

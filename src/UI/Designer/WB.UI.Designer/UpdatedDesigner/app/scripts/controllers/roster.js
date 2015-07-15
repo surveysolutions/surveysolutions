@@ -15,18 +15,21 @@
                 if (hotkeys.get(saveRoster) === false) {
                     hotkeys.del(saveRoster);
                 }
-                hotkeys.bindTo($scope)
-                      .add({
-                          combo: saveRoster,
-                          description: 'Save changes',
-                          allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                          callback: function (event) {
-                              $scope.saveRoster();
-                              $scope.editRosterForm.$setPristine();
-                              event.preventDefault();
-                          }
-                      });
-
+                if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)
+                {
+                    
+                    hotkeys.bindTo($scope)
+                        .add({
+                            combo: saveRoster,
+                            description: 'Save changes',
+                            allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                            callback: function(event) {
+                                $scope.saveRoster();
+                                $scope.editRosterForm.$setPristine();
+                                event.preventDefault();
+                            }
+                        });
+                }
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
                     $scope.activeRoster.variable = result.variableName;

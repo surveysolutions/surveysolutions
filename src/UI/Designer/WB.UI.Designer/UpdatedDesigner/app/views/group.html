@@ -17,13 +17,13 @@
         </div>
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button type="submit" id="edit-chapter-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': groupForm.$dirty }" ng-click="saveGroup()" unsaved-warning-clear ng-disabled="!groupForm.$valid">Save</button>
+        <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': groupForm.$dirty }" ng-click="saveGroup()" unsaved-warning-clear ng-disabled="!groupForm.$valid">Save</button>
         <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelGroup()" unsaved-warning-clear unsaved-warning-clear>Cancel</button>
     </div>
     <div class="pull-right">
-        <button type="button" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteItem()" unsaved-warning-clear>Delete</button>
-        <button type="button" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="activeGroup.isChapter ? cloneChapter() : cloneGroup()">Clone</button>
-        <ng-include src="'moveToChapterSnippet'" ng-if="!activeGroup.isChapter" />
+        <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteItem()" unsaved-warning-clear>Delete</button>
+        <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="activeGroup.isChapter ? cloneChapter() : cloneGroup()">Clone</button>
+        <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" ng-if="!activeGroup.isChapter" />
     </div>
 </div>
 </form>

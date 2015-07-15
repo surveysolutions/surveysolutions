@@ -42,10 +42,12 @@
   <ItemGroup>
     <Compile Include="Aggregates\IAggregateRoot.cs" />
     <Compile Include="Aggregates\IAggregateRootRepository.cs" />
+    <Compile Include="CommandBus\CommandHandlerConfiguration.cs" />
     <Compile Include="CommandBus\CommandRegistry.cs" />
     <Compile Include="CommandBus\CommandServiceException.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
+    <Compile Include="CommandBus\ICommandValidator.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Implementation\EventDispatcher\NcqrCompatibleEventDispatcher.cs" />
     <Compile Include="Implementation\InMemoryPlainStorageAccessor.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
+    <Compile Include="Implementation\Storage\InMemoryCachedSnapshotStore.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="EventBus\Lite\ILiteEventHandler.cs" />
@@ -154,7 +157,7 @@
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
     <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
-    <Compile Include="ReadSide\IChacheableRepositoryWriter.cs" />
+    <Compile Include="ReadSide\ICacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\IViewFactory.cs" />

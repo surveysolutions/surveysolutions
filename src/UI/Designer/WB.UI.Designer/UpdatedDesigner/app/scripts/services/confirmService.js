@@ -8,7 +8,8 @@
                 var scopeItem = {
                     title: item.title || "",
                     okButtonTitle: item.okButtonTitle || "DELETE",
-                    cancelButtonTitle: item.cancelButtonTitle || "BACK TO DESIGNER"
+                    cancelButtonTitle: item.cancelButtonTitle || "BACK TO DESIGNER",
+                    isReadOnly: item.isReadOnly || false
                 };
                 return $modal.open({
                     templateUrl: 'views/confirm.html',

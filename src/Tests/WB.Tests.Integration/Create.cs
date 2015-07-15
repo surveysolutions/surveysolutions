@@ -5,10 +5,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.CommandBus;
@@ -384,20 +386,29 @@ namespace WB.Tests.Integration
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
         }
 
-        public static CommandService CommandService(IAggregateRootRepository repository = null, IEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        public static CommandService CommandService(IAggregateRootRepository repository = null, 
+            IEventBus eventBus = null, 
+            IAggregateSnapshotter snapshooter = null,
+            IServiceLocator serviceLocator = null)
         {
             return new CommandService(
                 repository ?? Mock.Of<IAggregateRootRepository>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                snapshooter ?? Mock.Of<IAggregateSnapshotter>());
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
-        public static SequentialCommandService SequentialCommandService(IAggregateRootRepository repository = null, IEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        public static FileSystemIOAccessor FileSystemIOAccessor()
+        {
+            return new FileSystemIOAccessor();
+        }
+
+        public static SequentialCommandService SequentialCommandService(IAggregateRootRepository repository = null, ILiteEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
         {
             return new SequentialCommandService(
                 repository ?? Mock.Of<IAggregateRootRepository>(),
-                eventBus ?? Mock.Of<IEventBus>(),
-                snapshooter ?? Mock.Of<IAggregateSnapshotter>());
+                eventBus ?? Mock.Of<ILiteEventBus>(),
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>());
         }
     }
 }

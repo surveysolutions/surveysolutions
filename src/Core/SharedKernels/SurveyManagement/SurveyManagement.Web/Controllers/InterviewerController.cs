@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -40,15 +42,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                UserView user = this.GetUserByName(model.UserName);
-
-                if (user != null)
+                try
                 {
-                    this.Error("User name already exists. Please enter a different user name.");
+                    this.CreateInterviewer(model, model.SupervisorId);
+                }
+                catch (Exception e)
+                {
+                    this.Error(e.Message);
                     return this.View(model);
                 }
-
-                this.CreateInterviewer(model, model.SupervisorId);
+             
                 this.Success("Interviewer was successfully created");
                 return this.Back(model.SupervisorId);
             }
@@ -62,6 +65,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(this.GlobalInfo.GetCurrentUser().Id);
         }
 
+        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
+        public ActionResult Archived(Guid id)
+        {
+            var supervisor = this.GetUserById(id);
+            if (supervisor == null)
+                throw new HttpException(404, string.Empty);
+            return this.View(supervisor);
+        }
+
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
         {
@@ -73,7 +85,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
-                    IsLocked = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? user.IsLockedByHQ : user.IsLockedBySupervisor,
+                    IsLocked = user.IsLockedByHQ,
+                    IsLockedBySupervisor = user.IsLockedBySupervisor,
                     UserName = user.UserName,
                     DevicesHistory = user.DeviceChangingHistory.ToList(),
                     PersonName = user.PersonName,

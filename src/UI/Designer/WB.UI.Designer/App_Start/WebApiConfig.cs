@@ -32,6 +32,6 @@ namespace WB.UI.Designer
             );
 
             config.Formatters.Insert(0, new JsonFormatter());
-        }
+        } 
     }
 }

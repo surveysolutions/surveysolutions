@@ -32,8 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                 {
                     PublicKey = rosterQuestionId,
                     StataExportCaption = "var2",
-                    IsInteger = true,
-                    MaxValue = 5
+                    IsInteger = true
                 },
                 new Group
                 {
@@ -47,8 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                         {
                             PublicKey = rosterInsideRosterQuestionId,
                             StataExportCaption = "var1",
-                            IsInteger = true,
-                            MaxValue = 5
+                            IsInteger = true
                         },
                         new Group
                         {

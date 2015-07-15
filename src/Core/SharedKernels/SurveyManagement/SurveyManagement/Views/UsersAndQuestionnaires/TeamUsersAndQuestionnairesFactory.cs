@@ -4,37 +4,34 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 {
     public class TeamUsersAndQuestionnairesFactory : ITeamUsersAndQuestionnairesFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> usersReader;
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader;
-
-        public TeamUsersAndQuestionnairesFactory(IQueryableReadSideRepositoryReader<UserDocument> usersReader,
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader)
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        public TeamUsersAndQuestionnairesFactory(
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
-            this.usersReader = usersReader;
             this.questionnairesReader = questionnairesReader;
+            this.interviewSummaryReader = interviewSummaryReader;
         }
 
         public TeamUsersAndQuestionnairesView Load(TeamUsersAndQuestionnairesInputModel input)
         {
-            var allUsers = this.usersReader.Query(_ =>
-            {
-                var users = (from u in _
-                    where
-                        (u.Roles.Contains(UserRoles.Operator) && !u.IsLockedByHQ && !u.IsLockedBySupervisor && !u.IsDeleted && u.Supervisor.Id == input.ViewerId)
-                     || (u.PublicKey == input.ViewerId)
-                    select new UsersViewItem
-                    {
-                        UserId = u.PublicKey,
-                        UserName = u.UserName
-                    }).ToList();
-                return users;
-            });
+            var allUsers =
+                interviewSummaryReader.Query(
+                    _ =>
+                        _.Where(i => !i.IsDeleted && i.TeamLeadId == input.ViewerId)
+                            .GroupBy(x => new {x.ResponsibleId, x.ResponsibleName})
+                            .Where(x => x.Count() > 0)
+                            .Select(
+                                x => new UsersViewItem {UserId = x.Key.ResponsibleId, UserName = x.Key.ResponsibleName})
+                            .OrderBy(x => x.UserName).ToList());
 
 
             List<QuestionnaireBrowseItem> allQuestionnaires = this.questionnairesReader.Query(_ => _.ToList());

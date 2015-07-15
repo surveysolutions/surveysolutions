@@ -10,13 +10,13 @@
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button id="edit-static-text-save-button" class="btn btn-lg btn-primary" unsaved-warning-clear ng-click="saveStaticText()">Save</button>
+            <button id="edit-static-text-save-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-primary" unsaved-warning-clear ng-click="saveStaticText()">Save</button>
             <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelStaticText()">Cancel</button>
         </div>
         <div class="pull-right">
-            <button id="edit-static-text-delete-button" class="btn btn-lg btn-link" ng-click="deleteStaticText()" unsaved-warning-clear>Delete</button>
-            <button id="edit-static-text-clone-button" class="btn btn-lg btn-link" ng-click="cloneStaticText()">Clone</button>
-            <ng-include src="'moveToChapterSnippet'" />
+            <button id="edit-static-text-delete-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-link" ng-click="deleteStaticText()" unsaved-warning-clear>Delete</button>
+            <button id="edit-static-text-clone-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-link" ng-click="cloneStaticText()">Clone</button>
+            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>
     </div>
 </form>
