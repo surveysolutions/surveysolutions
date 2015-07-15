@@ -241,7 +241,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             {
                 Title = title,
                 Value = linkedToAnswer.RosterVector,
-                Checked = isChecked
+                Checked = isChecked,
+                QuestionState = this.QuestionState
             };
             if (this.areAnswersOrdered && isChecked)
             {
