@@ -39,11 +39,11 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         Because of = async () =>
         {
-            commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
+            await commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();
-            commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
+            await commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();
-            commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
+            await commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();
 
             await commandService.WaitPendingCommandsAsync();
