@@ -53,6 +53,7 @@ using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
@@ -64,6 +65,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -74,21 +76,26 @@ using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using WB.UI.Supervisor.Controllers;
 using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -327,8 +334,7 @@ namespace WB.Tests.Unit
                 return new UserChanged
                 {
                     PasswordHash = password,
-                    Email = email,
-                    Roles = new [] { UserRoles.Operator }
+                    Email = email
                 }.ToPublishedEvent(eventSourceId: userId);
             }
 
@@ -598,7 +604,8 @@ namespace WB.Tests.Unit
             long? questionnaireVersion = null,
             InterviewStatus? status = null,
             Guid? responsibleId = null,
-            Guid? teamLeadId = null)
+            Guid? teamLeadId = null,
+            UserRoles role = UserRoles.Operator)
         {
             return new InterviewSummary()
             {
@@ -608,7 +615,8 @@ namespace WB.Tests.Unit
                 ResponsibleId = responsibleId.GetValueOrDefault(),
                 ResponsibleName = responsibleId.FormatGuid(),
                 TeamLeadId = teamLeadId.GetValueOrDefault(),
-                TeamLeadName = teamLeadId.FormatGuid()
+                TeamLeadName = teamLeadId.FormatGuid(),
+                ResponsibleRole = role
             };
         }
 
@@ -1115,7 +1123,7 @@ namespace WB.Tests.Unit
         }
 
         public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool isInteger = false, int? countOfDecimalPlaces = null, int? maxValue = null)
+            bool isInteger = false, int? countOfDecimalPlaces = null)
         {
             return new NumericQuestion("Question N")
             {
@@ -1124,7 +1132,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
-                MaxValue = maxValue,
+                QuestionType = QuestionType.Numeric
             };
         }
 
@@ -1137,6 +1145,7 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
+                QuestionType = QuestionType.TextList
             };
         }
 
@@ -1156,7 +1165,7 @@ namespace WB.Tests.Unit
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null)
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
             {
@@ -1165,6 +1174,8 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
+                QuestionType = QuestionType.MultyOption,
+                Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
         }
 
@@ -1352,6 +1363,14 @@ namespace WB.Tests.Unit
                 ToPublishedEvent(new InterviewCreated(userId: GetGuidIdByStringId(userId),
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: questionnaireVersion), eventSourceId: interviewId);
         }
+
+        public static IPublishedEvent<TextQuestionAnswered> TextQuestionAnsweredEvent(Guid? interviewId = null, string userId = null)
+        {
+            return
+                ToPublishedEvent(new TextQuestionAnswered(GetGuidIdByStringId(userId), Guid.NewGuid(), new decimal[0],
+                    DateTime.Now, "tttt"));
+        }
+
 
         public static IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreatedEvent(Guid? interviewId = null, string userId = null,
             string questionnaireId = null, long questionnaireVersion = 0)
@@ -1654,9 +1673,9 @@ namespace WB.Tests.Unit
             return new ExportedQuestion() {Answers = new string[0]};
         }
 
-        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null)
+        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name")
         {
-            var user = new UserDocument() {PublicKey = userId ?? Guid.NewGuid()};
+            var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName };
             if (supervisorId.HasValue)
             {
                 user.Roles.Add(UserRoles.Operator);
@@ -1669,21 +1688,22 @@ namespace WB.Tests.Unit
             return user;
         }
 
-        public static InterviewStatuses InterviewStatuses(Guid? questionnaireId=null, long? questionnaireVersion=null,params InterviewCommentedStatus[] statuses)
+        public static InterviewStatuses InterviewStatuses(Guid? interviewid=null, Guid? questionnaireId=null, long? questionnaireVersion=null,params InterviewCommentedStatus[] statuses)
         {
             return new InterviewStatuses()
             {
-                InterviewCommentedStatuses = statuses.ToHashSet(),
+                InterviewId = (interviewid??Guid.NewGuid()).FormatGuid(),
+                InterviewCommentedStatuses = statuses.ToList(),
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1
             };
         }
 
-        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus=null)
+        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null, InterviewExportedAction status = InterviewExportedAction.Completed)
         {
             return new InterviewCommentedStatus()
             {
-                Status = InterviewStatus.Completed,
+                Status = status,
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId??Guid.NewGuid(),
                 SupervisorId = supervisorId??Guid.NewGuid(),
@@ -1863,6 +1883,124 @@ namespace WB.Tests.Unit
             {
                 Id = id,
                 Title = title
+            };
+        }
+        public static FileSystemIOAccessor FileSystemIOAccessor()
+        {
+            return new FileSystemIOAccessor();
+        }
+
+        public static UserLight UserLight(Guid? userId=null)
+        {
+            return new UserLight(userId ?? Guid.NewGuid(), "test");
+        }
+
+        public static NewUserCreated NewUserCreated(UserRoles role = UserRoles.Operator, Guid? supervisorId=null)
+        {
+            return new NewUserCreated() { Roles = new[] { role }, Supervisor = Create.UserLight(supervisorId) };
+        }
+
+        public static UserArchived UserArchived()
+        {
+           return new UserArchived();
+        }
+
+        public static ArchiveUserCommad ArchiveUserCommad(Guid userId)
+        {
+            return new ArchiveUserCommad(userId);
+        }
+
+        public static CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId=null)
+        {
+            return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(supervisorId), "", ""); 
+        }
+
+        public static UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
+        {
+            return new UnarchiveUserCommand(userId);
+        }
+
+        public static CreateInterviewCommand CreateInterviewCommand()
+        {
+            return new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now,
+                Guid.NewGuid(), 1);
+        }
+
+        public static SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
+        {
+            return new SynchronizeInterviewEventsCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1,
+                new object[0], InterviewStatus.Completed, true);
+        }
+
+        public static User User()
+        {
+            return new User();
+        }
+
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1")
+        {
+            return new GpsCoordinateQuestion()
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = variableName,
+                QuestionType = QuestionType.GpsCoordinates
+            };
+        }
+
+        public static InterviewData InterviewData(params InterviewQuestion[] topLevelQuestions)
+        {
+            var interviewData = new InterviewData() { InterviewId = Guid.NewGuid() };
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            foreach (var interviewQuestion in topLevelQuestions)
+            {
+                interviewData.Levels["#"].QuestionsSearchCahche.Add(interviewQuestion.Id, interviewQuestion);
+            }
+            return interviewData;
+        }
+
+        public static InterviewQuestion InterviewQuestion(Guid? questionId = null, object answer = null)
+        {
+            var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid());
+            interviewQuestion.Answer = answer;
+            return interviewQuestion;
+        }
+
+        public static GeoPosition GeoPosition()
+        {
+            return new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984,4,18)));
+        }
+
+        public static PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
+        {
+            return new PreloadedDataService(
+                    new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
+                        new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
+                        .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
+                    new QuestionDataParser(),
+                    new UserViewFactory(new TestInMemoryWriter<UserDocument>()));
+
+        }
+
+        public static InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null, long? questionnaireVersion = null, params TimeSpanBetweenStatuses[] timeSpans)
+        {
+            return new InterviewStatusTimeSpans()
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                TimeSpansBetweenStatuses = timeSpans.ToHashSet()
+            };
+        }
+
+        public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null)
+        {
+            return new TimeSpanBetweenStatuses()
+            {
+                BeginStatus = InterviewExportedAction.InterviewerAssigned,
+                EndStatus = InterviewExportedAction.ApprovedByHeadquarter,
+                EndStatusTimestamp = timestamp ?? DateTime.Now,
+                InterviewerId = interviewerId ?? Guid.NewGuid(),
+                SupervisorId = supervisorId ?? Guid.NewGuid(),
+                TimeSpan = timeSpanWithPreviousStatus?? new TimeSpan()
             };
         }
     }

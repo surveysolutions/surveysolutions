@@ -20,15 +20,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 {
                     PublicKey = rosterSizeQuestion1Id,
                     StataExportCaption = "var1",
-                    IsInteger = true,
-                    MaxValue = 5
+                    IsInteger = true
                 },
                 new NumericQuestion("rosterSizeQuestion2")
                 {
                     PublicKey = rosterSizeQuestion2Id,
                     StataExportCaption = "var2",
-                    IsInteger = true,
-                    MaxValue = 5
+                    IsInteger = true
                 },
                 new Group
                 {

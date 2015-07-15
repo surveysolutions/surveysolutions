@@ -265,8 +265,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     {
                         questionModel = new IntegerNumericQuestionModel
                                         {
-                                            IsRosterSizeQuestion = isRosterSizeQuestion,
-                                            MaxValue = numericQuestion.MaxValue
+                                            IsRosterSizeQuestion = isRosterSizeQuestion
                                         };
                     }
                     else

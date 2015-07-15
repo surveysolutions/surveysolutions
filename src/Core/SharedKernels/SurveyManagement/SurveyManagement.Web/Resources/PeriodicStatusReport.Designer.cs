@@ -70,6 +70,96 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average case assignment duration.
+        /// </summary>
+        public static string AverageCaseAssignmentDuration {
+            get {
+                return ResourceManager.GetString("AverageCaseAssignmentDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A time difference between the moment an interview is assigned to an interviewer and the moment when the complete button is pressed on a tablet..
+        /// </summary>
+        public static string AverageCaseAssignmentDurationDescription {
+            get {
+                return ResourceManager.GetString("AverageCaseAssignmentDurationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average HQ processing time.
+        /// </summary>
+        public static string AverageHQProcessingTime {
+            get {
+                return ResourceManager.GetString("AverageHQProcessingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A time difference between the moment a supervisor approves a questionnaire and that questionnaire is approved or rejected on HQ..
+        /// </summary>
+        public static string AverageHQProcessingTimeDescription {
+            get {
+                return ResourceManager.GetString("AverageHQProcessingTimeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average interview duration.
+        /// </summary>
+        public static string AverageInterviewDuration {
+            get {
+                return ResourceManager.GetString("AverageInterviewDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A time difference between the moment when the first answer is recorded on a tablet and when the complete button is pressed..
+        /// </summary>
+        public static string AverageInterviewDurationDescription {
+            get {
+                return ResourceManager.GetString("AverageInterviewDurationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average overall case processing time.
+        /// </summary>
+        public static string AverageOverallCaseProcessingTime {
+            get {
+                return ResourceManager.GetString("AverageOverallCaseProcessingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A time difference between the first assignment and the moment when the interview is approved by HQ..
+        /// </summary>
+        public static string AverageOverallCaseProcessingTimeDescription {
+            get {
+                return ResourceManager.GetString("AverageOverallCaseProcessingTimeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average supervisor processing time.
+        /// </summary>
+        public static string AverageSupervisorProcessingTime {
+            get {
+                return ResourceManager.GetString("AverageSupervisorProcessingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire..
+        /// </summary>
+        public static string AverageSupervisorProcessingTimeDescription {
+            get {
+                return ResourceManager.GetString("AverageSupervisorProcessingTimeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  Back to supervisors.
         /// </summary>
         public static string BackToSupervisors {
@@ -102,6 +192,69 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         public static string NumberOfCompletedInterviews {
             get {
                 return ResourceManager.GetString("NumberOfCompletedInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events..
+        /// </summary>
+        public static string NumberOfCompletedInterviewsDescription {
+            get {
+                return ResourceManager.GetString("NumberOfCompletedInterviewsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews approved by HQ.
+        /// </summary>
+        public static string NumberOfInterviewsApprovedByHQ {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewsApprovedByHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews collected by a {0} that were approved by HQ..
+        /// </summary>
+        public static string NumberOfInterviewsApprovedByHQDescription {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewsApprovedByHQDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by HQ.
+        /// </summary>
+        public static string NumberOfInterviewTransactionsByHQ {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsByHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}..
+        /// </summary>
+        public static string NumberOfInterviewTransactionsByHQDescription {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsByHQDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview transactions by Supervisor.
+        /// </summary>
+        public static string NumberOfInterviewTransactionsBySupervisor {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}..
+        /// </summary>
+        public static string NumberOfInterviewTransactionsBySupervisorDescription {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisorDescription", resourceCulture);
             }
         }
         
@@ -165,6 +318,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         public static string Total {
             get {
                 return ResourceManager.GetString("Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         

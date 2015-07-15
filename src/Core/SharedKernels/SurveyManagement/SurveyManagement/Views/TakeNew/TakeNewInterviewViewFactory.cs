@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 
             return this.users.Query(_ => 
                 _.OrderBy(x => x.UserName)
-                .Where(user => user.Roles.Any(role => role == UserRoles.Supervisor))
+                .Where(user => !user.IsArchived && user.Roles.Any(role => role == UserRoles.Supervisor))
                 .ToList());
         }
     }

@@ -33,8 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
 
             var cascadingQuestionModel = Mock.Of<IntegerNumericQuestionModel>(_
                 => _.Id == questionIdentity.Id
-                   && _.IsRosterSizeQuestion == true
-                   && _.MaxValue == 14);
+                   && _.IsRosterSizeQuestion == true);
 
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, cascadingQuestionModel } });
 
@@ -54,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.IntegerQu
         };
 
         It should_mark_question_as_invalid_with_message = () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '50' is incorrect because answer is greater than Roster upper bound '14'."), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '50' is incorrect because answer is greater than Roster upper bound '40'."), Times.Once);
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);

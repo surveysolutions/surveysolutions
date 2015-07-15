@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void Init()
         {
             AssemblyContext.SetupServiceLocator();
+
             this.eventContext = new EventContext();
         }
 
@@ -95,7 +96,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = false;
 
             // act
-            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, string.Empty, String.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, string.Empty, string.Empty, String.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLockedBySupervisor>().Count(), Is.EqualTo(1));
@@ -110,7 +111,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             bool isLockedByHQ = true;
 
             // act
-            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, new UserRoles[] { }, string.Empty, string.Empty, string.Empty, Guid.Empty);
+            user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
@@ -124,24 +125,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             string specifiedEmail = "user@example.com";
 
             // act
-            user.ChangeUser(specifiedEmail, false, false, new UserRoles[] { }, string.Empty, string.Empty, string.Empty, Guid.Empty);
+            user.ChangeUser(specifiedEmail, false, false, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<UserChanged>().Email, Is.EqualTo(specifiedEmail));
-        }
-
-        [Test]
-        public void ChangeUser_When_two_roles_are_specified_Then_raised_UserChanged_event_with_specified_roles()
-        {
-            // arrange
-            User user = CreateUserAR();
-            IEnumerable<UserRoles> twoSpecifedRoles = new [] { UserRoles.Administrator, UserRoles.User };
-
-            // act
-            user.ChangeUser("mail@domain.net", false, false, twoSpecifedRoles.ToArray(), string.Empty, string.Empty, string.Empty, Guid.Empty);
-
-            // assert
-            Assert.That(this.GetSingleRaisedEvent<UserChanged>().Roles, Is.EquivalentTo(twoSpecifedRoles));
         }
 
         [Test]
@@ -214,7 +201,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void ctor_When_three_roles_are_specified_Then_raised_NewUserCreated_event_with_specified_roles()
         {
             // arrange
-            IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor, UserRoles.Operator, UserRoles.User };
+            IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor,  UserRoles.User };
 
             // act
             new User(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null,string.Empty,string.Empty);

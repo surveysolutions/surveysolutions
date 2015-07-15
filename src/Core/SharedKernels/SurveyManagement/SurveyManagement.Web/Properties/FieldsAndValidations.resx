@@ -130,7 +130,7 @@
     <value>Email</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Is locked</value>
+    <value>Is locked by Headquarters</value>
   </data>
   <data name="PasswordErrorMessage" xml:space="preserve">
     <value>Password must contain at least one number, one upper case character and one lower case character</value>
@@ -170,5 +170,8 @@
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>Input name is too long</value>
+  </data>
+  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+    <value>Is locked by Supervisor</value>
   </data>
 </root>

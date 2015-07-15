@@ -9,7 +9,6 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [LimitsFilter]
     public abstract class BaseController : Controller
     {
         protected readonly ICommandService CommandService;

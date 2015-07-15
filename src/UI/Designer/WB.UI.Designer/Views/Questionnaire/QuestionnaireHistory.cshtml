@@ -19,7 +19,7 @@
     @Scripts.Render("~/list")
 }
 <div id="edit-form" style="position: static;">
-    <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">@Html.ActionLink(QuestionnaireHistoryResources.Back, "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
+    <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">@Html.ActionLink(QuestionnaireHistoryResources.Edit, "open", "App", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
 </div>
     <table id="questionnaire-table-header" class="table  table-header">
         <thead>

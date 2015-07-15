@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(id));
 
-            if (user == null)
+            if (user == null || user.IsArchived)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }

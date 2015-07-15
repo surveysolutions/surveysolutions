@@ -4,11 +4,14 @@ using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -17,6 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteSupervisor;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -28,6 +32,7 @@ using WB.Core.SharedKernels.SurveyManagement.QuartzIntegration;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
+using WB.Core.SharedKernels.SurveyManagement.Services.DeleteSupervisor;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -77,7 +82,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<InterviewPreconditionsServiceSettings>()
                 .ToConstant(new InterviewPreconditionsServiceSettings(interviewLimitCount));
-            this.Bind<IInterviewPreconditionsService>().To<SurveyManagementPreconditionsService>().InSingletonScope();
+
+            CommandRegistry.Configure<Interview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator, SynchronizeInterviewEventsCommand>());
+            CommandRegistry.Configure<Interview, CreateInterviewWithPreloadedData>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator, CreateInterviewWithPreloadedData>());
+            CommandRegistry.Configure<Interview, CreateInterviewCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator, CreateInterviewCommand>());
+            CommandRegistry.Configure<Interview, CreateInterviewOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator, CreateInterviewOnClientCommand>());
+            CommandRegistry.Configure<Interview, CreateInterviewCreatedOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator, CreateInterviewCreatedOnClientCommand>());
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
@@ -128,6 +138,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();
+            this.Kernel.RegisterDenormalizer<InterviewStatusTimeSpanDenormalizer>();
 
             this.Kernel.Load(new QuartzNinjectModule());
 
@@ -162,6 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
             this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
+            this.Bind<IDeleteSupervisorService>().To<DeleteSupervisorService>().InSingletonScope();
 
             this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
 

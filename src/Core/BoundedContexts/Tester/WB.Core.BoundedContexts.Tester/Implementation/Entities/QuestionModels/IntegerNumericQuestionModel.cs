@@ -3,7 +3,5 @@
     public class IntegerNumericQuestionModel : BaseQuestionModel
     {
         public bool IsRosterSizeQuestion { get; set; }
-
-        public int? MaxValue { get; set; }
     }
 }

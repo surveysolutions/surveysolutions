@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
                 
                 this.ExportToTabFile(questionnaireId, questionnaireVersion, approvedDataFolderPath,
-                    InterviewExportedAction.ApproveByHeadquarter);
+                    InterviewExportedAction.ApprovedByHeadquarter);
             }
 
             return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath)
@@ -343,9 +343,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 return;
 
             this.transactionManager.GetTransactionManager().BeginQueryTransaction();
-            this.CreateDataFiles(basePath, action, structure, questionnaireId, questionnaireVersion);
-            this.CreateFileForInterviewActions(action, basePath, questionnaireId, questionnaireVersion);
-            this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
+            try
+            {
+                this.CreateDataFiles(basePath, action, structure, questionnaireId, questionnaireVersion);
+                this.CreateFileForInterviewActions(action, basePath, questionnaireId, questionnaireVersion);
+            }
+            finally
+            {
+                this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
+            }
         }
 
         private void CreateDataFiles(string basePath, InterviewExportedAction? action, QuestionnaireExportStructure structure, Guid questionnaireId, long questionnaireVersion)

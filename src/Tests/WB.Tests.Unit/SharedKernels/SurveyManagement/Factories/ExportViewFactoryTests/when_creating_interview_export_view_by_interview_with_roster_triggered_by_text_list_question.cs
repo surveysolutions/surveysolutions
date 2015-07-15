@@ -111,8 +111,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
             InterviewData interview = CreateInterviewData();
-            
-            var textListQuestion = interview.Levels["#"].GetOrCreateQuestion(rosterSizeQuestionId);
+            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(rosterSizeQuestionId))
+                interview.Levels["#"].QuestionsSearchCahche.Add(rosterSizeQuestionId, new InterviewQuestion(rosterSizeQuestionId));
+
+            var textListQuestion = interview.Levels["#"].QuestionsSearchCahche[rosterSizeQuestionId];
             textListQuestion.Answer = new string[] { "a1", "a2" };
 
             for (int i = 0; i < levelCount; i++)
@@ -121,7 +123,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
-                var question = newLevel.GetOrCreateQuestion(questionInsideRosterGroupId);
+                if (!newLevel.QuestionsSearchCahche.ContainsKey(questionInsideRosterGroupId))
+                    newLevel.QuestionsSearchCahche.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
+
+                var question = newLevel.QuestionsSearchCahche[questionInsideRosterGroupId];
+
                 question.Answer = new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, someAnswer) });
             }
 

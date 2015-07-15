@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -33,7 +32,6 @@ namespace WB.Core.BoundedContexts.Tester
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<Func<IUserInteraction>>().ToMethod(context => () => Mvx.Resolve<IUserInteraction>());
             this.Bind<IUserInteractionAwaiter>().ToMethod(context => (IUserInteractionAwaiter) Mvx.Resolve<IUserInteraction>());
-            this.Bind<IInterviewPreconditionsService>().To<QuestionnaireTesterPreconditionsService>();
             this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
 
             CommandRegistry

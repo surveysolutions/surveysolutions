@@ -32,6 +32,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter")]
     public class HQController : BaseController
     {

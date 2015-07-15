@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 this.previousAnswer = Monads.Maybe(() => answer);
             }
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
-            this.answerMaxValue = questionModel.MaxValue ?? RosterUpperBoundDefaultValue;
+            this.answerMaxValue = RosterUpperBoundDefaultValue;
         }
 
         private async Task SendAnswerIntegerQuestionCommandAsync()

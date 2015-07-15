@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion() { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Numeric, StataExportCaption = rosterSizeQuestionVariableName, IsInteger = true, MaxValue = 2 },
+                    new NumericQuestion() { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Numeric, StataExportCaption = rosterSizeQuestionVariableName, IsInteger = true},
                     new Group("Roster Group")
                     {
                         IsRoster = true,
@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         CreatePreloadedDataByFile(new string[] { "Id", rosterSizeQuestionVariableName }, new string[][] { new string[] { "1","3" } },
                             questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"});
 
-        It should_return_empty_array = () =>
-            result.ShouldEqual(new decimal[0]); 
+        It should_return_array_with_0_1_2= () =>
+            result.ShouldEqual(new decimal[]{0, 1,2}); 
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;

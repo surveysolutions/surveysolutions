@@ -73,7 +73,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeReference.ReferenceId,
                 GetItemParentId(questionnaire, questionnaireChangeReference.ReferenceId),
                 questionnaireChangeReference.ReferenceTitle,
-                questionnaireChangeReference.ReferenceType);
+                questionnaireChangeReference.ReferenceType,
+                IsQuestionnaireChangeHistoryReferenceExists(questionnaire, questionnaireChangeReference.ReferenceId,
+                    questionnaireChangeReference.ReferenceType));
         }
 
         private Guid? GetItemParentId(QuestionnaireDocument questionnaire, Guid itemId)
@@ -87,6 +89,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 item = item.GetParent();
             }
             return item.PublicKey;
+        }
+
+        private bool IsQuestionnaireChangeHistoryReferenceExists(QuestionnaireDocument questionnaire, Guid itemId,
+            QuestionnaireItemType type)
+        {
+            switch (type)
+            {
+                case QuestionnaireItemType.Group:
+                case QuestionnaireItemType.Question:
+                case QuestionnaireItemType.Roster:
+                case QuestionnaireItemType.StaticText:
+                    return questionnaire.FirstOrDefault<IComposite>(g => g.PublicKey == itemId)!=null;
+                case QuestionnaireItemType.Person:
+                    return true;
+                case QuestionnaireItemType.Questionnaire:
+                    var questionnaireItem = questionnaireDocumentStorage.GetById(itemId);
+                    return questionnaireItem != null && !questionnaireItem.IsDeleted;
+            }
+            return false;
         }
     }
 }

@@ -67,7 +67,7 @@ namespace WB.UI.Designer.Code
 
         private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin)
         {
-            var hasAccess = (x.CreatedBy == viewerId ||
+            var hasEditAccess = (x.CreatedBy == viewerId ||
                 x.SharedPersons.Contains(viewerId) ||
                 isAdmin) &&
                 !x.IsDeleted;
@@ -81,9 +81,9 @@ namespace WB.UI.Designer.Code
                            CanDelete =
                                (x.CreatedBy == viewerId
                                || isAdmin) && !x.IsDeleted, 
-                           CanExport = true, 
-                           CanOpen = hasAccess,
-                           CanEdit = hasAccess,
+                           CanExport = true,
+                           CanOpen = !x.IsDeleted,
+                           CanEdit = hasEditAccess,
                            CanSynchronize = isAdmin, 
                            CanExportToPdf = true,
                            CreatorName =

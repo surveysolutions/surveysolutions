@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
 
-            if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
+            if (action.Action == InterviewExportedAction.ApprovedByHeadquarter)
                 fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetApprovedDataFolder(dataFolderForQuestionnaire));
         }
 

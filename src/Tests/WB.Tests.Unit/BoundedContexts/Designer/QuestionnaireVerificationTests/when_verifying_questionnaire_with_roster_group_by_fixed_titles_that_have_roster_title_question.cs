@@ -32,8 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = rosterTitleQuestionId,
                         StataExportCaption = "var",
-                        IsInteger = true,
-                        MaxValue = 5
+                        IsInteger = true
                     }
                 }
             });

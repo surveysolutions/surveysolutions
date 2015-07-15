@@ -77,11 +77,17 @@
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
+    <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
+    <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
+    <Compile Include="Events\User\UserArchived.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
+    <Compile Include="Events\User\UserUnarchived.cs" />
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
+    <Compile Include="Exceptions\UserDomainExceptionType.cs" />
+    <Compile Include="Exceptions\UserException.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
@@ -162,7 +168,6 @@
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
-    <Compile Include="Events\User\UserBaseEvent.cs" />
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserLocked.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
@@ -266,7 +271,6 @@
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
-    <Compile Include="Services\IInterviewPreconditionsService.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
@@ -329,6 +333,7 @@
   <ItemGroup>
     <Folder Include="Implementation\ReadSide\" />
     <Folder Include="Implementation\Services\" />
+    <Folder Include="Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>

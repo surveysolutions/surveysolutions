@@ -1,9 +1,14 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
 using Ncqrs.Domain.Storage;
-
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -16,16 +21,22 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         private readonly IAggregateRootRepository repository;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
+        private readonly IServiceLocator serviceLocator;
 
         private int executingCommandsCount = 0;
         private readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
 
-        public CommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
+
+        public CommandService(IAggregateRootRepository repository,
+            ILiteEventBus eventBus, 
+            IAggregateSnapshotter snapshooter,
+            IServiceLocator serviceLocator)
         {
             this.repository = repository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
+            this.serviceLocator = serviceLocator;
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -33,9 +44,9 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             return Task.Run(() => this.Execute(command, origin, cancellationToken));
         }
 
-        public void Execute(ICommand command, string origin)
+        public void Execute(ICommand command, string origin, bool handleInBatch = false)
         {
-            this.Execute(command, origin, CancellationToken.None);
+            this.ExecuteImpl(command, origin, handleInBatch, CancellationToken.None);
         }
 
         private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
@@ -44,7 +55,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             try
             {
-                this.ExecuteImpl(command, origin, cancellationToken);
+                this.ExecuteImpl(command, origin, false, cancellationToken);
             }
             finally
             {
@@ -93,7 +104,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             }
         }
 
-        protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
+        protected virtual void ExecuteImpl(ICommand command, string origin, bool handleInBatch, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException("command");
 
@@ -106,13 +117,13 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             Func<IAggregateRoot> constructor = CommandRegistry.GetAggregateRootConstructor(command);
+            IEnumerable<Type> validators = CommandRegistry.GetValidators(command);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
             IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();
-
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -123,11 +134,23 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             }
 
             cancellationToken.ThrowIfCancellationRequested();
+            foreach (var validator in validators)
+            {
+                var validatorInstance = serviceLocator.GetInstance(validator);
+                var validateMethod = validator.GetMethod("Validate", new[] {aggregateType, command.GetType()});
+                try
+                {
+                    validateMethod.Invoke(validatorInstance, new object[] { aggregate, command });
+                }
+                catch (TargetInvocationException ex)
+                {
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                }
+            }
 
+            cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
-
-            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin);
-
+            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin, handleInBatch);
             this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
         }
     }

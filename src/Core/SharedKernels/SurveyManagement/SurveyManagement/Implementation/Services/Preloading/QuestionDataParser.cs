@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Mime;
@@ -14,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 {
     internal class QuestionDataParser : IQuestionDataParser
     {
-        public ValueParsingResult TryParse(string answer, IQuestion question, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> parsedValue)
         {
             parsedValue = new KeyValuePair<Guid, object>();
 
@@ -51,12 +52,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, answer);
                     return ValueParsingResult.OK;
                 case QuestionType.GpsCoordinates:
-                    var parsedAnswer = GeoPosition.Parse(answer);
-                    if (parsedAnswer == null)
-                        return ValueParsingResult.AnswerAsGpsWasNotParsed;
+                    try
+                    {
+                        var parsedAnswer = GeoPosition.ParseProperty(answer, GetGpsPropertyFromColumnName(columnName));
 
-                    parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, parsedAnswer);
-                    return ValueParsingResult.OK;
+                        parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, parsedAnswer);
+                        return ValueParsingResult.OK;
+                    }
+                    catch (Exception)
+                    {
+                        return ValueParsingResult.AnswerAsGpsWasNotParsed;
+                    }
                 
                 case QuestionType.AutoPropagate:
                     int intValue;
@@ -80,9 +86,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                         parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, intNumericValue);
 
-                        if (numericQuestion.MaxValue.HasValue && intNumericValue > numericQuestion.MaxValue.Value)
-                            return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
-
                         if (intNumericValue < 0 &&
                             questionnaire.FirstOrDefault<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey) != null)
                             return ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative;
@@ -96,9 +99,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                         {
                             parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalNumericValue);
-                         
-                            if (numericQuestion.MaxValue.HasValue && decimalNumericValue > numericQuestion.MaxValue.Value)
-                                return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
 
                             return ValueParsingResult.OK;
                         }
@@ -143,38 +143,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         }
 
-        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, IQuestion question, QuestionnaireDocument questionnaire)
+        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(Tuple<string,string>[] answersWithColumnName, IQuestion question, QuestionnaireDocument questionnaire)
         {
             if (question == null)
                 return null;
 
-            var typedAnswers = new List<object>();
-
-            foreach (var answer in answers)
+            var typedAnswersWithColumnsNames = new ExpandoObject() as IDictionary<string, object>;
+            foreach (var answerWithColumnName in answersWithColumnName)
             {
                 KeyValuePair<Guid, object> parsedAnswer;
-                if(this.TryParse(answer, question, questionnaire, out parsedAnswer) != ValueParsingResult.OK)
+                if (this.TryParse(answerWithColumnName.Item2, answerWithColumnName.Item1, question, questionnaire, out parsedAnswer) != ValueParsingResult.OK)
                     continue;
-                
-                typedAnswers.Add(parsedAnswer.Value);
+
+                var propertyName = answerWithColumnName.Item1;
+                if (question.QuestionType == QuestionType.GpsCoordinates)
+                {
+                    propertyName = GetGpsPropertyFromColumnName(propertyName);
+                }
+                typedAnswersWithColumnsNames.Add(new KeyValuePair<string, object>(propertyName, parsedAnswer.Value));
             }
 
-            if (typedAnswers.Count == 0)
+            if (typedAnswersWithColumnsNames.Count == 0)
                 return null;
             
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.Select(a => (decimal)a).ToArray());
+                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswersWithColumnsNames.Select(a => (decimal)a.Value).ToArray());
                 case QuestionType.TextList:
                     return new KeyValuePair<Guid, object>(question.PublicKey,
-                        typedAnswers.Select((a, i) => new Tuple<decimal, string>(i + 1, (string)a)).ToArray());
+                        typedAnswersWithColumnsNames.Select((a, i) => new Tuple<decimal, string>(i + 1, (string)a.Value)).ToArray());
+                case QuestionType.GpsCoordinates:
+                    return new KeyValuePair<Guid, object>(question.PublicKey, new GeoPosition(typedAnswersWithColumnsNames));
                 default:
-                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswers.First());
+                    return new KeyValuePair<Guid, object>(question.PublicKey, typedAnswersWithColumnsNames.First().Value);
             }
         }
 
-        
+        private string GetGpsPropertyFromColumnName(string columnName)
+        {
+            if (!columnName.Contains("_"))
+                return columnName;
+            return columnName.Substring(columnName.IndexOf("_") + 1);
+        }
+
         private decimal[] GetAnswerOptionsAsValues(IQuestion question)
         {
             return

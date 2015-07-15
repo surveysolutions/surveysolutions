@@ -44,6 +44,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
+        int GetMaxRosterRowCount();
+
         bool IsCustomValidationDefined(Guid questionId);
 
         string GetCustomValidationExpression(Guid questionId);
@@ -59,8 +61,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldQuestionSpecifyRosterSize(Guid questionId);
 
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
-
-        int? GetMaxValueForNumericQuestion(Guid questionId);
 
         int? GetListSizeForListQuestion(Guid questionId);
 

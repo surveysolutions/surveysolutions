@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
 
         Because of = () => service.LoginAndCreateAccount("login", "pwd").Wait();
 
-        It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>(), Moq.It.IsAny<string>()), Times.Never);
+        It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
 
         It should_log_error_message = () => logger.Verify(x => x.Error(Moq.It.Is<string>(arg => arg.StartsWith("Failed to login user")), null));
 

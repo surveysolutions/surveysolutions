@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -28,10 +29,11 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
         private readonly ConcurrentQueue<CommandDescriptor> queue = new ConcurrentQueue<CommandDescriptor>();
         private readonly object lockObject = new object();
 
-        public SequentialCommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter)
-            : base(repository, eventBus, snapshooter) {}
+        public SequentialCommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter,
+            IServiceLocator serviceLocator)
+            : base(repository, eventBus, snapshooter, serviceLocator) { }
 
-        protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
+        protected override void ExecuteImpl(ICommand command, string origin, bool handleInBatch, CancellationToken cancellationToken)
         {
             var commandDescriptor = new CommandDescriptor(command, origin, cancellationToken);
 
@@ -46,7 +48,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
                     this.RemoveFromTopOfQueue(commandDescriptor);
 
-                    base.ExecuteImpl(commandDescriptor.Command, commandDescriptor.Origin, commandDescriptor.CancellationToken);
+                    base.ExecuteImpl(commandDescriptor.Command, commandDescriptor.Origin, handleInBatch, commandDescriptor.CancellationToken);
                 }
             }
         }

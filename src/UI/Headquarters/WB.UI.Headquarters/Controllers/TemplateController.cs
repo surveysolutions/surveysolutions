@@ -9,11 +9,13 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter")]
     public class TemplateController : BaseController
     {

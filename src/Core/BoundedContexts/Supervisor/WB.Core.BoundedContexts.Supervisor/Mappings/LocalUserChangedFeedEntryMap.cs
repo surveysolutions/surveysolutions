@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Mappings
             Property(x => x.ChangedUserId);
             Property(x => x.Timestamp);
             Property(x => x.SupervisorId);
+
+            Property(x => x.EntryType);
         }
     }
 
