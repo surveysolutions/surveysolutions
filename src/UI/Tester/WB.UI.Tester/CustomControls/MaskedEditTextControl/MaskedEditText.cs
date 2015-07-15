@@ -50,27 +50,6 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 
             this.selection = this.maskedText.FindFirstValidMaskPosition();
 
-            /*this.editingBefore = true;
-            this.editingOnChanged = true;
-            this.editingAfter = true;
-
-            if (this.HasHint && !this.maskedText.HasAnyText && !this.HasFocus)
-            {
-                this.EditableText.Clear();
-            }
-            else
-            {
-                var newMaskedText = this.maskedText.MakeMaskedText();
-                if (newMaskedText != this.Text)
-                {
-                    this.EditableText.Replace(0, this.Text.Length, newMaskedText);
-                }
-            }
-
-            this.editingBefore = false;
-            this.editingOnChanged = false;
-            this.editingAfter = false;*/
-        
             this.lastValidMaskPosition = maskedText.FindLastValidMaskPosition();
             this.initialized = true;
         }
