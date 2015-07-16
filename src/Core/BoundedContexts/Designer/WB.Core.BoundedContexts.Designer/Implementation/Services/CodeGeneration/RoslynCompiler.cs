@@ -14,17 +14,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class RoslynCompiler : IDynamicCompiler
     {
-        private readonly IDynamicCompilerSettings compilerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public RoslynCompiler(IDynamicCompilerSettings compilerSettings, IFileSystemAccessor fileSystemAccessor)
+        public RoslynCompiler(IFileSystemAccessor fileSystemAccessor)
         {
-            this.compilerSettings = compilerSettings;
             this.fileSystemAccessor = fileSystemAccessor;
         }
         
-        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(Guid templateId, Dictionary<string, string> generatedClasses,
+        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
+            Guid templateId, 
+            Dictionary<string, string> generatedClasses,
             string[] referencedPortableAssemblies,
+            IDynamicCompilerSettings settings,
             out string generatedAssembly)
         {
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
@@ -36,28 +37,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 AssemblyMetadata.CreateFromFile(typeof (Identity).Assembly.Location).GetReference()
             };
 
-            metadataReferences.AddRange(
-                compilerSettings.DefaultReferencedPortableAssemblies.Select(
-                    defaultReferencedPortableAssembly =>
-                        AssemblyMetadata.CreateFromFile(
-                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath, defaultReferencedPortableAssembly))
-                            .GetReference()));
-
-            metadataReferences.AddRange(
-                referencedPortableAssemblies.Select(
-                    defaultReferencedPortableAssembly =>
-                        AssemblyMetadata.CreateFromFile(
-                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath,
-                                defaultReferencedPortableAssembly)).GetReference()));
+            metadataReferences.AddRange(this.GetMetadataRefereces(settings.DefaultReferencedPortableAssemblies, settings.PortableAssembliesPath));
+            metadataReferences.AddRange(this.GetMetadataRefereces(referencedPortableAssemblies, settings.PortableAssembliesPath));
             
-            CSharpCompilation compilation = CSharpCompilation.Create(
-                String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
-                    checkOverflow: true, 
-                    optimizationLevel: OptimizationLevel.Release, 
-                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
-                syntaxTrees: syntaxTrees,
-                references: metadataReferences);
+            CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
 
             EmitResult compileResult;
             generatedAssembly = string.Empty;
@@ -74,6 +57,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             return compileResult;
+        }
+
+        static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<PortableExecutableReference> metadataReferences)
+        {
+            return CSharpCompilation.Create(
+                String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+                    checkOverflow: true, 
+                    optimizationLevel: OptimizationLevel.Release, 
+                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
+                syntaxTrees: syntaxTrees,
+                references: metadataReferences);
+        }
+
+        IEnumerable<PortableExecutableReference> GetMetadataRefereces(
+            IEnumerable<string> referencedPortableAssemblies,
+            string portableAssembliesPath)
+        {
+            return referencedPortableAssemblies.Select(
+                defaultReferencedPortableAssembly =>
+                    AssemblyMetadata.CreateFromFile(
+                        this.fileSystemAccessor.CombinePath(
+                            portableAssembliesPath,
+                            defaultReferencedPortableAssembly
+                        )
+                ).GetReference()
+            );
         }
     }
 }

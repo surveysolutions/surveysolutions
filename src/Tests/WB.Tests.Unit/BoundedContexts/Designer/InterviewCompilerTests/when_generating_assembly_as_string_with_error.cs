@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
+            dynamicCompilerSettings = CreateDynamicCompillerSettings();
 
             var classes = new Dictionary<string, string>();
             classes.Add("main", testClassToCompile);
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         };
 
         Because of = () =>
-            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly);
+            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], dynamicCompilerSettings, out resultAssembly);
 
 
         It should_faled = () =>
@@ -39,6 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
+        private static IDynamicCompilerSettings dynamicCompilerSettings;
         private static Dictionary<string, string> generatedClasses;
 
         private static string fileName = "validation:11111111111111111111111111111112";

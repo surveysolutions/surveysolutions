@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class DefaultDynamicCompillerSettings : IDynamicCompilerSettings
+    public class DefaultDynamicCompilerSettings : IDynamicCompilerSettings
     {
         public string PortableAssembliesPath { get; set; }
         public IEnumerable<string> DefaultReferencedPortableAssemblies { get; set; }

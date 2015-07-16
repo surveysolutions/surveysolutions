@@ -196,7 +196,8 @@
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompillerSettings.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettingsProvider.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
@@ -303,6 +304,7 @@
     </Compile>
     <Compile Include="QuestionnaireVerificationModule.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
+    <Compile Include="Services\CodeGeneration\IDynamicCompilerSettingsProvider.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
     <Compile Include="Services\ExpressionLocation.cs" />
     <Compile Include="Services\ExpressionLocationType.cs" />

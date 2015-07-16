@@ -13,11 +13,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
+            dynamicCompilerSettings = CreateDynamicCompillerSettings();
             generatedClasses.Add("main", testClassToCompile);
         };
 
         Because of = () =>
-            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly);
+            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], dynamicCompilerSettings, out resultAssembly);
 
 
         It should_result_succeded = () =>
@@ -33,6 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
+        private static IDynamicCompilerSettings dynamicCompilerSettings;
         private static Dictionary<string, string> generatedClasses = new Dictionary<string, string>();
 
 

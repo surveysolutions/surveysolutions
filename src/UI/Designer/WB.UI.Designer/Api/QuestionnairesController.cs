@@ -19,9 +19,11 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v1/questionnaires")]
+    [RoutePrefix("api/v8/questionnaires")]
     public class QuestionnairesController : ApiController
     {
+        private readonly Version ApiVersion = new Version(8, 0, 0, 0);
+
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
@@ -45,7 +47,7 @@ namespace WB.UI.Designer.Api
             this.expressionsEngineVersionService = expressionsEngineVersionService;
         }
 
-        [Route("~/api/v1/login")]
+        [Route("~/api/v8/login")]
         [HttpGet]
         public void Login()
         {
@@ -73,7 +75,10 @@ namespace WB.UI.Designer.Api
             string resultAssembly;
             try
             {
-                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source,expressionsEngineVersionService.GetLatestSupportedVersion(), out resultAssembly);
+                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
+                    questionnaireView.Source,
+                    ApiVersion, 
+                    out resultAssembly);
                 if(!generationResult.Success)
                     throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }

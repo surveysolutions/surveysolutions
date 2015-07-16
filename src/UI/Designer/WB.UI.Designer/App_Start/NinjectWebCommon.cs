@@ -13,6 +13,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Native.Logging;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -72,7 +73,7 @@ namespace WB.UI.Designer.App_Start
             // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
+            var dynamicCompilerSettings = (IDynamicCompilerSettingsProvider)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
