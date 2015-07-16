@@ -404,6 +404,8 @@
     <Compile Include="BoundedContexts\Tester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\ActiveGroupViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_disabled_event.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_disabled_event_and_disabled_group_is_not_on_screen.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_enabled_event_and_disabled_group_is_not_on_screen.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
@@ -559,7 +561,6 @@
     <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\HeadquarterUserCommandValidatorTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_41_on_numeric_int_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_minus_1_on_numeric_int_question_which_triggers_roster.cs" />
-   
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_substuting_question_title_inside_roster_with_reference_to_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
