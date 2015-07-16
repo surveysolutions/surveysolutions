@@ -11,19 +11,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly IDynamicCompiler codeCompiler;
         private readonly ICodeGenerator codeGenerator;
+        private readonly IDynamicCompilerSettingsProvider compilerSettingsProvider;
 
-        public QuestionnaireExpressionProcessorGenerator(IDynamicCompiler codeCompiler, ICodeGenerator codeGenerator)
+        public QuestionnaireExpressionProcessorGenerator(
+            IDynamicCompiler codeCompiler, 
+            ICodeGenerator codeGenerator,
+            IDynamicCompilerSettingsProvider compilerSettingsProvider)
         {
             this.codeCompiler =  codeCompiler;
             this.codeGenerator = codeGenerator;
+            this.compilerSettingsProvider = compilerSettingsProvider;
         }
 
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire,
             Version targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
+            var dynamicCompillerSettings = this.compilerSettingsProvider.GetSettings(targetVersion);
 
-            EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(questionnaire.PublicKey, generatedEvaluator, new string[] { },
+            EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
+                questionnaire.PublicKey, 
+                generatedEvaluator, 
+                new string[] { },
+                dynamicCompillerSettings,
                 out generatedAssembly);
 
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);

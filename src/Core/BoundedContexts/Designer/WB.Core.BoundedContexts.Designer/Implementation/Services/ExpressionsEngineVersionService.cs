@@ -18,10 +18,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// Functions were extended with IsAnswered function
         /// </summary>
         private readonly Version version_7 = new Version(7, 0, 0);
+        /// <summary>
+        /// Api for new tester, is used new RoslinCompile profile
+        /// </summary>
+        private readonly Version version_8 = new Version(8, 0, 0);
 
         public Version GetLatestSupportedVersion()
         {
-            return version_7;
+            return version_8;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
