@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -29,10 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public void Validate(User aggregate,CreateUserCommand command)
         {
             if (IsActiveUserExists(command.UserName))
-                throw new UserException(String.Format("user name '{0}' is taken", command.UserName), UserDomainExceptionType.UserNameUsedByActiveUser);
+                throw new UserException(String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenFormat, command.UserName), UserDomainExceptionType.UserNameUsedByActiveUser);
 
             if (IsArchivedUserExists(command.UserName))
-                throw new UserException(String.Format("user name '{0}' is taken by archived users", command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
+                throw new UserException(String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenByArchivedUsersFormat, command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
 
 
             if (command.Roles.Contains(UserRoles.Operator))
@@ -64,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var user = users.GetById(supervisorId);
             if (user == null || user.IsArchived)
-                throw new UserException("You can't unarchive interviewer until supervisor is archived",
+                throw new UserException(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived,
                     UserDomainExceptionType.SupervisorArchived);
         }
     }
