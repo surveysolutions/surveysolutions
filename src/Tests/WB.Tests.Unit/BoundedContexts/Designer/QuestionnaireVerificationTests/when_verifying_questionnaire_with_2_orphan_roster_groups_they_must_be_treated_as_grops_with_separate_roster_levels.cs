@@ -28,14 +28,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             {
                 PublicKey = rosterQuestionId1,
                 IsInteger = true,
-                MaxValue = 3,
                 StataExportCaption = "var1"
             });
             questionnaire.Children.Add(new NumericQuestion()
             {
                 PublicKey = rosterQuestionId2,
                 IsInteger = true,
-                MaxValue = 3,
                 StataExportCaption = "var2"
             });
 

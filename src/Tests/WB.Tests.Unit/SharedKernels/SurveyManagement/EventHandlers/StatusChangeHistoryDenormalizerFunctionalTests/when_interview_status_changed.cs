@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
@@ -46,29 +47,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             () => history.InterviewCommentedStatuses.Select(i => i.Status).ToArray()
                 .ShouldEqual(new[]
                 {
-                    InterviewStatus.InterviewerAssigned, 
-                    InterviewStatus.Completed,
-                    InterviewStatus.RejectedBySupervisor, 
-                    InterviewStatus.ApprovedBySupervisor, 
-                    InterviewStatus.RejectedByHeadquarters, 
-                    InterviewStatus.ApprovedByHeadquarters,
-                    InterviewStatus.Restarted,
-                    InterviewStatus.SupervisorAssigned,
-                    InterviewStatus.Restored,
-                    InterviewStatus.Deleted,
-                    InterviewStatus.Deleted
+                    InterviewExportedAction.InterviewerAssigned, 
+                    InterviewExportedAction.Completed,
+                    InterviewExportedAction.RejectedBySupervisor, 
+                    InterviewExportedAction.ApprovedBySupervisor, 
+                    InterviewExportedAction.RejectedByHeadquarter, 
+                    InterviewExportedAction.ApprovedByHeadquarter,
+                    InterviewExportedAction.Restarted,
+                    InterviewExportedAction.SupervisorAssigned,
+                    InterviewExportedAction.Restored,
+                    InterviewExportedAction.Deleted,
+                    InterviewExportedAction.Deleted
                 });
 
         It should_store_comments_and_preserve_the_order_for_statuses_Completed_Rejected_Approved_RejectedByHQ_Restarted =
            () => history.InterviewCommentedStatuses.Where(s => 
                new[]
                {
-                   InterviewStatus.Completed, 
-                   InterviewStatus.RejectedBySupervisor, 
-                   InterviewStatus.ApprovedBySupervisor, 
-                   InterviewStatus.RejectedByHeadquarters,
-                   InterviewStatus.Restarted, 
-                   InterviewStatus.ApprovedByHeadquarters
+                   InterviewExportedAction.Completed, 
+                   InterviewExportedAction.RejectedBySupervisor, 
+                   InterviewExportedAction.ApprovedBySupervisor, 
+                   InterviewExportedAction.RejectedByHeadquarter,
+                   InterviewExportedAction.Restarted, 
+                   InterviewExportedAction.ApprovedByHeadquarter
                }.Contains(s.Status)).Select(i => i.Comment).ToArray()
                .ShouldEqual(new[]
                 {

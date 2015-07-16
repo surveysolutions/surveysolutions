@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
  <#foreach (var namespaceToInclude in Model.Namespaces){#>
-	using <#=namespaceToInclude#>;
+    using <#=namespaceToInclude#>;
  <#}#>
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
@@ -20,6 +20,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
    {   
       private bool <#=Model.GeneratedMethodName#>()
       {
+      <# if(Model.GenerateSelf) {#>
+          var self = <#=Model.VariableName#>;
+      <# } #>
           return <#=Model.ExpressionString#>;
       }      
    }

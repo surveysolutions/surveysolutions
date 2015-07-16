@@ -320,7 +320,6 @@ namespace Main.Core.Documents
                 if (entity != null)
                 {
                     result.Add(entity);
-                    continue;
                 }
 
                 foreach (IComposite child in queueItem.Children)
@@ -501,14 +500,6 @@ namespace Main.Core.Documents
             }
 
             return doc;
-        }
-
-        public void UpdateRosterGroupsIfNeeded(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
-        {
-            if (triggeredGroupIds != null && triggeredGroupIds.Count > 0)
-            {
-                this.MarkGroupsAsRosterAndSetRosterSizeQuestion(triggeredGroupIds, rosterSizeQuestionId);
-            }
         }
 
         public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)

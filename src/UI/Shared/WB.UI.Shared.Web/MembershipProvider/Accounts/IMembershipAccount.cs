@@ -79,32 +79,6 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
         DateTime LastLockedOutAt { get; set; }
 
         /// <summary>
-        /// Gets or sets when the user entered an incorrect password for the first time
-        /// </summary>
-        /// <value>
-        /// DateTime.MinValue if the user has not entered an incorrect password (or succeded to login again).
-        /// </value>
-        DateTime FailedPasswordWindowStartedAt { get; set; }
-
-        /// <summary>
-        /// Gets or sets number of login attempts since <see cref="FailedPasswordWindowStartedAt"/>.
-        /// </summary>
-        int FailedPasswordWindowAttemptCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets when the user answered the password question incorrect for the first time.
-        /// </summary>
-        /// <value>
-        /// DateTime.MinValue if the user has not entered an incorrect answer (or succeded to login again).
-        /// </value>
-        DateTime FailedPasswordAnswerWindowStartedAt { get; set; }
-
-        /// <summary>
-        /// Gets or sets number of times that the user have answered the password question incorrectly since <see cref="FailedPasswordAnswerWindowAttemptCount"/>
-        /// </summary>
-        int FailedPasswordAnswerWindowAttemptCount { get; set; }
-
-        /// <summary>
         /// Gets or sets when the user account was created.
         /// </summary>
         DateTime CreatedAt { get; set; }

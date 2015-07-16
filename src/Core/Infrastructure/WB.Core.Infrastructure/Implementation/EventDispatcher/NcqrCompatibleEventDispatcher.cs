@@ -60,11 +60,65 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     occurredExceptions);
         }
 
-        public void Publish(IEnumerable<IPublishableEvent> eventMessages)
+        public void PublishInBatch(IEnumerable<IPublishableEvent> eventMessages)
         {
             List<IPublishableEvent> events = eventMessages.ToList();
 
             if(!events.Any())
+                return;
+
+            var functionalHandlers =
+               this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList();
+
+            var oldStyleHandlers =
+               this.registredHandlers.Values.Where(h => !(h.Handler is IFunctionalEventHandler)).ToList();
+
+            Guid firstEventSourceId = events.First().EventSourceId;
+
+            var errorsDuringHandling = new List<Exception>();
+
+            this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
+            try
+            {
+                foreach (var functionalEventHandler in functionalHandlers)
+                {
+                    functionalEventHandler.Handle(events, firstEventSourceId);
+                }
+
+                foreach (var publishableEvent in events)
+                {
+                    foreach (var handler in oldStyleHandlers)
+                    {
+                        handler.Bus.Publish(publishableEvent);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                errorsDuringHandling.Add(exception);
+            }
+            finally
+            {
+                if (errorsDuringHandling.Count > 0)
+                {
+                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+
+                    throw new AggregateException(
+                        string.Format(
+                            "One or more handlers failed when publishing {0} events. First event source id: {1}.",
+                            events.Count, firstEventSourceId.FormatGuid()),
+                        errorsDuringHandling);
+                }
+                
+                this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
+            }
+        }
+
+        public void Publish(IEnumerable<IPublishableEvent> eventMessages)
+        {
+            List<IPublishableEvent> events = eventMessages.ToList();
+
+            if (!events.Any())
                 return;
 
             var functionalHandlers =
@@ -117,7 +171,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
+        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool asBulk)
         {
             var eventStream = new UncommittedEventStream(origin);
 
@@ -127,7 +181,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             }
 
             this.eventStore.Store(eventStream);
-            this.Publish(eventStream);
+
+            if(asBulk)
+                this.PublishInBatch(eventStream);
+            else
+                this.Publish(eventStream);
 
             aggregateRoot.MarkChangesAsCommitted();
         }

@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    internal class WhenCreatingExportViewFactoryFromContaining2AutopropagatedGroupsWithOneTriggerMax2RowsAndMultyOptionLinkedQuestionToHeader : ExportViewFactoryTestsContext
+    internal class when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__ : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             referencedQuestionId = Guid.NewGuid();
 
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion("i am auto propagate") { PublicKey = numericTriggerQuestionId, MaxValue = 2 },
+                new NumericQuestion("i am auto propagate") { PublicKey = numericTriggerQuestionId },
                 new Group("i am roster1")
                 {
                     IsRoster = true,
@@ -49,11 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             exportViewFactory = CreateExportViewFactory();
         };
 
-        private Because of = () =>
+        Because of = () =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
-        It should_create_header_with_2_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { numericTriggerQuestionId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
+        It should_create_header_with_40_column = () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { numericTriggerQuestionId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(40);
 
         It should_create_header_with_nullable_level_labels = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();

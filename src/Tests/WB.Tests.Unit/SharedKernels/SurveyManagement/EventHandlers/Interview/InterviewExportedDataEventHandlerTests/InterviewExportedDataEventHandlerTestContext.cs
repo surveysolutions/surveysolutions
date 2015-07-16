@@ -25,16 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         protected const string firstLevelkey = "#";
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-          IDataExportRepositoryWriter dataExportRepositoryWriter = null,
-          IReadSideKeyValueStorage<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage = null, UserDocument user = null, InterviewSummary interviewSummary = null)
+          IDataExportRepositoryWriter dataExportRepositoryWriter = null,UserDocument user = null, InterviewSummary interviewSummary = null)
         {
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
-                recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideKeyValueStorage<RecordFirstAnswerMarkerView>>(),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),null);
         }
 
-        protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)
+        protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewExportedAction status)
         {
             return new InterviewCommentedStatus() { Status = status, InterviewerId = Guid.NewGuid() };
         }

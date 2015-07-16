@@ -34,8 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             {
                 PublicKey = rosterSizeQuestionId,
                 GroupPublicKey = groupToMoveId,
-                IsInteger = true,
-                MaxAllowedValue = 5
+                IsInteger = true
             });
 
 

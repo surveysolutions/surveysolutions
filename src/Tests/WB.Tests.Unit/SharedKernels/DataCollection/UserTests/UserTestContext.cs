@@ -10,5 +10,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
         {
             return new User();
         }
+
+        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
+        {
+            Setup.InstanceToMockedServiceLocator(instance);
+        }
     }
 }

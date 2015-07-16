@@ -232,9 +232,9 @@ namespace Main.Core.Tests.Documents
             var doc = new QuestionnaireDocument();
             var chapter1 = new Group("Chapter 1") { PublicKey = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB") };
             var numQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD1");
-            var numQuestion = new NumericQuestion("Numeric") { PublicKey = numQuestionId, MaxValue = 10 };
+            var numQuestion = new NumericQuestion("Numeric") { PublicKey = numQuestionId};
             var numQuestion1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD2");
-            var numQuestion1 = new NumericQuestion("Numeric") { PublicKey = numQuestion1Id, MaxValue = 10 };
+            var numQuestion1 = new NumericQuestion("Numeric") { PublicKey = numQuestion1Id};
 
             var textQuestion = new TextQuestion("Text") { PublicKey = textQuestionId, Capital = true };
             var textQuestion1 = new TextQuestion("Text") { PublicKey = textQuestion1Id, Capital = true };

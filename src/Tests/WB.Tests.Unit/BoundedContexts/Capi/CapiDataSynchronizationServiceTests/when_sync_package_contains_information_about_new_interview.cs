@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                                 param =>
                                     param.QuestionnaireId == questionnaireMetadata.TemplateId && param.Id == questionnaireMetadata.PublicKey &&
                                     param.UserId == questionnaireMetadata.ResponsibleId && (int)param.InterviewStatus == questionnaireMetadata.Status &&
-                                    param.Comments == "my comment" && param.Valid == true && param.CreatedOnClient == false && param.FeaturedQuestionsMeta.Length == 2), null),
+                                    param.Comments == "my comment" && param.Valid == true && param.CreatedOnClient == false && param.FeaturedQuestionsMeta.Length == 2), null, false),
                     Times.Once);
 
         It should_store_interview_content_in_sync_cacher_once =

@@ -2,6 +2,6 @@
 {
     public interface ICommandService
     {
-        void Execute(ICommand command, string origin = null);
+        void Execute(ICommand command, string origin = null, bool handleInBatch = false);
     }
 }
