@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Chance.MvvmCross.Plugins.UserInteraction;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
@@ -64,7 +61,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             downloadedQuestionnaire = await this.restService.GetWithProgressAsync<Questionnaire>(
                 url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
                 credentials:
-                    new RestCredentials()
+                    new RestCredentials
                     {
                         Login = this.userIdentity.Name,
                         Password = this.userIdentity.Password
@@ -79,8 +76,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             var  batchOfServerQuestionnaires= await this.restService.GetAsync<SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
-                credentials:
-                    new RestCredentials()
+                credentials: 
+                    new RestCredentials
                     {
                         Login = this.userIdentity.Name,
                         Password = this.userIdentity.Password
@@ -93,7 +90,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 Title = questionnaireListItem.Title,
                 LastEntryDate = questionnaireListItem.LastEntryDate,
                 IsPublic = isPublic,
-                OwnerName = this.userIdentity.Name
+                OwnerName = isPublic ? string.Empty : this.userIdentity.Name
             }).ToArray();
         }
     }

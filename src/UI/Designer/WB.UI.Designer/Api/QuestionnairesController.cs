@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -31,6 +30,7 @@ namespace WB.UI.Designer.Api
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
@@ -112,7 +112,8 @@ namespace WB.UI.Designer.Api
             {
                 Id = questionnaire.PublicId.FormatGuid(),
                 Title = questionnaire.Title,
-                LastEntryDate = questionnaire.LastEntryDate
+                LastEntryDate = questionnaire.LastEntryDate,
+                Owner = questionnaire.Owner
             });
         }
 
