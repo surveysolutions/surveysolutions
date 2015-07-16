@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 {
@@ -28,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
         {
             return a > staskDepthToAdd ?
-                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], dynamicCompilerSettings, out resultAssembly) :
+                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, ReferencedPortableAssemblies, dynamicCompilerSettings, out resultAssembly) :
                 IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(a + 1);
         }
 
@@ -45,6 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static string fileName = "validation:11111111111111111111111111111112";
 
         private static int staskDepthToAdd = 130;
+
+        static readonly PortableExecutableReference[] ReferencedPortableAssemblies = new[] { AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference() };
+
 
         public static string testClassToCompile =
             @"

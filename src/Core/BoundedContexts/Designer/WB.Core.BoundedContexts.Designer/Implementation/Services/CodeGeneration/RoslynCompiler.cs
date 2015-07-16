@@ -8,7 +8,6 @@ using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -29,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             out string generatedAssembly)
         {
             var metadataReferences = new List<PortableExecutableReference>();
-            metadataReferences.AddRange(this.GetMetadataRefereces(referencedPortableAssemblies, settings.PortableAssembliesPath));
+            metadataReferences.AddRange(this.GetMetadataReferences(referencedPortableAssemblies, settings.PortableAssembliesPath));
 
             return TryGenerateAssemblyAsStringAndEmitResult(templateId, 
                 generatedClasses, 
@@ -51,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             var metadataReferences = new List<PortableExecutableReference>();
 
-            metadataReferences.AddRange(this.GetMetadataRefereces(settings.DefaultReferencedPortableAssemblies, settings.PortableAssembliesPath));
+            metadataReferences.AddRange(this.GetMetadataReferences(settings.DefaultReferencedPortableAssemblies, settings.PortableAssembliesPath));
             metadataReferences.AddRange(referencedPortableAssemblies);
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
@@ -85,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 references: metadataReferences);
         }
 
-        IEnumerable<PortableExecutableReference> GetMetadataRefereces(
+        IEnumerable<PortableExecutableReference> GetMetadataReferences(
             IEnumerable<string> referencedPortableAssemblies,
             string portableAssembliesPath)
         {

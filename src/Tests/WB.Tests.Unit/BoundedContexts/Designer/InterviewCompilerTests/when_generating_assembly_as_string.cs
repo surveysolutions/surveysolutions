@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 {
     internal class when_generating_assembly_as_string : InterviewCompilerTestsContext
     {
-
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
@@ -18,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         };
 
         Because of = () =>
-            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], dynamicCompilerSettings, out resultAssembly);
+            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, ReferencedPortableAssemblies, dynamicCompilerSettings, out resultAssembly);
 
 
         It should_result_succeded = () =>
@@ -37,6 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static IDynamicCompilerSettings dynamicCompilerSettings;
         private static Dictionary<string, string> generatedClasses = new Dictionary<string, string>();
 
+        static readonly PortableExecutableReference[] ReferencedPortableAssemblies = new[] { AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference() };
 
         public static string testClassToCompile =
             @"using System.Collections.Generic;
