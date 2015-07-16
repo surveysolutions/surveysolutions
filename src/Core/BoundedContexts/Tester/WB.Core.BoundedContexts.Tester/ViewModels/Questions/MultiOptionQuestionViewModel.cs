@@ -168,20 +168,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private void PutOrderOnOptions(MultipleOptionsQuestionAnswered @event)
         {
-            var orderedOptions = this.Options.Where(x => @event.SelectedValues.Contains(x.Value))
-                .OrderBy(x => x.CheckedTimeStamp)
-                .ToList();
-
-            for (int i = 0; i < orderedOptions.Count; i++)
+            foreach (var option in this.Options)
             {
-                orderedOptions[i].CheckedOrder = i + 1;
-                orderedOptions[i].Checked = true;
-            }
+                var selectedOptionIndex = Array.IndexOf(@event.SelectedValues, option.Value);
 
-            foreach (var option in this.Options.Except(orderedOptions))
-            {
-                option.CheckedOrder = null;
-                option.Checked = false;
+                if (selectedOptionIndex >= 0)
+                {
+                    option.CheckedOrder = selectedOptionIndex + 1;
+                    option.Checked = true;
+                }
+                else
+                {
+                    option.CheckedOrder = null;
+                    option.Checked = false;
+                }
             }
         }
     }
