@@ -41,6 +41,10 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 case HttpStatusCode.UpgradeRequired:
                     friendlyMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
                     break;
+                case HttpStatusCode.NotFound:
+                    shouldRestExceptionBeLogged = true;
+                    friendlyMessage = UIResources.InvalidEndpoint;
+                    break;
                 case HttpStatusCode.BadRequest:
                     friendlyMessage = UIResources.InvalidEndpoint;
                     break;
