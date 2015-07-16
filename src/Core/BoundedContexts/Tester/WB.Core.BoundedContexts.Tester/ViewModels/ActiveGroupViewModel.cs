@@ -112,10 +112,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
 
             this.Items = listOfViewModels;
-            listOfChildrenIdOfCurrentGroup = group.Children
-                .Where(x => x.ModelType != typeof(RosterModel))
-                .Select(x => x.Id)
-                .ToList();
+            listOfChildrenIdOfCurrentGroup = group.Children.Select(x => x.Id).ToList();
 
             messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex));
         }
@@ -144,53 +141,37 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(QuestionsEnabled @event)
         {
-            this.NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(@event.Questions);
+            List<int> positionsToUpdate = CalculatePositionsToUpdate(@event.Questions).ToList();
+            positionsToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
         }
 
         public void Handle(QuestionsDisabled @event)
         {
-            this.NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(@event.Questions);
+            List<int> positionsToUpdate = CalculatePositionsToUpdate(@event.Questions).ToList();
+            positionsToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
         }
 
         public void Handle(GroupsEnabled @event)
         {
-            List<int> positionToUpdate = CalculatePositionsToUpdate(@event.Groups).Distinct().ToList();
-            positionToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
+            List<int> positionsToUpdate = CalculatePositionsToUpdate(@event.Groups).Distinct().ToList();
+            positionsToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
         }
 
         public void Handle(GroupsDisabled @event)
         {
-            List<int> positionToUpdate = CalculatePositionsToUpdate(@event.Groups).Distinct().ToList();
-            positionToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
+            List<int> positionsToUpdate = CalculatePositionsToUpdate(@event.Groups).Distinct().ToList();
+            positionsToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(@event, x)));
         }
 
-        private void NotifyAboutQuestionsEnablementChangeOnCurrentScreenIfNeeded(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] questionIdentities)
-        {
-            if (this.listOfChildrenIdOfCurrentGroup == null || this.listOfChildrenIdOfCurrentGroup.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var questionIdentity in questionIdentities)
-            {
-                if (this.listOfChildrenIdOfCurrentGroup.Contains(questionIdentity.Id)
-                    && questionIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
-                {
-                    var questionIndex = this.listOfChildrenIdOfCurrentGroup.IndexOf(questionIdentity.Id);
-                    this.messenger.Publish(new UpdateInterviewEntityStateMessage(questionIdentity, questionIndex));
-                }
-            }
-        }
-
-        List<int> CalculatePositionsToUpdate(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] groupIdentities)
+        List<int> CalculatePositionsToUpdate(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] intemIdentities)
         {
             var result = new List<int>();
-            foreach (var groupIdentity in groupIdentities)
+            foreach (var intemIdentity in intemIdentities)
             {
-                if (this.listOfChildrenIdOfCurrentGroup.Contains(groupIdentity.Id)
-                    && groupIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
+                if (this.listOfChildrenIdOfCurrentGroup.Contains(intemIdentity.Id)
+                    && intemIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
                 {
-                    result.Add(this.listOfChildrenIdOfCurrentGroup.IndexOf(groupIdentity.Id));
+                    result.Add(this.listOfChildrenIdOfCurrentGroup.IndexOf(intemIdentity.Id));
                 }
             }
             return result;
