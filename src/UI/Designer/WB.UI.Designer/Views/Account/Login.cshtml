@@ -1,4 +1,6 @@
-﻿@using WB.UI.Designer.BootstrapSupport
+﻿@using Recaptcha
+@using WB.UI.Designer
+@using WB.UI.Designer.BootstrapSupport
 @model WB.UI.Designer.Models.LoginModel
 
 @helper HasError()
@@ -41,11 +43,19 @@
         @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
     </div>
     <div class="form-group">
-        @Html.CheckBoxFor(x => x.RememberMe, new {@id="cb-stay-logged-in", @class = "wb-checkbox" })
+        @Html.CheckBoxFor(x => x.RememberMe, new {@id = "cb-stay-logged-in", @class = "wb-checkbox"})
         <label for="cb-stay-logged-in">
             <span></span>Stay logged in for a day
-        </label><br />
+        </label><br/>
     </div>
+    
+    if (AppSettings.Instance.IsReCaptchaEnabled && this.ViewBag.ShowCapcha)
+    {
+        <div style="line-height: 0">
+            @Html.Raw(Html.GenerateCaptcha())
+        </div>
+    }
+    
     <div class="form-actions">
         <input class="btn btn-success btn-lg" type="submit" value="Log in" />
         <a class="btn btn-link" href="@Url.Action("PasswordReset")">Forgot Password?</a>
