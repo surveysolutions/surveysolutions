@@ -5,12 +5,13 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {
-    internal class when_determining_has_interview_a_group_and_questionnaire_has_no_such_group : StatefulInterviewTestsContext
+    internal class when_determining_has_interview_a_group_and_questionnaire_has_such_group_and_group_is_not_in_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
             Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
-                => _.HasGroup(group.Id) == false);
+                => _.HasGroup(group.Id) == true
+                && _.GetRostersFromTopToSpecifiedGroup(group.Id) == new Guid[] { });
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId);
         };
@@ -18,8 +19,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
         Because of = () =>
             result = interview.HasGroup(group);
 
-        It should_return_false = () =>
-            result.ShouldBeFalse();
+        It should_return_true = () =>
+            result.ShouldBeTrue();
 
         private static bool result;
         private static StatefulInterview interview;
