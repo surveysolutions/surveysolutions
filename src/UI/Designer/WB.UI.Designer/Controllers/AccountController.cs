@@ -26,8 +26,8 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ISystemMailer mailer;
         private readonly ILogger logger;
-        private readonly string failedPasswordAttemptCount = "failed-password-attempt-count";
-        private readonly string failedPasswordAttemptEndedAt = "failed-password-attempt-ended-at";
+        private readonly string countOfFailedLoginAttempts = "count-of-failed-login-attempts";
+        private readonly string dateOfLastFailedLoginAttempt = "date-of-last-failed-login-attempt";
 
         public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger) : base(userHelper)
         {
@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Controllers
 
             if (AppSettings.Instance.IsReCaptchaEnabled && isCapchaPresentOnLoginPage && !captchaValid)
             {
-                this.Session[failedPasswordAttemptEndedAt] = DateTime.Now;
+                this.Session[dateOfLastFailedLoginAttempt] = DateTime.Now;
                 this.ViewBag.ShowCapcha = true;
                 this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
                 return View(model);
@@ -83,14 +83,14 @@ namespace WB.UI.Designer.Controllers
                 && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 Response.Cookies[0].Expires = DateTime.Now.AddDays(1);
-                this.Session[failedPasswordAttemptCount] = null;
-                this.Session[failedPasswordAttemptEndedAt] = null;
+                this.Session[countOfFailedLoginAttempts] = null;
+                this.Session[dateOfLastFailedLoginAttempt] = null;
                 return this.RedirectToLocal(returnUrl);
             }
 
-            int failedPasswordAttemptCountValue = (int)(this.Session[this.failedPasswordAttemptCount] ?? 0);
-            this.Session[failedPasswordAttemptCount] = failedPasswordAttemptCountValue + 1;
-            this.Session[failedPasswordAttemptEndedAt] = DateTime.Now;
+            int countOfFailedLoginAttemptsValue = (int)(this.Session[this.countOfFailedLoginAttempts] ?? 0);
+            this.Session[countOfFailedLoginAttempts] = countOfFailedLoginAttemptsValue + 1;
+            this.Session[dateOfLastFailedLoginAttempt] = DateTime.Now;
 
             this.ViewBag.ShowCapcha = IsCaptchaPresentOnLoginPage();
             this.Error(ErrorMessages.The_user_name_or_password_provided_is_incorrect);
@@ -99,14 +99,14 @@ namespace WB.UI.Designer.Controllers
 
         private bool IsCaptchaPresentOnLoginPage()
         {
-            if (this.Session[failedPasswordAttemptEndedAt] == null)
+            if (this.Session[dateOfLastFailedLoginAttempt] == null)
                 return false;
 
-            int failedPasswordAttemptCountValue = (int)(this.Session[this.failedPasswordAttemptCount] ?? 0);
-            DateTime failedPasswordAttemptEndedAtValue = (DateTime)this.Session[failedPasswordAttemptEndedAt];
+            int countOfFailedLoginAttemptsValue = (int)(this.Session[this.countOfFailedLoginAttempts] ?? 0);
+            DateTime dateOfLastFailedLoginAttemptValue = (DateTime)this.Session[dateOfLastFailedLoginAttempt];
 
-            if (failedPasswordAttemptCountValue >= AppSettings.Instance.CountOfFailedLoginAttemptsBeforeCaptcha &&
-                (DateTime.Now - failedPasswordAttemptEndedAtValue) < AppSettings.Instance.TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt)
+            if (countOfFailedLoginAttemptsValue >= AppSettings.Instance.CountOfFailedLoginAttemptsBeforeCaptcha &&
+                (DateTime.Now - dateOfLastFailedLoginAttemptValue) < AppSettings.Instance.TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt)
             {
                 return true;
             }
