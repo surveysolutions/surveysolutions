@@ -141,25 +141,25 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(QuestionsEnabled @event)
         {
-            CalculatePositionsToUpdate(@event.Questions);
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Questions);
         }
 
         public void Handle(QuestionsDisabled @event)
         {
-            CalculatePositionsToUpdate(@event.Questions);
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Questions);
         }
 
         public void Handle(GroupsEnabled @event)
         {
-            CalculatePositionsToUpdate(@event.Groups);
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Groups);
         }
 
         public void Handle(GroupsDisabled @event)
         {
-            CalculatePositionsToUpdate(@event.Groups);
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Groups);
         }
 
-        void CalculatePositionsToUpdate(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] itemIdentities)
+        void CalculatePositionsToUpdateAndNotifySubscribers(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] itemIdentities)
         {
             var positionsToUpdate = new List<int>();
             foreach (var itemIdentity in itemIdentities)
