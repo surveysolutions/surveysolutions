@@ -280,11 +280,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             for (int i = 0; i < orderedSelectedOptions.Count; i++)
             {
                 orderedSelectedOptions[i].CheckedOrder = i + 1;
+                orderedSelectedOptions[i].Checked = true;
             }
 
             foreach (var option in this.Options.Except(orderedSelectedOptions))
             {
                 option.CheckedOrder = null;
+                option.Checked = false;
             }
         }
     }
