@@ -295,7 +295,7 @@
     <value>Нажмите для ввода числа</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить {0} строк(у) у зависимого списка?</value>
+    <value>Вы уверены, что хотите удалить {0} строк(у) у зависимых списков?</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>Нет</value>
