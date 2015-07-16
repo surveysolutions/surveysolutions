@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    public class when_toggling_answer : MultiOptionLinkedQuestionViewModelTestsContext
+    public class when_handling_question_answered_event_on_sorted_multioption_question : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
+            interviewId = "interview";
             questionId = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var interview = Mock.Of<IStatefulInterview>(x =>
-                x.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[] 
+                x.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[]
                 {
                     Create.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
                     Create.TextAnswer("answer2", linkedToQuestionId, new []{2m})
@@ -37,9 +35,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuest
             questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>();
             questionnaire.Questions.Add(questionId.Id, new LinkedMultiOptionQuestionModel
             {
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                AreAnswersOrdered = true
             });
             questionnaire.Questions.Add(linkedToQuestionId, new TextQuestionModel());
+
 
             var interviews = new Mock<IStatefulInterviewRepository>();
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
@@ -47,25 +47,21 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuest
             interviews.SetReturnsDefault(interview);
             questionnaires.SetReturnsDefault(questionnaire);
 
-            answering = new Mock<AnsweringViewModel>();
-
-            viewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object, answering:answering.Object);
-            viewModel.Init("interviewId", questionId, Create.NavigationState());
+            viewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
+            viewModel.Init(interviewId, questionId, Create.NavigationState());
         };
 
-        Because of = () =>
-        {
-            viewModel.Options.First().Checked = true;
-            viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
-        };
+        Because of = () => viewModel.Handle(Create.Event.MultipleOptionsLinkedQuestionAnswered(questionId:questionId.Id,
+            rosterVector: questionId.RosterVector,
+            selectedRosterVectors: new[] { new decimal[] { 2 }, new decimal[] { 1 } }));
 
-        private It should_send_command_with_selected_roster_vectors = () =>
-            answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
-                c.QuestionId == questionId.Id && c.SelectedPropagationVectors.Any(pv => pv.SequenceEqual(viewModel.Options.First().Value)))));
+        It should_put_answers_order_on_option1 = () => viewModel.Options.First().CheckedOrder.ShouldEqual(2);
+        It should_put_answers_order_on_option2 = () => viewModel.Options.Second().CheckedOrder.ShouldEqual(1);
+        It should_put_checked_on_checked_items = () => viewModel.Options.Count(x => x.Checked).ShouldEqual(2);
 
         static MultiOptionLinkedQuestionViewModel viewModel;
+        static string interviewId;
         static Identity questionId;
-        static Mock<AnsweringViewModel> answering;
     }
 }
 
