@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AccountRepositoryTests
             accountRepository.Register(new AccountView() { ProviderUserKey = validatedUserId });
 
         It should_execute_RegisterAccountCommand_with_specified_validatedUserId = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<RegisterAccountCommand>(cp => cp.AccountId == validatedUserId), Moq.It.IsAny<string>()));
+            commandService.Verify(command => command.Execute(Moq.It.Is<RegisterAccountCommand>(cp => cp.AccountId == validatedUserId), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()));
 
         private static CQRSAccountRepository accountRepository;
         private static Mock<ICommandService> commandService;

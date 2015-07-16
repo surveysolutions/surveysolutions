@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4, QuestionType = QuestionType.Numeric},
+                new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true,  QuestionType = QuestionType.Numeric},
                 new Group()
                 {
                     PublicKey = rosterGroupId,

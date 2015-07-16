@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.GenericSubdomains.Utils
 @using WB.UI.Headquarters.Code
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
@@ -9,46 +10,51 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-    var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
-    var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
+        var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
+        var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
         var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "DeleteSupervisor" })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
-        ko.applyBindings(model);
-        model.load();
-    });
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })', $commandExecutionUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
     </script>
 }
 
 @section header
 {
     <div class="page-header">
-    <h2 class="sinle-line-header">Supervisors</h2>
-</div>
+        <h2 class="sinle-line-header">Supervisors</h2>
+    </div>
 }
 
 @section gridnavigation
 {
-     <div class="btn-group">
-         <div class="form-inline">
-             @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
-             {
-                 <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">
-                     <i class="glyphicon glyphicon-user"></i> Add supervisor
-                 </a>
-             }
-             <div class="input-group">
-                 <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
-                 <div class="input-group-btn">
-                     <button class="btn btn-default" type="button" data-bind="click: search">
-                         <i class="glyphicon glyphicon-search"></i>
-                     </button>
-                 </div>
-             </div>
-         </div>
-    </div>
+    <div class="btn-group">
+        <div class="form-inline">
+            @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+            {
+                <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">
+                    <i class="glyphicon glyphicon-user"></i> Add supervisor
+                </a>
+            }
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: search">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
 
- 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group pull-right">
+        <a class="btn btn-default" href="@Url.Action("Archived", "Supervisor", new {area = string.Empty})">
+            <i class="glyphicon glyphicon glyphicon-book"></i> Archived supervisors
+        </a>
+    </div>
 }
 
 @section grid
@@ -61,7 +67,7 @@
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
                 <th></th>
-                
+
             </tr>
         </thead>
         <tbody>
@@ -77,7 +83,7 @@
                             <i class="glyphicon glyphicon-user"></i> Interviewers
                         </a>
                     }
-               
+
                     @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                     {
                         <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
@@ -87,15 +93,40 @@
                     }
                     @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
                     {
+                        <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
+                            <i class="glyphicon glyphicon-user"></i>
+                        </a>
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
                         <div class="btn-group pull-right">
-                            <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
-                                <i class="glyphicon glyphicon-user"></i>
+                            <a class="btn btn-danger" data-bind="click : $parent.archiveSupervisor">
+                                <i class="glyphicon glyphicon-remove"></i>
                             </a>
                         </div>
                     }
+
                 </td>
             </tr>
             <!-- /ko -->
         </tbody>
     </table>
+    <script type="text/html" id="confirm-delete-template">
+        <h3>
+            <b>
+                <!-- ko foreach:$data -->
+                <!-- ko if: $index() > 0 -->,<!-- /ko -->
+                '<span class='text-normal' data-bind='text: UserName'></span>'
+                <!-- /ko -->
+            </b> supervisor will be archived with all his interviewers.
+        </h3>
+    </script>
+    <script type="text/html" id="confirm-continue-message-template">
+  
+    <br />
+    <b><span style="color: red;">
+    If the interviewers have completed interviews in census mode on the tablet then the data will be lost.
+</span></b>
+        <br />  <br />Do you want to continue?
+</script>
 }

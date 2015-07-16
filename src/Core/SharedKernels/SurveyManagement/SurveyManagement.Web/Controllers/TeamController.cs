@@ -6,11 +6,13 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [LimitsFilter]
     public class TeamController : BaseController
     {
         protected readonly IUserViewFactory userViewFactory;
@@ -31,11 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         protected UserView GetUserById(Guid id)
         {
             return this.userViewFactory.Load(new UserViewInputModel(id));
-        }
-
-        protected UserView GetUserByName(string userName)
-        {
-            return this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
         }
 
         protected void CreateInterviewer(UserModel interviewer, Guid supervisorId)
@@ -61,8 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
-                roles: user.Roles.ToArray(),
-                isLockedBySupervisor: this.GlobalInfo.IsSurepvisor ? editModel.IsLocked : user.IsLockedBySupervisor,
+                isLockedBySupervisor: editModel.IsLockedBySupervisor,
                 isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
                 passwordHash:
                     string.IsNullOrEmpty(editModel.Password)

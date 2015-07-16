@@ -81,7 +81,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
                 foreach (var questionId in variableNameAndQuestionId)
                 {
-                    var question = newLevel.GetOrCreateQuestion(questionId.Value);
+                    if (!newLevel.QuestionsSearchCahche.ContainsKey(questionId.Value))
+                        newLevel.QuestionsSearchCahche.Add(questionId.Value, new InterviewQuestion(questionId.Value));
+
+                    var question = newLevel.QuestionsSearchCahche[questionId.Value];
+
                     question.Answer = "some answer";
                 }
             }

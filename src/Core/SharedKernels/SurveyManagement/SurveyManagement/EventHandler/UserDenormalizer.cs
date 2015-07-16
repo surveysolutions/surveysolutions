@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                                     IEventHandler<UserLockedBySupervisor>,
                                     IEventHandler<UserUnlockedBySupervisor>,
                                     IEventHandler<UserLinkedToDevice>,
+                                    IEventHandler<UserArchived>,
+                                    IEventHandler<UserUnarchived>,
                                     IEventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -61,7 +63,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.Email = evnt.Payload.Email;
-            item.Roles = evnt.Payload.Roles.ToHashSet();
             item.Password = evnt.Payload.PasswordHash;
             item.PersonName = evnt.Payload.PersonName;
             item.PhoneNumber = evnt.Payload.PhoneNumber;
@@ -108,6 +109,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             item.DeviceId = evnt.Payload.DeviceId;
             item.DeviceChangingHistory.Add(
                 new DeviceInfo { Date = evnt.EventTimeStamp, DeviceId = evnt.Payload.DeviceId });
+            this.users.Store(item, item.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<UserArchived> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            item.IsArchived = true;
+            this.users.Store(item, item.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<UserUnarchived> evnt)
+        {
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
+
+            item.IsArchived = false;
             this.users.Store(item, item.PublicKey);
         }
     }

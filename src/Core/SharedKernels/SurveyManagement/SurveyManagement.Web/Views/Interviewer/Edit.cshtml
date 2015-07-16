@@ -25,6 +25,14 @@
             <fieldset class="form-horizontal">
                 @{
             this.Html.RenderPartial("UserEditForm");
+
+            <div class="form-group">
+                @Html.LabelFor(x => x.IsLockedBySupervisor, new { @class = "col-sm-4 control-label" })
+                <div class="col-sm-8">
+                    @Html.CheckBoxFor(x => x.IsLockedBySupervisor)
+                    @Html.ValidationMessageFor(x => x.IsLockedBySupervisor, null, new { @class = "help-block" })
+                </div>
+            </div>
                 }
                 <div class="form-group">
                     <div class="col-sm-offset-2">

@@ -26,6 +26,8 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ISystemMailer mailer;
         private readonly ILogger logger;
+        private readonly string countOfFailedLoginAttempts = "count-of-failed-login-attempts";
+        private readonly string dateOfLastFailedLoginAttempt = "date-of-last-failed-login-attempt";
 
         public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger) : base(userHelper)
         {
@@ -56,24 +58,59 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Login(string returnUrl)
         {
             this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.ShowCapcha = IsCaptchaPresentOnLoginPage();
             return this.View(new LoginModel());
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [RecaptchaControlMvc.CaptchaValidatorAttribute]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        public ActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
         {
+            var isCapchaPresentOnLoginPage = IsCaptchaPresentOnLoginPage();
+
+            if (AppSettings.Instance.IsReCaptchaEnabled && isCapchaPresentOnLoginPage && !captchaValid)
+            {
+                this.Session[dateOfLastFailedLoginAttempt] = DateTime.Now;
+                this.ViewBag.ShowCapcha = true;
+                this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
+                return View(model);
+            }
+
             if (this.ModelState.IsValid
                 && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 Response.Cookies[0].Expires = DateTime.Now.AddDays(1);
+                this.Session[countOfFailedLoginAttempts] = null;
+                this.Session[dateOfLastFailedLoginAttempt] = null;
                 return this.RedirectToLocal(returnUrl);
             }
 
+            int countOfFailedLoginAttemptsValue = (int)(this.Session[this.countOfFailedLoginAttempts] ?? 0);
+            this.Session[countOfFailedLoginAttempts] = countOfFailedLoginAttemptsValue + 1;
+            this.Session[dateOfLastFailedLoginAttempt] = DateTime.Now;
+
+            this.ViewBag.ShowCapcha = IsCaptchaPresentOnLoginPage();
             this.Error(ErrorMessages.The_user_name_or_password_provided_is_incorrect);
             return View(model);
+        }
+
+        private bool IsCaptchaPresentOnLoginPage()
+        {
+            if (this.Session[dateOfLastFailedLoginAttempt] == null)
+                return false;
+
+            int countOfFailedLoginAttemptsValue = (int)(this.Session[this.countOfFailedLoginAttempts] ?? 0);
+            DateTime dateOfLastFailedLoginAttemptValue = (DateTime)this.Session[dateOfLastFailedLoginAttempt];
+
+            if (countOfFailedLoginAttemptsValue >= AppSettings.Instance.CountOfFailedLoginAttemptsBeforeCaptcha &&
+                (DateTime.Now - dateOfLastFailedLoginAttemptValue) < AppSettings.Instance.TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt)
+            {
+                return true;
+            }
+            return false;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]

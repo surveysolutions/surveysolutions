@@ -25,12 +25,11 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.ReadSide;
+using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
-using WB.Core.Infrastructure.Storage.Raven;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
@@ -75,16 +74,6 @@ namespace WB.UI.Designer.App_Start
         {
             // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
-
-            var ravenSettings = new RavenConnectionSettings(
-                storagePath: AppSettings.Instance.RavenDocumentStore,
-                username: AppSettings.Instance.RavenUserName,
-                password: AppSettings.Instance.RavenUserPassword,
-                viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
-                plainDatabase: AppSettings.Instance.RavenPlainDatabase,
-                failoverBehavior: AppSettings.Instance.FailoverBehavior,
-                activeBundles: AppSettings.Instance.ActiveBundles,
-                ravenFileSystemName: AppSettings.Instance.RavenFileSystemName);
 
             var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
 
@@ -136,7 +125,7 @@ namespace WB.UI.Designer.App_Start
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
 
             kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
             kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());

@@ -19,9 +19,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
         int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile);
         decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues);
-        
-        Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
-        ValueParsingResult ParseQuestion(string answer, IQuestion question, out KeyValuePair<Guid, object> parsedValue);
+
+        Dictionary<string, Tuple<string, int>[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
+        ValueParsingResult ParseQuestion(string answer, string columnName, IQuestion question, out KeyValuePair<Guid, object> parsedValue);
 
         PreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
         PreloadedDataRecord[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile);

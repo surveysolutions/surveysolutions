@@ -44,16 +44,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region State
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private bool wasExpressionsMigrationPerformed = false;
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
+            if (e.ShareType == ShareType.View)
+                this.readOnlyUsers.Add(e.PersonId);
         }
 
         internal void Apply(SharedPersonFromQuestionnaireRemoved e)
         {
             this.innerDocument.SharedPersons.Remove(e.PersonId);
+            this.readOnlyUsers.Remove(e.PersonId);
         }
 
         private void Apply(QuestionnaireUpdated e)
@@ -162,8 +166,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Mask,
-                        e.Triggers,
-                        null,
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -181,8 +183,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
-
-            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
@@ -210,8 +210,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         null,
-                        e.Triggers,
-                        e.MaxAllowedValue,
                         null,
                         null,
                         e.IsInteger,
@@ -228,8 +226,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
-
-            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
@@ -255,8 +251,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         e.Instructions,
                         null,
-                        new List<Guid>(),
-                        null,
                         null,
                         null,
                         null,
@@ -278,7 +272,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(QuestionCloned e)
         {
-            var maxValue = e.QuestionType == QuestionType.Numeric ? e.MaxValue as int? : null;
             IQuestion question =
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
@@ -297,8 +290,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Mask,
-                        e.Triggers,
-                        maxValue,
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -315,8 +306,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
-
-            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
@@ -342,8 +331,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         null,
-                        e.Triggers,
-                        e.MaxAllowedValue,
                         null,
                         null,
                         e.IsInteger,
@@ -360,8 +347,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
-
-            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
@@ -387,8 +372,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         false,
                         e.Instructions,
-                        null,
-                        new List<Guid>(),
                         null,
                         null,
                         null,
@@ -441,8 +424,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         e.Mask,
-                        e.Triggers,
-                        questionType == QuestionType.AutoPropagate || questionType == QuestionType.Numeric ? e.MaxValue as int? : null,
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger,
@@ -454,8 +435,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CascadeFromQuestionId));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
-
-            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
@@ -482,8 +461,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Capital,
                         e.Instructions,
                         null,
-                        e.Triggers,
-                        e.MaxAllowedValue,
                         null,
                         null,
                         e.IsInteger,
@@ -495,8 +472,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
-
-            this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
@@ -522,8 +497,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         false,
                         e.Instructions,
-                        null,
-                        new List<Guid>(),
                         null,
                         null,
                         null,
@@ -586,8 +559,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         e.Instructions,
                         null,
-                        new List<Guid>(),
-                        null,
                         null,
                         null,
                         null,
@@ -626,8 +597,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsMandatory,
                         false,
                         e.Instructions,
-                        null,
-                        new List<Guid>(),
                         null,
                         null,
                         null,
@@ -668,8 +637,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         e.Instructions,
                         null,
-                        new List<Guid>(),
-                        null,
                         null,
                         null,
                         null,
@@ -707,8 +674,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsMandatory,
                         false,
                         e.Instructions,
-                        null,
-                        new List<Guid>(),
                         null,
                         null,
                         null,
@@ -762,6 +727,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionnaireDocument = this.innerDocument,
                 Version = this.Version,
                 WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
+                ReadOnlyUsers = this.readOnlyUsers
             };
         }
 
@@ -769,6 +735,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
             this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
+            this.readOnlyUsers = snapshot.ReadOnlyUsers;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
@@ -1135,7 +1102,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
                             responsibleId: responsibleId,
-                            maxValue: numericQuestion.MaxValue, 
                             isInteger: numericQuestion.IsInteger,
                             countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces));
                         continue;
@@ -1477,7 +1443,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (asNumeric != null)
             {
                 questionCloned.IsInteger = asNumeric.IsInteger;
-                questionCloned.MaxValue = asNumeric.MaxValue;
                 questionCloned.CountOfDecimalPlaces = asNumeric.CountOfDecimalPlaces;
             }
             if (asListQuestion != null)
@@ -1926,7 +1891,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string validationExpression, 
             string validationMessage,
             string instructions,
-            int? maxValue, 
             Guid responsibleId,
             bool isInteger,
             int? countOfDecimalPlaces)
@@ -1941,7 +1905,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
-            this.ThrowIfIsIntegerConflictsWithMaxValue(isInteger, maxValue);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
 
             this.ApplyEvent(new NumericQuestionChanged
@@ -1959,7 +1922,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-                MaxAllowedValue = maxValue,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
             });
@@ -1980,8 +1942,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, responsibleId);
-
-            ThrowIfMaxAnswerCountNotInRange1to40(maxAnswerCount);
 
             this.ApplyEvent(new TextListQuestionChanged
             {
@@ -2131,7 +2091,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Shared Person command handlers
 
-        public void AddSharedPerson(Guid personId, string email, Guid responsibleId)
+        public void AddSharedPerson(Guid personId, string email, ShareType shareType, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -2153,6 +2113,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PersonId = personId,
                 Email = email,
+                ShareType = shareType,
                 ResponsibleId = responsibleId
             });
         }
@@ -2486,6 +2447,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit or underscore");
             }
 
+            bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
+            if (endsWithUnderscore)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't end with underscore");
+            }
+
             var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
                 .Select(q => q.StataExportCaption);
@@ -2703,16 +2671,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private static void ThrowIfMaxAnswerCountNotInRange1to40(int? maxAnswerCount)
-        {
-            if (maxAnswerCount.HasValue && !Enumerable.Range(1, 40).Contains(maxAnswerCount.Value))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.MaxAnswerCountNotInRange,
-                    "Maximum number of answers should be in range from 1 to 40");
-            }
-        }
-
         private void ThrowDomainExceptionIfEntityAlreadyExists(Guid entityId)
         {
             this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
@@ -2784,16 +2742,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfIsIntegerConflictsWithMaxValue(bool isInteger, int? maxValue)
-        {
-            if (!isInteger && maxValue.HasValue)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.DecimalQuestionCantHaveMaxValueSettings,
-                    "Decimal question can't have Max Value settings");
-            }
-        }
-
         private void ThrowIfDecimalPlacesValueIsIncorrect(int? countOfDecimalPlaces)
         {
             if (!countOfDecimalPlaces.HasValue)
@@ -2861,6 +2809,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
+            }
+            if (this.readOnlyUsers.Contains(viewerId))
+            {
+                throw new QuestionnaireException(
+                   DomainExceptionType.DoesNotHavePermissionsForEdit,
+                   "You don't have permissions for changing this questionnaire");
             }
         }
 
@@ -3904,7 +3858,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, bool isInteger, int? countOfDecimalPlaces)
+        private IEnumerable<object> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             yield return new NumericQuestionCloned
             {
@@ -3924,7 +3878,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                MaxAllowedValue = maxValue,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
             };

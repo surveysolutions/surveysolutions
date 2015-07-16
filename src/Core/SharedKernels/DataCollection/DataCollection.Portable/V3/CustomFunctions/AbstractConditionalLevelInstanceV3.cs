@@ -20,12 +20,17 @@ namespace WB.Core.SharedKernels.DataCollection.V3.CustomFunctions
             return !IsAnswerEmpty(answer);
         }
 
-        public bool IsAnswered<TY>(TY answer) where TY : class
+        public bool IsAnswered(GeoLocation answer)
         {
             return !IsAnswerEmpty(answer);
         }
 
-        public bool IsAnswered<TY>(TY[] answer)
+        public bool IsAnswered(decimal[] answer)
+        {
+            return !IsAnswerEmpty(answer);
+        }
+
+        public bool IsAnswered(decimal[][] answer)
         {
             return !IsAnswerEmpty(answer);
         }

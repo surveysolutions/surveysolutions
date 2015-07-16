@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
         };
 
         Because of = () =>
-            view = factory.Load(questionnaireId);
+            view = factory.Load(questionnaireId, userId);
 
         It should_find_questionnaire = () =>
             view.ShouldNotBeNull();
@@ -35,5 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
         private static QuestionnaireInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";
+        private static Guid userId = Guid.Parse("22222222222222222222222222222222");
     }
 }

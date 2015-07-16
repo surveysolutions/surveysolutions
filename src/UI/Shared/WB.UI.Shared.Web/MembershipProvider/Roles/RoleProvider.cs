@@ -10,25 +10,6 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
     using System.Web.Hosting;
     using System.Web.Mvc;
 
-    /// <summary>
-    /// Provides roles through a repository
-    /// </summary>
-    /// <remarks>
-    /// You need to register a  <see cref="IRoleRepository"/> in your inversion of control container.
-    /// </remarks>
-    /// <example>
-    /// <code>
-    /// <![CDATA[
-    /// public class MvcApplication : System.Web.HttpApplication
-    /// {
-    ///     protected void Application_Start()
-    ///     {
-    ///         _unity.RegisterType<IRoleRepository, RavenDbRepository>();
-    ///     }
-    /// }
-    /// ]]>
-    /// </code>
-    /// </example>
     public class RoleProvider : System.Web.Security.RoleProvider
     {
         private IRoleRepository _roleService;

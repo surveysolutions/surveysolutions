@@ -18,9 +18,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.PublicKey);
             Property(x => x.CreationDate);
             Property(x => x.Email);
-            Property(x => x.IsDeleted);
             Property(x => x.IsLockedByHQ);
             Property(x => x.IsLockedBySupervisor);
+            Property(x => x.IsArchived);
             Property(x => x.Password);
             Property(x => x.UserName);
             Property(x => x.LastChangeDate);

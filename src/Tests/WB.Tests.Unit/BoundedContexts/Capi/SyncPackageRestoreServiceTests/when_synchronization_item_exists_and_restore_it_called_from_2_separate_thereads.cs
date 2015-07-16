@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
                                 param =>
                                     param.InterviewId == interviewSynchronizationDto.Id &&
                                         param.SynchronizedInterview == interviewSynchronizationDto &&
-                                        param.UserId == interviewSynchronizationDto.UserId), null), Times.Once);
+                                        param.UserId == interviewSynchronizationDto.UserId), null, false), Times.Once);
 
         It should_delete_synchronization_item = () => capiSynchronizationCacheServiceMock.DeleteCallCount.ShouldEqual(1);
 
