@@ -295,7 +295,7 @@
     <value>Tap to enter decimal</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Are you sure you want to remove {0} row(s) from dependent roster?</value>
+    <value>Are you sure you want to remove {0} row(s) from each related roster?</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
