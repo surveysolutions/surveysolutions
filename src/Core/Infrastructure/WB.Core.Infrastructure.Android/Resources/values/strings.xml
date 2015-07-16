@@ -18,7 +18,7 @@
   <string name="Prefs_VersionTitle">Application version</string>
   <string name="Prefs_GpsReceiveTimeoutSecTitle">GPS Receive timeout</string>
   <string name="Prefs_GpsReceiveTimeoutSecSummary">Number of seconds to wait for coordinates</string>
-  <string name="Prefs_VersionSummaryFormat">Version: {0}{1}Engine version: {2}</string>
+  <string name="Prefs_VersionSummaryFormat">Version: {0}</string>
   <string name="Prefs_ConnectionSettings">Connection settings</string>
   <string name="Prefs_DesignerEndPointTitle">Designer URL</string>
   <string name="Prefs_DesignerEndPointSummary">URL that is used to communicate with designer application</string>
