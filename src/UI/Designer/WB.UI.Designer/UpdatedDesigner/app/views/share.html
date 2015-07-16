@@ -26,7 +26,7 @@
                         <a href="mailto:{{s.email}}">{{s.email}}</a> -
                         <div class="btn-group">
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
-                               Can {{s.shareType === 'View' ? 'View' : 'Edit'}}<span class="caret"></span>
+                               Can {{s.shareType}}<span class="caret"></span>
                             </button>
                             <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i>owner</i></a>
                             <ul class="dropdown-menu" role="menu">
@@ -50,7 +50,7 @@
                         Provide a valid email
                     </p>
                 </div>
-                <div class="form-group">
+                <div class="form-group vertical-top">
                     <div class="btn-group dropup">
                         <button type="button" class="btn btn-link" data-toggle="dropdown" name="shareType" id="Share-type">
                             {{viewModel.shareType}}

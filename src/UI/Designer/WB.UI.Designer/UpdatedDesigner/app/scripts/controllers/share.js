@@ -30,7 +30,7 @@
                         var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType);
                         shareRequest.success(function() {
                             if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
-                                $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, sharedType: $scope.viewModel.shareType });
+                                $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
                             }
 
                             $scope.viewModel.shareWith = '';

@@ -8626,9 +8626,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verification-modal.ie9-backdrop {
   right: 0;
 }
-.share-window .modal-content {
-  width: 800px;
-}
 .share-question-dialog ul.accounts {
   list-style: none;
   padding-left: 0;
@@ -8650,11 +8647,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog input[type="text"]::-webkit-input-placeholder {
   font-style: italic;
 }
+.share-question-dialog .form-group .vertical-top {
+  vertical-align: top;
+}
 .share-question-dialog .form-group .questionaire-title {
-  width: 650px;
+  width: 475px;
 }
 .share-question-dialog .form-group .share-with-email {
-  width: 600px;
+  width: 430px;
 }
 .share-question-dialog .form-group.share-form-btn-label {
   padding-top: 6px;
