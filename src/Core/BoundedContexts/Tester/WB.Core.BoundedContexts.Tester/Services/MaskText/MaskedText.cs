@@ -73,7 +73,6 @@ namespace WB.Core.BoundedContexts.Tester.Services.MaskText
             if (after == 0)
             {
                 rangeStart = this.ErasingStart(start);
-                rangeEnd = start + after;
             }
 
             Range range = this.CalculateRange(rangeStart, rangeEnd);
