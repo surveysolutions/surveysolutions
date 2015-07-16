@@ -44,16 +44,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region State
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private bool wasExpressionsMigrationPerformed = false;
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
+            if (e.ShareType == ShareType.View)
+                this.readOnlyUsers.Add(e.PersonId);
         }
 
         internal void Apply(SharedPersonFromQuestionnaireRemoved e)
         {
             this.innerDocument.SharedPersons.Remove(e.PersonId);
+            this.readOnlyUsers.Remove(e.PersonId);
         }
 
         private void Apply(QuestionnaireUpdated e)
@@ -723,6 +727,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionnaireDocument = this.innerDocument,
                 Version = this.Version,
                 WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
+                ReadOnlyUsers = this.readOnlyUsers
             };
         }
 
@@ -730,6 +735,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
             this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
+            this.readOnlyUsers = snapshot.ReadOnlyUsers;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
@@ -2803,6 +2809,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
+            }
+            if (this.readOnlyUsers.Contains(viewerId))
+            {
+                throw new QuestionnaireException(
+                   DomainExceptionType.DoesNotHavePermissionsForEdit,
+                   "You don't have permissions for changing this questionnaire");
             }
         }
 
