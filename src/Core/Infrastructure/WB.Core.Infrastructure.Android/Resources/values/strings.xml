@@ -5,15 +5,15 @@
   <integer name="BufferSize">512</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
   <bool name="AcceptUnsignedSslCertificate">true</bool>
-  <string name="DesignerEndpoint">https://design-devalt.mysurvey.solutions/api/v1</string>
-  <!--<string name="DesignerEndpoint">http://192.168.88.196/designer/api/v1</string>-->
-  <!--<string name="DesignerEndpoint">https://192.168.1.90/designer/api/v1</string>-->
-  <!--<string name="DesignerEndpoint">https://192.168.88.159/designer/api/v1</string>-->
+  <string name="DesignerEndpoint">https://design-devalt.mysurvey.solutions/api/v8</string>
+  <!--<string name="DesignerEndpoint">http://192.168.88.196/designer/api/v8</string>-->
+  <!--<string name="DesignerEndpoint">https://192.168.1.90/designer/api/v8</string>-->
+  <!--<string name="DesignerEndpoint">https://192.168.88.159/designer/api/v8</string>-->
 
   <!--via android player-->
-  <!--<string name="DesignerEndpoint">http://192.168.56.1/designer/api/v1</string>-->
+  <!--<string name="DesignerEndpoint">http://192.168.56.1/designer/api/v8</string>-->
   <!--via hosted network-->
-  <!--<string name="DesignerEndpoint">https://192.168.73.1/designer/api/v1</string>-->
+  <!--<string name="DesignerEndpoint">https://192.168.73.1/designer/api/v8</string>-->
 
   <string name="Prefs_VersionTitle">Application version</string>
   <string name="Prefs_GpsReceiveTimeoutSecTitle">GPS Receive timeout</string>

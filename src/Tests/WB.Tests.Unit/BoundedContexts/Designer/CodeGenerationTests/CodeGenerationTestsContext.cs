@@ -536,15 +536,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         {
             return
                 new QuestionnaireExpressionProcessorGenerator(
-                    new RoslynCompiler(
-                        new DefaultDynamicCompillerSettings()
+                    new RoslynCompiler(new FileSystemIOAccessor()),
+                    new CodeGenerator(),
+                    new DefaultDynamicCompilerSettingsProvider()
+                    {
+                        DynamicCompilerSettings = new DefaultDynamicCompilerSettings()
                         {
                             PortableAssembliesPath =
                                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111",
                             DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
-                                "System.Collections.dll", "System.Linq.dll" }
-                        }, new FileSystemIOAccessor()),
-                    new CodeGenerator());
+                                    "System.Collections.dll", "System.Linq.dll" }
+                        }
+                    });
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndConditionContainingUsageOfSelf(Guid questionId)
