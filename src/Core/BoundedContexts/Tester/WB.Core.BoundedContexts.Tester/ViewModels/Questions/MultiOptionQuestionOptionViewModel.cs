@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             get { return @checked; }
             set
             {
+                if (@checked == value) return;
                 @checked = value;
                 if (value)
                 {
