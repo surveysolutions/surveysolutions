@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.CommandBus;
@@ -37,7 +38,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             commandService = Create.CommandService(repository: repository);
         };
 
-        Because of = async () =>
+        Because of = () =>
         {
             var t1 = commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();
@@ -46,7 +47,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var t3 = commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();
 
-            await commandService.WaitPendingCommandsAsync();
+            commandService.WaitPendingCommandsAsync().WaitAndUnwrapException();
 
             log.Add("wait finished");
         };
