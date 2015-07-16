@@ -272,21 +272,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            var orderedSelectedOptions =
-                this.Options.Where(x => @event.SelectedPropagationVectors.Any(y => y.SequenceEqual(x.Value)))
-                    .OrderBy(x => x.CheckedTimeStamp)
-                    .ToList();
-
-            for (int i = 0; i < orderedSelectedOptions.Count; i++)
+            foreach (var option in this.Options)
             {
-                orderedSelectedOptions[i].CheckedOrder = i + 1;
-                orderedSelectedOptions[i].Checked = true;
-            }
+                var foundIndex = @event.SelectedPropagationVectors
+                                       .Select((o,i) => new { index = i, selectedVector = o})
+                                       .FirstOrDefault(item => item.selectedVector.Identical(option.Value));
 
-            foreach (var option in this.Options.Except(orderedSelectedOptions))
-            {
-                option.CheckedOrder = null;
-                option.Checked = false;
+                var selectedOptionIndex = foundIndex != null ? foundIndex.index : -1;
+
+                if (selectedOptionIndex >= 0)
+                {
+                    option.CheckedOrder = selectedOptionIndex + 1;
+                    option.Checked = true;
+                }
+                else
+                {
+                    option.CheckedOrder = null;
+                    option.Checked = false;
+                }
             }
         }
     }

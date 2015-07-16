@@ -406,6 +406,17 @@ namespace WB.Tests.Unit
             {
                 return new Identity(id, rosterVector);
             }
+
+            public static MultipleOptionsLinkedQuestionAnswered MultipleOptionsLinkedQuestionAnswered(Guid? questionId = null,
+                decimal[] rosterVector = null,
+                decimal[][] selectedRosterVectors = null)
+            {
+                return new MultipleOptionsLinkedQuestionAnswered(Guid.NewGuid(), 
+                    questionId ?? Guid.NewGuid(),
+                    rosterVector ?? new decimal[]{},
+                    DateTime.Now, 
+                    selectedRosterVectors ?? new decimal[][]{});
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
