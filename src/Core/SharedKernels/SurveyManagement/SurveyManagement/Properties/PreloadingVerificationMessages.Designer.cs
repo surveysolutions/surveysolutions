@@ -232,15 +232,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value cannot be greater than the roster upper bound..
-        /// </summary>
-        internal static string PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue {
-            get {
-                return ResourceManager.GetString("PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Categorical multiple answers question has duplicate values..
         /// </summary>
         internal static string PL0021_MultyOptionQuestionHasDuplicateAnswers {

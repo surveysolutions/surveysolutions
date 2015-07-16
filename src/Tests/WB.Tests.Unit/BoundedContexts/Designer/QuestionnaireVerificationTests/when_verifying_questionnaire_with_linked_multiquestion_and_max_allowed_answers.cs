@@ -27,8 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = rosterSizeQuestion,
                         StataExportCaption = "var1",
-                        IsInteger = true,
-                        MaxValue = 5
+                        IsInteger = true
                     },
                     new Group("Roster Group")
                     {

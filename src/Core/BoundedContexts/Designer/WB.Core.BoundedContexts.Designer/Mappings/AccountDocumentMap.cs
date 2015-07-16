@@ -31,14 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Property(x => x.Email);
 
-            Property(x => x.FailedPasswordAnswerWindowAttemptCount);
-
-            Property(x => x.FailedPasswordAnswerWindowStartedAt);
-
-            Property(x => x.FailedPasswordWindowAttemptCount);
-
-            Property(x => x.FailedPasswordWindowStartedAt);
-
             Property(x => x.IsConfirmed);
 
             Property(x => x.IsLockedOut);

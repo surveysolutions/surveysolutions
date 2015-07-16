@@ -56,7 +56,7 @@
             <br />
             <div class="control-group">
                 <div class="controls">
-                    @Html.TextBoxFor(m => m.File, new { type = "file", accept = ExportFileSettings.ExtensionOfExportedDataFile })
+                    @Html.TextBoxFor(m => m.File, new { type = "file"})
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>

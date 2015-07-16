@@ -46,8 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             {
                 PublicKey = questionUsedAsLinkId,
                 GroupPublicKey = groupToUpdateId,
-                IsInteger = true,
-                MaxAllowedValue = 5
+                IsInteger = true
             });
 
             questionnaire.Apply(new NewQuestionAdded()

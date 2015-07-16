@@ -45,6 +45,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             if (header.ColumnNames.Length == 1)
                 return new string[] { this.AnswerToStringValue(question.Answer, header) };
 
+            var gpsQuestion = question.Answer as GeoPosition;
+            if (gpsQuestion != null)
+            {
+                return new[]
+                {
+                    gpsQuestion.Latitude.ToString(), gpsQuestion.Longitude.ToString(), gpsQuestion.Accuracy.ToString(),
+                    gpsQuestion.Altitude.ToString(), gpsQuestion.Timestamp.DateTime.ToString()
+                };
+            }
+
             var listOfAnswers = this.TryCastToEnumerable(question.Answer);
             if (listOfAnswers != null)
                 return this.BuildAnswerListForQuestionByHeader(listOfAnswers.ToArray(), header);

@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
-    public class InterviewHistoryWriter : IReadSideRepositoryWriter<InterviewHistoryView>, IReadSideRepositoryCleaner, IChacheableRepositoryWriter
+    public class InterviewHistoryWriter : IReadSideRepositoryWriter<InterviewHistoryView>, IReadSideRepositoryCleaner, ICacheableRepositoryWriter
     {
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;

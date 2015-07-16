@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_call_SynchronizeInterviewEvents = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEventsCommand>(_ => _.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEventsCommand>(_ => _.CreatedOnClient && _.InterviewId == interviewId), "", false), Times.Once);
 
         It should_call_DeleteSyncItem = () =>
         incomingSyncPackagesQueueMock.Verify(x => x.DeleteSyncItem("path"), Times.Once);

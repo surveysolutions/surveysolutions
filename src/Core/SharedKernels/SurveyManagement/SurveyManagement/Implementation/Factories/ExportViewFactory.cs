@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 }
 
                 dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
-                    this.GetQuestionsForExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
+                    this.GetQuestionsForExport(dataByLevel, headerStructureForLevel)));
             }
 
             return dataRecords.ToArray();
@@ -131,12 +131,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     interview.Levels.SingleOrDefault(
                         l => l.Key == CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
 
-                var questionToCheck = levelForVector.Value.GetQuestion(id);
+                var questionToCheck = levelForVector.Value.QuestionsSearchCahche.ContainsKey(id) ? levelForVector.Value.QuestionsSearchCahche[id] : null;
 
                 if (questionToCheck == null)
                     continue;
-                if (questionToCheck.Answer == null)
-                    return string.Empty;
+
                 var interviewTextListAnswer = questionToCheck.Answer as InterviewTextListAnswers;
 
                 if (interviewTextListAnswer == null)
@@ -149,13 +148,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return string.Empty;
         }
 
-        private ExportedQuestion[] GetQuestionsForExport(IEnumerable<InterviewQuestion> availableQuestions,
+        private ExportedQuestion[] GetQuestionsForExport(InterviewLevel interviewLevel,
             HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<ExportedQuestion>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
-                var question = availableQuestions.FirstOrDefault(q => q.Id == headerItem.PublicKey);
+                var question = interviewLevel.QuestionsSearchCahche.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCahche[headerItem.PublicKey] : null;
                 ExportedQuestion exportedQuestion = null;
                 if (question == null)
                 {
@@ -182,9 +181,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>()));
             return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
         }
-
-
-
 
         protected HeaderStructureForLevel CreateHeaderStructureForLevel(
             string levelTitle,
@@ -277,10 +273,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var fixedRosterGroups =
                 document.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles);
 
-            IEnumerable<INumericQuestion> rosterSizeNumericQuestions =
-                rosterGroups.Select(@group => document.Find<INumericQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null && question.MaxValue.HasValue).Distinct();
-
             IEnumerable<IMultyOptionsQuestion> rosterSizeMultyOptionQuestions =
                 rosterGroups.Select(@group => document.Find<IMultyOptionsQuestion>(@group.RosterSizeQuestionId.Value))
                     .Where(question => question != null).Distinct();
@@ -290,11 +282,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     .Where(question => question != null).Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
-
-            foreach (INumericQuestion rosterSizeNumericQuestion in rosterSizeNumericQuestions)
-            {
-                collectedMaxValues.Add(rosterSizeNumericQuestion.PublicKey, rosterSizeNumericQuestion.MaxValue.Value);
-            }
 
             foreach (IMultyOptionsQuestion rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
             {
@@ -391,10 +378,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     }
                     else if (this.IsQuestionTextList(question))
                     {
-                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
+                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question,
+                            referenceInfoForLinkedQuestions);
                     }
                     else
-                        this.AddHeaderForNotMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
+                    {
+                        if (question is GpsCoordinateQuestion)
+                            AddHeadersForGpsQuestion(headerStructureForLevel.HeaderItems, question,
+                                referenceInfoForLinkedQuestions);
+                        else
+                            this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel.HeaderItems, question,
+                                referenceInfoForLinkedQuestions);
+                    }
                     continue;
                 }
 
@@ -429,7 +424,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
-        protected void AddHeaderForNotMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
+        protected void AddHeaderForSingleColumnExportQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             headerItems.Add(question.PublicKey,
@@ -457,12 +452,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
+        protected void AddHeadersForGpsQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
+            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+        {
+            var gpsColumns = GeoPosition.PropertyNames;
+            var gpsQuestionExportHeader = this.CreateExportedHeaderItem(question,
+                this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions));
+            gpsQuestionExportHeader.ColumnNames = new string[gpsColumns.Length];
+            gpsQuestionExportHeader.Titles = new string[gpsColumns.Length];
+
+            for (int i = 0; i < gpsColumns.Length; i++)
+            {
+                gpsQuestionExportHeader.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption,
+                    gpsColumns[i]);
+
+                gpsQuestionExportHeader.Titles[i] += string.Format("{0}", gpsColumns[i]);
+            }
+
+            headerItems.Add(question.PublicKey, gpsQuestionExportHeader);
+        }
+
         private int GetRosterSizeForLinkedQuestion(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             var rosterSizeQuestionId =
                 referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope.Last();
-
+            
+            if (!maxValuesForRosterSizeQuestions.ContainsKey(rosterSizeQuestionId))
+                return SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount;
+            
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
 

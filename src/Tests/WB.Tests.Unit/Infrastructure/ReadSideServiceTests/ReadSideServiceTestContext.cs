@@ -11,7 +11,6 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests

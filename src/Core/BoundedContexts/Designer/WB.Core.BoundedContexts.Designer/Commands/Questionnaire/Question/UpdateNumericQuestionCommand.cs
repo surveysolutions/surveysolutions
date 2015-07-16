@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             string validationExpression, 
             string validationMessage, 
             string instructions,
-            int? maxValue,
             Guid responsibleId,
             bool isInteger, 
             int? countOfDecimalPlaces)
@@ -27,7 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
                  responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                  variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
         {
-            this.MaxValue = maxValue;
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
             this.IsPreFilled = isPreFilled;
@@ -35,8 +33,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
         }
-
-        public int? MaxValue { get; private set; }
 
         public bool IsInteger { get; private set; }
 

@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         protected static InterviewQuestion GetQuestion(Guid questionId, InterviewData viewData)
         {
-            return viewData.Levels["#"].GetAllQuestions().First(q => q.Id == questionId);
+            return viewData.Levels["#"].QuestionsSearchCahche.Values.First(q => q.Id == questionId);
         }
     }
 }

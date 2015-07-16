@@ -11,10 +11,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Users
         {
         }
 
-        public UserChangedFeedEntry(string supervisorId, string entryId)
+        public UserChangedFeedEntry(string supervisorId, string entryId, UserFeedEntryType entryType)
         {
             this.SupervisorId = supervisorId;
             this.EntryId = entryId;
+            this.EntryType = entryType;
         }
 
         public virtual string ChangedUserId { get; set; }
@@ -24,5 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Users
         public virtual string SupervisorId { get; set; }
 
         public virtual string EntryId { get; protected set; }
+
+        public virtual UserFeedEntryType EntryType { get; protected set; }
     }
 }

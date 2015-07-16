@@ -339,7 +339,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (idColumnIndex < 0 || parentIdColumnIndexes == null)
                 yield break;
 
-            var idAndParentContainer = new HashSet<KeyValuePair<string, string>>();
+            var idAndParentContainer = new HashSet<string>();
             for (int y = 0; y < levelData.Content.Length; y++)
             {
                 var idValue = levelData.Content[y][idColumnIndex];
@@ -351,15 +351,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     continue;
                 }
                 var parentIdValue = string.Join(",", parentIdColumnIndexes.Select(parentidIndex => levelData.Content[y][parentidIndex]));
-                var idAndParentPair = new KeyValuePair<string, string>(idValue, parentIdValue);
-                if (idAndParentContainer.Contains(idAndParentPair))
+                string itemKey = String.Format("{0}\t{1}", idValue, parentIdValue);
+                if (idAndParentContainer.Contains(itemKey))
                 {
                     yield return
                         new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                            string.Format("id:{0}, parentId: {1}", idAndParentPair.Key, idAndParentPair.Value), levelData.FileName);
+                            string.Format("id:{0}, parentId: {1}", idValue, parentIdValue), levelData.FileName);
                     continue;
                 }
-                idAndParentContainer.Add(idAndParentPair);
+                idAndParentContainer.Add(itemKey);
             }
         }
 
@@ -380,16 +380,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     foreach (var presentQuestion in presentQuestions)
                     {
                         var question = preloadedDataService.GetQuestionByVariableName(presentQuestion.Key);
-                        var values = new List<decimal>(); 
+                        var values = new List<decimal>();
 
-                        foreach (var answerIndex in presentQuestion.Value)
+                        foreach (var coulumnNameWithindex in presentQuestion.Value)
                         {
+                            var columnName = coulumnNameWithindex.Item1;
+                            var answerIndex = coulumnNameWithindex.Item2;
                             var answer = row[answerIndex];
                             if (string.IsNullOrEmpty(answer))
                                 continue;
 
                             KeyValuePair<Guid, object> parsedValue;
-                            var parsedResult = preloadedDataService.ParseQuestion(answer, question, out parsedValue);
+                            var parsedResult = preloadedDataService.ParseQuestion(answer, columnName, question, out parsedValue);
 
                             switch (parsedResult)
                             {
@@ -404,15 +406,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                     yield return
                                         new PreloadedDataVerificationError("PL0019",
                                             PreloadingVerificationMessages.PL0019_ExpectedDecimalNotParsed,
-                                            new PreloadedDataVerificationReference(answerIndex, y,
-                                                PreloadedDataVerificationReferenceType.Cell,
-                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
-                                                levelData.FileName));
-                                    break;
-                                case ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue:
-                                    yield return
-                                        new PreloadedDataVerificationError("PL0020",
-                                            PreloadingVerificationMessages.PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue,
                                             new PreloadedDataVerificationReference(answerIndex, y,
                                                 PreloadedDataVerificationReferenceType.Cell,
                                                 string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
@@ -629,7 +622,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return supervisorCache[name];
             
             var user = userViewFactory.Load(new UserViewInputModel(UserName: name, UserEmail: null));
-            if (user == null)
+            if (user == null || user.IsArchived)
             {
                 supervisorCache.Add(name, null);
                 return null;

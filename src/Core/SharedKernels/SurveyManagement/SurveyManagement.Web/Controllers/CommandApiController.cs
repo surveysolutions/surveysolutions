@@ -75,8 +75,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        this.Logger.Error(DefaultErrorMessage, e);
-                        response.DomainException = DefaultErrorMessage;
+                        var userException = e.GetSelfOrInnerAs<UserException>();
+                        if (userException == null)
+                        {
+                            this.Logger.Error(DefaultErrorMessage, e);
+                            response.DomainException = DefaultErrorMessage;
+                        }
+                        else
+                        {
+                            response.DomainException = userException.Message;
+                        }
                     }
                     else
                     {

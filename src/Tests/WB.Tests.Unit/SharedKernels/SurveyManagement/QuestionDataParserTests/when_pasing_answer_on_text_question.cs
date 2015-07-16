@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, 
+                    questionDataParser.TryParse(answer, questionVarName, 
                         question,
                         CreateQuestionnaireDocumentWithOneChapter(question),
                         out parcedValue);

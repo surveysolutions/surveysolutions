@@ -46,6 +46,7 @@
     <Compile Include="Documents\Answer.cs" />
     <Compile Include="Documents\AnswerType.cs" />
     <Compile Include="Documents\CompositeException.cs" />
+    <Compile Include="Documents\Constants.cs" />
     <Compile Include="Documents\FixedRosterTitle.cs" />
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Documents\Question\SingleQuestion.cs" />
     <Compile Include="Documents\Question\TextListQuestion.cs" />
     <Compile Include="Documents\Question\TextQuestion.cs" />
+    <Compile Include="Documents\ShareType.cs" />
     <Compile Include="Documents\RosterSizeSourceType.cs" />
     <Compile Include="Documents\StaticText.cs" />
     <Compile Include="Documents\UserLight.cs" />

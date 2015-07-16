@@ -142,8 +142,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.QuestionnaireTester.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Utils.Rest", "Core\GenericSubdomains\Utils\WB.Core.GenericSubdomains.Utils.Rest\WB.Core.GenericSubdomains.Utils.Rest.csproj", "{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.CleanIntegration", "Tests\WB.Tests.CleanIntegration\WB.Tests.CleanIntegration.csproj", "{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -709,21 +707,6 @@ Global
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD}.Release|x86.ActiveCfg = Release|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -788,6 +771,5 @@ Global
 		{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402} = {E616192B-D9A4-4E05-892E-B7A80A38624D}
 		{2DA00710-008B-499D-A704-E1EB62D07E82} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{F3BE22B5-C075-4B9C-A99D-E89B70A0DFCD} = {E616192B-D9A4-4E05-892E-B7A80A38624D}
-		{1C61DEA1-D02F-4FAE-987E-DE6106A9C025} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 	EndGlobalSection
 EndGlobal
