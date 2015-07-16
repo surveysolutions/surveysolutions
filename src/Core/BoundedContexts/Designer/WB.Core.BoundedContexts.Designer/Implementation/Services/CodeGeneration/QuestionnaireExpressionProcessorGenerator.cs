@@ -30,14 +30,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Version targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
-            var dynamicCompillerSettings = this.compilerSettingsProvider.GetSettings(targetVersion);
+            var dynamicCompilerSettings = this.compilerSettingsProvider.GetSettings(targetVersion);
             var referencedPortableAssemblies = GetReferencedPortableAssemblies(targetVersion);
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 
                 generatedEvaluator, 
                 referencedPortableAssemblies.ToArray(),
-                dynamicCompillerSettings,
+                dynamicCompilerSettings,
                 out generatedAssembly);
 
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
