@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteraction userInteraction;
+
+        readonly IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor;
+
         private readonly IFriendlyMessageService friendlyMessageService;
 
         public DashboardViewModel(
@@ -37,7 +41,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IQuestionnaireImportService questionnaireImportService,
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyMessageService friendlyMessageService,
-            IUserInteraction userInteraction)
+            IUserInteraction userInteraction,
+            IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
             : base(logger)
         {
             this.principal = principal;
@@ -46,12 +51,29 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteraction = userInteraction;
+            this.questionnaireListStorageAccessor = questionnaireListStorageAccessor;
             this.friendlyMessageService = friendlyMessageService;
         }
 
         public async void Init()
         {
+            this.myQuestionnaires = this.questionnaireListStorageAccessor
+                    .Query(query => query
+                    .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
+                    .ToList());
+
+            this.publicQuestionnaires = this.questionnaireListStorageAccessor
+                    .Query(query => query
+                    .Where(questionnaire => questionnaire.IsPublic)
+                    .ToList());
+
+            this.MyQuestionnairesCount = this.myQuestionnaires.Count;
+            this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
+
+            this.ShowMyQuestionnaires();
+
             await this.LoadServerQuestionnairesAsync();
+
             this.IsInitialized = true;
         }
 
@@ -237,6 +259,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
+                await this.questionnaireListStorageAccessor.RemoveAsync(this.myQuestionnaires);
+                await this.questionnaireListStorageAccessor.RemoveAsync(this.publicQuestionnaires);
+
                 this.myQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
                 this.publicQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
 
@@ -244,6 +269,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
 
                 this.ShowMyQuestionnaires();
+
+                await this.questionnaireListStorageAccessor.StoreAsync(this.myQuestionnaires);
+                await this.questionnaireListStorageAccessor.StoreAsync(this.publicQuestionnaires);
             }
             catch (RestException ex)
             {
