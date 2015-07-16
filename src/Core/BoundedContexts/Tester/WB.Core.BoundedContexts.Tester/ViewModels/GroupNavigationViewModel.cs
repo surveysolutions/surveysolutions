@@ -28,9 +28,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        protected GroupViewModel NavigateToGroupViewModel { get; private set; }
+        public GroupViewModel NavigateToGroupViewModel { get; private set; }
 
-        public GroupNavigationViewModel(){}
+        protected GroupNavigationViewModel(){}
 
         public GroupNavigationViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
