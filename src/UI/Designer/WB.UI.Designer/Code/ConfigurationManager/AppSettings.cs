@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Extensions;
 
@@ -49,5 +50,15 @@ namespace WB.UI.Designer
         {
             get { return ConfigurationManager.AppSettings.GetBool("IsApiSSLVerificationEnabled", true); }
         }
+        public int CountOfFailedLoginAttemptsBeforeCaptcha
+        {
+            get { return ConfigurationManager.AppSettings.GetInt("CountOfFailedLoginAttemptsBeforeCaptcha", 5); }
+        }
+
+        public TimeSpan TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt
+        {
+            get { return TimeSpan.FromMinutes(ConfigurationManager.AppSettings.GetInt("TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", 5)); }
+        }
+
     }
 }
