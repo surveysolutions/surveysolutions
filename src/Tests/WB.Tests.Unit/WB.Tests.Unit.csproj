@@ -409,8 +409,13 @@
     <Compile Include="BoundedContexts\Tester\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\ActiveGroupViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_disabled_event.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_questions_disabled_event_and_disabled_group_is_not_on_screen.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_disabled_event_and_disabled_group_is_not_on_screen.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_enabled_event.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_groups_enabled_event_and_disabled_group_is_not_on_screen.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_questions_disabled_event.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_questions_enabled_event.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_handling_questions_enabled_event_and_enabled_question_is_not_on_screen.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\ActiveGroupViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
