@@ -43,7 +43,7 @@
             replace = $.parseJSON(container.attr("data-valmsg-replace") || "null") !== false;
 
         container.removeClass("field-validation-valid").addClass("field-validation-error");
-        container.closest(".control-group").addClass("error");
+        container.closest(".form-group").addClass("has-error");
         error.data("unobtrusiveContainer", container);
 
         if (replace) {
@@ -75,7 +75,7 @@
 
         if (container) {
             container.addClass("field-validation-valid").removeClass("field-validation-error");
-            container.closest(".control-group").removeClass("error");
+            container.closest(".form-group").removeClass("has-error");
             error.removeData("unobtrusiveContainer");
 
             if (replace) {
@@ -96,7 +96,7 @@
             .removeData("unobtrusiveContainer")
             .find(">*")  // If we were using valmsg-replace, get the underlying error
                 .removeData("unobtrusiveContainer");
-        $form.find(".control-group").removeClass("error");
+        $form.find(".form-group").removeClass("has-error");
     }
 
     function validationInfo(form) {
