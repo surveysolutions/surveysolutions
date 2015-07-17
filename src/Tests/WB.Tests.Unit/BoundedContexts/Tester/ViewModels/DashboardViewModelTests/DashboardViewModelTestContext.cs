@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
@@ -16,7 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Dashboard
             IQuestionnaireImportService questionnaireImportService = null,
             IViewModelNavigationService viewModelNavigationService = null,
             IFriendlyMessageService friendlyMessageService = null,
-            IUserInteraction userInteraction = null)
+            IUserInteraction userInteraction = null,
+            IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor = null)
         {
             return new DashboardViewModel(principal: principal,
                 logger: logger,
@@ -25,7 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Dashboard
                 questionnaireImportService: questionnaireImportService,
                 viewModelNavigationService: viewModelNavigationService,
                 friendlyMessageService: friendlyMessageService,
-                userInteraction: userInteraction);
+                userInteraction: userInteraction,
+                questionnaireListStorageAccessor: questionnaireListStorageAccessor);
         }
     }
 }
