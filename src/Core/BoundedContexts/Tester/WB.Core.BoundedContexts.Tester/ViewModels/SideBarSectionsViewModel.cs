@@ -119,6 +119,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var addedIdentity = rosterInstance.GetIdentity();
                 this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
+
+            this.RefreshHasChildrenFlags();
         }
 
         public void Handle(GroupsEnabled @event)
@@ -130,6 +132,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);
                 this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
+
+            this.RefreshHasChildrenFlags();
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
@@ -161,6 +165,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
                 });
             }
+        }
+
+        private void RefreshHasChildrenFlags()
+        {
+            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
 
             foreach (var section in allVisibleSections)
             {
