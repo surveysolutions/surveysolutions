@@ -137,6 +137,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 
                 this.GroupChanged(groupChangedEventArgs);
             }
+
+            GC.Collect();
         }
     }
 
