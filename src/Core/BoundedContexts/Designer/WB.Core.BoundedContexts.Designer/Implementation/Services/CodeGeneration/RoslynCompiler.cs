@@ -23,23 +23,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
-            string[] referencedPortableAssemblies,
-            IDynamicCompilerSettings settings,
-            out string generatedAssembly)
-        {
-            var metadataReferences = new List<PortableExecutableReference>();
-            metadataReferences.AddRange(this.GetMetadataReferences(referencedPortableAssemblies, settings.PortableAssembliesPath));
-
-            return TryGenerateAssemblyAsStringAndEmitResult(templateId, 
-                generatedClasses, 
-                metadataReferences.ToArray(), 
-                settings,
-                out generatedAssembly);
-        }
-
-        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
-            Guid templateId,
-            Dictionary<string, string> generatedClasses,
             PortableExecutableReference[] referencedPortableAssemblies,
             IDynamicCompilerSettings settings,
             out string generatedAssembly)

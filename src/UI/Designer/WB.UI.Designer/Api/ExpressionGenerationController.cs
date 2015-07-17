@@ -17,7 +17,7 @@ namespace WB.UI.Designer.Api
     [LocalOrDevelopmentAccessOnly]
     public class ExpressionGenerationController : ApiController
     {
-        private IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IExpressionsEngineVersionService expressionsEngineVersionService;

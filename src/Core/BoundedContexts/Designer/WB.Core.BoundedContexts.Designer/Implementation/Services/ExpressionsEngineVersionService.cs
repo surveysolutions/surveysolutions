@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// </summary>
         private readonly Version version_7 = new Version(7, 0, 0);
         /// <summary>
-        /// Api for new tester, is used new RoslinCompile profile
+        /// Api for new tester, is used new RoslynCompile profile
         /// </summary>
         private readonly Version version_8 = new Version(8, 0, 0);
 
