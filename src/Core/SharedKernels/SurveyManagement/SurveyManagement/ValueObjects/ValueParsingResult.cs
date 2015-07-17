@@ -8,6 +8,7 @@
         
         AnswerAsIntWasNotParsed,
         AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative,
+        AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsMoreThan40,
         AnswerAsDecimalWasNotParsed,
         AnswerAsDateTimeWasNotParsed,
         AnswerAsGpsWasNotParsed,
