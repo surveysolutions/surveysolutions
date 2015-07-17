@@ -302,5 +302,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0028_UserIsNotSupervisor", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer on roster size question cannot be greater than 40..
+        /// </summary>
+        internal static string PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40 {
+            get {
+                return ResourceManager.GetString("PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40", resourceCulture);
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -89,6 +90,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         if (intNumericValue < 0 &&
                             questionnaire.FirstOrDefault<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey) != null)
                             return ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative;
+
+                        if (intNumericValue > Constants.MaxRosterRowCount &&
+                            questionnaire.FirstOrDefault<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey) != null)
+                            return ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsMoreThan40;
 
                         return ValueParsingResult.OK;
                     }
