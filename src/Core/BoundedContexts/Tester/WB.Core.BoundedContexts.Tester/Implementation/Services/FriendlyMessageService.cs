@@ -16,47 +16,37 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public string GetFriendlyErrorMessageByRestException(RestException ex)
         {
-            bool shouldRestExceptionBeLogged = false;
-            string friendlyMessage = null;
-
             switch (ex.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:
-                    friendlyMessage = ex.Message.Contains("lock")
-                        ? UIResources.AccountIsLockedOnServer
-                        : UIResources.Unauthorized;
-                    break;
+                    return ex.Message.Contains("lock") ? UIResources.AccountIsLockedOnServer : UIResources.Unauthorized;
+
                 case HttpStatusCode.ServiceUnavailable:
                     var isMaintenance = ex.Message.Contains("maintenance");
 
-                    shouldRestExceptionBeLogged = !isMaintenance;
+                    if (!isMaintenance) this.logger.Warn("Server error", ex);
 
-                    friendlyMessage = isMaintenance
-                        ? UIResources.Maintenance
-                        : UIResources.ServiceUnavailable;
-                    break;
+                    return isMaintenance ? UIResources.Maintenance : UIResources.ServiceUnavailable;
+
                 case HttpStatusCode.RequestTimeout:
-                    friendlyMessage = UIResources.RequestTimeout;
-                    break;
+                    return UIResources.RequestTimeout;
+
                 case HttpStatusCode.UpgradeRequired:
-                    friendlyMessage = UIResources.ImportQuestionnaire_Error_UpgradeRequired;
-                    break;
+                    return UIResources.ImportQuestionnaire_Error_UpgradeRequired;
+
                 case HttpStatusCode.NotFound:
-                    shouldRestExceptionBeLogged = true;
-                    friendlyMessage = UIResources.InvalidEndpoint;
-                    break;
+                    this.logger.Warn("Server error", ex);
+                    return UIResources.InvalidEndpoint;
+
                 case HttpStatusCode.BadRequest:
-                    friendlyMessage = UIResources.InvalidEndpoint;
-                    break;
+                    return UIResources.InvalidEndpoint;
+
                 case HttpStatusCode.InternalServerError:
-                    shouldRestExceptionBeLogged = true;
-                    friendlyMessage = UIResources.InternalServerError;
-                    break;
+                    this.logger.Warn("Server error", ex);
+                    return UIResources.InternalServerError;
             }
 
-            if (shouldRestExceptionBeLogged) this.logger.Warn("Server error", ex);
-
-            return friendlyMessage;
+            return null;
         }
     }
 }
