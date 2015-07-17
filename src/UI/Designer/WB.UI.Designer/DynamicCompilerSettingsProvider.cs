@@ -17,7 +17,7 @@ namespace WB.UI.Designer
 
         public IDynamicCompilerSettings GetSettings(Version apiVersion)
         {
-            var list = from DynamicCompilerSettings settigs in SettingsProviders select settigs;
+            var list = from DynamicCompilerSettings settings in SettingsProviders select settings;
 
             if (apiVersion.Major < 8)
                 return list.Single(i => i.name == "profile24");
