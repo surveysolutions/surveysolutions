@@ -32,6 +32,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),null);
         }
 
+        protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter = null,
+            IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage = null, IReadSideRepositoryWriter<InterviewStatuses> statuses = null)
+        {
+            return new InterviewExportedDataDenormalizer(dataExportWriter, userDocumentWriter,interviewSummaryStorage,statuses);
+        }
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewExportedAction status)
         {
             return new InterviewCommentedStatus() { Status = status, InterviewerId = Guid.NewGuid() };

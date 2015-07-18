@@ -408,6 +408,9 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_didnt_happen.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_happened.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_happened_and_complete_have_been_recorded.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_approved_by_hq_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_recived.cs" />
