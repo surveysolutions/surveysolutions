@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> statuses;
+        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
+
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
@@ -88,17 +90,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
             var interviewStatusHistory = this.statuses.GetById(evnt.EventSourceId);
-            if (interviewStatusHistory != null && !interviewStatusHistory.InterviewCommentedStatuses.Any())
+            if (interviewStatusHistory == null)
+                return;
+
+            var recordedStatusesForInterview = interviewStatusHistory.InterviewCommentedStatuses.ToList();
+
+            while (recordedStatusesForInterview.Any())
             {
-                var lastStatus = interviewStatusHistory.InterviewCommentedStatuses.Last();
-                if (lastStatus.Status == InterviewExportedAction.FirstAnswerSet)
-                {
-                    this.dataExportWriter.AddInterviewAction(InterviewExportedAction.FirstAnswerSet, evnt.EventSourceId,
-                        lastStatus.StatusChangeOriginatorId, lastStatus.Timestamp);
-                }
+                var lastStatusRecors = recordedStatusesForInterview.Last();
+                if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(lastStatusRecors.Status))
+                    break;
+
+                if (lastStatusRecors.Status == InterviewExportedAction.FirstAnswerSet)
+                    this.dataExportWriter.AddInterviewAction(lastStatusRecors.Status, evnt.EventSourceId,
+                        lastStatusRecors.StatusChangeOriginatorId, lastStatusRecors.Timestamp);
+                
+                recordedStatusesForInterview.Remove(lastStatusRecors);
             }
 
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, InterviewExportedAction.Completed);
+            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId,
+                evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, InterviewExportedAction.Completed);
         }
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt)
@@ -149,30 +160,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 this.dataExportWriter.AddInterviewAction(interviewCommentedStatus.Status, evnt.EventSourceId, interviewCommentedStatus.StatusChangeOriginatorId, interviewCommentedStatus.Timestamp);
             }
-        }
 
-        private InterviewExportedAction? GetInterviewExportedAction(InterviewStatus status)
-        {
-            switch (status)
+            if (interviewStatusHistory.InterviewCommentedStatuses.Any() &&
+                interviewStatusHistory.InterviewCommentedStatuses.Last().Status != InterviewExportedAction.Restored)
             {
-                case  InterviewStatus.ApprovedByHeadquarters:
-                    return InterviewExportedAction.ApprovedByHeadquarter;
-                case InterviewStatus.SupervisorAssigned:
-                    return InterviewExportedAction.SupervisorAssigned;
-                case InterviewStatus.InterviewerAssigned:
-                    return InterviewExportedAction.InterviewerAssigned;
-                case InterviewStatus.Completed:
-                    return InterviewExportedAction.Completed;
-                case InterviewStatus.Restarted:
-                    return InterviewExportedAction.Restarted;
-                case InterviewStatus.ApprovedBySupervisor:
-                    return InterviewExportedAction.ApprovedBySupervisor;
-                case InterviewStatus.RejectedBySupervisor:
-                    return InterviewExportedAction.RejectedBySupervisor;
-                case InterviewStatus.RejectedByHeadquarters:
-                    return InterviewExportedAction.RejectedByHeadquarter;
+                RecordAction(InterviewExportedAction.Restored, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
             }
-            return null;
         }
     }
 }
