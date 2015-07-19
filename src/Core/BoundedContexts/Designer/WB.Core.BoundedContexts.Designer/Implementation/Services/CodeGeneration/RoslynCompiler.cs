@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Guid templateId,
             Dictionary<string, string> generatedClasses,
             PortableExecutableReference[] referencedPortableAssemblies,
-            IDynamicCompilerSettings settings,
             out string generatedAssembly)
         {
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
@@ -32,8 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .ToArray();
 
             var metadataReferences = new List<PortableExecutableReference>();
-
-            metadataReferences.AddRange(this.GetMetadataReferences(settings.DefaultReferencedPortableAssemblies, settings.PortableAssembliesPath));
             metadataReferences.AddRange(referencedPortableAssemblies);
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
@@ -65,21 +62,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
                 references: metadataReferences);
-        }
-
-        IEnumerable<PortableExecutableReference> GetMetadataReferences(
-            IEnumerable<string> referencedPortableAssemblies,
-            string portableAssembliesPath)
-        {
-            return referencedPortableAssemblies.Select(
-                defaultReferencedPortableAssembly =>
-                    AssemblyMetadata.CreateFromFile(
-                        this.fileSystemAccessor.CombinePath(
-                            portableAssembliesPath,
-                            defaultReferencedPortableAssembly
-                        )
-                ).GetReference()
-            );
         }
     }
 }

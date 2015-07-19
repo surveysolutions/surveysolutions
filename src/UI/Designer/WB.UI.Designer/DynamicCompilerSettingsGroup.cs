@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+
 
 namespace WB.UI.Designer
 {
-    public class DynamicCompilerSettingsGroup : ConfigurationSection, IDynamicCompilerSettingsProvider
+    public class DynamicCompilerSettingsGroup : ConfigurationSection, IDynamicCompilerSettingsGroup
     {
-        [ConfigurationProperty("settings")]
-        public DynamicCompilerSettingsCollection SettingsProviders
+        public IEnumerable<IDynamicCompilerSettings> SettingsCollection
         {
-            get { return (DynamicCompilerSettingsCollection)base["settings"]; }
+            get
+            {
+                var list = from DynamicCompilerSettings settings in settingsCollection select settings;
+                return list;
+            }
         }
 
-        public IDynamicCompilerSettings GetSettings(Version apiVersion)
+        [ConfigurationProperty("settings")]
+        DynamicCompilerSettingsCollection settingsCollection
         {
-            var list = from DynamicCompilerSettings settings in SettingsProviders select settings;
-
-            if (apiVersion.Major < 8)
-                return list.Single(i => i.name == "profile24");
-
-            return list.Single(i => i.name == "profile111");
+            get { return (DynamicCompilerSettingsCollection)base["settings"]; }
         }
     }
 
@@ -42,6 +40,8 @@ namespace WB.UI.Designer
 
     public class DynamicCompilerSettings : ConfigurationElement, IDynamicCompilerSettings
     {
+        public string Name { get { return name; } }
+
         public string PortableAssembliesPath
         {
             get { return portableAssembliesPath; }

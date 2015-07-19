@@ -11,7 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Services.CodeGeneration
             Guid templateId,
             Dictionary<string, string> generatedClasses,
             PortableExecutableReference[] referencedPortableAssemblies,
-            IDynamicCompilerSettings settings,
             out string generatedAssembly);
     }
 }

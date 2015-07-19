@@ -262,11 +262,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
+            var fileSystemAccessor = new FileSystemIOAccessor(); 
+
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(new FileSystemIOAccessor()),
                     new CodeGenerator(),
-                    new DefaultDynamicCompilerSettingsProvider()
+                    new DefaultDynamicCompilerSettingsProvider(fileSystemAccessor)
                     {
                         DynamicCompilerSettings = new DefaultDynamicCompilerSettings()
                         {

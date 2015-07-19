@@ -1,6 +1,10 @@
-﻿using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 {
@@ -27,6 +31,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
                     "System.Linq.dll"
                 }
             };
+        }
+
+
+        public static PortableExecutableReference[] CreateReferencesForCompiler()
+        {
+            var settings = CreateDynamicCompillerSettings();
+            var fileAccessor = new FileSystemIOAccessor();
+            var settingsProvider = new DefaultDynamicCompilerSettingsProvider(fileAccessor)
+            {
+                DynamicCompilerSettings = settings
+            };
+
+            var references = new List<PortableExecutableReference>();
+            references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
+            references.AddRange(settingsProvider.GetAssembliesToRoslyn(new Version()));
+            return references.ToArray();
+
         }
     }
 }

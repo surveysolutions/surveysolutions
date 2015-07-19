@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class DefaultDynamicCompilerSettings : IDynamicCompilerSettings
     {
+        public string Name { get; set; }
         public string PortableAssembliesPath { get; set; }
         public IEnumerable<string> DefaultReferencedPortableAssemblies { get; set; }
     }
