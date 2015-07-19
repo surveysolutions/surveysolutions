@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
@@ -30,35 +31,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Version targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
-            var dynamicCompilerSettings = this.compilerSettingsProvider.GetSettings(targetVersion);
-            var referencedPortableAssemblies = GetReferencedPortableAssemblies(targetVersion);
+            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToRoslyn(targetVersion);
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 
                 generatedEvaluator, 
                 referencedPortableAssemblies.ToArray(),
-                dynamicCompilerSettings,
                 out generatedAssembly);
 
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
-        }
-
-        static List<PortableExecutableReference> GetReferencedPortableAssemblies(Version targetVersion)
-        {
-            var referencedPortableAssemblies = new List<PortableExecutableReference>();
-            if (targetVersion.Major < 8)
-            {
-                var refProfile24 = AssemblyMetadata.CreateFromImage(
-                    RoslynCompilerResources.WB_Core_SharedKernels_DataCollection_Portable_Profile24
-                    ).GetReference();
-                referencedPortableAssemblies.Add(refProfile24);
-            }
-            else
-            {
-                referencedPortableAssemblies.Add(
-                    AssemblyMetadata.CreateFromFile(typeof (Identity).Assembly.Location).GetReference());
-            }
-            return referencedPortableAssemblies;
         }
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, Version targetVersion)

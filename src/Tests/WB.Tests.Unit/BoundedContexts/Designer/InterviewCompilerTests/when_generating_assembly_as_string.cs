@@ -15,12 +15,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
-            dynamicCompilerSettings = CreateDynamicCompillerSettings();
+            referencedPortableAssemblies = CreateReferencesForCompiler();
             generatedClasses.Add("main", testClassToCompile);
         };
 
         Because of = () =>
-            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, ReferencedPortableAssemblies, dynamicCompilerSettings, out resultAssembly);
+            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly);
 
 
         It should_result_succeded = () =>
@@ -36,10 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
-        private static IDynamicCompilerSettings dynamicCompilerSettings;
         private static Dictionary<string, string> generatedClasses = new Dictionary<string, string>();
-
-        static readonly PortableExecutableReference[] ReferencedPortableAssemblies = new[] { AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference() };
+        private static PortableExecutableReference[] referencedPortableAssemblies;
 
         public static string testClassToCompile =
             @"using System.Collections.Generic;

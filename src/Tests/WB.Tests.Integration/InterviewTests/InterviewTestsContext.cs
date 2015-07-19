@@ -186,12 +186,13 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
+            var fileSystemAccessor = new FileSystemIOAccessor(); 
             var questionnaireVersionProvider =new ExpressionsEngineVersionService();
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(new FileSystemIOAccessor()),
                     new CodeGenerator(),
-                    new DefaultDynamicCompilerSettingsProvider()
+                    new DefaultDynamicCompilerSettingsProvider(fileSystemAccessor)
                     {
                         DynamicCompilerSettings = new DefaultDynamicCompilerSettings()
                         {
