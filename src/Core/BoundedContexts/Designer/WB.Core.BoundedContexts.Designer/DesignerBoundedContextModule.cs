@@ -36,11 +36,11 @@ namespace WB.Core.BoundedContexts.Designer
 {
     public class DesignerBoundedContextModule : NinjectModule
     {
-        private readonly IDynamicCompilerSettingsProvider dynamicCompilerSettingsProvider;
+        private readonly IDynamicCompilerSettingsGroup dynamicCompilerSettingsGroup;
 
-        public DesignerBoundedContextModule(IDynamicCompilerSettingsProvider dynamicCompilerSettingsProvider)
+        public DesignerBoundedContextModule(IDynamicCompilerSettingsGroup dynamicCompilerSettingsGroup)
         {
-            this.dynamicCompilerSettingsProvider = dynamicCompilerSettingsProvider;
+            this.dynamicCompilerSettingsGroup = dynamicCompilerSettingsGroup;
         }
         public override void Load()
         {
@@ -56,8 +56,9 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
-            this.Unbind<IDynamicCompilerSettingsProvider>();
-            this.Bind<IDynamicCompilerSettingsProvider>().ToConstant(this.dynamicCompilerSettingsProvider);
+            this.Unbind<IDynamicCompilerSettingsGroup>();
+            this.Bind<IDynamicCompilerSettingsGroup>().ToConstant(this.dynamicCompilerSettingsGroup);
+            this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);

@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
-            dynamicCompilerSettings = CreateDynamicCompillerSettings();
+            referencedPortableAssemblies = CreateReferencesForCompiler();
 
             var classes = new Dictionary<string, string>();
             classes.Add("main", testClassToCompile);
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
         {
             return a > staskDepthToAdd ?
-                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, ReferencedPortableAssemblies, dynamicCompilerSettings, out resultAssembly) :
+                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly) :
                 IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(a + 1);
         }
 
@@ -42,14 +42,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
-        private static IDynamicCompilerSettings dynamicCompilerSettings;
         private static Dictionary<string, string> generatedClasses;
+        private static PortableExecutableReference[] referencedPortableAssemblies;
 
         private static string fileName = "validation:11111111111111111111111111111112";
 
         private static int staskDepthToAdd = 130;
 
-        static readonly PortableExecutableReference[] ReferencedPortableAssemblies = new[] { AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference() };
 
 
         public static string testClassToCompile =

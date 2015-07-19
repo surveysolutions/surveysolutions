@@ -318,7 +318,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Code\MembershipModule.cs" />
-    <Compile Include="DynamicCompilerSettingsProvider.cs" />
+    <Compile Include="DynamicCompilerSettingsGroup.cs" />
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
