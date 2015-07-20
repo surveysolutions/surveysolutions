@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.WebServices;

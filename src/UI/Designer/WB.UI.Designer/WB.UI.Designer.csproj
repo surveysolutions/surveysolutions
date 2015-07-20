@@ -258,6 +258,7 @@
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
+    <Compile Include="DesignerSettingsProvider.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1193,6 +1194,7 @@
     <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
+    <Content Include="Views\ControlPanel\Settings.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
