@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View("PeriodicStatusReport", model);
         }
 
-        public ActionResult SpeedByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
+        public ActionResult SpeedByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.AverageInterviewDuration)
         {
             this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
 
