@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 {
@@ -12,12 +13,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
     {
         public static RoslynCompiler CreateRoslynCompiler()
         {
-            return new RoslynCompiler(new FileSystemIOAccessor());
+            return new RoslynCompiler();
         }
 
-        public static IDynamicCompilerSettings CreateDynamicCompillerSettings()
+        public static IDynamicCompilerSettings CreateDynamicCompilerSettings()
         {
-            return new DefaultDynamicCompilerSettings()
+            return new DefaultDynamicCompilerSettings
             {
                 PortableAssembliesPath =
                     "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111",
@@ -33,21 +34,26 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
             };
         }
 
-
         public static PortableExecutableReference[] CreateReferencesForCompiler()
         {
-            var settings = CreateDynamicCompillerSettings();
             var fileAccessor = new FileSystemIOAccessor();
-            var settingsProvider = new DefaultDynamicCompilerSettingsProvider(fileAccessor)
+
+            const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll" };
+
+            var settings = new List<IDynamicCompilerSettings>
             {
-                DynamicCompilerSettings = settings
+                Mock.Of<IDynamicCompilerSettings>(_ 
+                    => _.PortableAssembliesPath == pathToProfile
+                    && _.DefaultReferencedPortableAssemblies == referencesToAdd 
+                    && _.Name == "profile111")
             };
 
-            var references = new List<PortableExecutableReference>();
-            references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
-            references.AddRange(settingsProvider.GetAssembliesToRoslyn(new Version()));
-            return references.ToArray();
+            var defaultDynamicCompilerSettings = Mock.Of<IDynamicCompilerSettingsGroup>(_ => _.SettingsCollection == settings);
 
+            var settingsProvider = new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileAccessor);
+
+            return settingsProvider.GetAssembliesToRoslyn(new Version(8, 0, 0)).ToArray();
         }
     }
 }

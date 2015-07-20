@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 {
