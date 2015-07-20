@@ -7,19 +7,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     public class RoslynCompiler : IDynamicCompiler
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-
-        public RoslynCompiler(IFileSystemAccessor fileSystemAccessor)
-        {
-            this.fileSystemAccessor = fileSystemAccessor;
-        }
-
         public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,

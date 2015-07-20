@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public IEnumerable<PortableExecutableReference> GetAssembliesToRoslyn(Version apiVersion)
+        public IEnumerable<PortableExecutableReference> GetAssembliesToReference(Version apiVersion)
         {
             if (apiVersion.Major < 8)
                 return this.ReturnReferencesForProfile24();
