@@ -8,17 +8,24 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 
 namespace WB.UI.Headquarters.Controllers
 {
     public class InstallController : BaseController
     {
         private readonly IPasswordHasher passwordHasher;
+        private readonly IFormsAuthentication authentication;
 
-        public InstallController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IPasswordHasher passwordHasher)
+        public InstallController(ICommandService commandService,
+                                 IGlobalInfoProvider globalInfo,
+                                 ILogger logger,
+                                 IPasswordHasher passwordHasher,
+                                 IFormsAuthentication authentication)
             : base(commandService, globalInfo, logger)
         {
             this.passwordHasher = passwordHasher;
+            this.authentication = authentication;
         }
 
         public ActionResult Finish()
@@ -43,7 +50,9 @@ namespace WB.UI.Headquarters.Controllers
                                               personName:model.PersonName,
                                               phoneNumber:model.PhoneNumber));
 
-                    return this.RedirectToAction("LogOn", "Account");
+                    this.authentication.SignIn(model.UserName, true);
+
+                    return this.RedirectToAction("Index", "Headquarters");
                 }
                 catch (Exception ex)
                 {
