@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 
             var settingsProvider = new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileAccessor);
 
-            return settingsProvider.GetAssembliesToRoslyn(new Version(8, 0, 0)).ToArray();
+            return settingsProvider.GetAssembliesToReference(new Version(8, 0, 0)).ToArray();
         }
     }
 }
