@@ -1396,6 +1396,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void CloneQuestionById(Guid questionId, Guid responsibleId, Guid targetId)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(targetId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             IQuestion question = this.GetQuestion(questionId);
             
