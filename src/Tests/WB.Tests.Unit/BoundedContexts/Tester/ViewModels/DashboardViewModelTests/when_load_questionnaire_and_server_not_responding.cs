@@ -1,19 +1,24 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Machine.Specifications;
+
 using Main.Core.Documents;
+
 using Moq;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+
 using It = Machine.Specifications.It;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     public class when_load_questionnaire_and_server_not_responding : DashboardViewModelTestContext
     {
