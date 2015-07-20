@@ -372,4 +372,10 @@
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
     <value>Max number of answers for roster size question cannot be greater then 40.</value>
   </data>
+  <data name="WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Question has condition referencing question from deeper roster level.</value>
+  </data>
+  <data name="WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>Group has condition referencing question from deeper roster level.</value>
+  </data>
 </root>
