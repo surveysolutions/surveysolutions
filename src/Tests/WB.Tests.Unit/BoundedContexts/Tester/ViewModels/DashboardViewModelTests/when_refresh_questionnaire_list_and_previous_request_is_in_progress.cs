@@ -1,11 +1,15 @@
 using System.Threading;
+
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     public class when_refresh_questionnaire_list_and_previous_request_is_in_progress : DashboardViewModelTestContext
     {

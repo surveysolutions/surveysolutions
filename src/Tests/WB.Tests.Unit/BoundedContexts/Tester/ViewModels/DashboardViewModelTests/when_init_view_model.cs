@@ -1,25 +1,50 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
+
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     public class when_init_view_model : DashboardViewModelTestContext
     {
         Establish context = () =>
         {
-            var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
+            var designerApiService = Mock.Of<IDesignerApiService>(_ => 
+                _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
-            
+
+            var userName = "Vasya";
+
+            var storageAccessor = new Mock<IPlainStorageAccessor<QuestionnaireListItem>>();
+            storageAccessor.Setup(
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
+                .Returns(
+                    new List<QuestionnaireListItem>
+                    {
+                        new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
+                        new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
+                        new QuestionnaireListItem { IsPublic = true, OwnerName = userName},
+                        new QuestionnaireListItem { IsPublic = true, OwnerName = userName },
+                        new QuestionnaireListItem { IsPublic = true, OwnerName = userName }
+                    });
+
+            var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == Guid.Parse("11111111111111111111111111111111"));
+            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+
             viewModel = CreateDashboardViewModel(
-                designerApiService: designerApiService);
+                principal: principal,
+                designerApiService: designerApiService,
+                questionnaireListStorageAccessor: storageAccessor.Object);
         };
 
         Because of = () => viewModel.Init();

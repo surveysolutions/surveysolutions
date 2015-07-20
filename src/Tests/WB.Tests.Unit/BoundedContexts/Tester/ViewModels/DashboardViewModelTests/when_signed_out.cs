@@ -1,11 +1,14 @@
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     public class when_signed_out : DashboardViewModelTestContext
     {
