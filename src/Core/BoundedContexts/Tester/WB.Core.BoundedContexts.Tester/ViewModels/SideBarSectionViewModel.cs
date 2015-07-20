@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         Children.TreeToEnumerable(x => x.Children)
                                 .ToList() 
                                 .ForEach(x => x.Dispose());
-                        this.Children.Clear();
+                        this.mainThreadDispatcher.RequestMainThreadAction(() => this.Children.Clear());
                     }
 
                     this.RaisePropertyChanged();
