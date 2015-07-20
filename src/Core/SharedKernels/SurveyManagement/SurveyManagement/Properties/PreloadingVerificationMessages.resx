@@ -199,4 +199,7 @@
   <data name="PL0028_UserIsNotSupervisor" xml:space="preserve">
     <value>Provided User is not Supervisor</value>
   </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>Answer on roster size question cannot be greater than 40.</value>
+  </data>
 </root>
