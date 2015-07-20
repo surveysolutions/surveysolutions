@@ -3,8 +3,6 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 
