@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
 
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
-            "rowcode", "rowname", "rowindex", "roster", "id", "self"
+            "rowcode", "rowname", "rowindex", "roster", "id", "self", "state"
         };
         private static string[] reservedKeywords;
 
