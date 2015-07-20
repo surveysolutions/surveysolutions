@@ -1065,7 +1065,7 @@ namespace WB.Tests.Unit
         }
 
         public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool isInteger = false, int? countOfDecimalPlaces = null)
+            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName="var1")
         {
             return new NumericQuestion("Question N")
             {
@@ -1074,7 +1074,8 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
-                QuestionType = QuestionType.Numeric
+                QuestionType = QuestionType.Numeric,
+                StataExportCaption = variableName
             };
         }
 
@@ -1092,7 +1093,7 @@ namespace WB.Tests.Unit
         }
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string mask = null, string variable=null)
+            string mask = null, string variable=null, string validationMessage=null)
         {
             return new TextQuestion("Question T")
             {
@@ -1101,6 +1102,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 StataExportCaption = variable,
                 Mask = mask,
+                ValidationMessage = validationMessage
             };
         }
 
