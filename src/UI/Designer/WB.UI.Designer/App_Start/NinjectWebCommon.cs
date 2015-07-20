@@ -34,6 +34,8 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Settings;
+
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -105,6 +107,10 @@ namespace WB.UI.Designer.App_Start
                 new MainModule(),
                 new FileInfrastructureModule()
                 );
+
+
+            kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
+
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
             kernel.Load(ModulesFactory.GetEventStoreModule());

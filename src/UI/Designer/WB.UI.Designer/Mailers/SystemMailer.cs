@@ -1,37 +1,15 @@
+using Mvc.Mailer;
+using WB.UI.Designer.Models;
+
 namespace WB.UI.Designer.Mailers
 {
-    using Mvc.Mailer;
-
-    using WB.UI.Designer.Models;
-
-    /// <summary>
-    ///     The system mailer.
-    /// </summary>
     public class SystemMailer : MailerBase, ISystemMailer
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="SystemMailer" /> class.
-        /// </summary>
         public SystemMailer()
         {
             this.MasterName = "_Layout";
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The confirmation email.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="MvcMailMessage"/>.
-        /// </returns>
         public virtual MvcMailMessage ConfirmationEmail(EmailConfirmationModel model)
         {
             this.ViewData.Model = model;
@@ -44,15 +22,6 @@ namespace WB.UI.Designer.Mailers
                     });
         }
 
-        /// <summary>
-        /// The reset password email.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="MvcMailMessage"/>.
-        /// </returns>
         public virtual MvcMailMessage ResetPasswordEmail(EmailConfirmationModel model)
         {
             this.ViewData.Model = model;
@@ -64,7 +33,5 @@ namespace WB.UI.Designer.Mailers
                         x.To.Add(model.Email);
                     });
         }
-
-        #endregion
     }
 }

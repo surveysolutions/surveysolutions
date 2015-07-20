@@ -1,18 +1,29 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Web.Security;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer.Controllers
 {
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : BaseController
     {
-        public ControlPanelController(IMembershipUserService userHelper)
+        readonly ISettingsProvider settingsProvider;
+
+        public ControlPanelController(IMembershipUserService userHelper, ISettingsProvider settingsProvider)
             : base(userHelper)
         {
+            this.settingsProvider = settingsProvider;
+        }
+
+        public ActionResult Settings()
+        {
+            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings();
+            return this.View(settings);
         }
 
         public ActionResult Index()
