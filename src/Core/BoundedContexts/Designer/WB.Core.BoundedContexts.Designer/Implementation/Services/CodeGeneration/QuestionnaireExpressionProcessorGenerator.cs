@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Version targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.codeGenerator.GenerateEvaluator(questionnaire, targetVersion);
-            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToRoslyn(targetVersion);
+            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference(targetVersion);
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 
