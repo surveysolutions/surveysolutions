@@ -1,15 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
+
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     public class when_refresh_questionnaire_list : DashboardViewModelTestContext
     {
@@ -17,9 +23,22 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Dashboard
         {
             var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
-            
+
+            var userName = "Vasya";
+
+            var storageAccessor = new Mock<IPlainStorageAccessor<QuestionnaireListItem>>();
+            storageAccessor.Setup(
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
+                .Returns(new List<QuestionnaireListItem>());
+
+            var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == Guid.Parse("11111111111111111111111111111111"));
+            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+
             viewModel = CreateDashboardViewModel(
+                principal: principal,
+                questionnaireListStorageAccessor: storageAccessor.Object,
                 designerApiService: designerApiService);
+
             viewModel.Init();
             viewModel.ShowPublicQuestionnairesCommand.Execute();
         };
@@ -28,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Dashboard
 
         It should_set_IsPublicShowed_to_false = () => viewModel.IsPublicShowed.ShouldBeFalse();
         It should_Questionnaires_have_2_questionnaires = () => viewModel.Questionnaires.Count.ShouldEqual(2);
-        It should_contains_only_my_questionnares = () => viewModel.Questionnaires.All(_ => !_.IsPublic).ShouldBeTrue();
+        It should_contains_only_my_questionnaires = () => viewModel.Questionnaires.All(_ => !_.IsPublic).ShouldBeTrue();
         It should_set_MyQuestionnairesCount_to_2 = () => viewModel.MyQuestionnairesCount.ShouldEqual(2);
         It should_set_PublicQuestionnairesCount_to_3 = () => viewModel.PublicQuestionnairesCount.ShouldEqual(3);
 

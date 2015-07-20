@@ -1,13 +1,17 @@
 using System;
 using System.Threading;
+
 using Machine.Specifications;
+
 using Moq;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
+
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.DashboardViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     public class when_load_questionnaire_and_previous_request_is_in_progress : DashboardViewModelTestContext
     {
