@@ -106,6 +106,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question has condition referencing question from deeper roster level..
+        /// </summary>
+        internal static string WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel {
+            get {
+                return ResourceManager.GetString("WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group has condition referencing question from deeper roster level..
+        /// </summary>
+        internal static string WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel {
+            get {
+                return ResourceManager.GetString("WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
         internal static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
