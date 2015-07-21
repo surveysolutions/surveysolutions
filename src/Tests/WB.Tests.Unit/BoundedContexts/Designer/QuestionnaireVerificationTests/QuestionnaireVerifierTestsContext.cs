@@ -63,8 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = rosterQuestionId,
                         StataExportCaption = "var1",
-                        IsInteger = true, 
-                        MaxValue = 5
+                        IsInteger = true
                     },
                     new Group
                     {
@@ -98,8 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = numId, 
                         StataExportCaption = "var1",
-                        IsInteger = true, 
-                        MaxValue = 5
+                        IsInteger = true
                     },
                     new Group
                     {
@@ -139,8 +137,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = rosterGroupId, 
                         StataExportCaption = "var1",
-                        IsInteger = true, 
-                        MaxValue = 5
+                        IsInteger = true
                     },
                     new Group
                     {
@@ -177,8 +174,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = numKey1, 
                         StataExportCaption = numKey1.ToString(),
-                        IsInteger = true, 
-                        MaxValue = 5
+                        IsInteger = true
                     },
                     new Group
                     {
@@ -219,8 +215,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     {
                         PublicKey = rosterGroupId, 
                         StataExportCaption = "var1",
-                        IsInteger = true, 
-                        MaxValue = 5
+                        IsInteger = true
                     },
                     new Group
                     {

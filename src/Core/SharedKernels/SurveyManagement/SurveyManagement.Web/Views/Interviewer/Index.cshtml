@@ -37,6 +37,23 @@
             </a>
         </div>
     }
+<div class="btn-group">
+    <div class="form-inline">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="button" data-bind="click: search">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="btn-group pull-right">
+        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model })">
+            Archived interviewers
+        </a>
+    </div>
 }
 
 @section grid

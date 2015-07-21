@@ -243,7 +243,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
                 
                 this.ExportToTabFile(questionnaireId, questionnaireVersion, approvedDataFolderPath,
-                    InterviewExportedAction.ApproveByHeadquarter);
+                    InterviewExportedAction.ApprovedByHeadquarter);
             }
 
             return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath)

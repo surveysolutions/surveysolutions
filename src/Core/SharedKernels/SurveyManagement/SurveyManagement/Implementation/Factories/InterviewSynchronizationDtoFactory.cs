@@ -46,30 +46,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             foreach (var interviewLevel in interview.Levels.Values)
             {
-                foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
+                foreach (var interviewQuestion in interviewLevel.QuestionsSearchCahche)
                 {
-                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id,
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Key,
                         interviewLevel.RosterVector,
-                        interviewQuestion.Answer, GetLastComment(interviewQuestion));
+                        interviewQuestion.Value.Answer, GetLastComment(interviewQuestion.Value));
 
-                    FillAllComments(answeredQuestion, interviewQuestion);
+                    FillAllComments(answeredQuestion, interviewQuestion.Value);
 
                     if (!answeredQuestion.IsEmpty())
                     {
                         answeredQuestions.Add(answeredQuestion);
                     }
-                    if (interviewQuestion.IsDisabled())
+                    if (interviewQuestion.Value.IsDisabled())
                     {
-                        disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                        disabledQuestions.Add(new InterviewItemId(interviewQuestion.Value.Id, interviewLevel.RosterVector));
                     }
 
-                    if (interviewQuestion.IsInvalid())
+                    if (interviewQuestion.Value.IsInvalid())
                     {
-                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                     }
-                    if (!interviewQuestion.IsInvalid())
+                    if (!interviewQuestion.Value.IsInvalid())
                     {
-                        validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                        validQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                     }
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)

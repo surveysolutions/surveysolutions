@@ -7,5 +7,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
         public UserRoles Role = UserRoles.Undefined;
 
         public string SearchBy { get; set; }
+
+        public bool Archived { get; set; }
     }
 }

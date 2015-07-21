@@ -37,7 +37,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin)
+        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool asBulk)
         {
             var eventStream = new UncommittedEventStream(origin);
 

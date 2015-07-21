@@ -22,8 +22,6 @@ namespace Main.Core.Entities
             bool capital,
             string instructions,
             string mask,
-            List<Guid> triggers,
-            int? maxValue,
             Answer[] answers,
             Guid? linkedToQuestionId,
             bool? isInteger,
@@ -49,8 +47,6 @@ namespace Main.Core.Entities
             this.Mandatory = mandatory;
             this.Capital = capital;
             this.Instructions = instructions;
-            this.Triggers = triggers;
-            this.MaxValue = maxValue;
             this.Answers = answers;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.IsInteger = isInteger;
@@ -79,8 +75,6 @@ namespace Main.Core.Entities
         public readonly bool Capital;
         public readonly string Instructions;
         public readonly string Mask;
-        public readonly List<Guid> Triggers;
-        public readonly int? MaxValue;
         public readonly Answer[] Answers;
         public readonly Guid? LinkedToQuestionId;
         public readonly bool? IsInteger;

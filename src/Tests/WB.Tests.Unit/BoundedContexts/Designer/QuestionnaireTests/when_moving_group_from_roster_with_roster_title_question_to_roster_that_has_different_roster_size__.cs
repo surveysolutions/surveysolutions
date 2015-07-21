@@ -18,15 +18,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             {
                 PublicKey = rosterSizeQuestion1Id,
                 GroupPublicKey = chapterId,
-                IsInteger = true,
-                MaxAllowedValue = 5
+                IsInteger = true
             });
             questionnaire.Apply(new NumericQuestionAdded()
             {
                 PublicKey = rosterSizeQuestion2Id,
                 GroupPublicKey = chapterId,
-                IsInteger = true,
-                MaxAllowedValue = 5
+                IsInteger = true
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
             questionnaire.Apply(new GroupBecameARoster(responsibleId, targetGroupId));

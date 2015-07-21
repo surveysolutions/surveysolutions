@@ -44,13 +44,13 @@
 
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" id="edit-roster-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': editRosterForm.$dirty }" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid">Save</button>
+            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': editRosterForm.$dirty }" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid">Save</button>
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelRoster()">Cancel</button>
         </div>
         <div class="pull-right">
-            <button type="button" id="edit-chapter-delete-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="deleteRoster()" unsaved-warning-clear>Delete</button>
-            <button type="button" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
-            <ng-include src="'moveToChapterSnippet'" />
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="deleteRoster()" unsaved-warning-clear>Delete</button>
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
+            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>
     </div>
 

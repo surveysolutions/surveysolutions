@@ -9,13 +9,12 @@ using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
 {
-    [Subject(typeof(FileSystemIOAccessor))]
     internal class when_file_name_contains_invalid_characters
     {
         Establish context = () =>
         {
             fileName = "nastya" + new string(Path.GetInvalidFileNameChars());
-            fileSystemIOAccessor = new FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.FileSystemIOAccessor();
         };
 
         Because of = () =>

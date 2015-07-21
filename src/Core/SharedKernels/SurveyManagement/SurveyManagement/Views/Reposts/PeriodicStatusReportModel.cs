@@ -9,9 +9,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
         public bool CanNavigateToQuantityByTeamMember { get; set; }
         public bool CanNavigateToQuantityBySupervisors { get; set; }
         public TemplateViewItem[] Questionnaires { get; set; }
-        public string ReportTitle { get; set; }
         public string ReportName { get; set; }
         public string ResponsibleColumnName { get; set; }
         public Guid? SupervisorId { get; set; }
+        public PeriodiceReportType[] ReportTypes { get; set; }
+        public string ReportNameDescription { get; set; }
     }
 }

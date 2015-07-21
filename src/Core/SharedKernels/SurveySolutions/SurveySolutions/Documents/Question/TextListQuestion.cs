@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
@@ -37,7 +38,7 @@ namespace Main.Core.Entities.SubEntities.Question
         public int? MaxAnswerCount { get; set; }
         
         public static int MaxAnswerCountLimit {
-            get { return 40; }
+            get { return Constants.MaxRosterRowCount; }
         }
     }
 }

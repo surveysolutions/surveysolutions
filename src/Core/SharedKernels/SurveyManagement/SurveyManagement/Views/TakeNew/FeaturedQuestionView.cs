@@ -38,8 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
                 this.Settings = new
                 {
                     numericQuestion.IsInteger,
-                    numericQuestion.CountOfDecimalPlaces,
-                    numericQuestion.MaxValue
+                    numericQuestion.CountOfDecimalPlaces
                 };
             }
 

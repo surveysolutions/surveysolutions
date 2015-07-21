@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
 {
@@ -27,7 +28,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null,
-            IQuestionnaireInfoFactory questionnaireInfoFactory = null)
+            IQuestionnaireInfoFactory questionnaireInfoFactory = null,
+            IMembershipUserService userHelper = null)
         {
             var questionnaireController = new QuestionnaireController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
@@ -35,7 +37,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
-                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>());
+                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
+                userHelper ?? Mock.Of < IMembershipUserService>());
 
             return questionnaireController;
         }

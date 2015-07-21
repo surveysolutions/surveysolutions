@@ -9,11 +9,13 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [LimitsFilter]
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {

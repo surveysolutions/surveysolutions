@@ -212,8 +212,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             item.Add(result, groupId, null);
 
-            item.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
-
             if (result.Capital)
                 item.MoveHeadQuestionPropertiesToRoster(result.PublicKey, groupId);
 
@@ -240,8 +238,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             document.ReplaceEntity(question, newQuestion);
 
-            document.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
-
             if (newQuestion.Capital)
                 document.MoveHeadQuestionPropertiesToRoster(question.PublicKey, null);
 
@@ -260,8 +256,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             }
 
             document.Insert(index, result, groupId);
-
-            document.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
             if (result.Capital)
                 document.MoveHeadQuestionPropertiesToRoster(result.PublicKey, groupId);

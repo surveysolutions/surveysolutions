@@ -47,7 +47,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            var answeredQuestion = interview.Levels["#"].GetOrCreateQuestion(answeredQuestionId);
+            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(answeredQuestionId))
+                interview.Levels["#"].QuestionsSearchCahche.Add(answeredQuestionId, new InterviewQuestion(answeredQuestionId));
+
+            var answeredQuestion = interview.Levels["#"].QuestionsSearchCahche[answeredQuestionId];
+
             answeredQuestion.Answer = 5;
 
             questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);

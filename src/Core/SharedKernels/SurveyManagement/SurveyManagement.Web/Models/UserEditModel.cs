@@ -45,6 +45,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(Name = "IsLockedFieldName", ResourceType = typeof (FieldsAndValidations), Order = 6)]
         public bool IsLocked { get; set; }
 
+        [Display(Name = "IsLockedBySupervisorFieldName", ResourceType = typeof(FieldsAndValidations), Order = 7)]
+        public bool IsLockedBySupervisor { get; set; }
+
         public IList<DeviceInfo> DevicesHistory { get; set; }
     }
 }

@@ -43,14 +43,7 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='EventStore.Password']/@value" />
    </parameter>
-
-   <parameter name="Enable defaultproxy"
-      description="Enable/disable default proxy setting"
-      defaultValue="true">
-   <parameterEntry kind="XmlFile"
-      scope="\\web.config$"
-      match="/configuration/system.net/defaultProxy/@enabled" />
-   </parameter>
+   
    <parameter name="Network defaultCredentials"
       defaultValue="false">
    <parameterEntry kind="XmlFile"

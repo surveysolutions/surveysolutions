@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             try
             {
                 var userInfo = this.userViewFactory.Load(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
-                if (userInfo == null)
+                if (userInfo == null || userInfo.IsArchived)
                 {
                     this.RespondWithMessageThatUserDoesNotExists(actionContext);
                     return;

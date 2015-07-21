@@ -67,7 +67,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                     {
                         Id = q1Id,
                         IsInteger = true,
-                        MaxValue = 20,
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new Guid[] { g1Id },
                         RosterScopeIds = new Guid[] {  }

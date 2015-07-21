@@ -36,7 +36,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 var numericQuestionView = ((NumericDetailsView)questionView);
                 numericQuestionView.IsInteger = numericQuestion.IsInteger;
                 numericQuestionView.CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces;
-                numericQuestionView.MaxValue = numericQuestion.MaxValue;
                 return numericQuestionView;
             }
 

@@ -17,12 +17,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 
         public UserBrowseView Load(UserBrowseInputModel input)
         {
-            bool anyUserExists = this.indexAccessor.Query(_ => _.Any(x => !x.IsDeleted));
+            bool anyUserExists = this.indexAccessor.Query(_ => _.Any(x => !x.IsArchived));
             if (!anyUserExists)
             {
                 return new UserBrowseView(input.Page, input.PageSize, 0, new UserBrowseItem[0]);
             }
-
             List<UserDocument> pagedQuery = this.indexAccessor.Query(_ => ApplyPaging(Filter(_, input), input).ToList());
 
             IEnumerable<UserBrowseItem> items = pagedQuery.Select(x => new UserBrowseItem(x.PublicKey, 
@@ -46,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 
         private static IQueryable<UserDocument> Filter(IQueryable<UserDocument> _, UserBrowseInputModel input)
         {
-            var query = _.Where(x => !x.IsDeleted);
+            var query = _.Where(x => !x.IsArchived);
             if (input.Role.HasValue)
             {
                 query = query.Where(x => x.Roles.Contains(input.Role.Value));

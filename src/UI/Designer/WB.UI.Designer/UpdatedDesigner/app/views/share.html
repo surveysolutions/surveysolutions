@@ -6,50 +6,70 @@
 
 <div class="modal-body">
     <div class="container share-question-dialog">
-        <form role="form" class="row">
+        <form role="form" class="row form-inline">
             <div class="form-group">
-                <label class="control-label" for="questionnaireTitle">Questionnaire name:</label> <br/>
-                <textarea msd-elastic id="questionnaireTitle" type="text" class="form-control questionaire-title" ng-model="questionnaire.editedTitle"></textarea>
+                <label class="control-label" for="questionnaireTitle">Questionnaire name:</label> <br />
+                <input id="questionnaireTitle" type="text" class="form-control questionaire-title" ng-model="questionnaire.editedTitle">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-lg btn-primary invite-button" ng-click="updateTitle()">Update</button>
+                </div>
             </div>
-            <button type="submit" class="btn btn-lg btn-primary" ng-click="updateTitle()">Update</button>
         </form>
         <div class="row">
-            <h3>Who has access:</h3>
-            <ul class="accounts">
-                <li ng-repeat="s in questionnaire.sharedPersons">
-                    <a href="mailto:{{s.email}}">{{s.email}}</a> <i class="text-muted" ng-if="s.isOwner">(you)</i> - <div class="btn-group">
-                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
-                            Can edit <span class="caret"></span>
-                        </button>
-                        <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i>owner</i></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a ng-click="revokeAccess(s)">Revoke access</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-
             <button class="btn btn-link" ng-click="togglePublicity()">MAKE THIS QUESTIONNAIRE {{questionnaire.isPublic ? 'PRIVATE' : 'PUBLIC'}}</button>
-            <i class="text-muted">({{questionnaire.isPublic ? 'visible to you only' : 'visible to everyone'}})</i>
+            <i class="text-muted">({{questionnaire.isPublic ? 'visible to you and persons you shared with' : 'visible to everyone'}})</i>
         </div>
+        <div class="row">
+                <h3>Who has access:</h3>
+                <ul class="accounts">
+                    <li ng-repeat="s in questionnaire.sharedPersons">
+                        <a href="mailto:{{s.email}}">{{s.email}}</a> -
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
+                               Can {{s.shareType}}<span class="caret"></span>
+                            </button>
+                            <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i>owner</i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a ng-click="revokeAccess(s)">Revoke access</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         <form role="form" class="form-inline row" name="viewModel.shareForm" novalidate>
             <h3>Invite collaborators by e-mail:</h3>
-            <div class="form-group" ng-class="{'has-error': !viewModel.shareForm.shareWithInput.$valid && viewModel.doesUserExist  }">
-                <input type="text" ng-pattern="/^([a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$/" class="form-control share-with-email"
-                       name="shareWithInput" ng-model="viewModel.shareWith" />
-                <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false">
-                    Provide email of existing user
-                </p>
-                <p class="help-block ng-cloak" ng-show="viewModel.shareForm.shareWithInput.$error.pattern">
-                    Provide a valid email
-                </p>
-            </div>
             <div class="form-group">
-                <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
-            </div>
-            <div class="form-group share-form-btn-label">
-                <span class="text-muted">&mdash;</span> <a href="javascript:void(0);"><i> can edit and share</i></a>
+                <div class=" form-group" ng-class="{'has-error': !viewModel.shareForm.shareWithInput.$valid && viewModel.doesUserExist  }">
+
+                    <input type="text" ng-pattern="/^([a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$/" class="form-control share-with-email"
+                           name="shareWithInput" ng-model="viewModel.shareWith" />
+                    <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false">
+                        Provide email of existing user
+                    </p>
+                    <p class="help-block ng-cloak" ng-show="viewModel.shareForm.shareWithInput.$error.pattern">
+                        Provide a valid email
+                    </p>
+                </div>
+                <div class="form-group vertical-top">
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-link" data-toggle="dropdown" name="shareType" id="Share-type">
+                            {{viewModel.shareType}}
+                            <span class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation" ng-repeat="shareType in shareTypeOptions">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeShareType(shareType)">
+                                    {{shareType.name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
+                    </div>
+                </div>
             </div>
         </form>
+        </div>
     </div>
-</div>

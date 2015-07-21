@@ -9,17 +9,20 @@
             if (hotkeys.get(saveQuestion) === false) {
                 hotkeys.del(saveQuestion);
             }
-            hotkeys.bindTo($scope)
-              .add({
-                  combo: saveQuestion,
-                  description: 'Save changes',
-                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                  callback: function (event) {
-                      $scope.saveQuestion();
-                      $scope.questionForm.$setPristine();
-                      event.preventDefault();
-                  }
-              });
+
+            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: saveQuestion,
+                        description: 'Save changes',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event) {
+                            $scope.saveQuestion();
+                            $scope.questionForm.$setPristine();
+                            event.preventDefault();
+                        }
+                    });
+            }
 
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
@@ -55,7 +58,6 @@
 
                 $scope.activeQuestion.wereOptionsTruncated = question.wereOptionsTruncated || false;
                 $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
-                $scope.activeQuestion.maxValue = question.maxValue;
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
                 $scope.activeQuestion.questionScope = question.isPreFilled ? 'Prefilled' : question.questionScope;
@@ -191,7 +193,8 @@
                     var modalInstance = confirmService.open({
                         title: "To open options editor all unsaved changes must be saved. Should we save them now?",
                         okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later"
+                        cancelButtonTitle: "No, later",
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -212,7 +215,8 @@
                     var modalInstance = confirmService.open({
                         title: "To open options editor all unsaved changes must be saved. Should we save them now?",
                         okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later"
+                        cancelButtonTitle: "No, later",
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -322,7 +326,6 @@
             };
 
             $scope.isIntegerChange = function () {
-                $scope.activeQuestion.maxValue = null;
                 $scope.activeQuestion.countOfDecimalPlaces = null;
             };
 

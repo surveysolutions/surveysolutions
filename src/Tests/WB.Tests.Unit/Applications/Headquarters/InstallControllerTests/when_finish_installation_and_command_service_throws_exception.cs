@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
     {
         private Establish context = () =>
         {
-            commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()))
+            commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Throws(new Exception());
             
             controller = CreateController(commandService: commandServiceMock.Object, logger: loggerMock.Object);

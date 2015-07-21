@@ -6,6 +6,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -114,6 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             }
 
             int errorCountOccuredOnInterviewsCreaition = 0;
+            bool interviewLimitReached = false;
             DateTime startTime = DateTime.Now;
             
             var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
@@ -129,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         bigTemplate.PublicKey, version, 
                         interviewForCreate[interviewIndex].PreloadedDataDto,
                         DateTime.UtcNow,
-                        responsibleId));
+                        responsibleId), handleInBatch: true);
 
                     result.SetStatusMessage(string.Format(
                         @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",
@@ -145,12 +147,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     Logger.Error(e.Message, e);
 
                     errorCountOccuredOnInterviewsCreaition ++;
+                    var interviewException = e as InterviewException;
+                    if (interviewException != null && interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
+                    {
+                        interviewLimitReached = true;
+                        break;
+                    }
                 }
             }
 
             if (errorCountOccuredOnInterviewsCreaition > 0)
             {
-                result.SetErrorMessage(string.Format("Error {0} occurred during interview creation", errorCountOccuredOnInterviewsCreaition == 1 ? "" : "s"));
+                if (interviewLimitReached)
+                {
+                    result.SetErrorMessage("You can't create more interviews because limit has been reached");
+                }
+                else
+                {
+                    result.SetErrorMessage(string.Format("Error{0} occurred during interview creation",
+                        errorCountOccuredOnInterviewsCreaition == 1 ? "" : "s"));
+                }
             }
             else
                 result.CompleteProcess();

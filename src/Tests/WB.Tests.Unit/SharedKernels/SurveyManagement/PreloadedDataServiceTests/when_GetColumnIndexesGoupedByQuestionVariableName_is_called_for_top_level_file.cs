@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
            result.ShouldNotBeNull();
 
         It should_result_has_index_of_numeric_question_only = () =>
-          result["nq1"].SequenceEqual(new []{0});
+          result["nq1"].Select(r=>r.Item2).ToArray().SequenceEqual(new []{0});
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static Dictionary<string, int[]> result;
+        private static Dictionary<string, Tuple<string, int>[]> result;
         private static Guid rosterGroupId = Guid.NewGuid();
     }
 }

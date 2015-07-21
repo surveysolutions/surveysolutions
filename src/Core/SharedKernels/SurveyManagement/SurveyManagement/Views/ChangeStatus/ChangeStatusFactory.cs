@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
@@ -18,15 +19,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus
         {
             var interviewStatusChangeHistory = this.interviews.GetById(input.InterviewId);
 
-            return new ChangeStatusView {
-                StatusHistory = interviewStatusChangeHistory.InterviewCommentedStatuses
-                                                    .Select(x => new CommentedStatusHistroyView {
-                                                        Comment = x.Comment,
-                                                        Date = x.Timestamp,
-                                                        Status = x.Status,
-                                                        Responsible = x.StatusChangeOriginatorName
-                                                    }).ToList()
-                };
+            return new ChangeStatusView
+            {
+                StatusHistory =
+                    interviewStatusChangeHistory.InterviewCommentedStatuses.Where(
+                        i => i.Status.ConvertToInterviewStatus().HasValue)
+                        .Select(x => new CommentedStatusHistroyView
+                        {
+                            Comment = x.Comment,
+                            Date = x.Timestamp,
+                            Status = x.Status.ConvertToInterviewStatus().Value,
+                            Responsible = x.StatusChangeOriginatorName
+                        }).ToList()
+            };
         }
     }
 }

@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
     <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
@@ -78,6 +79,11 @@
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
+    <Compile Include="Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Users\Denormalizers\RolesExtensions.cs" />
     <Compile Include="Users\Denormalizers\UsersFeedDenormalizer.cs" />
   </ItemGroup>
@@ -118,6 +124,12 @@
   <ItemGroup>
     <Folder Include="Denormalizers\" />
     <Folder Include="Interviews\Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         };
 
         Because of = () =>
-            result = periodicStatusReportController.QuantityBySupervisors() as ViewResult;
+            result = periodicStatusReportController.QuantityBySupervisors(PeriodiceReportType.NumberOfCompletedInterviews) as ViewResult;
 
         It should_active_page_be_NumberOfCompletedInterviews = () =>
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.NumberOfCompletedInterviews);

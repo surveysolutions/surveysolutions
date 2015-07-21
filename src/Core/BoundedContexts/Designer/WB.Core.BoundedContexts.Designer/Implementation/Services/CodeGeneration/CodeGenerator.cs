@@ -110,7 +110,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var expressionMethodModel = new ExpressionMethodModel(
                             groupedRosters.Key,
                             questionTemplateModel.GeneratedConditionsMethodName,
-                            questionnaireTemplateStructure.Namespaces, questionTemplateModel.Conditions);
+                            questionnaireTemplateStructure.Namespaces, 
+                            questionTemplateModel.Conditions,
+                            false,
+                            questionTemplateModel.VariableName);
 
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
@@ -129,7 +132,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var expressionMethodModel = new ExpressionMethodModel(
                           groupedRosters.Key,
                           questionTemplateModel.GeneratedValidationsMethodName,
-                          questionnaireTemplateStructure.Namespaces, questionTemplateModel.Validations);
+                          questionnaireTemplateStructure.Namespaces, 
+                          questionTemplateModel.Validations,
+                          true,
+                          questionTemplateModel.VariableName);
 
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
@@ -150,7 +156,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var expressionMethodModel = new ExpressionMethodModel(
                             groupedRosters.Key,
                             groupTemplateModel.GeneratedConditionsMethodName,
-                            questionnaireTemplateStructure.Namespaces, groupTemplateModel.Conditions);
+                            questionnaireTemplateStructure.Namespaces, 
+                            groupTemplateModel.Conditions,
+                            false,
+                            groupTemplateModel.VariableName);
 
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
@@ -172,7 +181,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var expressionMethodModel = new ExpressionMethodModel(
                           groupedRosters.Key,
                           rosterTemplateModel.GeneratedConditionsMethodName,
-                          questionnaireTemplateStructure.Namespaces, rosterTemplateModel.Conditions);
+                          questionnaireTemplateStructure.Namespaces, 
+                          rosterTemplateModel.Conditions,
+                          false,
+                          rosterTemplateModel.VariableName);
 
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
@@ -199,7 +211,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var expressionMethodModel = new ExpressionMethodModel(
                          questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
                          questionTemplateModel.GeneratedConditionsMethodName,
-                         questionnaireTemplateStructure.Namespaces, questionTemplateModel.Conditions);
+                         questionnaireTemplateStructure.Namespaces, 
+                         questionTemplateModel.Conditions,
+                         false,
+                         questionTemplateModel.VariableName);
 
                     var methodTemplate =
                         new ExpressionMethodTemplate(expressionMethodModel);
@@ -218,7 +233,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var expressionMethodModel = new ExpressionMethodModel(
                         questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
                         questionTemplateModel.GeneratedValidationsMethodName,
-                        questionnaireTemplateStructure.Namespaces, questionTemplateModel.Validations);
+                        questionnaireTemplateStructure.Namespaces, 
+                        questionTemplateModel.Validations,
+                        true,
+                        questionTemplateModel.VariableName);
 
                     var methodTemplate =
                         new ExpressionMethodTemplate(expressionMethodModel);
@@ -240,7 +258,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var expressionMethodModel = new ExpressionMethodModel(
                         questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
                         groupTemplateModel.GeneratedConditionsMethodName,
-                        questionnaireTemplateStructure.Namespaces, groupTemplateModel.Conditions);
+                        questionnaireTemplateStructure.Namespaces, 
+                        groupTemplateModel.Conditions,
+                        false,
+                        groupTemplateModel.VariableName);
 
                     var methodTemplate =
                         new ExpressionMethodTemplate(expressionMethodModel);

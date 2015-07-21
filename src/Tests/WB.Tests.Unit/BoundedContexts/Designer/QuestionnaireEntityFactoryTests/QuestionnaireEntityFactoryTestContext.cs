@@ -31,8 +31,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 isMandatory ?? false, 
                 false,
                 instructions ?? "", null,
-                new List<Guid>(), 
-                null, 
                 new Answer[0], 
                 null, 
                 null, 

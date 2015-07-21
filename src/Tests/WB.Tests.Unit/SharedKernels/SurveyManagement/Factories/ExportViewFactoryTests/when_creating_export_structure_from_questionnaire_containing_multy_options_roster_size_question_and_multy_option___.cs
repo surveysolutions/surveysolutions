@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    internal class WhenCreatingExportViewFactoryFromContainingMultyOptionsRosterSizeQuestionAndMultyOptionLinkedQuestion :
+    internal class when_creating_export_structure_from_questionnaire_containing_multy_options_roster_size_question_and_multy_option___ :
         ExportViewFactoryTestsContext
     {
         private Establish context = () =>
