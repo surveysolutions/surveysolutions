@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IUserInteraction userInteraction;
+        private readonly IUserInteractionService userInteractionService;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
-            IUserInteraction userInteraction,
+            IUserInteractionService userInteractionService,
             AnsweringViewModel answering)
         {
             this.principal = principal;
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.interviewRepository = interviewRepository;
 
             this.QuestionState = questionStateViewModel;
-            this.userInteraction = userInteraction;
+            this.userInteractionService = userInteractionService;
             this.Answering = answering;
             this.Answers = new ObservableCollection<TextListItemViewModel>();
         }
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             if (this.isRosterSizeQuestion )
             {
                 var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, 1);
-                if (!(await this.userInteraction.ConfirmAsync(message)))
+                if (!(await this.userInteractionService.ConfirmAsync(message)))
                 {
                     return;
                 }

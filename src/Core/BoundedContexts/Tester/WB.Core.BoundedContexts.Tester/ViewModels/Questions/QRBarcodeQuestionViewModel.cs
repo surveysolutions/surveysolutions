@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private readonly IUserIdentity userIdentity;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQrBarcodeScanService qrBarcodeScanService;
-        private readonly IUserInteraction userInteraction;
+        private readonly IUserInteractionService userInteractionService;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -51,14 +51,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             IUserIdentity userIdentity,
             IStatefulInterviewRepository interviewRepository,
             IQrBarcodeScanService qrBarcodeScanService,
-            IUserInteraction userInteraction,
+            IUserInteractionService userInteractionService,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
             this.userIdentity = userIdentity;
             this.interviewRepository = interviewRepository;
             this.qrBarcodeScanService = qrBarcodeScanService;
-            this.userInteraction = userInteraction;
+            this.userInteractionService = userInteractionService;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;

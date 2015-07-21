@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IQuestionnaireImportService questionnaireImportService = null,
             IViewModelNavigationService viewModelNavigationService = null,
             IFriendlyMessageService friendlyMessageService = null,
-            IUserInteraction userInteraction = null,
+            IUserInteractionService userInteractionService = null,
             IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor = null)
         {
             return new DashboardViewModel(principal: principal,
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireImportService: questionnaireImportService,
                 viewModelNavigationService: viewModelNavigationService,
                 friendlyMessageService: friendlyMessageService,
-                userInteraction: userInteraction,
+                userInteractionService: userInteractionService,
                 questionnaireListStorageAccessor: questionnaireListStorageAccessor);
         }
     }

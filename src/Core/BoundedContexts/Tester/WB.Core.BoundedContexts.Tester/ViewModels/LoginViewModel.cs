@@ -14,16 +14,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IPrincipal principal;
         private readonly IDesignerApiService designerApiService;
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IUserInteraction userInteraction;
+        private readonly IUserInteractionService userInteractionService;
         private readonly IFriendlyMessageService friendlyMessageService;
 
         public LoginViewModel(IPrincipal principal, IDesignerApiService designerApiService, IViewModelNavigationService viewModelNavigationService,
-            IUserInteraction userInteraction, IFriendlyMessageService friendlyMessageService)
+            IUserInteractionService userInteractionService, IFriendlyMessageService friendlyMessageService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
             this.viewModelNavigationService = viewModelNavigationService;
-            this.userInteraction = userInteraction;
+            this.userInteractionService = userInteractionService;
             this.friendlyMessageService = friendlyMessageService;
         }
 
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 }
 
                 if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteraction.Alert(errorMessage);
+                    this.userInteractionService.Alert(errorMessage);
                 else 
                     throw;
             }

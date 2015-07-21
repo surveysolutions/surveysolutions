@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IUserInteraction userInteraction;
+        private readonly IUserInteractionService userInteractionService;
 
         readonly IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor;
 
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IQuestionnaireImportService questionnaireImportService,
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyMessageService friendlyMessageService,
-            IUserInteraction userInteraction,
+            IUserInteractionService userInteractionService,
             IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
             : base(logger)
         {
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
-            this.userInteraction = userInteraction;
+            this.userInteractionService = userInteractionService;
             this.questionnaireListStorageAccessor = questionnaireListStorageAccessor;
             this.friendlyMessageService = friendlyMessageService;
         }
@@ -238,7 +238,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 }
 
                 if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteraction.Alert(errorMessage);
+                    this.userInteractionService.Alert(errorMessage);
                 else 
                     throw;
             }
@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
 
                 if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteraction.Alert(errorMessage);
+                    this.userInteractionService.Alert(errorMessage);
                 else
                     throw;
             }

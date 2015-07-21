@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionQuestionVie
     [Subject(typeof(MultiOptionQuestionViewModel))]
     public class MultiOptionQuestionViewModelTestsContext
     {
-        protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteraction userInteraction = null, 
+        protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage = null, 
             ILiteEventRegistry eventRegistry = null, 
             IStatefulInterviewRepository interviewRepository = null, 
@@ -31,9 +31,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionQuestionVie
             AnsweringViewModel answeringViewModel = null, 
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewmodel = null)
         {
-            var userInteractionFunc = userInteraction == null
-                ? (Func<IUserInteraction>) (Mock.Of<IUserInteraction>)
-                : (() => userInteraction);
+            var userInteractionFunc = userInteractionService == null
+                ? (Func<IUserInteractionService>) (Mock.Of<IUserInteractionService>)
+                : (() => userInteractionService);
 
             return new MultiOptionQuestionViewModel(
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),

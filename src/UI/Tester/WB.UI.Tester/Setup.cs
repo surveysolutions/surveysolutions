@@ -115,7 +115,7 @@ namespace WB.UI.Tester
 
             base.FillTargetFactories(registry);
 
-            Mvx.RegisterType<IUserInteraction, UserInteractionService>();
+            Mvx.RegisterType<IUserInteractionService, UserInteractionService>();
         }
 
         protected override IDictionary<string, string> ViewNamespaceAbbreviations

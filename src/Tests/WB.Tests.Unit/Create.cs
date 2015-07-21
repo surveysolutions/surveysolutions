@@ -1775,7 +1775,7 @@ namespace WB.Tests.Unit
             var result = new NavigationState(
                 Mock.Of<ICommandService>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IUserInteraction>());
+                Mock.Of<IUserInteractionService>());
             return result;
         }
 
