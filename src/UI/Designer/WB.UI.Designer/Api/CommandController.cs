@@ -26,13 +26,15 @@ namespace WB.UI.Designer.Api
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
         private readonly ICommandPreprocessor commandPreprocessor;
+        private readonly ICommandPostprocessor commandPostprocessor;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandPreprocessor commandPreprocessor)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandPreprocessor commandPreprocessor, ICommandPostprocessor commandPostprocessor)
         {
             this.logger = logger;
             this.commandPreprocessor = commandPreprocessor;
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
+            this.commandPostprocessor = commandPostprocessor;
         }
 
         public HttpResponseMessage Post(CommandExecutionModel model)
@@ -42,6 +44,8 @@ namespace WB.UI.Designer.Api
                 var concreteCommand = this.commandDeserializer.Deserialize(model.Type, model.Command);
                 this.commandPreprocessor.PrepareDeserializedCommandForExecution(concreteCommand);
                 this.commandService.Execute(concreteCommand);
+
+                this.commandPostprocessor.ProcessCommandAfterExecution(concreteCommand);
             }
             catch (Exception e)
             {
