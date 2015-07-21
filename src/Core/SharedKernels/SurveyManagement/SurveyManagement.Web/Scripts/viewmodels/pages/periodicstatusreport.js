@@ -2,7 +2,8 @@
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
-    var dateFormat = "MM/DD/YYYY";
+
+    self.DateFormat = "MM/DD/YYYY";
 
     self.Url = new Url(window.location.href);
 
@@ -25,7 +26,7 @@
     self.GetPeriodName = function (period) {
         return ko.computed({
             read: function () {
-                return moment(period.From()).format(dateFormat) + "-" + moment(period.To()).format(dateFormat);
+                return moment(period.From()).format(self.DateFormat) + "-" + moment(period.To()).format(self.DateFormat);
             }
         }, this);
     };
@@ -40,7 +41,7 @@
         return data;
     };
     self.load = function () {
-        var todayMinus7Days = moment().add(-6, 'days').format(dateFormat);
+        var todayMinus7Days = moment().add(-6, 'days').format(self.DateFormat);
 
         self.Url.query['questionnaireId'] = self.QueryString['questionnaireId'] || "";
         self.Url.query['questionnaireVersion'] = self.QueryString['questionnaireVersion'] || "";
@@ -103,7 +104,7 @@
 
         self.Url.query['questionnaireId'] = selectedQuestionnaire.questionnaireId;
         self.Url.query['questionnaireVersion'] = selectedQuestionnaire.questionnaireVersion;
-        self.Url.query['from'] = startDate.format(dateFormat);
+        self.Url.query['from'] = startDate.format(self.DateFormat);
         self.Url.query['period'] = self.Period();
         self.Url.query['columnCount'] = self.ColumnCount();
         self.Url.query['reportType'] = self.SelectedType();
@@ -114,7 +115,7 @@
         return {
             questionnaireId: selectedQuestionnaire.questionnaireId,
             questionnaireVersion: selectedQuestionnaire.questionnaireVersion,
-            from: startDate.format(dateFormat),
+            from: startDate.format(self.DateFormat),
             period: self.Period(),
             columnCount: self.ColumnCount(),
             supervisorId: self.Url.query['supervisorId'],
