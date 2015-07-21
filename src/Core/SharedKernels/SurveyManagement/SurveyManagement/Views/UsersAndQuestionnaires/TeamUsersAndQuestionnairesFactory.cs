@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
                 TemplateId = questionnaire.QuestionnaireId,
                 TemplateName = questionnaire.Title,
                 TemplateVersion = questionnaire.Version
-            }).ToList();
+            }).OrderBy(x => x.TemplateName).ThenBy(n => n.TemplateVersion).ToList();
 
             return new TeamUsersAndQuestionnairesView
                 {
