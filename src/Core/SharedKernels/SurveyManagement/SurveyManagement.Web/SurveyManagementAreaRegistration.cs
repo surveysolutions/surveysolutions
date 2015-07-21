@@ -133,6 +133,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/viewmodels/pages/mapreport.js",
                 }
             },
+            {
+                "~/js/periodicstatusreport", new[]
+                {
+                    "~/Scripts/moment.js",
+                    "~/Scripts/components/moment-duration-format.js",
+                    "~/Scripts/bootstrap-datetimepicker.js",
+                    "~/Scripts/ko.datepicker.js",
+                    "~/Scripts/viewmodels/pages/periodicstatusreport.js"
+                }
+            },
         };
 
         public override string AreaName
