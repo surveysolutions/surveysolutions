@@ -64,14 +64,6 @@
     <MonoDroidExtraArgs />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Chance.MvvmCross.Plugins.UserInteraction">
-      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.4\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Chance.MvvmCross.Plugins.UserInteraction.Droid, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Chance.MvvmCross.Plugins.UserInteraction.1.1.4\lib\MonoAndroid\Chance.MvvmCross.Plugins.UserInteraction.Droid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
       <Private>True</Private>
@@ -257,7 +249,6 @@
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
-    <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
     <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />

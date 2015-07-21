@@ -1,8 +1,9 @@
 ﻿using System;
-using Chance.MvvmCross.Plugins.UserInteraction;
+
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.SharedKernels.DataCollection;
