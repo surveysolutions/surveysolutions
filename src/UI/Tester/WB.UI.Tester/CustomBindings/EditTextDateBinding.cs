@@ -4,7 +4,7 @@ using System.Reflection;
 using Android.App;
 using Android.Views;
 using Android.Widget;
-using Chance.MvvmCross.Plugins.UserInteraction;
+
 using Cirrious.MvvmCross.Binding.Bindings.Target;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;

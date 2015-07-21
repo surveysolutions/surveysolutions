@@ -1,5 +1,5 @@
 ﻿using System;
-using Chance.MvvmCross.Plugins.UserInteraction;
+
 using Cirrious.CrossCore;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
