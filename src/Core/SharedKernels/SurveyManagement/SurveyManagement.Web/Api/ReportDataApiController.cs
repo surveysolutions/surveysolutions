@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             QuestionnaireBrowseView questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(input);
             var result = new QuestionnaireAndVersionsView
             {
-                Items = questionnaireBrowseView.Items
+                Items = questionnaireBrowseView.Items.GroupBy(x => x.QuestionnaireId).Select(x => x.First())
                                                .Select(x => new QuestionnaireAndVersionsItem {
                                                         QuestionnaireId = x.QuestionnaireId,
                                                         Title = x.Title,
