@@ -44,7 +44,7 @@
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Services\IFriendlyMessageService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
-    <Compile Include="Services\IUserInteraction.cs" />
+    <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IViewModelNavigationService.cs" />
     <Compile Include="ViewModels\AnswerNotifier.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />

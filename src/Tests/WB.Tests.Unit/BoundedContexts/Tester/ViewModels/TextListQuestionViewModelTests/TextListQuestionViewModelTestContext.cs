@@ -22,14 +22,14 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             
-            IUserInteraction userInteraction = null)
+            IUserInteractionService userInteractionService = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
-                userInteraction ?? Mock.Of<IUserInteraction>(),
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
     }
