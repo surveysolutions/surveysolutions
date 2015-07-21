@@ -397,7 +397,7 @@
                         commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function () {
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
-                            $rootScope.$emit('questionDeleted');
+                            $rootScope.$emit('questionDeleted', itemIdToDelete);
                         });
                     }
                 });
@@ -408,7 +408,7 @@
                     .success(function () {
                         var publishDelete = function (deleted) {
                             var children = deleted.items || [];
-                            $rootScope.$emit(getItemType(deleted) + 'Deleted');
+                            $rootScope.$emit(getItemType(deleted) + 'Deleted', deleted.itemId);
                             _.each(children, function (child) {
                                 publishDelete(child);
                             });

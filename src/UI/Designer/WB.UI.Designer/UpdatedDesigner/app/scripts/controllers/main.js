@@ -128,18 +128,28 @@ angular.module('designerApp')
                 });
             };
 
+            $scope.removeItemWithIdFromErrors = function(itemId) {
+                $scope.verificationStatus.errors = _.filter($scope.verificationStatus.errors, function (item) {
+                    item.ItemId != itemId;
+                });
+                $scope.verificationStatus.errorsCount = $scope.verificationStatus.errors.length;
+            }
+
             $scope.currentChapter = null;
 
-            $rootScope.$on('groupDeleted', function () {
+            $rootScope.$on('groupDeleted', function (removedItemId) {
                 $scope.questionnaire.groupsCount--;
+                $scope.removeItemWithIdFromErrors(removedItemId);
             });
 
-            $rootScope.$on('questionDeleted', function () {
+            $rootScope.$on('questionDeleted', function (removedItemId) {
                 $scope.questionnaire.questionsCount--;
+                $scope.removeItemWithIdFromErrors(removedItemId);
             });
 
-            $rootScope.$on('rosterDeleted', function () {
+            $rootScope.$on('rosterDeleted', function (removedItemId) {
                 $scope.questionnaire.rostersCount--;
+                $scope.removeItemWithIdFromErrors(removedItemId);
             });
 
             $rootScope.$on('groupAdded', function () {
