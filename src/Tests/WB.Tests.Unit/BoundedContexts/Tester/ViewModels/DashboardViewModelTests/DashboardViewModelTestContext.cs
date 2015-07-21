@@ -1,6 +1,4 @@
-﻿using Chance.MvvmCross.Plugins.UserInteraction;
-
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;

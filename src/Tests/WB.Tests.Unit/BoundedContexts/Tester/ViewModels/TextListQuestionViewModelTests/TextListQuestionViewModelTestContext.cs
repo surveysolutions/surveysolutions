@@ -1,17 +1,13 @@
-﻿using Chance.MvvmCross.Plugins.UserInteraction;
-
-using Moq;
-
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
+﻿using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 using it = Moq.It;
 

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Chance.MvvmCross.Plugins.UserInteraction;
+
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;

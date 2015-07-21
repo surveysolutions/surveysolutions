@@ -1,4 +1,4 @@
-﻿using Chance.MvvmCross.Plugins.UserInteraction;
+﻿
 using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Infrastructure;

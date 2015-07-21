@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Chance.MvvmCross.Plugins.UserInteraction;
+
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;

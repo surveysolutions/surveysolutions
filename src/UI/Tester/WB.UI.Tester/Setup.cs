@@ -8,8 +8,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 
-using Chance.MvvmCross.Plugins.UserInteraction;
-
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
@@ -21,6 +19,8 @@ using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;

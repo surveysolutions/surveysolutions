@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Chance.MvvmCross.Plugins.UserInteraction;
+
 
 using Machine.Specifications;
 using Moq;
@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
