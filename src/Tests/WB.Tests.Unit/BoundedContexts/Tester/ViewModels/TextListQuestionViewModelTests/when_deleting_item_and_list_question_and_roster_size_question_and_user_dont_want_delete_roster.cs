@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
-            var userInteraction = new Mock<IUserInteraction>();
+            var userInteraction = new Mock<IUserInteractionService>();
 
             userInteraction
                 .Setup(x => x.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository,
                 principal: principal,
-                userInteraction: userInteraction.Object);
+                userInteractionService: userInteraction.Object);
 
             listModel.Init(interviewId, questionIdentity, navigationState);
 

@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal principal;
-        private readonly Func<IUserInteraction> userInteraction;
+        private readonly Func<IUserInteractionService> userInteraction;
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
-            Func<IUserInteraction> userInteraction,
+            Func<IUserInteractionService> userInteraction,
             AnsweringViewModel answering)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());

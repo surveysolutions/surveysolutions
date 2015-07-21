@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Tests.Unit.BoundedContexts.Tester.ViewModels.IntegerQuestionViewModelTests;
 
 using It = Machine.Specifications.It;
 
