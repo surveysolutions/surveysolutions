@@ -30,6 +30,7 @@ namespace WB.UI.Designer.Code
                  .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
 
             this.Bind<ICommandPreprocessor>().To<CommandPreprocessor>();
+            this.Bind<ICommandPostprocessor>().To<CommandPostprocessor>();
             this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();
             this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
             this.Bind<ISystemMailer>().To<SystemMailer>();

@@ -1,12 +1,15 @@
 ﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.GenericSubdomains.Utils.Rest;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
+using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
 
 namespace WB.UI.Designer
 {
@@ -37,6 +40,8 @@ namespace WB.UI.Designer
                         x.Inject<IMembershipWebUser>(),
                         x.Inject<IMembershipWebServiceUser>()))
                 .InSingletonScope();
+
+            this.Bind<IRecipientNotifier>().To<MailNotifier>().InSingletonScope();
         }
     }
 }
