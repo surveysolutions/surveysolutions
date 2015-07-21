@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Tester.Services;
 
 namespace WB.UI.Tester.CustomServices.UserInteraction
 {
-    public class UserInteractionService : IUserInteraction, IUserInteractionAwaiter
+    public class UserInteractionService : IUserInteraction
     {
         private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();

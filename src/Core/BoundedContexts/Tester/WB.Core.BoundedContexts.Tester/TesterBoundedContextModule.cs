@@ -31,7 +31,6 @@ namespace WB.Core.BoundedContexts.Tester
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<Func<IUserInteraction>>().ToMethod(context => () => Mvx.Resolve<IUserInteraction>());
-            this.Bind<IUserInteractionAwaiter>().ToMethod(context => (IUserInteractionAwaiter) Mvx.Resolve<IUserInteraction>());
             this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
 
             CommandRegistry
