@@ -9,5 +9,7 @@ namespace WB.Core.BoundedContexts.Tester.Services
         Task<bool> ConfirmAsync(string message, string title = "", string okButton = "OK", string cancelButton = "Cancel");
 
         void Alert(string message, Action done = null, string title = "", string okButton = "OK");
+
+        Task WaitPendingUserInteractionsAsync();
     }
 }
