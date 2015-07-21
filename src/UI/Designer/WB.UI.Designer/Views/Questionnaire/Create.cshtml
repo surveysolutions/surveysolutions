@@ -22,11 +22,11 @@
             @Html.CheckBoxFor(x => x.IsPublic, new { @id = "is-public-questionnaire", @class = "wb-checkbox" })
             <label for="is-public-questionnaire">
                 <span></span>Is Public
-            </label><br/>
+            </label><br />
         </div>
 
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Create"/>
+            <input type="submit" class="btn btn-success btn-lg" value="Create" id="inputSubmitQuestionnaire" />
             @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
             @Html.ActionLink("Back to List", "Index", "Questionnaire", null, new { @class = "btn " })
         </div>
@@ -35,4 +35,11 @@
 
 @section Scripts {
     @Scripts.Render("~/editform")
+    <script>
+        $(function () {
+            $('#edit-form').submit(function () {
+                $('#inputSubmitQuestionnaire').attr("disabled", true);
+                return true;
+            });
+        });</script>
 }

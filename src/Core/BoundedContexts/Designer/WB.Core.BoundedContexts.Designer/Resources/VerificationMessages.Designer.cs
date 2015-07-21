@@ -225,24 +225,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster upper bound for roster size question cannot be empty..
-        /// </summary>
-        internal static string WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty {
-            get {
-                return ResourceManager.GetString("WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Roster upper bound for roster size question must be in range [1, 40]..
-        /// </summary>
-        internal static string WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40 {
-            get {
-                return ResourceManager.GetString("WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string WB0027_QuestionnaireHaveAutopropagatedGroups {

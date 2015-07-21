@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
                 command.Email == HeadquartersUser.Email &&
                 command.IsLockedByHQ == HeadquartersUser.IsLockedByHQ &&
                 command.IsLockedBySupervisor == HeadquartersUser.IsLockedBySupervisor),
-            Moq.It.IsAny<string>()));
+            Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()));
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;

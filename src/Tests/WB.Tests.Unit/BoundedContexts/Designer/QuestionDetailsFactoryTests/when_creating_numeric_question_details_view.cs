@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
                 Instructions = instructions,
                 QuestionScope = scope,
                 IsInteger = isInteger,
-                MaxValue = maxValue,
                 CountOfDecimalPlaces = countOfDecimalPlaces
             };
 
@@ -37,9 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
 
         It should_set_CountOfDecimalPlaces_in_countOfDecimalPlaces = () =>
             questionView.CountOfDecimalPlaces.ShouldEqual(countOfDecimalPlaces);
-
-        It should_set_MaxValue_in_maxValue = () =>
-            questionView.MaxValue.ShouldEqual(maxValue);
 
         It should_set_IsInteger_in_isInteger = () =>
             questionView.IsInteger.ShouldEqual(isInteger);
@@ -103,7 +99,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
         private static QuestionDetailsViewMapper viewMapper;
         private static NumericDetailsView questionView;
         private static bool  isInteger = true;
-        private static int maxValue = 18;
         private static readonly int countOfDecimalPlaces = 9;
     }
 }

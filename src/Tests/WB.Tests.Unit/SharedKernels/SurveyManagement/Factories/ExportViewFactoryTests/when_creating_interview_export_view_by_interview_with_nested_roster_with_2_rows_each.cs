@@ -99,7 +99,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     var nestedVector = new decimal[] { i, j };
                     var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId }, null, nestedVector);
                     interview.Levels.Add(string.Join(",", nestedVector), nestedLevel);
-                    var question = nestedLevel.GetOrCreateQuestion(questionInsideRosterGroupId);
+
+                    if (!nestedLevel.QuestionsSearchCahche.ContainsKey(questionInsideRosterGroupId))
+                        nestedLevel.QuestionsSearchCahche.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
+
+                    var question = nestedLevel.QuestionsSearchCahche[questionInsideRosterGroupId];
+
                     question.Answer = "some answer";
                 }
 

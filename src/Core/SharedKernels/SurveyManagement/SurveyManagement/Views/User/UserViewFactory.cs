@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
         
         public UserView Load(UserViewInputModel input)
         {
-            Expression<Func<UserDocument, bool>> query = (x) => false;
+            Expression<Func<UserDocument, bool>> query = (x) => true;
             if (input.PublicKey != null)
             {
                 query = x => x.PublicKey == input.PublicKey;
@@ -48,7 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                             CreationDate = userDocument.CreationDate,
                             UserName = userDocument.UserName,
                             Email = userDocument.Email,
-                            IsDeleted = userDocument.IsDeleted,
                             IsLockedBySupervisor = userDocument.IsLockedBySupervisor,
                             IsLockedByHQ = userDocument.IsLockedByHQ,
                             PublicKey = userDocument.PublicKey,
@@ -57,7 +56,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
                             Supervisor = userDocument.Supervisor,
                             DeviceChangingHistory = userDocument.DeviceChangingHistory,
                             PersonName = userDocument.PersonName,
-                            PhoneNumber = userDocument.PhoneNumber
+                            PhoneNumber = userDocument.PhoneNumber,
+                            IsArchived = userDocument.IsArchived
                         }
                         : null;
                 });

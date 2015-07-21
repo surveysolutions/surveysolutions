@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return innerDocument;
         }
 
-        private static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text, int maxValue = 0, List<Guid> triggers = null)
+        private static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text)
         {
             return new QuestionChanged
                 {
@@ -102,8 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     Instructions = "Answer this question, please",
                     StataExportCaption = "name",
                     ValidationExpression = "[this]!=''",
-                    ValidationMessage = "Empty names is invalid answer",
-                    Triggers = triggers,
+                    ValidationMessage = "Empty names is invalid answer"
                 };
         }
 

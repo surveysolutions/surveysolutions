@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
 
-            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQiestionId, IsInteger = true, MaxValue = 5, StataExportCaption = "var" });
+            questionnaire.Children.Add(new NumericQuestion() { PublicKey = rosterSizeQiestionId, IsInteger = true, StataExportCaption = "var" });
             questionnaire.Children.Add(new Group()
             {
                 PublicKey = rosterGroupId,

@@ -221,7 +221,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Instructions = string.Empty,
                 Answers = null,
                 AnswerOrder = Order.AsIs,
-                Triggers = new List<Guid>(),
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = null
             });
@@ -253,7 +252,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                     Instructions = string.Empty,
                     Answers = null,
                     AnswerOrder = Order.AsIs,
-                    Triggers = new List<Guid>(),
                     ResponsibleId = responsibleId,
                     LinkedToQuestionId = null
                 });

@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 
             var commandService = Mock.Of<ICommandService>();
             Mock.Get(commandService)
-                .Setup(cs => cs.Execute(it.IsAny<ICommand>(), it.IsAny<string>()))
+                .Setup(cs => cs.Execute(it.IsAny<ICommand>(), it.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Throws(commandServiceException);
 
             var zipUtilsMock = new Mock<IStringCompressor>();

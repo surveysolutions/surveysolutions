@@ -82,7 +82,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -90,6 +90,7 @@
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
@@ -109,20 +110,23 @@
     <Compile Include="Implementation\Services\DataExport\TabFileReader.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
-    <Compile Include="Implementation\Services\SurveyManagementPreconditionsService.cs" />
+    <Compile Include="Implementation\Services\DeleteSupervisor\DeleteSupervisorService.cs" />
+    <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
+    <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
     <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
-    <Compile Include="Mappings\InterviewCommentedStatusMap.cs" />
     <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
     <Compile Include="Mappings\InterviewHistoryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
     <Compile Include="Mappings\InterviewStatusesMap.cs" />
+    <Compile Include="Mappings\InterviewStatusTimeSpansMap.cs" />
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\QuestionnaireFeedEntryMap.cs" />
     <Compile Include="Mappings\QuestionnaireSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
+    <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
     <Compile Include="Mappings\UserChangedFeedEntryMap.cs" />
     <Compile Include="Mappings\UserSyncPackageMetaMap.cs" />
     <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
@@ -130,8 +134,14 @@
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
     <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="QuartzIntegration\NinjectJobFactory.cs" />
+    <Compile Include="Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
+    <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
     <Compile Include="Services\Export\ExportDataType.cs" />
     <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
@@ -206,6 +216,7 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
     <Compile Include="Services\Sql\IExportedDataAccessor.cs" />
+    <Compile Include="Synchronization\Users\UserFeedEntryType.cs" />
     <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
     <Compile Include="ValueObjects\HealthCheck\EventStoreHealthCheckResult.cs" />
@@ -255,10 +266,11 @@
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedAction.cs" />
+    <Compile Include="Views\DataExport\InterviewExportedActionUtils.cs" />
     <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\InterviewHistory.cs" />
-    <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
@@ -306,6 +318,7 @@
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
     <Compile Include="Views\Interview\InterviewStatuses.cs" />
+    <Compile Include="Views\Interview\InterviewStatusTimeSpans.cs" />
     <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
@@ -321,6 +334,7 @@
     <Compile Include="Views\Interview\QuestionAnswer.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByDateAndTemplate.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
+    <Compile Include="Views\Interview\TimeSpanBetweenStatuses.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
     <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
@@ -340,6 +354,8 @@
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBySupervisorsReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesByInterviewersReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquartersTeamsAndStatusesReport.cs" />
@@ -354,6 +370,7 @@
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\PeriodiceReportType.cs" />
     <Compile Include="Views\Reposts\PeriodicStatusReportModel.cs" />
     <Compile Include="Views\Reposts\PeriodicStatusReportWebApiActionName.cs" />
     <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
@@ -463,6 +480,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

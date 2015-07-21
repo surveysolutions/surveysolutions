@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             {
                 PublicKey = rosterSizeQiestionId,
                 IsInteger = true,
-                MaxValue = 5,
                 StataExportCaption = "var"
             });
             questionnaire.Children.Add(new Group()

@@ -9,12 +9,11 @@ using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
 {
-    [Subject(typeof(FileSystemIOAccessor))]
     internal class when_file_name_is_null
     {
         Establish context = () =>
         {
-            fileSystemIOAccessor = new FileSystemIOAccessor();
+            fileSystemIOAccessor = Create.FileSystemIOAccessor();
         };
 
         Because of = () =>

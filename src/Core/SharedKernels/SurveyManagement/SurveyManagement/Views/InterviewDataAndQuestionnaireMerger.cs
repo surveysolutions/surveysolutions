@@ -210,8 +210,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 var question = entity as IQuestion;
                 if (question != null)
                 {
-                    InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
-
+                    var answeredQuestion = interviewLevel.QuestionsSearchCahche.ContainsKey(question.PublicKey) ? interviewLevel.QuestionsSearchCahche[question.PublicKey] : null;
+                    
                     Dictionary<string, string> answersForTitleSubstitution =
                         GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), rosterTitleFromLevel);
 
@@ -359,7 +359,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private static InterviewQuestion GetQuestion(Guid questionId, InterviewLevel currentInterviewLevel)
         {
-            return currentInterviewLevel.GetQuestion(questionId);
+            return currentInterviewLevel.QuestionsSearchCahche.ContainsKey(questionId)? currentInterviewLevel.QuestionsSearchCahche[questionId] : null;
         }
 
         private Dictionary<decimal[], string> GetAvailableOptions(Guid questionId, decimal[] questionRosterVector, InterviewData interview,
@@ -373,7 +373,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
             IDictionary<decimal[], InterviewQuestion> allLinkedQuestions =
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
-                    interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
+                interviewLevel => interviewLevel.QuestionsSearchCahche.ContainsKey(optionsSource.ReferencedQuestionId)?interviewLevel.QuestionsSearchCahche[optionsSource.ReferencedQuestionId] : null);
 
             return allLinkedQuestions.Where(question => question.Value != null && !question.Value.IsDisabled() && question.Value.Answer != null)
                 .ToDictionary(question => question.Key,

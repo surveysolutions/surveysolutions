@@ -51,11 +51,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                 ConfirmationToken = user.ConfirmationToken,
                 CreatedAt = user.CreatedAt,
                 Email = user.Email,
-                FailedPasswordAnswerWindowAttemptCount =
-                    user.FailedPasswordAnswerWindowAttemptCount,
-                FailedPasswordAnswerWindowStartedAt = user.FailedPasswordAnswerWindowStartedAt,
-                FailedPasswordWindowAttemptCount = user.FailedPasswordWindowAttemptCount,
-                FailedPasswordWindowStartedAt = user.FailedPasswordWindowStartedAt,
                 IsConfirmed = user.IsConfirmed,
                 IsLockedOut = user.IsLockedOut,
                 IsOnline = user.IsOnline,

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_never_call_SynchronizeInterviewEvents = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()), Times.Never);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
 
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;

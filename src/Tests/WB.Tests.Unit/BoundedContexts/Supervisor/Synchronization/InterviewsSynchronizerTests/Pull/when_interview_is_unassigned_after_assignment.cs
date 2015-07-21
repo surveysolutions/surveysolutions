@@ -74,11 +74,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
         Because of = () => synchronizer.PullInterviewsForSupervisors(new[] { supervisorId });
 
-        It should_should_not_create_it = () => 
-            commandServiceMock.Verify(x => x.Execute(it.IsAny<SynchronizeInterviewFromHeadquarters>(), Constants.HeadquartersSynchronizationOrigin), Times.Never);
+        It should_should_not_create_it = () =>
+            commandServiceMock.Verify(x => x.Execute(it.IsAny<SynchronizeInterviewFromHeadquarters>(), Constants.HeadquartersSynchronizationOrigin, Moq.It.IsAny<bool>()), Times.Never);
 
-        It should_unassign_interview = () => 
-            commandServiceMock.Verify(x => x.Execute(it.IsAny<CancelInterviewByHqSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+        It should_unassign_interview = () =>
+            commandServiceMock.Verify(x => x.Execute(it.IsAny<CancelInterviewByHqSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin, Moq.It.IsAny<bool>()), Times.Once);
         
         private static InterviewsSynchronizer synchronizer;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");

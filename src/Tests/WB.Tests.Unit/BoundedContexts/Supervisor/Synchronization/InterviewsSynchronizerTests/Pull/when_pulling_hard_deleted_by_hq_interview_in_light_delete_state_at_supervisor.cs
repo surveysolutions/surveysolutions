@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     x.Execute(
                         Moq.It.Is<HardDeleteInterview>(
                             _ =>
-                                _.InterviewId==interviewId && _.UserId==userId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+                                _.InterviewId==interviewId && _.UserId==userId), Constants.HeadquartersSynchronizationOrigin, false), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;

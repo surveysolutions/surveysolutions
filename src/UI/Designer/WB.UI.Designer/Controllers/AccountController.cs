@@ -1,24 +1,23 @@
-﻿using WB.Core.GenericSubdomains.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
+using System.Web.SessionState;
+using System.Web.UI;
+using Recaptcha;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Filters;
+using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Mailers;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Membership;
+using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    using System;
-    using System.Web.Mvc;
-    using System.Web.Security;
-    using System.Web.UI;
-    using Recaptcha;
-
-    using WB.UI.Designer.Extensions;
-    using WB.UI.Designer.Mailers;
-    using WB.UI.Designer.Models;
-    using WB.UI.Shared.Web.Membership;
-
-    using WebMatrix.WebData;
-
     [CustomAuthorize]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
     [RequireHttps]
@@ -26,6 +25,7 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ISystemMailer mailer;
         private readonly ILogger logger;
+        private string ShowCaptchaSessionKey = "ShowCaptchaForHim";
 
         public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger) : base(userHelper)
         {
@@ -56,24 +56,103 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Login(string returnUrl)
         {
             this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.ShowCapcha = IsCaptchaPresentOnLoginPage(null);
             return this.View(new LoginModel());
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [RecaptchaControlMvc.CaptchaValidatorAttribute]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        public ActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
         {
+            var isCapchaPresentOnLoginPage = IsCaptchaPresentOnLoginPage(model.UserName);
+
+            if (AppSettings.Instance.IsReCaptchaEnabled && isCapchaPresentOnLoginPage && !captchaValid)
+            {
+                StoreInvalidAttempt(model.UserName);
+                this.ViewBag.ShowCapcha = true;
+                this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
+                return View(model);
+            }
+
             if (this.ModelState.IsValid
                 && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
-                Response.Cookies[0].Expires = DateTime.Now.AddDays(1);
+                if (model.RememberMe)
+                {
+                    Response.Cookies[0].Expires = DateTime.Now.AddDays(1);
+                }
+
+                ResetInvalidAttemptsCount(model.UserName);
                 return this.RedirectToLocal(returnUrl);
             }
 
+            StoreInvalidAttempt(model.UserName);
+
+            this.ViewBag.ShowCapcha = IsCaptchaPresentOnLoginPage(model.UserName);
             this.Error(ErrorMessages.The_user_name_or_password_provided_is_incorrect);
             return View(model);
+        }
+
+        private void StoreInvalidAttempt(string userName)
+        {
+            var appSettings = AppSettings.Instance;
+            Queue<DateTime> existingLoginAttempts = HttpContext.Cache.Get(userName) as Queue<DateTime>;
+            if (existingLoginAttempts == null)
+            {
+                existingLoginAttempts = new Queue<DateTime>(appSettings.CountOfFailedLoginAttemptsBeforeCaptcha + 1);
+            }
+
+            existingLoginAttempts.Enqueue(DateTime.Now);
+
+            var invalidAttemptsExceededLimit = existingLoginAttempts.Count >= appSettings.CountOfFailedLoginAttemptsBeforeCaptcha;
+            var expire = DateTime.Now + appSettings.TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt;
+
+            if (invalidAttemptsExceededLimit)
+            {
+                Response.Cookies.Add(new HttpCookie(ShowCaptchaSessionKey, invalidAttemptsExceededLimit.ToString())
+                {
+                    Expires = expire
+                });
+            }
+
+            HttpContext.Cache.Insert(userName,
+                existingLoginAttempts,
+                null,
+                expire,
+                System.Web.Caching.Cache.NoSlidingExpiration);
+        }
+
+        private void ResetInvalidAttemptsCount(string userName)
+        {
+            HttpContext.Cache.Remove(userName);
+            if (Request.Cookies[ShowCaptchaSessionKey] != null)
+            {
+                Request.Cookies.Remove(ShowCaptchaSessionKey);
+                var httpCookie = new HttpCookie(ShowCaptchaSessionKey);
+                httpCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(httpCookie);
+            }
+
+            Session.Remove(ShowCaptchaSessionKey);
+        }
+
+        private bool IsCaptchaPresentOnLoginPage(string userName)
+        {
+            string showCaptchaForHim = Monads.Maybe(() => Request.Cookies[ShowCaptchaSessionKey].Value);
+            if (!string.IsNullOrEmpty(showCaptchaForHim)) return true;
+            if (string.IsNullOrEmpty(userName)) return false;
+
+            Queue<DateTime> existingLoginAttempts = HttpContext.Cache.Get(userName) as Queue<DateTime>;
+
+            if (existingLoginAttempts == null || existingLoginAttempts.Count < AppSettings.Instance.CountOfFailedLoginAttemptsBeforeCaptcha)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]

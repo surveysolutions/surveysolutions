@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId);
 
         It should_never_execute_DisableQuestionnaire_Command = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<DisableQuestionnaire>(), Moq.It.IsAny<string>()), Times.Never);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<DisableQuestionnaire>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
 
         private static DeleteQuestionnaireService deleteQuestionnaireService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

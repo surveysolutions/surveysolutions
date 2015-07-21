@@ -120,12 +120,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
         It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>
             commandServiceMock.Verify(service => 
-                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), HQSynchronizationOrigin),
+                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), HQSynchronizationOrigin, false),
                 Times.Once);
 
         It should_execute_only_one_command = () =>
             commandServiceMock.Verify(service =>
-                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()),
+                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()),
                 Times.Once);
 
         private static InterviewsSynchronizer interviewsSynchronizer;

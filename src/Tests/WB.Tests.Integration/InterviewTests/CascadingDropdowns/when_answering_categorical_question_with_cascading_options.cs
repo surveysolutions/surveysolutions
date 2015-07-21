@@ -4,7 +4,6 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -96,7 +95,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
 
-        It should_not_enable_child_question_because_it_was_already_anabled = () =>
+        It should_not_enable_child_question_because_it_was_already_enabled = () =>
            results.WasChildCascadingEnabled.ShouldBeFalse();
 
         It should_invalidate_child_question_because_it_is_mandatory = () =>

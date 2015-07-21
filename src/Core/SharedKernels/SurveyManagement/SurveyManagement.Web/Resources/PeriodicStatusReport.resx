@@ -132,6 +132,15 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Number of completed interviews</value>
   </data>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>Number of interviews approved by HQ</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>Number of interview transactions by HQ</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>Number of interview transactions by Supervisor</value>
+  </data>
   <data name="Period" xml:space="preserve">
     <value>Period</value>
   </data>
@@ -153,10 +162,55 @@
   <data name="Total" xml:space="preserve">
     <value>Total</value>
   </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>ver.</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Week</value>
+  </data>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>Average case assignment duration</value>
+  </data>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>Average HQ processing time</value>
+  </data>
+  <data name="AverageInterviewDuration" xml:space="preserve">
+    <value>Average interview duration</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>Average overall case processing time</value>
+  </data>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>Average supervisor processing time</value>
+  </data>
+  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+    <value>A time difference between the moment an interview is assigned to an interviewer and the moment when the complete button is pressed on a tablet.</value>
+  </data>
+  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+    <value>A time difference between the moment a supervisor approves a questionnaire and that questionnaire is approved or rejected on HQ.</value>
+  </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>A time difference between the moment when the first answer is recorded on a tablet and when the complete button is pressed.</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+    <value>A time difference between the first assignment and the moment when the interview is approved by HQ.</value>
+  </data>
+  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+    <value>A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire.</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+    <value>Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events.</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+    <value>Number of interviews collected by a {0} that were approved by HQ.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+    <value>Number of approvals and rejections performed by a HQ on questionnaires collected by a {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+    <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}.</value>
   </data>
 </root>

@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 {
                     PublicKey = rosterSizeQuestionId,
                     IsInteger = true,
-                    MaxValue = 4,
                     QuestionType = QuestionType.Numeric
                 },
                 new Group()

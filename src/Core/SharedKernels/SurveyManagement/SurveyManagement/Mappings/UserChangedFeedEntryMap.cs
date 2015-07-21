@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             this.Property(x => x.ChangedUserId);
             this.Property(x => x.Timestamp);
             this.Property(x => x.SupervisorId);
+            this.Property(x => x.EntryType);
         }
     }
 }

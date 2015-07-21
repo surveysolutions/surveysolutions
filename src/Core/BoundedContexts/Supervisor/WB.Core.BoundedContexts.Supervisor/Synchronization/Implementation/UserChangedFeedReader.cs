@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.headquartersPullContext.PushMessage(string.Format("Received {0} events from feed {1}", feedEntries.Count(), this.headquartersSettings.UserChangedFeedUrl));
 
                 var result = from f in feedEntries
-                    select new LocalUserChangedFeedEntry(f.Content.SupervisorId, f.Content.EntryId)
+                    select new LocalUserChangedFeedEntry(f.Content.SupervisorId, f.Content.EntryId, f.Content.EntryType)
                     {
                         Timestamp = f.Content.Timestamp,
                         ChangedUserId = f.Content.ChangedUserId,

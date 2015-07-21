@@ -14,8 +14,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         }
 
         public UserWebView(Guid publicKey, string userName, string password, string email, DateTime creationDate, 
-            IEnumerable<UserRoles> roles, bool isLockedBySupervisor, bool isLockedByHQ, UserLight supervisor, string deviceId, 
-            string personName, string phoneNumber)
+            IEnumerable<UserRoles> roles, bool isLockedBySupervisor, bool isLockedByHQ, UserLight supervisor, string deviceId,
+            string personName, string phoneNumber, bool isArchived)
         {
             this.PublicKey = publicKey;
             this.UserName = userName;
@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
             this.DeviceId = deviceId;
             this.PersonName = personName;
             this.PhoneNumber = phoneNumber;
+            this.IsArchived = isArchived;
         }
 
         public DateTime CreationDate { get; set; }
@@ -38,6 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         public bool isLockedBySupervisor { get; set; }
 
         public bool IsLockedByHQ { get; set; }
+
+        public bool IsArchived { get; set; }
 
         public string Password { get; set; }
 
@@ -75,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         public static UserWebView New()
         {
             return new UserWebView(
-                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, false, null, null, null, null);
+                Guid.Empty, null, null, null, DateTime.UtcNow, new[] { UserRoles.User }, false, false, null, null, null, null, false);
         }
     }
 }

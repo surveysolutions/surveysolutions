@@ -76,7 +76,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId.FormatGuid());
 
             item.Email = evnt.Payload.Email;
-            item.Roles = evnt.Payload.Roles.ToHashSet();
             item.Password = evnt.Payload.PasswordHash;
 
             this.SaveUser(item, evnt.EventTimeStamp);

@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             {
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
-                MaxValue = 5,
                 StataExportCaption = "var1"
             });
             questionnaire.Children.Add(new MultyOptionsQuestion()

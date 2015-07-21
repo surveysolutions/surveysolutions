@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
         Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview, responsibleId));
 
         It should_never_call_any_command =
-            () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);
+            () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null, false), Times.Never);
 
         It should_cleanup_data_for_interview =
             () => cleanUpExecutorMock.Verify(x => x.DeleteInterview(interviewId), Times.Once);

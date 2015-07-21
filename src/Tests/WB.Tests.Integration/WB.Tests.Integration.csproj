@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>c1d8f7b4</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>e18b2647</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
@@ -43,8 +43,20 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Esent.Interop, Version=1.7.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Externals\Esent.Interop.dll</HintPath>
+    <Reference Include="Esent.Collections, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.ClientAPI, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EventStore.Client.3.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.ClientAPI.Embedded">
+      <HintPath>..\..\..\packages\EventStore.Client.Embedded.3.0.1\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
@@ -77,18 +89,6 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Database">
-      <HintPath>..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Database.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
@@ -123,13 +123,23 @@
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
+    <Compile Include="EsentTests\TestStoredEntity.cs" />
+    <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
+    <Compile Include="EsentTests\when_item_removed.cs" />
+    <Compile Include="EsentTests\when_random_item_is_stored.cs" />
+    <Compile Include="EsentTests\with_esent_store.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
+    <Compile Include="EventStoreTests\when_reading_all_events.cs" />
+    <Compile Include="EventStoreTests\when_storing_event_stream.cs" />
+    <Compile Include="EventStoreTests\with_in_memory_event_store.cs" />
     <Compile Include="Execute.cs" />
+    <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_acreating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_numeric_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
@@ -144,6 +154,7 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_single_option_question_that_was_turned_on_by_numeric.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_cascading_question_depends_on_other_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_numeric_question_that_can_turn_off_cascading_chain.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
@@ -185,7 +196,6 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
-    <Compile Include="RavenMockUtils.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
@@ -197,16 +207,6 @@
     <Compile Include="InterviewTests\when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldExtensions.cs" />
-    <Compile Include="StorageTests\DocumentStoreFailedTests.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\RavenReadSideRepositoryWriterTestsContext.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_bulk_store_used.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_get_by_id_called_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_remove_called_and_cache_is_disabled.cs" />
-    <Compile Include="StorageTests\RavenReadSideRepositoryWriterTests\when_store_called_and_cache_is_disabled.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
@@ -296,8 +296,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets'))" />
   </Target>
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.0.1\build\EventStore.Client.Embedded.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

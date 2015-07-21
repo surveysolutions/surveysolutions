@@ -129,26 +129,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetReadableStatus()
         {
-            var status1 = ((IChacheableRepositoryWriter) interviewActionsDataStorage).GetReadableStatus();
-            var status2 = ((IChacheableRepositoryWriter)interviewExportedDataStorage).GetReadableStatus();
+            var status1 = ((ICacheableRepositoryWriter) interviewActionsDataStorage).GetReadableStatus();
+            var status2 = ((ICacheableRepositoryWriter)interviewExportedDataStorage).GetReadableStatus();
             return status1 + Environment.NewLine + status2;
         }
 
         public void EnableCache()
         {
-            ((IChacheableRepositoryWriter)interviewActionsDataStorage).EnableCache();
-            ((IChacheableRepositoryWriter)interviewExportedDataStorage).EnableCache();
+            ((ICacheableRepositoryWriter)interviewActionsDataStorage).EnableCache();
+            ((ICacheableRepositoryWriter)interviewExportedDataStorage).EnableCache();
         }
 
         public void DisableCache()
         {
-            ((IChacheableRepositoryWriter)interviewActionsDataStorage).DisableCache();
-            ((IChacheableRepositoryWriter)interviewExportedDataStorage).DisableCache();
+            ((ICacheableRepositoryWriter)interviewActionsDataStorage).DisableCache();
+            ((ICacheableRepositoryWriter)interviewExportedDataStorage).DisableCache();
         }
 
         public bool IsCacheEnabled
         {
-            get { return ((IChacheableRepositoryWriter) interviewActionsDataStorage).IsCacheEnabled; }
+            get { return ((ICacheableRepositoryWriter) interviewActionsDataStorage).IsCacheEnabled; }
         }
     }
 }

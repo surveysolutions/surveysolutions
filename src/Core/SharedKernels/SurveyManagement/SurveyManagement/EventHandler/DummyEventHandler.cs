@@ -3,6 +3,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.Synchronization.Documents;
+using WB.Core.Synchronization.Events.Sync;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -28,7 +30,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewDeclaredInvalid>,
-        IEventHandler<QuestionnaireAssemblyImported>
+        IEventHandler<QuestionnaireAssemblyImported>,
+        IEventHandler<TabletRegistered>, 
+        IEventHandler<TabletDocument>
     {
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
@@ -86,5 +90,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt){}
+        public void Handle(IPublishedEvent<TabletRegistered> evnt){}
+        public void Handle(IPublishedEvent<TabletDocument> evnt)
+        {
+        }
     }
 }

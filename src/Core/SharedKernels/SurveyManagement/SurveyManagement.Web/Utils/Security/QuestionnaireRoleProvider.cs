@@ -142,6 +142,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             try
             {
                 UserWebView user = this.UserViewFactory.Load(new UserWebViewInputModel(username.ToLower(), null));
+                
                 bool hasRole = user.Roles.Any(role => role.ToString().Equals(roleName));
 
                 HttpContext.Current.Items.Add(contextKey, hasRole);

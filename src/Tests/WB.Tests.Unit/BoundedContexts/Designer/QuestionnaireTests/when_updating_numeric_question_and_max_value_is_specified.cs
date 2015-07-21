@@ -15,7 +15,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("11111111111111111111111111111111");
-            maxValue = 42;
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -27,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Because of = () =>
             questionnaire.UpdateNumericQuestion(questionId, "title",
                 "var1",null, false, false, QuestionScope.Interviewer, null, null, null, null,
-                maxValue, responsibleId, true, null);
+                responsibleId, true, null);
 
         Cleanup stuff = () =>
         {
@@ -42,12 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<NumericQuestionChanged>()
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_NumericQuestionChanged_event_with_MaxAllowedValue_equal_to_specified_max_value = () =>
-            eventContext.GetSingleEvent<NumericQuestionChanged>()
-                .MaxAllowedValue.ShouldEqual(maxValue);
-
         private static EventContext eventContext;
-        private static int maxValue;
         private static Questionnaire questionnaire;
         private static Guid questionId;
         private static Guid chapterId;

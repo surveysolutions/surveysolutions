@@ -106,7 +106,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is locked.
+        ///   Looks up a localized string similar to Is locked by Supervisor.
+        /// </summary>
+        public static string IsLockedBySupervisorFieldName {
+            get {
+                return ResourceManager.GetString("IsLockedBySupervisorFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is locked by Headquarters.
         /// </summary>
         public static string IsLockedFieldName {
             get {

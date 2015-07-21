@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
 {
@@ -23,6 +24,8 @@ namespace WB.UI.Designer.Api
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
+
+        private readonly IMembershipUserService userHelper;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
@@ -35,7 +38,8 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
-            IQuestionnaireInfoFactory questionnaireInfoFactory)
+            IQuestionnaireInfoFactory questionnaireInfoFactory,
+            IMembershipUserService userHelper)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -44,13 +48,14 @@ namespace WB.UI.Designer.Api
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
 
+            this.userHelper = userHelper;
         }
 
         [HttpGet]
         [CamelCase]
         public HttpResponseMessage Get(string id)
         {
-            var questionnaireInfoView = questionnaireInfoViewFactory.Load(id);
+            var questionnaireInfoView = questionnaireInfoViewFactory.Load(id, userHelper.WebUser.UserId);
 
             if (questionnaireInfoView == null)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
@@ -38,6 +39,7 @@ namespace Main.Core.Entities.SubEntities.Question
         
         public int? CountOfDecimalPlaces { get; set; }
 
-        public int? MaxValue { get; set; }
+        [Obsolete]
+        public int? MaxValue { get { return Constants.MaxRosterRowCount; } }
     }
 }

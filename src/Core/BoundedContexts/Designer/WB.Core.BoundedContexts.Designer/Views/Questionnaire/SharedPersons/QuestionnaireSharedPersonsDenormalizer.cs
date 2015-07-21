@@ -33,7 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
                 item.SharedPersons.Add(new SharedPerson()
                 {
                     Id = evnt.Payload.PersonId,
-                    Email = evnt.Payload.Email
+                    Email = evnt.Payload.Email,
+                    ShareType = evnt.Payload.ShareType
                 });
             }
 

@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.Core.Synchronization
             commandServiceMock = new Mock<ICommandService>();
 
             commandServiceMock
-                .Setup(x => x.Execute(Moq.It.IsAny<LinkUserToDevice>(), Moq.It.IsAny<string>()))
-                .Callback((ICommand command, string origin) => linkUserToDevice = command as LinkUserToDevice);
+                .Setup(x => x.Execute(Moq.It.IsAny<LinkUserToDevice>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
+                .Callback((ICommand command, string origin, bool isBulk) => linkUserToDevice = command as LinkUserToDevice);
 
             syncManager = CreateSyncManager(commandService: commandServiceMock.Object, devices: devices);
         };

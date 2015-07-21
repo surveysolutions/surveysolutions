@@ -22,17 +22,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         public string Role { get; private set; }
         public DateTime Timestamp { get; private set; }
     }
-
-    public enum InterviewExportedAction
-    {
-        SupervisorAssigned,
-        InterviewerAssigned,
-        FirstAnswerSet,
-        Completed,
-        Restarted,
-        ApproveBySupervisor,
-        ApproveByHeadquarter,
-        RejectedBySupervisor,
-        RejectedByHeadquarter,
-    }
 }

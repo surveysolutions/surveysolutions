@@ -45,13 +45,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId).Wait();
 
         It should_once_execute_DisableQuestionnaire_Command = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<DisableQuestionnaire>(_=>_.QuestionnaireId==questionnaireId && _.QuestionnaireVersion==questionnaireVersion && _.ResponsibleId==userId), Moq.It.IsAny<string>()), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<DisableQuestionnaire>(_ => _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion && _.ResponsibleId == userId), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once);
 
         It should_once_execute_DeleteQuestionnaire_Command = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<DeleteQuestionnaire>(_ => _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion && _.ResponsibleId == userId), Moq.It.IsAny<string>()), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<DeleteQuestionnaire>(_ => _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion && _.ResponsibleId == userId), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once);
 
         It should_once_execute_HardDeleteInterview_Command = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<HardDeleteInterview>(_ => _.InterviewId == interviewId && _.UserId == userId), Moq.It.IsAny<string>()), Times.Once);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.Is<HardDeleteInterview>(_ => _.InterviewId == interviewId && _.UserId == userId), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once);
 
 
         It should_once_call_DeleteQuestionnaireDocument = () =>

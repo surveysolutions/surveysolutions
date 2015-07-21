@@ -1,5 +1,6 @@
 using System;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
 {
@@ -7,7 +8,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
     {
         public QuantityByInterviewersReportInputModel()
         {
-            this.InterviewStatus = InterviewStatus.Completed;
+            this.InterviewStatuses = new InterviewExportedAction[0];
         }
 
         public Guid SupervisorId { get; set; }
@@ -16,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels
         public long QuestionnaireVersion { get; set; }
         public string Period { get; set; }
         public int ColumnCount { get; set; }
-        public InterviewStatus InterviewStatus { get; set; }
+        public InterviewExportedAction[] InterviewStatuses { get; set; }
+        public PeriodiceReportType ReportType { get; set; }
     }
 }

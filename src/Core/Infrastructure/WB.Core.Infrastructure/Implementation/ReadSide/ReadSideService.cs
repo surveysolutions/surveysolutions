@@ -457,11 +457,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
                .Distinct()
                .ToArray();
 
-            foreach (IChacheableRepositoryWriter writer in writers)
+            foreach (ICacheableRepositoryWriter writer in writers)
             {
                 writer.EnableCache();
             }
@@ -473,11 +473,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Disabling cache in repository writers.");
 
-            var writers = handlers.SelectMany(x => x.Writers.OfType<IChacheableRepositoryWriter>())
+            var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
              .Distinct()
              .ToArray();
 
-            foreach (IChacheableRepositoryWriter writer in writers)
+            foreach (ICacheableRepositoryWriter writer in writers)
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",

@@ -18,13 +18,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
 
-            Set(x => x.InterviewCommentedStatuses, set =>
+            List(x => x.InterviewCommentedStatuses, listMap =>
             {
-                set.Key(key => key.Column("InterviewId"));
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                listMap.Table("InterviewCommentedStatuses");
+                listMap.Index(index => index.Column("Position"));
+                listMap.Key(keyMap =>
+                {
+                    keyMap.Column(clm =>
+                    {
+                        clm.Name("InterviewId");
+                        clm.Index("InterviewStatuseses_InterviewCommentedStatuses");
+                    });
+                });
+                listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
             },
-                relation => relation.OneToMany());
+                rel =>
+                {
+                    rel.Component(cmp =>
+                    {
+                        cmp.Property(x => x.Id);
+                        cmp.Property(x => x.SupervisorId);
+                        cmp.Property(x => x.InterviewerId);
+                        cmp.Property(x => x.StatusChangeOriginatorId);
+                        cmp.Property(x => x.Timestamp);
+                        cmp.Property(x => x.StatusChangeOriginatorName);
+                        cmp.Property(x => x.Status);
+                        cmp.Property(x => x.Comment);
+                        cmp.Property(x => x.TimeSpanWithPreviousStatus);
+                        cmp.Property(x => x.SupervisorName);
+                        cmp.Property(x => x.InterviewerName);
+                    });
+                });
         }
     }
 }

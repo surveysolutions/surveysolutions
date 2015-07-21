@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 
         private static IQueryable<UserDocument> ApplyFilter(IQueryable<UserDocument> _, UserListViewInputModel input)
         {
-            var allUsers = _.Where(x => x.Roles.Contains(input.Role));
+            var allUsers = _.Where(x =>x.IsArchived==input.Archived && x.Roles.Contains(input.Role));
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 allUsers = allUsers.Where(x => x.UserName.Contains(input.SearchBy) || x.Email.Contains(input.SearchBy));

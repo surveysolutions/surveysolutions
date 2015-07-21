@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.UI.Shared.Web.CommandDeserialization;
 
@@ -37,6 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
 
                         { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
                         { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },
+                        { "ArchiveUserCommad", typeof ( ArchiveUserCommad) },
+                        { "UnarchiveUserCommand", typeof ( UnarchiveUserCommand) }
                     };
             }
         }
