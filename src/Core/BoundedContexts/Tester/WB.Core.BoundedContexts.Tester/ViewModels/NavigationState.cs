@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     {
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IUserInteractionAwaiter userInteractionAwaiter;
+        private readonly IUserInteraction userInteractionAwaiter;
 
         protected NavigationState()
         {
@@ -27,15 +27,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
 
-        protected NavigationState(IUserInteractionAwaiter userInteractionAwaiter)
+        protected NavigationState(IUserInteraction userInteractionAwaiter)
         {
             this.userInteractionAwaiter = userInteractionAwaiter;
         }
 
         public NavigationState(
             ICommandService commandService, 
-            IStatefulInterviewRepository interviewRepository, 
-            IUserInteractionAwaiter userInteractionAwaiter)
+            IStatefulInterviewRepository interviewRepository,
+            IUserInteraction userInteractionAwaiter)
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;
