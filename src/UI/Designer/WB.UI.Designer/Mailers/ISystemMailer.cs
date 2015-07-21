@@ -11,27 +11,14 @@ namespace WB.UI.Designer.Mailers
     {
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The confirmation email.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="MvcMailMessage"/>.
-        /// </returns>
         MvcMailMessage ConfirmationEmail(EmailConfirmationModel model);
-
-        /// <summary>
-        /// The reset password email.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="MvcMailMessage"/>.
-        /// </returns>
         MvcMailMessage ResetPasswordEmail(EmailConfirmationModel model);
+
+        MvcMailMessage GetShareNotificationEmail(SharingNotificationModel model);
+        MvcMailMessage GetStopShareNotificationEmail(SharingNotificationModel model);
+
+        MvcMailMessage GetOwnerShareNotificationEmail(SharingNotificationModel model);
+        MvcMailMessage GetOwnerStopShareNotificationEmail(SharingNotificationModel model);
 
         #endregion
     }

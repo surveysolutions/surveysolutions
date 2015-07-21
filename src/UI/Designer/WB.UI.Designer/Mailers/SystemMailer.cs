@@ -65,6 +65,56 @@ namespace WB.UI.Designer.Mailers
                     });
         }
 
+        public MvcMailMessage GetShareNotificationEmail(SharingNotificationModel model)
+        {
+            this.ViewData.Model = model;
+            var message = this.Populate(
+                x =>
+                {
+                    x.Subject = "Questionnaire sharing notification";
+                    x.ViewName = "TargetPersonShareNotification";
+                    x.To.Add(model.Email);
+                });
+
+            return message;
+        }
+
+        public MvcMailMessage GetStopShareNotificationEmail(SharingNotificationModel model)
+        {
+            this.ViewData.Model = model;
+            return this.Populate(
+                x =>
+                {
+                    x.Subject = "Questionnaire stop sharing notification";
+                    x.ViewName = "TargetPersonStopShareNotification";
+                    x.To.Add(model.Email);
+                });
+        }
+
+        public MvcMailMessage GetOwnerShareNotificationEmail(SharingNotificationModel model)
+        {
+            this.ViewData.Model = model;
+            return this.Populate(
+                x =>
+                {
+                    x.Subject = "Your questionnaire sharing notification";
+                    x.ViewName = "OwnerShareNotification";
+                    x.To.Add(model.Email);
+                });
+        }
+
+        public MvcMailMessage GetOwnerStopShareNotificationEmail(SharingNotificationModel model)
+        {
+            this.ViewData.Model = model;
+            return this.Populate(
+                x =>
+                {
+                    x.Subject = "Your questionnaire stop sharing notification";
+                    x.ViewName = "OwnerStopShareNotification";
+                    x.To.Add(model.Email);
+                });
+        }
+
         #endregion
     }
 }

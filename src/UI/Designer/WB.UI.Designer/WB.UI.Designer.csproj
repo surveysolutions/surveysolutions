@@ -239,7 +239,12 @@
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
+    <Compile Include="Code\ICommandPostprocessor.cs" />
+    <Compile Include="Code\Implementation\CommandPostprocessor.cs" />
+    <Compile Include="Code\Implementation\MailNotifier.cs" />
+    <Compile Include="Code\IRecipientNotifier.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
+    <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1174,6 +1179,10 @@
     <Content Include="UpdatedDesigner\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
+    <Content Include="Views\SystemMailer\TargetPersonShareNotification.cshtml" />
+    <Content Include="Views\SystemMailer\TargetPersonStopShareNotification.cshtml" />
+    <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
+    <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
