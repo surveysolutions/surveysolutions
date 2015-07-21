@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -92,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
 
-        private static readonly Regex VariableNameRegex = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
+        private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
@@ -118,8 +119,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
                     Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
-                    Verifier<IQuestion>(RosterSizeQuestionMaxValueCouldNotBeEmpty, "WB0025", VerificationMessages.WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty),
-                    Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetNumericQuestionRosterSizeQuestionMaxValue), "WB0026", VerificationMessages.WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40),
                     Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMultyOptionRosterSizeOptionCountWhenMaxAllowedAnswersIsEmpty), "WB0099", VerificationMessages.WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options),
                     Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And40(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40),
                     Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
@@ -429,7 +428,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            return keywordsProvider.GetAllReservedKeywords().Contains(question.StataExportCaption);
+            return question.StataExportCaption != null && keywordsProvider.GetAllReservedKeywords().Contains(question.StataExportCaption.ToLower());
         }
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
@@ -437,8 +436,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterGroup(roster))
                 return false;
 
-            var keywords = keywordsProvider.GetAllReservedKeywords();
-            return keywords.Contains(roster.VariableName);
+            return roster.VariableName != null && keywordsProvider.GetAllReservedKeywords().Contains(roster.VariableName.ToLower());
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
@@ -614,31 +612,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.FixedRosterTitles.Length > 40;
-        }
-
-        private static bool RosterSizeQuestionMaxValueCouldNotBeEmpty(IQuestion question, QuestionnaireDocument questionnaire)
-        {
-            return IsRosterSizeQuestion(question, questionnaire)
-                && IsQuestionAllowedToBeRosterSizeSource(question)
-                && IsMaxValueMissing(question);
-        }
-
-        private static int? GetNumericQuestionRosterSizeQuestionMaxValue(IQuestion question)
-        {
-            var integerQuestion = question as INumericQuestion;
-            if (integerQuestion != null)
-                return integerQuestion.IsInteger
-                    ? integerQuestion.MaxValue
-                    : null;
-
-            return null;
+            return group.FixedRosterTitles.Length > SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount;
         }
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options(IQuestion question)
         {
             var multyOptionQuestion = question as IMultyOptionsQuestion;
-            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count>40)
+            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount)
                 return multyOptionQuestion.MaxAllowedAnswers;
             return null;
         }
@@ -660,7 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var rosterSizeQuestionMaxValue = getRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
-            return !Enumerable.Range(1, 40).Contains(rosterSizeQuestionMaxValue.Value);
+            return !Enumerable.Range(1, SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
@@ -1462,16 +1442,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var rosterSizeQuestionIds =
                 questionnaire.Find<IGroup>(IsRosterByQuestion).Select(group => group.RosterSizeQuestionId);
             return rosterSizeQuestionIds.Contains(question.PublicKey);
-        }
-
-        private static bool IsMaxValueMissing(IQuestion question)
-        {
-            var integerQuestion = question as INumericQuestion;
-
-            if (integerQuestion != null && integerQuestion.IsInteger)
-                return !integerQuestion.MaxValue.HasValue;
-            else
-                return false;
         }
 
         private static IQuestion GetRosterSizeQuestionByRosterGroup(IGroup group, QuestionnaireDocument questionnaire)

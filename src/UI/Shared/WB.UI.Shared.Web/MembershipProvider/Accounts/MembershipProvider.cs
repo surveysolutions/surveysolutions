@@ -353,13 +353,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
 
         public override DateTime GetLastPasswordFailureDate(string userName)
         {
-            IMembershipAccount user = this.AccountRepository.Get(userName);
-            if (user == null)
-            {
-                return DateTime.MinValue;
-            }
-
-            return user.FailedPasswordWindowStartedAt;
+            return DateTime.MinValue;
         }
 
         public override int GetNumberOfUsersOnline()
@@ -396,13 +390,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
 
         public override int GetPasswordFailuresSinceLastSuccess(string userName)
         {
-            IMembershipAccount user = this.AccountRepository.Get(userName);
-            if (user == null)
-            {
-                return 0;
-            }
-
-            return user.FailedPasswordWindowAttemptCount;
+            return 0;
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
@@ -514,10 +502,6 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             }
 
             user.IsLockedOut = false;
-            user.FailedPasswordAnswerWindowAttemptCount = 0;
-            user.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue;
-            user.FailedPasswordWindowAttemptCount = 0;
-            user.FailedPasswordWindowStartedAt = DateTime.MinValue;
             this.AccountRepository.Update(user, MembershipEventType.UnlockUser);
             return true;
         }
@@ -542,27 +526,8 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             if (validated)
             {
                 account.LastLoginAt = DateTime.Now;
-                account.FailedPasswordWindowStartedAt = DateTime.MinValue;
-                account.FailedPasswordWindowAttemptCount = 0;
                 this.AccountRepository.Update(account, MembershipEventType.UserValidated);
                 return true;
-            }
-            else
-            {
-                if (account.FailedPasswordWindowAttemptCount > this.PasswordPolicy.MaxInvalidPasswordAttempts)
-                {
-                    this.LockUser(account);
-                }
-                else
-                {
-                    account.FailedPasswordWindowAttemptCount += 1;
-                    if (account.FailedPasswordWindowStartedAt == DateTime.MinValue)
-                    {
-                        account.FailedPasswordAnswerWindowStartedAt = DateTime.Now;
-                    }
-
-                    this.AccountRepository.Update(account, MembershipEventType.FailedLogin);
-                }
             }
 
             return false;

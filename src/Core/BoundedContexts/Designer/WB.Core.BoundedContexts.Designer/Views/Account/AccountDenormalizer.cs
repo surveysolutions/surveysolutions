@@ -104,9 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         Email = @event.Payload.Email, 
                         ConfirmationToken = @event.Payload.ConfirmationToken, 
                         ApplicationName = @event.Payload.ApplicationName, 
-                        CreatedAt = @event.Payload.CreatedDate, 
-                        FailedPasswordAnswerWindowAttemptCount = 0, 
-                        FailedPasswordWindowAttemptCount = 0
+                        CreatedAt = @event.Payload.CreatedDate
                     }, 
                 @event.EventSourceId);
         }
@@ -116,10 +114,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.IsLockedOut = false;
-            item.FailedPasswordAnswerWindowAttemptCount = 0;
-            item.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue;
-            item.FailedPasswordWindowAttemptCount = 0;
-            item.FailedPasswordWindowStartedAt = DateTime.MinValue;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -139,8 +133,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.LastLoginAt = @event.Payload.LastLoginAt;
-            item.FailedPasswordWindowStartedAt = DateTime.MinValue;
-            item.FailedPasswordWindowAttemptCount = 0;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -164,8 +156,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.FailedPasswordWindowStartedAt = @event.Payload.FailedPasswordWindowStartedAt;
-            item.FailedPasswordWindowAttemptCount += 1;
             this._accounts.Store(item, @event.EventSourceId);
         }
 

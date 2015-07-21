@@ -24,15 +24,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 {
                     PublicKey = rosterSizeQuestionId,
                     StataExportCaption = "var1",
-                    IsInteger = true,
-                    MaxValue = 5
+                    IsInteger = true
                 },
                 new NumericQuestion
                 {
                     PublicKey = rosterSizeQuestionForChildRoster1Id,
                     StataExportCaption = "var2",
-                    IsInteger = true,
-                    MaxValue = 5
+                    IsInteger = true
                 },
                 new Group
                 {
@@ -52,8 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                                 {
                                     PublicKey = rosterSizeQuestionWithInvalidRosterLevelId,
                                     StataExportCaption = "var3",
-                                    IsInteger = true,
-                                    MaxValue = 5
+                                    IsInteger = true
                                 },
                                 new Group
                                 {

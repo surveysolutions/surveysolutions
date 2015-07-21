@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 
                 // act
-                questionnaire.AddSharedPerson(personId, email, responsibleId);
+                questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
 
                 // assert
                 var evt = GetSingleEvent<SharedPersonToQuestionnaireAdded>(eventContext);
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 
                 // act
-                questionnaire.AddSharedPerson(personId, string.Empty, responsibleId);
+                questionnaire.AddSharedPerson(personId, string.Empty, ShareType.Edit, responsibleId);
                 questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
 
                 // assert
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             
             // act
-            TestDelegate act = () => questionnaire.AddSharedPerson(responsibleId, email, responsibleId);
+            TestDelegate act = () => questionnaire.AddSharedPerson(responsibleId, email, ShareType.Edit, responsibleId);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.OwnerCannotBeInShareList));
@@ -90,8 +91,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            questionnaire.AddSharedPerson(personId, email, responsibleId);
-            TestDelegate act = () => questionnaire.AddSharedPerson(personId, email, responsibleId);
+            questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
+            TestDelegate act = () => questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserExistInShareList));

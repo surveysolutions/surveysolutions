@@ -56,7 +56,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             foreach (var answeredQuestion in answeredQuestions)
             {
-                var nestedQuestion = rosterLevel.GetOrCreateQuestion(answeredQuestion.Key);
+                if (!rosterLevel.QuestionsSearchCahche.ContainsKey(answeredQuestion.Key))
+                    rosterLevel.QuestionsSearchCahche.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
+
+                var nestedQuestion = rosterLevel.QuestionsSearchCahche[answeredQuestion.Key];
                 nestedQuestion.Answer = answeredQuestion.Value;
             }
 

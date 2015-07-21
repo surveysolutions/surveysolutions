@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.SyncPackageRestoreServiceTests
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewSynchronizationDto>("some string")).Returns(interviewSynchronizationDto);
 
             commandServiceMock = new Mock<ICommandService>();
-            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewCommand>(), null)).Throws<NullReferenceException>();
+            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewCommand>(), null, false)).Throws<NullReferenceException>();
             syncPackageRestoreService = CreateSyncPackageRestoreService(capiSynchronizationCacheServiceMock.Object, jsonUtilsMock.Object, commandServiceMock.Object);
         };
         Because of = () =>

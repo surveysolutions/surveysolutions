@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -483,6 +482,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(AnswersRemoved @event)
         {
             this.interviewState.RemoveAnswers(@event.Questions);
+
+            foreach (var identity in @event.Questions)
+            {
+                this.ExpressionProcessorStatePrototype.RemoveAnswer(identity.Id, identity.RosterVector);
+            }
         }
 
         public InterviewState CreateSnapshot()
@@ -553,11 +557,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>(); }
         }
 
-        private IInterviewPreconditionsService InterviewPreconditionsService
-        {
-            get { return ServiceLocator.Current.GetInstance<IInterviewPreconditionsService>(); }
-        }
-
         #endregion
 
         #region .ctors
@@ -594,8 +593,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewWithPreloadedData(Guid questionnaireId, long version, PreloadedDataDto preloadedData, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, version);
 
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
@@ -660,8 +657,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -711,8 +706,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewForTesting(Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, GetQuestionnaireOrThrow(questionnaireId).Version);
 
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(questionnaireId);
@@ -766,8 +759,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewOnClient(Guid questionnaireId, long? questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, (questionnaireVersion.HasValue
                     ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
                     : GetQuestionnaireOrThrow(questionnaireId)).Version);
@@ -810,8 +801,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
             GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
@@ -826,16 +815,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : this(() => questionnaireId, () => questionnaireVersion, id)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : this(() => interviewDto.QuestionnaireId, () => interviewDto.QuestionnaireVersion, id)
         {
-            this.ThrowIfInterviewCountLimitReached();
-
             this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
         }
 
@@ -1840,7 +1825,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                ThrowIfInterviewCountLimitReached();
                 this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             }
             else
@@ -2239,7 +2223,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
             {
-                ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
                 ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
             }
@@ -2272,14 +2255,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
-            ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+            this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            {
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Length, questionnaire);
+            }
+
             if (applyStrongChecks)
             {
-                ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
+                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
             }
         }
 
@@ -2296,36 +2285,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, decimal[] rosterVector, int answer, IQuestionnaire questionnaire,
             Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
+
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            {
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answer, questionnaire);
+            }
+
             if (applyStrongChecks)
             {
-                ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-
-                if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
-                {
-                    ThrowIfRosterSizeAnswerIsNegative(questionId, answer, questionnaire);
-                }
+                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
             }
         }
 
         private void CheckTextListInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
         {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
 
+            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
+            {
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answers.Length, questionnaire);
+            }
+
             if (applyStrongChecks)
             {
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-                ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
-                ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
+                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                this.ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
+                this.ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
-                ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+                this.ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
             }
         }
 
@@ -3142,14 +3136,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region ThrowIfs
 
-        private void ThrowIfInterviewCountLimitReached()
-        {
-            if (this.InterviewPreconditionsService.GetInterviewsCountAllowedToCreateUntilLimitReached() <= 0)
-                throw new InterviewException(string.Format("Max number of interviews '{0}' is reached.",
-                    this.InterviewPreconditionsService.GetMaxAllowedInterviewsCount()),
-                    InterviewDomainExceptionType.InterviewLimitReached);
-        }
-
         private void ThrowIfInterviewWasCompleted()
         {
             if (this.wasCompleted)
@@ -3392,29 +3378,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private void ThrowIfNumericAnswerExceedsMaxValue(Guid questionId, decimal answer, IQuestionnaire questionnaire)
+        private void ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(Guid questionId, int answer,
+            IQuestionnaire questionnaire)
         {
-            int? maxValue = questionnaire.GetMaxValueForNumericQuestion(questionId);
-
-            if (!maxValue.HasValue)
-                return;
-
-            bool answerExceedsMaxValue = answer > maxValue.Value;
-
-            if (answerExceedsMaxValue)
+            if (answer < 0)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because answer is greater than Roster upper bound '{2}'. InterviewId: {3}",
-                    answer, FormatQuestionForException(questionId, questionnaire), maxValue.Value, EventSourceId));
-        }
-
-        private void ThrowIfRosterSizeAnswerIsNegative(Guid questionId, int answer, IQuestionnaire questionnaire)
-        {
-            bool answerIsNegative = answer < 0;
-
-            if (answerIsNegative)
-                throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster group and specified answer is negative. InterviewId: {2}",
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {2}",
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
+
+            var maxRosterRowCount = questionnaire.GetMaxRosterRowCount();
+            if (answer > maxRosterRowCount)
+                throw new InterviewException(string.Format(
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater then {3}. InterviewId: {2}",
+                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId, maxRosterRowCount));
         }
 
         private void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)

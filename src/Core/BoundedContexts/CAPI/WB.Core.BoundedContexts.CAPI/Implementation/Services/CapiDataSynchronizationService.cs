@@ -72,8 +72,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                     user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor, 
                     user.PersonName, user.PhoneNumber);
             else
-                userCommand = new ChangeUserCommand(user.PublicKey, user.Email,
-                    user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, user.PersonName, user.PhoneNumber,Guid.Empty);
+                userCommand = new ChangeUserCommand(user.PublicKey, user.Email, user.IsLockedBySupervisor, user.IsLockedByHQ, user.Password, user.PersonName, user.PhoneNumber,Guid.Empty);
 
             this.commandService.Execute(userCommand);
         }

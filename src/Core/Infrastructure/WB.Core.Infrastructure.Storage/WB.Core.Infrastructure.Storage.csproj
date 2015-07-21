@@ -101,14 +101,6 @@
     <Reference Include="Npgsql">
       <HintPath>..\..\..\..\packages\Npgsql.2.2.4.3\lib\net45\Npgsql.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Database.3.0.3528\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -164,25 +156,6 @@
     <Compile Include="Postgre\PostgresPlainStorageModule.cs" />
     <Compile Include="Postgre\PostgresPlainStorageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Raven\Implementation\DocumentStoreProvider.cs" />
-    <Compile Include="Raven\Implementation\FileStoreProvider.cs" />
-    <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
-    <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
-    <Compile Include="Raven\Implementation\PropertiesOnlyContractResolver.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenDataStoreRepositoryAccessor.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryAccessor.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryIndexAccessor.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryReader.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriter.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriterSettings.cs" />
-    <Compile Include="Raven\Implementation\ReadSide\RepositoryAccessors\ReadSideCleaner.cs" />
-    <Compile Include="Raven\PlainStorage\IRavenPlainStorageProvider.cs" />
-    <Compile Include="Raven\RavenConnectionSettings.cs" />
-    <Compile Include="Raven\RavenExtensions.cs" />
-    <Compile Include="Raven\RavenInfrastructureModule.cs" />
-    <Compile Include="Raven\RavenPlainStorageInfrastructureModule.cs" />
-    <Compile Include="Raven\RavenReadSideInfrastructureModule.cs" />
-    <Compile Include="Raven\StoredEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

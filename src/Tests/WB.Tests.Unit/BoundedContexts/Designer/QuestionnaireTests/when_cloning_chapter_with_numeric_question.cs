@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 StataExportCaption = variableName,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 Featured = isPrefilled,
-                MaxAllowedValue = maxAllowedValue,
                 IsInteger = isInteger,
                 QuestionScope = questionScope,
                 ValidationExpression = validationExpression,
@@ -89,9 +88,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_NumericQuestionCloned_event_Featured_be_equal_isPrefilled = () =>
             eventContext.GetSingleEvent<NumericQuestionCloned>().Featured.ShouldEqual(isPrefilled);
 
-        It should_NumericQuestionCloned_event_MaxAllowedValue_be_equal_maxAllowedValue = () =>
-            eventContext.GetSingleEvent<NumericQuestionCloned>().MaxAllowedValue.ShouldEqual(maxAllowedValue);
-
         It should_NumericQuestionCloned_event_QuestionScope_be_equal_questionScope = () =>
             eventContext.GetSingleEvent<NumericQuestionCloned>().QuestionScope.ShouldEqual(questionScope);
 
@@ -122,7 +118,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static int? countOfDecimalPlaces = 5;
         private static bool isPrefilled = true;
         private static bool isInteger = true;
-        private static int? maxAllowedValue = 10;
         private static QuestionScope questionScope = QuestionScope.Interviewer;
         private static string validationExpression = "validation expression";
         private static string validationMessage = "validation message";

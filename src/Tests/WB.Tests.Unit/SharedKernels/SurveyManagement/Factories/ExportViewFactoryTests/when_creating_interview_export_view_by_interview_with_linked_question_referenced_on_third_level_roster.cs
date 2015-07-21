@@ -61,7 +61,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 });
 
             interview = CreateInterviewData();
-            var textListQuestion = interview.Levels["#"].GetOrCreateQuestion(linkedQuestionId);
+
+            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(linkedQuestionId))
+                interview.Levels["#"].QuestionsSearchCahche.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
+
+            var textListQuestion = interview.Levels["#"].QuestionsSearchCahche[linkedQuestionId];
+
             textListQuestion.Answer = new decimal[] { 0, 0 };
             exportViewFactory = CreateExportViewFactory();
         };

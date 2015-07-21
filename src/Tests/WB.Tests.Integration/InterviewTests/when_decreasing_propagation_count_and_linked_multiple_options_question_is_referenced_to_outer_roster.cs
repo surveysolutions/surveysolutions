@@ -38,8 +38,7 @@ namespace WB.Tests.Integration.InterviewTests
                             {
                                 PublicKey = numericQuestionId,
                                 IsInteger = true,
-                                QuestionType = QuestionType.Numeric,
-                                MaxValue = 10,
+                                QuestionType = QuestionType.Numeric
                             },
                             new Group
                             {

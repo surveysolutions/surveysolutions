@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 PublicKey = rosterSizeQuestionId,
                 GroupPublicKey = chapterId,
                 QuestionText = rosterSizeQuestionTitle,
-                MaxAllowedValue = rosterSizeMaxAllowedValue,
                 IsInteger = isRosterSizeQuestionInteger
             });
             questionnaire.Apply(new NewGroupAdded()
@@ -107,9 +106,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_NumericQuestionCloned_event_question_text_be_equal_to_rosterSizeQuestionTitle = () =>
             eventContext.GetSingleEvent<NumericQuestionCloned>().QuestionText.ShouldEqual(rosterSizeQuestionTitle);
 
-        It should_NumericQuestionCloned_event_max_allowed_value_be_equal_to_rosterSizeMaxAllowedValue = () =>
-            eventContext.GetSingleEvent<NumericQuestionCloned>().MaxAllowedValue.ShouldEqual(rosterSizeMaxAllowedValue);
-
         It should_NumericQuestionCloned_event_is_integer_be_equal_to_isRosterSizeQuestionInteger = () =>
             eventContext.GetSingleEvent<NumericQuestionCloned>().IsInteger.ShouldEqual(isRosterSizeQuestionInteger);
 
@@ -140,7 +136,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string rosterTitle = "roster title";
         private static string rosterTitleQuestionTitle = "roster title question title";
         private static string rosterSizeQuestionTitle = "roster size question title";
-        private static int rosterSizeMaxAllowedValue = 5;
         private static bool isRosterSizeQuestionInteger = true;
         private static int targetIndex = 0;
         private static EventContext eventContext;

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         Because of =
           () =>
               parseResult =
-                  questionDataParser.TryParse("22",
+                  questionDataParser.TryParse("22",questionVarName,
                       question, CreateQuestionnaireDocumentWithOneChapter(question), out parsedValue);
 
         It should_return_OK = () => parseResult.ShouldEqual(ValueParsingResult.OK);

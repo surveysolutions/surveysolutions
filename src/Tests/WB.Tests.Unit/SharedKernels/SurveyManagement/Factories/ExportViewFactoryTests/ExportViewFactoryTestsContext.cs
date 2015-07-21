@@ -72,8 +72,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var interviewData = CreateInterviewData();
             foreach (var questionsWithAnswer in questionsWithAnswers)
             {
-                var question =
-                    interviewData.Levels["#"].GetOrCreateQuestion(questionsWithAnswer);
+                if (!interviewData.Levels["#"].QuestionsSearchCahche.ContainsKey(questionsWithAnswer))
+                    interviewData.Levels["#"].QuestionsSearchCahche.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
+
+                var question = interviewData.Levels["#"].QuestionsSearchCahche[questionsWithAnswer]; 
+                
                 question.Answer = "some answer";
             }
             return interviewData;

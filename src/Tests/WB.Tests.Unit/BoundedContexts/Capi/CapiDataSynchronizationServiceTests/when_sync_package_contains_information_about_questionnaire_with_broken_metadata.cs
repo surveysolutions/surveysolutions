@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                         x.Execute(
                             Moq.It.Is<RegisterPlainQuestionnaire>(
                                 param =>
-                                    param.QuestionnaireId == questionnaireDocument.PublicKey && param.Version == Moq.It.IsAny<long>()), null),
+                                    param.QuestionnaireId == questionnaireDocument.PublicKey && param.Version == Moq.It.IsAny<long>()), null, false),
                     Times.Never);
 
         It should_not_store_questionnaire_in_pline_storage =

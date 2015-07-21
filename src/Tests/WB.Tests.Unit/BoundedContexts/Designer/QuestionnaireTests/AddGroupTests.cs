@@ -99,6 +99,29 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
+        [TestCase(Propagate.None)]
+        [TestCase(Propagate.AutoPropagated)]
+        public void NewAddGroup_When_User_In_Readonly_mode_Questionnaire_Then_DomainException_should_be_thrown(Propagate supportedPopagationKind)
+        {
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
+            var readOnlyUser = Guid.NewGuid();
+            questionnaire.Apply(new SharedPersonToQuestionnaireAdded()
+            {
+                PersonId = readOnlyUser,
+                ShareType = ShareType.View
+            });
+            // act
+            TestDelegate act =
+                () =>
+                    questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: readOnlyUser, title: "Title", variableName: null, rosterSizeQuestionId: null,
+                        description: null, condition: null, parentGroupId: null, isRoster: false,
+                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+        }
+
         [Test]
         public void NewAddGroup_When_Group_Have_Condition_With_Reference_To_Existing_Question_Variable_Then_DomainException_should_NOT_be_thrown()
         {

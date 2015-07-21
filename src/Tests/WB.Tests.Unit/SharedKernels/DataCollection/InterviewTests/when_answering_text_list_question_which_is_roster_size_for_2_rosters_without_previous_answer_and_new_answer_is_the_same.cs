@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,6 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                 => _.HasQuestion(textListQuestionId) == true
                     && _.GetQuestionType(textListQuestionId) == QuestionType.TextList
+                    && _.GetMaxRosterRowCount() == Constants.MaxRosterRowCount
                     && _.ShouldQuestionSpecifyRosterSize(textListQuestionId) == true
                     && _.GetListSizeForListQuestion(textListQuestionId) == 10
                     && _.GetRosterGroupsByRosterSizeQuestion(textListQuestionId) == new[] { rosterAId, rosterBId }

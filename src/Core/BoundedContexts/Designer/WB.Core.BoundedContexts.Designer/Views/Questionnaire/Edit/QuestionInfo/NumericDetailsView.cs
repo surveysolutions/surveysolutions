@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         public bool IsInteger { get; set; }
-        public int? MaxValue { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public override QuestionType Type { get; set; }
     }

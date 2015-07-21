@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             syncPackagesProcessor.ProcessNextSyncPackage();
 
         It should_SynchronizeInterviewEvents_should_be_called = () =>
-           commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEventsCommand>(_ => !_.CreatedOnClient && _.InterviewId == interviewId), ""), Times.Once);
+           commandServiceMock.Verify(x => x.Execute(Moq.It.Is<SynchronizeInterviewEventsCommand>(_ => !_.CreatedOnClient && _.InterviewId == interviewId), "", false), Times.Once);
 
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static SyncPackagesProcessor syncPackagesProcessor;

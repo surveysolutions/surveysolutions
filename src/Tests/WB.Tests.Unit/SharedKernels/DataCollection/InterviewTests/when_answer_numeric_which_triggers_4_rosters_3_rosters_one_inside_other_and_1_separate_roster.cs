@@ -32,8 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 {
                     PublicKey = rosterSizeQuestionId,
                     QuestionType = QuestionType.Numeric,
-                    IsInteger = true,
-                    MaxValue = 4
+                    IsInteger = true
                 },
                 new Group("top level roster")
                 {

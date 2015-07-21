@@ -11,12 +11,6 @@ namespace Main.Core.Events.Questionnaire
         public Order AnswerOrder { get; set; }
         public Answer[] Answers { get; set; }
         public Guid? GroupPublicKey { get; set; }
-        public List<Guid> Triggers { get; set; }
-
-        /// <summary>
-        /// Max allowed value for numeric question
-        /// </summary>
-        public int? MaxValue { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
         public bool? IsInteger { get; set; }

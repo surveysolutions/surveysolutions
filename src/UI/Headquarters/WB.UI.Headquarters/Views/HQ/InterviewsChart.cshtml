@@ -53,7 +53,7 @@
 
 @section header
 {
-    <h3 class="sinle-line-header" data-bind="text: TemplateName"></h3>
+    <h3>Cumulative Interview Chart</h3>
 }
 
 @section filters
@@ -96,6 +96,8 @@
     <div class="btn-group">
         <button type="button" class="btn btn-default" data-bind="click: $root.initChart">Refresh</button>
     </div>
+
+    <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
 }
 
 @section chart

@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
 
         It should_not_call_RegisterPlainQuestionnaire =
             () => commandService.Verify(x => x.Execute(Moq.It.Is<DeleteQuestionnaire>(param =>
-                                    param.QuestionnaireId == Moq.It.IsAny<Guid>() && param.QuestionnaireVersion == Moq.It.IsAny<long>()), null),
+                                    param.QuestionnaireId == Moq.It.IsAny<Guid>() && param.QuestionnaireVersion == Moq.It.IsAny<long>()), null, false),
                     Times.Never);
 
         It should_not_store_questionnaire_in_pline_storage =

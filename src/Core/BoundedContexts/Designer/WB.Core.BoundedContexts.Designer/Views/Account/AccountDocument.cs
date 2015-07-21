@@ -28,14 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public virtual string Email { get; set; }
 
-        public virtual int FailedPasswordAnswerWindowAttemptCount { get; set; }
-
-        public virtual DateTime FailedPasswordAnswerWindowStartedAt { get; set; }
-
-        public virtual int FailedPasswordWindowAttemptCount { get; set; }
-
-        public virtual DateTime FailedPasswordWindowStartedAt { get; set; }
-
         public virtual bool IsConfirmed { get; set; }
 
         public virtual bool IsLockedOut { get; set; }

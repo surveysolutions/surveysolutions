@@ -59,7 +59,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview.Levels["#"].DisabledGroups.Add(chapterId);
             
-            var answeredQuestion = interview.Levels["#"].GetOrCreateQuestion(questionInNestedGroupId);
+            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(questionInNestedGroupId))
+                interview.Levels["#"].QuestionsSearchCahche.Add(questionInNestedGroupId, new InterviewQuestion(questionInNestedGroupId));
+
+            var answeredQuestion = interview.Levels["#"].QuestionsSearchCahche[questionInNestedGroupId];
+
+
             answeredQuestion.Answer = 5;
 
             questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);

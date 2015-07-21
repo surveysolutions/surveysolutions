@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             loggerMock.Verify(x => x.Warn("Unknown event of type 0 received in interviews feed. It was skipped and marked as processed with error. EventId: dddddddddddddddddddddddddddddddd", null), Times.Once);
 
         It should_not_excecute_Any_command = () =>
-            commandServiceMock.Verify(x=>x.Execute(Moq.It.IsAny<ICommand>(),Moq.It.IsAny<string>()), Times.Never);
+            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
