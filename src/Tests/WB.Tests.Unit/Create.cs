@@ -1188,6 +1188,7 @@ namespace WB.Tests.Unit
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
