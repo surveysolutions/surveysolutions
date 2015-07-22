@@ -19,9 +19,9 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Native.Logging;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
@@ -51,6 +51,7 @@ using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WebActivatorEx;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
+using WB.Core.Infrastructure.EventBus.Lite;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -205,7 +206,9 @@ namespace WB.UI.Supervisor.App_Start
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
+            kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
 

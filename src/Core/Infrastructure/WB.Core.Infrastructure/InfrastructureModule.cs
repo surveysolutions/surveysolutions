@@ -11,7 +11,7 @@ namespace WB.Core.Infrastructure
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IAggregateRootRepository, AggregateRootRepository>();
-            registry.Bind<ICommandService, CommandService>();
+            registry.BindAsSingleton<ICommandService, CommandService>();
         }
     }
 }

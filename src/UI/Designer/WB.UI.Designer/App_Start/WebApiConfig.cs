@@ -1,4 +1,7 @@
 ﻿using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
+using Elmah.Contrib.WebApi;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
 
 namespace WB.UI.Designer
@@ -7,11 +10,15 @@ namespace WB.UI.Designer
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Services.Add(typeof(IExceptionLogger), new ElmahExceptionLogger());
+
             //Temporary comment Web API auth during investigation how it works with Angular
             //config.MessageHandlers.Add(new BasicAuthMessageHandler());
 
             if (AppSettings.Instance.IsApiSslVerificationEnabled)
                 config.MessageHandlers.Add(new HttpsVerifier());
+
+            config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",
@@ -23,6 +30,8 @@ namespace WB.UI.Designer
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-        }
+
+            config.Formatters.Insert(0, new JsonFormatter());
+        } 
     }
 }

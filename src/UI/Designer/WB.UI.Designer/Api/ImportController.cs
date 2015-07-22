@@ -8,13 +8,14 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
+using QuestionnaireListItem = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireListItem;
 
 namespace WB.UI.Designer.Api
 {
@@ -146,7 +147,7 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
         {
-            if(request == null) throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException("request");
 
             var questionnaireListView = this.viewFactory.Load(
                 new QuestionnaireListInputModel
@@ -189,14 +190,14 @@ namespace WB.UI.Designer.Api
                     pageIndex: pageIndex);
 
                 questionnaireItemList.AddRange(
-                    questionnaireList.Select(q => new QuestionnaireListItem() {Id = q.Id, Title = q.Title}).ToList());
+                    questionnaireList.Select(q => new QuestionnaireListItem() { Id = q.Id, Title = q.Title }).ToList());
 
                 pageIndex++;
                 if (pageIndex > questionnaireList.TotalPages)
                     break;
             }
 
-            return new QuestionnaireListCommunicationPackage {Items = questionnaireItemList};
+            return new QuestionnaireListCommunicationPackage { Items = questionnaireItemList };
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

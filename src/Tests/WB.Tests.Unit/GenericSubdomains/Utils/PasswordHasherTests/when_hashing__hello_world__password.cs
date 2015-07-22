@@ -1,5 +1,5 @@
 ﻿using Machine.Specifications;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
 {

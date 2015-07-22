@@ -25,6 +25,19 @@ namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
         }
 
         public string RosterTitleSubstitutionReference { get { return "rostertitle"; } }
+
+        public bool ContainsRosterTitle(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return false;
+
+            return input.Contains(string.Format("{0}{1}{0}", SubstitutionVariableDelimiter, RosterTitleSubstitutionReference));
+        }
+
+        public string GenerateRosterName(string groupTitle, string rosterTitle)
+        {
+            return string.Format("{0} - {1}", groupTitle, string.IsNullOrEmpty(rosterTitle) ? DefaultSubstitutionText : rosterTitle);
+        }
+
         public string DefaultSubstitutionText { get { return "[...]"; } }
     }
 }

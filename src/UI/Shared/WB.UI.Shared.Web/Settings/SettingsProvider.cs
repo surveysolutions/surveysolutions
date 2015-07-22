@@ -6,11 +6,13 @@ namespace WB.UI.Shared.Web.Settings
 {
     public class SettingsProvider : ISettingsProvider
     {
-        private static List<string> settingsToSkip = new List<string>()
+        protected virtual List<string> settingsToSkip
         {
-            "Headquarters.AccessToken",
-            "EventStore.Password"
-        };
+            get
+            {
+                return new List<string> { "Headquarters.AccessToken", "EventStore.Password" };
+            }
+        }
 
         public virtual IEnumerable<ApplicationSetting> GetSettings()
         {
@@ -37,9 +39,9 @@ namespace WB.UI.Shared.Web.Settings
         }
     }
 
-    public class ApplicationSetting 
+    public class ApplicationSetting
     {
-        public ApplicationSetting() {}
+        public ApplicationSetting() { }
         public ApplicationSetting(string name, object value)
         {
             this.Name = name;

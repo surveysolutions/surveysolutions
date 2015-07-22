@@ -5,9 +5,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     public class EventStoreLogger : ILogger
     {
-        private readonly GenericSubdomains.Utils.Services.ILogger genericLogger;
+        private readonly GenericSubdomains.Portable.Services.ILogger genericLogger;
 
-        public EventStoreLogger(GenericSubdomains.Utils.Services.ILogger genericLogger)
+        public EventStoreLogger(GenericSubdomains.Portable.Services.ILogger genericLogger)
         {
             this.genericLogger = genericLogger;
         }

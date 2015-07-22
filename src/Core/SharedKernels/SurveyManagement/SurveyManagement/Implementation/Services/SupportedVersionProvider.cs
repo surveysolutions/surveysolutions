@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private static Version expressionsEngineVersion = new Version(7, 0, 0);
+        private static Version expressionsEngineVersion = new Version(8, 0, 0);
         private static Func<bool> isDebugMode;
         private static Version applicationBuildVersion;
 

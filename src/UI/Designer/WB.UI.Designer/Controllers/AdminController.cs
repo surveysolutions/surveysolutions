@@ -2,8 +2,8 @@ using System.Configuration.Provider;
 using System.Web;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using System;
@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Controllers
 
             if (uploadFile != null && uploadFile.ContentLength > 0)
             {
-                var document = this.zipUtils.DecompressGZip<IQuestionnaireDocument>(uploadFile.InputStream);
+                var document = this.zipUtils.DecompressGZip<QuestionnaireDocument>(uploadFile.InputStream);
                 if (document != null)
                 {
                     this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));

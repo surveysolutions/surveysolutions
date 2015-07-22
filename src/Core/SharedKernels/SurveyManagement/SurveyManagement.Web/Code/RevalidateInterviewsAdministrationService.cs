@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

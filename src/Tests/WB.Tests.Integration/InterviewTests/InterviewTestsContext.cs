@@ -12,8 +12,8 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Native;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -22,8 +22,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.V2;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -189,18 +187,27 @@ namespace WB.Tests.Integration.InterviewTests
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
+            var fileSystemAccessor = new FileSystemIOAccessor(); 
             var questionnaireVersionProvider =new ExpressionsEngineVersionService();
+
+            const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll" };
+
+            var settings = new List<IDynamicCompilerSettings>
+            {
+                Mock.Of<IDynamicCompilerSettings>(_ 
+                    => _.PortableAssembliesPath == pathToProfile
+                    && _.DefaultReferencedPortableAssemblies == referencesToAdd 
+                    && _.Name == "profile111")
+            };
+
+            var defaultDynamicCompilerSettings = Mock.Of<IDynamicCompilerSettingsGroup>(_ => _.SettingsCollection == settings);
+
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
-                    new RoslynCompiler(
-                        new DefaultDynamicCompillerSettings()
-                        {
-                            PortableAssembliesPath =
-                                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111",
-                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
-                                "System.Collections.dll", "System.Linq.dll" }
-                        }, new FileSystemIOAccessor()),
-                    new CodeGenerator());
+                    new RoslynCompiler(),
+                    new CodeGenerator(),
+                    new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);

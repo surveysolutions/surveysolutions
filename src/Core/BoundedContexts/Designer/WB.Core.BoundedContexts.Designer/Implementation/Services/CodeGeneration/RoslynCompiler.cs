@@ -6,58 +6,26 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     public class RoslynCompiler : IDynamicCompiler
     {
-        private readonly IDynamicCompilerSettings compilerSettings;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-
-        public RoslynCompiler(IDynamicCompilerSettings compilerSettings, IFileSystemAccessor fileSystemAccessor)
-        {
-            this.compilerSettings = compilerSettings;
-            this.fileSystemAccessor = fileSystemAccessor;
-        }
-        
-        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(Guid templateId, Dictionary<string, string> generatedClasses,
-            string[] referencedPortableAssemblies,
+        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
+            Guid templateId,
+            Dictionary<string, string> generatedClasses,
+            PortableExecutableReference[] referencedPortableAssemblies,
             out string generatedAssembly)
         {
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
 
-            var metadataReferences = new List<PortableExecutableReference>
-            {
-                AssemblyMetadata.CreateFromFile(typeof (Identity).Assembly.Location).GetReference()
-            };
-
-            metadataReferences.AddRange(
-                compilerSettings.DefaultReferencedPortableAssemblies.Select(
-                    defaultReferencedPortableAssembly =>
-                        AssemblyMetadata.CreateFromFile(
-                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath, defaultReferencedPortableAssembly))
-                            .GetReference()));
-
-            metadataReferences.AddRange(
-                referencedPortableAssemblies.Select(
-                    defaultReferencedPortableAssembly =>
-                        AssemblyMetadata.CreateFromFile(
-                            fileSystemAccessor.CombinePath(compilerSettings.PortableAssembliesPath,
-                                defaultReferencedPortableAssembly)).GetReference()));
+            var metadataReferences = new List<PortableExecutableReference>();
+            metadataReferences.AddRange(referencedPortableAssemblies);
             
-            CSharpCompilation compilation = CSharpCompilation.Create(
-                String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
-                    checkOverflow: true, 
-                    optimizationLevel: OptimizationLevel.Release, 
-                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
-                syntaxTrees: syntaxTrees,
-                references: metadataReferences);
+            CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
 
             EmitResult compileResult;
             generatedAssembly = string.Empty;
@@ -74,6 +42,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             return compileResult;
+        }
+
+        static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<PortableExecutableReference> metadataReferences)
+        {
+            return CSharpCompilation.Create(
+                String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+                    checkOverflow: true, 
+                    optimizationLevel: OptimizationLevel.Release, 
+                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
+                syntaxTrees: syntaxTrees,
+                references: metadataReferences);
         }
     }
 }

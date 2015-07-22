@@ -3,7 +3,8 @@ using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 
 namespace WB.Core.Infrastructure.Storage.EventStore

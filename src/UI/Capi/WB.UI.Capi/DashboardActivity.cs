@@ -14,10 +14,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
@@ -87,7 +84,7 @@ namespace WB.UI.Capi
             {
                 Text = messge
             };
-            noAssignmentsMessage.SetBackgroundDrawable(this.Resources.GetDrawable(Resource.Drawable.errorwarningstyle));
+            noAssignmentsMessage.SetBackgroundResource(Resource.Drawable.errorwarningstyle);
             noAssignmentsMessage.SetPadding(10, 10, 10, 10);
             noAssignmentsMessage.LayoutParameters = layoutParameters;
             noAssignmentsMessage.SetTextColor(Color.Black);

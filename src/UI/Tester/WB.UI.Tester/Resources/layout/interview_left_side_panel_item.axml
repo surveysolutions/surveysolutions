@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:local="http://schemas.android.com/apk/res-auto">
+  <TableLayout
+                style="@style/Interview_Sidebar_GroupRow"
+                local:MvxBind="Click NavigateToSectionCommand; PaddingLeft NodeDepth; Activated IsCurrent">
+    <TableRow android:gravity="center_vertical">
+      <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
+              local:MvxBind="Click Toggle; Text If(Expanded, '–','+'); Transparent Not(HasChildren);"/>
+      <TextView
+            style="@style/Interview_Sidebar_Sections_Section_Title"
+            local:MvxBind="Text Title; Bold IsCurrent" />
+    </TableRow>
+  </TableLayout>
+
+  <MvxLinearLayout
+        style="@style/Interview_Sidebar_Sections"
+        local:MvxBind="ItemsSource Children; Visible Expanded"
+        local:MvxItemTemplate="@layout/interview_left_side_panel_item_group" />
+</merge>
