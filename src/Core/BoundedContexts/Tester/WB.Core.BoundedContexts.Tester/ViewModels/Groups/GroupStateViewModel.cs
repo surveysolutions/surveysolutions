@@ -11,15 +11,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
     {
         private readonly IStatefulInterviewRepository interviewRepository;
 
+        protected GroupStateViewModel()
+        {
+        }
+
         public GroupStateViewModel(IStatefulInterviewRepository interviewRepository)
         {
             this.interviewRepository = interviewRepository;
         }
 
         private string interviewId;
+
         private Identity group;
 
-        public void Init(string interviewId, Identity groupIdentity)
+        public virtual void Init(string interviewId, Identity groupIdentity)
         {
             this.interviewId = interviewId;
             this.group = groupIdentity;

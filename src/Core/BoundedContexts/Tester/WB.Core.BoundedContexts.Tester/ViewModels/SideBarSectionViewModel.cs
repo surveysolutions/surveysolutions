@@ -11,6 +11,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Repositories;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
         private string interviewId;
+        AnswerNotifier answerNotifier;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -59,6 +61,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public void Init(string interviewId, 
             Identity sectionIdentity,
             SideBarSectionViewModel parent, 
+            GroupStateViewModel groupStateViewModel,
+            AnswerNotifier answerNotifier,
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
@@ -69,6 +73,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var questionnaireModel = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
 
+            groupStateViewModel.Init(interviewId, sectionIdentity);
+            this.answerNotifier = answerNotifier;
+            this.SideBarGroupState = groupStateViewModel;
             this.Parent = parent;
             this.SectionIdentity = sectionIdentity;
             this.HasChildren = interview.GetEnabledSubgroups(sectionIdentity).Any();
@@ -84,12 +91,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.Title = groupModel.Title;
             }
 
+            this.answerNotifier.Init(interviewId);
+
             this.NavigationState = navigationState;
-            this.NavigationState.GroupChanged += NavigationState_OnGroupChanged;
-            this.NavigationState.BeforeGroupChanged += navigationState_OnBeforeGroupChanged;
+            this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
+            this.NavigationState.BeforeGroupChanged += this.NavigationState_OnBeforeGroupChanged;
+            this.answerNotifier.QuestionAnswered += answerNotifier_QuestionAnswered;
         }
 
-        void navigationState_OnBeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs)
+        void answerNotifier_QuestionAnswered(object sender, EventArgs e)
+        {
+            this.SideBarGroupState.UpdateFromModel();
+        }
+
+        void NavigationState_OnBeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs)
         {
             this.IsCurrent = false;
         }
@@ -105,6 +120,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 }
             }
         }
+
+        public GroupStateViewModel SideBarGroupState { get; private set; }
 
         public NavigationState NavigationState {get; set; }
         public Identity SectionIdentity { get; set; }
@@ -192,6 +209,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private MvxCommand navigateToSectionCommand;
+
         public ICommand NavigateToSectionCommand
         {
             get
@@ -270,7 +288,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public void Dispose()
         {
             this.NavigationState.GroupChanged -= this.NavigationState_OnGroupChanged;
-            this.NavigationState.BeforeGroupChanged -= this.navigationState_OnBeforeGroupChanged;
+            this.NavigationState.BeforeGroupChanged -= this.NavigationState_OnBeforeGroupChanged;
         }
 
         public void RefreshHasChildrenFlag()
