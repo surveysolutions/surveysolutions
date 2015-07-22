@@ -16,3 +16,13 @@ body {
 .form-horizontal .form-actions {
     padding-left: 30px;
 }
+
+/* Sticky footer style
+-------------------------------------------------- */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 100px;
+}

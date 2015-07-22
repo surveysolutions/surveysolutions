@@ -533,6 +533,7 @@
     <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
     <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Archived.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
