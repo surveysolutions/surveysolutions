@@ -51,16 +51,16 @@
     };
 
     self.load = function () {
-        self.SelectedTemplate("{\"templateId\": \"" + self.Url.query['templateId'] + "\",\"version\": \"" + self.Url.query['templateVersion'] + "\"}");
-        self.SelectedStatus(self.Url.query['status']);
-        self.SelectedResponsible(self.Url.query['interviewerId']);
-        self.SearchBy(decodeURIComponent(self.Url.query['searchBy'] || ""));
+        self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
+        self.SelectedStatus(self.QueryString['status']);
+        self.SelectedResponsible(self.QueryString['interviewerId']);
+        self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
-        self.Url.query['templateId'] = self.Url.query['templateId'] || "";
-        self.Url.query['templateVersion'] = self.Url.query['templateVersion'] || "";
-        self.Url.query['status'] = self.Url.query['status'] || "";
-        self.Url.query['interviewerId'] = self.Url.query['interviewerId'] || "";
-        self.Url.query['searchBy'] = self.Url.query['searchBy'] || "";
+        self.Url.query['templateId'] = self.QueryString['templateId'] || "";
+        self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
+        self.Url.query['status'] = self.QueryString['status'] || "";
+        self.Url.query['interviewerId'] = self.QueryString['interviewerId'] || "";
+        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
 
         self.SelectedTemplate.subscribe(self.filter);
         self.SelectedResponsible.subscribe(self.filter);
@@ -98,7 +98,7 @@
         };
 
         self.SendCommands(command, function () {
-            self.load();
+            self.search();
         }, true);
     };
 
