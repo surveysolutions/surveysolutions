@@ -1191,7 +1191,7 @@ namespace WB.Tests.Unit
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variableName
+                StataExportCaption = variable
             };
         }
 
