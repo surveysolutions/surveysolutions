@@ -29,8 +29,8 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
                             fixedTitles: new string[]{"one", "two"},
                             children: new List<IComposite>
                             {
-                                Create.TextQuestion(questionId: rosterTitleId, variableName: "test"),
-                                Create.TextQuestion(questionId: substitutionTargetQuestionId, text: "uses %rostertitle%", variableName:"subst")
+                                Create.TextQuestion(questionId: rosterTitleId, variable: "test"),
+                                Create.TextQuestion(questionId: substitutionTargetQuestionId, text: "uses %rostertitle%", variable:"subst")
                             })
                });
             QuestionnaireModel model = null;

@@ -26,7 +26,6 @@ namespace WB.UI.Tester
 		
 		public static void UpdateIdValues()
 		{
-			global::Chance.MvvmCross.Plugins.UserInteraction.Droid.Resource.String.library_name = global::WB.UI.Tester.Resource.String.library_name;
 			global::Cirrious.MvvmCross.Plugins.Network.Droid.Resource.String.ApplicationName = global::WB.UI.Tester.Resource.String.ApplicationName;
 			global::Cirrious.MvvmCross.Plugins.Network.Droid.Resource.String.Hello = global::WB.UI.Tester.Resource.String.Hello;
 			global::IHS.MvvmCross.Plugins.Keychain.Droid.Resource.String.ApplicationName = global::WB.UI.Tester.Resource.String.ApplicationName;
