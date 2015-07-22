@@ -17,6 +17,13 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 {
     public class StatefulInterview : Interview, IStatefulInterview
     {
+        private class CalculatedState
+        {
+            public Dictionary<Identity, IEnumerable<Identity>> EnabledInterviewerChildQuestions = new Dictionary<Identity, IEnumerable<Identity>>();
+        }
+
+        private CalculatedState calculated = null;
+
         private readonly Dictionary<string, BaseInterviewAnswer> answers;
         private readonly Dictionary<string, InterviewGroup> groups;
         private readonly Dictionary<string, List<Identity>> rosterInstancesIds;
@@ -34,9 +41,15 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             this.notAnsweredQuestionsInterviewerComments = new Dictionary<string, string>();
         }
 
+        private void ResetCalculatedState()
+        {
+            this.calculated = new CalculatedState();
+        }
+
         protected new void Apply(InterviewOnClientCreated @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
 
             this.Id = this.EventSourceId;
             this.QuestionnaireId = @event.QuestionnaireId.FormatGuid();
@@ -48,6 +61,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(TextQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<TextAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
@@ -55,6 +70,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(QRBarcodeQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<QRBarcodeAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
@@ -62,6 +79,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(PictureQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<MultimediaAnswer>(@event);
             answer.SetAnswer(@event.PictureFileName);
         }
@@ -69,6 +88,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(NumericRealQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<RealNumericAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
@@ -76,6 +97,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(NumericIntegerQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<IntegerNumericAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
@@ -83,6 +106,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(DateTimeQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<DateTimeAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
@@ -90,6 +115,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(SingleOptionQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<SingleOptionAnswer>(@event);
             answer.SetAnswer(@event.SelectedValue);
         }
@@ -97,6 +124,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(MultipleOptionsQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<MultiOptionAnswer>(@event);
             answer.SetAnswers(@event.SelectedValues);
         }
@@ -104,6 +133,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(GeoLocationQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<GpsCoordinatesAnswer>(@event);
             answer.SetAnswer(@event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude);
         }
@@ -111,6 +142,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(TextListQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<TextListAnswer>(@event);
             answer.SetAnswers(@event.Answers);
         }
@@ -118,6 +151,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(@event);
             answer.SetAnswer(@event.SelectedPropagationVector);
         }
@@ -125,6 +160,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var answer = this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(@event);
             answer.SetAnswers(@event.SelectedPropagationVectors);
         }
@@ -134,6 +171,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         internal new void Apply(AnswerCommented @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
             var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
@@ -151,6 +190,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(AnswersRemoved @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Questions.ForEach(x =>
                 this.Answers[ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)].RemoveAnswer()
             );
@@ -159,6 +200,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
@@ -177,6 +220,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
@@ -195,6 +240,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(GroupsDisabled @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Groups.ForEach(x =>
             {
                 var groupOrRoster = this.GetOrCreateGroupOrRoster(x.Id, x.RosterVector);
@@ -205,6 +252,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Groups.ForEach(x =>
             {
                 var groupOrRoster = this.GetOrCreateGroupOrRoster(x.Id, x.RosterVector);
@@ -215,6 +264,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(QuestionsDisabled @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
@@ -234,6 +285,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(QuestionsEnabled @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
@@ -256,6 +309,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(RosterInstancesTitleChanged @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             foreach (var changedRosterInstanceTitle in @event.ChangedInstances)
             {
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedRosterInstanceTitle.RosterInstance.GroupId, GetFullRosterVector(changedRosterInstanceTitle.RosterInstance));
@@ -267,6 +322,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(RosterInstancesAdded @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
 
             foreach (var rosterInstance in @event.Instances)
             {
@@ -292,6 +348,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(RosterInstancesRemoved @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             foreach (var rosterInstance in @event.Instances)
             {
                 var fullRosterVector = GetFullRosterVector(rosterInstance);
@@ -314,24 +372,32 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public new void Apply(InterviewCompleted @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             this.IsCompleted = true;
         }
 
         public new void Apply(InterviewRestarted @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             this.IsCompleted = false;
         }
 
         public new void Apply(InterviewDeclaredValid @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             this.HasErrors = false;
         }
 
         public new void Apply(InterviewDeclaredInvalid @event)
         {
             base.Apply(@event);
+            this.ResetCalculatedState();
+
             this.HasErrors = true;
         }
 
@@ -728,12 +794,20 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 
         private IEnumerable<Identity> GetEnabledInterviewerChildQuestions(Identity group)
         {
+            return GetOrCalculate(
+                group,
+                this.GetEnabledInterviewerChildQuestionsImpl,
+                this.calculated.EnabledInterviewerChildQuestions);
+        }
+
+        private IEnumerable<Identity> GetEnabledInterviewerChildQuestionsImpl(Identity group)
+        {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             IEnumerable<Guid> questionIds = questionnaire.GetChildInterviewerQuestions(group.Id);
 
             IEnumerable<Identity> questions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                this.interviewState, questionIds, @group.RosterVector, questionnaire, GetRosterInstanceIds);
+                this.interviewState, questionIds, group.RosterVector, questionnaire, GetRosterInstanceIds);
 
             return questions.Where(this.IsEnabled);
         }
@@ -851,6 +925,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             var questionKey = ConversionHelper.ConvertIdentityToString(questionIdentity);
 
             return this.GetExistingAnswerOrNull(questionKey);
+        }
+
+        private static TValue GetOrCalculate<TKey, TValue>(TKey key, Func<TKey, TValue> calculateValue, Dictionary<TKey, TValue> calculatedValues)
+        {
+            return calculatedValues.GetOrAdd(key, () => calculateValue(key));
         }
 
         private static bool AreEqual(Guid first, Guid second)
