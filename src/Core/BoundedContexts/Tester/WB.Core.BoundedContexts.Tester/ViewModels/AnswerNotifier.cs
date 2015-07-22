@@ -71,8 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
                                                  this.questions.Any(x => @event.QuestionId == x.Id && @event.PropagationVector.Identical(x.RosterVector));
 
-            var shouldNotifyAboutAllAnswers = !this.questionId.HasValue && this.questions.Length == 0;
-            var shouldRaiseEvent = shouldNotifyAboutSingleAnswer || shouldNotifyAboutListOfAnswers || shouldNotifyAboutAllAnswers;
+            var shouldRaiseEvent = shouldNotifyAboutSingleAnswer || shouldNotifyAboutListOfAnswers;
 
             if (shouldRaiseEvent)
             {

@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.Widget;
@@ -57,10 +58,14 @@ namespace WB.UI.Tester.Activities
 
             this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, this.toolbar, 0, 0);
             drawerLayout.SetDrawerListener(this.drawerToggle);
-            drawerLayout.DrawerOpened += (sender, args) =>
+            drawerLayout.DrawerOpened += async (sender, args) =>
             {
+                var messenger = Mvx.Resolve<IMvxMessenger>();
+
                 this.RemoveFocusFromEditText();
                 this.HideKeyboard(drawerLayout.WindowToken);
+                
+                await Task.Run(() => messenger.Publish(new SideBarShownMessage(drawerLayout)));
             };
 
             this.layoutManager = new LinearLayoutManager(this);

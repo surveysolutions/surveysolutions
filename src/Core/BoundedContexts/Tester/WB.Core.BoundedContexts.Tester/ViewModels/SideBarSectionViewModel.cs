@@ -37,7 +37,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
         private string interviewId;
-        AnswerNotifier answerNotifier;
+        private readonly MvxSubscriptionToken subsctiptionToken;
+
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -55,6 +56,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
+            this.subsctiptionToken = this.messenger.Subscribe<SideBarShownMessage>((msg) => this.SideBarGroupState.UpdateFromModel());
             this.Children = new ObservableCollection<SideBarSectionViewModel>();
         }
 
@@ -62,7 +64,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             Identity sectionIdentity,
             SideBarSectionViewModel parent, 
             GroupStateViewModel groupStateViewModel,
-            AnswerNotifier answerNotifier,
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
@@ -74,7 +75,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
 
             groupStateViewModel.Init(interviewId, sectionIdentity);
-            this.answerNotifier = answerNotifier;
             this.SideBarGroupState = groupStateViewModel;
             this.Parent = parent;
             this.SectionIdentity = sectionIdentity;
@@ -91,17 +91,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.Title = groupModel.Title;
             }
 
-            this.answerNotifier.Init(interviewId);
-
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged += this.NavigationState_OnBeforeGroupChanged;
-            this.answerNotifier.QuestionAnswered += answerNotifier_QuestionAnswered;
-        }
-
-        void answerNotifier_QuestionAnswered(object sender, EventArgs e)
-        {
-            this.SideBarGroupState.UpdateFromModel();
         }
 
         void NavigationState_OnBeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs)
@@ -289,6 +281,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.NavigationState.GroupChanged -= this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged -= this.NavigationState_OnBeforeGroupChanged;
+            this.messenger.Unsubscribe<SideBarShownMessage>(this.subsctiptionToken);
         }
 
         public void RefreshHasChildrenFlag()
