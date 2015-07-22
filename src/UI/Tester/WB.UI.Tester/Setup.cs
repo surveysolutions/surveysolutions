@@ -75,6 +75,7 @@ namespace WB.UI.Tester
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
+            registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());

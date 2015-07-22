@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Android.Content.Res;
 using Android.Graphics;
 using Android.Text;
 using Android.Util;
@@ -34,7 +35,7 @@ namespace WB.UI.Tester.CustomBindings
 
             if (e.AfterCount == 0 && e.BeforeCount == 0 && Target.Typeface.IsItalic)
                 return;
-
+           
             this.SetupHintStyle(e.Text);
         }
 

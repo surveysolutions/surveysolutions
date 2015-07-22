@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSectionViewModelTests
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSe
             viewModel = CreateViewModel(questionnaire: questionnaire, interview: interview);
 
             sectionIdentity = new Identity(rosterGroupId, new[]{0m});
-            viewModel.Init("", sectionIdentity, null,  Create.NavigationState());
+            viewModel.Init("", sectionIdentity, null, Substitute.For<GroupStateViewModel>(), Create.AnswerNotifier(), Create.NavigationState());
 
             viewModel.SectionIdentity = sectionIdentity;
         };

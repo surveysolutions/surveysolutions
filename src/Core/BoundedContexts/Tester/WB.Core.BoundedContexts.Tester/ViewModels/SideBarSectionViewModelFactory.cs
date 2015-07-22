@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -13,18 +14,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         public SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, 
-            Identity enabledSubgroupIdentity, 
+            Identity groupIdentity, 
             NavigationState navigationState, 
             string interviewId)
         {
             var sideBarItem = serviceLocator.GetInstance<SideBarSectionViewModel>();
-            sideBarItem.Init(interviewId, enabledSubgroupIdentity, sectionToAddTo, navigationState);
+            var groupStateViewModel = serviceLocator.GetInstance<GroupStateViewModel>();
+            var answerNotifier = serviceLocator.GetInstance<AnswerNotifier>();
+            sideBarItem.Init(interviewId, groupIdentity, sectionToAddTo, groupStateViewModel, answerNotifier, navigationState);
             return sideBarItem;
         }
     }
 
     public interface ISideBarSectionViewModelsFactory
     {
-        SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity, NavigationState navigationState, string interviewId);
+        SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity groupIdentity, NavigationState navigationState, string interviewId);
     }
 }
