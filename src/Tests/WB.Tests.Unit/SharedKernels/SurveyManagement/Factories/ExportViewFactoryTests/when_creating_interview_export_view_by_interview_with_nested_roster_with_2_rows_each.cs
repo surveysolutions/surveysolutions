@@ -6,7 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;

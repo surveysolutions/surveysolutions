@@ -25,6 +25,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             this.sessionProvider.GetSession().Delete(id);
         }
 
+        public void Remove(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.sessionProvider.GetSession().Delete(entity);
+            }
+        }
+
         public void Store(TEntity entity, object id)
         {
             this.sessionProvider.GetSession().SaveOrUpdate(entity);

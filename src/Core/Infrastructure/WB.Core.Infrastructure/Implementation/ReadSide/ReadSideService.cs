@@ -7,12 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Implementation.ReadSide

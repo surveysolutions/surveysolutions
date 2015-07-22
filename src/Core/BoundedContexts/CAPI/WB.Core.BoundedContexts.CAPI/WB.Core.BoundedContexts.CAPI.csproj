@@ -16,6 +16,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>8856a599</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,14 +64,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\FileAR.cs" />
@@ -111,6 +126,29 @@
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
     <Compile Include="ValueObjects\CapiPages.cs" />
+    <Compile Include="ViewModel\InterviewAutocompleteSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewCascadingSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewDynamicOption.cs" />
+    <Compile Include="ViewModel\InterviewGeoLocation.cs" />
+    <Compile Include="ViewModel\InterviewDateQuestion.cs" />
+    <Compile Include="ViewModel\InterviewDecimalQuestion.cs" />
+    <Compile Include="ViewModel\InterviewGeolocationQuestion.cs" />
+    <Compile Include="ViewModel\InterviewIntegerQuestion.cs" />
+    <Compile Include="ViewModel\InterviewMultiChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewQrBarcodeQuestion.cs" />
+    <Compile Include="ViewModel\InterviewEntity.cs" />
+    <Compile Include="ViewModel\InterviewGroup.cs" />
+    <Compile Include="ViewModel\InterviewImageQuestion.cs" />
+    <Compile Include="ViewModel\InterviewQuestion.cs" />
+    <Compile Include="ViewModel\InterviewRoster.cs" />
+    <Compile Include="ViewModel\InterviewSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewStaticText.cs" />
+    <Compile Include="ViewModel\InterviewTextQuestion.cs" />
+    <Compile Include="ViewModel\InterviewViewModel.cs" />
+    <Compile Include="ViewModel\InterviewListQuestion.cs" />
+    <Compile Include="ViewModel\InterviewLinkedMultiChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewLinkedSingleChoiceQuestion.cs" />
+    <Compile Include="ViewModel\InterviewStaticOption.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\BreadCrumbsUtils.cs" />
     <Compile Include="Views\InterviewDetails\CascadingComboboxQuestionViewModel.cs" />
@@ -150,9 +188,9 @@
     <Folder Include="Events\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{A134F8E7-42C7-4804-8177-D11178600CAA}</Project>
@@ -186,7 +224,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

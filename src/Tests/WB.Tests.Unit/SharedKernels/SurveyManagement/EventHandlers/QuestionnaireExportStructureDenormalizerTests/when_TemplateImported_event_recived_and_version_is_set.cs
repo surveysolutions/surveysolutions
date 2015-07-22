@@ -10,7 +10,7 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;

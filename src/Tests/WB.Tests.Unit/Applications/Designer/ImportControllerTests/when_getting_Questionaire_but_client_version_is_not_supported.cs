@@ -26,9 +26,9 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
-            var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
-                    u => u.UserId == userId));
+            var membershipUserService =
+                Mock.Of<IMembershipUserService>(
+                    _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
 
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));

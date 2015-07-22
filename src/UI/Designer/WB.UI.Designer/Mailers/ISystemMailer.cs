@@ -1,16 +1,10 @@
+using Mvc.Mailer;
+using WB.UI.Designer.Models;
+
 namespace WB.UI.Designer.Mailers
 {
-    using Mvc.Mailer;
-
-    using WB.UI.Designer.Models;
-
-    /// <summary>
-    /// The SystemMailer interface.
-    /// </summary>
     public interface ISystemMailer
     {
-        #region Public Methods and Operators
-
         MvcMailMessage ConfirmationEmail(EmailConfirmationModel model);
         MvcMailMessage ResetPasswordEmail(EmailConfirmationModel model);
 
@@ -19,7 +13,5 @@ namespace WB.UI.Designer.Mailers
 
         MvcMailMessage GetOwnerShareNotificationEmail(SharingNotificationModel model);
         MvcMailMessage GetOwnerStopShareNotificationEmail(SharingNotificationModel model);
-
-        #endregion
     }
 }

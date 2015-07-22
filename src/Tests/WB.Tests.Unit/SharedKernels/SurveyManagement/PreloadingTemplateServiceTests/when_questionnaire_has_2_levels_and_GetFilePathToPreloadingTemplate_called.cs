@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;

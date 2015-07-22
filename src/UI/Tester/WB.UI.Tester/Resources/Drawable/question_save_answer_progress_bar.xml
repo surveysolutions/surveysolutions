@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:oneshot="false">
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate2" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate3" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate4" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate5" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate6" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate7" android:duration="50" />
+    <item android:drawable="@drawable/question_save_answer_progressbar_indeterminate8" android:duration="50" />
+
+</animation-list>

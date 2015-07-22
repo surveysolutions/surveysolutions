@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="MenuItem_Title_Dashboard">Опросники</string>
+  <string name="MenuItem_Title_Settings">Настройки</string>
+  <string name="MenuItem_Title_SignOut">Выйти</string>
+</resources>

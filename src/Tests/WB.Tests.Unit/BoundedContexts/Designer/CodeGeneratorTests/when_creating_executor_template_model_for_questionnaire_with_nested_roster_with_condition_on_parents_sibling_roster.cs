@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                                     rosterSizeSourceType: RosterSizeSourceType.Question,
                                     rosterSizeQuestionId: numericNestedRosterId, children: new IComposite[]
                                     {
-                                        Create.TextQuestion(questionId: Guid.NewGuid(), variable: "r1r1t1",
+                                        Create.TextQuestion(questionId: Guid.NewGuid(), variableName: "r1r1t1",
                                             enablementCondition: "r2n1 > 0"),
                                         Create.Roster(rosterId: r1r1r1, variable: "r1r1r1", children: new IComposite[]
                                         {
-                                            Create.TextQuestion(questionId: Guid.NewGuid(), variable: "r1r1r1t1",
+                                            Create.TextQuestion(questionId: Guid.NewGuid(), variableName: "r1r1r1t1",
                                                 enablementCondition: "r2n1 > r1n1")
                                         })
                                     })

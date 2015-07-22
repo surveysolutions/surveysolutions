@@ -19,11 +19,12 @@ using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Native.Logging;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
@@ -225,7 +226,9 @@ namespace WB.UI.Headquarters
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
             {

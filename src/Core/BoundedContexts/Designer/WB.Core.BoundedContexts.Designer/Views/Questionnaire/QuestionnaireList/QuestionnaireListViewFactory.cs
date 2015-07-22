@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList

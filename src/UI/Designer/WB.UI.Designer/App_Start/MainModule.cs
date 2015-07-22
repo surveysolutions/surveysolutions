@@ -2,9 +2,9 @@
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Native;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
@@ -23,6 +23,7 @@ namespace WB.UI.Designer
             //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();

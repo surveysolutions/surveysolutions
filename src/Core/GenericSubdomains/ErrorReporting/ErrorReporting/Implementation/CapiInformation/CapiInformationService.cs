@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformation

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+
+  <dimen name="Interview_Entity_margin_left">56dp</dimen>
+  <dimen name="Interview_Entity_margin_right">74dp</dimen>
+
+  <dimen name="Interview_Entity_Element_margin_horizontal">14dp</dimen>
+
+  <dimen name="Interview_Question_Instruction_Title_margin_top">10dp</dimen>
+
+  <dimen name="Interview_Question_Answer_margin_top">10dp</dimen>
+  <dimen name="Interview_Question_Answer_margin_bottom">16dp</dimen>
+
+  <dimen name="Interview_Question_Answer_background_padding">14dp</dimen>
+  <dimen name="Interview_Question_Answer_background_corners_radius">12dp</dimen>
+
+  <dimen name="Interview_Question_Answer_Input_background_padding">13dp</dimen>
+
+  <dimen name="Interview_Question_Answer_MediaBlock_margin_bottom">28dp</dimen>
+
+  <dimen name="Interview_Question_Answer_Media_height">250dp</dimen>
+
+  <dimen name="Interview_Question_Answer_Media_Caption_margin_top">8dp</dimen>
+
+  <dimen name="Interview_Question_Errors_Title_margin_top">10dp</dimen>
+  <dimen name="Interview_Question_Errors_Details_margin_top">10dp</dimen>
+  
+</resources>

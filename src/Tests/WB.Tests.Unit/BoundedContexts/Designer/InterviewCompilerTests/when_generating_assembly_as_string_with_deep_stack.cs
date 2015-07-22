@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
+            referencedPortableAssemblies = CreateReferencesForCompiler();
 
             var classes = new Dictionary<string, string>();
             classes.Add("main", testClassToCompile);
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static EmitResult IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(int a)
         {
             return a > staskDepthToAdd ?
-                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly) :
+                compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly) :
                 IncreaseCallStackEndExec_TODO_Check_does_method_name_affect_stack(a + 1);
         }
 
@@ -39,10 +40,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         private static string resultAssembly;
         private static EmitResult emitResult;
         private static Dictionary<string, string> generatedClasses;
+        private static PortableExecutableReference[] referencedPortableAssemblies;
 
         private static string fileName = "validation:11111111111111111111111111111112";
 
         private static int staskDepthToAdd = 130;
+
+
 
         public static string testClassToCompile =
             @"
@@ -257,7 +261,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
-			var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+            var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
             var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
             if (rosterLevel != null)
                 rosterLevel.SetRowName(rosterTitle);

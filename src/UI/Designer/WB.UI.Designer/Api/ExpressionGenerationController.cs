@@ -8,11 +8,8 @@ using System.Text;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
@@ -20,7 +17,7 @@ namespace WB.UI.Designer.Api
     [LocalOrDevelopmentAccessOnly]
     public class ExpressionGenerationController : ApiController
     {
-        private IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IExpressionsEngineVersionService expressionsEngineVersionService;

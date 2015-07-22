@@ -22,5 +22,10 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>();
         }
+
+        void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
+        {
+            this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
+        }
     }
 }

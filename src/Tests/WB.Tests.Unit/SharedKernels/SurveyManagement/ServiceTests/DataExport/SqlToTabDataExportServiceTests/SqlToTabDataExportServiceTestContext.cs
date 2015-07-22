@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;

@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -12,17 +12,12 @@ namespace WB.Core.SharedKernels.DataCollection
     /// and to reduce parameters count in calculation methods.
     /// Should not be made public or be used in any form in events or commands.
     /// </remarks>
-    [DebuggerDisplay("Id = {Id}, RosterVector = [{string.Join(\",\", RosterVector)}]")]
     public class Identity
     {
         protected bool Equals(Identity other)
         {
-            var str = string.Join(",", RosterVector);
-            return this.Id.Equals(other.Id) && this.RosterVector.SequenceEqual(other.RosterVector);
-            
+            return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
         }
-
-
 
         public override int GetHashCode()
         {
@@ -45,7 +40,12 @@ namespace WB.Core.SharedKernels.DataCollection
         public Identity(Guid id, decimal[] rosterVector)
         {
             this.Id = id;
-            this.RosterVector = rosterVector;
+            this.RosterVector = rosterVector ?? new decimal[]{};
+        }
+
+        public override string ToString()
+        {
+            return ConversionHelper.ConvertIdentityToString(this);
         }
 
         public override bool Equals(object obj)

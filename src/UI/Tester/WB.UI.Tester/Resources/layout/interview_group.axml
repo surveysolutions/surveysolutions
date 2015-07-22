@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:local="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             local:MvxBind="HideKeyboardOnClick .">
+  <MvxLinearLayout style="@style/Interview_Group">
+    <MvxLinearLayout android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(IsStarted, true, false)))">
+      <Button style="@style/Interview_Group_Button"
+              local:MvxBind="
+                HideKeyboardOnClick .; 
+                Click NavigateToGroupCommand; 
+                Text Title; 
+                ButtonGroupStyle GroupState; 
+                Enabled Enablement.Enabled;
+              "/>
+    </MvxLinearLayout>
+    <TextView style="@style/Interview_Group_Description"
+              local:MvxBind="Visible Enablement.Enabled; GroupInfo GroupState"/>
+  </MvxLinearLayout>
+  <LinearLayout style="@style/Interview_GroupWithDivider"
+                local:MvxBind="Enabled Enablement.Enabled"
+                android:layout_height="match_parent">
+  </LinearLayout>
+  <View style="@style/Interview_Question_Divider" android:layout_gravity="bottom"/>
+</FrameLayout>

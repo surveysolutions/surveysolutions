@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <EditTextPreference
+   android:key="GpsReceiveTimeoutSec"
+   android:numeric="integer"
+   android:title="@string/Prefs_GpsReceiveTimeoutSecTitle"
+   android:summary="@string/Prefs_GpsReceiveTimeoutSecSummary"
+   android:defaultValue="@integer/GpsReceiveTimeoutSec"/>
+  <Preference
+     android:key="version"
+     android:title="@string/Prefs_VersionTitle" /> 
+
+  <PreferenceCategory android:title="@string/Prefs_ConnectionSettings" 
+                      android:key="dev_settings_category">
+    <EditTextPreference android:key="DesignerEndpoint"
+           android:title="@string/Prefs_DesignerEndPointTitle"
+           android:summary="@string/Prefs_DesignerEndPointSummary"
+           android:defaultValue="@string/DesignerEndpoint"/>
+    <CheckBoxPreference android:key="AcceptUnsignedSslCertificate"
+      android:title="@string/Prefs_AcceptUnsignedTitle"
+      android:summary="@string/Prefs_AcceptUnsignedSummary"
+      android:defaultValue="@bool/AcceptUnsignedSslCertificate" />
+
+  </PreferenceCategory>
+
+
+</PreferenceScreen>

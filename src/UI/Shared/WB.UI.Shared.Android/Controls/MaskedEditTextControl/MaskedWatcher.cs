@@ -2,7 +2,8 @@ using Android.Text;
 using Android.Widget;
 using Java.Lang;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using String = System.String;
 
