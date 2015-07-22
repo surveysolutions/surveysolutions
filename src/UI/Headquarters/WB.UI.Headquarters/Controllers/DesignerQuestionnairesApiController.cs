@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
                     request: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.Questionnaire.Id,
-                        SupportedVersion = new QuestionnnaireVersion()
+                        SupportedVersion = new QuestionnaireVersion()
                         {
                             Major = supportedVersion.Major,
                             Minor = supportedVersion.Minor,

@@ -9,9 +9,8 @@ using System.Linq;
 using System.Reflection;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Capi.Settings;
@@ -22,6 +21,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+
+using WB.Core.GenericSubdomains.Android;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Capi.Views.Login;
 
@@ -135,7 +136,8 @@ namespace WB.UI.Capi.Injections
         public override void Load()
         {
             base.Load();
-            
+
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();

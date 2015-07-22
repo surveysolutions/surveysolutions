@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots
 {
-    internal class InterviewState
+    public class InterviewState
     {
         public InterviewState(bool wasHardDeleted)
         {

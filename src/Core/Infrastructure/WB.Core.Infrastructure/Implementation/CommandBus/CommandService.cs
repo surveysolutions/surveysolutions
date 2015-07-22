@@ -1,26 +1,35 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.Infrastructure.Implementation.CommandBus
 {
     internal class CommandService : ICommandService
     {
         private readonly IAggregateRootRepository repository;
-        private readonly IEventBus eventBus;
+        private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
 
-        public CommandService(IAggregateRootRepository repository, 
-            IEventBus eventBus, 
+        private int executingCommandsCount = 0;
+        private readonly object executionCountLock = new object();
+        private TaskCompletionSource<object> executionAwaiter = null;
+
+
+        public CommandService(IAggregateRootRepository repository,
+            ILiteEventBus eventBus, 
             IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator)
         {
@@ -30,9 +39,76 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             this.serviceLocator = serviceLocator;
         }
 
-        public void Execute(ICommand command, string origin, bool handleInBatch)
+        public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => this.Execute(command, origin, cancellationToken));
+        }
+
+        public void Execute(ICommand command, string origin, bool handleInBatch = false)
+        {
+            this.ExecuteImpl(command, origin, handleInBatch, CancellationToken.None);
+        }
+
+        private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
+        {
+            this.RegisterCommandExecution();
+
+            try
+            {
+                this.ExecuteImpl(command, origin, false, cancellationToken);
+            }
+            finally
+            {
+                this.UnregisterCommandExecution();
+            }
+        }
+
+        private void RegisterCommandExecution()
+        {
+            lock (this.executionCountLock)
+            {
+                this.executingCommandsCount++;
+            }
+        }
+
+        private void UnregisterCommandExecution()
+        {
+            lock (this.executionCountLock)
+            {
+                this.executingCommandsCount--;
+
+                if (this.executingCommandsCount > 0)
+                    return;
+
+                if (this.executionAwaiter != null)
+                {
+                    this.executionAwaiter.SetResult(new object());
+                    this.executionAwaiter = null;
+                }
+            }
+        }
+
+        public Task WaitPendingCommandsAsync()
+        {
+            lock (this.executionCountLock)
+            {
+                if (this.executingCommandsCount == 0)
+                    return Task.FromResult(null as object);
+
+                if (this.executionAwaiter == null)
+                {
+                    this.executionAwaiter = new TaskCompletionSource<object>();
+                }
+
+                return this.executionAwaiter.Task;
+            }
+        }
+
+        protected virtual void ExecuteImpl(ICommand command, string origin, bool handleInBatch, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException("command");
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (!CommandRegistry.Contains(command))
                 throw new CommandServiceException(string.Format("Unable to execute command {0} because it is not registered.", command.GetType().Name));
@@ -47,6 +123,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
 
+            cancellationToken.ThrowIfCancellationRequested();
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -56,7 +133,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
                 aggregate.SetId(aggregateId);
             }
 
-
+            cancellationToken.ThrowIfCancellationRequested();
             foreach (var validator in validators)
             {
                 var validatorInstance = serviceLocator.GetInstance(validator);
@@ -71,6 +148,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
                 }
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
             this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin, handleInBatch);
             this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);

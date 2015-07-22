@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+
+
+  <dimen name="zero">0dp</dimen>
+
+
+  <dimen name="Theme_ProgressBar_height">16dip</dimen>
+  <dimen name="Theme_SeekBar_height">13dip</dimen>
+  <dimen name="Theme_SeekBar_padding">16dip</dimen>
+  <dimen name="Theme_Button_min_height">48dip</dimen>
+  <dimen name="Theme_Button_min_width">64dip</dimen>
+  
+  <dimen name="ListStyle_Divider_height">1dp</dimen>
+
+
+  <dimen name="Toolbar_margin_horizontal">25dp</dimen>
+
+
+  <dimen name="Splash_Logo_size">300dp</dimen>
+  <dimen name="Splash_Logo_padding">100dp</dimen>
+
+
+  <dimen name="Login_ProgressBar_margin_top">-7dp</dimen>
+
+  <dimen name="Login_Element_width">300dp</dimen>
+  <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
+  <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+
+
+  <dimen name="Dashboard_ProgressBar_margin_top">-7dp</dimen>
+
+  <dimen name="Dashboard_Menu_height">80dp</dimen>
+  <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
+  <dimen name="Dashboard_Menu_margin_horizontal">32dp</dimen>
+
+  <dimen name="Dashboard_Menu_Item_margin_horizontal_in_between">@dimen/Dashboard_Menu_margin_horizontal</dimen>
+  <dimen name="Dashboard_Questionnaire_MyQuestionnaireLink_margin_top">42dp</dimen>
+  <dimen name="Dashboard_Questionnaire_MyQuestionnaireLink_margin_bottom">32dp</dimen>
+
+  <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
+  <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
+  <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
+
+  <dimen name="Dashboard_QuestionnairesListItem_LeftIndicator_width">14dp</dimen>
+  
+  <dimen name="Dashboard_QuestionnairesListItem_Body_padding">12dp</dimen>
+
+  <dimen name="Dashboard_QuestionnairesListItem_Title_margin_right">24dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Divider_margin">2dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Title_margin_left">14dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Date_width">128dp</dimen>
+
+  <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_left">32dp</dimen>
+  <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_top">32dp</dimen>
+  <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_right">46dp</dimen>
+
+  <dimen name="Interview_Question_List_Editor_margin_right">24dp</dimen>
+  <dimen name="Interview_Question_List_Editor_margin_left">14dp</dimen>
+  <dimen name="Interview_Question_List_Editor_width">0dp</dimen>
+  <dimen name="Interview_Question_List_Editor_padding">0dp</dimen>
+  <dimen name="Interview_Question_List_Editor_border">0dp</dimen>
+
+  <dimen name="Interview_Question_List_DeleteButton_width">24dp</dimen>
+  <dimen name="Interview_Question_List_DeleteButton_height">24dp</dimen>
+  
+  <dimen name="Interview_Group_button_padding">17dp</dimen>
+  
+  <dimen name="Interview_Question_Answer_FilteredComboBox_padding">4dp</dimen>
+  <dimen name="button_shadow_margin">4dp</dimen>
+  
+</resources>

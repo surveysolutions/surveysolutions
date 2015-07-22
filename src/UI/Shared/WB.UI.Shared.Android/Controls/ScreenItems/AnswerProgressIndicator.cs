@@ -1,4 +1,5 @@
 using System;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {

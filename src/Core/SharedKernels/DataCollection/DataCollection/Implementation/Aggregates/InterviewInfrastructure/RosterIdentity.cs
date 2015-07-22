@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class RosterIdentity
+    public class RosterIdentity
     {
         public Guid GroupId { get; private set; }
         public decimal[] OuterRosterVector { get; private set; }

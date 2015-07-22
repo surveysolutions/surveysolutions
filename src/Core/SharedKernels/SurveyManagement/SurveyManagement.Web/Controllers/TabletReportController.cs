@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models

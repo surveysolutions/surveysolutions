@@ -10,8 +10,8 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -537,10 +537,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 return childQuestion.ConditionExpression;
 
             string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
-                ? ""
+                ? string.Empty
                 : string.Format(" && {0}", childQuestion.ConditionExpression));
 
-            return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + childQuestionCondition;
+            var valuesOfParentCascadingThatHaveChildOptions = childQuestion.Answers.Select(x => x.ParentValue).Distinct();
+            var allValuesOfParentCascadingQuestion = parentQuestion.Answers.Select(x => x.AnswerValue);
+
+            var parentOptionsThatHaveNoChildOptions = allValuesOfParentCascadingQuestion.Where(x => !valuesOfParentCascadingThatHaveChildOptions.Contains(x));
+
+            var expressionToDisableChildThatHasNoOptionsForChosenParent = !parentOptionsThatHaveNoChildOptions.Any()
+                ? string.Empty
+                : string.Join("", parentOptionsThatHaveNoChildOptions.Select(x => string.Format(" && {0}!={1}m", parentQuestion.StataExportCaption, x)));
+
+            return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
         }
 
         private string GenerateQuestionTypeName(IQuestion question)

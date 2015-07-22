@@ -1,4 +1,6 @@
-using WB.Core.GenericSubdomains.Utils.Services;
+using System;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.Views
@@ -12,9 +14,28 @@ namespace WB.UI.Headquarters.Views
             this.configurationManager = configurationManager;
         }
 
-        public string BaseAddress()
+        public string Endpoint
         {
-            return configurationManager.AppSettings["DesignerAddress"];
+            get { return configurationManager.AppSettings["DesignerAddress"]; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public TimeSpan Timeout
+        {
+            get { return new TimeSpan(0, 0, 0, 30); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public int BufferSize
+        {
+            get { return 512; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public bool AcceptUnsignedSslCertificate
+        {
+            get { return false; }
+            set { throw new NotImplementedException(); }
         }
     }
 }
