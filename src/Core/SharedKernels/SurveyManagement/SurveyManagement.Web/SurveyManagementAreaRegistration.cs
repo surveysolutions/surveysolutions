@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 {
                     "~/Scripts/moment.js",
                     "~/Scripts/components/moment-duration-format.js",
-                    "~/Scripts/bootstrap-datetimepicker.js",
+                    "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/ko.datepicker.js",
                     "~/Scripts/viewmodels/pages/periodicstatusreport.js"
                 }
