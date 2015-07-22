@@ -20,8 +20,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             var sideBarItem = serviceLocator.GetInstance<SideBarSectionViewModel>();
             var groupStateViewModel = serviceLocator.GetInstance<GroupStateViewModel>();
-            var answerNotifier = serviceLocator.GetInstance<AnswerNotifier>();
-            sideBarItem.Init(interviewId, groupIdentity, sectionToAddTo, groupStateViewModel, answerNotifier, navigationState);
+            sideBarItem.Init(interviewId, groupIdentity, sectionToAddTo, groupStateViewModel, navigationState);
             return sideBarItem;
         }
     }
