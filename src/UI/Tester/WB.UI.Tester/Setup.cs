@@ -115,8 +115,6 @@ namespace WB.UI.Tester
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
 
             base.FillTargetFactories(registry);
-
-            Mvx.RegisterType<IUserInteractionService, UserInteractionService>();
         }
 
         protected override IDictionary<string, string> ViewNamespaceAbbreviations

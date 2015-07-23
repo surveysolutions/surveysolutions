@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal principal;
-        private readonly Func<IUserInteractionService> userInteraction;
+        private readonly IUserInteractionService userInteraction;
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
-            Func<IUserInteractionService> userInteraction,
+            IUserInteractionService userInteraction,
             AnsweringViewModel answering)
         {
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 var amountOfRostersToRemove = 1;
                 var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
                     amountOfRostersToRemove);
-                if (!(await this.userInteraction().ConfirmAsync(message)))
+                if (!(await this.userInteraction.ConfirmAsync(message)))
                 {
                     changedModel.Checked = true;
                     return;
