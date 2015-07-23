@@ -1540,6 +1540,11 @@ namespace WB.Tests.Unit
             return new QuestionnaireView(new QuestionnaireDocument() {CreatedBy = createdBy ?? Guid.NewGuid()});
         }
 
+        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
+        {
+            return new QuestionnaireView(questionnaireDocument);
+        }
+
         public static GenerationResult GenerationResult(bool success=false)
         {
             return new GenerationResult() {Success = success};
