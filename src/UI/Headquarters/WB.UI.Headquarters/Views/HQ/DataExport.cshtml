@@ -19,12 +19,12 @@
         var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
         var $HistoryUrl = '@Url.Action("GetHistory", "ImportExport")';
 
-        $(function () {
+        $(function() {
             var templates = [
-                    @foreach (var item in Model)
-                    {
-                        <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
-                    }
+                @foreach (var item in Model)
+                {
+                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
+                }
             ];
 
             var model = new Supervisor.VM.ExportData(templates);
@@ -76,20 +76,17 @@
             <td>
                 <div>
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                       <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
                         Data.tab
                     </a>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
                         Stata.dta
                     </a>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2'}">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                        <img src="@Url.Content("~/Content/icons/spss.png")" alt="spss" />
                         SPSS.sav
                     </a>
                 </div>
@@ -97,20 +94,17 @@
             <td>
                 <div>
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
                         Data.tab
                     </a>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
                         Stata.dta
                     </a>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2' }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                        <img src="@Url.Content("~/Content/icons/spss.png")" alt="spss" />
                         SPSS.sav
                     </a>
                 </div>
@@ -118,8 +112,7 @@
             <td>
                 <div>
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $FilesUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
+                        <img src="@Url.Content("~/Content/icons/binary.png")" alt="tabs" />
                         Binary
                     </a>
                 </div>
