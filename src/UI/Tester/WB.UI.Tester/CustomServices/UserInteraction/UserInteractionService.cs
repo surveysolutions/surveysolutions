@@ -22,16 +22,6 @@ namespace WB.UI.Tester.CustomServices.UserInteraction
             }
         }
 
-        public void Confirm(
-            string message,
-            Action<bool> answer,
-            string title = null,
-            string okButton = "OK",
-            string cancelButton = "Cancel")
-        {
-            this.ConfirmImpl(message, answer, title, okButton, cancelButton);
-        }
-
         public Task<bool> ConfirmAsync(
             string message,
             string title = "",
@@ -39,13 +29,15 @@ namespace WB.UI.Tester.CustomServices.UserInteraction
             string cancelButton = "Cancel")
         {
             var tcs = new TaskCompletionSource<bool>();
-            Confirm(message, tcs.SetResult, title, okButton, cancelButton);
+            this.Confirm(message, tcs.SetResult, title, okButton, cancelButton);
             return tcs.Task;
         }
 
-        public void Alert(string message, Action done = null, string title = "", string okButton = "OK")
+        public Task AlertAsync(string message, string title = "", string okButton = "OK")
         {
-            this.AlertImpl(message, done, title, okButton);
+            var tcs = new TaskCompletionSource<object>();
+            this.Alert(message, () => tcs.SetResult(null), title, okButton);
+            return tcs.Task;
         }
 
         public Task WaitPendingUserInteractionsAsync()
@@ -62,6 +54,21 @@ namespace WB.UI.Tester.CustomServices.UserInteraction
 
                 return userInteractionsAwaiter.Task;
             }
+        }
+
+        private void Confirm(
+            string message,
+            Action<bool> answer,
+            string title = null,
+            string okButton = "OK",
+            string cancelButton = "Cancel")
+        {
+            this.ConfirmImpl(message, answer, title, okButton, cancelButton);
+        }
+
+        private void Alert(string message, Action done = null, string title = "", string okButton = "OK")
+        {
+            this.AlertImpl(message, done, title, okButton);
         }
 
         private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton)

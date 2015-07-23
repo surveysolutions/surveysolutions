@@ -64,6 +64,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             IsInProgress = true;
 
+            string errorMessage = null;
+
             try
             {
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
@@ -74,8 +76,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
-                string errorMessage;
-
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
@@ -86,15 +86,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteractionService.Alert(errorMessage);
-                else 
+                if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
             finally
             {
                 IsInProgress = false;    
             }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         public override void NavigateToPreviousViewModel()
