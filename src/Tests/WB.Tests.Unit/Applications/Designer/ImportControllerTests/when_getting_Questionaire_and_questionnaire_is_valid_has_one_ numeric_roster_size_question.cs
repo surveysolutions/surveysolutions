@@ -28,9 +28,12 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == userId));
 
+            var numericIntQuestion = Create.NumericIntegerQuestion(id: numericIntQuestionId);
+            numericIntQuestion.MaxValue = 3;
+            
             var questionnaireDocument = Create.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.NumericIntegerQuestion(id: numericIntQuestionId),
+                numericIntQuestion,
                 Create.NumericQuestion(questionId: numericRealQuestionId, isInteger: false),
                 Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
                 Create.Roster(rosterSizeQuestionId: rosterSizeQuestionId,
