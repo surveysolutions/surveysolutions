@@ -62,6 +62,10 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 var filteredSingleOptionQuestion = question as FilteredSingleOptionQuestionModel;
                 if (filteredSingleOptionQuestion != null)
                     return filteredSingleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
+
+                var cascadingSingleOptionQuestion = question as CascadingSingleOptionQuestionModel;
+                if (cascadingSingleOptionQuestion != null)
+                    return cascadingSingleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
             }
 
             if (answer is TextListAnswer)
