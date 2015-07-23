@@ -9,6 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         where TMeta : class, IReadSideRepositoryEntity, IOrderableSyncPackage
         where TContent : class, IReadSideRepositoryEntity, ISyncPackage
     {
-        void Store(TContent content, TMeta syncPackageMeta, string partialPackageId, string counterId);
+        void Store(TContent content, TMeta syncPackageMeta, string packageId, string sortIndexId);
     }
 }

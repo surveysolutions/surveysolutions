@@ -27,20 +27,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Reposit
             this.packageContentWriter = packageContentWriter;
         }
 
-        public void Store(TContent content, TMeta syncPackageMeta, string partialPackageId, string counterId)
+        public void Store(TContent content, TMeta syncPackageMeta, string packageId, string sortIndexId)
         {
             lock (StoreSyncDeltaLockObject)
             {
-                SynchronizationDeltasCounter deltasCounter = this.counterStorage.GetById(counterId);
+                SynchronizationDeltasCounter deltasCounter = this.counterStorage.GetById(sortIndexId);
                 int storedDeltasCount = deltasCounter != null ? deltasCounter.CountOfStoredDeltas : 1;
 
                 int nextSortIndex = storedDeltasCount;
 
                 storedDeltasCount++;
-                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), counterId);
+                this.counterStorage.Store(new SynchronizationDeltasCounter(storedDeltasCount), sortIndexId);
                 
-                var packageId = string.Format("{0}${1}", partialPackageId, nextSortIndex);
-
                 syncPackageMeta.SortIndex = nextSortIndex;
                 syncPackageMeta.PackageId = packageId;
 

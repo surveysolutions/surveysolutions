@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                           PersonName = evnt.Payload.PersonName,
                           PhoneNumber = evnt.Payload.PhoneNumber
                       };
-            this.SaveUser(doc, evnt.EventTimeStamp);
+            this.SaveUser(doc, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
         }
 
         public void Handle(IPublishedEvent<UserChanged> evnt)
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             item.Email = evnt.Payload.Email;
             item.Password = evnt.Payload.PasswordHash;
 
-            this.SaveUser(item, evnt.EventTimeStamp);
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
         }
 
         public void Handle(IPublishedEvent<UserLocked> evnt)
@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedByHQ = true;
-            this.SaveUser(item, evnt.EventTimeStamp);
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> evnt)
@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedByHQ = false;
-            this.SaveUser(item, evnt.EventTimeStamp);
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
         }
 
         public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt)
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedBySupervisor = true;
-            this.SaveUser(item, evnt.EventTimeStamp);
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
         }
 
         public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
@@ -110,10 +110,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedBySupervisor = false;
-            this.SaveUser(item, evnt.EventTimeStamp);
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
         }
 
-        private void SaveUser(UserDocument user, DateTime timestamp)
+        private void SaveUser(UserDocument user, DateTime timestamp, string packageId)
         {
             if (!user.Roles.Contains(UserRoles.Operator))
             {
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             
             var syncPackageContent = new UserSyncPackageContent(content);
 
-            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, user.PublicKey.FormatGuid(), CounterId);
+            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, packageId, CounterId);
         }
     }
 }
