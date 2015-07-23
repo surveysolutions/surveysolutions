@@ -34,6 +34,7 @@ using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
@@ -306,6 +307,7 @@ namespace WB.UI.Capi
             var bus = new InProcessEventBus(Kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
+            kernel.Bind<ILiteEventBus>().ToConstant(bus).Named("interviewViewBus");
 
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
