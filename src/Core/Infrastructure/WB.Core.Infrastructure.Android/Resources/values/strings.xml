@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <string name="ApplicationName">Questionnaire Tester</string>
-  <integer name="HttpResponseTimeout">30</integer>
+  <integer name="HttpResponseTimeout">300</integer>
   <integer name="BufferSize">512</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
