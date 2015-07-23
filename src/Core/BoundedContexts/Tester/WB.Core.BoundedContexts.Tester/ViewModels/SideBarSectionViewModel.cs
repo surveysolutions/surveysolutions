@@ -179,7 +179,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         Children.TreeToEnumerable(x => x.Children)
                                 .ToList() 
                                 .ForEach(x => x.Dispose());
-                        this.mainThreadDispatcher.RequestMainThreadAction(() => this.Children.Clear());
+
+                        this.Children = new ObservableCollection<SideBarSectionViewModel>();
                     }
 
                     this.RaisePropertyChanged();
