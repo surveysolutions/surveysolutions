@@ -153,18 +153,15 @@ namespace WB.UI.Designer.Api
 
         private void UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(QuestionnaireDocument questionnaire)
         {
-            var rosterSizeQuestionIds =
-                questionnaire.Find<IGroup>(g => g.RosterSizeQuestionId.HasValue)
-                    .Select(g => g.RosterSizeQuestionId.Value)
-                    .ToArray();
-
-            foreach (var rosterSizeQuestionId in rosterSizeQuestionIds)
+            var numericQuestions = questionnaire.Find<NumericQuestion>(q => true).ToArray();
+            foreach (var numericQuestion in numericQuestions)
             {
-                var numericRosterSizeQuestion = questionnaire.FirstOrDefault<NumericQuestion>(q => q.PublicKey == rosterSizeQuestionId);
-                if (numericRosterSizeQuestion == null)
-                    continue;
-
-                numericRosterSizeQuestion.MaxValue = Constants.MaxRosterRowCount;
+                var rostersTriggeredByTheQuestion =
+                    questionnaire.Find<IGroup>(g => g.RosterSizeQuestionId == numericQuestion.PublicKey);
+                if (rostersTriggeredByTheQuestion.Any())
+                    numericQuestion.MaxValue = Constants.MaxRosterRowCount;
+                else
+                    numericQuestion.MaxValue = null;
             }
         }
 
