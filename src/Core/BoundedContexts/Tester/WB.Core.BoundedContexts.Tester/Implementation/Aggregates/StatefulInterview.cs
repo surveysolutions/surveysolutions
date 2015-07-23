@@ -19,10 +19,13 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
     {
         private class CalculatedState
         {
-            public Dictionary<Identity, IEnumerable<Identity>> EnabledInterviewerChildQuestions = new Dictionary<Identity, IEnumerable<Identity>>();
+            public Dictionary<Identity, ReadOnlyCollection<Identity>> EnabledInterviewerChildQuestions = new Dictionary<Identity, ReadOnlyCollection<Identity>>();
+            public Dictionary<Identity, ReadOnlyCollection<Identity>> GroupsAndRostersInGroup = new Dictionary<Identity, ReadOnlyCollection<Identity>>();
+            public Dictionary<Identity, bool> IsEnabled = new Dictionary<Identity, bool>();
         }
 
         private CalculatedState calculated = null;
+        private IQuestionnaire cachedQuestionnaire = null;
 
         private readonly Dictionary<string, BaseInterviewAnswer> answers;
         private readonly Dictionary<string, InterviewGroup> groups;
@@ -610,14 +613,14 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         {
             return this
                 .GetEnabledInterviewerChildQuestions(group)
-                .Count(this.IsEnabled);
+                .Count;
         }
 
         public int GetGroupsInGroupCount(Identity group)
         {
             return this
                 .GetGroupsAndRostersInGroup(group)
-                .Count();
+                .Count;
         }
 
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
@@ -733,6 +736,14 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 
         public bool IsEnabled(Identity entityIdentity)
         {
+            return GetOrCalculate(
+                entityIdentity,
+                this.IsEnabledImpl,
+                this.calculated.IsEnabled);
+        }
+
+        private bool IsEnabledImpl(Identity entityIdentity)
+        {
             var entityKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
 
             if (this.groups.ContainsKey(entityKey))
@@ -782,17 +793,25 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             return interviewAnswerModel.InterviewerComment;
         }
 
-        private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity groupIdentity)
+        private ReadOnlyCollection<Identity> GetGroupsAndRostersInGroup(Identity group)
+        {
+            return GetOrCalculate(
+                group,
+                this.GetGroupsAndRostersInGroupImpl,
+                this.calculated.GroupsAndRostersInGroup);
+        }
+
+        private ReadOnlyCollection<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(groupIdentity.Id);
+            IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(group.Id);
 
             return this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
-                this.interviewState, groupsAndRosters, groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds);
+                this.interviewState, groupsAndRosters, group.RosterVector, questionnaire, GetRosterInstanceIds).ToReadOnlyCollection();
         }
 
-        private IEnumerable<Identity> GetEnabledInterviewerChildQuestions(Identity group)
+        private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestions(Identity group)
         {
             return GetOrCalculate(
                 group,
@@ -800,7 +819,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
                 this.calculated.EnabledInterviewerChildQuestions);
         }
 
-        private IEnumerable<Identity> GetEnabledInterviewerChildQuestionsImpl(Identity group)
+        private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestionsImpl(Identity group)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -809,7 +828,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             IEnumerable<Identity> questions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, questionIds, group.RosterVector, questionnaire, GetRosterInstanceIds);
 
-            return questions.Where(this.IsEnabled);
+            return questions.Where(this.IsEnabled).ToReadOnlyCollection();
         }
 
         private T GetQuestionAnswer<T>(Identity identity) where T : BaseInterviewAnswer, new()
@@ -907,7 +926,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 
         private IQuestionnaire GetQuestionnaireOrThrow()
         {
-            return GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion);
+            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion));
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)
