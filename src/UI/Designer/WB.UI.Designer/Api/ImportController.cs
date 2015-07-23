@@ -4,6 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -11,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
@@ -136,11 +140,32 @@ namespace WB.UI.Designer.Api
                 });
             }
 
+            UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(
+                questionnaireView.Source);
             return new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(jsonUtils.Serialize(questionnaireView.Source)),
                 QuestionnaireAssembly = resultAssembly
             };
+        }
+
+
+
+        private void UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(QuestionnaireDocument questionnaire)
+        {
+            var rosterSizeQuestionIds =
+                questionnaire.Find<IGroup>(g => g.RosterSizeQuestionId.HasValue)
+                    .Select(g => g.RosterSizeQuestionId.Value)
+                    .ToArray();
+
+            foreach (var rosterSizeQuestionId in rosterSizeQuestionIds)
+            {
+                var numericRosterSizeQuestion = questionnaire.FirstOrDefault<NumericQuestion>(q => q.PublicKey == rosterSizeQuestionId);
+                if (numericRosterSizeQuestion == null)
+                    continue;
+
+                numericRosterSizeQuestion.MaxValue = Constants.MaxRosterRowCount;
+            }
         }
 
         [HttpPost]
