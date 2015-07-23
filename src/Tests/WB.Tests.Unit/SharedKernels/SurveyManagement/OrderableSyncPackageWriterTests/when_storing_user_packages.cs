@@ -1,7 +1,8 @@
+using System;
 using Machine.Specifications;
 
 using Moq;
-
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Synchronization.SyncStorage;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.OrderableSyncPackageWrite
     {
         Establish context = () =>
         {
-            expectedPackageId = string.Format("{0}${1}", partialPackageId, storedIndex);
+            expectedPackageId = Guid.NewGuid().FormatGuid();
             meta = CreateUserSyncPackageMeta();
             content = CreateUserSyncPackageContent();
             var storedCounter = CreateSynchronizationDeltasCounter(storedIndex);
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.OrderableSyncPackageWrite
         };
 
         Because of = () =>
-            writer.Store(content, meta, partialPackageId, counterId);
+            writer.Store(content, meta, expectedPackageId, counterId);
 
         It should_stored_package_meta_with_updated_SortIndex_and_PackageId_fields = () =>
             packageMetaWriterMock.Verify(x => x.Store(
@@ -54,7 +55,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.OrderableSyncPackageWrite
                 x.Store(Moq.It.Is<SynchronizationDeltasCounter>(c => c.CountOfStoredDeltas == storedIndex + 1), counterId), Times.Once);
 
         private static UserSyncPackageMeta meta;
-        private static string partialPackageId = "hello";
         private static UserSyncPackageContent content;
         private const int storedIndex = 5;
         private static string expectedPackageId;

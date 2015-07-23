@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.OrderableSyncPackageWrite
         };
 
         Because of = () =>
-            writer.Store(content, meta, partialPackageId, counterId);
+            writer.Store(content, meta, expectedPackageId, counterId);
 
         It should_stored_package_meta_with_updated_SortIndex_and_PackageId_fields = () =>
             packageMetaWriterMock.Verify(x => x.Store(
