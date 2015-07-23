@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -31,16 +32,27 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
-        public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IUserViewFactory userViewFactory, IPasswordHasher passwordHasher, ISettingsProvider settingsProvider,
-            IDataExportRepositoryWriter dataExportRepositoryWriter, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
+        private readonly ITransactionManagerProvider transactionManagerProvider;
+
+        public ControlPanelController(
+            IServiceLocator serviceLocator, 
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
+            ICommandService commandService,
+            IGlobalInfoProvider globalInfo,
+            ILogger logger,
+            IUserViewFactory userViewFactory,
+            IPasswordHasher passwordHasher, 
+            ISettingsProvider settingsProvider,
+            IDataExportRepositoryWriter dataExportRepositoryWriter,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
+            ITransactionManagerProvider transactionManagerProvider)
             : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
             this.dataExportRepositoryWriter = dataExportRepositoryWriter;
             this.interviewSummaries = interviewSummaries;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public ActionResult ReexportInterviews()
@@ -58,22 +70,29 @@ namespace WB.UI.Headquarters.Controllers
         private void ReexportApprovedInterviewsImpl(int skip)
         {
             int pageSize = 20;
-
-            int count = this.GetApprovedInterviewIds().Count();
-            int processed = skip;
-
-            lastReexportMessage = string.Format("found {0} interviews", count);
-            while (processed < count)
+            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            try
             {
-                List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
+                int count = this.GetApprovedInterviewIds().Count();
+                int processed = skip;
 
-                foreach (var interviewId in interviewIds)
+                lastReexportMessage = string.Format("found {0} interviews", count);
+                while (processed < count)
                 {
-                    this.dataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
-                    processed++;
+                    List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
 
-                    lastReexportMessage = string.Format("last processed interview index: {0}", processed);
+                    foreach (var interviewId in interviewIds)
+                    {
+                        this.dataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
+                        processed++;
+
+                        lastReexportMessage = string.Format("last processed interview index: {0}", processed);
+                    }
                 }
+            }
+            finally
+            {
+                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
             }
         }
 
@@ -134,8 +153,8 @@ namespace WB.UI.Headquarters.Controllers
                             password: passwordHasher.Hash(model.Password), email: model.Email,
                             isLockedBySupervisor: false,
                             isLockedByHQ: false, roles: new[] { role }, supervsor: null,
-                            personName:model.PersonName,
-                            phoneNumber:model.PhoneNumber));
+                            personName: model.PersonName,
+                            phoneNumber: model.PhoneNumber));
                         return true;
                     }
                     catch (Exception ex)
@@ -162,7 +181,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResetUserPassword(UserModel model)
         {
-            UserView userToCheck = 
+            UserView userToCheck =
                 this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
             if (userToCheck != null)
             {
@@ -173,7 +192,7 @@ namespace WB.UI.Headquarters.Controllers
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
                         roles: userToCheck.Roles.ToArray(),
-                        personName:userToCheck.PersonName, phoneNumber:userToCheck.PhoneNumber));
+                        personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
                 }
