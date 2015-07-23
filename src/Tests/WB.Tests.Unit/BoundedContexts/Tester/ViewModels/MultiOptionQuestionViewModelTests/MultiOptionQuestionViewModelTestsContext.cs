@@ -31,17 +31,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionQuestionVie
             AnsweringViewModel answeringViewModel = null, 
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewmodel = null)
         {
-            var userInteractionFunc = userInteractionService == null
-                ? (Func<IUserInteractionService>) (Mock.Of<IUserInteractionService>)
-                : (() => userInteractionService);
-
             return new MultiOptionQuestionViewModel(
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                userInteractionFunc,
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>());
         }
 
