@@ -63,7 +63,13 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             }
             catch (FlurlHttpTimeoutException ex)
             {
-                throw new RestException(message: "Request timeout", statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                throw new RestException(message: "Request timeout", statusCode: HttpStatusCode.RequestTimeout,
+                    innerException: ex);
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw new RestException(message: "Request timeout", statusCode: HttpStatusCode.RequestTimeout,
+                    innerException: ex);
             }
             catch (FlurlHttpException ex)
             {
