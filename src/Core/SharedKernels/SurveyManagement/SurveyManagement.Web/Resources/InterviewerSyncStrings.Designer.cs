@@ -188,6 +188,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization partially failed. Completed interviews were sent to server, but you won&apos;t receive new assignments. Please navigate to android settings -&gt; Apps -&gt; Interviewer and push Clear Data button. Then synchronize from scratch..
+        /// </summary>
+        internal static string OldInterviewerNeedsCleanup {
+            get {
+                return ResourceManager.GetString("OldInterviewerNeedsCleanup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Internal server error occurred. Please contact developers..
         /// </summary>
         internal static string ServerError {
