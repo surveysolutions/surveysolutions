@@ -77,6 +77,7 @@ namespace WB.UI.Headquarters.Controllers
 
             int processed = skip;
 
+            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
             lastReexportMessage = string.Format("found {0} interviews", count);
             while (processed < count)
             {
@@ -97,9 +98,10 @@ namespace WB.UI.Headquarters.Controllers
                     }
 
                     processed++;
-                    lastReexportMessage = string.Format("last processed interview index: {0}", processed);
+                    lastReexportMessage = string.Format("last processed interview index: {0} / {1}", processed, count);
                 }
             }
+            this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
         }
 
         private IQueryable<Guid> GetApprovedInterviewIds()
