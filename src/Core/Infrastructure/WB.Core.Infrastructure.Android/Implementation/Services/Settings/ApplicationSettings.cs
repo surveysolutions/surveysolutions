@@ -43,8 +43,15 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
 
         public TimeSpan RequestTimeout
         {
-            get { return new TimeSpan(0, 0, SharedPreferences.GetInt(HttpResponseTimeoutParameterName,
-                                            Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout))); }
+            get
+            {
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout);
+                string httpResponseTimeoutSec = SharedPreferences.GetString(HttpResponseTimeoutParameterName, defValue.ToString());
+
+                int result;
+
+                return int.TryParse(httpResponseTimeoutSec, out result) ? new TimeSpan(0, 0, result) : new TimeSpan(0, 0, defValue);
+            }
         }
 
         public int BufferSize
