@@ -74,8 +74,9 @@ namespace WB.UI.Headquarters.Controllers
             this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
             int count = this.GetApprovedInterviewIds().Count();
             this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
-
+            int errorsCount = 0;
             int processed = skip;
+            List<Guid> notExportedInterviews = new List<Guid>();
 
             this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
             lastReexportMessage = string.Format("found {0} interviews", count);
@@ -93,15 +94,19 @@ namespace WB.UI.Headquarters.Controllers
                     }
                     catch (Exception ex)
                     {
+                        errorsCount++;
+                        notExportedInterviews.Add(interviewId);
                         this.Logger.Error(ex.Message, ex);
                         this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
                     }
 
                     processed++;
-                    lastReexportMessage = string.Format("last processed interview index: {0} / {1}", processed, count);
+                    lastReexportMessage = string.Format("last processed interview index: {0} / {1}. Errors: {2}", processed, count, errorsCount);
                 }
             }
             this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+            lastReexportMessage += Environment.NewLine;
+            lastReexportMessage += string.Join(Environment.NewLine, notExportedInterviews);
         }
 
         private IQueryable<Guid> GetApprovedInterviewIds()
