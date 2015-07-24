@@ -12,6 +12,7 @@ using Android.Widget;
 using System;
 using System.Text;
 using System.Threading;
+using Flurl.Http;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -505,14 +506,21 @@ namespace WB.UI.Capi
             }
 
             var restException = exception as RestException;
-            if (restException != null)
+            var flurException = exception as FlurlHttpException;
+
+            if (restException != null || flurException != null)
             {
-                switch (restException.StatusCode)
+                HttpStatusCode statusCode = restException != null ? restException.StatusCode : flurException.Call.Response.StatusCode;
+
+                switch (statusCode)
                 {
                     case HttpStatusCode.UpgradeRequired:
                     case HttpStatusCode.Unauthorized:
                     case HttpStatusCode.NotAcceptable:
                         errorMessage = restException.Message;
+                        break;
+                    case HttpStatusCode.Conflict:
+                        errorMessage = Properties.Resources.OldInterviewerNeedsCleanup;
                         break;
                     case HttpStatusCode.NotFound:
                     case HttpStatusCode.InternalServerError:

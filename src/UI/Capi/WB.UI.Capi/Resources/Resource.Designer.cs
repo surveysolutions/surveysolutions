@@ -38,6 +38,8 @@ namespace WB.UI.Capi
 			global::MWBarcodeScanner.Resource.Id.zoomButton = global::WB.UI.Capi.Resource.Id.zoomButton;
 			global::MWBarcodeScanner.Resource.Layout.scanner = global::WB.UI.Capi.Resource.Layout.scanner;
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.Capi.Resource.String.library_name;
+			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
+			global::PCLStorage.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.GenericSubdomains.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.GenericSubdomains.Android.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
