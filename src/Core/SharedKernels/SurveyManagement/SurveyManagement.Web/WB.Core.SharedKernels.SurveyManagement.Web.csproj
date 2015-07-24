@@ -659,6 +659,9 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <EmbeddedResource Include="Scripts\moment-with-locales.js" />
     <EmbeddedResource Include="Scripts\moment-with-locales.min.js" />
+    <EmbeddedResource Include="Scripts\bootstrap3-typeahead.js" />
+    <EmbeddedResource Include="Scripts\bootstrap3-typeahead.min.js" />
+    <EmbeddedResource Include="Scripts\knockout\ko.typeahead.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ar.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.az.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.bg.min.js" />

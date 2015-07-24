@@ -1,6 +1,8 @@
-﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsibles, users, commandExecutionUrl) {
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
+
+    self.Users = users;
 
     self.Assign = function (user) {
         self.sendCommandAfterFilterAndConfirm(
