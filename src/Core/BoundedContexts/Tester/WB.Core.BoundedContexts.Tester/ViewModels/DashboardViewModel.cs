@@ -186,6 +186,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
 
+            string errorMessage = null;
             try
             {
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
@@ -237,21 +238,22 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
-                    this.userInteractionService.Alert(errorMessage);
-                else
+                if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
             finally
             {
                 this.IsInProgress = false;   
             }
+
+            if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
-
+            string errorMessage = null;
             try
             {
                 await this.questionnaireListStorageAccessor.RemoveAsync(this.myQuestionnaires);
@@ -270,17 +272,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
-                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
 
-                if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
-                    this.userInteractionService.Alert(errorMessage);
-                else
+                if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
             finally
             {
                 this.IsInProgress = false;
             }
+
+            if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         public override void NavigateToPreviousViewModel()
