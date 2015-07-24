@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     return UIResources.InvalidEndpoint;
 
                 case HttpStatusCode.BadRequest:
+                case HttpStatusCode.Redirect:
                     return UIResources.InvalidEndpoint;
 
                 case HttpStatusCode.InternalServerError:
