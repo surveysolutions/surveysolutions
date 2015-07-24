@@ -161,6 +161,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void SignOut()
         {
+            this.IsInitialized = false;
             this.principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
@@ -184,8 +185,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsInProgress = true;
 
             this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
-
-            string errorMessage = null;
 
             try
             {
@@ -216,6 +215,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
+                    this.IsInitialized = false;
                     this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
                 }
             }
@@ -237,28 +237,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         break;
                 }
 
-                if (string.IsNullOrEmpty(errorMessage))
+                if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
+                    this.userInteractionService.Alert(errorMessage);
+                else
                     throw;
-            }
-            catch (OperationCanceledException)
-            {
-                // show here the message that loading questionnaire was canceled
-                // don't needed in the current implementation
             }
             finally
             {
                 this.IsInProgress = false;   
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
 
-            string errorMessage = null;
             try
             {
                 await this.questionnaireListStorageAccessor.RemoveAsync(this.myQuestionnaires);
@@ -277,18 +270,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
-                errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
-                
-                if (string.IsNullOrEmpty(errorMessage))
+                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+
+                if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
+                    this.userInteractionService.Alert(errorMessage);
+                else
                     throw;
             }
             finally
             {
                 this.IsInProgress = false;
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         public override void NavigateToPreviousViewModel()

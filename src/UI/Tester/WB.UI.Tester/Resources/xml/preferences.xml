@@ -2,6 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
   <EditTextPreference
+   android:key="HttpResponseTimeout"
+   android:numeric="integer"
+   android:title="@string/Prefs_HttpResponseTimeoutTitle"
+   android:summary="@string/Prefs_HttpResponseTimeoutSummary"
+   android:defaultValue="@integer/HttpResponseTimeout"/>
+  
+  <EditTextPreference
    android:key="GpsReceiveTimeoutSec"
    android:numeric="integer"
    android:title="@string/Prefs_GpsReceiveTimeoutSecTitle"

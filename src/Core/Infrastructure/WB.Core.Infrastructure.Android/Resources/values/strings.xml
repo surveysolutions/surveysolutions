@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <string name="ApplicationName">Questionnaire Tester</string>
-  <integer name="HttpResponseTimeout">300</integer>
+  <integer name="HttpResponseTimeout">1200</integer>
   <integer name="BufferSize">512</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
@@ -24,4 +24,6 @@
   <string name="Prefs_DesignerEndPointSummary">URL that is used to communicate with designer application</string>
   <string name="Prefs_AcceptUnsignedTitle">Accept all SSL certificates</string>
   <string name="Prefs_AcceptUnsignedSummary">Disable SSL certificate validation</string>
+  <string name="Prefs_HttpResponseTimeoutTitle">Server Response timeout</string>
+  <string name="Prefs_HttpResponseTimeoutSummary">Number of seconds to wait until server response</string>
 </resources>
