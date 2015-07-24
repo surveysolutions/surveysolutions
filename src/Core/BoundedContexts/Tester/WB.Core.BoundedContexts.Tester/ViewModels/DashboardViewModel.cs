@@ -161,6 +161,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void SignOut()
         {
+            this.IsInitialized = false;
             this.principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
@@ -214,6 +215,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
+                    this.IsInitialized = false;
                     this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
                 }
             }
@@ -237,15 +239,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(errorMessage))
+                if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
                     this.userInteractionService.Alert(errorMessage);
                 else 
                     throw;
             }
             catch (OperationCanceledException)
             {
-                // show here the message that loading questionnaire was canceled
-                // don't needed in the current implementation
+                if (this.IsInitialized)
+                    this.userInteractionService.Alert(UIResources.RequestTimeout);
             }
             finally
             {
