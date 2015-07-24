@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Android.App;
 using Android.Content.PM;
@@ -12,17 +13,31 @@ namespace WB.UI.Tester.Activities
         private static int tapTimes = 0;
         private Preference devSettingsCategory;
 
+        const string designerEndpointKey = "DesignerEndpoint";
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             this.AddPreferencesFromResource(Resource.Xml.preferences);
 
             this.devSettingsCategory = this.FindPreference("dev_settings_category");
-            this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
 
+            Preference designerEndpointPreference = this.FindPreference(designerEndpointKey);
+            designerEndpointPreference.PreferenceChange += DevSettingsCategoryOnPreferenceChange;
+
+            this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
+            
             this.SetupVersionPreference();
         }
-        
+
+        void DevSettingsCategoryOnPreferenceChange(object sender, Preference.PreferenceChangeEventArgs preferenceChangeEventArgs)
+        {
+            //string uri = preferenceChangeEventArgs.NewValue.ToString();
+            //Uri uriResult;
+            //bool result = Uri.TryCreate(uri, UriKind.Absolute, out uriResult);
+            //preferenceChangeEventArgs.Handled = result && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+        }
+
         private void SetupVersionPreference()
         {
             Preference versionPreference = this.FindPreference("version");
