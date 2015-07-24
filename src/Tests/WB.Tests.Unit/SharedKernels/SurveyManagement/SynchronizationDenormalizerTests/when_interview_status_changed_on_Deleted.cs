@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         };
 
         Because of = () =>
-            denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.Deleted, comments));
+            denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.Deleted, comments, eventId: Guid.Parse(partialPackageId)));
 
         It should_create_interview_package = () =>
             interviewPackageStorageWriterMock.Verify(x => x.Store(
