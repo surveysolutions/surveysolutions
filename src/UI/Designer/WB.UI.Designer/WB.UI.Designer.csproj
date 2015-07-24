@@ -256,6 +256,7 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
+    <Compile Include="Code\Implementation\ShareChangeType.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="Code\Implementation\MailNotifier.cs" />
     <Compile Include="Code\IRecipientNotifier.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
+    <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -372,6 +374,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\NotificationMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NotificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
@@ -1347,6 +1354,10 @@
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

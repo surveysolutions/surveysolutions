@@ -1,7 +1,5 @@
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-Hello @(String.IsNullOrWhiteSpace(Model.UserName) ? Model.Email : Model.UserName),
+Hello @Model.UserCallName,
 <br/>
-@(String.IsNullOrWhiteSpace(Model.ActionPersonEmail) ? "user" : Model.ActionPersonEmail) has stopped to share with you questionnaire @(String.IsNullOrWhiteSpace(Model.QiestionnaireTitle) ? "unknown" : Model.QiestionnaireTitle) 
-
-
+@Model.ActionPersonCallName has stopped to share with you questionnaire: @Model.QuestionnaireDisplayTitle
