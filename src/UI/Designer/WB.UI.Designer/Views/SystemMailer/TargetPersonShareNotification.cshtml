@@ -5,13 +5,3 @@ Hello @Model.UserCallName,
 <br/>
 @Model.ActionPersonCallName has invited you to @Model.ShareTypeName the following questionnaire:
 @Html.ActionLink(Model.QuestionnaireDisplayTitle, "Open", "App", HttpContext.Current.Request.Url.Scheme, null, null, new { id = Model.QuestionnaireId }, null)
-@*<a href="@Model.QuestionnaireLink">@Model.QuestionnaireDisplayTitle</a>*@
-
-@*
-    @Html.ActionLink(Model.QuestionnaireDisplayTitle, "Open", "App", HttpContext.Current.Request.Url.Scheme, null, null, new { id = Model.QuestionnaireId }, null)
-
-
-
-    @Html.ActionLink(Model.QuestionnaireDisplayTitle, "Open", "App", @Model.QuestionnaireId, null)
-*@
-
