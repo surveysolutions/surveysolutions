@@ -69,27 +69,43 @@
     </div>
     <div class="jumbotron">
         <h1>Warning</h1>
-        <p>Before take any action, make sure find right interview and there is any problem with it</p>
-        <p><a class="btn btn-success btn-lg" href="@Url.Action("Troubleshoot","Interview")">Fix another interview</a></p>
+
+        <p>Before taking any actions, make sure you have selected the right interview and this interview has one or more of the problems listed below</p>
+        <h3>Re-evaluate if</h3>
+        <ul>
+            <li>You found a group or question that was disabled\enabled by mistake</li>
+            <li>You found a group or question that was invalid\valid by mistake</li>
+        </ul>
+
+        <h3>Re-export if</h3>
+        <ul>
+            <li>You re-evaluated the interview</li>
+        </ul>
+
+        <h3>Re-apply the most recent interview status if</h3>
+        <ul>
+            <li>Status of interview on details page differs from the status displayed on Interviews page</li>
+        </ul>
+        <p>or <a class="btn btn-success btn-lg" href="@Url.Action("Troubleshoot","Interview")">Fix another interview</a></p>
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <h3>You should revalidate interview only if</h3>
+            <h3>Re-evaluate if</h3>
             <ul>
-                <li>You found any mistakenly disabled\enabled group or question</li>
-                <li>You found any mistakenly invalid\valid question</li>
+                <li>You found a group or question that was disabled\enabled by mistake</li>
+                <li>You found a group or question that was invalid\valid by mistake</li>
             </ul>
         </div>
         <div class="col-sm-4">
-            <h3>You should re-export interview only if</h3>
+            <h3>Re-export if</h3>
             <ul>
-                <li>You did revalidation and did not change interview status</li>
+                <li>You re-evaluated the interview</li>
             </ul>
         </div>
         <div class="col-sm-4">
-            <h3>You should repeat last status interview only if</h3>
+            <h3>Re-apply the most recent interview status if</h3>
             <ul>
-                <li>Status of interview on details page differ from status on Interviews page</li>
+                <li>Status of interview on details page differs from the status displayed on Interviews page</li>
             </ul>
         </div>
     </div>
@@ -99,7 +115,7 @@
             {
                 @Html.HiddenFor(x => x.InterviewId)
                 @Html.HiddenFor(x => x.QuestionnairePublicKey)
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Revalidate</button>
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Re-evaluate</button>
             }
             @if (this.TempData.ContainsKey("Revalidation.Error"))
             {
@@ -127,7 +143,7 @@
             {
                 @Html.HiddenFor(x => x.InterviewId)
                 @Html.HiddenFor(x => x.QuestionnairePublicKey)
-                <button class="btn btn-primary  btn-lg btn-block" type="submit">Repeat last status</button>
+                <button class="btn btn-primary  btn-lg btn-block" type="submit">Re-apply recent status change</button>
             }
 
             @if (this.TempData.ContainsKey("RepeatLastStatus.Error"))
