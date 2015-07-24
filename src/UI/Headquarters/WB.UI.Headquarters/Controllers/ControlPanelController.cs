@@ -35,16 +35,16 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ITransactionManagerProvider transactionManagerProvider;
 
         public ControlPanelController(
-            IServiceLocator serviceLocator, 
+            IServiceLocator serviceLocator,
             IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ILogger logger,
             IUserViewFactory userViewFactory,
-            IPasswordHasher passwordHasher, 
+            IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             ITransactionManagerProvider transactionManagerProvider)
             : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
         {
@@ -70,29 +70,35 @@ namespace WB.UI.Headquarters.Controllers
         private void ReexportApprovedInterviewsImpl(int skip)
         {
             int pageSize = 20;
+
             this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-            try
-            {
-                int count = this.GetApprovedInterviewIds().Count();
-                int processed = skip;
+            int count = this.GetApprovedInterviewIds().Count();
+            this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
 
-                lastReexportMessage = string.Format("found {0} interviews", count);
-                while (processed < count)
+            int processed = skip;
+
+            lastReexportMessage = string.Format("found {0} interviews", count);
+            while (processed < count)
+            {
+                List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
+
+                foreach (var interviewId in interviewIds)
                 {
-                    List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
-
-                    foreach (var interviewId in interviewIds)
+                    try
                     {
+                        this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                         this.dataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
-                        processed++;
-
-                        lastReexportMessage = string.Format("last processed interview index: {0}", processed);
+                        this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
                     }
+                    catch (Exception ex)
+                    {
+                        this.Logger.Error(ex.Message, ex);
+                        this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                    }
+
+                    processed++;
+                    lastReexportMessage = string.Format("last processed interview index: {0}", processed);
                 }
-            }
-            finally
-            {
-                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
             }
         }
 
