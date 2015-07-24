@@ -110,15 +110,15 @@ namespace WB.Tests.Unit
         public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, 
             Guid? eventSourceId = null,
             string origin = null,
-            DateTime? eventTimeStamp = null)
+            DateTime? eventTimeStamp = null,
+            Guid? eventId = null)
             where T : class
         {
-            var eventId = Guid.NewGuid();
             var mock = new Mock<IPublishedEvent<T>>();
             mock.Setup(x => x.Payload).Returns(@event);
             mock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
             mock.Setup(x => x.Origin).Returns(origin);
-            mock.Setup(x => x.EventIdentifier).Returns(eventId);
+            mock.Setup(x => x.EventIdentifier).Returns(eventId ?? Guid.NewGuid());
             mock.Setup(x => x.EventTimeStamp).Returns((eventTimeStamp ?? DateTime.Now));
             var publishableEventMock =mock.As<IPublishableEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
@@ -319,44 +319,50 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
             }
 
-            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId)
+            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId, Guid? eventId = null)
             {
                 return new UserUnlockedBySupervisor
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId)
+            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId, Guid? eventId = null)
             {
                 return new UserLockedBySupervisor
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId)
+            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId, Guid? eventId = null)
             {
                 return new UserUnlocked
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserLocked> UserLocked(Guid userId)
+            public static IPublishedEvent<UserLocked> UserLocked(Guid userId, Guid? eventId = null)
             {
                 return new UserLocked
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email)
+            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email, Guid? eventId = null)
             {
                 return new UserChanged
                 {
                     PasswordHash = password,
                     Email = email
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, string name, string password, string email, bool islockedBySupervisor, bool isLocked)
+            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
+                string name, 
+                string password, 
+                string email,
+                bool islockedBySupervisor, 
+                bool isLocked,
+                Guid? eventId = null)
             {
                 return new NewUserCreated
                 {
@@ -366,7 +372,7 @@ namespace WB.Tests.Unit
                     IsLockedBySupervisor = islockedBySupervisor,
                     IsLocked = isLocked,
                     Roles = new[] { UserRoles.Operator }
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
             public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
@@ -374,10 +380,13 @@ namespace WB.Tests.Unit
                 return new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
             }
 
-            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, InterviewStatus status, string comment = "hello")
+            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, 
+                InterviewStatus status, 
+                string comment = "hello",
+                Guid? eventId = null)
             {
                 return new InterviewStatusChanged(status, comment)
-                        .ToPublishedEvent(eventSourceId: interviewId);
+                    .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
             }
 
             public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
