@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class RevalidateModel
+    public class TroubleshootModel
     {
         [RegularExpression(
             "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", 

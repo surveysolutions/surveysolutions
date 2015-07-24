@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
 {
-    public class InterviewInfoForRevalidationInputModel
+    public class InterviewTroubleshootInputModel
     {
         public Guid InterviewId { get; set; }
     }

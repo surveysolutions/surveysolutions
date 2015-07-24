@@ -284,7 +284,7 @@
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
-    <Compile Include="Models\RevalidateModel.cs" />
+    <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
     <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
@@ -422,8 +422,8 @@
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="app.config" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Troubleshooting.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Troubleshoot.cshtml" />
     <EmbeddedResource Include="fonts\fontawesome-webfont.svg" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.svg" />
     <EmbeddedResource Include="Scripts\supervisor.framework.js" />

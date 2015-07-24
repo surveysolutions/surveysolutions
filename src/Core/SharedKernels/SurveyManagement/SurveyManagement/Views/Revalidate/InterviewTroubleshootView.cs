@@ -6,9 +6,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
 {
-    public class InterviewInfoForRevalidationView
+    public class InterviewTroubleshootView
     {
-        public InterviewInfoForRevalidationView()
+        public InterviewTroubleshootView()
         {
 
             this.FeaturedQuestions = new List<InterviewQuestionView>();
@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         public UserLight Responsible { get; set; }
 
         public Guid QuestionnairePublicKey { get; set; }
+
+        public long QuestionnaireVersion { get; set; }
 
         public Guid PublicKey { get; set; }
 

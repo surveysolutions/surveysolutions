@@ -1,0 +1,141 @@
+﻿@model WB.Core.SharedKernels.SurveyManagement.Views.Revalidate.InterviewTroubleshootView
+
+@{
+    ViewBag.Title = "Troubleshoot";
+}
+<div class="col-sm-12">
+    <div class="page-header">
+        <h3>
+            @Html.ActionLink(Model.Title, "Details", "Interview", new { id = Model.InterviewId }, new { }) <small>(ver. @Model.QuestionnaireVersion)</small>
+        </h3>
+        <h4>Responsible: @Model.Responsible.Name, Status: @Model.Status</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Pre-filled questions</div>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Answer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var question in Model.FeaturedQuestions)
+                        {
+                            <tr class="@(question.IsValid ? "" : "error")">
+                                <td>
+                                    @question.Title
+                                </td>
+                                <td>
+                                    @question.Answer
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Mandatory questions</div>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Answer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var question in Model.MandatoryQuestions)
+                        {
+                            <tr class="@(question.IsValid ? "" : "error")">
+                                <td>
+                                    @question.Title
+                                </td>
+                                <td>
+                                    @question.Answer
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <h1>Warning</h1>
+        <p>Before take any action, make sure find right interview and there is any problem with it</p>
+        <p><a class="btn btn-success btn-lg" href="@Url.Action("Troubleshoot","Interview")">Fix another interview</a></p>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>You should revalidate interview only if</h3>
+            <ul>
+                <li>You found any mistakenly disabled\enabled group or question</li>
+                <li>You found any mistakenly invalid\valid question</li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <h3>You should re-export interview only if</h3>
+            <ul>
+                <li>You did revalidation and did not change interview status</li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <h3>You should repeat last status interview only if</h3>
+            <ul>
+                <li>Status of interview on details page differ from status on Interviews page</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            @using (Html.BeginForm("Revalidate", "Interview", FormMethod.Post))
+            {
+                @Html.HiddenFor(x => x.InterviewId)
+                @Html.HiddenFor(x => x.QuestionnairePublicKey)
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Revalidate</button>
+            }
+            @if (this.TempData.ContainsKey("Revalidation.Error"))
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>@TempData["Revalidation.Error"]</strong><br />@TempData["Revalidation.ErrorDetails"]
+                </div>
+            }
+        </div>
+        <div class="col-sm-4">
+            @using (Html.BeginForm("Reexport", "Interview", FormMethod.Post))
+            {
+                @Html.HiddenFor(x => x.InterviewId)
+                @Html.HiddenFor(x => x.QuestionnairePublicKey)
+                <button class="btn btn-primary  btn-lg btn-block" type="submit">Re-export</button>
+            }
+            @if (this.TempData.ContainsKey("Reexport.Error"))
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>@TempData["Reexport.Error"]</strong><br />@TempData["Reexport.ErrorDetails"]
+                </div>
+            }
+        </div>
+        <div class="col-sm-4">
+            @using (Html.BeginForm("RepeatLastStatus", "Interview", FormMethod.Post))
+            {
+                @Html.HiddenFor(x => x.InterviewId)
+                @Html.HiddenFor(x => x.QuestionnairePublicKey)
+                <button class="btn btn-primary  btn-lg btn-block" type="submit">Repeat last status</button>
+            }
+
+            @if (this.TempData.ContainsKey("RepeatLastStatus.Error"))
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>@TempData["RepeatLastStatus.Error"]</strong><br />@TempData["RepeatLastStatus.ErrorDetails"]
+                </div>
+            }
+        </div>
+    </div>
+</div>

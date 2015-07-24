@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
 {
-    public class InterviewInfoForRevalidationFactory : IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>
+    public class InterviewTroubleshootFactory : IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView>
     {
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures;
         private readonly IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
-        public InterviewInfoForRevalidationFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
+        public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures,
@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
         }
 
-        public InterviewInfoForRevalidationView Load(InterviewInfoForRevalidationInputModel input)
+        public InterviewTroubleshootView Load(InterviewTroubleshootInputModel input)
         {
             var interview = this.interviewStore.GetById(input.InterviewId);
             if (interview == null || interview.IsDeleted)
@@ -56,10 +56,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             var mergedInterview = this.merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
 
-            var revalidateInterviewView = new InterviewInfoForRevalidationView
+            var interviewTroubleshootView = new InterviewTroubleshootView
             {
                 Responsible = mergedInterview.Responsible,
                 QuestionnairePublicKey = mergedInterview.QuestionnairePublicKey,
+                QuestionnaireVersion = interview.QuestionnaireVersion,
                 Title = mergedInterview.Title,
                 Description = mergedInterview.Description,
                 PublicKey = mergedInterview.PublicKey,
@@ -67,10 +68,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
                 InterviewId = input.InterviewId
             };
 
-            revalidateInterviewView.FeaturedQuestions.AddRange(mergedInterview.Groups.SelectMany(group => group.Entities.OfType<InterviewQuestionView>().Where(q => q.IsFeatured)));
-            revalidateInterviewView.MandatoryQuestions.AddRange(mergedInterview.Groups.SelectMany(group => group.Entities.OfType<InterviewQuestionView>().Where(q => q.IsMandatory && q.IsEnabled)));
+            interviewTroubleshootView.FeaturedQuestions.AddRange(mergedInterview.Groups.SelectMany(group => group.Entities.OfType<InterviewQuestionView>().Where(q => q.IsFeatured)));
+            interviewTroubleshootView.MandatoryQuestions.AddRange(mergedInterview.Groups.SelectMany(group => group.Entities.OfType<InterviewQuestionView>().Where(q => q.IsMandatory && q.IsEnabled)));
 
-            return revalidateInterviewView;
+            return interviewTroubleshootView;
         }
     }
 }
