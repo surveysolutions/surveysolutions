@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         };
 
         Because of = () =>
-            denormalizer.Handle(Create.Event.NewUserCreated(userId, name, password, email, isLockedBySupervisor, isLocked));
+            denormalizer.Handle(Create.Event.NewUserCreated(userId, name, password, email, isLockedBySupervisor, isLocked, eventId: Guid.Parse(partialPackageId)));
 
         It should_create_new_user_package = () =>
             userSyncPackageWriter.Verify(
