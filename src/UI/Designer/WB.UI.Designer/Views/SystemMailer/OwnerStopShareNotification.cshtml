@@ -1,9 +1,9 @@
 @using Main.Core.Entities.SubEntities
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-Hello @(String.IsNullOrWhiteSpace(Model.UserName) ? Model.Email : Model.UserName), <br/>
+Hello @Model.UserCallName, <br/>
 <br/>
-@(String.IsNullOrWhiteSpace(Model.ActionPersonEmail) ? "user" : Model.ActionPersonEmail) has revoked access for @(String.IsNullOrWhiteSpace(Model.TargetPersonEmail) ? "<user>" : Model.TargetPersonEmail) to your questionnaire: @(String.IsNullOrWhiteSpace(Model.QiestionnaireTitle) ? "unknown" : Model.QiestionnaireTitle)
+@Model.ActionPersonCallName has revoked access for @Model.SharedWithPersonEmail to your questionnaire: @Model.QuestionnaireDisplayTitle
 
 
 

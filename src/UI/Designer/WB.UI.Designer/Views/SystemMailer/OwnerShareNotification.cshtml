@@ -1,8 +1,8 @@
 @using Main.Core.Entities.SubEntities
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-Hello @(String.IsNullOrWhiteSpace(Model.UserName) ? Model.Email : Model.UserName), <br/>
+Hello @Model.UserCallName, <br/>
 <br/>
-@(String.IsNullOrWhiteSpace(Model.ActionPersonEmail) ? "user" : Model.ActionPersonEmail) has invited @(String.IsNullOrWhiteSpace(Model.TargetPersonEmail) ? "<user>" : Model.TargetPersonEmail) to @(Model.ShareType == ShareType.Edit ? "edit" : "view") your questionnaire: @Html.ActionLink(String.IsNullOrWhiteSpace(Model.QiestionnaireTitle) ? "link" : Model.QiestionnaireTitle, "Open", "App", @Model.QiestionnaireId, null)
-
+@Model.ActionPersonCallName has invited @Model.SharedWithPersonEmail to @Model.ShareTypeName your questionnaire:
+@Html.ActionLink(Model.QuestionnaireDisplayTitle, "Open", "App", HttpContext.Current.Request.Url.Scheme, null, null, new { id = Model.QuestionnaireId }, null)
 
