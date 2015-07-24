@@ -75,7 +75,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
 
                 throw new RestException(message: "No connection", innerException: ex);
             }
-            catch (WebException ex)
+            catch (Exception ex)
             {
                 this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
                 throw new RestException(message: "No connection", innerException: ex);
