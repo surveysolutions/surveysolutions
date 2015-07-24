@@ -11,19 +11,21 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
 
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
-        var $detailsUrl = '@Url.Action("Details", "Interview")';
-        var $surveysUrl = '@Url.Action("Index", "Survey")';
-        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-        $(function() {
-            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new Supervisor.VM.SVInterviews('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })', $interviewsPageUrl, users, commandExecutionUrl);
-            ko.applyBindings(model);
-            model.load();
-        });
+    var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
+    var $detailsUrl = '@Url.Action("Details", "Interview")';
+    var $surveysUrl = '@Url.Action("Index", "Survey")';
+    var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+    var $statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })';
+    $(function() {
+        var users = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
+        var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
+        var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsibles, users, $commandExecutionUrl);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -164,16 +166,7 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Responsible</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedResponsible" class="form-control">
-                    @if (Model.Responsibles.Count() > 1)
-                    {
-                        <option value="">Any</option>
-                    }
-                    @foreach (var item in Model.Responsibles)
-                    {
-                        <option value="@item.UserId">@item.UserName</option>
-                    }
-                </select>
+                <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}, autoselect: true, addItem: DefaultResponsible}, valueupdate:'afterkeydown'" type="text"/>
             </p>
         </li>
         <li class="list-group-item">

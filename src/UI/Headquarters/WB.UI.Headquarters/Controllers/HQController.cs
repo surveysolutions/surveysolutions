@@ -344,19 +344,11 @@ namespace WB.UI.Headquarters.Controllers
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
             return new DocumentFilter
-                {
-                    Users =
-                        this.supervisorsFactory.Load(new UserListViewInputModel { PageSize = int.MaxValue })
-                            .Items.Where(u => !u.IsLockedBySupervisor && !u.IsLockedByHQ)
-                            .Select(u => new UsersViewItem
-                                {
-                                    UserId = u.UserId,
-                                    UserName = u.UserName
-                                }),
-                    Responsibles = usersAndQuestionnaires.Users,
-                    Templates = usersAndQuestionnaires.Questionnaires,
-                    Statuses = statuses
-                };
+            {
+                Responsibles = usersAndQuestionnaires.Users,
+                Templates = usersAndQuestionnaires.Questionnaires,
+                Statuses = statuses
+            };
         }
 
         public ActionResult DataExport()

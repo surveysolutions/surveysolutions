@@ -1,17 +1,18 @@
-﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsibles, users, commandExecutionUrl) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
     
     self.Url = new Url(interviewDetailsUrl);
-    self.Users = users;
 
-    self.Templates = ko.observableArray([]);
-    self.Responsibles = ko.observableArray([]);
-    self.Statuses = ko.observableArray([]);
+    self.Responsibles = responsibles;
 
     self.SelectedTemplate = ko.observable('');
-    self.SelectedResponsible = ko.observable('');
+
+    self.DefaultResponsible = { UserId: '', UserName: 'Any' };
+
+    self.SelectedResponsible = ko.observable(self.DefaultResponsible);
+
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
 
@@ -34,7 +35,7 @@
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
         self.Url.query['status'] = self.SelectedStatus() || "";
-        self.Url.query['interviewerId'] = self.SelectedResponsible() || "";
+        self.Url.query['interviewerId'] = self.SelectedResponsible().UserId || "";
         self.Url.query['searchBy'] = self.SearchBy() || "";
         
         if (Modernizr.history) {
@@ -44,7 +45,7 @@
         return {
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
-            ResponsibleId: self.SelectedResponsible,
+            ResponsibleId: self.SelectedResponsible().UserId,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy
         };
@@ -53,7 +54,10 @@
     self.load = function () {
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
         self.SelectedStatus(self.QueryString['status']);
-        self.SelectedResponsible(self.QueryString['interviewerId']);
+
+        var selectedResponsible = _.find(self.Responsibles, function(responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
+        self.SelectedResponsible(selectedResponsible || self.DefaultResponsible);
+
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
