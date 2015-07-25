@@ -32,10 +32,12 @@ namespace WB.UI.Tester.Activities
 
         void DevSettingsCategoryOnPreferenceChange(object sender, Preference.PreferenceChangeEventArgs preferenceChangeEventArgs)
         {
-            //string uri = preferenceChangeEventArgs.NewValue.ToString();
-            //Uri uriResult;
-            //bool result = Uri.TryCreate(uri, UriKind.Absolute, out uriResult);
-            //preferenceChangeEventArgs.Handled = result && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            string uri = preferenceChangeEventArgs.NewValue.ToString();
+            string trimmedUri = (uri ?? string.Empty).Trim().Replace(" ", string.Empty);
+            if (uri != trimmedUri)
+            {
+                preferenceChangeEventArgs.Handled = false;
+            }
         }
 
         private void SetupVersionPreference()
