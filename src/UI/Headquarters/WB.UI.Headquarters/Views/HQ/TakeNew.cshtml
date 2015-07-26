@@ -31,17 +31,31 @@
     <script type="text/javascript">
         $(function() {
             var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                                  {
-                                      TypeNameHandling = TypeNameHandling.None,
-                                      TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                                  }));
-            var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
+                                {
+                                    TypeNameHandling = TypeNameHandling.None,
+                                    TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                                }));
+
+            var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
             var interviewListUrl = '@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme)';
 
             var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl);
-            model.load();
+
+            var isViewModelValid = function() {
+                if (!model.isValid()) {
+                    model.errors.showAllMessages();
+                    return false;
+                } else {
+                    return true;
+                };
+            };
+
+            model.load(isViewModelValid);
+
+            ko.validation.group(model);
             ko.applyBindings(model);
         });
+
     </script>
     <script type="text/html" id="SingleOption">
         <!-- ko ifnot: isFilteredCombobox -->
@@ -58,7 +72,7 @@
                 <!-- ko foreach: options -->
                 <div class="radio">
                     <label data-bind='attr: { "for": optionFor }'>
-                        <input type='radio' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOption" />
+                        <input type='radio' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOption"/>
                         <span data-bind="text: label"></span>
                     </label>
                 </div>
@@ -72,7 +86,7 @@
         <div class="form-group" data-bind="validationElement: value">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
-                <input class="form-control" type="text" data-bind="typeahead: options, id: selectedOption, value: value, valueUpdate: 'afterkeydown'" />
+                <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return _.isUndefined(item) ? '' : item.label()}, autoselect: true}, valueupdate:'afterkeydown'" type="text" />
                 <span class="help-block" data-bind="validationMessage: value"></span>
             </div>
         </div>
@@ -84,7 +98,7 @@
                 <!-- ko foreach: options -->
                 <div class="checkbox">
                     <label data-bind='attr: { "for": optionFor }'>
-                        <input type='checkbox' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOptions" />
+                        <input type='checkbox' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOptions"/>
                         <span data-bind="text: label"></span>
                     </label>
                 </div>
@@ -99,7 +113,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input class="form-control" type="text" data-bind="numericformatter: selectedOption, valueUpdate: 'afterkeydown'" />
+                    <input class="form-control" type="text" data-bind="numericformatter: selectedOption, valueUpdate: 'afterkeydown'"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -112,7 +126,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
+                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -125,7 +139,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+                    <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -138,7 +152,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">T</span>
-                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown', maskFormatter:mask" />
+                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown', maskFormatter:mask"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -150,7 +164,7 @@
             <div class="col-sm-2">
                 <div class="input-prepend">
                     <span class="add-on">T</span>
-                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'"/>
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -167,7 +181,7 @@
         <div class="form-group" data-bind="validationElement: responsible">
             <label class="col-sm-2 control-label">Responsible</label>
             <div class="col-md-2">
-                <select class="form-control" data-bind="options: supervisors, optionsText: 'name', value: responsible"></select>
+                <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return _.isUndefined(item) ? '' : item.name()}, autoselect: true}, valueupdate:'afterkeydown'" type="text" />
                 <span class="help-block" data-bind="validationMessage: responsible"></span>
             </div>
         </div>
