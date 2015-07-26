@@ -98,7 +98,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/knockout.validation.js",
                     "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/Math.uuid.js",
-                    "~/Scripts/typeahead.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/jquery.maskedinput.js"
@@ -107,6 +106,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             {
                 "~/js/interview-new", new[]
                 {
+                    "~/Scripts/bootstrap3-typeahead.js", 
+                    "~/Scripts/knockout/ko.typeahead.js",
                     "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/new/mapper.js",
                     "~/Scripts/viewmodels/pages/interview/new/model.js",
@@ -116,6 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             {
                 "~/js/details", new[]
                 {
+                    "~/Scripts/typeahead.js",
                     "~/Scripts/components/bindings.js",
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",

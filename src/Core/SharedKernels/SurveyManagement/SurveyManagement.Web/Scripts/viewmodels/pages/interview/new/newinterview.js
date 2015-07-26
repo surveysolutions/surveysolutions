@@ -9,7 +9,7 @@
     self.InterviewListUrl = interviewListUrl;
 
     self.questionnaire = ko.observable();
-    self.responsible = ko.observable();
+    self.responsible = ko.observable().extend({ required: true });
     self.questions = ko.observableArray();
     self.supervisors = ko.observableArray();
 
@@ -17,33 +17,40 @@
         var answersAreInvalid = ko.utils.arrayFilter(self.questions(), function (question) {
             return question.errors().length > 0;
         });
-        return $(answersAreInvalid).length == 0;
+        return $(answersAreInvalid).length == 0 && !_.isUndefined(self.responsible());
     });
     
     self.saveCommand = function() {
-        var command = {
-            type: "CreateInterviewCommand",
-            command: ko.toJSON({
-                interviewId: self.questionnaire().id,
-                supervisorId: self.responsible().id(),
-                questionnaireId: self.questionnaire().templateId,
-                questionnaireVersion: self.questionnaire().templateVersion,
-                answersToFeaturedQuestions: datacontext.prepareQuestion()
-            })
-        };
-        self.SendCommand(command, function(data) {
-            window.location = self.InterviewListUrl.concat("?templateId=",
-                datacontext.questionnaire.templateId, "&templateVersion=",
-                datacontext.questionnaire.templateVersion);
-        });
-    },
-    self.load = function () {
+            if (!self.isViewModelValid())
+                return;
+
+            var command = {
+                type: "CreateInterviewCommand",
+                command: ko.toJSON({
+                    interviewId: self.questionnaire().id,
+                    supervisorId: self.responsible().id(),
+                    questionnaireId: self.questionnaire().templateId,
+                    questionnaireVersion: self.questionnaire().templateVersion,
+                    answersToFeaturedQuestions: datacontext.prepareQuestion()
+                })
+            };
+            self.SendCommand(command, function(data) {
+                window.location = self.InterviewListUrl.concat("?templateId=",
+                    datacontext.questionnaire.templateId, "&templateVersion=",
+                    datacontext.questionnaire.templateVersion);
+            });
+        },
+    self.load = function (isViewModelValid) {
         self.IsAjaxComplete(false);
         self.questionnaire(datacontext.questionnaire);
         self.questions(datacontext.questions.getAllLocal());
         self.supervisors(datacontext.supervisors.getAllLocal());
         self.IsAjaxComplete(true);
         self.IsPageLoaded(true);
+
+        self.isViewModelValid = isViewModelValid;
     };
+
+    self.isViewModelValid = function() { return true };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.NewInterview, Supervisor.VM.BasePage);
