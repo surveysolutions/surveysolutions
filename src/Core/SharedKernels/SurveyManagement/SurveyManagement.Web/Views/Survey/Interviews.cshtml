@@ -36,7 +36,12 @@
 @section  actionbar{
     <div class="form-inline">
         <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-bind="disable: IsNothingSelected">Assign interviewer <span class="caret"></span></button>
+            <div class="input-group" data-bind="disable: IsNothingSelected">
+                <input class="form-control" placeholder="Enter interviewer name" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return _.isUndefined(item) ? '' : item.UserName}, autoselect: true}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text" />
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" data-bind="enable: CanAssignTo, click: $root.Assign">Assign</button>
+                </span>
+            </div>
             <ul class="dropdown-menu" data-bind="foreach: Users">
                 <li><a href="javascript:void(0)" data-bind="click: $root.Assign, text: UserName">Action</a></li>
             </ul>
