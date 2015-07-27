@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Instruction"
     local:MvxBind="Visible QuestionState.Header.Instruction">
@@ -9,4 +9,4 @@
   <TextView
       style="@style/Interview_Question_Instruction_Details"
       local:MvxBind="Text QuestionState.Header.Instruction" />
-</MvxLinearLayout>
+</LinearLayout>
