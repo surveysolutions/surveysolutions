@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Tester.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
 {
-    public class AnswerToStringServiceTestsContext
+    internal class AnswerToStringServiceTestsContext
     {
         public static IAnswerToStringService CreateAnswerToStringService()
         {

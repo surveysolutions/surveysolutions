@@ -24,9 +24,4 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return sideBarItem;
         }
     }
-
-    public interface ISideBarSectionViewModelsFactory
-    {
-        SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity groupIdentity, NavigationState navigationState, string interviewId);
-    }
 }

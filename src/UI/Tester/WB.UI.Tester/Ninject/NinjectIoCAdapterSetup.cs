@@ -22,6 +22,7 @@ namespace WB.UI.Tester.Ninject
                     plainStorageSettings: new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
                 new ApplicationModule(),
                 new PlainStorageInfrastructureModule(),
+                new EnumeratorSharedKernelModule(),
                 new TesterBoundedContextModule(),
                 new DataCollectionModule(basePath),
                 new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));

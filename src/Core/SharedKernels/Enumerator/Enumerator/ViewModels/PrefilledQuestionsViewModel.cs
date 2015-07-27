@@ -61,7 +61,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
+//            TODO: CAPI-Interview-Details
+//            this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
         }
     }
 }

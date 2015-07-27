@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
-    public class when_initializing : QuestionHeaderViewModelTestsContext
+    internal class when_initializing : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
         {

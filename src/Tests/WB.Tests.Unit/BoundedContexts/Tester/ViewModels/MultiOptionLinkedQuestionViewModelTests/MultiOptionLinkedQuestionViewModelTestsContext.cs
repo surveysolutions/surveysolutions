@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
     [Subject(typeof(MultiOptionLinkedQuestionViewModel))]
-    public class MultiOptionLinkedQuestionViewModelTestsContext
+    internal class MultiOptionLinkedQuestionViewModelTestsContext
     {
         protected static MultiOptionLinkedQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
             AnsweringViewModel answering = null, 

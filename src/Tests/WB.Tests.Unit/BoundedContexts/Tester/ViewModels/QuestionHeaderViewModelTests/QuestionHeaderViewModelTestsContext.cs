@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
     [Subject(typeof(QuestionHeaderViewModel))]
-    public class QuestionHeaderViewModelTestsContext
+    internal class QuestionHeaderViewModelTestsContext
     {
         public static QuestionHeaderViewModel CreateViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null, 
             IStatefulInterviewRepository interviewRepository = null, 

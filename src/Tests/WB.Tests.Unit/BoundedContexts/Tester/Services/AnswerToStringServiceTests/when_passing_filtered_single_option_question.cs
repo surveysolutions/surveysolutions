@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Tester.Services.MaskText;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
 {
-    public class when_passing_filtered_single_option_question : AnswerToStringServiceTestsContext
+    internal class when_passing_filtered_single_option_question : AnswerToStringServiceTestsContext
     {
         Establish context = () =>
         {
