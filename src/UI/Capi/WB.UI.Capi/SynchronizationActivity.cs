@@ -517,7 +517,7 @@ namespace WB.UI.Capi
                     case HttpStatusCode.UpgradeRequired:
                     case HttpStatusCode.Unauthorized:
                     case HttpStatusCode.NotAcceptable:
-                        errorMessage = restException.Message;
+                        errorMessage = exception.Message;
                         break;
                     case HttpStatusCode.Conflict:
                         errorMessage = Properties.Resources.OldInterviewerNeedsCleanup;
@@ -530,16 +530,16 @@ namespace WB.UI.Capi
                         errorMessage = Properties.Resources.SynchronizationRequestTimeout;
                         break;
                     case HttpStatusCode.ServiceUnavailable:
-                        errorMessage = restException.Message.Contains("maintenance")
+                        errorMessage = exception.Message.Contains("maintenance")
                             ? Properties.Resources.SynchronizationMaintenance
-                            : restException.Message;
+                            : exception.Message;
                         break;
                     default:
                         var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
 
                         errorMessage = string.Format(Properties.Resources.PleaseCheckURLInSettingsFormat,
                             settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
-                            GetNetworkStatus((int) restException.StatusCode));
+                            GetNetworkStatus((int) statusCode));
                         break;
                 }
             }
