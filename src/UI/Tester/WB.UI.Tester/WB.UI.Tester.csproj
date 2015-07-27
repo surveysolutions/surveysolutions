@@ -257,6 +257,7 @@
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
+    <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
