@@ -113,5 +113,23 @@ namespace Resources {
                 return ResourceManager.GetString("UploadSampleDescription", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload users.
+        /// </summary>
+        internal static string UploadUsers {
+            get {
+                return ResourceManager.GetString("UploadUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload Users Description must be here.
+        /// </summary>
+        internal static string UploadUsersDescription {
+            get {
+                return ResourceManager.GetString("UploadUsersDescription", resourceCulture);
+            }
+        }
     }
 }

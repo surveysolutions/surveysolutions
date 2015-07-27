@@ -213,6 +213,7 @@
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
+    <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
