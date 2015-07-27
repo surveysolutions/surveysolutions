@@ -177,6 +177,12 @@ namespace WB.Core.Infrastructure.Android
 			// aapt resource value: 0x7f040005
 			public static int Prefs_GpsReceiveTimeoutSecTitle = 2130968581;
 			
+			// aapt resource value: 0x7f04000e
+			public static int Prefs_HttpResponseTimeoutSummary = 2130968590;
+			
+			// aapt resource value: 0x7f04000d
+			public static int Prefs_HttpResponseTimeoutTitle = 2130968589;
+			
 			// aapt resource value: 0x7f040007
 			public static int Prefs_VersionSummaryFormat = 2130968583;
 			
