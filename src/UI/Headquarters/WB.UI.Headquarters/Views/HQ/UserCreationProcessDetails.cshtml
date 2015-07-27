@@ -1,0 +1,29 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
+@using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
+@using WB.Core.SharedKernels.SurveyManagement.Views.User
+@model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+<div class="row-fluid">
+    @if (Model.State == UserPrelodingState.CreatingUsers || Model.State == UserPrelodingState.ReadyForUserCreation)
+    {
+        <h3>@Model.CreatedUsersCount out of @Model.RecordsCount users have been created</h3>
+    }
+    else if (Model.State == UserPrelodingState.Finished)
+    {
+        <h3>All @Model.RecordsCount users have been created</h3>
+    }
+    else if (Model.State == UserPrelodingState.FinishedWithError)
+    {
+        <h3>@Model.State, Reason: @Model.ErrorMessage</h3>
+        @Html.ActionLink("Upload new file", "UserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
+    }
+    else
+    {
+        <h3>unknown state @Model.State</h3>
+        @Html.ActionLink("Upload new file", "UserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
+    }
+</div>

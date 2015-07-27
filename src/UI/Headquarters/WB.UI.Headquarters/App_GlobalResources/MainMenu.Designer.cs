@@ -214,6 +214,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User batch upload.
+        /// </summary>
+        internal static string UserBatchUpload {
+            get {
+                return ResourceManager.GetString("UserBatchUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Users.
         /// </summary>
         internal static string Users {

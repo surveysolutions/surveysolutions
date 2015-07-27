@@ -1,0 +1,74 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
+@using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
+@using WB.Core.SharedKernels.SurveyManagement.Views.User
+@model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+<div class="row-fluid">
+    @if (Model.VerificationErrors.Count > 0)
+    {
+        <div style="height: 500px; overflow-y: scroll;">
+            <table class="table table-striped table-bordered table-condensed table-break-words">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Message</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.VerificationErrors)
+                {
+                    <tr>
+                        <th>@item.Code</th>
+                        <th>@item.Message</th>
+                        <th>
+                            @*@foreach (var reference in item.References)
+                                {
+                                    if (!string.IsNullOrEmpty(@reference.Content))
+                                    {
+                                        <span>@reference.Type : @reference.Content</span>
+                                        <br />
+                                    }
+                                    if (reference.PositionX.HasValue)
+                                    {
+                                        <span>Column: @reference.PositionX</span>
+                                        <br />
+                                    }
+
+                                    if (reference.PositionY.HasValue)
+                                    {
+                                        <span>Row: @reference.PositionY</span>
+                                        <br />
+                                    }
+
+                                    <span>File name: @reference.DataFile </span>
+
+                                }
+                                <br />*@
+                        </th>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        @Html.ActionLink("Upload new file", "UserBatchUpload",null, new { @class = "btn btn-default btn-primary pull-right" })
+    }
+    else if (Model.State == UserPrelodingState.Validated)
+    {
+        <h3>Data is valid</h3>
+        using (Html.BeginForm("CreateUsers", "HQ"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("Id", Model.UserPreloadingProcessId)
+    <input type="submit" class="btn btn-default btn-primary pull-right" name="Submit" value="Create users" />
+    }
+    }
+    else
+    {
+        <h3>Please wait, current state of "@Model.FileName" preloading is @Model.State</h3>
+    }
+</div>
