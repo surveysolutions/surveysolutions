@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Mvc.Mailer;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.Models;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Designer.MailNotifierTests
         {
             systemMailer.Setup(x => x.GetOwnerShareChangeNotificationEmail(it.IsAny<SharingNotificationModel>())).Returns(message.Object);
 
-            recipientNotifier = new MailNotifier(systemMailer.Object);
+            recipientNotifier = new MailNotifier(systemMailer.Object, new Mock<ILogger>().Object);
         };
 
         Because of = () =>

@@ -1,5 +1,4 @@
+@using WB.UI.Designer.Resources
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-Hello @Model.UserCallName,
-<br/>
-@Model.ActionPersonCallName has stopped to share with you questionnaire: @Model.QuestionnaireDisplayTitle
+@string.Format(NotificationResources.TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_, @Model.UserCallName, @Model.ActionPersonCallName, @Model.QuestionnaireDisplayTitle)

@@ -22,24 +22,24 @@ namespace WB.UI.Designer.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class NotificationMessages {
+    public class NotificationResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal NotificationMessages() {
+        internal NotificationResources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Designer.Resources.NotificationMessages", typeof(NotificationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Designer.Resources.NotificationResources", typeof(NotificationResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to view.
         /// </summary>
-        internal static string MailNotifier_NotifyOwnerAboutShareChange_view {
+        public static string MailNotifier_NotifyOwnerAboutShareChange_view {
             get {
                 return ResourceManager.GetString("MailNotifier_NotifyOwnerAboutShareChange_view", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to edit.
         /// </summary>
-        internal static string MailNotifier_NotifyTargetPersonAboutShareChange_edit {
+        public static string MailNotifier_NotifyTargetPersonAboutShareChange_edit {
             get {
                 return ResourceManager.GetString("MailNotifier_NotifyTargetPersonAboutShareChange_edit", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to link.
         /// </summary>
-        internal static string MailNotifier_NotifyTargetPersonAboutShareChange_link {
+        public static string MailNotifier_NotifyTargetPersonAboutShareChange_link {
             get {
                 return ResourceManager.GetString("MailNotifier_NotifyTargetPersonAboutShareChange_link", resourceCulture);
             }
@@ -90,16 +90,36 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to user.
         /// </summary>
-        internal static string MailNotifier_NotifyTargetPersonAboutShareChange_user {
+        public static string MailNotifier_NotifyTargetPersonAboutShareChange_user {
             get {
                 return ResourceManager.GetString("MailNotifier_NotifyTargetPersonAboutShareChange_user", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hello {0},  {1} has invited {2} to {3} your questionnaire: .
+        /// </summary>
+        public static string OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__ {
+            get {
+                return ResourceManager.GetString("OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__" +
+                        "to__3__your_questionnaire__", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello {0},  {1} has revoked access for {2} to your questionnaire: {3}.
+        /// </summary>
+        public static string OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_ {
+            get {
+                return ResourceManager.GetString("OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_" +
+                        "access_for__2__to_your_questionnaire___3_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Complete Registration Process.
         /// </summary>
-        internal static string SystemMailer_ConfirmationEmail_Complete_Registration_Process {
+        public static string SystemMailer_ConfirmationEmail_Complete_Registration_Process {
             get {
                 return ResourceManager.GetString("SystemMailer_ConfirmationEmail_Complete_Registration_Process", resourceCulture);
             }
@@ -108,7 +128,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your questionnaire sharing notification.
         /// </summary>
-        internal static string SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification {
+        public static string SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification {
             get {
                 return ResourceManager.GetString("SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notificati" +
                         "on", resourceCulture);
@@ -118,7 +138,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Your questionnaire stop sharing notification.
         /// </summary>
-        internal static string SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification {
+        public static string SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification {
             get {
                 return ResourceManager.GetString("SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_n" +
                         "otification", resourceCulture);
@@ -128,7 +148,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire sharing notification.
         /// </summary>
-        internal static string SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification {
+        public static string SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification {
             get {
                 return ResourceManager.GetString("SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification", resourceCulture);
             }
@@ -137,7 +157,7 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Questionnaire stop sharing notification.
         /// </summary>
-        internal static string SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification {
+        public static string SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification {
             get {
                 return ResourceManager.GetString("SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notificatio" +
                         "n", resourceCulture);
@@ -147,9 +167,29 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Complete Password Reset.
         /// </summary>
-        internal static string SystemMailer_ResetPasswordEmail_Complete_Password_Reset {
+        public static string SystemMailer_ResetPasswordEmail_Complete_Password_Reset {
             get {
                 return ResourceManager.GetString("SystemMailer_ResetPasswordEmail_Complete_Password_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, {1} has invited you to {2} the following questionnaire:.
+        /// </summary>
+        public static string TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_ {
+            get {
+                return ResourceManager.GetString("TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invit" +
+                        "ed_you_to__2__the_following_questionnaire_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello {0}, {1} has stopped to share with you questionnaire: {2}.
+        /// </summary>
+        public static string TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_ {
+            get {
+                return ResourceManager.GetString("TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_s" +
+                        "topped_to_share_with_you_questionnaire___2_", resourceCulture);
             }
         }
     }
