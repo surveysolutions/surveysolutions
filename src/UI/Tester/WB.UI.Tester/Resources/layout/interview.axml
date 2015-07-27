@@ -32,7 +32,12 @@
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true">
-      <include layout="@layout/interview_current_group" />
+      <MvxRecyclerView
+        style="@style/Interview_List"
+        android:id="@+id/questionnaireEntitiesList"
+        android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
+        android:scrollbars="vertical"
+        local:MvxBind="ItemsSource CurrentGroup.Items" />
     </ScrollView>
   </MvxLinearLayout>
   <MvxLinearLayout style="@style/Interview_Sidebar">
