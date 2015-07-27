@@ -14,22 +14,22 @@ namespace WB.UI.Designer.Mailers
 
         public virtual MvcMailMessage ConfirmationEmail(EmailConfirmationModel model)
         {
-            return this.GetMessage(model, NotificationMessages.SystemMailer_ConfirmationEmail_Complete_Registration_Process, "ConfirmationEmail");
+            return this.GetMessage(model, NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process, "ConfirmationEmail");
         }
 
         public virtual MvcMailMessage ResetPasswordEmail(EmailConfirmationModel model)
         {
-            return this.GetMessage(model, NotificationMessages.SystemMailer_ResetPasswordEmail_Complete_Password_Reset, "ResetPasswordEmail");
+            return this.GetMessage(model, NotificationResources.SystemMailer_ResetPasswordEmail_Complete_Password_Reset, "ResetPasswordEmail");
         }
 
         public MvcMailMessage GetShareChangeNotificationEmail(SharingNotificationModel model)
         {
-            return this.GetMessage(model, NotificationMessages.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification, model.ShareChangeType == ShareChangeType.Share ? "TargetPersonShareNotification" : "TargetPersonStopShareNotification");
+            return this.GetMessage(model, NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification, model.ShareChangeType == ShareChangeType.Share ? "TargetPersonShareNotification" : "TargetPersonStopShareNotification");
         }
 
         public MvcMailMessage GetOwnerShareChangeNotificationEmail(SharingNotificationModel model)
         {
-            return this.GetMessage(model, NotificationMessages.SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification, model.ShareChangeType == ShareChangeType.Share ? "OwnerShareNotification" : "OwnerStopShareNotification");
+            return this.GetMessage(model, NotificationResources.SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification, model.ShareChangeType == ShareChangeType.Share ? "OwnerShareNotification" : "OwnerStopShareNotification");
         }
 
         private MvcMailMessage GetMessage(IEmailNotification model, string subject, string viewName)
