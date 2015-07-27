@@ -84,8 +84,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.ConnectionString = connectionString;
                 db.Dialect<PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                db.Batcher<PostgresClientBatchingBatcherFactory>();
-                db.BatchSize = 128;
             });
             cfg.Cache(c => c.Provider<SysCacheProvider>());
             cfg.Proxy(proxy => proxy.ProxyFactoryFactory<ProxyFactoryFactory>());

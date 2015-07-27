@@ -148,7 +148,9 @@ namespace WB.UI.Headquarters
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
 
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
+                new PostresKeyValueModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                    postgresCacheSize),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
