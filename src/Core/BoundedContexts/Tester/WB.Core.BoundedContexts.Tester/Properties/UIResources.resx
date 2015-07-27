@@ -422,4 +422,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Empty value cannot be saved</value>
   </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>Empty values are not allowed</value>
+  </data>
 </root>

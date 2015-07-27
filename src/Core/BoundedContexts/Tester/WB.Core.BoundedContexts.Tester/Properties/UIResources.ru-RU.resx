@@ -422,4 +422,7 @@
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Нельзя сохранить пустое значение</value>
   </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>Пустые значения не разрешены</value>
+  </data>
 </root>
