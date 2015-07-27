@@ -19,7 +19,7 @@ using EventsIdentity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dto
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
-    public class when_substitution_title_changed : QuestionHeaderViewModelTestsContext
+    internal class when_substitution_title_changed : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
         {

@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public event EventHandler QuestionAnswered;
 
-        internal AnswerNotifier() {}
+        protected AnswerNotifier() {}
 
         public AnswerNotifier(ILiteEventRegistry registry)
         {

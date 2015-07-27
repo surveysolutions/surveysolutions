@@ -21,7 +21,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTests
 {
-    public class when_handling_questions_enabled_event_and_enabled_question_is_not_on_screen : ActiveGroupViewModelTestContext
+    internal class when_handling_questions_enabled_event_and_enabled_question_is_not_on_screen : ActiveGroupViewModelTestContext
     {
         Establish context = () =>
         {

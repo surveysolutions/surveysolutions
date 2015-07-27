@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
-    public class when_roster_title_substitution_is_used : QuestionHeaderViewModelTestsContext
+    internal class when_roster_title_substitution_is_used : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
         {

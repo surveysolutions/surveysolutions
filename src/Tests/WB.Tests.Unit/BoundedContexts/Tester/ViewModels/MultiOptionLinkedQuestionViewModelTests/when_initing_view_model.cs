@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    public class when_initing_view_model : MultiOptionLinkedQuestionViewModelTestsContext
+    internal class when_initing_view_model : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

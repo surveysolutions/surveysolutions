@@ -19,7 +19,7 @@ using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-
+using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Tester.Activities;
@@ -145,7 +145,11 @@ namespace WB.UI.Tester
 
         protected override Assembly[] GetViewModelAssemblies()
         {
-            return new[] { typeof(BaseViewModel).Assembly };
+            return new[]
+            {
+                typeof(TesterBoundedContextModule).Assembly,
+                typeof(EnumeratorSharedKernelModule).Assembly,
+            };
         }
 
         private void InitializeLogger(Context applicationContext)

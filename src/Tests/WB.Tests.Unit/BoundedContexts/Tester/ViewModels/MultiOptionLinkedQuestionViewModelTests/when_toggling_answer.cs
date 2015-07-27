@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    public class when_toggling_answer : MultiOptionLinkedQuestionViewModelTestsContext
+    internal class when_toggling_answer : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
