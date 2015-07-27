@@ -67,6 +67,8 @@ namespace WB.UI.Tester
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_DesignerEndPointTitle = global::WB.UI.Tester.Resource.String.Prefs_DesignerEndPointTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_GpsReceiveTimeoutSecSummary = global::WB.UI.Tester.Resource.String.Prefs_GpsReceiveTimeoutSecSummary;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_GpsReceiveTimeoutSecTitle = global::WB.UI.Tester.Resource.String.Prefs_GpsReceiveTimeoutSecTitle;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_HttpResponseTimeoutSummary = global::WB.UI.Tester.Resource.String.Prefs_HttpResponseTimeoutSummary;
+			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_HttpResponseTimeoutTitle = global::WB.UI.Tester.Resource.String.Prefs_HttpResponseTimeoutTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionSummaryFormat = global::WB.UI.Tester.Resource.String.Prefs_VersionSummaryFormat;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionTitle = global::WB.UI.Tester.Resource.String.Prefs_VersionTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.library_name = global::WB.UI.Tester.Resource.String.library_name;
@@ -118,23 +120,23 @@ namespace WB.UI.Tester
 		public partial class Attribute
 		{
 			
-			// aapt resource value: 0x7f0100f8
-			public const int MvxBind = 2130772216;
-			
-			// aapt resource value: 0x7f0100fc
-			public const int MvxDropDownItemTemplate = 2130772220;
-			
-			// aapt resource value: 0x7f0100fb
-			public const int MvxItemTemplate = 2130772219;
-			
 			// aapt resource value: 0x7f0100f9
-			public const int MvxLang = 2130772217;
+			public const int MvxBind = 2130772217;
 			
 			// aapt resource value: 0x7f0100fd
-			public const int MvxSource = 2130772221;
+			public const int MvxDropDownItemTemplate = 2130772221;
+			
+			// aapt resource value: 0x7f0100fc
+			public const int MvxItemTemplate = 2130772220;
 			
 			// aapt resource value: 0x7f0100fa
-			public const int MvxTemplate = 2130772218;
+			public const int MvxLang = 2130772218;
+			
+			// aapt resource value: 0x7f0100fe
+			public const int MvxSource = 2130772222;
+			
+			// aapt resource value: 0x7f0100fb
+			public const int MvxTemplate = 2130772219;
 			
 			// aapt resource value: 0x7f010068
 			public const int actionBarDivider = 2130772072;
@@ -585,6 +587,9 @@ namespace WB.UI.Tester
 			
 			// aapt resource value: 0x7f0100c2
 			public const int maxButtonHeight = 2130772162;
+			
+			// aapt resource value: 0x7f0100f8
+			public const int maxHeight = 2130772216;
 			
 			// aapt resource value: 0x7f010032
 			public const int measureWithLargestChild = 2130772018;
@@ -3389,17 +3394,17 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f07003b
 			public const int DesignerEndpoint = 2131165243;
 			
-			// aapt resource value: 0x7f070045
-			public const int Hello = 2131165253;
-			
-			// aapt resource value: 0x7f070048
-			public const int MenuItem_Title_Dashboard = 2131165256;
-			
-			// aapt resource value: 0x7f070049
-			public const int MenuItem_Title_Settings = 2131165257;
+			// aapt resource value: 0x7f070047
+			public const int Hello = 2131165255;
 			
 			// aapt resource value: 0x7f07004a
-			public const int MenuItem_Title_SignOut = 2131165258;
+			public const int MenuItem_Title_Dashboard = 2131165258;
+			
+			// aapt resource value: 0x7f07004b
+			public const int MenuItem_Title_Settings = 2131165259;
+			
+			// aapt resource value: 0x7f07004c
+			public const int MenuItem_Title_SignOut = 2131165260;
 			
 			// aapt resource value: 0x7f070044
 			public const int Prefs_AcceptUnsignedSummary = 2131165252;
@@ -3421,6 +3426,12 @@ namespace WB.UI.Tester
 			
 			// aapt resource value: 0x7f07003d
 			public const int Prefs_GpsReceiveTimeoutSecTitle = 2131165245;
+			
+			// aapt resource value: 0x7f070046
+			public const int Prefs_HttpResponseTimeoutSummary = 2131165254;
+			
+			// aapt resource value: 0x7f070045
+			public const int Prefs_HttpResponseTimeoutTitle = 2131165253;
 			
 			// aapt resource value: 0x7f07003f
 			public const int Prefs_VersionSummaryFormat = 2131165247;
@@ -3575,11 +3586,11 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f07001a
 			public const int decline = 2131165210;
 			
-			// aapt resource value: 0x7f070047
-			public const int font_fontFamily_medium = 2131165255;
+			// aapt resource value: 0x7f070049
+			public const int font_fontFamily_medium = 2131165257;
 			
-			// aapt resource value: 0x7f070046
-			public const int library_name = 2131165254;
+			// aapt resource value: 0x7f070048
+			public const int library_name = 2131165256;
 			
 			// aapt resource value: 0x7f070000
 			public const int mr_media_route_button_content_description = 2131165184;
@@ -3633,11 +3644,11 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f080007
 			public const int Animation_AppCompat_DropDownUp = 2131230727;
 			
-			// aapt resource value: 0x7f08017e
-			public const int AppTheme = 2131231102;
+			// aapt resource value: 0x7f08017f
+			public const int AppTheme = 2131231103;
 			
-			// aapt resource value: 0x7f080186
-			public const int AutoCompleteTextViewTheme = 2131231110;
+			// aapt resource value: 0x7f080187
+			public const int AutoCompleteTextViewTheme = 2131231111;
 			
 			// aapt resource value: 0x7f080008
 			public const int Base_AlertDialog_AppCompat = 2131230728;
@@ -4023,14 +4034,14 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f080081
 			public const int Base_Widget_AppCompat_Toolbar_Button_Navigation = 2131230849;
 			
-			// aapt resource value: 0x7f080180
-			public const int BlueAppTheme = 2131231104;
-			
-			// aapt resource value: 0x7f080182
-			public const int ButtonAppTheme = 2131231106;
+			// aapt resource value: 0x7f080181
+			public const int BlueAppTheme = 2131231105;
 			
 			// aapt resource value: 0x7f080183
-			public const int CheckBoxTheme = 2131231107;
+			public const int ButtonAppTheme = 2131231107;
+			
+			// aapt resource value: 0x7f080184
+			public const int CheckBoxTheme = 2131231108;
 			
 			// aapt resource value: 0x7f08012b
 			public const int Dashboard_EmptyQuestionnaireListText = 2131231019;
@@ -4068,26 +4079,26 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f080128
 			public const int Dashboard_Questionnaires_Header_Body = 2131231016;
 			
-			// aapt resource value: 0x7f080181
-			public const int Divider_ListStyle = 2131231105;
+			// aapt resource value: 0x7f080182
+			public const int Divider_ListStyle = 2131231106;
 			
-			// aapt resource value: 0x7f08017a
-			public const int DrawerArrowStyle = 2131231098;
+			// aapt resource value: 0x7f08017b
+			public const int DrawerArrowStyle = 2131231099;
 			
-			// aapt resource value: 0x7f080189
-			public const int DropDownListViewStyleTheme = 2131231113;
+			// aapt resource value: 0x7f08018a
+			public const int DropDownListViewStyleTheme = 2131231114;
 			
-			// aapt resource value: 0x7f080185
-			public const int EditTextTheme = 2131231109;
+			// aapt resource value: 0x7f080186
+			public const int EditTextTheme = 2131231110;
 			
 			// aapt resource value: 0x7f080165
 			public const int FullWidthWrappingLayout = 2131231077;
 			
-			// aapt resource value: 0x7f08017f
-			public const int GrayAppTheme = 2131231103;
+			// aapt resource value: 0x7f080180
+			public const int GrayAppTheme = 2131231104;
 			
-			// aapt resource value: 0x7f08017d
-			public const int ImageButtonTheme_Blue_Light = 2131231101;
+			// aapt resource value: 0x7f08017e
+			public const int ImageButtonTheme_Blue_Light = 2131231102;
 			
 			// aapt resource value: 0x7f080168
 			public const int InterviewToolbarTitle = 2131231080;
@@ -4254,41 +4265,44 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f080132
 			public const int Interview_Roster = 2131231026;
 			
-			// aapt resource value: 0x7f08016f
-			public const int Interview_Sidebar = 2131231087;
-			
 			// aapt resource value: 0x7f080170
-			public const int Interview_Sidebar_Body = 2131231088;
-			
-			// aapt resource value: 0x7f080174
-			public const int Interview_Sidebar_GroupRow = 2131231092;
+			public const int Interview_Sidebar = 2131231088;
 			
 			// aapt resource value: 0x7f080171
-			public const int Interview_Sidebar_Header = 2131231089;
-			
-			// aapt resource value: 0x7f080178
-			public const int Interview_Sidebar_PrefilledQuestion = 2131231096;
-			
-			// aapt resource value: 0x7f08016b
-			public const int Interview_Sidebar_PrefilledQuestions = 2131231083;
-			
-			// aapt resource value: 0x7f080172
-			public const int Interview_Sidebar_Sections = 2131231090;
+			public const int Interview_Sidebar_Body = 2131231089;
 			
 			// aapt resource value: 0x7f080175
-			public const int Interview_Sidebar_Sections_Group = 2131231093;
+			public const int Interview_Sidebar_GroupRow = 2131231093;
 			
-			// aapt resource value: 0x7f080173
-			public const int Interview_Sidebar_Sections_Section = 2131231091;
-			
-			// aapt resource value: 0x7f080177
-			public const int Interview_Sidebar_Sections_Section_Title = 2131231095;
-			
-			// aapt resource value: 0x7f080176
-			public const int Interview_Sidebar_Sections_ToggleButton = 2131231094;
+			// aapt resource value: 0x7f080172
+			public const int Interview_Sidebar_Header = 2131231090;
 			
 			// aapt resource value: 0x7f080179
-			public const int Interview_Sidebar_Title = 2131231097;
+			public const int Interview_Sidebar_PrefilledQuestion = 2131231097;
+			
+			// aapt resource value: 0x7f08016c
+			public const int Interview_Sidebar_PrefilledQuestions = 2131231084;
+			
+			// aapt resource value: 0x7f08016b
+			public const int Interview_Sidebar_PrefilledQuestions_Container = 2131231083;
+			
+			// aapt resource value: 0x7f080173
+			public const int Interview_Sidebar_Sections = 2131231091;
+			
+			// aapt resource value: 0x7f080176
+			public const int Interview_Sidebar_Sections_Group = 2131231094;
+			
+			// aapt resource value: 0x7f080174
+			public const int Interview_Sidebar_Sections_Section = 2131231092;
+			
+			// aapt resource value: 0x7f080178
+			public const int Interview_Sidebar_Sections_Section_Title = 2131231096;
+			
+			// aapt resource value: 0x7f080177
+			public const int Interview_Sidebar_Sections_ToggleButton = 2131231095;
+			
+			// aapt resource value: 0x7f08017a
+			public const int Interview_Sidebar_Title = 2131231098;
 			
 			// aapt resource value: 0x7f080082
 			public const int Platform_AppCompat = 2131230850;
@@ -4323,20 +4337,20 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f080167
 			public const int PrefilledQuestionsToolbarTitle = 2131231079;
 			
-			// aapt resource value: 0x7f08016c
-			public const int PrefilledQuestions_List = 2131231084;
-			
 			// aapt resource value: 0x7f08016d
-			public const int PrefilledQuestions_QuestionnaireTitle = 2131231085;
+			public const int PrefilledQuestions_List = 2131231085;
 			
 			// aapt resource value: 0x7f08016e
-			public const int PrefilledQuestions_StartButton = 2131231086;
+			public const int PrefilledQuestions_QuestionnaireTitle = 2131231086;
 			
-			// aapt resource value: 0x7f08017b
-			public const int ProgressBarTheme_Blue_Light = 2131231099;
+			// aapt resource value: 0x7f08016f
+			public const int PrefilledQuestions_StartButton = 2131231087;
 			
-			// aapt resource value: 0x7f080184
-			public const int RadioButtonTheme = 2131231108;
+			// aapt resource value: 0x7f08017c
+			public const int ProgressBarTheme_Blue_Light = 2131231100;
+			
+			// aapt resource value: 0x7f080185
+			public const int RadioButtonTheme = 2131231109;
 			
 			// aapt resource value: 0x7f080086
 			public const int RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = 2131230854;
@@ -4374,14 +4388,14 @@ namespace WB.UI.Tester
 			// aapt resource value: 0x7f080091
 			public const int RtlOverlay_Widget_AppCompat_Toolbar_Button_Navigation = 2131230865;
 			
-			// aapt resource value: 0x7f08017c
-			public const int SeekBarTheme_Blue_Light = 2131231100;
+			// aapt resource value: 0x7f08017d
+			public const int SeekBarTheme_Blue_Light = 2131231101;
+			
+			// aapt resource value: 0x7f080189
+			public const int SpinnerDropDownItemTheme = 2131231113;
 			
 			// aapt resource value: 0x7f080188
-			public const int SpinnerDropDownItemTheme = 2131231112;
-			
-			// aapt resource value: 0x7f080187
-			public const int SpinnerTheme = 2131231111;
+			public const int SpinnerTheme = 2131231112;
 			
 			// aapt resource value: 0x7f080092
 			public const int TextAppearance_AppCompat = 2131230866;
@@ -5254,6 +5268,12 @@ namespace WB.UI.Tester
 			// aapt resource value: 14
 			public const int MapAttrs_zOrderOnTop = 14;
 			
+			public static int[] MaxHeightScrollView = new int[] {
+					2130772216};
+			
+			// aapt resource value: 0
+			public const int MaxHeightScrollView_maxHeight = 0;
+			
 			public static int[] MediaRouteButton = new int[] {
 					16843071,
 					16843072,
@@ -5399,8 +5419,8 @@ namespace WB.UI.Tester
 			public const int MenuView_preserveIconSpacing = 7;
 			
 			public static int[] MvxBinding = new int[] {
-					2130772216,
-					2130772217};
+					2130772217,
+					2130772218};
 			
 			// aapt resource value: 0
 			public const int MvxBinding_MvxBind = 0;
@@ -5409,20 +5429,20 @@ namespace WB.UI.Tester
 			public const int MvxBinding_MvxLang = 1;
 			
 			public static int[] MvxControl = new int[] {
-					2130772218};
+					2130772219};
 			
 			// aapt resource value: 0
 			public const int MvxControl_MvxTemplate = 0;
 			
 			public static int[] MvxImageView = new int[] {
-					2130772221};
+					2130772222};
 			
 			// aapt resource value: 0
 			public const int MvxImageView_MvxSource = 0;
 			
 			public static int[] MvxListView = new int[] {
-					2130772219,
-					2130772220};
+					2130772220,
+					2130772221};
 			
 			// aapt resource value: 1
 			public const int MvxListView_MvxDropDownItemTemplate = 1;
