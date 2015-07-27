@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTests
 {
-    public class ActiveGroupViewModelTestContext
+    internal class ActiveGroupViewModelTestContext
     {
         public static ActiveGroupViewModel CreateActiveGroupViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,

@@ -8,11 +8,4 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 
         public bool IsRoster { get; set; }
     }
-
-    public class QuestionnaireReferenceModel
-    {
-        public Guid Id { get; set; }
-        
-        public Type ModelType { get; set; }
-    }
 }

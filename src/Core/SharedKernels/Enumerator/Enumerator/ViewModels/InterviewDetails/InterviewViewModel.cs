@@ -20,12 +20,6 @@ using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class SideBarPrefillQuestion
-    {
-        public string Question { get; set; }
-        public string Answer { get; set; }
-    }
-
     public class InterviewViewModel : BaseViewModel
     {
         private readonly IPrincipal principal;
@@ -148,7 +142,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return navigateToDashboardCommand ?? (navigateToDashboardCommand = new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DashboardViewModel>()));
+                return navigateToDashboardCommand ?? (navigateToDashboardCommand = new MvxCommand(() =>
+                {
+//                    TODO: CAPI-Interview-Details
+//                    this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
+                }));
             }
         }
 
@@ -158,7 +156,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return navigateToHelpCommand ?? (navigateToHelpCommand = new MvxCommand(() => this.viewModelNavigationService.NavigateTo<HelpViewModel>()));
+                return navigateToHelpCommand ?? (navigateToHelpCommand = new MvxCommand(() =>
+                {
+//                    TODO: CAPI-Interview-Details
+//                    this.viewModelNavigationService.NavigateTo<HelpViewModel>();
+                }));
             }
         }
 
@@ -171,13 +173,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void SignOut()
         {
-            this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+//            TODO: CAPI-Interview-Details
+//            this.principal.SignOut();
+//            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()
         {
-            this.navigationState.NavigateBackAsync(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).WaitAndUnwrapException();
+//            TODO: CAPI-Interview-Details
+//            this.navigationState.NavigateBackAsync(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).WaitAndUnwrapException();
         }
     }
 }

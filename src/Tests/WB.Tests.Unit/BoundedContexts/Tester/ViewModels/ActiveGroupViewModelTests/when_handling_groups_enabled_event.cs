@@ -21,7 +21,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTests
 {
-    public class when_handling_groups_enabled_event : ActiveGroupViewModelTestContext
+    internal class when_handling_groups_enabled_event : ActiveGroupViewModelTestContext
     {
         Establish context = () =>
         {

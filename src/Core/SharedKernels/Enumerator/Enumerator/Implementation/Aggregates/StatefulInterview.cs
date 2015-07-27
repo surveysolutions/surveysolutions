@@ -15,7 +15,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 {
-    public class StatefulInterview : Interview, IStatefulInterview
+    internal class StatefulInterview : Interview, IStatefulInterview
     {
         private class CalculatedState
         {
