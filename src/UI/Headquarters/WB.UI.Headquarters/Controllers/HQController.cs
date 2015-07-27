@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -96,7 +92,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             var featuredQuestionItems = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions;
-            var viewModel = new BatchUploadModel()
+            var viewModel = new Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel()
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
@@ -109,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult SampleBatchUpload(BatchUploadModel model)
+        public ActionResult SampleBatchUpload(Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
             
@@ -139,7 +135,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult PanelBatchUpload(BatchUploadModel model)
+        public ActionResult PanelBatchUpload(Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
@@ -178,7 +174,13 @@ namespace WB.UI.Headquarters.Controllers
             //null is handled inside 
             var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
 
-            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName"}).Items;
+            this.ViewBag.SupervisorList =
+                this.supervisorsFactory.Load(new UserListViewInputModel
+                {
+                    Role = UserRoles.Supervisor,
+                    PageSize = int.MaxValue,
+                    Order = "UserName"
+                }).Items.Select(x => new UsersViewItem() {UserId = x.UserId, UserName = x.UserName});
 
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
@@ -195,8 +197,14 @@ namespace WB.UI.Headquarters.Controllers
         {
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
+
             this.ViewBag.SupervisorList =
-              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue, Order = "UserName" }).Items;
+                this.supervisorsFactory.Load(new UserListViewInputModel
+                {
+                    Role = UserRoles.Supervisor,
+                    PageSize = int.MaxValue,
+                    Order = "UserName"
+                }).Items.Select(x => new UsersViewItem() { UserId = x.UserId, UserName = x.UserName });
 
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
@@ -208,68 +216,6 @@ namespace WB.UI.Headquarters.Controllers
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
 
             return this.View("VerifySample", model);
-        }
-
-        [ObserverNotAllowed]
-        public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
-        {
-            PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
-            Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
-
-            new Task(() =>
-            {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-
-                try
-                {
-                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-                    sampleImportService.CreatePanel(
-                        questionnaireId,
-                        version,
-                        id,
-                        preloadedData,
-                        responsibleHeadquarterId,
-                        responsibleSupervisor);
-                }
-                finally
-                {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
-                }
-            }).Start();
-
-            return this.RedirectToAction("SampleCreationResult", new { id });
-        }
-
-        [ObserverNotAllowed]
-        public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid? responsibleSupervisor)
-        {
-            PreloadedDataByFile preloadedData = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
-            Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
-
-            new Task(() =>
-            {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-
-                try
-                {
-                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-                    sampleImportService.CreateSample(
-                        questionnaireId,
-                        version,
-                        id,
-                        preloadedData,
-                        responsibleHeadquarterId,
-                        responsibleSupervisor);
-                }
-                finally
-                {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
-                }
-            }).Start();
-            
-            return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
         public ActionResult SampleCreationResult(string id)
