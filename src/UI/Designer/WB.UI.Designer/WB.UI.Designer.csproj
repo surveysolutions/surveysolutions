@@ -370,15 +370,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\NotificationResources.Designer.cs">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\QuestionnaireHistoryResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\NotificationMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NotificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
@@ -1351,13 +1351,13 @@
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotificationResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
