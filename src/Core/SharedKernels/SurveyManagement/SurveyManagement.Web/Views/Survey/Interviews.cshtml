@@ -23,6 +23,11 @@
         var users = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
         var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
         var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsibles, users, $commandExecutionUrl);
+        model.IsNothingSelected.subscribe(function(value) {
+            if (value) {
+                model.AssignTo(undefined);   
+            }
+        });
         ko.applyBindings(model);
         model.load();
     });
