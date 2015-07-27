@@ -73,7 +73,7 @@
         self.search();
     };
 
-    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId) {
+    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId, onSuccessCommandExecuting) {
         var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
@@ -86,11 +86,11 @@
 
         bootbox.confirm(messageHtml, function (result) {
             if (result)
-                self.sendCommand(commandName, parametersFunc, filteredItems);
+                self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
         });
     };
 
-    self.sendCommand = function (commandName, parametersFunc, items) {
+    self.sendCommand = function (commandName, parametersFunc, items, onSuccessCommandExecuting) {
         var commands = ko.utils.arrayMap(items, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON(parametersFunc(item));
@@ -102,6 +102,8 @@
         };
 
         self.SendCommands(command, function () {
+            if (!_.isUndefined(onSuccessCommandExecuting))
+                onSuccessCommandExecuting();
             self.search();
         }, true);
     };

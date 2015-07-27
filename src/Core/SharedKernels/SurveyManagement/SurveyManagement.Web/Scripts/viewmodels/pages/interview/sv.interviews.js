@@ -3,14 +3,22 @@
     var self = this;
 
     self.Users = users;
+    self.AssignTo = ko.observable();
 
-    self.Assign = function (user) {
+    self.CanAssignTo = ko.computed(function() {
+        return !(self.IsNothingSelected && _.isUndefined(self.AssignTo()));
+    });
+
+    self.Assign = function () {
         self.sendCommandAfterFilterAndConfirm(
             "AssignInterviewerCommand",
-            function (item) { return { InterviewerId: user.UserId, InterviewId: item.InterviewId }},
+            function (item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId }},
             function (item) { return item.CanBeReassigned(); },
             "#confirm-assign-template",
-            "#confirm-continue-message-template"
+            "#confirm-continue-message-template",
+            function() {
+                self.AssignTo(undefined);
+            }
         );
     };
 
