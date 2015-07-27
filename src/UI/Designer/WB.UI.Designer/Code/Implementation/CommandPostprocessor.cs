@@ -34,20 +34,18 @@ namespace WB.UI.Designer.Code.Implementation
         {
             try
             {
+                var addSharedPersonCommand = command as AddSharedPersonToQuestionnaireCommand;
+                if (addSharedPersonCommand != null)
+                {
+                    this.HandleNotifications(ShareChangeType.Share, addSharedPersonCommand.Email, addSharedPersonCommand.QuestionnaireId, addSharedPersonCommand.ShareType);
+                    return;
+                }
 
-            
-            var addSharedPersonCommand = command as AddSharedPersonToQuestionnaireCommand;
-            if (addSharedPersonCommand != null)
-            {
-                this.HandleNotifications(ShareChangeType.Share, addSharedPersonCommand.Email, addSharedPersonCommand.QuestionnaireId, addSharedPersonCommand.ShareType);
-                return;
-            }
-
-            var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaireCommand;
-            if (removeSharedPersonCommand != null)
-            {
-                this.HandleNotifications(ShareChangeType.StopShare, removeSharedPersonCommand.Email, removeSharedPersonCommand.QuestionnaireId, ShareType.Edit);
-            }
+                var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaireCommand;
+                if (removeSharedPersonCommand != null)
+                {
+                    this.HandleNotifications(ShareChangeType.StopShare, removeSharedPersonCommand.Email, removeSharedPersonCommand.QuestionnaireId, ShareType.Edit);
+                }
             }
             catch (Exception exc)
             {
