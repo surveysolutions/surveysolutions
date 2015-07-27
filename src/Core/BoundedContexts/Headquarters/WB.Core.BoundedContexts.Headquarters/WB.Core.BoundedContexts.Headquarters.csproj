@@ -45,6 +45,14 @@
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
@@ -60,6 +68,10 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -107,6 +119,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
+    <Compile Include="UserPreloading\Dto\UserPreloadingProcess.cs" />
+    <Compile Include="UserPreloading\Dto\UserPreloadingVerificationError.cs" />
+    <Compile Include="UserPreloading\Dto\UserPrelodingState.cs" />
+    <Compile Include="UserPreloading\Jobs\BatchUserCreator.cs" />
+    <Compile Include="UserPreloading\Jobs\UserPreloadingVerifier.cs" />
+    <Compile Include="UserPreloading\Mapping\UserPreloadingProcessMap.cs" />
+    <Compile Include="UserPreloading\Mapping\UserPreloadingVerificationErrorMap.cs" />
+    <Compile Include="UserPreloading\Services\IUserPreloadingService.cs" />
+    <Compile Include="UserPreloading\Services\UserPreloadingException.cs" />
+    <Compile Include="UserPreloading\Services\UserPreloadingService.cs" />
+    <Compile Include="UserPreloading\Tasks\BatchUserCreatorTask.cs" />
+    <Compile Include="UserPreloading\Tasks\UserPreloadingVerifierTask.cs" />
     <Compile Include="Users\Denormalizers\RolesExtensions.cs" />
     <Compile Include="Users\Denormalizers\UsersFeedDenormalizer.cs" />
   </ItemGroup>
@@ -147,6 +172,7 @@
   <ItemGroup>
     <Folder Include="Denormalizers\" />
     <Folder Include="Interviews\Views\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">

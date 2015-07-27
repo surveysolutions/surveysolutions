@@ -135,4 +135,10 @@
   <data name="UploadSampleDescription" xml:space="preserve">
     <value>To upload the sample to be interviewed, please prepare a file with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.</value>
   </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Upload users</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>Upload Users Description must be here</value>
+  </data>
 </root>

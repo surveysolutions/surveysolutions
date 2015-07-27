@@ -464,6 +464,10 @@
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
     <Content Include="Views\HQ\DataExport.cshtml" />
     <Content Include="Views\Supervisor\Archived.cshtml" />
+    <Content Include="Views\HQ\UserBatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportUserDetails.cshtml" />
+    <Content Include="Views\HQ\UserPreloadigVerificationDetails.cshtml" />
+    <Content Include="Views\HQ\UserCreationProcessDetails.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
