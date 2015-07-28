@@ -284,6 +284,7 @@
     <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
+    <Content Include="Scripts\pages\userpreloading.js" />
     <Content Include="Scripts\popover-extra-placements.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -491,6 +492,7 @@
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
+    <Compile Include="API\PreloadingApiController.cs" />
     <Compile Include="API\Resources\AssembliesResourceController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>

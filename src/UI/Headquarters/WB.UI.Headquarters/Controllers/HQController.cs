@@ -165,7 +165,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult UserPreloadigVerificationDetails(string id)
         {
-            return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
+            return this.View("UserPreloadigVerificationDetails",null, id);
         }
 
         [HttpPost]
