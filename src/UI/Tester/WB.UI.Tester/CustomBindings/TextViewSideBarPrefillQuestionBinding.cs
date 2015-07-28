@@ -19,7 +19,7 @@ namespace WB.UI.Tester.CustomBindings
                 return;
 
             var answerText = value.Answer ?? string.Empty;
-            var questionText = value.Question == null ? string.Empty : value.Question.ToUpper();
+            var questionText = Html.FromHtml(value.Question == null ? string.Empty : value.Question.ToUpper());
 
             var message = string.Format(@"{0} : {1}", questionText, answerText);
             SpannableString str = new SpannableString(message);
