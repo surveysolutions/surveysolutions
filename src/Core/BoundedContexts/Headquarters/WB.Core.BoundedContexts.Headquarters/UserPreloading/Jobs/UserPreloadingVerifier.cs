@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate;
+using Ninject;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -21,71 +23,86 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     [DisallowConcurrentExecution]
     internal class UserPreloadingVerifier : IJob
     {
-        private readonly IUserPreloadingService userPreloadingService;
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
-
-        private  readonly IPlainTransactionManager PlainTransactionManager;
-
         ITransactionManager TransactionManager
         {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManager>(); }
+            get { return transactionManagerProvider.GetTransactionManager(); }
         }
 
-
-        public UserPreloadingVerifier(IUserPreloadingService userPreloadingService, 
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage, IPlainTransactionManager plainTransactionManager)
+        IPlainTransactionManager PlainTransactionManager
         {
-            this.userPreloadingService = userPreloadingService;
-            this.userStorage = userStorage;
-            this.PlainTransactionManager = plainTransactionManager;
+            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
+        }
+
+        private readonly ITransactionManagerProvider transactionManagerProvider;
+
+        public UserPreloadingVerifier(
+            ITransactionManagerProvider transactionManagerProvider)
+        {   this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public void Execute(IJobExecutionContext context)
         {
-            string preloadingProcessIdToValidate = PlainTransactionManager.ExecuteInPlainTransaction(() =>
-                userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated());
-
-            if (string.IsNullOrEmpty(preloadingProcessIdToValidate))
-                return;
-
-            var preloadingProcessDataToValidate =
-                PlainTransactionManager.ExecuteInPlainTransaction(
-                    () =>
-                        userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate)
-                            .UserPrelodingData.ToList());
-
-            TransactionManager.ExecuteInQueryTransaction(() =>
+            IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+            try
             {
-                this.ValidatePreloadedData(preloadingProcessDataToValidate, preloadingProcessIdToValidate);
-            });
+                var userPreloadingService = ServiceLocator.Current.GetInstance<IUserPreloadingService>();
+                var userStorage = ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<UserDocument>>();
+                string preloadingProcessIdToValidate = PlainTransactionManager.ExecuteInPlainTransaction(() =>
+                    userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated());
 
-            PlainTransactionManager.ExecuteInPlainTransaction(
-                () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
+                if (string.IsNullOrEmpty(preloadingProcessIdToValidate))
+                    return;
+
+                var preloadingProcessDataToValidate =
+                    PlainTransactionManager.ExecuteInPlainTransaction(
+                        () =>
+                            userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate)
+                                .UserPrelodingData.ToList());
+
+                TransactionManager.ExecuteInQueryTransaction(() =>
+                {
+                    this.ValidatePreloadedData(userPreloadingService, userStorage, preloadingProcessDataToValidate,
+                        preloadingProcessIdToValidate);
+                });
+
+                PlainTransactionManager.ExecuteInPlainTransaction(
+                    () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
+            }
+            finally
+            {
+                IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+            }
         }
 
-        void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
+        void ValidatePreloadedData(IUserPreloadingService userPreloadingService,
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data,
+            string processId)
         {
-
-            ValidateRow(data, processId, LoginNameTakenByExistingUser, "PLU0001",
+            ValidateRow(userPreloadingService, userStorage, data, processId, LoginNameTakenByExistingUser, "PLU0001",
                 "Login is taken by an existing user", "Login");
-            ValidateRow(data, processId, LoginDublicationInDataset, "PLU0002", "Login duplication in the file",
+            ValidateRow(userPreloadingService, userStorage, data, processId, LoginDublicationInDataset, "PLU0002",
+                "Login duplication in the file",
                 "Login");
-            ValidateRow(data, processId, LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam, "PLU0003",
+            ValidateRow(userPreloadingService, userStorage, data, processId,
+                LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam, "PLU0003",
                 "Login of archive user can't be reused because it belongs to other team", "Login");
-            ValidateRow(data, processId, LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole, "PLU0004",
+            ValidateRow(userPreloadingService, userStorage, data, processId,
+                LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole, "PLU0004",
                 "Login of archive user can't be reused because it exists in other role", "Login");
-            ValidateRow(data, processId, LoginFormatVerification, "PLU0005",
+            ValidateRow(userPreloadingService, data, processId, LoginFormatVerification, "PLU0005",
                 "Login needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol",
                 "Login");
-            ValidateRow(data, processId, PasswordFormatVerification, "PLU0006",
+            ValidateRow(userPreloadingService, data, processId, PasswordFormatVerification, "PLU0006",
                 "Password must contain at least one number, one upper case character and one lower case character",
                 "Password");
-            ValidateRow(data, processId, EmailFormatVerification, "PLU0007", "Email is invalid", "Email");
-            ValidateRow(data, processId, PhoneNumberFormatVerification, "PLU0008", "Phone number is invalid",
+            ValidateRow(userPreloadingService, data, processId, EmailFormatVerification, "PLU0007", "Email is invalid",
+                "Email");
+            ValidateRow(userPreloadingService, data, processId, PhoneNumberFormatVerification, "PLU0008",
+                "Phone number is invalid",
                 "PhoneNumber");
-            ValidateRow(data, processId, RoleVerification, "PLU0009",
+            ValidateRow(userPreloadingService, data, processId, RoleVerification, "PLU0009",
                 "Role is invalid. 'Supervisor' or 'Interviewer' is valid values.", "Role");
-            ValidateRow(data, processId, SupervisorVerification, "PLU0010",
+            ValidateRow(userPreloadingService, userStorage, data, processId, SupervisorVerification, "PLU0010",
                 "Supervisor doesn't exist in the file or in the existing teams", "Supervisor");
         }
 
@@ -127,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             return !regExp.IsMatch(userPreloadingDataRecord.PhoneNumber);
         }
 
-        private bool LoginNameTakenByExistingUser(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool LoginNameTakenByExistingUser(IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             return
                     userStorage.Query(
@@ -137,12 +154,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         .Any();
         }
 
-        private bool LoginDublicationInDataset(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool LoginDublicationInDataset(IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             return data.Count(row => row.Login.ToLower() == userPreloadingDataRecord.Login) > 1;
         }
 
-        private bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(IList<UserPreloadingDataRecord> data,
+        private bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data, 
             UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var desiredRole = ParseUserRole(userPreloadingDataRecord.Role);
@@ -168,7 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             return false;
         }
 
-        private bool LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var desiredRole = ParseUserRole(userPreloadingDataRecord.Role);
 
@@ -190,15 +207,46 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             return false;
         }
 
-        private void ValidateRow(IList<UserPreloadingDataRecord> data, string processId, Func<IList<UserPreloadingDataRecord>,UserPreloadingDataRecord, bool> validation, string code, string message, string columnName)
+        private void ValidateRow(
+            IUserPreloadingService userPreloadingService,
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            IList<UserPreloadingDataRecord> data, 
+            string processId, 
+            Func<IQueryableReadSideRepositoryReader<UserDocument>, IList<UserPreloadingDataRecord>,UserPreloadingDataRecord, bool> validation, 
+            string code, 
+            string message, 
+            string columnName)
         {
             int rowNumber = 1;
+            
             foreach (var userPreloadingDataRecord in data)
             {
-                if (validation(data, userPreloadingDataRecord))
+                if (validation(userStorage, data, userPreloadingDataRecord))
                         userPreloadingService.PushVerificationError(processId, code,
                             message,
                             rowNumber, columnName, userPreloadingDataRecord.Login);
+
+                rowNumber++;
+            }
+        }
+
+        private void ValidateRow(
+            IUserPreloadingService userPreloadingService,
+            IList<UserPreloadingDataRecord> data,
+            string processId,
+            Func<IList<UserPreloadingDataRecord>, UserPreloadingDataRecord, bool> validation,
+            string code,
+            string message,
+            string columnName)
+        {
+            int rowNumber = 1;
+
+            foreach (var userPreloadingDataRecord in data)
+            {
+                if (validation(data, userPreloadingDataRecord))
+                    userPreloadingService.PushVerificationError(processId, code,
+                        message,
+                        rowNumber, columnName, userPreloadingDataRecord.Login);
 
                 rowNumber++;
             }
@@ -210,7 +258,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             return role == UserRoles.Undefined;
         }
 
-        private bool SupervisorVerification(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool SupervisorVerification(IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = ParseUserRole(userPreloadingDataRecord.Role);
             if (role != UserRoles.Operator)
