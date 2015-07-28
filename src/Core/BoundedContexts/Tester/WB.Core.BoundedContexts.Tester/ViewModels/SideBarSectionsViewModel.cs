@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<GroupsEnabled>
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>
     {
         private NavigationState navigationState;
 
@@ -66,13 +67,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void BuildSectionsList()
         {
             var questionnaire = this.questionnaireRepository.GetById(questionnaireId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
+
             foreach (GroupsHierarchyModel section in questionnaire.GroupsHierarchy)
             {
                 var groupIdentity = new Identity(section.Id, new decimal[] { });
-                var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
-
-                sections.Add(sectionViewModel);
+                if (interview.IsEnabled(groupIdentity))
+                {
+                    var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
+                    sections.Add(sectionViewModel);
+                }
             }
 
             this.Sections = sections;
@@ -125,15 +130,32 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(GroupsEnabled @event)
         {
+            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             foreach (var groupId in @event.Groups)
             {
                 var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);
-                this.RefreshListWithNewItemAdded(addedIdentity, interview);
+                
+                var section = questionnaire.GroupsHierarchy.FirstOrDefault(s => s.Id == addedIdentity.Id);
+                if (section != null)
+                    this.AddSection(section, questionnaire, interview);
+                else
+                    this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
 
             this.RefreshHasChildrenFlags();
+        }
+
+        void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
+        {
+            var sectionIdentity = new Identity(section.Id, new decimal[0]);
+            var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
+            var index = questionnaire.GroupsHierarchy
+                .Where(s => interview.IsEnabled(sectionIdentity))
+                .ToList()
+                .IndexOf(section);
+            Sections.Insert(index, sectionViewModel);
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
@@ -167,6 +189,26 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
+        public void Handle(GroupsDisabled @event)
+        {
+            foreach (var groupId in @event.Groups)
+            {
+                var removeIdentity = new Identity(groupId.Id, groupId.RosterVector);
+                this.RefreshListWithRemoveItem(removeIdentity);
+            }
+
+            this.RefreshHasChildrenFlags();
+        }
+
+        void RefreshListWithRemoveItem(Identity removeIdentity)
+        {
+            var sectionToRemove = this.Sections.SingleOrDefault(s => s.SectionIdentity.Equals(removeIdentity));
+            if (sectionToRemove != null)
+            {
+                sectionToRemove.RemoveMe(() => this.Sections.Remove(sectionToRemove));
+            }
+        }
+
         private void RefreshHasChildrenFlags()
         {
             var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
@@ -181,5 +223,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             return this.modelsFactory.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
         }
+
     }
 }

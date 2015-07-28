@@ -261,8 +261,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void RemoveMe()
         {
+            if (Parent == null)
+                return;
+
+            this.RemoveMe(() => this.Parent.Children.Remove(this));
+        }
+
+        public void RemoveMe(Action removeFromCollectionAction)
+        {
             this.eventRegistry.Unsubscribe(this, this.interviewId);
-            this.mainThreadDispatcher.RequestMainThreadAction(() => this.Parent.Children.Remove(this));
+            this.mainThreadDispatcher.RequestMainThreadAction(removeFromCollectionAction);
             this.RefreshHasChildrenFlag();
             this.Dispose();
         }
