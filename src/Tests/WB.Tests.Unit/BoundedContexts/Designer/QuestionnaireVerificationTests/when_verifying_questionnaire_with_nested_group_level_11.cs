@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -19,83 +20,82 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new Group
-            {
-                PublicKey = Guid.NewGuid(),
-                IsRoster = false,
-                VariableName = "a",
-                Children = new List<IComposite>
+            questionnaire = CreateQuestionnaireDocument(
+                new Group
                 {
-                    new Group
+                    PublicKey = Guid.NewGuid(),
+                    IsRoster = false,
+                    VariableName = "a",
+                    Children = new List<IComposite>
                     {
-                        PublicKey = Guid.NewGuid(),
-                        IsRoster = false,
-                        VariableName = "a",
-                        Children = new List<IComposite>
+                        new TextListQuestion
                         {
-                            new Group
+                            PublicKey = Guid.NewGuid(),
+                            StataExportCaption = "var1",
+                            QuestionType = QuestionType.TextList
+                        },
+                        new Group
+                        {
+                            PublicKey = Guid.NewGuid(),
+                            IsRoster = false,
+                            VariableName = "a",
+                            Children = new List<IComposite>
                             {
-                                PublicKey = Guid.NewGuid(),
-                                IsRoster = false,
-                                VariableName = "a",
-                                Children = new List<IComposite>
+                                new Group
                                 {
-                                    new Group
+                                    PublicKey = Guid.NewGuid(),
+                                    IsRoster = false,
+                                    VariableName = "a",
+                                    Children = new List<IComposite>
                                     {
-                                        PublicKey = Guid.NewGuid(),
-                                        IsRoster = false,
-                                        VariableName = "a",
-                                        Children = new List<IComposite>
+                                        new Group
                                         {
-                                            new Group
+                                            PublicKey = Guid.NewGuid(),
+                                            IsRoster = false,
+                                            VariableName = "a",
+                                            Children = new List<IComposite>
                                             {
-                                                PublicKey = Guid.NewGuid(),
-                                                IsRoster = false,
-                                                VariableName = "a",
-                                                Children = new List<IComposite>
+                                                new Group
                                                 {
-                                                    new Group
+                                                    PublicKey = Guid.NewGuid(),
+                                                    IsRoster = false,
+                                                    VariableName = "a",
+                                                    Children = new List<IComposite>
                                                     {
-                                                        PublicKey = Guid.NewGuid(),
-                                                        IsRoster = false,
-                                                        VariableName = "a",
-                                                        Children = new List<IComposite>
+                                                        new Group
                                                         {
-                                                            new Group
+                                                            PublicKey = Guid.NewGuid(),
+                                                            IsRoster = false,
+                                                            VariableName = "a",
+                                                            Children = new List<IComposite>
                                                             {
-                                                                PublicKey = Guid.NewGuid(),
-                                                                IsRoster = false,
-                                                                VariableName = "a",
-                                                                Children = new List<IComposite>
+                                                                new Group
                                                                 {
-                                                                    new Group
+                                                                    PublicKey = Guid.NewGuid(),
+                                                                    IsRoster = false,
+                                                                    VariableName = "a",
+                                                                    Children = new List<IComposite>
                                                                     {
-                                                                        PublicKey = Guid.NewGuid(),
-                                                                        IsRoster = false,
-                                                                        VariableName = "a",
-                                                                        Children = new List<IComposite>
+                                                                        new Group
                                                                         {
-                                                                            new Group
+                                                                            PublicKey = Guid.NewGuid(),
+                                                                            IsRoster = false,
+                                                                            VariableName = "a",
+                                                                            Children = new List<IComposite>
                                                                             {
-                                                                                PublicKey = Guid.NewGuid(),
-                                                                                IsRoster = false,
-                                                                                VariableName = "a",
-                                                                                Children = new List<IComposite>
+                                                                                new Group
                                                                                 {
-                                                                                    new Group
+                                                                                    PublicKey = Guid.NewGuid(),
+                                                                                    IsRoster = false,
+                                                                                    VariableName = "a",
+                                                                                    Children = new List<IComposite>
                                                                                     {
-                                                                                        PublicKey = Guid.NewGuid(),
-                                                                                        IsRoster = false,
-                                                                                        VariableName = "a",
-                                                                                        Children = new List<IComposite>
+                                                                                        new Group
                                                                                         {
-                                                                                            new Group
-                                                                                            {
-                                                                                                PublicKey =
-                                                                                                    rosterGroupId,
-                                                                                                IsRoster = false,
-                                                                                                VariableName = "a"
-                                                                                            }
+                                                                                            PublicKey = rosterGroupId,
+                                                                                            IsRoster = false,
+                                                                                            VariableName = "a"
+                                                                                            
                                                                                         }
                                                                                     }
                                                                                 }
@@ -114,8 +114,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                             }
                         }
                     }
-                }
-            });
+                });
 
 
             verifier = CreateQuestionnaireVerifier();
