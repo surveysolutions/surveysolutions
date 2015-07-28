@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(),
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
-                new InterviewHistorySettings("", false));
+                new InterviewHistorySettings("", false), Mock.Of<IUserPreloadingService>());
         }
     }
 }
