@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult UserCreationProcessDetails(string id)
         {
-            return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
+            return this.View("UserCreationProcessDetails", null, id);
         }
 
         [HttpPost]
