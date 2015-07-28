@@ -178,7 +178,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
-                                        
+                    Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB00101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),                 
+
                     ErrorsByQuestionsAndGroupsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
@@ -664,6 +665,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return rosterLevel;
+        }
+
+        private static bool GroupHasLevelDepthMoreThan10(IGroup group)
+        {
+            int rosterLevel = 0;
+            IComposite questionnaireItem = group;
+            while (questionnaireItem != null)
+            {
+                rosterLevel++;
+                questionnaireItem = questionnaireItem.GetParent();
+            }
+
+            return rosterLevel > 10;
         }
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
