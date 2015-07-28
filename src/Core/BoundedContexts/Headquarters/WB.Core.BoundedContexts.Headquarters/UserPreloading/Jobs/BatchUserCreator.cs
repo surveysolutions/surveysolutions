@@ -99,42 +99,100 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private void CreateUsersFromPreloadedData(IUserPreloadingService userPreloadingService, IList<UserPreloadingDataRecord> data, string id)
         {
             var commandService = ServiceLocator.Current.GetInstance<ICommandService>();
+            var userStorage = ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<UserDocument>>();
             var supervisorsToCreate = data.Where(row => row.Role.ToLower() == "supervisor").ToArray();
 
             foreach (var supervisorToCreate in supervisorsToCreate)
             {
                 TransactionManager.ExecuteInQueryTransaction(
-                  () => commandService.Execute(new CreateUserCommand(Guid.NewGuid(), supervisorToCreate.Login,
-                      passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email,
-                      new[] { UserRoles.Supervisor  },
-                      false,
-                      false, null,
-                      supervisorToCreate.FullName, supervisorToCreate.PhoneNumber)));
+                    () => CreateSupervisorOrUnarchiveAndUpdate(commandService, userStorage, supervisorToCreate));
 
                 PlainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
+            
             var interviewersToCreate = data.Where(row => row.Role.ToLower() == "interviewer").ToArray();
+
             foreach (var interviewerToCreate in interviewersToCreate)
             {
                 TransactionManager.ExecuteInQueryTransaction(
-                    () => commandService.Execute(new CreateUserCommand(Guid.NewGuid(), interviewerToCreate.Login,
-                        passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email,
-                        new[] { UserRoles.Operator},
-                        false,
-                        false, GetSupervisorForUserIfNeeded(interviewerToCreate),
-                        interviewerToCreate.FullName, interviewerToCreate.PhoneNumber)));
-
+                    () => CreateInterviewerOrUnarchiveAndUpdate(commandService, userStorage, interviewerToCreate));
 
                 PlainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
         }
 
-        private UserLight GetSupervisorForUserIfNeeded(UserPreloadingDataRecord dataRecord)
+
+        private void CreateSupervisorOrUnarchiveAndUpdate(
+            ICommandService commandService, 
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            UserPreloadingDataRecord supervisorToCreate)
         {
-            var userStorage = ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<UserDocument>>();
+            var archivedSupervisor =
+                userStorage.Query(
+                    _ =>
+                        _.FirstOrDefault(u => u.UserName.ToLower() == supervisorToCreate.Login.ToLower() && u.IsArchived));
+            if (archivedSupervisor == null)
+            {
+                commandService.Execute(new CreateUserCommand(Guid.NewGuid(), supervisorToCreate.Login,
+                    passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email,
+                    new[] {UserRoles.Supervisor},
+                    false,
+                    false, null,
+                    supervisorToCreate.FullName, supervisorToCreate.PhoneNumber));
+                return;
+            }
             
+            if (!archivedSupervisor.Roles.Contains(UserRoles.Supervisor))
+                throw new ArgumentException(
+                    String.Format("archived user '{0}' is in role '{1}' but must be in role supervisor",
+                        archivedSupervisor.UserName, string.Join(",", archivedSupervisor.Roles)));
+
+            commandService.Execute(new UnarchiveUserCommand(archivedSupervisor.PublicKey));
+            commandService.Execute(new ChangeUserCommand(archivedSupervisor.PublicKey, supervisorToCreate.Email, false,
+                false, passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.FullName,
+                supervisorToCreate.PhoneNumber, archivedSupervisor.PublicKey));
+        }
+
+        void CreateInterviewerOrUnarchiveAndUpdate(
+            ICommandService commandService,
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage,
+            UserPreloadingDataRecord interviewerToCreate)
+        {
+            var archivedInterviewers =
+                userStorage.Query(
+                    _ =>
+                        _.FirstOrDefault(
+                            u => u.UserName.ToLower() == interviewerToCreate.Login.ToLower() && u.IsArchived));
+
+            var supervisor = GetSupervisorForUserIfNeeded(userStorage, interviewerToCreate);
+            
+            if (archivedInterviewers == null)
+            {
+                commandService.Execute(new CreateUserCommand(Guid.NewGuid(), interviewerToCreate.Login,
+                    passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email,
+                    new[] {UserRoles.Operator},
+                    false,
+                    false, supervisor,
+                    interviewerToCreate.FullName, interviewerToCreate.PhoneNumber));
+                return;
+            }
+
+            if (!archivedInterviewers.Roles.Contains(UserRoles.Operator))
+                throw new ArgumentException(
+                    String.Format("archived user '{0}' is in role '{1}' but must be in role interviewer",
+                        archivedInterviewers.UserName, string.Join(",", archivedInterviewers.Roles)));
+
+            commandService.Execute(new UnarchiveUserCommand(archivedInterviewers.PublicKey));
+            commandService.Execute(new ChangeUserCommand(archivedInterviewers.PublicKey, interviewerToCreate.Email,
+                false,
+                false, passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.FullName,
+                interviewerToCreate.PhoneNumber, archivedInterviewers.PublicKey));
+        }
+
+        private UserLight GetSupervisorForUserIfNeeded(IQueryableReadSideRepositoryReader<UserDocument> userStorage, UserPreloadingDataRecord dataRecord)
+        {
             var supervisor =
                 userStorage.Query(_ => _.FirstOrDefault(u => u.UserName.ToLower() == dataRecord.Supervisor.ToLower()));
             
