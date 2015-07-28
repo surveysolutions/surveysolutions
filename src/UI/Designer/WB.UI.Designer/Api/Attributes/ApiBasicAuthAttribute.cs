@@ -82,6 +82,12 @@ namespace WB.UI.Designer.Api.Attributes
                     return;
                 }
 
+                if (this.IsAccountNotApproved())
+                {
+                    this.ThrowNotApprovedException(actionContext);
+                    return;
+                }
+
                 base.OnAuthorization(actionContext);
             }
             finally
@@ -131,6 +137,15 @@ namespace WB.UI.Designer.Api.Attributes
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.UserLockedOut };
         }
 
+        private void ThrowNotApprovedException(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+            {
+                ReasonPhrase =
+                    string.Format(ErrorMessages.UserNotApproved, this.userHelper.WebUser.MembershipUser.Email)
+            };
+        }
+
         private void ResponseMaintenanceMessage(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = ErrorMessages.Maintenance };
@@ -144,6 +159,11 @@ namespace WB.UI.Designer.Api.Attributes
         private bool IsAccountLockedOut()
         {
             return this.userHelper.WebUser == null || this.userHelper.WebUser.MembershipUser.IsLockedOut;
+        }
+
+        private bool IsAccountNotApproved()
+        {
+            return !this.userHelper.WebUser.MembershipUser.IsApproved;
         }
     }
 }
