@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
@@ -10,22 +9,21 @@ using System.Web.Security;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NSubstitute;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.AttributesTests
 {
-    public class when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials : AttributesTestContext
+    public class when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved : AttributesTestContext
     {
         Establish context = () =>
         {
             var membershipUserServiceMock = new Mock<IMembershipUserService>();
             var membershipWebUserMock = new Mock<IMembershipWebUser>();
             var membershipUserMock = new Mock<MembershipUser>();
-            membershipUserMock.Setup(x => x.IsApproved).Returns(true);
-            membershipUserMock.Setup(x => x.IsLockedOut).Returns(false);
+            membershipUserMock.Setup(x => x.IsApproved).Returns(false);
+            membershipUserMock.Setup(x => x.Email).Returns(userEmail);
             membershipWebUserMock.Setup(x => x.MembershipUser).Returns(membershipUserMock.Object);
             membershipUserServiceMock.Setup(_ => _.WebUser).Returns(membershipWebUserMock.Object);
 
@@ -51,16 +49,20 @@ namespace WB.Tests.Unit.Applications.Designer.AttributesTests
 
         Because of = () =>
             attribute.OnAuthorization(filterContext);
+        
+        It should_response_context_contains_unauthorized_exception = () =>
+            filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
-        It should_set_Thread_Identity_name_to_proveded_value = () =>
-            Thread.CurrentPrincipal.Identity.Name.ShouldEqual(userName);
-
-        It should_set_Thread_Identity_IsAuthenticated_to_true = () =>
-            Thread.CurrentPrincipal.Identity.IsAuthenticated.ShouldBeTrue();
+        It should_response_context_unauthorized_exception_has_specified_reasonphrase = () =>
+            filterContext.Response.ReasonPhrase.ShouldEqual(expectedReasonPhrase);
 
         private static ApiBasicAuthAttribute attribute;
         private static HttpActionContext filterContext;
 
         private static string userName = "name";
+        private static string userEmail = "user@mail";
+
+        private static readonly string expectedReasonPhrase =
+            string.Format("Your account is not approved. Please, confirm your account first. We've sent a confirmation link to {0}.", userEmail);
     }
 }

@@ -247,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applications\Designer\AttributesTests\AttributesTestContext.cs" />
+    <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />

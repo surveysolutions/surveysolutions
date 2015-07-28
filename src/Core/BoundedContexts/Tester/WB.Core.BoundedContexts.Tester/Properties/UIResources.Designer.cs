@@ -80,6 +80,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first..
+        /// </summary>
+        public static string AccountIsNotApprovedOnServer {
+            get {
+                return ResourceManager.GetString("AccountIsNotApprovedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application name:.
         /// </summary>
         public static string ApplicationNameText {

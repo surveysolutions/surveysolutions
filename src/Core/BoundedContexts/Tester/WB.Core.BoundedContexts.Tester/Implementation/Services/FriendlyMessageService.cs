@@ -19,7 +19,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             switch (ex.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:
-                    return ex.Message.Contains("lock") ? UIResources.AccountIsLockedOnServer : UIResources.Unauthorized;
+                    if (ex.Message.Contains("lock")) return UIResources.AccountIsLockedOnServer;
+                    if (ex.Message.Contains("not approved")) return UIResources.AccountIsNotApprovedOnServer;
+                    return UIResources.Unauthorized;
 
                 case HttpStatusCode.ServiceUnavailable:
                     var isMaintenance = ex.Message.Contains("maintenance");
