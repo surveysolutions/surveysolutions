@@ -669,15 +669,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool GroupHasLevelDepthMoreThan10(IGroup group)
         {
-            int rosterLevel = 0;
+            int groupLevel = 0;
             IComposite questionnaireItem = group;
             while (questionnaireItem != null)
             {
-                rosterLevel++;
+                groupLevel++;
                 questionnaireItem = questionnaireItem.GetParent();
             }
 
-            return rosterLevel > 10;
+            return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
