@@ -147,11 +147,6 @@
     <Compile Include="CommandServiceTests\when_waiting_for_command_execution_and_there_are_3_commands_executing_each_for_half_a_second.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
-    <Compile Include="EsentTests\TestStoredEntity.cs" />
-    <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
-    <Compile Include="EsentTests\when_item_removed.cs" />
-    <Compile Include="EsentTests\when_random_item_is_stored.cs" />
-    <Compile Include="EsentTests\with_esent_store.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
