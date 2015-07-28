@@ -31,7 +31,6 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -154,7 +153,7 @@ namespace WB.UI.Headquarters
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
 
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
+                new PostresKeyValueModule(postgresCacheSize),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
 
