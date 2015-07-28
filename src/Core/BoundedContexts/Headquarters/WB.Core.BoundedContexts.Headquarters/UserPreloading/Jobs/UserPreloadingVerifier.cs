@@ -222,9 +222,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             foreach (var userPreloadingDataRecord in data)
             {
                 if (validation(userStorage, data, userPreloadingDataRecord))
-                        userPreloadingService.PushVerificationError(processId, code,
+
+                    PlainTransactionManager.ExecuteInPlainTransaction(
+                        () => userPreloadingService.PushVerificationError(processId, code,
                             message,
-                            rowNumber, columnName, userPreloadingDataRecord.Login);
+                            rowNumber, columnName, userPreloadingDataRecord.Login));
 
                 rowNumber++;
             }
@@ -244,9 +246,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             foreach (var userPreloadingDataRecord in data)
             {
                 if (validation(data, userPreloadingDataRecord))
-                    userPreloadingService.PushVerificationError(processId, code,
-                        message,
-                        rowNumber, columnName, userPreloadingDataRecord.Login);
+                    PlainTransactionManager.ExecuteInPlainTransaction(
+                        () => userPreloadingService.PushVerificationError(processId, code,
+                            message,
+                            rowNumber, columnName, userPreloadingDataRecord.Login));
 
                 rowNumber++;
             }
