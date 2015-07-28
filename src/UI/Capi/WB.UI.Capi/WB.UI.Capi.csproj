@@ -197,13 +197,11 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xamarin.Android.Support.v13">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v13.21.0.3.0\lib\MonoAndroid32\Xamarin.Android.Support.v13.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Xamarin.Android.Support.v4">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.21.0.3.0\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.22.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v4.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.AppCompat">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.AppCompat.22.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Mobile">
       <HintPath>..\..\..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
@@ -382,7 +380,9 @@
     <AndroidResource Include="Resources\layout\interview_roster.axml" />
     <AndroidResource Include="Resources\layout\interview_roster_item.axml" />
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
-    <AndroidResource Include="Resources\layout\ListItem_UserLogin.axml" />
+    <AndroidResource Include="Resources\layout\ListItem_UserLogin.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
     <AndroidResource Include="Resources\layout\prefilled_questions_start_button.axml" />
     <AndroidResource Include="Resources\layout\questionnaire_list_item.axml" />
@@ -589,13 +589,14 @@
     <AndroidResource Include="Resources\values-small\dimensions.xml" />
     <AndroidResource Include="Resources\values-v21\fonts.xml" />
     <AndroidResource Include="Resources\values-v21\styles.xml" />
-    <AndroidResource Include="Resources\xml\preferences.xml" />
+    <AndroidResource Include="Resources\xml\preferences.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\values\Attrs.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\dimensions-interview.xml" />
     <AndroidResource Include="Resources\values\dimensions.xml" />
     <AndroidResource Include="Resources\values\fonts.xml" />
-    <AndroidResource Include="Resources\values\MvxBindingAttributes.xml" />
     <AndroidResource Include="Resources\values\styles-dashboard.xml" />
     <AndroidResource Include="Resources\values\styles-interview-group.xml" />
     <AndroidResource Include="Resources\values\styles-interview-question.xml" />
@@ -626,6 +627,10 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj">
+      <Project>{c6b1ba38-e58e-4e3d-ba59-5289fa10ccbb}</Project>
+      <Name>WB.Core.Infrastructure.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
