@@ -67,8 +67,6 @@ namespace WB.UI.Tester
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_DesignerEndPointTitle = global::WB.UI.Tester.Resource.String.Prefs_DesignerEndPointTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_GpsReceiveTimeoutSecSummary = global::WB.UI.Tester.Resource.String.Prefs_GpsReceiveTimeoutSecSummary;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_GpsReceiveTimeoutSecTitle = global::WB.UI.Tester.Resource.String.Prefs_GpsReceiveTimeoutSecTitle;
-			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_HttpResponseTimeoutSummary = global::WB.UI.Tester.Resource.String.Prefs_HttpResponseTimeoutSummary;
-			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_HttpResponseTimeoutTitle = global::WB.UI.Tester.Resource.String.Prefs_HttpResponseTimeoutTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionSummaryFormat = global::WB.UI.Tester.Resource.String.Prefs_VersionSummaryFormat;
 			global::WB.Core.Infrastructure.Android.Resource.String.Prefs_VersionTitle = global::WB.UI.Tester.Resource.String.Prefs_VersionTitle;
 			global::WB.Core.Infrastructure.Android.Resource.String.library_name = global::WB.UI.Tester.Resource.String.library_name;
