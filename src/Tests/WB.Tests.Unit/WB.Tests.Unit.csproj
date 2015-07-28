@@ -371,8 +371,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_moving_group_to_illegal_depth.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_group_of_illegal_depth.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_moving_group_to_anoter_group_and_combined_depth_more_than_10.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_group_to_11_level_of_depth.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_by_fixed_values_and_fixed_titles_have_dublicates.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_condition_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_validation_expression.cs" />
