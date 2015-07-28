@@ -846,5 +846,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-section can have no more than 10 parent sub-sections..
+        /// </summary>
+        internal static string WB0101_GroupHasLevelDepthMoreThan10 {
+            get {
+                return ResourceManager.GetString("WB0101_GroupHasLevelDepthMoreThan10", resourceCulture);
+            }
+        }
     }
 }

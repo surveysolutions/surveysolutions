@@ -345,6 +345,34 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             return questionnaire;
         }
 
+        public static Questionnaire CreateQuestionnaireWithNesingAndLastGroup(int depth, Guid dippestGroupId, Guid responsibleId)
+        {
+            var questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+
+            if (depth > 0)
+            {
+                Guid parentId = depth == 1 ? dippestGroupId : Guid.NewGuid();
+                questionnaire.Apply(new NewGroupAdded
+                {
+                    PublicKey = parentId,
+                    ResponsibleId = responsibleId,
+                    GroupText = "New section"
+                });
+
+                for (int i = 0; i < depth - 1; i++)
+                {
+                    var groupId = (i == depth - 2) ? dippestGroupId : Guid.NewGuid();
+
+                    AddGroup(questionnaire, groupId, parentId, "", responsibleId, null);
+                    //questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parentId });
+                    
+                    parentId = groupId;
+                }
+            }
+
+            return questionnaire;
+        }
+
         protected static void RegisterExpressionProcessorMock(string expression, string[] identifiers)
         {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
