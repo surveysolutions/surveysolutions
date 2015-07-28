@@ -1,29 +1,34 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+﻿@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
 @using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
-@model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess
+@model string
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
 <div class="row-fluid">
-    @if (Model.State == UserPrelodingState.CreatingUsers || Model.State == UserPrelodingState.ReadyForUserCreation)
-    {
-        <h3>@Model.CreatedUsersCount out of @Model.RecordsCount users have been created</h3>
-    }
-    else if (Model.State == UserPrelodingState.Finished)
-    {
-        <h3>All @Model.RecordsCount users have been created</h3>
-    }
-    else if (Model.State == UserPrelodingState.FinishedWithError)
-    {
-        <h3>@Model.State, Reason: @Model.ErrorMessage</h3>
+
+    <h3 data-bind="visible: state()==@((int)UserPrelodingState.CreatingUsers) || state()==@((int)UserPrelodingState.ReadyForUserCreation)"><b data-bind="text: createdUsersCount"></b> out of <b data-bind="text: recordsCount"></b> users have been created</h3>
+
+    <h3 data-bind="visible: state()==@((int)UserPrelodingState.Finished)">All <b data-bind="text: recordsCount"></b> users have been created</h3>
+
+    <div data-bind="visible: state()==@((int)UserPrelodingState.FinishedWithError)">
+        <h3>Finished with error, Reason: <span data-bind="text: errorMessage"></span></h3>
+        <b data-bind="text: createdUsersCount"></b> out of <b data-bind="text: recordsCount"></b> users have been created
         @Html.ActionLink("Upload new file", "UserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
-    }
-    else
-    {
-        <h3>unknown state @Model.State</h3>
-        @Html.ActionLink("Upload new file", "UserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
-    }
+    </div>
 </div>
+
+@section scripts
+{
+    @Scripts.Render("~/Scripts/components/bindings.js", "~/Scripts/pages/userpreloading.js")
+    <script type="text/javascript">
+        var updateVerificationStatusApiUrl = '@(Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "PreloadingApi", action = "UserPreloadingDetails"})+"/"+Model)';
+        var viewModel = new Supervisor.VM.Preloading.UserPreloading(updateVerificationStatusApiUrl, [@((int)UserPrelodingState.CreatingUsers), @((int)UserPrelodingState.ReadyForUserCreation)]);
+        viewModel.load();
+
+        ko.applyBindings(viewModel);
+    </script>
+}
