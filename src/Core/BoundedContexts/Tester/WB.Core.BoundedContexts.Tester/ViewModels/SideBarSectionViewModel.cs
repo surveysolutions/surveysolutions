@@ -24,8 +24,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<RosterInstancesRemoved>,
-        ILiteEventHandler<GroupsDisabled>,
         IDisposable
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
@@ -241,36 +239,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        public void Handle(GroupsDisabled @event)
-        {
-            var meDisabled = @event.Groups.Any(x => new Identity(x.Id, x.RosterVector).Equals(this.SectionIdentity));
-            if (meDisabled)
-            {
-                this.RemoveMe();
-            }
-        }
-
-        public void Handle(RosterInstancesRemoved @event)
-        {
-            var meRemoved = @event.Instances.Any(x => x.GetIdentity().Equals(this.SectionIdentity));
-            if (meRemoved)
-            {
-                this.RemoveMe();
-            } 
-        }
-
-        private void RemoveMe()
-        {
-            if (Parent == null)
-                return;
-
-            this.RemoveMe(() => this.Parent.Children.Remove(this));
-        }
-
-        public void RemoveMe(Action removeFromCollectionAction)
+        public void RemoveMe()
         {
             this.eventRegistry.Unsubscribe(this, this.interviewId);
-            this.mainThreadDispatcher.RequestMainThreadAction(removeFromCollectionAction);
             this.RefreshHasChildrenFlag();
             this.Dispose();
         }
