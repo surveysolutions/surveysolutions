@@ -422,4 +422,7 @@
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Нельзя сохранить пустое значение</value>
   </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись не подтверждена на сервере. Пожалуйста, прежде чем войти, подтвердите Вашу учетную запись, с помощью ссылки которую мы выслали Вам на почтовый ящик.</value>
+  </data>
 </root>
