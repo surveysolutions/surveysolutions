@@ -1,42 +1,44 @@
 ﻿using System;
+using System.Data;
 using Humanizer;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class PostgreKeyValueStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IPlainKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
-        where TEntity : class, IReadSideRepositoryEntity
+    internal abstract class PostgresKeyValueStorage<TEntity> where TEntity: class
     {
-        private readonly PostgreConnectionSettings settings;
+        private readonly ISessionProvider sessionProvider;
+        private readonly string connectionString;
         private readonly string tableName = typeof(TEntity).Name.Pluralize();
 
-        public PostgreKeyValueStorage(PostgreConnectionSettings settings)
+        public PostgresKeyValueStorage(ISessionProvider sessionProvider, string connectionString)
         {
-            this.settings = settings;
+            this.sessionProvider = sessionProvider;
+            this.connectionString = connectionString;
             EnshureTableExists();
         }
 
         public TEntity GetById(string id)
         {
-            using (var conn = new NpgsqlConnection(settings.ConnectionString))
+            string queryResult;
+            using (var command = sessionProvider.GetSession().Connection.CreateCommand())
             {
                 string commandText = string.Format("SELECT value FROM {0} WHERE id = :id", this.tableName);
 
-                var command = conn.CreateCommand();
                 command.CommandText = commandText;
-                command.Parameters.AddWithValue("id", id);
+                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
+                command.Parameters.Add(parameter);
 
-                conn.Open();
-                var queryResult = (string)command.ExecuteScalar();
-                if (queryResult != null)
-                {
-                    return JsonConvert.DeserializeObject<TEntity>(queryResult, JsonSerializerSettings);
-                }
+                EnlistIntoCurrentTransaction(command);
+
+                queryResult = (string) command.ExecuteScalar();
+            }
+
+            if (queryResult != null)
+            {
+                return JsonConvert.DeserializeObject<TEntity>(queryResult, JsonSerializerSettings);
             }
 
             return null;
@@ -44,67 +46,71 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Remove(string id)
         {
-            using (var conn = new NpgsqlConnection(settings.ConnectionString))
+            int queryResult;
+            using (var command = sessionProvider.GetSession().Connection.CreateCommand())
             {
-                string commandText = string.Format("DELETE FROM {0} WHERE id = :id", this.tableName);
+                command.CommandText = string.Format("DELETE FROM {0} WHERE id = :id", this.tableName);
+                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
+                command.Parameters.Add(parameter);
 
-                var command = conn.CreateCommand();
-                command.CommandText = commandText;
-                command.Parameters.AddWithValue("id", id);
-
-                conn.Open();
-                int queryResult = command.ExecuteNonQuery();
-                if (queryResult > 1)
-                {
-                    throw new Exception(
-                        string.Format("Unexpected row count of deletec records. Expected to delete not more than 1 row, but affected {0} number of rows",
+                EnlistIntoCurrentTransaction(command);
+                queryResult = command.ExecuteNonQuery();
+            }
+            if (queryResult > 1)
+            {
+                throw new Exception(
+                    string.Format(
+                        "Unexpected row count of deleted records. Expected to delete 1 row, but affected {0} number of rows",
                         queryResult));
-                }
             }
         }
 
         public void Store(TEntity view, string id)
         {
-            bool existing;
-            string existsSql = string.Format("SELECT 1 FROM {0} WHERE id = :id LIMIT 1", this.tableName);
-
-            using (var connection = new NpgsqlConnection(this.settings.ConnectionString))
+            object existsResult;
+            using (var existsCommand = sessionProvider.GetSession().Connection.CreateCommand())
             {
-                var command = connection.CreateCommand();
-                command.CommandText = existsSql;
-                command.Parameters.AddWithValue("id", id);
+                existsCommand.CommandText = string.Format("SELECT 1 FROM {0} WHERE id = :id LIMIT 1", this.tableName);
 
-                connection.Open();
-                object queryResult = command.ExecuteScalar();
+                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
 
-                existing = queryResult != null;
+                existsCommand.Parameters.Add(idParameter);
+
+                EnlistIntoCurrentTransaction(existsCommand);
+                existsResult = existsCommand.ExecuteScalar();
             }
 
-            string upsertCommandText;
+            var existing = existsResult != null;
+
+            string commandText;
             if (existing)
             {
-                upsertCommandText = string.Format("UPDATE {0} SET value = :value WHERE id = :id", this.tableName);
+                commandText = string.Format("UPDATE {0} SET value = :value WHERE id = :id", this.tableName);
             }
             else
             {
-                upsertCommandText = string.Format("INSERT INTO {0} VALUES(:id, :value)", this.tableName);
+                commandText = string.Format("INSERT INTO {0} VALUES(:id, :value)", this.tableName);
             }
 
-            using (var connection = new NpgsqlConnection(this.settings.ConnectionString))
+
+            int queryResult;
+            using (var upsertCommand = sessionProvider.GetSession().Connection.CreateCommand())
             {
-                var command = connection.CreateCommand();
-                command.CommandText = upsertCommandText;
-                command.Parameters.AddWithValue("id", id);
+                upsertCommand.CommandText = commandText;
 
+                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 string serializedValue = JsonConvert.SerializeObject(view, Formatting.None, JsonSerializerSettings);
-                command.Parameters.AddWithValue("value", serializedValue);
+                var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Json) { Value = serializedValue };
 
-                connection.Open();
-                int queryResult = command.ExecuteNonQuery();
-                if (queryResult > 1)
-                {
-                    throw new Exception(string.Format("Unexpected row count of deletec records. Expected to delete not more than 1 row, but affected {0} number of rows", queryResult));
-                }
+                upsertCommand.Parameters.Add(parameter);
+                upsertCommand.Parameters.Add(valueParameter);
+
+                EnlistIntoCurrentTransaction(upsertCommand);
+                queryResult = upsertCommand.ExecuteNonQuery();
+            }
+            if (queryResult > 1)
+            {
+                throw new Exception(string.Format("Unexpected row count of deleted records. Expected to delete not more than 1 row, but affected {0} number of rows", queryResult));
             }
         }
 
@@ -112,12 +118,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             EnshureTableExists();
 
-            using (var conn = new NpgsqlConnection(settings.ConnectionString))
+            using (var command = sessionProvider.GetSession().Connection.CreateCommand())
             {
-                string commandText = string.Format("DELETE FROM {0}", this.tableName);
-                var command = conn.CreateCommand();
-                command.CommandText = commandText;
-                conn.Open();
+                command.CommandText = string.Format("DELETE FROM {0}", this.tableName);
+                EnlistIntoCurrentTransaction(command);
                 command.ExecuteNonQuery();
             }
         }
@@ -138,15 +142,18 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         private void EnshureTableExists()
         {
-            using (var connection = new NpgsqlConnection(this.settings.ConnectionString))
+            using (var connection = new NpgsqlConnection(connectionString))
             {
                 connection.Open();
                 var command = @"CREATE TABLE IF NOT EXISTS " + this.tableName + @" (
     id        varchar(70) PRIMARY KEY,
     value       JSON NOT NULL
 )";
-                var sqlCommand = new NpgsqlCommand(command, connection);
-                sqlCommand.ExecuteNonQuery();
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = command;
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
         }
 
@@ -161,6 +168,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore
                 };
+            }
+        }
+
+        private void EnlistIntoCurrentTransaction(IDbCommand command)
+        {
+            var activeTransaction = sessionProvider.GetSession().Transaction;
+            if (activeTransaction.IsActive)
+            {
+                activeTransaction.Enlist(command);
             }
         }
     }
