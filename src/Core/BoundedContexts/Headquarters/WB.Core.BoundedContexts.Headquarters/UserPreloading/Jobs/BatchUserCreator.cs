@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using NHibernate;
+using Ninject;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -12,6 +14,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage;
+using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -21,99 +25,115 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     [DisallowConcurrentExecution]
     public class BatchUserCreator : IJob
     {
-        private readonly IUserPreloadingService userPreloadingService;
-        private readonly ICommandService commandService;
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
         private readonly ILogger logger;
 
         protected readonly IPasswordHasher passwordHasher;
 
         ITransactionManager TransactionManager
         {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManager>(); }
+            get { return transactionManagerProvider.GetTransactionManager(); }
         }
 
-        private readonly IPlainTransactionManager PlainTransactionManager;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
-        public BatchUserCreator(IUserPreloadingService userPreloadingService, ILogger logger,
-            ICommandService commandService, IQueryableReadSideRepositoryReader<UserDocument> userStorage,
-            IPasswordHasher passwordHasher, IPlainTransactionManager plainTransactionManager)
+        IPlainTransactionManager PlainTransactionManager
         {
-            this.userPreloadingService = userPreloadingService;
-            this.logger = logger;
-            this.commandService = commandService;
+            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
+        }
 
-            this.userStorage = userStorage;
+
+        public BatchUserCreator(
+            ILogger logger,
+            IPasswordHasher passwordHasher, 
+            ITransactionManagerProvider transactionManagerProvider)
+        {
+            this.logger = logger;
             this.passwordHasher = passwordHasher;
-            this.PlainTransactionManager = plainTransactionManager;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public void Execute(IJobExecutionContext context)
         {
-            string preloadingProcessIdToCreate =
-                PlainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
-
-            if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
-                return;
-
-            var preloadingProcessDataToCreate =
-                PlainTransactionManager.ExecuteInPlainTransaction(
-                    () =>
-                        userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate)
-                            .UserPrelodingData.ToList());
-
+            IsolatedThreadManager.MarkCurrentThreadAsIsolated();
             try
             {
-                this.CreateUsersFromPreloadedData(preloadingProcessDataToCreate, preloadingProcessIdToCreate);
+                var userPreloadingService = ServiceLocator.Current.GetInstance<IUserPreloadingService>();
+                string preloadingProcessIdToCreate =
+                    PlainTransactionManager.ExecuteInPlainTransaction(
+                        () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
+
+                if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
+                    return;
+
+                var preloadingProcessDataToCreate =
+                    PlainTransactionManager.ExecuteInPlainTransaction(
+                        () =>
+                            userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate)
+                                .UserPrelodingData.ToList());
+
+                try
+                {
+                    this.CreateUsersFromPreloadedData(userPreloadingService, preloadingProcessDataToCreate, preloadingProcessIdToCreate);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(
+                        string.Format("preloading process with id {0} finished with error", preloadingProcessIdToCreate),
+                        e);
+
+                    PlainTransactionManager.ExecuteInPlainTransaction(
+                        () =>
+                            userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,
+                                e.Message));
+                    return;
+                }
+                PlainTransactionManager.ExecuteInPlainTransaction(
+                    () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
             }
-            catch (Exception e)
+            finally
             {
-                logger.Error(
-                    string.Format("preloading process with id {0} finished with error", preloadingProcessIdToCreate),
-                    e);
+                IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+            }
+        }
+
+        private void CreateUsersFromPreloadedData(IUserPreloadingService userPreloadingService, IList<UserPreloadingDataRecord> data, string id)
+        {
+            var commandService = ServiceLocator.Current.GetInstance<ICommandService>();
+            var supervisorsToCreate = data.Where(row => row.Role.ToLower() == "supervisor").ToArray();
+
+            foreach (var supervisorToCreate in supervisorsToCreate)
+            {
+                TransactionManager.ExecuteInQueryTransaction(
+                  () => commandService.Execute(new CreateUserCommand(Guid.NewGuid(), supervisorToCreate.Login,
+                      passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email,
+                      new[] { UserRoles.Supervisor  },
+                      false,
+                      false, null,
+                      supervisorToCreate.FullName, supervisorToCreate.PhoneNumber)));
 
                 PlainTransactionManager.ExecuteInPlainTransaction(
-                    () =>
-                        userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,
-                            e.Message));
-                return;
+                    () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
-            PlainTransactionManager.ExecuteInPlainTransaction(
-                () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
-        }
-
-        private void CreateUsersFromPreloadedData(IList<UserPreloadingDataRecord> data, string id)
-        {
-            foreach (var userPreloadingDataRecord in data)
+            var interviewersToCreate = data.Where(row => row.Role.ToLower() == "interviewer").ToArray();
+            foreach (var interviewerToCreate in interviewersToCreate)
             {
-                var role = ParseUserRole(userPreloadingDataRecord.Role);
                 TransactionManager.ExecuteInQueryTransaction(
-                    () => commandService.Execute(new CreateUserCommand(Guid.NewGuid(), userPreloadingDataRecord.Login,
-                        passwordHasher.Hash(userPreloadingDataRecord.Password), userPreloadingDataRecord.Email,
-                        new[] {role},
+                    () => commandService.Execute(new CreateUserCommand(Guid.NewGuid(), interviewerToCreate.Login,
+                        passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email,
+                        new[] { UserRoles.Operator},
                         false,
-                        false, GetSupervisorForUserIfNeeded(userPreloadingDataRecord, role),
-                        userPreloadingDataRecord.FullName, userPreloadingDataRecord.PhoneNumber)));
+                        false, GetSupervisorForUserIfNeeded(interviewerToCreate),
+                        interviewerToCreate.FullName, interviewerToCreate.PhoneNumber)));
 
-                userPreloadingService.IncreaseCountCreateUsers(id);
+
+                PlainTransactionManager.ExecuteInPlainTransaction(
+                    () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
         }
 
-        private UserRoles ParseUserRole(string role)
+        private UserLight GetSupervisorForUserIfNeeded(UserPreloadingDataRecord dataRecord)
         {
-            if (role.ToLower() == "supervisor")
-                return UserRoles.Supervisor;
-            if (role.ToLower() == "interviewer")
-                return UserRoles.Operator;
-
-            return UserRoles.Undefined;
-        }
-
-        private UserLight GetSupervisorForUserIfNeeded(UserPreloadingDataRecord dataRecord, UserRoles role)
-        {
-            if (role != UserRoles.Operator)
-                return null;
+            var userStorage = ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<UserDocument>>();
             
             var supervisor =
                 userStorage.Query(_ => _.FirstOrDefault(u => u.UserName.ToLower() == dataRecord.Supervisor.ToLower()));
