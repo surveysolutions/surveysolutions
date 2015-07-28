@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionBId] = new GroupModel{Id = sectionBId, Title = "B"};
 
             var interview = Substitute.For<IStatefulInterview>();
+            interview.IsEnabled(Moq.It.IsAny<Identity>()).ReturnsForAnyArgs(true);
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
             navigationState = Substitute.For<NavigationState>();
