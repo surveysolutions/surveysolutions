@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private const int MaxChapterItemsCount = 400;
         private const int MaxTitleLength = 500;
         private const int maxFilteredComboboxOptionsCount = 5000;
+        private const int MaxGroupDepth = 10;
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
         {
@@ -937,6 +938,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.innerDocument.ConnectChildrenWithParent();
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
+                this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
 
             this.ApplyEvent(new NewGroupAdded
@@ -1364,6 +1366,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
                     }
                 }
+
+                var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetGroupId.Value)).Count();
+                var sourceGroupMaxChildNestingDepth = this.GetMaxChildGroupNestingDepth(sourceGroup);
+
+                if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
+                {
+                    throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                }
+                
             }
             
             // if we don't have a target group we would like to move source group into root of questionnaire
@@ -2197,6 +2208,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
                 throw new QuestionnaireException(string.Format("Section cannot have more than {0} child items", MaxChapterItemsCount));
+            }
+        }
+
+        private void ThrowIfTargetGroupHasReachedAllowedDepthLimit(Guid itemId)
+        {
+            
+            var entity = innerDocument.Find<IComposite>(itemId);
+            if (entity != null)
+            {
+                var targetGroupDepth = this.GetAllParentGroups(entity).Count();
+
+                if ((targetGroupDepth) >= MaxGroupDepth)
+                {
+                    throw new QuestionnaireException(string.Format("Sub-section or roster  depth cannot be higher than {0}",
+                        MaxGroupDepth));
+                }
             }
         }
 
@@ -3731,6 +3758,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             return rosterFixedTitles.Select(item => new FixedRosterTitle(decimal.Parse(item.Value), item.Title)).ToArray();                
                 
+        }
+
+        int GetMaxChildGroupNestingDepth(IGroup group)
+        {
+            int maxDepth = 1;
+            Queue<Tuple<IGroup, int>> queue = new Queue<Tuple<IGroup, int>>();
+            queue.Enqueue(Tuple.Create(group, 1));
+
+            while (queue.Any())
+            {
+                var item = queue.Dequeue();
+                foreach (var subGroup in item.Item1.Children.OfType<IGroup>())
+                {
+                    queue.Enqueue(Tuple.Create(subGroup, item.Item2 + 1));
+                }
+
+                if (item.Item2 > maxDepth)
+                    maxDepth = item.Item2;
+            }
+
+            return maxDepth;
         }
 
         #endregion

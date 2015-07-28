@@ -370,6 +370,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_moving_group_to_illegal_depth.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_group_of_illegal_depth .cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_by_fixed_values_and_fixed_titles_have_dublicates.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_condition_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_validation_expression.cs" />
@@ -380,6 +382,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_max_allowed_answers_more_then_40.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_more_then_40_options.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_nested_group_level_11.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="BoundedContexts\Tester\Aggregates\StatefulInterviewTestsContext.cs" />
