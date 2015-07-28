@@ -1,0 +1,27 @@
+﻿Supervisor.VM.Preloading = function () { };
+Supervisor.VM.Preloading.prototype = {};
+Supervisor.VM.Preloading.UserPreloading = function (updateVerificationStatusApiUrl, statesToUpdate) {
+    Supervisor.VM.Preloading.UserPreloading.superclass.constructor.apply(this, arguments);
+
+    var self = this;
+    self.state = ko.observable(0);
+    self.fileName = ko.observable('');
+    self.verificationErrors = ko.observableArray([]);
+    self.updateVerificationStatusApiUrl = updateVerificationStatusApiUrl;
+
+    self.load = function () {
+
+        self.SendRequest(self.updateVerificationStatusApiUrl, {}, function (processDetails) {
+            ko.mapping.fromJS(processDetails, {}, self);
+            self.state(processDetails.State);
+            self.fileName(processDetails.FileName);
+            self.verificationErrors(processDetails.VerificationErrors);
+
+            if ($.inArray(self.state(), statesToUpdate)>=0)
+                _.delay(self.load, 3000);
+
+        }, true, false);
+    };
+};
+
+Supervisor.Framework.Classes.inherit(Supervisor.VM.Preloading.UserPreloading, Supervisor.VM.BasePage);
