@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
 
-                if (!string.IsNullOrEmpty(errorMessage))
+                if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
                     this.userInteractionService.Alert(errorMessage);
                 else
                     throw;
