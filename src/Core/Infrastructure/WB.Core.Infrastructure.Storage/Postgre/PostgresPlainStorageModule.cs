@@ -29,6 +29,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         public override void Load()
         {
+            this.Bind<PostgresPlainStorageSettings>().ToConstant(this.settings);
             DatabaseManagement.CreateDatabase(settings.ConnectionString);
 
             this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory())
