@@ -7,7 +7,7 @@
     <TextView style="@style/Interview_Sidebar_Title"
               local:MvxBind="Text QuestionnaireTitle" />
     <MaxHeightLinearLayout
-      local:maxHeight="200dp"
+      local:maxHeight="@dimen/Interview_Sidebar_PrefilledQuestions_max_height"
       style="@style/Interview_Sidebar_PrefilledQuestions_Container">
       
       <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
