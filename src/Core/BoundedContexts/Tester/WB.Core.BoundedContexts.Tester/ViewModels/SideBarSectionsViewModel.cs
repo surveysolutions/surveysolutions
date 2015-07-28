@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private string questionnaireId;
         private string interviewId;
 
-        public IList<SideBarSectionViewModel> Sections { get; set; }
+        public ObservableCollection<SideBarSectionViewModel> Sections { get; set; }
 
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -80,7 +81,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 }
             }
 
-            this.Sections = sections;
+            this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections); 
         }
 
         void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
@@ -155,7 +156,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 .Where(s => interview.IsEnabled(sectionIdentity))
                 .ToList()
                 .IndexOf(section);
-            Sections.Insert(index, sectionViewModel);
+            this.mainThreadDispatcher.RequestMainThreadAction(() => Sections.Insert(index, sectionViewModel));
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
