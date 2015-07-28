@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId1 = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             groupId2 = Guid.Parse("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            responsibleId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaireWithNesingAndLastGroup(9, parentGroupId, responsibleId);
 
