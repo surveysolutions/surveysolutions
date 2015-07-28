@@ -79,31 +79,31 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             string processId)
         {
             ValidateRow(userPreloadingService, userStorage, data, processId, LoginNameTakenByExistingUser, "PLU0001",
-                "Login is taken by an existing user", "Login");
+                "Login is taken by an existing user", "Login", u=>u.Login);
             ValidateRow(userPreloadingService, userStorage, data, processId, LoginDublicationInDataset, "PLU0002",
                 "Login duplication in the file",
-                "Login");
+                "Login", u => u.Login);
             ValidateRow(userPreloadingService, userStorage, data, processId,
                 LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam, "PLU0003",
-                "Login of archive user can't be reused because it belongs to other team", "Login");
+                "Login of archive user can't be reused because it belongs to other team", "Login", u => u.Login);
             ValidateRow(userPreloadingService, userStorage, data, processId,
                 LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole, "PLU0004",
-                "Login of archive user can't be reused because it exists in other role", "Login");
+                "Login of archive user can't be reused because it exists in other role", "Login", u => u.Login);
             ValidateRow(userPreloadingService, data, processId, LoginFormatVerification, "PLU0005",
                 "Login needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol",
-                "Login");
+                "Login", u => u.Login);
             ValidateRow(userPreloadingService, data, processId, PasswordFormatVerification, "PLU0006",
                 "Password must contain at least one number, one upper case character and one lower case character",
-                "Password");
+                "Password", u => u.Password);
             ValidateRow(userPreloadingService, data, processId, EmailFormatVerification, "PLU0007", "Email is invalid",
-                "Email");
+                "Email", u=>u.Email);
             ValidateRow(userPreloadingService, data, processId, PhoneNumberFormatVerification, "PLU0008",
                 "Phone number is invalid",
-                "PhoneNumber");
+                "PhoneNumber", u => u.PhoneNumber);
             ValidateRow(userPreloadingService, data, processId, RoleVerification, "PLU0009",
-                "Role is invalid. 'Supervisor' or 'Interviewer' is valid values.", "Role");
+                "Role is invalid. 'Supervisor' or 'Interviewer' is valid values.", "Role", u=>u.Role);
             ValidateRow(userPreloadingService, userStorage, data, processId, SupervisorVerification, "PLU0010",
-                "Supervisor doesn't exist in the file or in the existing teams", "Supervisor");
+                "Supervisor doesn't exist in the file or in the existing teams", "Supervisor",u=>u.Supervisor);
         }
 
         private bool PasswordFormatVerification(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
@@ -214,8 +214,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             string processId, 
             Func<IQueryableReadSideRepositoryReader<UserDocument>, IList<UserPreloadingDataRecord>,UserPreloadingDataRecord, bool> validation, 
             string code, 
-            string message, 
-            string columnName)
+            string message,
+            string columnName,
+            Func<UserPreloadingDataRecord, string> cellFunc)
         {
             int rowNumber = 1;
             
@@ -226,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     PlainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.PushVerificationError(processId, code,
                             message,
-                            rowNumber, columnName, userPreloadingDataRecord.Login));
+                            rowNumber, columnName, cellFunc(userPreloadingDataRecord)));
 
                 rowNumber++;
             }
@@ -239,7 +240,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             Func<IList<UserPreloadingDataRecord>, UserPreloadingDataRecord, bool> validation,
             string code,
             string message,
-            string columnName)
+            string columnName,
+            Func<UserPreloadingDataRecord, string> cellFunc)
         {
             int rowNumber = 1;
 
@@ -249,7 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     PlainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.PushVerificationError(processId, code,
                             message,
-                            rowNumber, columnName, userPreloadingDataRecord.Login));
+                            rowNumber, columnName, cellFunc(userPreloadingDataRecord)));
 
                 rowNumber++;
             }
