@@ -92,10 +92,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                                                                                     {
                                                                                         new Group
                                                                                         {
-                                                                                            PublicKey = rosterGroupId,
+                                                                                            PublicKey = Guid.NewGuid(),
                                                                                             IsRoster = false,
-                                                                                            VariableName = "a"
-                                                                                            
+                                                                                            VariableName = "a",
+                                                                                            Children =
+                                                                                                new List<IComposite>
+                                                                                                {
+                                                                                                    new Group
+                                                                                                    {
+                                                                                                        PublicKey =
+                                                                                                            rosterGroupId,
+                                                                                                        IsRoster = false,
+                                                                                                        VariableName =
+                                                                                                            "a"
+                                                                                                    }
+                                                                                                }
                                                                                         }
                                                                                     }
                                                                                 }
