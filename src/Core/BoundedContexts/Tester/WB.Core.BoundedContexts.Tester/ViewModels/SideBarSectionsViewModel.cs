@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>
     {
@@ -192,21 +193,44 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(GroupsDisabled @event)
         {
-            foreach (var groupId in @event.Groups)
-            {
-                var removeIdentity = new Identity(groupId.Id, groupId.RosterVector);
-                this.RefreshListWithRemoveItem(removeIdentity);
-            }
-
+            var identities = @event.Groups.Select(i => new Identity(i.Id, i.RosterVector)).ToArray();
+            this.RemoveFromSections(identities);
+            this.RemoveFromChildrenSections(identities);
             this.RefreshHasChildrenFlags();
         }
 
-        void RefreshListWithRemoveItem(Identity removeIdentity)
+        public void Handle(RosterInstancesRemoved @event)
         {
-            var sectionToRemove = this.Sections.SingleOrDefault(s => s.SectionIdentity.Equals(removeIdentity));
-            if (sectionToRemove != null)
+            var identities = @event.Instances.Select(ri => ri.GetIdentity()).ToArray();
+            this.RemoveFromChildrenSections(identities);
+            this.RefreshHasChildrenFlags();
+        }
+
+        private void RemoveFromChildrenSections(Identity[] identities)
+        {
+            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
+
+            foreach (var groupIdentity in identities)
             {
-                sectionToRemove.RemoveMe(() => this.Sections.Remove(sectionToRemove));
+                var section = allVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                if (section != null)
+                {
+                    this.mainThreadDispatcher.RequestMainThreadAction(() => section.Parent.Children.Remove(section));
+                    section.RemoveMe();
+                }
+            }
+        }
+
+        private void RemoveFromSections(Identity[] identities)
+        {
+            foreach (var groupIdentity in identities)
+            {
+                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                if (topLevelSectionToRemove != null)
+                {
+                    this.mainThreadDispatcher.RequestMainThreadAction(() => this.Sections.Remove(topLevelSectionToRemove));
+                    topLevelSectionToRemove.RemoveMe();
+                }
             }
         }
 
@@ -224,6 +248,5 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             return this.modelsFactory.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
         }
-
     }
 }
