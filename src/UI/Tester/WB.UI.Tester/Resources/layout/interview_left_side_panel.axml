@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/Interview_Sidebar_Body">
+ 
 
   <LinearLayout style="@style/Interview_Sidebar_Header">
     <TextView style="@style/Interview_Sidebar_Title"
@@ -22,4 +23,4 @@
         local:MvxBind="ItemsSource Sections.Sections"
         local:MvxItemTemplate="@layout/interview_left_side_panel_item_section" />
 
-</MvxLinearLayout>
+</LinearLayout>
