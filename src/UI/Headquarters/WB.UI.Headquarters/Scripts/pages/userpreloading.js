@@ -5,6 +5,9 @@ Supervisor.VM.Preloading.UserPreloading = function (updateVerificationStatusApiU
 
     var self = this;
     self.state = ko.observable(0);
+    self.createdUsersCount = ko.observable(0);
+    self.recordsCount = ko.observable(0);
+    self.errorMessage = ko.observable(0);
     self.fileName = ko.observable('');
     self.verificationErrors = ko.observableArray([]);
     self.updateVerificationStatusApiUrl = updateVerificationStatusApiUrl;
@@ -17,6 +20,9 @@ Supervisor.VM.Preloading.UserPreloading = function (updateVerificationStatusApiU
             self.fileName(processDetails.FileName);
             self.verificationErrors(processDetails.VerificationErrors);
 
+            self.createdUsersCount(processDetails.CreatedUsersCount);
+            self.recordsCount(processDetails.RecordsCount);
+            self.errorMessage(processDetails.ErrorMessage);
             if ($.inArray(self.state(), statesToUpdate)>=0)
                 _.delay(self.load, 3000);
 
