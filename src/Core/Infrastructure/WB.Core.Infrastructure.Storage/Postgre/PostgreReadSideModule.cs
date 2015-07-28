@@ -8,8 +8,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using Humanizer;
 using NHibernate;
-using NHibernate.ByteCode.Castle;
-using NHibernate.Caches.SysCache;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
@@ -85,8 +83,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.Dialect<PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
-            cfg.Cache(c => c.Provider<SysCacheProvider>());
-            cfg.Proxy(proxy => proxy.ProxyFactoryFactory<ProxyFactoryFactory>());
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
