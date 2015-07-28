@@ -1,30 +1,30 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
-    internal class when_adding_group_of_illegal_depth : QuestionnaireTestsContext
+    internal class when_moving_group_to_anoter_group_and_combined_depth_more_than_10 : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            groupId1 = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            groupId2 = Guid.Parse("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             responsibleId = Guid.Parse("11111111111111111111111111111111");
 
-            questionnaire = CreateQuestionnaireWithNesingAndLastGroup(10, parentGroupId, responsibleId);
+            questionnaire = CreateQuestionnaireWithNesingAndLastGroup(9, parentGroupId, responsibleId);
+
+            AddGroup(questionnaire, groupId1, null, "", responsibleId, null);
+            AddGroup(questionnaire, groupId2, groupId1, "", responsibleId, null);
         };
 
         Because of = () =>
             exception = Catch.Exception(
                 () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(groupId,
-                responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: null, description: null,
-                condition: null, parentGroupId: parentGroupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
-                rosterFixedTitles: null,
-                rosterTitleQuestionId: null));
+                    questionnaire.MoveGroup(groupId1,
+                responsibleId: responsibleId, targetGroupId: parentGroupId, targetIndex:0));
 
                     
 
@@ -37,7 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
-        private static Guid groupId;
+        private static Guid groupId1;
+        private static Guid groupId2;
         private static Guid parentGroupId;
         
         private static Exception exception;
