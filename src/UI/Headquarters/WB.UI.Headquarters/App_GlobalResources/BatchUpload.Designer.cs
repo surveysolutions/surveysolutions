@@ -79,6 +79,69 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        internal static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse teams.
+        /// </summary>
+        internal static string BrowseTeams {
+            get {
+                return ResourceManager.GetString("BrowseTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        internal static string Code {
+            get {
+                return ResourceManager.GetString("Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create users.
+        /// </summary>
+        internal static string CreateUsers {
+            get {
+                return ResourceManager.GetString("CreateUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data is valid.
+        /// </summary>
+        internal static string DataIsValid {
+            get {
+                return ResourceManager.GetString("DataIsValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        internal static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to download template archive.
         /// </summary>
         internal static string DownloadTemplateArchive {
@@ -88,11 +151,119 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File name.
+        /// </summary>
+        internal static string FileName {
+            get {
+                return ResourceManager.GetString("FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File size.
+        /// </summary>
+        internal static string FileSize {
+            get {
+                return ResourceManager.GetString("FileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished with error, Reason:.
+        /// </summary>
+        internal static string FinishedWithError {
+            get {
+                return ResourceManager.GetString("FinishedWithError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to in verification process.
+        /// </summary>
+        internal static string InVerificationProcess {
+            get {
+                return ResourceManager.GetString("InVerificationProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last update date.
+        /// </summary>
+        internal static string LastUpdateDate {
+            get {
+                return ResourceManager.GetString("LastUpdateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message.
+        /// </summary>
+        internal static string Message {
+            get {
+                return ResourceManager.GetString("Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to out of.
+        /// </summary>
+        internal static string OutOf {
+            get {
+                return ResourceManager.GetString("OutOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait, file.
+        /// </summary>
+        internal static string PleaseWait {
+            get {
+                return ResourceManager.GetString("PleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Records count.
+        /// </summary>
+        internal static string RecordsCount {
+            get {
+                return ResourceManager.GetString("RecordsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        internal static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload.
         /// </summary>
         internal static string Upload {
             get {
                 return ResourceManager.GetString("Upload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload date.
+        /// </summary>
+        internal static string UploadDate {
+            get {
+                return ResourceManager.GetString("UploadDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload new file.
+        /// </summary>
+        internal static string UploadNewFile {
+            get {
+                return ResourceManager.GetString("UploadNewFile", resourceCulture);
             }
         }
         
@@ -129,6 +300,33 @@ namespace Resources {
         internal static string UploadUsersDescription {
             get {
                 return ResourceManager.GetString("UploadUsersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User batch uploads.
+        /// </summary>
+        internal static string UserBatchUploads {
+            get {
+                return ResourceManager.GetString("UserBatchUploads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to user(s) have been created.
+        /// </summary>
+        internal static string UsersHaveBeenCreated {
+            get {
+                return ResourceManager.GetString("UsersHaveBeenCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify.
+        /// </summary>
+        internal static string Verify {
+            get {
+                return ResourceManager.GetString("Verify", resourceCulture);
             }
         }
     }

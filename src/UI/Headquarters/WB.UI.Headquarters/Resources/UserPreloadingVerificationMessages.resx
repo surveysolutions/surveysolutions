@@ -117,94 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedMode" xml:space="preserve">
-    <value>Advanced data upload mode</value>
+  <data name="PLU0001" xml:space="preserve">
+    <value> User with Login already exists in the system</value>
   </data>
-  <data name="AdvancedModeDescription" xml:space="preserve">
-    <value>In order to pre-load data to more sections and variables, you can prepare a set of .tab files that correspond to the structure of your questionnaire and put in a .zip archive . Please use the template archive below. You can put only those files and columns that you wish to upload. Any columns left missing or with titles not corresponding to an existing variable in the questionnaire will be ignored.</value>
+  <data name="PLU0002" xml:space="preserve">
+    <value> There are duplicate values of Login in the file</value>
   </data>
-  <data name="All" xml:space="preserve">
-    <value>All</value>
+  <data name="PLU0003" xml:space="preserve">
+    <value> Login of an archived user cannot be re-used because it belonged to anther team </value>
   </data>
-  <data name="BrowseTeams" xml:space="preserve">
-    <value>Browse teams</value>
+  <data name="PLU0004" xml:space="preserve">
+    <value> Login of an archived user cannot be re-used because it existed in anther role</value>
   </data>
-  <data name="Code" xml:space="preserve">
-    <value>Code</value>
+  <data name="PLU0005" xml:space="preserve">
+    <value> Login needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
   </data>
-  <data name="CreateUsers" xml:space="preserve">
-    <value>Create users</value>
+  <data name="PLU0006" xml:space="preserve">
+    <value> Password must contain at least one number, one upper case character and one lower case character</value>
   </data>
-  <data name="DataIsValid" xml:space="preserve">
-    <value>Data is valid</value>
+  <data name="PLU0007" xml:space="preserve">
+    <value> Email is invalid</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="PLU0008" xml:space="preserve">
+    <value> Phone number is invalid</value>
   </data>
-  <data name="Details" xml:space="preserve">
-    <value>Details</value>
+  <data name="PLU0009" xml:space="preserve">
+    <value> Role is invalid. Only "Supervisor" or "Interviewer" values are allowed</value>
   </data>
-  <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>download template archive</value>
-  </data>
-  <data name="FileName" xml:space="preserve">
-    <value>File name</value>
-  </data>
-  <data name="FileSize" xml:space="preserve">
-    <value>File size</value>
-  </data>
-  <data name="FinishedWithError" xml:space="preserve">
-    <value>Finished with error, Reason:</value>
-  </data>
-  <data name="InVerificationProcess" xml:space="preserve">
-    <value>in verification process</value>
-  </data>
-  <data name="LastUpdateDate" xml:space="preserve">
-    <value>Last update date</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="OutOf" xml:space="preserve">
-    <value>out of</value>
-  </data>
-  <data name="PleaseWait" xml:space="preserve">
-    <value>Please wait, file</value>
-  </data>
-  <data name="RecordsCount" xml:space="preserve">
-    <value>Records count</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="Upload" xml:space="preserve">
-    <value>Upload</value>
-  </data>
-  <data name="UploadDate" xml:space="preserve">
-    <value>Upload date</value>
-  </data>
-  <data name="UploadNewFile" xml:space="preserve">
-    <value>Upload new file</value>
-  </data>
-  <data name="UploadSample" xml:space="preserve">
-    <value>Upload sample</value>
-  </data>
-  <data name="UploadSampleDescription" xml:space="preserve">
-    <value>To upload the sample to be interviewed, please prepare a file with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.</value>
-  </data>
-  <data name="UploadUsers" xml:space="preserve">
-    <value>Batch User Upload</value>
-  </data>
-  <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Please prepare a file with tab-separated values (.tab file) corresponding to the template below. The columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed for the 'role' column.</value>
-  </data>
-  <data name="UserBatchUploads" xml:space="preserve">
-    <value>User batch uploads</value>
-  </data>
-  <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>user(s) have been created</value>
-  </data>
-  <data name="Verify" xml:space="preserve">
-    <value>Verify</value>
+  <data name="PLU0010" xml:space="preserve">
+    <value> Supervisor must be an existing user in the system or present in the file</value>
   </data>
 </root>
