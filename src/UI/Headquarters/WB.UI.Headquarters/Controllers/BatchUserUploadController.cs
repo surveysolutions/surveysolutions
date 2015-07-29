@@ -20,6 +20,13 @@ namespace WB.UI.Headquarters.Controllers
             this.userPreloadingService = userPreloadingService;
         }
 
+        public ActionResult UserBatchUploads()
+        {
+            this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
+            return
+                this.View(userPreloadingService.GetPreloadingProcesses());
+        }
+
         public ActionResult NewUserBatchUpload()
         {
             this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
@@ -78,6 +85,16 @@ namespace WB.UI.Headquarters.Controllers
             this.userPreloadingService.EnqueueForValidation(id);
             return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult DeleteUserPreloadingProcess(string id)
+        {
+            this.userPreloadingService.DeletePreloadingProcess(id);
+            return this.RedirectToAction("UserBatchUploads", new { id });
+        }
+        
         [ObserverNotAllowed]
         public ActionResult UserPreloadigVerificationDetails(string id)
         {

@@ -1,0 +1,54 @@
+﻿@using System.Web.Optimization
+@using WB.Core.GenericSubdomains.Portable
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess[]
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
+}
+
+<div class="row-fluid">
+    <h3>User batch uploads @Html.ActionLink("Upload new file", "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })</h3>
+   <br/>
+    <div>
+        <table class="table table-striped table-bordered table-condensed table-break-words">
+            <thead>
+                <tr>
+                    <th>File name</th>
+                    <th>File size</th>
+                    <th>Upload date</th>
+                    <th>Last update date</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var userPreloadingProcess in Model)
+            {
+                <tr>
+                    <td>@userPreloadingProcess.FileName</td>
+                    <td>@FileSizeUtils.SizeSuffix(userPreloadingProcess.FileSize)</td>
+                    <td>@userPreloadingProcess.UploadDate</td>
+                    <td>@userPreloadingProcess.LastUpdateDate</td>
+                    <td>@userPreloadingProcess.State</td>
+                    <td>
+                       
+                        @using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
+    <input type="submit" class="btn btn-danger pull-right" name="Submit" value="Delete" />
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
