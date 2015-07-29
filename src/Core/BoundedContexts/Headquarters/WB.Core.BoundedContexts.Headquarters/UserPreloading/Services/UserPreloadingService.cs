@@ -238,7 +238,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return userPreloadingProcessStorage.GetById(preloadingProcessId);
         }
 
-        public void PushVerificationError(string preloadingProcessId, string code, string message, int rowNumber, string columnName,
+        public void PushVerificationError(string preloadingProcessId, string code, int rowNumber, string columnName,
             string cellValue)
         {
             var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
@@ -250,7 +250,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 CellValue = cellValue,
                 Code = code,
                 ColumnName = columnName,
-                Message = message,
                 RowNumber = rowNumber
             });
             preloadingProcess.LastUpdateDate = DateTime.Now;

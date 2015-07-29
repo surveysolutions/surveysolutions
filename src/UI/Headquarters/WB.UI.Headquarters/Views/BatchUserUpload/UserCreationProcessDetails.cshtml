@@ -10,14 +10,17 @@
 }
 <div class="row-fluid">
 
-    <h3 data-bind="visible: state()==@((int)UserPrelodingState.CreatingUsers) || state()==@((int)UserPrelodingState.ReadyForUserCreation)"><b data-bind="text: createdUsersCount"></b> out of <b data-bind="text: recordsCount"></b> users have been created</h3>
+    <h3 data-bind="visible: state()==@((int)UserPrelodingState.CreatingUsers) || state()==@((int)UserPrelodingState.ReadyForUserCreation)"><b data-bind="text: createdUsersCount"></b> @BatchUpload.OutOf <b data-bind="text: recordsCount"></b> @BatchUpload.UsersHaveBeenCreated</h3>
 
-    <h3 data-bind="visible: state()==@((int)UserPrelodingState.Finished)">All <b data-bind="text: recordsCount"></b> users have been created</h3>
+    <div data-bind="visible: state()==@((int) UserPrelodingState.Finished)">
+        <h3>@BatchUpload.All <b data-bind="text: recordsCount"></b> @BatchUpload.UsersHaveBeenCreated</h3>
+        @Html.ActionLink(BatchUpload.BrowseTeams, "Index","Supervisor", null, new { @class = "btn btn-default btn-primary" })
+    </div>
 
     <div data-bind="visible: state()==@((int)UserPrelodingState.FinishedWithError)">
-        <h3>Finished with error, Reason: <span data-bind="text: errorMessage"></span></h3>
-        <b data-bind="text: createdUsersCount"></b> out of <b data-bind="text: recordsCount"></b> users have been created
-        @Html.ActionLink("Upload new file", "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
+        <h3>@BatchUpload.FinishedWithError <span data-bind="text: errorMessage"></span></h3>
+        <b data-bind="text: createdUsersCount"></b> @BatchUpload.OutOf <b data-bind="text: recordsCount"></b> @BatchUpload.UsersHaveBeenCreated
+        @Html.ActionLink(BatchUpload.UploadNewFile, "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary" })
     </div>
 </div>
 

@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         UserPreloadingProcess[] GetPreloadingProcesses();
         UserPreloadingProcess GetPreloadingProcesseDetails(string preloadingProcessId);
 
-        void PushVerificationError(string preloadingProcessId, string code, string message, int rowNumber, string columnName, string cellValue);
+        void PushVerificationError(string preloadingProcessId, string code, int rowNumber, string columnName, string cellValue);
         void IncreaseCountCreateUsers(string preloadingProcessId);
         string[] GetAvaliableDataColumnNames();
     }
