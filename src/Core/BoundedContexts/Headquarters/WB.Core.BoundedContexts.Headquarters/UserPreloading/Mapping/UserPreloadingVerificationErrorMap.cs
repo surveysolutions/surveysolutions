@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             Property(x => x.CellValue);
             Property(x => x.Code);
             Property(x => x.ColumnName);
-            Property(x => x.Message);
             Property(x => x.RowNumber);
             ManyToOne(x => x.UserPreloadingProcess, mto =>
             {

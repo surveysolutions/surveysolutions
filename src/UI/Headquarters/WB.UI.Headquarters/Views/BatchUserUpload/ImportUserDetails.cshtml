@@ -14,46 +14,43 @@
 
 <div class="row-fluid">
     <h3>@BatchUpload.UploadUsers</h3>
-    <div>
-        @BatchUpload.UploadUsersDescription
-    </div>
     <br />
     <div>
         <table class="table table-striped table-bordered table-condensed table-break-words">
             <tbody>
                 <tr>
-                    <th>File name</th>
+                    <th>@BatchUpload.FileName</th>
                     <th>@Model.FileName</th>
                 </tr>
                 <tr>
-                    <th>File size</th>
+                    <th>@BatchUpload.FileSize</th>
                     <th>@FileSizeUtils.SizeSuffix(Model.FileSize)</th>
                 </tr>
                 <tr>
-                    <th>Records count</th>
+                    <th>@BatchUpload.RecordsCount</th>
                     <th>@Model.RecordsCount</th>
                 </tr>
                 <tr>
-                    <th>Status</th>
+                    <th>@BatchUpload.Status</th>
                     <th>@Model.State</th>
                 </tr>
                 <tr>
-                    <th>Upload date</th>
+                    <th>@BatchUpload.UploadDate</th>
                     <th>@Model.UploadDate</th>
                 </tr>
                 <tr>
-                    <th>Last update date</th>
+                    <th>@BatchUpload.LastUpdateDate</th>
                     <th>@Model.LastUpdateDate</th>
                 </tr>
             </tbody>
 
         </table>
-         
+
         @using (Html.BeginForm("VerifyUserPreloadig", "BatchUserUpload"))
         {
             @Html.AntiForgeryToken()
             @Html.Hidden("Id", Model.UserPreloadingProcessId)
-            <input type="submit" class="btn btn-default btn-primary pull-right" name="Submit" value="Verify" />
+            <input type="submit" class="btn btn-default btn-primary pull-right" name="Submit" value="@BatchUpload.Verify" />
         }
     </div>
 </div>

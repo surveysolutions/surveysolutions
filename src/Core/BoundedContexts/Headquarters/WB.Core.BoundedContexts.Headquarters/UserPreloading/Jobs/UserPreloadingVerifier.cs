@@ -8,6 +8,7 @@ using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using Ninject;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -78,33 +79,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             IQueryableReadSideRepositoryReader<UserDocument> userStorage, IList<UserPreloadingDataRecord> data,
             string processId)
         {
-            ValidateRow(userPreloadingService, userStorage, data, processId, LoginNameTakenByExistingUser, "PLU0001",
-                "User with Login already exists in the system", "Login", u => u.Login);
-            ValidateRow(userPreloadingService, userStorage, data, processId, LoginDublicationInDataset, "PLU0002",
-                "There are duplicate values of Login in the file",
-                "Login", u => u.Login);
-            ValidateRow(userPreloadingService, userStorage, data, processId,
-                LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam, "PLU0003",
-                "Login of an archived user cannot be re-used because it belonged to anther team", "Login", u => u.Login);
-            ValidateRow(userPreloadingService, userStorage, data, processId,
-                LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole, "PLU0004",
-                "Login of an archived user cannot be re-used because it existed in anther role", "Login", u => u.Login);
-            ValidateRow(userPreloadingService, data, processId, LoginFormatVerification, "PLU0005",
-                "Login needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol",
-                "Login", u => u.Login);
-            ValidateRow(userPreloadingService, data, processId, PasswordFormatVerification, "PLU0006",
-                "Password must contain at least one number, one upper case character and one lower case character",
-                "Password", u => u.Password);
-            ValidateRow(userPreloadingService, data, processId, EmailFormatVerification, "PLU0007", "Email is invalid",
-                "Email", u => u.Email);
-            ValidateRow(userPreloadingService, data, processId, PhoneNumberFormatVerification, "PLU0008",
-                "Phone number is invalid",
-                "PhoneNumber", u => u.PhoneNumber);
-            ValidateRow(userPreloadingService, data, processId, RoleVerification, "PLU0009",
-                "Role is invalid. Only \"Supervisor\" or \"Interviewer\" values are allowed", "Role", u => u.Role);
-            ValidateRow(userPreloadingService, userStorage, data, processId, SupervisorVerification, "PLU0010",
-                "Supervisor must be an existing user in the system or present in the file", "Supervisor",
-                u => u.Supervisor);
+            ValidateRow(userPreloadingService, userStorage, data, processId, LoginNameTakenByExistingUser, "PLU0001", "Login", u => u.Login);
+            ValidateRow(userPreloadingService, userStorage, data, processId, LoginDublicationInDataset, "PLU0002", "Login", u => u.Login);
+            ValidateRow(userPreloadingService, userStorage, data, processId, LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam, "PLU0003", "Login", u => u.Login);
+            ValidateRow(userPreloadingService, userStorage, data, processId, LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole, "PLU0004", "Login", u => u.Login);
+            ValidateRow(userPreloadingService, data, processId, LoginFormatVerification, "PLU0005", "Login", u => u.Login);
+            ValidateRow(userPreloadingService, data, processId, PasswordFormatVerification, "PLU0006", "Password", u => u.Password);
+            ValidateRow(userPreloadingService, data, processId, EmailFormatVerification, "PLU0007", "Email", u => u.Email);
+            ValidateRow(userPreloadingService, data, processId, PhoneNumberFormatVerification, "PLU0008", "PhoneNumber", u => u.PhoneNumber);
+            ValidateRow(userPreloadingService, data, processId, RoleVerification, "PLU0009", "Role", u => u.Role);
+            ValidateRow(userPreloadingService, userStorage, data, processId, SupervisorVerification, "PLU0010", "Supervisor", u => u.Supervisor);
         }
 
         private bool PasswordFormatVerification(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
@@ -215,7 +199,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             string processId, 
             Func<IQueryableReadSideRepositoryReader<UserDocument>, IList<UserPreloadingDataRecord>,UserPreloadingDataRecord, bool> validation, 
             string code, 
-            string message,
             string columnName,
             Func<UserPreloadingDataRecord, string> cellFunc)
         {
@@ -227,7 +210,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                     PlainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.PushVerificationError(processId, code,
-                            message,
                             rowNumber, columnName, cellFunc(userPreloadingDataRecord)));
 
                 rowNumber++;
@@ -240,7 +222,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             string processId,
             Func<IList<UserPreloadingDataRecord>, UserPreloadingDataRecord, bool> validation,
             string code,
-            string message,
             string columnName,
             Func<UserPreloadingDataRecord, string> cellFunc)
         {
@@ -251,7 +232,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 if (validation(data, userPreloadingDataRecord))
                     PlainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.PushVerificationError(processId, code,
-                            message,
                             rowNumber, columnName, cellFunc(userPreloadingDataRecord)));
 
                 rowNumber++;
