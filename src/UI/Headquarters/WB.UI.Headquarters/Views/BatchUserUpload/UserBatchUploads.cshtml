@@ -15,7 +15,7 @@
 
 <div class="row-fluid">
     <h3>User batch uploads @Html.ActionLink("Upload new file", "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })</h3>
-   <br/>
+    <br />
     <div>
         <table class="table table-striped table-bordered table-condensed table-break-words">
             <thead>
@@ -29,27 +29,49 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach (var userPreloadingProcess in Model)
-            {
-                <tr>
-                    <td>@userPreloadingProcess.FileName</td>
-                    <td>@FileSizeUtils.SizeSuffix(userPreloadingProcess.FileSize)</td>
-                    <td>@userPreloadingProcess.UploadDate</td>
-                    <td>@userPreloadingProcess.LastUpdateDate</td>
-                    <td>@userPreloadingProcess.State</td>
-                    <td>
-                       @if (!new[] {UserPrelodingState.Validating, UserPrelodingState.CreatingUsers}.Contains(userPreloadingProcess.State))
-                       {
-                           using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
-                                <input type="submit" class="btn btn-danger pull-right" name="Submit" value="Delete"/>
+                @foreach (var userPreloadingProcess in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                    var actionMethodName = "ImportUserDetails";
+                    switch (userPreloadingProcess.State)
+                    {
+                        case UserPrelodingState.Uploaded:
+                            actionMethodName = "ImportUserDetails";
+                            break;
+                        case UserPrelodingState.ReadyForValidation:
+                        case UserPrelodingState.Validating:
+                        case UserPrelodingState.Validated:
+                            actionMethodName = "UserPreloadigVerificationDetails";
+                            break;
+                        case UserPrelodingState.ReadyForUserCreation:
+                        case UserPrelodingState.CreatingUsers:
+                        case UserPrelodingState.Finished:
+                        case UserPrelodingState.FinishedWithError:
+                            actionMethodName = "UserCreationProcessDetails";
+                            break;
+                    }
                             }
-                       }
-                    </td>
-                </tr>
-            }
+                            @Html.ActionLink(userPreloadingProcess.FileName, actionMethodName, new { id = userPreloadingProcess.UserPreloadingProcessId }, null)
+                        </td>
+                        <td>@FileSizeUtils.SizeSuffix(userPreloadingProcess.FileSize)</td>
+                        <td>@userPreloadingProcess.UploadDate</td>
+                        <td>@userPreloadingProcess.LastUpdateDate</td>
+                        <td>@userPreloadingProcess.State</td>
+                        <td>
+                            @if (!new[] { UserPrelodingState.Validating, UserPrelodingState.CreatingUsers }.Contains(userPreloadingProcess.State))
+                            {
+                                using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
+                                    <input type="submit" class="btn btn-danger pull-right" name="Submit" value="Delete" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
