@@ -158,7 +158,7 @@ namespace WB.UI.Tester.CustomServices.UserInteraction
                     {
                         if (userInteractionsAwaiter != null)
                         {
-                            userInteractionsAwaiter.SetResult(new object());
+                            userInteractionsAwaiter.TrySetResult(new object());
                             userInteractionsAwaiter = null;
                         }
                     }
