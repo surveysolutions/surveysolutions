@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(),
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
-                new InterviewHistorySettings("", false), Mock.Of<IUserPreloadingService>());
+                new InterviewHistorySettings("", false));
         }
     }
 }
