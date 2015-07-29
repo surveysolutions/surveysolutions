@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess[]
@@ -37,13 +38,15 @@
                     <td>@userPreloadingProcess.LastUpdateDate</td>
                     <td>@userPreloadingProcess.State</td>
                     <td>
-                       
-                        @using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
-    <input type="submit" class="btn btn-danger pull-right" name="Submit" value="Delete" />
-                        }
+                       @if (!new[] {UserPrelodingState.Validating, UserPrelodingState.CreatingUsers}.Contains(userPreloadingProcess.State))
+                       {
+                           using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
+                                <input type="submit" class="btn btn-danger pull-right" name="Submit" value="Delete"/>
+                            }
+                       }
                     </td>
                 </tr>
             }

@@ -23,7 +23,7 @@
                 <tr>
                     @foreach (var columnName in Model.AvaliableDataColumnNames)
                     {
-                        <th>@columnName</th>
+                        <th><label class="control-label  @(new[] { "Login", "Password","Role" }.Contains(columnName)?"required":"")">@columnName</label></th>
                     }
                 </tr>
             </thead>
