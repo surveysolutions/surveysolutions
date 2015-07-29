@@ -87,7 +87,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void CreateUsersFromPreloadedData(IList<UserPreloadingDataRecord> data, string id)
         {
-            var supervisorsToCreate = data.Where(row => row.Role.ToLower() == "supervisor").ToArray();
+            var supervisorsToCreate =
+                data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Supervisor)
+                    .ToArray();
 
             foreach (var supervisorToCreate in supervisorsToCreate)
             {
@@ -98,7 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
 
-            var interviewersToCreate = data.Where(row => row.Role.ToLower() == "interviewer").ToArray();
+            var interviewersToCreate = data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Operator).ToArray();
 
             foreach (var interviewerToCreate in interviewersToCreate)
             {
@@ -129,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             if (!archivedSupervisor.Roles.Contains(UserRoles.Supervisor))
-                throw new ArgumentException(
+                throw new UserPreloadingException(
                     String.Format("archived user '{0}' is in role '{1}' but must be in role supervisor",
                         archivedSupervisor.UserName, string.Join(",", archivedSupervisor.Roles)));
 
@@ -161,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             if (!archivedInterviewers.Roles.Contains(UserRoles.Operator))
-                throw new ArgumentException(
+                throw new UserPreloadingException(
                     String.Format("archived user '{0}' is in role '{1}' but must be in role interviewer",
                         archivedInterviewers.UserName, string.Join(",", archivedInterviewers.Roles)));
 

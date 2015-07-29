@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
@@ -17,16 +18,23 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         void FinishPreloadingProcessWithError(string preloadingProcessId, string errorMessage);
 
         void EnqueueForValidation(string preloadingProcessId);
+
         void EnqueueForUserCreation(string preloadingProcessId);
 
         string DeQueuePreloadingProcessIdReadyToBeValidated();
+
         string DeQueuePreloadingProcessIdReadyToCreateUsers();
         
         UserPreloadingProcess[] GetPreloadingProcesses();
+
         UserPreloadingProcess GetPreloadingProcesseDetails(string preloadingProcessId);
 
         void PushVerificationError(string preloadingProcessId, string code, int rowNumber, string columnName, string cellValue);
+
         void IncreaseCountCreateUsers(string preloadingProcessId);
+
         string[] GetAvaliableDataColumnNames();
+
+        UserRoles GetUserRoleFromDataRecord(UserPreloadingDataRecord dataRecord);
     }
 }
