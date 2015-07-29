@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private string interviewId;
         string questionnaireId;
 
+        private SideBarSectionsViewModel root;
+
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -57,6 +59,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Init(string interviewId, 
             Identity sectionIdentity,
+            SideBarSectionsViewModel root, 
             SideBarSectionViewModel parent, 
             NavigationState navigationState)
         {
@@ -69,6 +72,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
             var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
 
+            this.root = root;
             this.Parent = parent;
             this.SectionIdentity = sectionIdentity;
             this.HasChildren = interview.GetEnabledSubgroups(sectionIdentity).Any();
@@ -174,6 +178,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
 
                     this.RaisePropertyChanged();
+
+                    root.UpdateSideBarTree();
                 }
             }
         }
@@ -220,7 +226,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
             var result = interview.GetEnabledSubgroups(this.SectionIdentity)
-                                  .Select(groupInstance =>  this.modelsFactory.BuildSectionItem(this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
+                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(root, this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
 
             return new ObservableCollection<SideBarSectionViewModel>(result);
         }

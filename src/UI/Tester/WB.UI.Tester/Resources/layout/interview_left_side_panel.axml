@@ -20,7 +20,7 @@
   <View style="@style/Interview_Entity_Divider" />
   <MvxListView
         style="@style/Interview_Sidebar_Sections"
-        local:MvxBind="ItemsSource Sections.Sections"
+        local:MvxBind="ItemsSource Sections.AllVisibleSections"
         local:MvxItemTemplate="@layout/interview_left_side_panel_item_section" />
 
 </LinearLayout>
