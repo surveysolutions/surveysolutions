@@ -4,11 +4,11 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
 {
-    public class BatchUserCreatorTask
+    public class UserPreloadingVerificationTask
     {
         readonly IScheduler scheduler;
 
-        public BatchUserCreatorTask(IScheduler scheduler)
+        public UserPreloadingVerificationTask(IScheduler scheduler)
         {
             if (scheduler == null) throw new ArgumentNullException("scheduler");
             this.scheduler = scheduler;
@@ -16,13 +16,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<BatchUserCreator>()
-                .WithIdentity("user creation", "Creation")
+            IJobDetail job = JobBuilder.Create<UserPreloadingVerificationJob>()
+                .WithIdentity("user preloading verification", "Verification")
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("user creation", "Creation")
+                .WithIdentity("user preloading verification", "Verification")
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(5)

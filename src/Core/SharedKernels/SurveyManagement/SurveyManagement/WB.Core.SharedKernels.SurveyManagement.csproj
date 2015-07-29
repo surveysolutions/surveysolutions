@@ -117,6 +117,7 @@
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
+    <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
@@ -176,7 +177,6 @@
     <Compile Include="EventHandler\UserSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
-    <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
