@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+<Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <MvxLinearLayout style="@style/Interview_Question">
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Question">
     <include layout="@layout/interview_question__title" />
-    <MvxLinearLayout style="@style/Interview_Question_Body">
+    <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Question_Body">
       <include layout="@layout/interview_question__instructions" />
-      <MvxLinearLayout style="@style/Interview_Question_Answer"
+      <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-        <MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
+        <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/VerticalFullWidthWrappingLayout">
           <TextView style="@style/Interview_Question_TextAnswer"
             local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" /> />
           <Button style="@style/Interview_Question_InputButton"
@@ -17,14 +17,14 @@
                            Click SaveAnswerCommand; 
                            Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); 
                            BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
-        </MvxLinearLayout>
+        </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
 
-      </MvxLinearLayout>
+      </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
       <include layout="@layout/interview_question__errors" />
       <include layout="@layout/interview_question__comments" />
-    </MvxLinearLayout>
-  </MvxLinearLayout>
+    </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
+  </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
     local:MvxBind="ShowProgress IsInProgress" />
   <View style="@style/Interview_Question_Divider" />
-</MvxLinearLayout>
+</Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>

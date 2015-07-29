@@ -5,16 +5,16 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              local:MvxBind="HideKeyboardOnClick .">
-  <MvxLinearLayout style="@style/Interview_Group">
-    <MvxLinearLayout android:layout_width="match_parent"
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Group">
+    <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(GroupState.IsStarted, true, false)));">
       <Button style="@style/Interview_Group_Button"
               local:MvxBind="HideKeyboardOnClick .; Click GroupState.NavigateToGroupCommand; ButtonGroupStyle GroupState.GroupState; Enabled GroupState.Enablement.Enabled; RosterTitle ."/>
-    </MvxLinearLayout>
+    </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
               local:MvxBind="Visible GroupState.Enablement.Enabled; GroupInfo GroupState.GroupState"/>
-  </MvxLinearLayout>
+  </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 android:layout_height="match_parent"
                 local:MvxBind="Enabled GroupState.Enablement.Enabled"/>
