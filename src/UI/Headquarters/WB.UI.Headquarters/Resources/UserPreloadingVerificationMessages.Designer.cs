@@ -142,11 +142,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Supervisor must be an existing user in the system or present in the file.
+        ///   Looks up a localized string similar to  Supervisor must be an existing user in &quot;Supervisor&quot; role in the system or present in the file.
         /// </summary>
         public static string PLU0010 {
             get {
                 return ResourceManager.GetString("PLU0010", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Supervisor column must be empty for user in &quot;Supervisor&quot; role.
+        /// </summary>
+        public static string PLU0011 {
+            get {
+                return ResourceManager.GetString("PLU0011", resourceCulture);
             }
         }
     }
