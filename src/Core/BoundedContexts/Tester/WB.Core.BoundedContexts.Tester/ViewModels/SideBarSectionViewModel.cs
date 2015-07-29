@@ -234,7 +234,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
                 if (questionnaire == null) throw new Exception("questionnaire is null");
-                string groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.SectionIdentity.Id].Title;
+                var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.SectionIdentity.Id];
+                if (groupModel == null) throw new Exception("groupModel is null");
+                string groupTitle = groupModel.Title;
                 string rosterTitle = myChangedInstance.Title;
 
                 string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
