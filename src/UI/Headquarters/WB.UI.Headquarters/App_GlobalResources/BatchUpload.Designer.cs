@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload users.
+        ///   Looks up a localized string similar to Batch User Upload.
         /// </summary>
         internal static string UploadUsers {
             get {
@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload Users Description must be here.
+        ///   Looks up a localized string similar to Please prepare a file with tab-separated values (.tab file) corresponding to the template below. The columns marked with (*) are required. Only &apos;Supervisor&apos; or &apos;Interviewer&apos; values are allowed for the &apos;role&apos; column..
         /// </summary>
         internal static string UploadUsersDescription {
             get {

@@ -136,9 +136,9 @@
     <value>To upload the sample to be interviewed, please prepare a file with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
-    <value>Upload users</value>
+    <value>Batch User Upload</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Upload Users Description must be here</value>
+    <value>Please prepare a file with tab-separated values (.tab file) corresponding to the template below. The columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed for the 'role' column.</value>
   </data>
 </root>
