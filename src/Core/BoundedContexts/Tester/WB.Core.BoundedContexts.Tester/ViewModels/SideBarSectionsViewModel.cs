@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
+            var allVisibleSections = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections).TreeToEnumerable(x => x.Children).ToList();
             var sectionToAddTo = allVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void RemoveFromChildrenSections(Identity[] identities)
         {
-            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
+            var allVisibleSections = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections).TreeToEnumerable(x => x.Children).ToList();
 
             foreach (var groupIdentity in identities)
             {
