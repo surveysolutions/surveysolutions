@@ -17,7 +17,7 @@
     <div data-bind="visible: state()==@((int)UserPrelodingState.FinishedWithError)">
         <h3>Finished with error, Reason: <span data-bind="text: errorMessage"></span></h3>
         <b data-bind="text: createdUsersCount"></b> out of <b data-bind="text: recordsCount"></b> users have been created
-        @Html.ActionLink("Upload new file", "UserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
+        @Html.ActionLink("Upload new file", "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
     </div>
 </div>
 

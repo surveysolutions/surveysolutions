@@ -40,12 +40,12 @@
             </tbody>
         </table>
         <div data-bind="visible: state()==@((int)UserPrelodingState.Validated)">
-            @Html.ActionLink("Upload new file", "UserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
+            @Html.ActionLink("Upload new file", "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })
         </div>
     </div>
     <div data-bind="visible: (state()==@((int)UserPrelodingState.Validated) && verificationErrors().length===0)">
         <h3>Data is valid</h3>
-        @using (Html.BeginForm("CreateUsers", "HQ"))
+        @using (Html.BeginForm("CreateUsers", "BatchUserUpload"))
         {
             @Html.AntiForgeryToken()
             @Html.Hidden("Id", Model)
