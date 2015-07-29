@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -10,10 +12,11 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class AggregateRootRepositoryWithCache : AggregateRootRepository
     {
-        readonly Dictionary<Type, IAggregateRoot> memoryCache = new Dictionary<Type, IAggregateRoot>(); 
+        static readonly ConcurrentDictionary<Type, IAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IAggregateRoot>();
 
-        public AggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository) 
-            : base(eventStore, snapshotStore, repository) { }
+        public AggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore,
+            IDomainRepository repository)
+            : base(eventStore, snapshotStore, repository){}
 
 
         public override IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
