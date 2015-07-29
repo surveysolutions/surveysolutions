@@ -81,6 +81,12 @@ namespace WB.UI.Tester.Activities
             base.OnStart();
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            this.Dispose();
+        }
+
         private void OnSectionChange(SectionChangeMessage msg)
         {
             Application.SynchronizationContext.Post(_ =>
