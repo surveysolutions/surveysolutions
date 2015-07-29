@@ -135,9 +135,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand loadQuestionnaireCommand;
         public IMvxCommand LoadQuestionnaireCommand
         {
-            get { return loadQuestionnaireCommand ?? 
-                (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire),
-                    (item) => IsInProgress)); }
+            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire))); }
         }
 
         private IMvxCommand refreshQuestionnairesCommand;
