@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
         private string interviewId;
+        string questionnaireId;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -64,7 +65,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.eventRegistry.Subscribe(this, interviewId);
 
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            var questionnaireModel = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            this.questionnaireId = interview.QuestionnaireId;
+            var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
             var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
 
             this.Parent = parent;
@@ -75,13 +77,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (groupModel is RosterModel)
             {
                 string rosterTitle = interview.GetRosterTitle(sectionIdentity);
-                this.Title = substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
+                this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
             }
             else
             {
                 this.Title = groupModel.Title;
             }
-
+            
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged += navigationState_OnBeforeGroupChanged;
@@ -230,7 +232,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var myChangedInstance = @event.ChangedInstances.SingleOrDefault(x => x.RosterInstance.GetIdentity().Equals(this.SectionIdentity));
             if (myChangedInstance != null)
             {
-                QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.NavigationState.QuestionnaireId);
+                QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+                if (questionnaire == null) throw new Exception("questionnaire is null");
                 string groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.SectionIdentity.Id].Title;
                 string rosterTitle = myChangedInstance.Title;
 
