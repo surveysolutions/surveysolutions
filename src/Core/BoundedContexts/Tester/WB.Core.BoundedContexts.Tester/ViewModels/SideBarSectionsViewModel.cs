@@ -115,6 +115,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             sideBarSectionToHighlight.IsSelected = true;
             sideBarSectionToHighlight.Expanded = true;
+            sideBarSectionToHighlight.TreeToEnumerable(s => s.Children)
+                .Where(s => !s.IsSelected)
+                .ForEach(s => s.IsSelected = true);
+
+            this.UpdateSideBarTree();
         }
 
         public void Handle(RosterInstancesAdded @event)
