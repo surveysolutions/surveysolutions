@@ -89,6 +89,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             ValidateRow(userPreloadingService, data, processId, PhoneNumberFormatVerification, "PLU0008", "PhoneNumber", u => u.PhoneNumber);
             ValidateRow(userPreloadingService, data, processId, RoleVerification, "PLU0009", "Role", u => u.Role);
             ValidateRow(userPreloadingService, userStorage, data, processId, SupervisorVerification, "PLU0010", "Supervisor", u => u.Supervisor);
+            ValidateRow(userPreloadingService, data, processId,  SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011", "Supervisor", u => u.Supervisor);
+        }
+
+        private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
+        {
+            var role = ParseUserRole(userPreloadingDataRecord.Role);
+            if (role != UserRoles.Supervisor)
+                return false;
+
+            return !string.IsNullOrEmpty(userPreloadingDataRecord.Supervisor);
         }
 
         private bool PasswordFormatVerification(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
@@ -257,7 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 userStorage.Query(
                     _ => _.Where(u => u.UserName.ToLower() == userPreloadingDataRecord.Supervisor.ToLower()));
 
-            if (storedSupervisor.Any())
+            if (storedSupervisor.Any(u => u.Roles.Contains(UserRoles.Supervisor)))
                 return false;
 
             var supervisorsToPreload =
