@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
 using Android.OS;
+using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Shared.Android.Activities;
@@ -43,9 +46,11 @@ namespace WB.UI.Capi.Implementations.Fragments
 
             if (questionnaire.FeaturedQuestions.Count == 0)
             {
-                var intent = new Intent(this.Activity, typeof(DataCollectionDetailsActivity));
-                intent.PutExtra("publicKey", this.QuestionnaireId.ToString());
-                this.StartActivity(intent);
+                ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateTo<InterviewViewModel>(new { interviewId = this.QuestionnaireId.FormatGuid() });
+                
+//                var intent = new Intent(this.Activity, typeof(DataCollectionDetailsActivity));
+//                intent.PutExtra("publicKey", this.QuestionnaireId.ToString());
+//                this.StartActivity(intent);
                 this.Activity.Finish();
             }
             return new QuestionnaireScreenViewModel(this.QuestionnaireId, "Pre-filled questions", "", true, new InterviewItemId(Guid.Empty),
