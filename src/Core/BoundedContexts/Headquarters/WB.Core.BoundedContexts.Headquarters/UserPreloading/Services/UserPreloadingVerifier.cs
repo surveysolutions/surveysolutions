@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var role = ParseUserRole(userPreloadingDataRecord.Role);
+            var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             if (role != UserRoles.Supervisor)
                 return false;
 
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(IList<UserPreloadingDataRecord> data,
             UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var desiredRole = ParseUserRole(userPreloadingDataRecord.Role);
+            var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             if (desiredRole != UserRoles.Operator)
                 return false;
 
@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var desiredRole = ParseUserRole(userPreloadingDataRecord.Role);
+            var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
 
             var archivedUsersWithTheSameLogin = userStorage.Query(
                 _ =>
@@ -185,28 +185,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             return false;
-        }
-
-        private void ValidateRow(
-            IList<UserPreloadingDataRecord> data,
-            string processId,
-            Func<IQueryableReadSideRepositoryReader<UserDocument>, IList<UserPreloadingDataRecord>, UserPreloadingDataRecord, bool> validation,
-            string code,
-            string columnName,
-            Func<UserPreloadingDataRecord, string> cellFunc)
-        {
-            int rowNumber = 1;
-
-            foreach (var userPreloadingDataRecord in data)
-            {
-                if (validation(userStorage, data, userPreloadingDataRecord))
-
-                    PlainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.PushVerificationError(processId, code,
-                            rowNumber, columnName, cellFunc(userPreloadingDataRecord)));
-
-                rowNumber++;
-            }
         }
 
         private void ValidateRow(
@@ -232,13 +210,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool RoleVerification(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var role = ParseUserRole(userPreloadingDataRecord.Role);
+            var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             return role == UserRoles.Undefined;
         }
 
         private bool SupervisorVerification(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var role = ParseUserRole(userPreloadingDataRecord.Role);
+            var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             if (role != UserRoles.Operator)
                 return false;
 
@@ -260,22 +238,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             foreach (var supervisorToPreload in supervisorsToPreload)
             {
-                var possibleSupervisorRole = ParseUserRole(supervisorToPreload.Role);
+                var possibleSupervisorRole = userPreloadingService.GetUserRoleFromDataRecord(supervisorToPreload);
                 if (possibleSupervisorRole == UserRoles.Supervisor)
                     return false;
             }
 
             return true;
-        }
-
-        private UserRoles ParseUserRole(string role)
-        {
-            if (role.ToLower() == "supervisor")
-                return UserRoles.Supervisor;
-            if (role.ToLower() == "interviewer")
-                return UserRoles.Operator;
-
-            return UserRoles.Undefined;
         }
     }
 }

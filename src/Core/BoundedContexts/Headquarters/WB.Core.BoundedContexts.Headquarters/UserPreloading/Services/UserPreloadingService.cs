@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -287,6 +288,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public string[] GetAvaliableDataColumnNames()
         {
             return dataColumnNames;
+        }
+
+        public UserRoles GetUserRoleFromDataRecord(UserPreloadingDataRecord dataRecord)
+        {
+            if (dataRecord.Role.ToLower() == "supervisor")
+                return UserRoles.Supervisor;
+            if (dataRecord.Role.ToLower() == "interviewer")
+                return UserRoles.Operator;
+
+            return UserRoles.Undefined;
         }
 
         private UserPreloadingProcess GetUserPreloadingProcessAndThrowIfMissing(string preloadingProcessId)
