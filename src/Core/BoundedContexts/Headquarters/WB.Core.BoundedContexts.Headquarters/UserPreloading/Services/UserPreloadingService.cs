@@ -43,14 +43,23 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             preloadingProcess.LastUpdateDate = DateTime.Now;
 
-            var recordAccessor = recordsAccessorFactory.CreateRecordsAccessor(data, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+            var records=new List<string[]>();
+            try
+            {
+                records = recordsAccessorFactory.CreateRecordsAccessor(data,
+                    ExportFileSettings.SeparatorOfExportedDataFile.ToString()).Records.ToList();
+            }
+            catch (Exception e)
+            {
+                throw new UserPreloadingException(e.Message, e);
+            }
 
             string[] header = null;
-            foreach (var record in recordAccessor.Records.ToList())
+            foreach (var record in records)
             {
                 if (header == null)
                 {
-                    header = record.Select(r=>r.ToLower()).ToArray();
+                    header = record.Select(r => r.ToLower()).ToArray();
                     ThrowIfFileStructureIsInvalid(header);
                     continue;
                 }
