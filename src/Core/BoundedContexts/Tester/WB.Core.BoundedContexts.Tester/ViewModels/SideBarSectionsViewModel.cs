@@ -40,8 +40,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
-            IMvxMainThreadDispatcher mainThreadDispatcher
-)
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
@@ -168,7 +167,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 .ToList()
                 .IndexOf(section);
             Sections.Insert(index, sectionViewModel);
-            //this.mainThreadDispatcher.RequestMainThreadAction(() => Sections.Insert(index, sectionViewModel));
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
@@ -179,25 +177,22 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (sectionToAddTo != null)
             {
                 List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
-                //this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                //{
-                    for (int i = 0; i < enabledSubgroups.Count; i++)
+                for (int i = 0; i < enabledSubgroups.Count; i++)
+                {
+                    var enabledSubgroupIdentity = enabledSubgroups[i];
+                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
                     {
-                        var enabledSubgroupIdentity = enabledSubgroups[i];
-                        if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                        var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
+                        if (i < sectionToAddTo.Children.Count)
                         {
-                            var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
-                            if (i < sectionToAddTo.Children.Count)
-                            {
-                                sectionToAddTo.Children.Insert(i, sideBarItem);
-                            }
-                            else
-                            {
-                                sectionToAddTo.Children.Add(sideBarItem);
-                            }
+                            sectionToAddTo.Children.Insert(i, sideBarItem);
+                        }
+                        else
+                        {
+                            sectionToAddTo.Children.Add(sideBarItem);
                         }
                     }
-                //});
+                }
             }
         }
 
@@ -225,8 +220,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var section = AllVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
                 if (section != null)
                 {
-                    //this.mainThreadDispatcher.RequestMainThreadAction(() => section.Parent.Children.Remove(section));
-                    section.Parent.Children.Remove(section);
+                    if (section.Parent != null)
+                        section.Parent.Children.Remove(section);
+                    
                     section.RemoveMe();
                 }
             }
@@ -239,7 +235,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
                 if (topLevelSectionToRemove != null)
                 {
-                    //this.mainThreadDispatcher.RequestMainThreadAction(() => this.Sections.Remove(topLevelSectionToRemove));
                     this.Sections.Remove(topLevelSectionToRemove);
                     topLevelSectionToRemove.RemoveMe();
                 }
