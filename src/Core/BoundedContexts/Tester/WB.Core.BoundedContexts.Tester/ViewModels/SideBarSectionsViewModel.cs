@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void RefreshHasChildrenFlags()
         {
-            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
+            var allVisibleSections = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections).TreeToEnumerable(x => x.Children).ToList();
 
             foreach (var section in allVisibleSections)
             {
