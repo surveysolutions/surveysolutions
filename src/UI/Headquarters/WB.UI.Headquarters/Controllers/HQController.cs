@@ -38,7 +38,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
-        private readonly IUserPreloadingService userPreloadingService;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
         private readonly InterviewHistorySettings interviewHistorySettings;
@@ -52,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            InterviewHistorySettings interviewHistorySettings, IUserPreloadingService userPreloadingService)
+            InterviewHistorySettings interviewHistorySettings)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -62,7 +61,6 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.interviewHistorySettings = interviewHistorySettings;
-            this.userPreloadingService = userPreloadingService;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
             this.supervisorsFactory = supervisorsFactory;
         }
@@ -102,85 +100,6 @@ namespace WB.UI.Headquarters.Controllers
             };
 
             return this.View(viewModel);
-        }
-
-        public ActionResult UserBatchUpload()
-        {
-            this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
-            return
-                this.View(new UserBatchUploadModel()
-                {
-                    AvaliableDataColumnNames = userPreloadingService.GetAvaliableDataColumnNames()
-                });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        public ActionResult UserBatchUpload(UserBatchUploadModel model)
-        {
-            this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View("UserBatchUpload", model);
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("UserBatchUpload", model);
-            }
-            try
-            {
-                var preloadedDataId = this.userPreloadingService.CreateUserPreloadingProcess(model.File.InputStream,
-                    model.File.FileName);
-              
-                return this.RedirectToAction("ImportUserDetails",new {id =preloadedDataId });
-            }
-            catch (UserPreloadingException e)
-            {
-                this.Error(e.Message);
-                return this.View(new UserBatchUploadModel()
-                {
-                    AvaliableDataColumnNames = userPreloadingService.GetAvaliableDataColumnNames()
-                });
-            }
-        }
-
-        [ObserverNotAllowed]
-        public ActionResult ImportUserDetails(string id)
-        {
-            return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        public ActionResult VerifyUserPreloadig(string id)
-        {
-            this.userPreloadingService.EnqueueForValidation(id);
-            return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
-        }
-        [ObserverNotAllowed]
-        public ActionResult UserPreloadigVerificationDetails(string id)
-        {
-            return this.View("UserPreloadigVerificationDetails",null, id);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        public ActionResult CreateUsers(string id)
-        {
-            this.userPreloadingService.EnqueueForUserCreation(id);
-            return this.RedirectToAction("UserCreationProcessDetails", new { id });
-        }
-
-        [ObserverNotAllowed]
-        public ActionResult UserCreationProcessDetails(string id)
-        {
-            return this.View("UserCreationProcessDetails", null, id);
         }
 
         [HttpPost]
