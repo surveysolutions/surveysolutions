@@ -9,18 +9,19 @@ namespace WB.UI.Tester.Ninject
 {
     public class NinjectMvxIocProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
     {
-        private readonly StandardKernel kernel = new StandardKernel();
+        private readonly IKernel kernel;
         private readonly Dictionary<Type, List<Action>> pluginsForLazyRegistration = new Dictionary<Type, List<Action>>();
 
-        public NinjectMvxIocProvider(params INinjectModule[] modules)
+        public NinjectMvxIocProvider(IKernel kernel)
         {
-            kernel = new StandardKernel(modules);
+            this.kernel = kernel;
         }
 
+        public NinjectMvxIocProvider(params INinjectModule[] modules)
+            : this(new StandardKernel(modules)) {}
+
         public NinjectMvxIocProvider(INinjectSettings settings, params INinjectModule[] modules)
-        {
-            kernel = new StandardKernel(settings, modules);
-        }
+            : this(new StandardKernel(settings, modules)) {}
 
         public void CallbackWhenRegistered(Type type, Action action)
         {
