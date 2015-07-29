@@ -87,6 +87,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.Title = groupModel.Title;
             }
+            if (Parent != null)
+            {
+                IsSelected = Parent.IsSelected;
+            }
             
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += NavigationState_OnGroupChanged;
@@ -178,8 +182,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
 
                     this.RaisePropertyChanged();
-
-                    root.UpdateSideBarTree();
                 }
             }
         }
@@ -211,7 +213,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return new MvxCommand(() => this.Expanded = !this.Expanded);
+                return new MvxCommand(() =>
+                {
+                    this.Expanded = !this.Expanded;
+                    root.UpdateSideBarTree();
+                });
             }
         }
 
