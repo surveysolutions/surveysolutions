@@ -12,7 +12,7 @@ using Cirrious.MvvmCross.Binding.Droid.Views;
 
 namespace WB.UI.Tester.CustomControls
 {
-    class FlowLayout : ViewGroup, IMvxWithChangeAdapter
+    public class FlowLayout : ViewGroup, IMvxWithChangeAdapter
     {
         public static int Horizontal = 0;
         public static int Vertical = 1;

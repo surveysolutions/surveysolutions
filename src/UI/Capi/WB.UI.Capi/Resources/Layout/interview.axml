@@ -6,17 +6,17 @@
                                         android:layout_height="match_parent"
                                         android:fitsSystemWindows="true"
                                         local:MvxBind="StatusBarColorByInterviewStatus Status;">
-  <MvxLinearLayout android:layout_width="match_parent"
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:orientation="vertical">
     <LinearLayout style="@style/Interview_BreadCrumbsContainer"
                   local:MvxBind="ColorByInterviewStatus Status;">
-      <FlowLayout orienation="horizontal"
+      <!--<WB.UI.Tester.CustomControls.FlowLayout orienation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   local:MvxBind="ItemsSource BreadCrumbs.Items;"
                   local:MvxItemTemplate="@layout/interview_breadcrumb_item">
-      </FlowLayout>
+      </WB.UI.Tester.CustomControls.FlowLayout>-->
 
     </LinearLayout>
     <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
@@ -34,8 +34,8 @@
                 android:fillViewport="true">
       <include layout="@layout/interview_current_group" />
     </ScrollView>
-  </MvxLinearLayout>
-  <MvxLinearLayout style="@style/Interview_Sidebar">
+  </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Sidebar">
     <include layout="@layout/interview_left_side_panel" />
-  </MvxLinearLayout>
+  </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
 </android.support.v4.widget.DrawerLayout>

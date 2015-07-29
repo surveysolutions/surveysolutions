@@ -5,8 +5,8 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              local:MvxBind="HideKeyboardOnClick .">
-  <MvxLinearLayout style="@style/Interview_Group">
-    <MvxLinearLayout android:layout_width="match_parent"
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Group">
+    <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(IsStarted, true, false)))">
       <Button style="@style/Interview_Group_Button"
@@ -17,10 +17,10 @@
                 ButtonGroupStyle GroupState; 
                 Enabled Enablement.Enabled;
               "/>
-    </MvxLinearLayout>
+    </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
     <TextView style="@style/Interview_Group_Description"
               local:MvxBind="Visible Enablement.Enabled; GroupInfo GroupState"/>
-  </MvxLinearLayout>
+  </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"
                 android:layout_height="match_parent">
