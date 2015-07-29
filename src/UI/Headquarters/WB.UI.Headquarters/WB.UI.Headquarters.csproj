@@ -469,6 +469,7 @@
     <Content Include="Views\BatchUserUpload\ImportUserDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserPreloadigVerificationDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserCreationProcessDetails.cshtml" />
+    <Content Include="Views\BatchUserUpload\UserBatchUploads.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
