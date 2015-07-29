@@ -1,6 +1,9 @@
-﻿@using System.Web.Optimization
+﻿@using System.Collections
+@using System.Globalization
+@using System.Resources
+@using System.Web.Optimization
 @using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
-@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
+@using WB.UI.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @model string
@@ -68,16 +71,14 @@
         ko.applyBindings(viewModel);
 
         var errorMessages = new Array();
-        errorMessages["PLU0001"] = '@BatchUpload.PLU0001';
-        errorMessages["PLU0002"] = '@BatchUpload.PLU0002';
-        errorMessages["PLU0003"] = '@BatchUpload.PLU0003';
-        errorMessages["PLU0004"] = '@BatchUpload.PLU0004';
-        errorMessages["PLU0005"] = '@BatchUpload.PLU0005';
-        errorMessages["PLU0006"] = '@BatchUpload.PLU0006';
-        errorMessages["PLU0007"] = '@BatchUpload.PLU0007';
-        errorMessages["PLU0008"] = '@BatchUpload.PLU0008';
-        errorMessages["PLU0009"] = '@BatchUpload.PLU0009';
-        errorMessages["PLU0010"] = '@BatchUpload.PLU0010';
+
+        @foreach (DictionaryEntry entry in UserPreloadingVerificationMessages.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
+    {
+        <text>
+        errorMessages["@entry.Key"] = '@Html.Raw(entry.Value)';
+        </text>
+    }
+
         function convertErrorCodeToMessage(code) {
             return errorMessages[code];
         }
