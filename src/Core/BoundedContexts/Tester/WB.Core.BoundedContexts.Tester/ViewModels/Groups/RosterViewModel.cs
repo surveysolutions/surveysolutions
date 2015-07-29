@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
@@ -78,6 +79,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
         private void ReadRosterInstancesFromModel()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
+            if (interview == null) throw new Exception("Interview is null.");
 
             var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(this.groupIdentity.Id, this.groupIdentity.RosterVector);
 
