@@ -202,8 +202,8 @@ namespace WB.UI.Headquarters
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            ServiceLocator.Current.GetInstance<UserPreloadingVerifierTask>().Configure();
-            ServiceLocator.Current.GetInstance<BatchUserCreatorTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserPreloadingVerificationTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserBatchCreatingTask>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
