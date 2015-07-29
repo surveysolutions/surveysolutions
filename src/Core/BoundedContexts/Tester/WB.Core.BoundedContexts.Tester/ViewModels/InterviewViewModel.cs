@@ -69,7 +69,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
+            if (interview == null) throw new Exception("Interview is null.");
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            if (questionnaire == null) throw new Exception("questionnaire is null");
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
