@@ -92,9 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 return;
 
             var indexOfColumn = Array.IndexOf(header, dataColumnNameLowerCase);
-            var cellValue = fileRecord[indexOfColumn].Trim();
-            if (string.IsNullOrEmpty(cellValue))
-                return;
+            var cellValue = (fileRecord[indexOfColumn]??"").Trim();
 
             PropertyInfo property = typeof (UserPreloadingDataRecord).GetProperty(dataColumnName,
                 BindingFlags.Public | BindingFlags.Instance);
