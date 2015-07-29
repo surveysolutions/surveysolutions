@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Android;
+using WB.Core.Infrastructure.Ncqrs;
 
 namespace WB.UI.Tester.Ninject
 {
@@ -25,7 +26,8 @@ namespace WB.UI.Tester.Ninject
                 new EnumeratorSharedKernelModule(),
                 new TesterBoundedContextModule(),
                 new DataCollectionModule(basePath),
-                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
+                new NcqrsModule().AsNinject(),
+                new InfrastructureModuleMobile().AsNinject());
         }
 
         private static string GetPathToSubfolderInLocalDirectory(string subFolderName)

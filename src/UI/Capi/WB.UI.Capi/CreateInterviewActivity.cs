@@ -5,6 +5,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Implementations.Fragments;
 using WB.UI.Shared.Android.Activities;
@@ -52,10 +56,12 @@ namespace WB.UI.Capi
 
         void btnNext_Click(object sender, EventArgs e)
         {
-            var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
-            intent.SetFlags(ActivityFlags.ReorderToFront);
-            intent.PutExtra("publicKey", this.QuestionnaireId.ToString());
-            this.StartActivity(intent);
+            ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateTo<InterviewViewModel>(new { interviewId = this.QuestionnaireId.FormatGuid() });
+
+//            var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
+//            intent.SetFlags(ActivityFlags.ReorderToFront);
+//            intent.PutExtra("publicKey", this.QuestionnaireId.ToString());
+//            this.StartActivity(intent);
         }
     }
 }

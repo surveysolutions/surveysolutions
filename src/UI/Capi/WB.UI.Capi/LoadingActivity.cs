@@ -10,7 +10,9 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -215,9 +217,11 @@ namespace WB.UI.Capi
             }
             else
             {
-                var intent = new Intent(this, typeof (DataCollectionDetailsActivity));
-                intent.PutExtra("publicKey", interviewId.ToString());
-                this.StartActivity(intent);
+                ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateTo<InterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
+
+//                var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
+//                intent.PutExtra("publicKey", interviewId.ToString());
+//                this.StartActivity(intent);
             }
         }
 

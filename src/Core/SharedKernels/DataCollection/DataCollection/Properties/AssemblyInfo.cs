@@ -43,3 +43,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement")]
 [assembly: InternalsVisibleTo("WB.UI.Shared.Android")]
 [assembly: InternalsVisibleTo("WB.UI.Tester")]
+[assembly: InternalsVisibleTo("WB.UI.Capi")]

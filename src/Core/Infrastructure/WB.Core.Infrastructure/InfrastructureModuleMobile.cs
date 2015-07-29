@@ -25,7 +25,6 @@ namespace WB.Core.Infrastructure
             registry.Bind<IAggregateRootCreationStrategy, SimpleAggregateRootCreationStrategy>();
             registry.Bind<IAggregateSupportsSnapshotValidator,AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
-            registry.Bind<IDomainRepository, DomainRepository>();
         }
     }
 }
