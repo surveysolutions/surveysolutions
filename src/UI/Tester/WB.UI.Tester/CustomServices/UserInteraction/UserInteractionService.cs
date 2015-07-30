@@ -29,14 +29,14 @@ namespace WB.UI.Tester.CustomServices.UserInteraction
             string cancelButton = "Cancel")
         {
             var tcs = new TaskCompletionSource<bool>();
-            this.Confirm(message, tcs.SetResult, title, okButton, cancelButton);
+            this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton);
             return tcs.Task;
         }
 
         public Task AlertAsync(string message, string title = "", string okButton = "OK")
         {
             var tcs = new TaskCompletionSource<object>();
-            this.Alert(message, () => tcs.SetResult(null), title, okButton);
+            this.Alert(message, () => tcs.TrySetResult(null), title, okButton);
             return tcs.Task;
         }
 
