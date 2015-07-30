@@ -52,6 +52,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             get { return this.checkedOrder; }
             set
             {
+                if (checkedOrder == value) return;
                 this.checkedOrder = value; 
                 this.RaisePropertyChanged();
             }
