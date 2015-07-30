@@ -289,7 +289,7 @@
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
-    <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
+    <Compile Include="CustomBindings\ButtonGroupTitleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
@@ -668,12 +668,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_roster.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_roster_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_breadcrumb_item.axml">

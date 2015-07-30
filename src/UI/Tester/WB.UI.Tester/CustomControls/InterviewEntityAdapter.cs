@@ -41,7 +41,6 @@ namespace WB.UI.Tester.CustomControls
             {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_cascading_single_option },
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
-            {typeof (RosterViewModel), Resource.Layout.interview_roster},
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
         };

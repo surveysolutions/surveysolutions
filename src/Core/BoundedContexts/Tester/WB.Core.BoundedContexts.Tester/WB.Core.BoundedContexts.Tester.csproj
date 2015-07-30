@@ -40,6 +40,7 @@
     <Compile Include="Implementation\Entities\QuestionModels\CascadingOptionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\CascadingSingleOptionQuestionModel.cs" />
     <Compile Include="Implementation\Entities\QuestionModels\FilteredSingleOptionQuestionModel.cs" />
+    <Compile Include="Implementation\Entities\RosterModel.cs" />
     <Compile Include="Implementation\Services\FriendlyMessageService.cs" />
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Services\IFriendlyMessageService.cs" />
@@ -79,7 +80,6 @@
     <Compile Include="Implementation\Entities\QuestionnaireModel.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireReferenceModel.cs" />
     <Compile Include="Implementation\Entities\RealNumericAnswer.cs" />
-    <Compile Include="Implementation\Entities\RosterModel.cs" />
     <Compile Include="Implementation\Entities\SingleOptionAnswer.cs" />
     <Compile Include="Implementation\Entities\StaticTextModel.cs" />
     <Compile Include="Implementation\Entities\TextListAnswer.cs" />
@@ -163,8 +163,6 @@
     <Compile Include="ViewModels\Questions\MultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\Questions\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\Questions\IntegerQuestionViewModel.cs" />
-    <Compile Include="ViewModels\Groups\RosterStateViewModel.cs" />
-    <Compile Include="ViewModels\Groups\RosterViewModel.cs" />
     <Compile Include="ViewModels\Questions\TextQuestionViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\Questions\SingleOptionQuestionOptionViewModel.cs" />

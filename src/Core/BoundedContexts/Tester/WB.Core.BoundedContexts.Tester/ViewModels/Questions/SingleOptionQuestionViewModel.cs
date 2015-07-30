@@ -54,6 +54,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             get { return true; }
         }
 
+        public Identity Identity { get { return questionIdentity; } }
+
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
