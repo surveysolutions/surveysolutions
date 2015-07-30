@@ -1,11 +1,12 @@
 using Machine.Specifications;
 
 using Moq;
-
+using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
-
 using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTests
 {
@@ -13,7 +14,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTe
     {
         Establish context = () =>
         {
-            activeGroup = CreateActiveGroupViewModel(eventRegistry: eventRegistry.Object);
+            interviewRepositoryMock.Setup(x => x.Get(Moq.It.IsAny<string>())).Returns(Mock.Of<IStatefulInterview>());
+            activeGroup = CreateActiveGroupViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
         };
 
         Because of = () => activeGroup.Init(interviewId, navigationState.Object);
@@ -27,7 +29,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTe
 
         static readonly Mock<NavigationState> navigationState = new Mock<NavigationState>();
 
-        static Mock<ILiteEventRegistry> eventRegistry = new Mock<ILiteEventRegistry>();
+        static readonly Mock<ILiteEventRegistry> eventRegistry = new Mock<ILiteEventRegistry>();
+        static readonly Mock<IStatefulInterviewRepository> interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
 
         
     }
