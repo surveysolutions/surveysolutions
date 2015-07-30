@@ -27,7 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private  readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
 
-        public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, IUserPreloadingService userPreloadingService, IQueryableReadSideRepositoryReader<UserDocument> userStorage, IPlainTransactionManager plainTransactionManager)
+        public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, 
+            IUserPreloadingService userPreloadingService, 
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            IPlainTransactionManager plainTransactionManager)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.userPreloadingService = userPreloadingService;
