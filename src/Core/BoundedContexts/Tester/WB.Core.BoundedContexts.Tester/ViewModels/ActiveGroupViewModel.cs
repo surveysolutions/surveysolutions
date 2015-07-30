@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
@@ -101,17 +102,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.Name = group.Title;
             }
 
-            this.Items = new ObservableCollection<IInterviewEntityViewModel>();
-
-            var listOfViewModels = this.interviewViewModelFactory.GetEntities(
-                interviewId: this.navigationState.InterviewId,
-                groupIdentity: navigationParams.TargetGroup,
-                navigationState: this.navigationState);
-
-            listOfViewModels.ForEach(x=>this.Items.Add(x));
-
-            this.InsertRosterInstances(navigationParams.TargetGroup);
-            this.AddToParentButton(navigationParams.TargetGroup);
+            this.UpdateFormModel(navigationParams.TargetGroup);
 
             var anchorElementIndex = 0;
 
@@ -126,11 +117,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.messenger.Publish(new ScrollToAnchorMessage(this, anchorElementIndex));
         }
 
-        private void AddToParentButton(Identity targetGroupIdentity)
+        void UpdateFormModel(Identity groupIdentity)
+        {
+            var listOfViewModels = this.interviewViewModelFactory.GetEntities(
+                interviewId: this.navigationState.InterviewId,
+                groupIdentity: groupIdentity,
+                navigationState: this.navigationState);
+
+            this.InsertRosterInstances(groupIdentity, listOfViewModels);
+            this.AddToParentButton(groupIdentity, listOfViewModels);
+
+            this.Items = new ObservableCollection<IInterviewEntityViewModel>(listOfViewModels);
+        }
+
+        private void AddToParentButton(Identity targetGroupIdentity, IList<IInterviewEntityViewModel> listOfViewModels)
         {
             var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
             previousGroupNavigationViewModel.Init(this.interviewId, targetGroupIdentity, this.navigationState);
-            this.Items.Add(previousGroupNavigationViewModel);
+            listOfViewModels.Add(previousGroupNavigationViewModel);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
@@ -147,37 +151,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(RosterInstancesAdded @event)
         {
-            foreach (var rosterInstance in @event.Instances)
-            {
-                if (this.questionnaire.GroupsParentIdMap[rosterInstance.GroupId] != this.navigationState.CurrentGroup.Id ||
-                    !rosterInstance.OuterRosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
-                    continue;
-
-                GroupModel currentGroupInQuestionnaire = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
-                this.InsertRosterInstance(rosterInstance.GetIdentity(), currentGroupInQuestionnaire);
-            }
+            this.UpdateFormModel(this.navigationState.CurrentGroup);
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            for (int i = @event.Instances.Length - 1; i >= 0; i--)
-            {
-                var rosterInstance = @event.Instances[i];
-
-                if (this.questionnaire.GroupsParentIdMap[rosterInstance.GroupId] != this.navigationState.CurrentGroup.Id ||
-                    !rosterInstance.OuterRosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
-                    continue;
-
-                var rosterIdentity = rosterInstance.GetIdentity();
-                var rosterInstanceViewModel =
-                    this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(rosterIdentity));
-
-                if (rosterInstanceViewModel != null)
-                    this.Items.Remove(rosterInstanceViewModel);
-            }
+            this.UpdateFormModel(this.navigationState.CurrentGroup);
         }
 
-        private void InsertRosterInstances(Identity targetGroupIdentity)
+        private void InsertRosterInstances(Identity targetGroupIdentity, IList<IInterviewEntityViewModel> listOfViewModels)
         {
             GroupModel currentGroupInQuestionnaire = questionnaire.GroupsWithFirstLevelChildrenAsReferences[targetGroupIdentity.Id];
 
@@ -191,11 +173,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     return;
 
                 this.interview.RosterInstancesIds[rosterKey].ForEach(
-                    rosterInstance => this.InsertRosterInstance(rosterInstance, currentGroupInQuestionnaire));
+                    rosterInstance => this.InsertRosterInstance(rosterInstance, currentGroupInQuestionnaire, listOfViewModels));
             }
         }
 
-        private void InsertRosterInstance(Identity rosterInstance, GroupModel currentGroupInQuestionnaire)
+        private void InsertRosterInstance(Identity rosterInstance, GroupModel currentGroupInQuestionnaire, IList<IInterviewEntityViewModel> listOfViewModels)
         {
             var questionnaireRoster = currentGroupInQuestionnaire.Children.Find(x => x.Id == rosterInstance.Id);
 
@@ -207,15 +189,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 rosterInstanceIndex = (int)rosterInstance.RosterVector.Last();
             else
             {
-                var interviewEntitiesBeforeRosterInstance = this.Items.Where(x => x.Identity != null && x.Identity.Id.Equals(questionnaireEntityBeforeRoster.Id));
+                var interviewEntitiesBeforeRosterInstance = listOfViewModels.Where(x => x.Identity != null && x.Identity.Id.Equals(questionnaireEntityBeforeRoster.Id));
 
-                rosterInstanceIndex = this.Items.IndexOf(interviewEntitiesBeforeRosterInstance.Last()) + 1;
+                rosterInstanceIndex = listOfViewModels.IndexOf(interviewEntitiesBeforeRosterInstance.Last()) + 1;
             }
 
             var rosterInstanceViewModel = this.interviewViewModelFactory.GetNew<GroupViewModel>();
             rosterInstanceViewModel.Init(this.interviewId, rosterInstance, this.navigationState);
 
-            this.Items.Insert(rosterInstanceIndex, rosterInstanceViewModel);
+            listOfViewModels.Insert(rosterInstanceIndex, rosterInstanceViewModel);
         }
     }
 }
