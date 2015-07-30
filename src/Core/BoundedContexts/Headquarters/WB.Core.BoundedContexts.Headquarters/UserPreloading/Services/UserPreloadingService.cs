@@ -18,9 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
 
-        private readonly UserPrelodingState[] statesInWhichProcessCantBeDelete = new[]
-        {UserPrelodingState.Validating, UserPrelodingState.CreatingUsers};
-
         private readonly string[] dataColumnNames = new[] {"Login", "Password", "Email", "FullName", "PhoneNumber", "Role", "Supervisor"};
 
         public UserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage,
@@ -188,14 +185,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public void DeletePreloadingProcess(string preloadingProcessId)
         {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            if(statesInWhichProcessCantBeDelete.Contains(preloadingProcess.State))
-                throw new ArgumentException(
-                   String.Format(
-                       "user preloading process with id '{0}' is in state '{1}' can't be deleted",
-                       preloadingProcessId, preloadingProcess.State));
-
             userPreloadingProcessStorage.Remove(preloadingProcessId);
         }
 

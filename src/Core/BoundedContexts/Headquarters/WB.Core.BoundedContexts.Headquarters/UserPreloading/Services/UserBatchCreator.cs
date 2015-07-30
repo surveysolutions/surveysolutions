@@ -29,17 +29,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly ITransactionManagerProvider transactionManagerProvider;
 
-        IPlainTransactionManager PlainTransactionManager
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
-        }
+        private readonly IPlainTransactionManager plainTransactionManager;
 
         ITransactionManager TransactionManager
         {
             get { return transactionManagerProvider.GetTransactionManager(); }
         }
 
-        public UserBatchCreator(IUserPreloadingService userPreloadingService, ICommandService commandService, IQueryableReadSideRepositoryReader<UserDocument> userStorage, ILogger logger, IPasswordHasher passwordHasher, ITransactionManagerProvider transactionManagerProvider)
+        public UserBatchCreator(IUserPreloadingService userPreloadingService, ICommandService commandService, IQueryableReadSideRepositoryReader<UserDocument> userStorage, ILogger logger, IPasswordHasher passwordHasher, ITransactionManagerProvider transactionManagerProvider, IPlainTransactionManager plainTransactionManager)
         {
             this.userPreloadingService = userPreloadingService;
             this.commandService = commandService;
@@ -47,19 +44,20 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.logger = logger;
             this.passwordHasher = passwordHasher;
             this.transactionManagerProvider = transactionManagerProvider;
+            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void CreateUsersFromReadyToBeCreatedQueue()
         {
             string preloadingProcessIdToCreate =
-                PlainTransactionManager.ExecuteInPlainTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
 
             if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
                 return;
 
             var preloadingProcessDataToCreate =
-                PlainTransactionManager.ExecuteInPlainTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () =>
                         userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate)
                             .UserPrelodingData.ToList());
@@ -74,13 +72,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     string.Format("preloading process with id {0} finished with error", preloadingProcessIdToCreate),
                     e);
 
-                PlainTransactionManager.ExecuteInPlainTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () =>
                         userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,
                             e.Message));
                 return;
             }
-            PlainTransactionManager.ExecuteInPlainTransaction(
+            this.plainTransactionManager.ExecuteInPlainTransaction(
                 () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
         }
 
@@ -96,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 TransactionManager.ExecuteInQueryTransaction(
                     () => CreateSupervisorOrUnarchiveAndUpdate(supervisorToCreate));
 
-                PlainTransactionManager.ExecuteInPlainTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
 
@@ -107,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 TransactionManager.ExecuteInQueryTransaction(
                     () => CreateInterviewerOrUnarchiveAndUpdate(interviewerToCreate));
 
-                PlainTransactionManager.ExecuteInPlainTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.IncreaseCountCreateUsers(id));
             }
         }
