@@ -157,7 +157,7 @@
     <value>Finished with error, Reason:</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
-    <value>in verification process</value>
+    <value>is in verification process</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Last update date</value>
@@ -169,7 +169,7 @@
     <value>out of</value>
   </data>
   <data name="PleaseWait" xml:space="preserve">
-    <value>Please wait, file</value>
+    <value>Please wait, the file</value>
   </data>
   <data name="RecordsCount" xml:space="preserve">
     <value>Records count</value>
@@ -184,7 +184,7 @@
     <value>Upload date</value>
   </data>
   <data name="UploadNewFile" xml:space="preserve">
-    <value>Upload new file</value>
+    <value>Upload a new file</value>
   </data>
   <data name="UploadSample" xml:space="preserve">
     <value>Upload sample</value>
