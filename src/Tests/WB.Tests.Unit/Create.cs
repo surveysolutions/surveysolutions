@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
@@ -2042,6 +2043,24 @@ namespace WB.Tests.Unit
                 InterviewerId = interviewerId ?? Guid.NewGuid(),
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
                 TimeSpan = timeSpanWithPreviousStatus?? new TimeSpan()
+            };
+        }
+
+        public static UserPreloadingProcess UserPreloadingProcess(params UserPreloadingDataRecord[] dataRecords)
+        {
+            return new UserPreloadingProcess() { UserPreloadingProcessId = Guid.NewGuid().FormatGuid(), UserPrelodingData = dataRecords };
+        }
+
+        public static UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email="", string phoneNumber="", string role=null)
+        {
+            return new UserPreloadingDataRecord()
+            {
+                Login = login,
+                Supervisor = supervisor,
+                Role = role??(string.IsNullOrEmpty(supervisor) ? "supervisor" : "interviewer"),
+                Password = password,
+                Email = email,
+                PhoneNumber = phoneNumber
             };
         }
     }
