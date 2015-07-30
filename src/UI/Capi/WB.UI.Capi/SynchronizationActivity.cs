@@ -512,7 +512,12 @@ namespace WB.UI.Capi
 
             if (restException != null || flurException != null)
             {
-                HttpStatusCode statusCode = restException != null ? restException.StatusCode : flurException.Call.Response.StatusCode;
+                HttpStatusCode? statusCode =
+                    restException != null
+                        ? restException.StatusCode
+                        : flurException.Call.Response != null
+                            ? flurException.Call.Response.StatusCode
+                            : null as HttpStatusCode?;
 
                 switch (statusCode)
                 {
@@ -535,6 +540,8 @@ namespace WB.UI.Capi
                         errorMessage = exception.Message.Contains("maintenance")
                             ? Properties.Resources.SynchronizationMaintenance
                             : exception.Message;
+                        break;
+                    case null:
                         break;
                     default:
                         var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
