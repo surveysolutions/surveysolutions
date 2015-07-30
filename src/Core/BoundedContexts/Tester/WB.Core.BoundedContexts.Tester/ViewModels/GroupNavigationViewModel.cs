@@ -42,6 +42,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.NavigateToGroupViewModel = navigateToGroupViewModel;
         }
 
+        public Identity Identity { get { return null; } }
+
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;

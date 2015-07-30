@@ -68,6 +68,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
         }
 
+        public Identity Identity { get { return this.questionIdentity; } }
+
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);

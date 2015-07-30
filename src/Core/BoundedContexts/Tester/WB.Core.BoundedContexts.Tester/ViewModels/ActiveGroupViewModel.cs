@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -22,10 +25,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>,
-        ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>
+        ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>
     {
         private string name;
         public string Name
@@ -34,8 +35,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { name = value; RaisePropertyChanged(); }
         }
 
-        private IList items;
-        public IList Items
+        private ObservableCollection<IInterviewEntityViewModel> items;
+        public ObservableCollection<IInterviewEntityViewModel> Items
         {
             get { return items; }
             set { items = value; RaisePropertyChanged(); }
@@ -51,6 +52,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IMvxMessenger messenger;
 
         private NavigationState navigationState;
+
+        IStatefulInterview interview;
+        QuestionnaireModel questionnaire;
+        string interviewId;
 
         public ActiveGroupViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
@@ -73,55 +78,59 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (navigationState == null) throw new ArgumentNullException("navigationState");
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
 
+            this.interviewId = interviewId;
+            this.interview = this.interviewRepository.Get(interviewId);
+            this.questionnaire = this.questionnaireRepository.GetById(this.interview.QuestionnaireId);
+
             eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.navigationState.GroupChanged += navigationState_OnGroupChanged;
         }
 
-        List<Guid> listOfChildrenIdOfCurrentGroup = new List<Guid>();
-
         public void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
-
             GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
-            
+
             if (group is RosterModel)
             {
                 string title = group.Title;
-                var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
-                this.Name = this.substitutionService.GenerateRosterName(title, interview.GetRosterTitle(navigationParams.TargetGroup));
+                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(navigationParams.TargetGroup));
             }
             else
             {
                 this.Name = group.Title;
             }
 
+            this.Items = new ObservableCollection<IInterviewEntityViewModel>();
+
             var listOfViewModels = this.interviewViewModelFactory.GetEntities(
                 interviewId: this.navigationState.InterviewId,
-                groupIdentity: navigationParams.TargetGroup, 
+                groupIdentity: navigationParams.TargetGroup,
                 navigationState: this.navigationState);
 
-            this.AddToParentButton(listOfViewModels, navigationParams);
+            listOfViewModels.ForEach(x=>this.Items.Add(x));
 
-            var anchoreElementIndex = 0;
+            this.InsertRosterInstances(navigationParams.TargetGroup);
+            this.AddToParentButton(navigationParams.TargetGroup);
+
+            var anchorElementIndex = 0;
+
             if (navigationParams.AnchoredElementIdentity != null)
             {
-                var childItem = group.Children.FirstOrDefault(x => x.Id == navigationParams.AnchoredElementIdentity.Id);
-                anchoreElementIndex = childItem != null ? group.Children.IndexOf(childItem) : 0;
+                var childItem = this.Items.OfType<GroupViewModel>()
+                    .FirstOrDefault(x => x.Identity.Equals(navigationParams.AnchoredElementIdentity));
+
+                anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
             }
 
-            this.Items = listOfViewModels;
-            listOfChildrenIdOfCurrentGroup = group.Children.Select(x => x.Id).ToList();
-
-            messenger.Publish(new ScrollToAnchorMessage(this, anchoreElementIndex));
+            this.messenger.Publish(new ScrollToAnchorMessage(this, anchorElementIndex));
         }
 
-        private void AddToParentButton(IList listOfViewModels, GroupChangedEventArgs navigationParams)
+        private void AddToParentButton(Identity targetGroupIdentity)
         {
             var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-            previousGroupNavigationViewModel.Init(this.navigationState.InterviewId, navigationParams.TargetGroup, this.navigationState);
-            listOfViewModels.Add(previousGroupNavigationViewModel);
+            previousGroupNavigationViewModel.Init(this.interviewId, targetGroupIdentity, this.navigationState);
+            this.Items.Add(previousGroupNavigationViewModel);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
@@ -130,48 +139,83 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
-                    var questionnaire = this.questionnaireRepository.GetById(this.navigationState.QuestionnaireId);
-
-                    GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
-                    var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
-                    this.Name = this.substitutionService.GenerateRosterName(@group.Title, interview.GetRosterTitle(this.navigationState.CurrentGroup));
+                    GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
+                    this.Name = this.substitutionService.GenerateRosterName(@group.Title, this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
                 }
             }
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public void Handle(RosterInstancesAdded @event)
         {
-            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Questions);
-        }
-
-        public void Handle(QuestionsDisabled @event)
-        {
-            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Questions);
-        }
-
-        public void Handle(GroupsEnabled @event)
-        {
-            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Groups);
-        }
-
-        public void Handle(GroupsDisabled @event)
-        {
-            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Groups);
-        }
-
-        void CalculatePositionsToUpdateAndNotifySubscribers(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] itemIdentities)
-        {
-            var positionsToUpdate = new List<int>();
-            foreach (var itemIdentity in itemIdentities)
+            foreach (var rosterInstance in @event.Instances)
             {
-                if (this.listOfChildrenIdOfCurrentGroup.Contains(itemIdentity.Id)
-                    && itemIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
-                {
-                    positionsToUpdate.Add(this.listOfChildrenIdOfCurrentGroup.IndexOf(itemIdentity.Id));
-                }
+                if (this.questionnaire.GroupsParentIdMap[rosterInstance.GroupId] != this.navigationState.CurrentGroup.Id ||
+                    !rosterInstance.OuterRosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
+                    continue;
+
+                GroupModel currentGroupInQuestionnaire = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
+                this.InsertRosterInstance(rosterInstance.GetIdentity(), currentGroupInQuestionnaire);
             }
-            positionsToUpdate = positionsToUpdate.Distinct().ToList();
-            positionsToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(this.navigationState.CurrentGroup, x)));
+        }
+
+        public void Handle(RosterInstancesRemoved @event)
+        {
+            for (int i = @event.Instances.Length - 1; i >= 0; i--)
+            {
+                var rosterInstance = @event.Instances[i];
+
+                if (this.questionnaire.GroupsParentIdMap[rosterInstance.GroupId] != this.navigationState.CurrentGroup.Id ||
+                    !rosterInstance.OuterRosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
+                    continue;
+
+                var rosterIdentity = rosterInstance.GetIdentity();
+                var rosterInstanceViewModel =
+                    this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(rosterIdentity));
+
+                if (rosterInstanceViewModel != null)
+                    this.Items.Remove(rosterInstanceViewModel);
+            }
+        }
+
+        private void InsertRosterInstances(Identity targetGroupIdentity)
+        {
+            GroupModel currentGroupInQuestionnaire = questionnaire.GroupsWithFirstLevelChildrenAsReferences[targetGroupIdentity.Id];
+
+            var questionnairesRosters = currentGroupInQuestionnaire.Children.Where(questionnaireEntityReference => questionnaireEntityReference.ModelType == typeof(RosterModel));
+
+            foreach (var questionnairesRoster in questionnairesRosters)
+            {
+                var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionnairesRoster.Id, targetGroupIdentity.RosterVector);
+
+                if (!interview.RosterInstancesIds.ContainsKey(rosterKey))
+                    return;
+
+                this.interview.RosterInstancesIds[rosterKey].ForEach(
+                    rosterInstance => this.InsertRosterInstance(rosterInstance, currentGroupInQuestionnaire));
+            }
+        }
+
+        private void InsertRosterInstance(Identity rosterInstance, GroupModel currentGroupInQuestionnaire)
+        {
+            var questionnaireRoster = currentGroupInQuestionnaire.Children.Find(x => x.Id == rosterInstance.Id);
+
+            var rosterInstanceIndex = currentGroupInQuestionnaire.Children.IndexOf(questionnaireRoster);
+
+            var questionnaireEntityBeforeRoster = currentGroupInQuestionnaire.Children.ElementAtOrDefault(rosterInstanceIndex - 1);
+
+            if (questionnaireEntityBeforeRoster == null)
+                rosterInstanceIndex = (int)rosterInstance.RosterVector.Last();
+            else
+            {
+                var interviewEntitiesBeforeRosterInstance = this.Items.Where(x => x.Identity != null && x.Identity.Id.Equals(questionnaireEntityBeforeRoster.Id));
+
+                rosterInstanceIndex = this.Items.IndexOf(interviewEntitiesBeforeRosterInstance.Last()) + 1;
+            }
+
+            var rosterInstanceViewModel = this.interviewViewModelFactory.GetNew<GroupViewModel>();
+            rosterInstanceViewModel.Init(this.interviewId, rosterInstance, this.navigationState);
+
+            this.Items.Insert(rosterInstanceIndex, rosterInstanceViewModel);
         }
     }
 }
