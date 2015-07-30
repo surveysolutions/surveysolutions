@@ -258,6 +258,7 @@
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
+    <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
@@ -289,7 +290,7 @@
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
     <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
-    <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
+    <Compile Include="CustomBindings\ButtonGroupTitleBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
@@ -639,9 +640,6 @@
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
     <AndroidResource Include="Resources\layout\interview_question_single_option_item.axml" />
     <AndroidResource Include="Resources\layout\interview_question_single_option.axml" />
-    <AndroidResource Include="Resources\layout\interview_current_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__title.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -671,12 +669,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_roster.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_roster_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_breadcrumb_item.axml">

@@ -44,11 +44,18 @@
     <item name="android:animationCache">false</item>
   </style>
 
+
+  <style name="Interview_Sidebar_PrefilledQuestions_Container" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fadeScrollbars">false</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_PrefilledQuestions_margin_top</item>
+  </style>
+  
   <style name="Interview_Sidebar_PrefilledQuestions" parent="FullWidthWrappingLayout">
+    <item name="android:layout_height">match_parent</item>
     <item name="android:orientation">vertical</item>
     <item name="android:divider">@null</item>
     <item name="android:dividerHeight">@dimen/zero</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Sidebar_PrefilledQuestions_margin_top</item>
   </style>
 
   <style name="PrefilledQuestions_List" parent="VerticalFullWidthWrappingLayout">

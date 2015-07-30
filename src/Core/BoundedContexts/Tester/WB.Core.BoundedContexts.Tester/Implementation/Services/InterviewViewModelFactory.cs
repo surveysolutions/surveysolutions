@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        private Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap =
+        private readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap =
             new Dictionary<Type, Func<IInterviewEntityViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
@@ -42,8 +42,10 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
                 { typeof(GroupModel), Load<GroupViewModel> },
-                { typeof(RosterModel), Load<RosterViewModel> }
+                { typeof(RosterModel), NothingToRender}
             };
+
+        public static Func<IInterviewEntityViewModel> NothingToRender { get { return () => null; } }
 
         private static T Load<T>() where T : class
         {
@@ -58,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             this.interviewRepository = interviewRepository;
         }
 
-        public IList GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public IList<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             return GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
@@ -68,7 +70,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             return GetPrefilledQuestionsImpl(interviewId);
         }
 
-        private IList GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        private IList<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
@@ -91,6 +93,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     entityModelType: child.ModelType, 
                     interviewId: interviewId,
                     navigationState: navigationState))
+                .Where(child=>child != null)
                 .ToList();
 
             
@@ -136,6 +139,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
+
+            if (viewModel == null) return null;
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;

@@ -2,7 +2,6 @@
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -10,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel,
         ILiteEventHandler<TAnswerEvent>
         where TAnswerEvent : QuestionAnswered
     {
@@ -41,7 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
             this.Enablement = enablementViewModel;
             this.Comments = commentsViewModel;
         }
-
+        
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");

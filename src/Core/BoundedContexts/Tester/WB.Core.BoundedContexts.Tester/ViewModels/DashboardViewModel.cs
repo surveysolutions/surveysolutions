@@ -135,7 +135,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand loadQuestionnaireCommand;
         public IMvxCommand LoadQuestionnaireCommand
         {
-            get { return loadQuestionnaireCommand ?? (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire))); }
+            get { return loadQuestionnaireCommand ?? 
+                (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), 
+               (item) => !this.IsInProgress)); }
         }
 
         private IMvxCommand refreshQuestionnairesCommand;
@@ -246,7 +248,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.IsInProgress = false;   
             }
 
-            if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
+            if (!string.IsNullOrEmpty(errorMessage))
                 await this.userInteractionService.AlertAsync(errorMessage);
         }
 
@@ -282,7 +284,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.IsInProgress = false;
             }
 
-            if (!string.IsNullOrEmpty(errorMessage) && this.IsInitialized)
+            if (!string.IsNullOrEmpty(errorMessage))
                 await this.userInteractionService.AlertAsync(errorMessage);
         }
 

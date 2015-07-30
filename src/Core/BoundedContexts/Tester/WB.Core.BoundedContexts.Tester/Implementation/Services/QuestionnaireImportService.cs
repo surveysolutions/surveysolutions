@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                                 {
                                     CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId.Value,
                                     Options = singleQuestion.Answers.Select(ToCascadingOptionModel).ToList(),
-                                    RosterLevelDepthOfParentQuestion = questionIdToRosterLevelDeep[singleQuestion.PublicKey],
+                                    RosterLevelDepthOfParentQuestion = questionIdToRosterLevelDeep[singleQuestion.CascadeFromQuestionId.Value],
                                 };
                             }
                             else

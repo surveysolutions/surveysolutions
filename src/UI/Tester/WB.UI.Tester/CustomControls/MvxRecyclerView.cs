@@ -36,11 +36,6 @@ namespace WB.UI.Tester.CustomControls
             return base.GetAdapter() as IMvxRecyclerViewAdapter;
         }
 
-        public override bool Fling(int velocityX, int velocityY)
-        {
-            return base.Fling(velocityX, (int)(velocityY * 0.7));
-        }
-
         public virtual void SetAdapter(IMvxRecyclerViewAdapter adapter)
         {
             var existing = this.GetAdapter();

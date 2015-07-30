@@ -84,6 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                     new Identity(rosterId, new []{1m}),
                     new Identity(group2Id, Empty.RosterVector)
                 });
+            interview.IsEnabled(Moq.It.IsAny<Identity>()).ReturnsForAnyArgs(true);
 
             viewModel = CreateSectionsViewModel(questionnaire, interview);
             viewModel.Init("", "", Create.NavigationState());
