@@ -520,7 +520,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
 
-            return !this.groups.ContainsKey(convertIdentityToString) ? string.Empty : ((InterviewRoster)this.groups[convertIdentityToString]).Title;
+            if (!this.groups.ContainsKey(convertIdentityToString)) return string.Empty;
+
+            var roster = this.groups[convertIdentityToString] as InterviewRoster;
+
+            return roster == null ? string.Empty : roster.Title;
         }
 
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
