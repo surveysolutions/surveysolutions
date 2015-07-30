@@ -83,6 +83,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         public AnsweringViewModel Answering { get; private set; }
         public AnswerNotifier ReferencedAnswerNotifier { get; private set; }
 
+        public Identity Identity { get { return this.questionIdentity; } }
+
         public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");

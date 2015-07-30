@@ -1,9 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -22,6 +20,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private string interviewId;
+
+        public Identity Identity { get { return null; } }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {

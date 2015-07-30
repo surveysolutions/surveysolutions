@@ -55,6 +55,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
+        public Identity Identity { get { return this.questionIdentity; } }
+
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);

@@ -519,12 +519,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public string GetRosterTitle(Identity rosterIdentity)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
-            if (!this.groups.ContainsKey(convertIdentityToString))
-            {
-                throw new KeyNotFoundException(string.Format("There is no roster with {0} id in interview {1}", convertIdentityToString, this.Id));
-            }
 
-            return ((InterviewRoster)this.groups[convertIdentityToString]).Title;
+            return !this.groups.ContainsKey(convertIdentityToString) ? string.Empty : ((InterviewRoster)this.groups[convertIdentityToString]).Title;
         }
 
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
