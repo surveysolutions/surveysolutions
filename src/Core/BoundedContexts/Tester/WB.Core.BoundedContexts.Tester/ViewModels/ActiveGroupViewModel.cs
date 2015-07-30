@@ -183,21 +183,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var rosterInstanceIndex = currentGroupInQuestionnaire.Children.IndexOf(questionnaireRoster);
 
-            var questionnaireEntityBeforeRoster = currentGroupInQuestionnaire.Children.ElementAtOrDefault(rosterInstanceIndex - 1);
-
-            if (questionnaireEntityBeforeRoster == null)
-                rosterInstanceIndex = (int)rosterInstance.RosterVector.Last();
-            else
-            {
-                var interviewEntitiesBeforeRosterInstance = listOfViewModels.Where(x => x.Identity != null && x.Identity.Id.Equals(questionnaireEntityBeforeRoster.Id));
-
-                rosterInstanceIndex = listOfViewModels.IndexOf(interviewEntitiesBeforeRosterInstance.Last()) + 1;
-            }
+            var questionnaireEntityAfterRoster = currentGroupInQuestionnaire.Children.ElementAtOrDefault(rosterInstanceIndex + 1);
 
             var rosterInstanceViewModel = this.interviewViewModelFactory.GetNew<GroupViewModel>();
             rosterInstanceViewModel.Init(this.interviewId, rosterInstance, this.navigationState);
 
-            listOfViewModels.Insert(rosterInstanceIndex, rosterInstanceViewModel);
+            if (questionnaireEntityAfterRoster == null) 
+                listOfViewModels.Add(rosterInstanceViewModel);
+            else
+            {
+                var interviewEntitiesAfterRosterInstance = listOfViewModels.Where(x => x.Identity != null && x.Identity.Id.Equals(questionnaireEntityAfterRoster.Id));
+
+                rosterInstanceIndex = listOfViewModels.IndexOf(interviewEntitiesAfterRosterInstance.Last()) - 1;
+
+                listOfViewModels.Insert(rosterInstanceIndex, rosterInstanceViewModel);
+            }
         }
     }
 }
