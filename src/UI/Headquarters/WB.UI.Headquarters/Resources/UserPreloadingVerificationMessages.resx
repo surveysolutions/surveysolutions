@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PLU0001" xml:space="preserve">
-    <value> User with Login already exists in the system</value>
+    <value> User with Login already exists</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
     <value> There are duplicate values of Login in the file</value>
@@ -127,7 +127,7 @@
     <value> Login of an archived user cannot be re-used because it belonged to anther team </value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value> Login of an archived user cannot be re-used because it existed in anther role</value>
+    <value> Login of an archived user cannot be re-used because it exists in anther role</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
     <value> Login needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
@@ -145,7 +145,7 @@
     <value> Role is invalid. Only "Supervisor" or "Interviewer" values are allowed</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
-    <value> Supervisor must be an existing user in "Supervisor" role in the system or present in the file</value>
+    <value> Supervisor must be an existing user in the system or present in the file</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value> Supervisor column must be empty for user in "Supervisor" role</value>

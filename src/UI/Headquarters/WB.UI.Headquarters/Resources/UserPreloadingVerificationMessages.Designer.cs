@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  User with Login already exists in the system.
+        ///   Looks up a localized string similar to  User with Login already exists.
         /// </summary>
         public static string PLU0001 {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Login of an archived user cannot be re-used because it existed in anther role.
+        ///   Looks up a localized string similar to  Login of an archived user cannot be re-used because it exists in anther role.
         /// </summary>
         public static string PLU0004 {
             get {
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Supervisor must be an existing user in &quot;Supervisor&quot; role in the system or present in the file.
+        ///   Looks up a localized string similar to  Supervisor must be an existing user in the system or present in the file.
         /// </summary>
         public static string PLU0010 {
             get {

@@ -196,7 +196,7 @@
     <value>Batch User Upload</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Please prepare a file with tab-separated values (.tab file) corresponding to the template below. The columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed for the 'role' column.</value>
+    <value>Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed in the 'role' column.</value>
   </data>
   <data name="UserBatchUploads" xml:space="preserve">
     <value>User batch uploads</value>
