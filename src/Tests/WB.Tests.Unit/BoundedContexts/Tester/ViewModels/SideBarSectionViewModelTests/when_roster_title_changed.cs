@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSe
             viewModel = CreateViewModel(questionnaire: questionnaire, interview: interview);
 
             sectionIdentity = new Identity(rosterGroupId, new[]{0m});
-            viewModel.Init("", sectionIdentity, null, null, null, Create.NavigationState());
+            viewModel.Init("", sectionIdentity, Substitute.For<SideBarSectionsViewModel>(), null, Substitute.For<GroupStateViewModel>(), Create.NavigationState());
 
             viewModel.SectionIdentity = sectionIdentity;
         };
