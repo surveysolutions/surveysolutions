@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to in verification process.
+        ///   Looks up a localized string similar to is in verification process.
         /// </summary>
         internal static string InVerificationProcess {
             get {
@@ -214,7 +214,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please wait, file.
+        ///   Looks up a localized string similar to Please wait, the file.
         /// </summary>
         internal static string PleaseWait {
             get {
@@ -259,7 +259,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload new file.
+        ///   Looks up a localized string similar to Upload a new file.
         /// </summary>
         internal static string UploadNewFile {
             get {

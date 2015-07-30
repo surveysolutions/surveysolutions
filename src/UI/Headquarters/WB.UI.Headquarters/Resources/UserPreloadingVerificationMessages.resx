@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PLU0001" xml:space="preserve">
-    <value> User with Login already exists</value>
+    <value> The User with such Login already exists</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
     <value> There are duplicate values of Login in the file</value>
   </data>
   <data name="PLU0003" xml:space="preserve">
-    <value> Login of an archived user cannot be re-used because it belonged to anther team </value>
+    <value> Login of an archived user cannot be re-used because it belongs to another team</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value> Login of an archived user cannot be re-used because it exists in anther role</value>
+    <value> Login of an archived user cannot be re-used because it exists in another role</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
-    <value> Login needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
+    <value> Login should be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
     <value> Password must contain at least one number, one upper case character and one lower case character</value>

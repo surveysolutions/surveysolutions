@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  User with Login already exists.
+        ///   Looks up a localized string similar to  The User with such Login already exists.
         /// </summary>
         public static string PLU0001 {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Login of an archived user cannot be re-used because it belonged to anther team .
+        ///   Looks up a localized string similar to  Login of an archived user cannot be re-used because it belongs to another team.
         /// </summary>
         public static string PLU0003 {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Login of an archived user cannot be re-used because it exists in anther role.
+        ///   Looks up a localized string similar to  Login of an archived user cannot be re-used because it exists in another role.
         /// </summary>
         public static string PLU0004 {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Login needs to be between 3 and 15 characters and contain only letters, digits and underscore symbol.
+        ///   Looks up a localized string similar to  Login should be between 3 and 15 characters and contain only letters, digits and underscore symbol.
         /// </summary>
         public static string PLU0005 {
             get {
