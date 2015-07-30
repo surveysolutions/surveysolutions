@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
 
         public EnablementViewModel Enablement { get; private set; }
         public string Title { get; private set; }
+        public string RosterTitle { get; private set; }
 
         private readonly GroupStateViewModel groupState;
         public GroupStateViewModel GroupState
@@ -84,7 +85,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
             this.GroupState.Init(interviewId, entityIdentity);
 
             this.Title = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id].Title;
-
+            this.RosterTitle = interview.GetRosterTitle(entityIdentity);
 
             if (groupWithAnswersToMonitor != null)
             {

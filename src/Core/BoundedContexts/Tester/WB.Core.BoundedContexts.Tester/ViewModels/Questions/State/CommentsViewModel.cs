@@ -3,15 +3,13 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
 {
-    public class CommentsViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel
+    public class CommentsViewModel : MvxNotifyPropertyChanged
     {
         private readonly IStatefulInterviewRepository interviewRepository;
 
@@ -34,6 +32,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
 
         private string interviewId;
         private Identity questionIdentity;
+
+        public Identity Identity { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {

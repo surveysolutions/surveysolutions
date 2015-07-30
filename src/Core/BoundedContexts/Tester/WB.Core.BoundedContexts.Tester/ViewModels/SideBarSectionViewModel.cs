@@ -25,8 +25,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
-        ILiteEventHandler<RosterInstancesRemoved>,
-        ILiteEventHandler<GroupsDisabled>,
         IDisposable
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
@@ -38,7 +36,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IMvxMessenger messenger;
         private string interviewId;
         private readonly MvxSubscriptionToken subsctiptionToken;
+        string questionnaireId;
 
+        private SideBarSectionsViewModel root;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -57,11 +57,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
             this.subsctiptionToken = this.messenger.Subscribe<SideBarShownMessage>((msg) => this.SideBarGroupState.UpdateFromModel());
-            this.Children = new ObservableCollection<SideBarSectionViewModel>();
+            this.Children = new List<SideBarSectionViewModel>();
         }
 
         public void Init(string interviewId, 
             Identity sectionIdentity,
+            SideBarSectionsViewModel root, 
             SideBarSectionViewModel parent, 
             GroupStateViewModel groupStateViewModel,
             NavigationState navigationState)
@@ -71,10 +72,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.eventRegistry.Subscribe(this, interviewId);
 
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            var questionnaireModel = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            this.questionnaireId = interview.QuestionnaireId;
+            var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
             var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
 
             groupStateViewModel.Init(interviewId, sectionIdentity);
+            this.root = root;
             this.SideBarGroupState = groupStateViewModel;
             this.Parent = parent;
             this.SectionIdentity = sectionIdentity;
@@ -84,13 +87,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (groupModel is RosterModel)
             {
                 string rosterTitle = interview.GetRosterTitle(sectionIdentity);
-                this.Title = substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
+                this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
             }
             else
             {
                 this.Title = groupModel.Title;
             }
-
+            if (Parent != null)
+            {
+                IsSelected = Parent.IsSelected;
+            }
+            
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged += this.NavigationState_OnBeforeGroupChanged;
@@ -180,7 +187,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                 .ToList() 
                                 .ForEach(x => x.Dispose());
 
-                        this.Children = new ObservableCollection<SideBarSectionViewModel>();
+                        this.Children = new List<SideBarSectionViewModel>();
                     }
 
                     this.RaisePropertyChanged();
@@ -190,8 +197,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public int NodeDepth { get; set; }
 
-        private ObservableCollection<SideBarSectionViewModel> children;
-        public ObservableCollection<SideBarSectionViewModel> Children
+        private List<SideBarSectionViewModel> children;
+        public List<SideBarSectionViewModel> Children
         {
             get { return this.children; }
             set
@@ -216,7 +223,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return new MvxCommand(() => this.Expanded = !this.Expanded);
+                return new MvxCommand(() =>
+                {
+                    this.Expanded = !this.Expanded;
+                    root.UpdateSideBarTree();
+                });
             }
         }
 
@@ -226,14 +237,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             await this.NavigationState.NavigateToAsync(this.SectionIdentity);
         }
 
-        private ObservableCollection<SideBarSectionViewModel> GenerateChildNodes()
+        private List<SideBarSectionViewModel> GenerateChildNodes()
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
             var result = interview.GetEnabledSubgroups(this.SectionIdentity)
-                                  .Select(groupInstance =>  this.modelsFactory.BuildSectionItem(this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
+                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(root, this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
 
-            return new ObservableCollection<SideBarSectionViewModel>(result);
+            return new List<SideBarSectionViewModel>(result);
         }
 
         public SideBarSectionViewModel Parent { get; set; }
@@ -243,8 +254,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var myChangedInstance = @event.ChangedInstances.SingleOrDefault(x => x.RosterInstance.GetIdentity().Equals(this.SectionIdentity));
             if (myChangedInstance != null)
             {
-                QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.NavigationState.QuestionnaireId);
-                string groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.SectionIdentity.Id].Title;
+                QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+                if (questionnaire == null) throw new Exception("questionnaire is null");
+                var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.SectionIdentity.Id];
+                if (groupModel == null) throw new Exception("groupModel is null");
+                string groupTitle = groupModel.Title;
                 string rosterTitle = myChangedInstance.Title;
 
                 string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
@@ -252,28 +266,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        public void Handle(GroupsDisabled @event)
-        {
-            var meDisabled = @event.Groups.Any(x => new Identity(x.Id, x.RosterVector).Equals(this.SectionIdentity));
-            if (meDisabled)
-            {
-                this.RemoveMe();
-            }
-        }
-
-        public void Handle(RosterInstancesRemoved @event)
-        {
-            var meRemoved = @event.Instances.Any(x => x.GetIdentity().Equals(this.SectionIdentity));
-            if (meRemoved)
-            {
-                this.RemoveMe();
-            } 
-        }
-
-        private void RemoveMe()
+        public void RemoveMe()
         {
             this.eventRegistry.Unsubscribe(this, this.interviewId);
-            this.mainThreadDispatcher.RequestMainThreadAction(() => this.Parent.Children.Remove(this));
             this.RefreshHasChildrenFlag();
             this.Dispose();
         }

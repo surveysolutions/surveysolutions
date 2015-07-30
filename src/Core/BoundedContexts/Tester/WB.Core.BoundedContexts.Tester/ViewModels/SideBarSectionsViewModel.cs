@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.CrossCore.Core;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
@@ -17,7 +19,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<GroupsEnabled>
+        ILiteEventHandler<RosterInstancesRemoved>,
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>
     {
         private NavigationState navigationState;
 
@@ -29,7 +33,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private string questionnaireId;
         private string interviewId;
 
-        public IList<SideBarSectionViewModel> Sections { get; set; }
+        public ObservableCollection<SideBarSectionViewModel> Sections { get; set; }
+        public ObservableCollection<SideBarSectionViewModel> AllVisibleSections { get; set; }
 
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -66,16 +71,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void BuildSectionsList()
         {
             var questionnaire = this.questionnaireRepository.GetById(questionnaireId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
+
             foreach (GroupsHierarchyModel section in questionnaire.GroupsHierarchy)
             {
                 var groupIdentity = new Identity(section.Id, new decimal[] { });
-                var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
-
-                sections.Add(sectionViewModel);
+                if (interview.IsEnabled(groupIdentity))
+                {
+                    var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
+                    sections.Add(sectionViewModel);
+                }
             }
 
-            this.Sections = sections;
+            this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections);
+            this.UpdateSideBarTree();
         }
 
         void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
@@ -85,22 +95,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
         {
-            SideBarSectionViewModel sideBarSectionToHighlight = null;
-            foreach (var section in this.Sections)
-            {
-                SideBarSectionViewModel selectedGroup = section.TreeToEnumerable(x => x.Children)
-                    .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+            SideBarSectionViewModel selectedGroup = AllVisibleSections
+                .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
-                if (selectedGroup != null)
-                {
-                    sideBarSectionToHighlight = section;
-                    break;
-                }
-            }
-
+            var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
             {
                 return;
+            }      
+      
+            while (sideBarSectionToHighlight.Parent != null)
+            {
+                sideBarSectionToHighlight = sideBarSectionToHighlight.Parent;
             }
 
             this.Sections.Where(x => x != sideBarSectionToHighlight && x.IsSelected).ForEach(x => x.IsSelected = false);
@@ -108,78 +114,153 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             sideBarSectionToHighlight.IsSelected = true;
             sideBarSectionToHighlight.Expanded = true;
+            sideBarSectionToHighlight.TreeToEnumerable(s => s.Children)
+                .Where(s => !s.IsSelected)
+                .ForEach(s => s.IsSelected = true);
+
+            this.UpdateSideBarTree();
         }
 
         public void Handle(RosterInstancesAdded @event)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-
-            foreach (var rosterInstance in @event.Instances)
+            using (GlobalStopwatcher.Scope("sidebar SideBarSectionsViewModel"))
             {
-                var addedIdentity = rosterInstance.GetIdentity();
-                this.RefreshListWithNewItemAdded(addedIdentity, interview);
-            }
+                IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            this.RefreshHasChildrenFlags();
+                foreach (var rosterInstance in @event.Instances)
+                {
+                    var addedIdentity = rosterInstance.GetIdentity();
+                    this.RefreshListWithNewItemAdded(addedIdentity, interview);
+                }
+
+                this.RefreshHasChildrenFlags();
+                this.UpdateSideBarTree();
+            }
         }
 
         public void Handle(GroupsEnabled @event)
         {
+            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             foreach (var groupId in @event.Groups)
             {
                 var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);
-                this.RefreshListWithNewItemAdded(addedIdentity, interview);
+
+                var section = questionnaire.GroupsHierarchy.FirstOrDefault(s => s.Id == addedIdentity.Id);
+                if (section != null)
+                    this.AddSection(section, questionnaire, interview);
+                else
+                    this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
 
             this.RefreshHasChildrenFlags();
+            this.UpdateSideBarTree();
+        }
+
+        void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
+        {
+            var sectionIdentity = new Identity(section.Id, new decimal[0]);
+            var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
+            var index = questionnaire.GroupsHierarchy
+                .Where(s => interview.IsEnabled(sectionIdentity))
+                .ToList()
+                .IndexOf(section);
+            Sections.Insert(index, sectionViewModel);
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
-            var sectionToAddTo = allVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = AllVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
                 List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(parentId).ToList();
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                for (int i = 0; i < enabledSubgroups.Count; i++)
                 {
-                    for (int i = 0; i < enabledSubgroups.Count; i++)
+                    var enabledSubgroupIdentity = enabledSubgroups[i];
+                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
                     {
-                        var enabledSubgroupIdentity = enabledSubgroups[i];
-                        if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                        var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
+                        if (i < sectionToAddTo.Children.Count)
                         {
-                            var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
-                            if (i < sectionToAddTo.Children.Count)
-                            {
-                                sectionToAddTo.Children.Insert(i, sideBarItem);
-                            }
-                            else
-                            {
-                                sectionToAddTo.Children.Add(sideBarItem);
-                            }
+                            sectionToAddTo.Children.Insert(i, sideBarItem);
+                        }
+                        else
+                        {
+                            sectionToAddTo.Children.Add(sideBarItem);
                         }
                     }
-                });
+                }
+            }
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            var identities = @event.Groups.Select(i => new Identity(i.Id, i.RosterVector)).ToArray();
+            this.RemoveFromSections(identities);
+            this.RemoveFromChildrenSections(identities);
+            this.RefreshHasChildrenFlags();
+            this.UpdateSideBarTree();
+        }
+
+        public void Handle(RosterInstancesRemoved @event)
+        {
+            var identities = @event.Instances.Select(ri => ri.GetIdentity()).ToArray();
+            this.RemoveFromChildrenSections(identities);
+            this.RefreshHasChildrenFlags();
+            this.UpdateSideBarTree();
+        }
+
+        private void RemoveFromChildrenSections(Identity[] identities)
+        {
+            foreach (var groupIdentity in identities)
+            {
+                var section = AllVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                if (section != null)
+                {
+                    if (section.Parent != null)
+                        section.Parent.Children.Remove(section);
+                    
+                    section.RemoveMe();
+                }
+            }
+        }
+
+        private void RemoveFromSections(Identity[] identities)
+        {
+            foreach (var groupIdentity in identities)
+            {
+                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                if (topLevelSectionToRemove != null)
+                {
+                    this.Sections.Remove(topLevelSectionToRemove);
+                    topLevelSectionToRemove.RemoveMe();
+                }
             }
         }
 
         private void RefreshHasChildrenFlags()
         {
-            var allVisibleSections = this.Sections.TreeToEnumerable(x => x.Children).ToList();
-
-            foreach (var section in allVisibleSections)
+            foreach (var section in AllVisibleSections)
             {
                 section.RefreshHasChildrenFlag();
             }
         }
 
+        public void UpdateSideBarTree()
+        {
+            var tree = this.Sections.TreeToEnumerableDepthFirst(
+                x => x.Expanded ? x.Children : Enumerable.Empty<SideBarSectionViewModel>()
+                ).ToList();
+            this.AllVisibleSections = new ObservableCollection<SideBarSectionViewModel>(tree);
+            this.RaisePropertyChanged(() => this.AllVisibleSections);
+        }
+
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
         {
-            return this.modelsFactory.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
+            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
         }
     }
 }

@@ -13,20 +13,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.serviceLocator = serviceLocator;
         }
 
-        public SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, 
-            Identity groupIdentity, 
+        public SideBarSectionViewModel BuildSectionItem(SideBarSectionsViewModel root, 
+            SideBarSectionViewModel sectionToAddTo,
+            Identity enabledSubgroupIdentity, 
             NavigationState navigationState, 
             string interviewId)
         {
             var sideBarItem = serviceLocator.GetInstance<SideBarSectionViewModel>();
             var groupStateViewModel = serviceLocator.GetInstance<GroupStateViewModel>();
-            sideBarItem.Init(interviewId, groupIdentity, sectionToAddTo, groupStateViewModel, navigationState);
+            sideBarItem.Init(interviewId, enabledSubgroupIdentity, root, sectionToAddTo, groupStateViewModel, navigationState);
             return sideBarItem;
         }
     }
 
     public interface ISideBarSectionViewModelsFactory
     {
-        SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity groupIdentity, NavigationState navigationState, string interviewId);
+        SideBarSectionViewModel BuildSectionItem(SideBarSectionsViewModel root, SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity, NavigationState navigationState, string interviewId);
     }
 }
