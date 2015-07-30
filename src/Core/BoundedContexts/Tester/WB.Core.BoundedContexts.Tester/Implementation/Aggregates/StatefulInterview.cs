@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,9 +20,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
     {
         private class CalculatedState
         {
-            public Dictionary<Identity, ReadOnlyCollection<Identity>> EnabledInterviewerChildQuestions = new Dictionary<Identity, ReadOnlyCollection<Identity>>();
-            public Dictionary<Identity, ReadOnlyCollection<Identity>> GroupsAndRostersInGroup = new Dictionary<Identity, ReadOnlyCollection<Identity>>();
-            public Dictionary<Identity, bool> IsEnabled = new Dictionary<Identity, bool>();
+            public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> EnabledInterviewerChildQuestions = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
+            public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> GroupsAndRostersInGroup = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
+            public ConcurrentDictionary<Identity, bool> IsEnabled = new ConcurrentDictionary<Identity, bool>();
         }
 
         private CalculatedState calculated = null;
@@ -518,12 +519,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public string GetRosterTitle(Identity rosterIdentity)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(rosterIdentity);
-            if (!this.groups.ContainsKey(convertIdentityToString))
-            {
-                throw new KeyNotFoundException(string.Format("There is no roster with {0} id in interview {1}", convertIdentityToString, this.Id));
-            }
 
-            return ((InterviewRoster)this.groups[convertIdentityToString]).Title;
+            if (!this.groups.ContainsKey(convertIdentityToString)) return string.Empty;
+
+            var roster = this.groups[convertIdentityToString] as InterviewRoster;
+
+            return roster == null ? string.Empty : roster.Title;
         }
 
         public BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector)
@@ -946,9 +947,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             return this.GetExistingAnswerOrNull(questionKey);
         }
 
-        private static TValue GetOrCalculate<TKey, TValue>(TKey key, Func<TKey, TValue> calculateValue, Dictionary<TKey, TValue> calculatedValues)
+        private static TValue GetOrCalculate<TKey, TValue>(TKey key, Func<TKey, TValue> calculateValue, ConcurrentDictionary<TKey, TValue> calculatedValues)
         {
-            return calculatedValues.GetOrAdd(key, () => calculateValue(key));
+            return calculatedValues.GetOrAdd(key, calculateValue);
         }
 
         private static bool AreEqual(Guid first, Guid second)

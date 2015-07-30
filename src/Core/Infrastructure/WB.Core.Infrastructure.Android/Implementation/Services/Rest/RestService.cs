@@ -61,6 +61,13 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
                     statusCode: HttpStatusCode.BadRequest,
                     innerException: ex);
             }
+            catch (UriFormatException ex)
+            {
+                throw new RestException(
+                    message: string.Format("Invalid endpoint url {0}", this.settingsProvider.Endpoint),
+                    statusCode: HttpStatusCode.BadRequest,
+                    innerException: ex);
+            }
             catch (FlurlHttpTimeoutException ex)
             {
                 throw new RestException(message: "Request timeout", statusCode: HttpStatusCode.RequestTimeout,

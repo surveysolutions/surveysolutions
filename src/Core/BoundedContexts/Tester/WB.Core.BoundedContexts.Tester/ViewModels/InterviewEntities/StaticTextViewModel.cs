@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities
             this.interviewRepository = interviewRepository;
         }
 
+        public Identity Identity { get { return this.questionIdentity; } }
+
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
@@ -27,10 +29,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
+            this.questionIdentity = entityIdentity;
+
             this.StaticText = questionnaire.StaticTexts[entityIdentity.Id].Title;
         }
 
         private string staticText;
+        private Identity questionIdentity;
+
         public string StaticText
         {
             get { return this.staticText; }

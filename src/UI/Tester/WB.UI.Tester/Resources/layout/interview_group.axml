@@ -5,22 +5,22 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              local:MvxBind="HideKeyboardOnClick .">
-  <MvxLinearLayout style="@style/Interview_Group">
-    <MvxLinearLayout android:layout_width="match_parent"
+  <LinearLayout style="@style/Interview_Group">
+    <LinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(IsStarted, true, false)))">
       <Button style="@style/Interview_Group_Button"
               local:MvxBind="
                 HideKeyboardOnClick .; 
                 Click NavigateToGroupCommand; 
-                Text Title; 
+                GroupTitle .;
                 ButtonGroupStyle GroupState; 
                 Enabled Enablement.Enabled;
               "/>
-    </MvxLinearLayout>
+    </LinearLayout>
     <TextView style="@style/Interview_Group_Description"
               local:MvxBind="Visible Enablement.Enabled; GroupInfo GroupState"/>
-  </MvxLinearLayout>
+  </LinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"
                 android:layout_height="match_parent">

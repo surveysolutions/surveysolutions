@@ -14,4 +14,7 @@
     <attr name="layout_horizontalSpacing" format="dimension"/>
     <attr name="layout_verticalSpacing" format="dimension"/>
   </declare-styleable>
+  <declare-styleable name="MaxHeightScrollView">
+    <attr name="maxHeight" format="dimension"/>
+  </declare-styleable>
 </resources>

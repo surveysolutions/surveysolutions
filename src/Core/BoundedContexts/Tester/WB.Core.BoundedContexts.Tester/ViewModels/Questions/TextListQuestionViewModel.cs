@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
@@ -93,6 +92,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.Answers = new ObservableCollection<TextListItemViewModel>();
         }
 
+        public Identity Identity { get { return this.questionIdentity; } }
+
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
@@ -162,6 +163,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             if (maxAnswerCount.HasValue)
             {
                 IsAddNewItemVisible = Answers.Count < maxAnswerCount.Value;
+            }
+
+            if (this.Answers.Any(x => string.IsNullOrWhiteSpace(x.Title)))
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_List_Empty_Values_Are_Not_Allowed);
+                return;
             }
 
             var answers = this.Answers.Select(x => new Tuple<decimal, string>(x.Value, x.Title)).ToArray();

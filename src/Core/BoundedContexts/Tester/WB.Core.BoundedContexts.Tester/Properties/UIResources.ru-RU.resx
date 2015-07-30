@@ -425,4 +425,7 @@
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Ваша учетная запись не подтверждена на сервере. Пожалуйста, прежде чем войти, подтвердите Вашу учетную запись, с помощью ссылки которую мы выслали Вам на почтовый ящик.</value>
   </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>Пустые значения не разрешены</value>
+  </data>
 </root>

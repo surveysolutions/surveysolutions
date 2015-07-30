@@ -3519,7 +3519,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var maxRosterRowCount = questionnaire.GetMaxRosterRowCount();
             if (answer > maxRosterRowCount)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater then {3}. InterviewId: {2}",
+                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater than {3}. InterviewId: {2}",
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId, maxRosterRowCount));
         }
 

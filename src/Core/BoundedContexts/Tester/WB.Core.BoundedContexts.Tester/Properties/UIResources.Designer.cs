@@ -622,6 +622,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty values are not allowed.
+        /// </summary>
+        public static string Interview_Question_List_Empty_Values_Are_Not_Allowed {
+            get {
+                return ResourceManager.GetString("Interview_Question_List_Empty_Values_Are_Not_Allowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
         /// </summary>
         public static string Interview_Question_Real_ParsingError {

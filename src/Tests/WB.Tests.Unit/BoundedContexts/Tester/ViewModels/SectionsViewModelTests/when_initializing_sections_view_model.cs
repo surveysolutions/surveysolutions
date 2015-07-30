@@ -5,12 +5,13 @@ using Cirrious.CrossCore;
 using Machine.Specifications;
 
 using Moq;
-
+using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
-
+using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
@@ -20,16 +21,21 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         Establish context = () =>
         {
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.GroupsWithFirstLevelChildrenAsReferences == listOfSection && _.GroupsHierarchy == sectionsHierarchy);
+            var interview = Mock.Of<IStatefulInterview>(_ => _.IsEnabled(Moq.It.IsAny<Identity>()) == true);
 
             questionnaireRepositoryMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireModel);
-
-            sectionsModel = CreateSectionsViewModel(questionnaireRepository: questionnaireRepositoryMock.Object);
+            interviewRepositoryMock
+                .Setup(x => x.Get(interviewId))
+                .Returns(interview);
+            sectionsModel = CreateSectionsViewModel(
+                questionnaireRepository: questionnaireRepositoryMock.Object,
+                interviewRepository: interviewRepositoryMock.Object);
         };
 
         Because of = () => 
-            sectionsModel.Init(questionnaireId, "id", navigationState);
+            sectionsModel.Init(questionnaireId, interviewId, navigationState);
 
         It should_get_questionnaire_by_id_once = () =>
             questionnaireRepositoryMock.Verify(x => x.GetById(questionnaireId), Times.Once);
@@ -43,8 +49,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
         static SideBarSectionsViewModel sectionsModel;
 
         private const string questionnaireId = "questionnaire Id";
+        private const string interviewId = "interview Id";
         private static readonly NavigationState navigationState = Mock.Of<NavigationState>();
         private static readonly Mock<IPlainKeyValueStorage<QuestionnaireModel>> questionnaireRepositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+        private static readonly Mock<IStatefulInterviewRepository> interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
 
         private static readonly Dictionary<Guid, GroupModel> listOfSection = new Dictionary<Guid, GroupModel> 
                                                                            {
