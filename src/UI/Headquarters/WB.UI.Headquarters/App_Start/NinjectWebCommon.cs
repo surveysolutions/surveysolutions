@@ -106,6 +106,13 @@ namespace WB.UI.Headquarters
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
+            var userPreloadingSettings =
+                new UserPreloadingSettings(
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.VerificationIntervalInSeconds"].ParseIntOrNull() ?? 5,
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.CreationIntervalInSeconds"].ParseIntOrNull() ?? 5,
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.CleaningIntervalInHours"].ParseIntOrNull() ?? 12,
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned"].ParseIntOrNull() ?? 1);
+
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
@@ -155,7 +162,7 @@ namespace WB.UI.Headquarters
 
                 new PostresKeyValueModule(postgresCacheSize),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();

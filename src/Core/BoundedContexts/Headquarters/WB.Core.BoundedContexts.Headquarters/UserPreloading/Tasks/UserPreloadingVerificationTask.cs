@@ -8,10 +8,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
     {
         readonly IScheduler scheduler;
 
-        public UserPreloadingVerificationTask(IScheduler scheduler)
+        private readonly UserPreloadingSettings userPreloadingSettings;
+
+        public UserPreloadingVerificationTask(IScheduler scheduler, UserPreloadingSettings userPreloadingSettings)
         {
             if (scheduler == null) throw new ArgumentNullException("scheduler");
             this.scheduler = scheduler;
+            this.userPreloadingSettings = userPreloadingSettings;
         }
 
         public void Configure()
@@ -25,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
                 .WithIdentity("user preloading verification", "Verification")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(5)
+                    .WithIntervalInSeconds(userPreloadingSettings.VerificationIntervalInSeconds)
                     .RepeatForever())
                 .Build();
 

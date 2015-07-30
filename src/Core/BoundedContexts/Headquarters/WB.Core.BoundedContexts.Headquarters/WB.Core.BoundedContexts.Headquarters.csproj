@@ -139,6 +139,7 @@
     <Compile Include="UserPreloading\Services\UserPreloadingVerifier.cs" />
     <Compile Include="UserPreloading\Tasks\UserBatchCreatingTask.cs" />
     <Compile Include="UserPreloading\Tasks\UserPreloadingCleanerTask.cs" />
+    <Compile Include="UserPreloading\Tasks\UserPreloadingSettings.cs" />
     <Compile Include="UserPreloading\Tasks\UserPreloadingVerificationTask.cs" />
     <Compile Include="Users\Denormalizers\RolesExtensions.cs" />
     <Compile Include="Users\Denormalizers\UsersFeedDenormalizer.cs" />
