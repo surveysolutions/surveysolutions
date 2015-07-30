@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
-            BreadCrumbsViewModel breadCrumbsViewModel,
+            //BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService = viewModelNavigationService;
             this.groupState = groupState;
 
-            this.BreadCrumbs = breadCrumbsViewModel;
+            //this.BreadCrumbs = breadCrumbsViewModel;
             this.CurrentGroup = groupViewModel;
             this.Sections = sectionsViewModel;
         }
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 })
                 .ToList();
 
-            this.BreadCrumbs.Init(interviewId, this.navigationState);
+            //this.BreadCrumbs.Init(interviewId, this.navigationState);
             this.Sections.Init(questionnaire.Id.FormatGuid(), interviewId, this.navigationState);
             this.CurrentGroup.Init(interviewId, this.navigationState);
 
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        public BreadCrumbsViewModel BreadCrumbs { get; set; }
+        //public BreadCrumbsViewModel BreadCrumbs { get; set; }
         public ActiveGroupViewModel CurrentGroup { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
