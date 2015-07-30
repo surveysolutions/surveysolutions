@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -304,7 +305,8 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(),
                         CapiApplication.Kernel.Get<IJsonUtils>(),
                         CapiApplication.Kernel.Get<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>(),
-                        CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
+                        CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>(),
+                        CapiApplication.Kernel.Get<IQuestionnaireImportService>()),
                     cleaner,
                     CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),

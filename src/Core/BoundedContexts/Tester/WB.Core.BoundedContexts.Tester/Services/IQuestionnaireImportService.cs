@@ -5,5 +5,6 @@ namespace WB.Core.BoundedContexts.Tester.Services
     public interface IQuestionnaireImportService
     {
         void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly);
+        void ImportQuestionnaireModel(QuestionnaireDocument questionnaireDocument);
     }
 }
