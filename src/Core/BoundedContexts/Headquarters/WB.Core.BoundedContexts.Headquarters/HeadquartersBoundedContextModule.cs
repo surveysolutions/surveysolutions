@@ -19,10 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters
     public class HeadquartersBoundedContextModule : NinjectModule
     {
         private readonly bool supervisorFunctionsEnabled;
+        private readonly UserPreloadingSettings userPreloadingSettings;
 
-        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled)
+        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings)
         {
             this.supervisorFunctionsEnabled = supervisorFunctionsEnabled;
+            this.userPreloadingSettings = userPreloadingSettings;
         }
 
         public override void Load()
@@ -39,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, CreateUserCommand>());
             CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, UnarchiveUserCommand>());
 
+            this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
             this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>();
