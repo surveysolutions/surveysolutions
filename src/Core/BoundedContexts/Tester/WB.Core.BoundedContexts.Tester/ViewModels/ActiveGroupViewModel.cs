@@ -27,7 +27,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>
+        ILiteEventHandler<RosterInstancesRemoved>,
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>,
+        ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<QuestionsDisabled>
     {
         private string name;
         public string Name
@@ -36,8 +40,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { name = value; RaisePropertyChanged(); }
         }
 
-        private ObservableCollection<IInterviewEntityViewModel> items;
-        public ObservableCollection<IInterviewEntityViewModel> Items
+        private IList<IInterviewEntityViewModel> items;
+        public IList<IInterviewEntityViewModel> Items
         {
             get { return items; }
             set { items = value; RaisePropertyChanged(); }
@@ -198,6 +202,41 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             rosterInstanceViewModel.Init(this.interviewId, rosterInstance, this.navigationState);
 
             listOfViewModels.Insert(rosterInstanceIndex, rosterInstanceViewModel);
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Questions);
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Questions);
+        }
+
+        public void Handle(GroupsEnabled @event)
+        {
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Groups);
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            this.CalculatePositionsToUpdateAndNotifySubscribers(@event.Groups);
+        }
+
+        void CalculatePositionsToUpdateAndNotifySubscribers(SharedKernels.DataCollection.Events.Interview.Dtos.Identity[] itemIdentities)
+        {
+            var positionsToUpdate = new List<int>();
+            foreach (var itemIdentity in itemIdentities)
+            {
+                var interviewEntity = this.Items.FirstOrDefault(x => x.Identity != null && x.Identity.Id == itemIdentity.Id);
+                if (interviewEntity != null && itemIdentity.RosterVector.Identical(this.navigationState.CurrentGroup.RosterVector))
+                {
+                    positionsToUpdate.Add(this.Items.IndexOf(interviewEntity));
+                }
+            }
+            positionsToUpdate = positionsToUpdate.Distinct().ToList();
+            positionsToUpdate.ForEach(x => this.messenger.Publish(new UpdateInterviewEntityStateMessage(this.navigationState.CurrentGroup, x)));
         }
     }
 }
