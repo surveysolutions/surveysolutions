@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
+            this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>();
         }
     }
 }

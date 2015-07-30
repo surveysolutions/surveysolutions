@@ -204,6 +204,7 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<UserPreloadingVerificationTask>().Configure();
             ServiceLocator.Current.GetInstance<UserBatchCreatingTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 

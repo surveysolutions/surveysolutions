@@ -19,10 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             get { return transactionManagerProvider.GetTransactionManager(); }
         }
 
-        IPlainTransactionManager PlainTransactionManager
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
-        }
+        private readonly IPlainTransactionManager plainTransactionManager;
 
         private readonly ITransactionManagerProvider transactionManagerProvider;
 
@@ -30,24 +27,24 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private  readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
 
-        public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, IUserPreloadingService userPreloadingService, IQueryableReadSideRepositoryReader<UserDocument> userStorage)
+        public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, IUserPreloadingService userPreloadingService, IQueryableReadSideRepositoryReader<UserDocument> userStorage, IPlainTransactionManager plainTransactionManager)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.userPreloadingService = userPreloadingService;
             this.userStorage = userStorage;
+            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
         {
-
-            string preloadingProcessIdToValidate = PlainTransactionManager.ExecuteInPlainTransaction(() =>
+            string preloadingProcessIdToValidate = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                 userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated());
 
             if (string.IsNullOrEmpty(preloadingProcessIdToValidate))
                 return;
 
             var preloadingProcessDataToValidate =
-                PlainTransactionManager.ExecuteInPlainTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () =>
                         userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate)
                             .UserPrelodingData.ToList());
@@ -58,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     preloadingProcessIdToValidate);
             });
 
-            PlainTransactionManager.ExecuteInPlainTransaction(
+            this.plainTransactionManager.ExecuteInPlainTransaction(
                 () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
         }
 
@@ -200,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             foreach (var userPreloadingDataRecord in data)
             {
                 if (validation(data, userPreloadingDataRecord))
-                    PlainTransactionManager.ExecuteInPlainTransaction(
+                    this.plainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.PushVerificationError(processId, code,
                             rowNumber, columnName, cellFunc(userPreloadingDataRecord)));
 
