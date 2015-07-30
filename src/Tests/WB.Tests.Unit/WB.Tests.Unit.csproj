@@ -582,7 +582,7 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_approved_by_hq_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_happened_and_complete_have_been_recorded.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_handled_and_first_answer_set_and_complete_have_been_recorded.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_first_answer_given.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_second_answer_given.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_gps_question.cs" />
