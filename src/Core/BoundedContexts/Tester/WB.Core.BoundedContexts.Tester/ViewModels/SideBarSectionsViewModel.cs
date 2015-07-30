@@ -33,6 +33,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private string questionnaireId;
         private string interviewId;
 
+        protected SideBarSectionsViewModel()
+        {
+        }
+
         public ObservableCollection<SideBarSectionViewModel> Sections { get; set; }
         public ObservableCollection<SideBarSectionViewModel> AllVisibleSections { get; set; }
 
