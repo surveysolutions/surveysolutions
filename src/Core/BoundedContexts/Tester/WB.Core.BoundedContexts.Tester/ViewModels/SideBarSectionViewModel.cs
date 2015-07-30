@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
-            this.Children = new ObservableCollection<SideBarSectionViewModel>();
+            this.Children = new List<SideBarSectionViewModel>();
         }
 
         public void Init(string interviewId, 
@@ -188,8 +188,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public int NodeDepth { get; set; }
 
-        private ObservableCollection<SideBarSectionViewModel> children;
-        public ObservableCollection<SideBarSectionViewModel> Children
+        private List<SideBarSectionViewModel> children;
+        public List<SideBarSectionViewModel> Children
         {
             get { return this.children; }
             set
@@ -227,14 +227,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             await this.NavigationState.NavigateToAsync(this.SectionIdentity);
         }
 
-        private ObservableCollection<SideBarSectionViewModel> GenerateChildNodes()
+        private List<SideBarSectionViewModel> GenerateChildNodes()
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
             var result = interview.GetEnabledSubgroups(this.SectionIdentity)
                                   .Select(groupInstance => this.modelsFactory.BuildSectionItem(root, this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
 
-            return new ObservableCollection<SideBarSectionViewModel>(result);
+            return new List<SideBarSectionViewModel>(result);
         }
 
         public SideBarSectionViewModel Parent { get; set; }
