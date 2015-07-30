@@ -8,10 +8,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
     {
         readonly IScheduler scheduler;
 
-        public UserPreloadingCleanerTask(IScheduler scheduler)
+        private readonly UserPreloadingSettings userPreloadingSettings;
+
+        public UserPreloadingCleanerTask(IScheduler scheduler, UserPreloadingSettings userPreloadingSettings)
         {
             if (scheduler == null) throw new ArgumentNullException("scheduler");
             this.scheduler = scheduler;
+            this.userPreloadingSettings = userPreloadingSettings;
         }
 
         public void Configure()
@@ -25,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
                 .WithIdentity("user preloading cleaning", "Cleaning")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(12)
+                    .WithIntervalInHours(userPreloadingSettings.CleaningIntervalInHours)
                     .RepeatForever())
                 .Build();
 
