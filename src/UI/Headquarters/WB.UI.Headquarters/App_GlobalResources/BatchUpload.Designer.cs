@@ -295,7 +295,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please prepare a file with tab-separated values (.tab file) corresponding to the template below. The columns marked with (*) are required. Only &apos;Supervisor&apos; or &apos;Interviewer&apos; values are allowed for the &apos;role&apos; column..
+        ///   Looks up a localized string similar to Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only &apos;Supervisor&apos; or &apos;Interviewer&apos; values are allowed in the &apos;role&apos; column..
         /// </summary>
         internal static string UploadUsersDescription {
             get {
