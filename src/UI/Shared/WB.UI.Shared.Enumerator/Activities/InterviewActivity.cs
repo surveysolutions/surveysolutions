@@ -8,6 +8,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Droid.Views;
 using Cirrious.MvvmCross.Plugins.Messenger;
 
 using Java.Lang;
@@ -23,39 +24,42 @@ namespace WB.UI.Tester.Activities
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : BaseActivity<InterviewViewModel>
+    public class InterviewActivity : MvxActivity
+    //public class InterviewActivity : BaseActivity<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
-        private MvxSubscriptionToken sectionChangeSubscriptionToken;
-        private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
-        private MvxSubscriptionToken updateEntityStateSubscriptionToken;
+//        private MvxSubscriptionToken sectionChangeSubscriptionToken;
+//        private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
+//        private MvxSubscriptionToken updateEntityStateSubscriptionToken;
 
         private Toolbar toolbar;
 
-        private MvxRecyclerView recyclerView;
+//        private MvxRecyclerView recyclerView;
 
         private LinearLayoutManager layoutManager;
 
         private InterviewEntityAdapter adapter;
 
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.interview; }
-        }
+//        protected override int ViewResourceId
+//        {
+//            get { return Resource.Layout.interview; }
+//        }
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
+            this.SetContentView(Resource.Layout.interview);
+
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-            drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 
-            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
+//            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
 
-            this.SetSupportActionBar(this.toolbar);
-            this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            this.SupportActionBar.SetHomeButtonEnabled(true);
+//            this.SetSupportActionBar(this.toolbar);
+//            this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+//            this.SupportActionBar.SetHomeButtonEnabled(true);
 
             this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, this.toolbar, 0, 0);
             drawerLayout.SetDrawerListener(this.drawerToggle);
@@ -70,22 +74,22 @@ namespace WB.UI.Tester.Activities
             };
 
             this.layoutManager = new LinearLayoutManager(this);
-            this.recyclerView.SetLayoutManager(this.layoutManager);
-            this.recyclerView.HasFixedSize = true;
+//            this.recyclerView.SetLayoutManager(this.layoutManager);
+//            this.recyclerView.HasFixedSize = true;
 
             this.adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
             
-            this.recyclerView.Adapter = this.adapter;
+//            this.recyclerView.Adapter = this.adapter;
         }
 
-        protected override void OnStart()
-        {
-            var messenger = Mvx.Resolve<IMvxMessenger>();
-            sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
-            scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
-            this.updateEntityStateSubscriptionToken = messenger.Subscribe<UpdateInterviewEntityStateMessage>(this.OnUpdateQuestionState);
-            base.OnStart();
-        }
+//        protected override void OnStart()
+//        {
+//            var messenger = Mvx.Resolve<IMvxMessenger>();
+//            sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
+//            scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+//            this.updateEntityStateSubscriptionToken = messenger.Subscribe<UpdateInterviewEntityStateMessage>(this.OnUpdateQuestionState);
+//            base.OnStart();
+//        }
 
         private void OnSectionChange(SectionChangeMessage msg)
         {
@@ -121,14 +125,14 @@ namespace WB.UI.Tester.Activities
             }
         }
 
-        protected override void OnStop()
-        {
-            var messenger = Mvx.Resolve<IMvxMessenger>();
-            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
-            messenger.Unsubscribe<UpdateInterviewEntityStateMessage>(this.updateEntityStateSubscriptionToken);
-            base.OnStop();
-        }
+//        protected override void OnStop()
+//        {
+//            var messenger = Mvx.Resolve<IMvxMessenger>();
+//            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
+//            messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
+//            messenger.Unsubscribe<UpdateInterviewEntityStateMessage>(this.updateEntityStateSubscriptionToken);
+//            base.OnStop();
+//        }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
         {
@@ -151,7 +155,7 @@ namespace WB.UI.Tester.Activities
 
             if (item.ItemId == Resource.Id.interview_dashboard)
             {
-                this.ViewModel.NavigateToDashboardCommand.Execute();
+                //this.ViewModel.NavigateToDashboardCommand.Execute();
             }
             else if (item.ItemId == Resource.Id.interview_settings)
             {
@@ -161,7 +165,7 @@ namespace WB.UI.Tester.Activities
             }
             else if (item.ItemId == Resource.Id.interview_signout)
             {
-                this.ViewModel.SignOutCommand.Execute();
+                //this.ViewModel.SignOutCommand.Execute();
             }
 
             return base.OnOptionsItemSelected(item);
