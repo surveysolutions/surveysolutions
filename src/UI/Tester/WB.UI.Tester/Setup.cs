@@ -40,6 +40,16 @@ namespace WB.UI.Tester
         public Setup(Context applicationContext) : base(applicationContext)
         {
             this.InitializeLogger(applicationContext);
+            
+            //killing app to avoid incorrect state
+            AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) =>
+            {
+                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            };
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            };
         }
 
         protected override IMvxApplication CreateApp()
