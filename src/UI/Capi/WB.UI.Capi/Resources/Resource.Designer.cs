@@ -3479,13 +3479,10 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f0b002c
 			public const int MakeThisTabletWorkingDevice = 2131427372;
-			
 			// aapt resource value: 0x7f0b0046
 			public const int MenuItem_Title_Dashboard = 2131427398;
-			
 			// aapt resource value: 0x7f0b0047
 			public const int MenuItem_Title_Settings = 2131427399;
-			
 			// aapt resource value: 0x7f0b0048
 			public const int MenuItem_Title_SignOut = 2131427400;
 			
