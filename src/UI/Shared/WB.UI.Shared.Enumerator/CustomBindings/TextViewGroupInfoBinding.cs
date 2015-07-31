@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.CustomBindings
 {

@@ -3,6 +3,7 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.CustomBindings
 {

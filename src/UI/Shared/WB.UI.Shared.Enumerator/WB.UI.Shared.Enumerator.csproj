@@ -41,6 +41,49 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.CrossCore.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.CrossCore.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Binding">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Localization">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.DownloadCache.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.DownloadCache.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.DownloadCache.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.DownloadCache.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Location">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Location.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Location.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Location.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="GooglePlayServicesLib">
+      <HintPath>..\..\..\..\packages\Xamarin.GooglePlayServices.22.0.0.2\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -53,10 +96,78 @@
     <Reference Include="Xamarin.Android.Support.v7.AppCompat">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.AppCompat.22.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.MediaRouter">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.MediaRouter.21.0.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.RecyclerView">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.RecyclerView.22.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
+    <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
+    <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
+    <Compile Include="Converters\GroupStateToColorConverter.cs" />
+    <Compile Include="Converters\LocalizationValueConverter.cs" />
+    <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionStateStyle.cs" />
+    <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
+    <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
+    <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
+    <Compile Include="CustomBindings\BaseBinding.cs" />
+    <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
+    <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
+    <Compile Include="CustomBindings\EditTextDateBinding.cs" />
+    <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
+    <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
+    <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
+    <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
+    <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
+    <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
+    <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
+    <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
+    <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
+    <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
+    <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
+    <Compile Include="CustomBindings\TextViewHintBinding.cs" />
+    <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
+    <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
+    <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
+    <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
+    <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
+    <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />
+    <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
+    <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
+    <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
+    <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
+    <Compile Include="CustomControls\DynamicImageView.cs" />
+    <Compile Include="CustomControls\EnterTimeView.cs" />
+    <Compile Include="CustomControls\FlowLayout.cs" />
+    <Compile Include="CustomControls\HttpImageView.cs" />
+    <Compile Include="CustomControls\IMvxRecyclerViewAdapter.cs" />
+    <Compile Include="CustomControls\IMvxRecyclerViewViewHolder.cs" />
+    <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
+    <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
+    <Compile Include="CustomControls\MvxRecyclerView.cs" />
+    <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
+    <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
+    <Compile Include="CustomServices\Location\IMvxLocationReceiver.cs" />
+    <Compile Include="CustomServices\Location\IPlayConnectionCallbacksReceiver.cs" />
+    <Compile Include="CustomServices\Location\IPlayConnectionFailedReceiver.cs" />
+    <Compile Include="CustomServices\Location\MvxLocationListener.cs" />
+    <Compile Include="CustomServices\Location\PlayConnectionCallbacksListener.cs" />
+    <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
+    <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
+    <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
+    <Compile Include="ValueCombiners\NotValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -851,12 +962,29 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj">
       <Project>{c6b1ba38-e58e-4e3d-ba59-5289fa10ccbb}</Project>
       <Name>WB.Core.Infrastructure.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
+      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
+      <Name>WB.Core.SharedKernels.Enumerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
+      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
+      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

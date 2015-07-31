@@ -9,6 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Shared.Enumerator;
 
 
 namespace WB.UI.Tester.CustomBindings

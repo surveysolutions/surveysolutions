@@ -121,6 +121,9 @@
     <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IViewModelNavigationService.cs" />
     <Compile Include="EnumeratorSharedKernelModule.cs" />
+    <Compile Include="Services\MaskText\MaskedText.cs" />
+    <Compile Include="Services\MaskText\Range.cs" />
+    <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GroupChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />

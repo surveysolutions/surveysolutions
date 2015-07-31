@@ -2,6 +2,7 @@
 using System.Globalization;
 using Android.Provider;
 using Cirrious.CrossCore.Converters;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.Converters
 {
