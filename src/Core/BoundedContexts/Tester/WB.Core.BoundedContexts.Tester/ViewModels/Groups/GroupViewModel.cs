@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
         public EnablementViewModel Enablement { get; private set; }
         public string Title { get; private set; }
         public string RosterTitle { get; private set; }
+        public bool IsRoster { get; private set; }
 
         private readonly GroupStateViewModel groupState;
         public GroupStateViewModel GroupState
@@ -84,8 +86,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
             this.GroupState.Init(interviewId, entityIdentity);
 
-            this.Title = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id].Title;
+            var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id];
+            this.Title = groupModel.Title;
             this.RosterTitle = interview.GetRosterTitle(entityIdentity);
+            this.IsRoster = groupModel is RosterModel;
 
             if (groupWithAnswersToMonitor != null)
             {
