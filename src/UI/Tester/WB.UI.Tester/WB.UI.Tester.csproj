@@ -339,6 +339,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
@@ -351,6 +352,7 @@
       <SubType>Designer</SubType>
     </None>
     <AndroidResource Include="Resources\layout\login.axml" />
+    <AndroidResource Include="Resources\layout\splash.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
