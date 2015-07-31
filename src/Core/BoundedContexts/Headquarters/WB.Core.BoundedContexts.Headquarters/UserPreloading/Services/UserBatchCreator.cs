@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     () => CreateSupervisorOrUnarchiveAndUpdate(supervisorToCreate));
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingService.IncreaseCountCreateUsers(id));
+                    () => userPreloadingService.IncrementCreatedUsersCount(id));
             }
 
             var interviewersToCreate = data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Operator).ToArray();
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     () => CreateInterviewerOrUnarchiveAndUpdate(interviewerToCreate));
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingService.IncreaseCountCreateUsers(id));
+                    () => userPreloadingService.IncrementCreatedUsersCount(id));
             }
         }
 

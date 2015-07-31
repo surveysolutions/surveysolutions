@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         void PushVerificationError(string preloadingProcessId, string code, int rowNumber, string columnName, string cellValue);
 
-        void IncreaseCountCreateUsers(string preloadingProcessId);
+        void IncrementCreatedUsersCount(string preloadingProcessId);
 
         string[] GetAvaliableDataColumnNames();
 
