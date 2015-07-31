@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Comments"
     local:MvxBind="Visible QuestionState.Comments.HasComments">
@@ -14,4 +14,4 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         local:MvxBind="Text QuestionState.Comments.InterviewerComment; FocusValueChanged QuestionState.Comments.InterviewerCommentChangeCommand; Visible QuestionState.Comments.IsCommentInEditMode; SetFocus QuestionState.Comments.IsCommentInEditMode" />
-</MvxLinearLayout>
+</Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
