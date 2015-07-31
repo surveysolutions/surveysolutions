@@ -119,6 +119,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\UserPreloadingServiceMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingProcess.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingVerificationError.cs" />
@@ -187,6 +192,10 @@
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserPreloadingServiceMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
