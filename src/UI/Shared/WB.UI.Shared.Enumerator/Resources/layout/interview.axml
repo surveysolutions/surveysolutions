@@ -17,7 +17,6 @@
                   local:MvxBind="ItemsSource BreadCrumbs.Items;"
                   local:MvxItemTemplate="@layout/interview_breadcrumb_item">
       </WB.UI.Tester.CustomControls.FlowLayout>
-
     </LinearLayout>
     <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
                                        android:layout_width="match_parent"
@@ -32,7 +31,7 @@
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true">
-      <include layout="@layout/interview_current_group" />
+<!--      <include layout="@layout/interview_current_group" />-->
     </ScrollView>
   </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
   <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Sidebar">
