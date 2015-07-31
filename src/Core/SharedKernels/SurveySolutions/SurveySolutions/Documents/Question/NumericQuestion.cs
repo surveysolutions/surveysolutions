@@ -40,6 +40,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public int? CountOfDecimalPlaces { get; set; }
 
         [Obsolete]
-        public int? MaxValue { get { return Constants.MaxRosterRowCount; } }
+        public int? MaxValue { get; set; }
     }
 }
