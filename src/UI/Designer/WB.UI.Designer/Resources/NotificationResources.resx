@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
-    <value>Hello {0}, {1} has stopped to share with you questionnaire: {2}</value>
+    <value>Hello {0}, &lt;br&gt; {1} has stopped to share with you questionnaire: {2}</value>
   </data>
   <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
-    <value>Hello {0}, {1} has invited you to {2} the following questionnaire:</value>
+    <value>Hello {0}, &lt;br&gt; {1} has invited you to {2} the following questionnaire:</value>
   </data>
   <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
-    <value>Hello {0},  {1} has revoked access for {2} to your questionnaire: {3}</value>
+    <value>Hello {0}, &lt;br&gt;  {1} has revoked access for {2} to your questionnaire: {3}</value>
   </data>
   <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
-    <value>Hello {0},  {1} has invited {2} to {3} your questionnaire: </value>
+    <value>Hello {0}, &lt;br&gt;  {1} has invited {2} to {3} your questionnaire: </value>
   </data>
   <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
     <value>view</value>
