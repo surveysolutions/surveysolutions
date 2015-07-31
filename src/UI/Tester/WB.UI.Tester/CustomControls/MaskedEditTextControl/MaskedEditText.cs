@@ -114,7 +114,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 
         private void Init()
         {
-            this.SetFilters(new IInputFilter[] { this });
+            //this.SetFilters(new IInputFilter[] { this });
             this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
             this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
             this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);

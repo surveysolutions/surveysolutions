@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 eventStream.Append(@event);
             }
 
-            //this.eventStore.Store(eventStream);
+            this.eventStore.Store(eventStream);
 
             try
             {
@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
             finally
             {
-                //aggregateRoot.MarkChangesAsCommitted();
+                aggregateRoot.MarkChangesAsCommitted();
             }
         }
 
