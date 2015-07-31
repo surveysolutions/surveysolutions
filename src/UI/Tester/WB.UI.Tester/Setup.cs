@@ -42,14 +42,16 @@ namespace WB.UI.Tester
             this.InitializeLogger(applicationContext);
             
             //killing app to avoid incorrect state
-            AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) =>
-            {
-                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-            };
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => 
+                UncaughtExceptionHandler();
+            
             System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, args) =>
-            {
-                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-            };
+                UncaughtExceptionHandler();
+        }
+
+        static void UncaughtExceptionHandler()
+        {
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
         }
 
         protected override IMvxApplication CreateApp()
