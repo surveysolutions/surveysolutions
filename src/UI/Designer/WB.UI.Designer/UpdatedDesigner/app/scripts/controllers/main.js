@@ -128,26 +128,42 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.removeItemWithIdFromErrors = function(itemId) {
-                $scope.verificationStatus.errors = _.filter($scope.verificationStatus.errors, function (item) {
-                    item.ItemId != itemId;
+            $scope.removeItemWithIdFromErrors = function (itemId) {
+                var errors = $scope.verificationStatus.errors;
+
+                $scope.verificationStatus.errors = _.filter(errors, function (item) {
+                    return item.ItemId != itemId;
                 });
-                $scope.verificationStatus.errorsCount = $scope.verificationStatus.errors.length;
+
+                _.each(errors, function(error) {
+                    if (error.isGroupOfErrors) {
+                        error.references = _.filter(error.references, function(reference) {
+                            return reference.itemId != itemId;
+                        });
+                    }
+                })
+
+                errors = _.filter(errors, function(error) {
+                    return !error.isGroupOfErrors || error.references.length;
+                });
+
+                $scope.verificationStatus.errors = errors;
+                $scope.verificationStatus.errorsCount = errors.length;
             }
 
             $scope.currentChapter = null;
 
-            $rootScope.$on('groupDeleted', function (removedItemId) {
+            $rootScope.$on('groupDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.groupsCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
             });
 
-            $rootScope.$on('questionDeleted', function (removedItemId) {
+            $rootScope.$on('questionDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.questionsCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
             });
 
-            $rootScope.$on('rosterDeleted', function (removedItemId) {
+            $rootScope.$on('rosterDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.rostersCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
             });
