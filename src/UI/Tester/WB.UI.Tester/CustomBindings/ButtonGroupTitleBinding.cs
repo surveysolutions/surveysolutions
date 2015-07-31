@@ -4,7 +4,6 @@ using Android.Text.Style;
 using Android.Widget;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.UI.Tester.CustomBindings
@@ -24,14 +23,13 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (value == null) return;
 
-            var rosterTitle = this.SubstitutionService.GenerateRosterName(value.Title, value.RosterTitle);
-
-            if (rosterTitle.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(value.RosterTitle))
             {
                 control.Text = value.Title;
             }
             else
             {
+                var rosterTitle = this.SubstitutionService.GenerateRosterName(value.Title, value.RosterTitle);
                 var span = new SpannableString(rosterTitle);
                 span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.Title.Length, rosterTitle.Length,
                     SpanTypes.ExclusiveExclusive);
