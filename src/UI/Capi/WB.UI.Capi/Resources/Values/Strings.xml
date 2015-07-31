@@ -43,8 +43,4 @@
   <string name="YouAreNotConnectedToAnyNetwork">You are not connected to any network.</string>
   <string name="NowYouareConnectedToWifiNetwork">Now you are connected to wi-fi network: {0}.</string>
   <string name="NewHtmlLine"> <![CDATA[<br/>]]></string>
-
-  <string name="MenuItem_Title_Dashboard">Questionnaires</string>
-  <string name="MenuItem_Title_Settings">Settings</string>
-  <string name="MenuItem_Title_SignOut">Sign out</string>
 </resources>
