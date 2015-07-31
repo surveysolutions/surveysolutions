@@ -53,7 +53,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         RejectedBySupervisorCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedBySupervisor),
                         ApprovedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.ApprovedByHeadquarters),
                         RejectedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedByHeadquarters),
-                        TotalCount = groupedResults.Where(x => x.ResponsibleId == responsibleId).Sum(x => x.InterviewsCount)
+                        TotalCount = groupedResults.Where(x => x.ResponsibleId == responsibleId).Sum(x => x.InterviewsCount),
+                        QuestionnaireId = input.TemplateId,
+                        QuestionnaireVersion = input.TemplateVersion
                     });
                 }
 
