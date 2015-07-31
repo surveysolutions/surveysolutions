@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelNavigationService viewModelNavigationService)
-            : base(logger)
+            : base()
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException("interviewViewModelFactory");
             if (plainQuestionnaireRepository == null) throw new ArgumentNullException("plainQuestionnaireRepository");
