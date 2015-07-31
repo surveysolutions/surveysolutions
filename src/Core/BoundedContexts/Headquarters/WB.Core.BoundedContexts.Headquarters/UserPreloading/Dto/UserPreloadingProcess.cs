@@ -24,9 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
 
         public virtual string ErrorMessage { get; set; }
 
-        [IgnoreDataMember]
-        public virtual IList<UserPreloadingDataRecord> UserPrelodingData { get; set; }
+        public virtual IList<UserPreloadingDataRecord> UserPrelodingData { get;protected set; }
 
-        public virtual ISet<UserPreloadingVerificationError> VerificationErrors { get; set; }
+        public virtual ISet<UserPreloadingVerificationError> VerificationErrors { get; protected set; }
     }
 }

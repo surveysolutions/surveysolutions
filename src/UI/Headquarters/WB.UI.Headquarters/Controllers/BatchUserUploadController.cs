@@ -15,7 +15,12 @@ namespace WB.UI.Headquarters.Controllers
     public class BatchUserUploadController : BaseController
     {
         private readonly IUserPreloadingService userPreloadingService;
-        public BatchUserUploadController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IUserPreloadingService userPreloadingService) : base(commandService, globalInfo, logger)
+        public BatchUserUploadController(
+            ICommandService commandService, 
+            IGlobalInfoProvider globalInfo, 
+            ILogger logger, 
+            IUserPreloadingService userPreloadingService) : 
+            base(commandService, globalInfo, logger)
         {
             this.userPreloadingService = userPreloadingService;
         }
@@ -49,11 +54,6 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View(model);
-            }
             try
             {
                 var preloadedDataId = this.userPreloadingService.CreateUserPreloadingProcess(model.File.InputStream,
