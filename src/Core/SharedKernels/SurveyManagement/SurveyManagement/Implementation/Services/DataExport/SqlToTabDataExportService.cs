@@ -333,18 +333,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return result;
         }
 
-        private void ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath,
+        void ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath,
             InterviewExportedAction? action = null)
         {
-            var structure = questionnaireExportStructureWriter.AsVersioned()
-                .Get(questionnaireId.FormatGuid(), questionnaireVersion);
-
-            if (structure == null)
-                return;
-
             this.transactionManager.GetTransactionManager().BeginQueryTransaction();
             try
             {
+                var structure = questionnaireExportStructureWriter.AsVersioned()
+                    .Get(questionnaireId.FormatGuid(), questionnaireVersion);
+
+                if (structure == null)
+                    return;
                 this.CreateDataFiles(basePath, action, structure, questionnaireId, questionnaireVersion);
                 this.CreateFileForInterviewActions(action, basePath, questionnaireId, questionnaireVersion);
             }
