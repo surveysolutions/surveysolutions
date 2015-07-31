@@ -1581,7 +1581,6 @@ namespace WB.UI.Tester
 			global::WB.UI.Shared.Enumerator.Resource.Style.Widget_AppCompat_Toolbar_Button_Navigation = global::WB.UI.Tester.Resource.Style.Widget_AppCompat_Toolbar_Button_Navigation;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Widget_MediaRouter_Light_MediaRouteButton = global::WB.UI.Tester.Resource.Style.Widget_MediaRouter_Light_MediaRouteButton;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Widget_MediaRouter_MediaRouteButton = global::WB.UI.Tester.Resource.Style.Widget_MediaRouter_MediaRouteButton;
-			global::WB.UI.Shared.Enumerator.Resource.Xml.preferences = global::WB.UI.Tester.Resource.Xml.preferences;
 			global::WB.UI.Shared.Enumerator.Resource.Styleable.ActionBar = global::WB.UI.Tester.Resource.Styleable.ActionBar;
 			global::WB.UI.Shared.Enumerator.Resource.Styleable.ActionBar_background = global::WB.UI.Tester.Resource.Styleable.ActionBar_background;
 			global::WB.UI.Shared.Enumerator.Resource.Styleable.ActionBar_backgroundSplit = global::WB.UI.Tester.Resource.Styleable.ActionBar_backgroundSplit;

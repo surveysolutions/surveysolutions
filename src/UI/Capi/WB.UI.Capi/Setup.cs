@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Injections;
 using WB.UI.Shared.Android;
+using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.CustomBindings;
 using WB.UI.Tester.CustomControls;
@@ -68,7 +69,7 @@ namespace WB.UI.Capi
             base.FillValueConverters(registry);
 
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry =>
-                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Tester.Setup))));
+                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
