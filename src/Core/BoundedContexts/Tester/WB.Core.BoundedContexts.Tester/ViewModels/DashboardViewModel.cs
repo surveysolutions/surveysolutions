@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyMessageService friendlyMessageService,
             IUserInteractionService userInteractionService,
             IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
-            : base(logger)
+            : base()
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
