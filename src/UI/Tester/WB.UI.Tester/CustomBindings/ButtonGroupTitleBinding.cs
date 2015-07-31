@@ -23,7 +23,7 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (value == null) return;
 
-            if (string.IsNullOrEmpty(value.RosterTitle))
+            if (!value.IsRoster)
             {
                 control.Text = value.Title;
             }
