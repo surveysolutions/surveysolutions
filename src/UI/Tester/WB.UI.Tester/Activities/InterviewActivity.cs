@@ -94,7 +94,11 @@ namespace WB.UI.Tester.Activities
         {
             if (this.layoutManager != null)
             {
-                Application.SynchronizationContext.Post(_ => { this.recyclerView.SmoothScrollToPosition(msg.AnchorElementIndex); }, null);
+                Application.SynchronizationContext.Post(_ =>
+                {
+                    this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
+                }, 
+                null);
             }
         }
 
