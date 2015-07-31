@@ -90,6 +90,10 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -172,6 +176,9 @@
     <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
     <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
+    <Compile Include="Ninject\ModuleExtensions.cs" />
+    <Compile Include="Ninject\NinjectModuleAdapter.cs" />
+    <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
@@ -904,11 +911,6 @@
     <AndroidResource Include="Resources\values\fonts.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\MvxBindingAttributes.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\styles-dashboard.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -965,11 +967,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\xml\preferences.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -994,6 +991,11 @@
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\MvxBindingAttributes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
