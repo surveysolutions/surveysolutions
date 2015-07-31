@@ -1,4 +1,5 @@
 ﻿using Android.Views;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.CustomBindings
 {

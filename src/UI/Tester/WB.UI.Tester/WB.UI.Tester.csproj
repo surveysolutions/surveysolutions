@@ -239,7 +239,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
@@ -251,66 +250,6 @@
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
-    <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
-    <Compile Include="Converters\GroupStateToColorConverter.cs" />
-    <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
-    <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
-    <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
-    <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
-    <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
-    <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
-    <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
-    <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
-    <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
-    <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
-    <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
-    <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
-    <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
-    <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
-    <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
-    <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
-    <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
-    <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />
-    <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
-    <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
-    <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
-    <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
-    <Compile Include="CustomBindings\EditTextDateBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
-    <Compile Include="Converters\QuestionStateStyle.cs" />
-    <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
-    <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
-    <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
-    <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHintBinding.cs" />
-    <Compile Include="CustomControls\DynamicImageView.cs" />
-    <Compile Include="CustomControls\EnterTimeView.cs" />
-    <Compile Include="CustomControls\FlowLayout.cs" />
-    <Compile Include="CustomControls\HttpImageView.cs" />
-    <Compile Include="CustomControls\IMvxRecyclerViewAdapter.cs" />
-    <Compile Include="CustomControls\IMvxRecyclerViewViewHolder.cs" />
-    <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
-    <Compile Include="CustomControls\MvxRecyclerView.cs" />
-    <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
-    <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
-    <Compile Include="CustomServices\Location\IMvxLocationReceiver.cs" />
-    <Compile Include="CustomServices\Location\IPlayConnectionCallbacksReceiver.cs" />
-    <Compile Include="CustomServices\Location\IPlayConnectionFailedReceiver.cs" />
-    <Compile Include="CustomServices\Location\MvxLocationListener.cs" />
-    <Compile Include="CustomServices\Location\PlayConnectionCallbacksListener.cs" />
-    <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
-    <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\ApplicationModule.cs" />
     <Compile Include="Ninject\DataCollectionModule.cs" />
@@ -330,7 +269,6 @@
     <Compile Include="Activities\BaseMvxActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="ValueCombiners\NotValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon.png" />

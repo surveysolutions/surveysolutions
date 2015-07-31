@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.Converters
 {

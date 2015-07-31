@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
-
+using WB.UI.Shared.Enumerator;
 using GroupViewModel = WB.Core.BoundedContexts.Tester.ViewModels.Groups.GroupViewModel;
 
 namespace WB.UI.Tester.CustomControls
