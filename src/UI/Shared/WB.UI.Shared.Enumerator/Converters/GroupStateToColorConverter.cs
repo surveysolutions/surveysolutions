@@ -5,6 +5,7 @@ using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.Droid.Platform;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.Converters
 {

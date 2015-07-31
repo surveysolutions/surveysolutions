@@ -2,6 +2,7 @@
 using Cirrious.MvvmCross.Binding;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.CustomBindings
 {
