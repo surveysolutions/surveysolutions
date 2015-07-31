@@ -80,8 +80,6 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             }
             catch (FlurlHttpException ex)
             {
-                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
-
                 if (ex.Call.Response != null)
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
                         innerException: ex);
@@ -90,7 +88,6 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             }
             catch (Exception ex)
             {
-                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", fullUrl, fullUrl.QueryParams), ex);
                 throw new RestException(message: "No connection", innerException: ex);
             }
         }
