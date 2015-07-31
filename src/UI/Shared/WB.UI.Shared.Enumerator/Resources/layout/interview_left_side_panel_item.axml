@@ -13,7 +13,7 @@
     </TableRow>
   </TableLayout>
 
-  <MvxLinearLayout
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout
         style="@style/Interview_Sidebar_Sections"
         local:MvxBind="ItemsSource Children; Visible Expanded"
         local:MvxItemTemplate="@layout/interview_left_side_panel_item_group" />

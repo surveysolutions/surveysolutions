@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/VerticalFullWidthWrappingLayout">
   <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
@@ -22,7 +22,7 @@
     </LinearLayout>
     <View style="@style/Dashboard_Filters_Divider"></View>
   </LinearLayout>
-  <MvxListView android:id="@+id/questionnairesList"
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView android:id="@+id/questionnairesList"
                style="@style/Dashboard_QuestionnairesList"
                local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand; BackgroundStyle PublicBackground(IsPublicShowed)"
                local:MvxItemTemplate="@layout/questionnaire_list_item" />
@@ -34,5 +34,5 @@
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
                local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible IsInitialized"/>
   </LinearLayout>
-</MvxLinearLayout>
+</Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
 
