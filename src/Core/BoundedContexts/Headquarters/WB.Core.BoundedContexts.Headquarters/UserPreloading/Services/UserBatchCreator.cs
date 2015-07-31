@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                         _.FirstOrDefault(
                             u => u.UserName.ToLower() == interviewerToCreate.Login.ToLower() && u.IsArchived));
 
-            var supervisor = GetSupervisorForUserIfNeeded(interviewerToCreate);
+            var supervisor = this.GetSupervisorForUser(interviewerToCreate);
 
             if (archivedInterviewers == null)
             {
@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 interviewerToCreate.PhoneNumber, archivedInterviewers.PublicKey));
         }
 
-        private UserLight GetSupervisorForUserIfNeeded(UserPreloadingDataRecord dataRecord)
+        private UserLight GetSupervisorForUser(UserPreloadingDataRecord dataRecord)
         {
             var supervisor =
                 userStorage.Query(_ => _.FirstOrDefault(u => u.UserName.ToLower() == dataRecord.Supervisor.ToLower()));
