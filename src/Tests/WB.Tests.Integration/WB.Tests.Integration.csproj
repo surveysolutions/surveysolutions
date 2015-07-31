@@ -43,14 +43,6 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Esent.Collections, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="EventStore.ClientAPI, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\EventStore.Client.3.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>

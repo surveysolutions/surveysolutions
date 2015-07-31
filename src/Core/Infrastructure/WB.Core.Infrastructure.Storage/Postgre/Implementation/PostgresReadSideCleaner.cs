@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Microsoft.Isam.Esent.Interop;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
