@@ -13,6 +13,7 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Java.Lang;
 
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Tester.CustomControls;
 
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -148,20 +149,21 @@ namespace WB.UI.Tester.Activities
                 return true;
             }
 
-            switch (item.ItemId)
+            if (item.ItemId == Resource.Id.interview_dashboard)
             {
-                case Resource.Id.interview_dashboard:
-                    this.ViewModel.NavigateToDashboardCommand.Execute();
-                    break;
-                case Resource.Id.interview_settings:
-                    Intent intent = new Intent(this, typeof(PrefsActivity));
-                    this.StartActivity(intent);
-                    break;
-                case Resource.Id.interview_signout:
-                    this.ViewModel.SignOutCommand.Execute();
-                    break;
-
+                this.ViewModel.NavigateToDashboardCommand.Execute();
             }
+            else if (item.ItemId == Resource.Id.interview_settings)
+            {
+                //TODO: CAPI-Interview-Details
+                //Intent intent = new Intent(this, typeof(PrefsActivity));
+                //this.StartActivity(intent);
+            }
+            else if (item.ItemId == Resource.Id.interview_signout)
+            {
+                this.ViewModel.SignOutCommand.Execute();
+            }
+
             return base.OnOptionsItemSelected(item);
         }
     }
