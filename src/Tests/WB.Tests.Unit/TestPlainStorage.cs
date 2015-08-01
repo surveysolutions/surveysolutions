@@ -17,6 +17,8 @@ namespace WB.Tests.Unit
 
         public T GetById(object id)
         {
+            if (!entites.ContainsKey(id))
+                return null;
             return this.entites[id];
         }
 
