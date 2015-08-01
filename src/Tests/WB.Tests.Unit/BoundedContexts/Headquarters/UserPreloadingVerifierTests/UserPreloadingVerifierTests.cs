@@ -6,6 +6,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -218,7 +219,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
                         _ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                     userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                     userStorage ?? new InMemoryReadSideRepositoryAccessor<UserDocument>(),
-                    Mock.Of<IPlainTransactionManager>(), new UserPreloadingSettings(5, 5, 12, 1, 10000, 100));
+                    Mock.Of<IPlainTransactionManager>(), new UserPreloadingSettings(5, 5, 12, 1, 10000, 100,100), Mock.Of<ILogger>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)
