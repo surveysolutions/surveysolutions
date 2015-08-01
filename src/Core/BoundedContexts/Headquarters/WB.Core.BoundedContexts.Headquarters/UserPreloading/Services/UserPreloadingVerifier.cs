@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -29,15 +30,23 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private  readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
 
+        private readonly UserPreloadingSettings userPreloadingSettings;
+
+        private readonly ILogger logger;
+
         public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, 
             IUserPreloadingService userPreloadingService, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
-            IPlainTransactionManager plainTransactionManager)
+            IPlainTransactionManager plainTransactionManager, 
+            UserPreloadingSettings userPreloadingSettings, 
+            ILogger logger)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.userPreloadingService = userPreloadingService;
             this.userStorage = userStorage;
             this.plainTransactionManager = plainTransactionManager;
+            this.userPreloadingSettings = userPreloadingSettings;
+            this.logger = logger;
         }
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
@@ -53,10 +62,19 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     () =>
                         userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate)
                             .UserPrelodingData.ToList());
-
-            this.ValidatePreloadedData(preloadingProcessDataToValidate,
-                preloadingProcessIdToValidate);
-
+            try
+            {
+                this.ValidatePreloadedData(preloadingProcessDataToValidate,
+                    preloadingProcessIdToValidate);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message, e);
+                this.plainTransactionManager.ExecuteInPlainTransaction(
+                    () => userPreloadingService.FinishValidationProcessWithError(preloadingProcessIdToValidate, e.Message));
+                return;
+                
+            }
             this.plainTransactionManager.ExecuteInPlainTransaction(
                 () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
         }
@@ -96,18 +114,26 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower())
                 );
 
-            this.ValidateEachRowInDataSet(data, processId, (userPreloadingDataRecord) => LoginNameUsedByExistingUser(activeUserNames, userPreloadingDataRecord), "PLU0001", u => u.Login);
-            this.ValidateEachRowInDataSet(data, processId, (userPreloadingDataRecord) => LoginDublicationInDataset(data, userPreloadingDataRecord), "PLU0002", u => u.Login);
-            this.ValidateEachRowInDataSet(data, processId, (userPreloadingDataRecord) => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, userPreloadingDataRecord), "PLU0003", u => u.Login);
-            this.ValidateEachRowInDataSet(data, processId, (userPreloadingDataRecord) => LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames, userPreloadingDataRecord), "PLU0004", u => u.Login);
-            this.ValidateEachRowInDataSet(data, processId, LoginFormatVerification, "PLU0005",  u => u.Login);
-            this.ValidateEachRowInDataSet(data, processId, PasswordFormatVerification, "PLU0006", u => u.Password);
-            this.ValidateEachRowInDataSet(data, processId, EmailFormatVerification, "PLU0007", u => u.Email);
-            this.ValidateEachRowInDataSet(data, processId, PhoneNumberFormatVerification, "PLU0008",  u => u.PhoneNumber);
-            this.ValidateEachRowInDataSet(data, processId, RoleVerification, "PLU0009", u => u.Role);
-            this.ValidateEachRowInDataSet(data, processId, (userPreloadingDataRecord) => SupervisorVerification(data, activeSupervisorNames, userPreloadingDataRecord), "PLU0010", u => u.Supervisor);
-            this.ValidateEachRowInDataSet(data, processId, SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",
-                u => u.Supervisor);
+            var validationFunctions = new[]
+            {
+                new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row),"PLU0001", u => u.Login),
+                new PreloadedDataValidator(row => LoginDublicationInDataset(data, row), "PLU0002",u => u.Login),
+                new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003",u => u.Login),
+                new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames,row), "PLU0004", u => u.Login),
+                new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
+                new PreloadedDataValidator(PasswordFormatVerification, "PLU0006", u => u.Password),
+                new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
+                new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
+                new PreloadedDataValidator(PhoneNumberFormatVerification, "PLU0008", u => u.PhoneNumber),
+                new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
+                new PreloadedDataValidator(row =>SupervisorVerification(data, activeSupervisorNames, row), "PLU0010",u => u.Supervisor),
+                new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
+            };
+
+            for (int i = 0; i < validationFunctions.Length; i++)
+            {
+                this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
+            }
         }
 
         private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserPreloadingDataRecord userPreloadingDataRecord)
@@ -204,26 +230,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
         }
 
-        private void ValidateEachRowInDataSet(
-            IList<UserPreloadingDataRecord> data,
-            string processId,
-            Func<UserPreloadingDataRecord, bool> validation,
-            string code,
-            Expression<Func<UserPreloadingDataRecord, string>> cellFunc)
-        {
-            int rowNumber = 1;
-            var columnName=   ((MemberExpression)cellFunc.Body).Member.Name;
-            foreach (var userPreloadingDataRecord in data)
-            {
-                if (validation(userPreloadingDataRecord))
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.PushVerificationError(processId, code,
-                            rowNumber, columnName, cellFunc.Compile()(userPreloadingDataRecord)));
-
-                rowNumber++;
-            }
-        }
-
         private bool RoleVerification(UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
@@ -260,6 +266,47 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             return true;
+        }
+
+        void ValidateEachRowInDataSet(
+            IList<UserPreloadingDataRecord> data,
+            string processId,
+            PreloadedDataValidator validator,
+            int indexOfCurrentVerification,
+            int countOfVerifications)
+        {
+            int rowNumber = 1;
+            var columnName = ((MemberExpression)validator.ValueSelector.Body).Member.Name;
+            foreach (var userPreloadingDataRecord in data)
+            {
+                if (validator.ValidationFunction(userPreloadingDataRecord))
+                    this.plainTransactionManager.ExecuteInPlainTransaction(
+                        () => userPreloadingService.PushVerificationError(processId, validator.Code,
+                            rowNumber, columnName, validator.ValueSelector.Compile()(userPreloadingDataRecord)));
+
+                rowNumber++;
+            }
+            int percents = (int)((((double) (indexOfCurrentVerification + 1))/countOfVerifications)*100);
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(
+                () => userPreloadingService.UpdateVerificationProgressInPercents(processId, percents));
+        }
+
+        class PreloadedDataValidator
+        {
+            public PreloadedDataValidator(
+                Func<UserPreloadingDataRecord, bool> validationFunction, 
+                string code, 
+                Expression<Func<UserPreloadingDataRecord, string>> valueSelector)
+            {
+                this.ValidationFunction = validationFunction;
+                this.Code = code;
+                this.ValueSelector = valueSelector;
+            }
+
+            public Func<UserPreloadingDataRecord, bool> ValidationFunction { get; private set; }
+            public string Code { get; private set; }
+            public Expression<Func<UserPreloadingDataRecord, string>> ValueSelector { get; private set; }
         }
     }
 }

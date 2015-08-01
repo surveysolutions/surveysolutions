@@ -178,11 +178,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to is in verification process.
+        ///   Looks up a localized string similar to is in verification process, verified.
         /// </summary>
         internal static string InVerificationProcess {
             get {
                 return ResourceManager.GetString("InVerificationProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is invalid. Please fix error(s) below and upload again..
+        /// </summary>
+        internal static string IsInvalid {
+            get {
+                return ResourceManager.GetString("IsInvalid", resourceCulture);
             }
         }
         
