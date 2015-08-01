@@ -113,7 +113,9 @@ namespace WB.UI.Headquarters
                     WebConfigurationManager.AppSettings["UserPreloadingSettings.CreationIntervalInSeconds"].ParseIntOrNull() ?? 5,
                     WebConfigurationManager.AppSettings["UserPreloadingSettings.CleaningIntervalInHours"].ParseIntOrNull() ?? 12,
                     WebConfigurationManager.AppSettings["UserPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned"].ParseIntOrNull() ?? 1,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.MaxAllowedRecordNumber"].ParseIntOrNull() ?? 10000);
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.MaxAllowedRecordNumber"].ParseIntOrNull() ?? 10000,
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress"].ParseIntOrNull() ?? 100,
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation"].ParseIntOrNull() ?? 100);
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))

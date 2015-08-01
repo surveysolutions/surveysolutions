@@ -27,6 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             Property(x => x.CreatedUsersCount);
             Property(x => x.ErrorMessage);
 
+            Property(x => x.ValidationStartDate);
+            Property(x => x.VerificationProgressInPercents);
+            Property(x => x.CreationStartDate);
+
             List<UserPreloadingDataRecord>(x => x.UserPrelodingData, listMap =>
             {
                 listMap.Index(index => index.Column("Position"));

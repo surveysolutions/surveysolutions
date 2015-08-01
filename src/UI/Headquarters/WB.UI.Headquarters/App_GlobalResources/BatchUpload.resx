@@ -157,7 +157,10 @@
     <value>Finished with error, Reason:</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
-    <value>is in verification process</value>
+    <value>is in verification process, verified</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>is invalid. Please fix error(s) below and upload again.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Last update date</value>

@@ -13,6 +13,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         void FinishValidationProcess(string preloadingProcessId);
 
+        void FinishValidationProcessWithError(string preloadingProcessId, string errorMessage);
+
         void FinishPreloadingProcess(string preloadingProcessId);
 
         void FinishPreloadingProcessWithError(string preloadingProcessId, string errorMessage);
@@ -30,6 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         UserPreloadingProcess GetPreloadingProcesseDetails(string preloadingProcessId);
 
         void PushVerificationError(string preloadingProcessId, string code, int rowNumber, string columnName, string cellValue);
+
+        void UpdateVerificationProgressInPercents(string preloadingProcessId, int percents);
 
         void IncrementCreatedUsersCount(string preloadingProcessId);
 
