@@ -60,7 +60,7 @@
                         <td>@userPreloadingProcess.LastUpdateDate</td>
                         <td>@userPreloadingProcess.State</td>
                         <td>
-                            @if (!new[] { UserPrelodingState.Validating, UserPrelodingState.CreatingUsers }.Contains(userPreloadingProcess.State))
+                            @if (userPreloadingProcess.State != UserPrelodingState.CreatingUsers)
                             {
                                 using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
                                 {

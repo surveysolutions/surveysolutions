@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Supervisor must be an existing user in the system or present in the file.
+        ///   Looks up a localized string similar to  Supervisor must be an active user in the system or present in the file.
         /// </summary>
         public static string PLU0010 {
             get {

@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual long CreatedUsersCount { get; set; }
 
         public virtual string ErrorMessage { get; set; }
-
+        [IgnoreDataMember]
         public virtual IList<UserPreloadingDataRecord> UserPrelodingData { get;protected set; }
 
         public virtual ISet<UserPreloadingVerificationError> VerificationErrors { get; protected set; }

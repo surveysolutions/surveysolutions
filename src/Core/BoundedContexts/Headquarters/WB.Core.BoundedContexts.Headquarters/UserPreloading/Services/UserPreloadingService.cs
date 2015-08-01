@@ -18,14 +18,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
     {
         private readonly IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
+        private readonly UserPreloadingSettings userPreloadingSettings;
 
         readonly Dictionary<string, Action<UserPreloadingDataRecord, string>> dataColumnNamesMappedOnRecordSetter;
 
         public UserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage,
-            IRecordsAccessorFactory recordsAccessorFactory)
+            IRecordsAccessorFactory recordsAccessorFactory, UserPreloadingSettings userPreloadingSettings)
         {
             this.userPreloadingProcessStorage = userPreloadingProcessStorage;
             this.recordsAccessorFactory = recordsAccessorFactory;
+            this.userPreloadingSettings = userPreloadingSettings;
 
             this.dataColumnNamesMappedOnRecordSetter = new Dictionary<string, Action<UserPreloadingDataRecord, string>>
             {
@@ -63,6 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             {
                 throw new UserPreloadingException(e.Message, e);
             }
+
+            if (records.Count - 1 > userPreloadingSettings.MaxAllowedRecordNumber)
+                throw new UserPreloadingException(
+                    String.Format(UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat,
+                        records.Count - 1, userPreloadingSettings.MaxAllowedRecordNumber));
 
             string[] header = null;
             foreach (var record in records)
@@ -302,7 +309,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return
                 userPreloadingProcessStorage.Query(
                     _ =>
-                        _.Where(p => p.State == UserPrelodingState.ReadyForValidation)
+                        _.Where(p => p.State == state)
                             .OrderBy(p => p.LastUpdateDate)
                             .FirstOrDefault());
         }

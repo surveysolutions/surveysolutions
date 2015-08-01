@@ -2053,7 +2053,12 @@ namespace WB.Tests.Unit
 
         public static UserPreloadingProcess UserPreloadingProcess(params UserPreloadingDataRecord[] dataRecords)
         {
-            return new UserPreloadingProcess() { UserPreloadingProcessId = Guid.NewGuid().FormatGuid(), UserPrelodingData = dataRecords };
+            var result= new UserPreloadingProcess() { UserPreloadingProcessId = Guid.NewGuid().FormatGuid() };
+            foreach (var userPreloadingDataRecord in dataRecords)
+            {
+                result.UserPrelodingData.Add(userPreloadingDataRecord);
+            }
+            return result;
         }
 
         public static UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email="", string phoneNumber="", string role=null)

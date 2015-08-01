@@ -19,6 +19,7 @@ using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Native.Logging;
@@ -111,7 +112,8 @@ namespace WB.UI.Headquarters
                     WebConfigurationManager.AppSettings["UserPreloadingSettings.VerificationIntervalInSeconds"].ParseIntOrNull() ?? 5,
                     WebConfigurationManager.AppSettings["UserPreloadingSettings.CreationIntervalInSeconds"].ParseIntOrNull() ?? 5,
                     WebConfigurationManager.AppSettings["UserPreloadingSettings.CleaningIntervalInHours"].ParseIntOrNull() ?? 12,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned"].ParseIntOrNull() ?? 1);
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned"].ParseIntOrNull() ?? 1,
+                    WebConfigurationManager.AppSettings["UserPreloadingSettings.MaxAllowedRecordNumber"].ParseIntOrNull() ?? 10000);
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))

@@ -36,7 +36,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             get { return transactionManagerProvider.GetTransactionManager(); }
         }
 
-        public UserBatchCreator(IUserPreloadingService userPreloadingService, ICommandService commandService, IQueryableReadSideRepositoryReader<UserDocument> userStorage, ILogger logger, IPasswordHasher passwordHasher, ITransactionManagerProvider transactionManagerProvider, IPlainTransactionManager plainTransactionManager)
+        public UserBatchCreator(
+            IUserPreloadingService userPreloadingService, 
+            ICommandService commandService, 
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            ILogger logger, 
+            IPasswordHasher passwordHasher, 
+            ITransactionManagerProvider transactionManagerProvider, 
+            IPlainTransactionManager plainTransactionManager)
         {
             this.userPreloadingService = userPreloadingService;
             this.commandService = commandService;
@@ -124,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     new[] { UserRoles.Supervisor },
                     false,
                     false, null,
-                    supervisorToCreate.FullName, supervisorToCreate.PhoneNumber));
+                    supervisorToCreate.FullName, supervisorToCreate.PhoneNumber), handleInBatch:true);
                 return;
             }
 
@@ -133,10 +140,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     String.Format("archived user '{0}' is in role '{1}' but must be in role supervisor",
                         archivedSupervisor.UserName, string.Join(",", archivedSupervisor.Roles)));
 
-            commandService.Execute(new UnarchiveUserCommand(archivedSupervisor.PublicKey));
-            commandService.Execute(new ChangeUserCommand(archivedSupervisor.PublicKey, supervisorToCreate.Email, false,
-                false, passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.FullName,
-                supervisorToCreate.PhoneNumber, archivedSupervisor.PublicKey));
+            commandService.Execute(new UnarchiveUserAndUpdateCommand(archivedSupervisor.PublicKey,
+                passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email, supervisorToCreate.FullName,
+                supervisorToCreate.PhoneNumber), handleInBatch:true);
         }
 
         void CreateInterviewerOrUnarchiveAndUpdate(UserPreloadingDataRecord interviewerToCreate)
@@ -156,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     new[] { UserRoles.Operator },
                     false,
                     false, supervisor,
-                    interviewerToCreate.FullName, interviewerToCreate.PhoneNumber));
+                    interviewerToCreate.FullName, interviewerToCreate.PhoneNumber), handleInBatch:true);
                 return;
             }
 
@@ -165,11 +171,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     String.Format("archived user '{0}' is in role '{1}' but must be in role interviewer",
                         archivedInterviewers.UserName, string.Join(",", archivedInterviewers.Roles)));
 
-            commandService.Execute(new UnarchiveUserCommand(archivedInterviewers.PublicKey));
-            commandService.Execute(new ChangeUserCommand(archivedInterviewers.PublicKey, interviewerToCreate.Email,
-                false,
-                false, passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.FullName,
-                interviewerToCreate.PhoneNumber, archivedInterviewers.PublicKey));
+            commandService.Execute(new UnarchiveUserAndUpdateCommand(archivedInterviewers.PublicKey,
+                passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email, interviewerToCreate.FullName,
+                interviewerToCreate.PhoneNumber), handleInBatch: true);
         }
 
         private UserLight GetSupervisorForUser(UserPreloadingDataRecord dataRecord)
