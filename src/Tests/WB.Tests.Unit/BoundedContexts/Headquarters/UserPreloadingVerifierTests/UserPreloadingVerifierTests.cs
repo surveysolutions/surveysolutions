@@ -209,6 +209,26 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0011", 1, "Supervisor", supervisorCellValue));
         }
 
+        [Test]
+        public void
+            VerifyProcessFromReadyToBeVerifiedQueue_When_exception_happend_during_verification_Then_verification_should_be_finished_with_error()
+        {
+            var userName = "nastya";
+            var userPreloadingProcess = Create.UserPreloadingProcess(Create.UserPreloadingDataRecord(userName));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+            userPreloadingServiceMock.Setup(
+                x =>
+                    x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId,
+                        Moq.It.IsAny<int>())).Throws<NullReferenceException>();
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.FinishValidationProcessWithError(userPreloadingProcess.UserPreloadingProcessId, Moq.It.IsAny<string>()));
+        }
+
         private UserPreloadingVerifier CreateUserPreloadingVerifier(
             IUserPreloadingService userPreloadingService = null, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage = null)

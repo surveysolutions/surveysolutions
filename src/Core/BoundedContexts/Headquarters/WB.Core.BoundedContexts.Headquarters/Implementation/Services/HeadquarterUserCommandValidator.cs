@@ -36,8 +36,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new UserException(
                     String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenByArchivedUsersFormat,
                         command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
-
-            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(command.Roles, command.Supervisor.Id);
+            
+            if (command.Supervisor!=null)
+                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(command.Roles, command.Supervisor.Id);
         }
 
         public void Validate(User aggregate, UnarchiveUserCommand command)
