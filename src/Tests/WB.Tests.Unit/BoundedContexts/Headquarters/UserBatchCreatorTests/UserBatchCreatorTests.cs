@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             commantService.Verify(
                 x =>
                     x.Execute(Moq.It.Is<CreateUserCommand>(c => c.UserName == supervisorName && c.Roles.Contains(UserRoles.Supervisor)), Moq.It.IsAny<string>(),
-                        false));
+                        true));
 
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
@@ -60,8 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-            commantService.Verify(x => x.Execute(Moq.It.IsAny<UnarchiveUserCommand>(), Moq.It.IsAny<string>(),false));
-            commantService.Verify(x =>x.Execute(Moq.It.IsAny<ChangeUserCommand>(), Moq.It.IsAny<string>(),false));
+            commantService.Verify(x => x.Execute(Moq.It.IsAny<UnarchiveUserAndUpdateCommand>(), Moq.It.IsAny<string>(), true));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -83,7 +82,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             commantService.Verify(
                 x =>
                     x.Execute(Moq.It.Is<CreateUserCommand>(c => c.UserName == interviewerName && c.Roles.Contains(UserRoles.Operator)), Moq.It.IsAny<string>(),
-                        false));
+                        true));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -104,8 +103,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-            commantService.Verify(x => x.Execute(Moq.It.IsAny<UnarchiveUserCommand>(), Moq.It.IsAny<string>(), false));
-            commantService.Verify(x => x.Execute(Moq.It.IsAny<ChangeUserCommand>(), Moq.It.IsAny<string>(), false));
+            commantService.Verify(x => x.Execute(Moq.It.IsAny<UnarchiveUserAndUpdateCommand>(), Moq.It.IsAny<string>(), true));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -118,7 +116,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var userPreloadingProcess = Create.UserPreloadingProcess(
                 Create.UserPreloadingDataRecord(login: supervisorName));
             var commantService = new Mock<ICommandService>();
-            commantService.Setup(x => x.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), false))
+            commantService.Setup(x => x.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), true))
                 .Throws<NullReferenceException>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
 
