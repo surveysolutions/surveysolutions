@@ -104,20 +104,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return preloadingProcessId;
         }
 
-        void ThrowIfFileStructureIsInvalid(string[] header, string fileName)
-        {
-            var dataColumnNamesLowerCase = this.dataColumnNamesMappedOnRecordSetter.Keys.Select(r => r.ToLower()).ToArray();
-            var invalidColumnNames = new List<string>();
-            foreach (var columnName in header)
-            {
-                if (!dataColumnNamesLowerCase.Contains(columnName))
-                    invalidColumnNames.Add(columnName);
-            }
-            if (invalidColumnNames.Any())
-                throw new UserPreloadingException(String.Format(UserPreloadingServiceMessages.FileColumnsCantBeMappedFormat,
-                    fileName, string.Join(",", invalidColumnNames)));
-        }
-
         public void FinishValidationProcess(string preloadingProcessId)
         {
             var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
@@ -350,6 +336,20 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                         _.Where(p => p.State == state)
                             .OrderBy(p => p.LastUpdateDate)
                             .FirstOrDefault());
+        }
+
+        private void ThrowIfFileStructureIsInvalid(string[] header, string fileName)
+        {
+            var dataColumnNamesLowerCase = this.dataColumnNamesMappedOnRecordSetter.Keys.Select(r => r.ToLower()).ToArray();
+            var invalidColumnNames = new List<string>();
+            foreach (var columnName in header)
+            {
+                if (!dataColumnNamesLowerCase.Contains(columnName))
+                    invalidColumnNames.Add(columnName);
+            }
+            if (invalidColumnNames.Any())
+                throw new UserPreloadingException(String.Format(UserPreloadingServiceMessages.FileColumnsCantBeMappedFormat,
+                    fileName, string.Join(",", invalidColumnNames)));
         }
     }
 }

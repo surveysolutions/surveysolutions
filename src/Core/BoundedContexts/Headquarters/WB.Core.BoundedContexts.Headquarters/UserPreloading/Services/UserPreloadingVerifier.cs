@@ -276,26 +276,27 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             int countOfVerifications)
         {
             int rowNumber = 1;
-            var columnName = ((MemberExpression)validator.ValueSelector.Body).Member.Name;
+            var columnName = ((MemberExpression) validator.ValueSelector.Body).Member.Name;
             foreach (var userPreloadingDataRecord in data)
             {
                 if (validator.ValidationFunction(userPreloadingDataRecord))
                     this.plainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.PushVerificationError(processId, validator.Code,
                             rowNumber, columnName, validator.ValueSelector.Compile()(userPreloadingDataRecord)));
-                
+
                 if (rowNumber%userPreloadingSettings.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress == 0)
                 {
-                    var part = (double)indexOfCurrentVerification+ (double)rowNumber / data.Count;
-                    int intermediatePercents = (int)((part / countOfVerifications) * 100);
+                    var part = (double) indexOfCurrentVerification + (double) rowNumber/data.Count;
+                    int intermediatePercents = (int) ((part/countOfVerifications)*100);
 
                     this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.UpdateVerificationProgressInPercents(processId, intermediatePercents));
+                        () =>
+                            userPreloadingService.UpdateVerificationProgressInPercents(processId, intermediatePercents));
                 }
                 rowNumber++;
             }
 
-            int percents = (int)((((double)(indexOfCurrentVerification + 1)) / countOfVerifications) * 100);
+            int percents = (int) ((((double) (indexOfCurrentVerification + 1))/countOfVerifications)*100);
             this.plainTransactionManager.ExecuteInPlainTransaction(
                 () => userPreloadingService.UpdateVerificationProgressInPercents(processId, percents));
         }
