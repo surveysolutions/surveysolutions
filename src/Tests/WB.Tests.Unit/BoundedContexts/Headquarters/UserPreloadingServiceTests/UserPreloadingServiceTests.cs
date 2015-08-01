@@ -141,6 +141,86 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
             Assert.That(userPreloadingProcessStorage.GetById(processId).State, Is.EqualTo(UserPrelodingState.FinishedWithError));
         }
 
+
+        [Test]
+        public void
+            EnqueueForValidation_When_process_is_in_Uploaded_state_Then_process_should_be_ready_for_validation()
+        {
+            var processId = "aaa";
+            var userPreloadingProcessStorage = new TestPlainStorage<UserPreloadingProcess>();
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId, State = UserPrelodingState.Uploaded }, processId);
+            var userPreloadingService =
+                this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage);
+
+            userPreloadingService.EnqueueForValidation(processId);
+
+            Assert.That(userPreloadingProcessStorage.GetById(processId).State, Is.EqualTo(UserPrelodingState.ReadyForValidation));
+        }
+
+        [Test]
+        public void
+            EnqueueForUserCreation_When_process_is_in_Validated_state_Then_process_should_be_ready_for_user_creation()
+        {
+            var processId = "aaa";
+            var userPreloadingProcessStorage = new TestPlainStorage<UserPreloadingProcess>();
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId, State = UserPrelodingState.Validated }, processId);
+            var userPreloadingService =
+                this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage);
+
+            userPreloadingService.EnqueueForUserCreation(processId);
+
+            Assert.That(userPreloadingProcessStorage.GetById(processId).State, Is.EqualTo(UserPrelodingState.ReadyForUserCreation));
+        }
+
+        [Test]
+        public void
+            DeletePreloadingProcess_When_process_is_in_Validated_state_Then_process_should_be_deleted()
+        {
+            var processId = "aaa";
+            var userPreloadingProcessStorage = new TestPlainStorage<UserPreloadingProcess>();
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId, State = UserPrelodingState.Validated }, processId);
+            var userPreloadingService =
+                this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage);
+
+            userPreloadingService.DeletePreloadingProcess(processId);
+
+            Assert.That(userPreloadingProcessStorage.GetById(processId), Is.Null);
+        }
+
+        [Test]
+        public void
+            DeQueuePreloadingProcessIdReadyToBeValidated_When_2_processes_in_ready_to_be_validated_state_are_present_Then_oldest_process_id_should_be_returned()
+        {
+            var processId1 = "aaa";
+            var processId2 = "bbb";
+            var userPreloadingProcessStorage = new TestPlainStorage<UserPreloadingProcess>();
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId1, State = UserPrelodingState.ReadyForValidation, LastUpdateDate = DateTime.Now }, processId1);
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId2, State = UserPrelodingState.ReadyForValidation, LastUpdateDate = DateTime.Now }, processId2);
+            var userPreloadingService =
+                this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage);
+
+            var result = userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated();
+
+            Assert.That(result, Is.EqualTo(processId1));
+        }
+
+        [Test]
+        public void
+            DeQueuePreloadingProcessIdReadyToCreateUsers_When_2_processes_in_ReadyForUserCreation_state_are_present_Then_oldest_process_id_should_be_returned()
+        {
+            var processId1 = "aaa";
+            var processId2 = "bbb";
+            var userPreloadingProcessStorage = new TestPlainStorage<UserPreloadingProcess>();
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId1, State = UserPrelodingState.ReadyForUserCreation, LastUpdateDate = DateTime.Now }, processId1);
+            userPreloadingProcessStorage.Store(new UserPreloadingProcess() { UserPreloadingProcessId = processId2, State = UserPrelodingState.ReadyForUserCreation, LastUpdateDate = DateTime.Now }, processId2);
+            var userPreloadingService =
+                this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage);
+
+            var result = userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers();
+
+            Assert.That(result, Is.EqualTo(processId1));
+        }
+
         private UserPreloadingService CreateUserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage=null,
             IRecordsAccessorFactory recordsAccessorFactory = null)
         {
