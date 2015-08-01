@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -31,6 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
 
             userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0001", 1, "Login", userName));
+            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, 8));
         }
 
         [Test]
@@ -210,10 +212,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             IUserPreloadingService userPreloadingService = null, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage = null)
         {
-            return new UserPreloadingVerifier(Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
-                userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
-                userStorage ?? new InMemoryReadSideRepositoryAccessor<UserDocument>(),
-                Mock.Of<IPlainTransactionManager>());
+            return
+                new UserPreloadingVerifier(
+                    Mock.Of<ITransactionManagerProvider>(
+                        _ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
+                    userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
+                    userStorage ?? new InMemoryReadSideRepositoryAccessor<UserDocument>(),
+                    Mock.Of<IPlainTransactionManager>(), new UserPreloadingSettings(5, 5, 12, 1, 10000, 100));
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)

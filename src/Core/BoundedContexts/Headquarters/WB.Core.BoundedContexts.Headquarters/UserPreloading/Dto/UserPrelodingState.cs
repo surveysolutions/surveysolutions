@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         ReadyForUserCreation,
         CreatingUsers,
         Finished,
-        FinishedWithError
+        FinishedWithError,
+        ValidationFinishedWithError
     }
 }

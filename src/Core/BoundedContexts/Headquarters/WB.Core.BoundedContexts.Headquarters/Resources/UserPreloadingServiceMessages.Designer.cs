@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to max number of validation errors {0} have been reached.
+        /// </summary>
+        internal static string MaxNumberOfValidationErrorsHaveBeenReachedFormat {
+            get {
+                return ResourceManager.GetString("MaxNumberOfValidationErrorsHaveBeenReachedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The dataset contains {0} records, but max allowed record number is {1}.
         /// </summary>
         internal static string TheDatasetMaxRecordNumberReachedFormat {
@@ -93,6 +102,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         internal static string UserPreloadingProcessWithIdHasErrorsFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessWithIdHasErrorsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to validation progress in percents can&apos;t be negative or greater then 100, but the value is {0}.
+        /// </summary>
+        internal static string validationProgressInPercentsCantBeNegativeOrGreaterThen100Format {
+            get {
+                return ResourceManager.GetString("validationProgressInPercentsCantBeNegativeOrGreaterThen100Format", resourceCulture);
             }
         }
     }

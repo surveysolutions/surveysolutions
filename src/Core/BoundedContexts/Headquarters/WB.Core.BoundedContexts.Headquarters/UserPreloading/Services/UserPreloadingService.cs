@@ -130,6 +130,19 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
         }
 
+        public void FinishValidationProcessWithError(string preloadingProcessId, string errorMessage)
+        {
+            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
+
+            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
+
+            preloadingProcess.State = UserPrelodingState.ValidationFinishedWithError;
+            preloadingProcess.ErrorMessage = errorMessage;
+            preloadingProcess.LastUpdateDate = DateTime.Now;
+
+            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
+        }
+
         public void FinishPreloadingProcess(string preloadingProcessId)
         {
             var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
@@ -204,6 +217,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             process.State = UserPrelodingState.Validating;
             process.LastUpdateDate = DateTime.Now;
+            process.ValidationStartDate = DateTime.Now;
 
             userPreloadingProcessStorage.Store(process, process.UserPreloadingProcessId);
             return process.UserPreloadingProcessId;
@@ -217,6 +231,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             process.State = UserPrelodingState.CreatingUsers;
             process.LastUpdateDate = DateTime.Now;
+            process.CreationStartDate = DateTime.Now;
 
             userPreloadingProcessStorage.Store(process, process.UserPreloadingProcessId);
             return process.UserPreloadingProcessId;
@@ -241,6 +256,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
 
+            if (preloadingProcess.VerificationErrors.Count >
+                userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation)
+            {
+                throw new UserPreloadingException(
+                    string.Format(UserPreloadingServiceMessages.MaxNumberOfValidationErrorsHaveBeenReachedFormat,
+                        userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation));
+            }
+
             preloadingProcess.VerificationErrors.Add(new UserPreloadingVerificationError()
             {
                 CellValue = cellValue,
@@ -249,6 +272,21 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 RowNumber = rowNumber
             });
             preloadingProcess.LastUpdateDate = DateTime.Now;
+            
+            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
+        }
+
+        public void UpdateVerificationProgressInPercents(string preloadingProcessId, int percents)
+        {
+            if(percents<0 ||percents>100)
+                throw new UserPreloadingException(String.Format(UserPreloadingServiceMessages.validationProgressInPercentsCantBeNegativeOrGreaterThen100Format, percents));
+
+            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
+
+            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
+
+            preloadingProcess.LastUpdateDate=DateTime.Now;
+            preloadingProcess.VerificationProgressInPercents = percents;
 
             userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
         }

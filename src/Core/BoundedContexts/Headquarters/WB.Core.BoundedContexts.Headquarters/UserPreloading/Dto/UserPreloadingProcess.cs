@@ -17,6 +17,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual UserPrelodingState State { get; set; }
         public virtual long FileSize { get; set; }
         public virtual DateTime UploadDate { get; set; }
+        public virtual DateTime? ValidationStartDate { get; set; }
+        public virtual int VerificationProgressInPercents { get; set; }
+        public virtual DateTime? CreationStartDate { get; set; }
         public virtual DateTime LastUpdateDate { get; set; }
 
         public virtual long RecordsCount { get; set; }
