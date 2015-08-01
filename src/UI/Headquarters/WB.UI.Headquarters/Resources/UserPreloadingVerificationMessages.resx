@@ -145,7 +145,7 @@
     <value> Role is invalid. Only "Supervisor" or "Interviewer" values are allowed</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
-    <value> Supervisor must be an existing user in the system or present in the file</value>
+    <value> Supervisor must be an active user in the system or present in the file</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value> Supervisor column must be empty for user in "Supervisor" role</value>

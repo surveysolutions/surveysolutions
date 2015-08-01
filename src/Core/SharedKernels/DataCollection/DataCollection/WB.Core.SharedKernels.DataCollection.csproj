@@ -79,6 +79,7 @@
     <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
+    <Compile Include="Commands\User\UnarchiveUserAndUpdateCommand.cs" />
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />

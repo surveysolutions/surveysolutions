@@ -107,4 +107,7 @@
   <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
     <value>user preloading process with id '{0}'has {1} error(s).</value>
   </data>
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>The dataset contains {0} records, but max allowed record number is {1}</value>
+  </data>
 </root>

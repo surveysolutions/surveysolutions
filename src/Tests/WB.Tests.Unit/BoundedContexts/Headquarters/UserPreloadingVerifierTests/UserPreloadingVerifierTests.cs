@@ -212,7 +212,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         {
             return new UserPreloadingVerifier(Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
-                userStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
+                userStorage ?? new InMemoryReadSideRepositoryAccessor<UserDocument>(),
                 Mock.Of<IPlainTransactionManager>());
         }
 

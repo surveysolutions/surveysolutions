@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The dataset contains {0} records, but max allowed record number is {1}.
+        /// </summary>
+        internal static string TheDatasetMaxRecordNumberReachedFormat {
+            get {
+                return ResourceManager.GetString("TheDatasetMaxRecordNumberReachedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; can&apos;t be finished because only {1} created out of {2}.
         /// </summary>
         internal static string userPreloadingProcessCantBeFinishedFormat {
