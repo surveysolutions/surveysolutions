@@ -2051,9 +2051,16 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static UserPreloadingProcess UserPreloadingProcess(params UserPreloadingDataRecord[] dataRecords)
+        public static UserPreloadingProcess UserPreloadingProcess(string userPreloadingProcessId = null,
+            UserPrelodingState state = UserPrelodingState.Uploaded, int recordsCount=0, params UserPreloadingDataRecord[] dataRecords)
         {
-            var result= new UserPreloadingProcess() { UserPreloadingProcessId = Guid.NewGuid().FormatGuid() };
+            var result = new UserPreloadingProcess()
+            {
+                UserPreloadingProcessId = userPreloadingProcessId ?? Guid.NewGuid().FormatGuid(),
+                State = state,
+                RecordsCount = recordsCount,
+                LastUpdateDate = DateTime.Now
+            };
             foreach (var userPreloadingDataRecord in dataRecords)
             {
                 result.UserPrelodingData.Add(userPreloadingDataRecord);
@@ -2072,6 +2079,11 @@ namespace WB.Tests.Unit
                 Email = email,
                 PhoneNumber = phoneNumber
             };
+        }
+
+        public static UserPreloadingVerificationError UserPreloadingVerificationError()
+        {
+            return new UserPreloadingVerificationError();
         }
     }
 }

@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
 
-            if (preloadingProcess.VerificationErrors.Count >
+            if (preloadingProcess.VerificationErrors.Count >=
                 userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation)
             {
                 throw new UserPreloadingException(
@@ -264,14 +264,17 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public void UpdateVerificationProgressInPercents(string preloadingProcessId, int percents)
         {
-            if(percents<0 ||percents>100)
-                throw new UserPreloadingException(String.Format(UserPreloadingServiceMessages.validationProgressInPercentsCantBeNegativeOrGreaterThen100Format, percents));
+            if (percents < 0 || percents > 100)
+                throw new UserPreloadingException(
+                    String.Format(
+                        UserPreloadingServiceMessages.validationProgressInPercentsCantBeNegativeOrGreaterThen100Format,
+                        percents));
 
             var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
 
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
 
-            preloadingProcess.LastUpdateDate=DateTime.Now;
+            preloadingProcess.LastUpdateDate = DateTime.Now;
             preloadingProcess.VerificationProgressInPercents = percents;
 
             userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
