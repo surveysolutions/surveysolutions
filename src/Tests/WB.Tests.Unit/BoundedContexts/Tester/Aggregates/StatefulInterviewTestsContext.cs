@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {
     [Subject(typeof(StatefulInterview))]
-    public class StatefulInterviewTestsContext
+    internal class StatefulInterviewTestsContext
     {
         protected static void SetupQuestionnaireWithLinkedAndReferencedQuestions(Guid questionnaireId,
             Guid linkedQuestionId, Guid[] linkedQuestionRosters, Guid referencedQuestionId, Guid[] referencedQuestionRosters)

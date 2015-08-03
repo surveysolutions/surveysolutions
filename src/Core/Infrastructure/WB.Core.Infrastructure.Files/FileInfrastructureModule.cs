@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.Files
     {
         public override void Load()
         {
-            this.Bind<IFileSystemAccessor>().To<FileSystemIOAccessor>();
+            //this.Bind<IFileSystemAccessor>().To<FileSystemIOAccessor>();
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
     }
