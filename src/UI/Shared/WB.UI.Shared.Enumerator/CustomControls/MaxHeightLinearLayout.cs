@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.CustomControls
 {

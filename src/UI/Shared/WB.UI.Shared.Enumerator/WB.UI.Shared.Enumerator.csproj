@@ -131,6 +131,7 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
+    <Compile Include="CustomBindings\ButtonGroupTitleBinding.cs" />
     <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="CustomControls\IMvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
+    <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
     <Compile Include="CustomControls\MvxRecyclerView.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
