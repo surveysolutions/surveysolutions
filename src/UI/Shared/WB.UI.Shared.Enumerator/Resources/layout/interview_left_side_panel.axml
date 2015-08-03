@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/Interview_Sidebar_Body">
- 
 
   <LinearLayout style="@style/Interview_Sidebar_Header">
     <TextView style="@style/Interview_Sidebar_Title"
@@ -10,7 +9,7 @@
     <WB.UI.Tester.CustomControls.MaxHeightLinearLayout
       local:maxHeight="@dimen/Interview_Sidebar_PrefilledQuestions_max_height"
       style="@style/Interview_Sidebar_PrefilledQuestions_Container">
-      
+
       <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
                    local:MvxBind="ItemsSource PrefilledQuestions"
                    local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
@@ -18,7 +17,7 @@
   </LinearLayout>
 
   <View style="@style/Interview_Entity_Divider" />
-  <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView
+  <MvxListView
         style="@style/Interview_Sidebar_Sections"
         local:MvxBind="ItemsSource Sections.AllVisibleSections"
         local:MvxItemTemplate="@layout/interview_left_side_panel_item_section" />
