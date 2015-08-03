@@ -135,7 +135,6 @@ namespace WB.UI.Capi
                 toReturn.Add(typeof(MvxRecyclerView).Assembly);
                 toReturn.Add(typeof(DrawerLayout).Assembly);
                 toReturn.Add(typeof(SwitchCompat).Assembly);
-                toReturn.Add(typeof(MvxLinearLayout).Assembly);
                 return toReturn;
             }
         }
