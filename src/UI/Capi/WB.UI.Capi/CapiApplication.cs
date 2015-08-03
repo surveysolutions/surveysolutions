@@ -1,4 +1,5 @@
 using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,15 +25,19 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
+using PCLStorage;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.BoundedContexts.Tester;
+using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Android.Logging;
 using WB.Core.GenericSubdomains.ErrorReporting;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Android;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
@@ -48,6 +53,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Capi.EventHandlers;
 using WB.UI.Capi.FileStorage;
+using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Injections;
@@ -57,7 +63,10 @@ using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
+using WB.UI.Tester.CustomServices.UserInteraction;
+using WB.UI.Tester.Ninject;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Capi
 {
@@ -255,11 +264,8 @@ namespace WB.UI.Capi
         {
             base.OnCreate();
 
-             this.RestoreAppState();
+            this.RestoreAppState();
 
-             // initialize app if necessary
-            MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
-            MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
             NcqrsEnvironment.InitDefaults();
 
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
@@ -270,16 +276,25 @@ namespace WB.UI.Capi
             const string InterviewFilesFolder = "InterviewData";
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-
             this.kernel = new StandardKernel(
-                new ServiceLocationModule(),
-                new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
+
+                new AndroidInfrastructureModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries"),
+                    plainStorageSettings: new PlainStorageSettings() { StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
+                new EnumeratorSharedKernelModule(),
+                new TesterBoundedContextModule(),
+                new InfrastructureModuleMobile().AsNinject(),
+
                 new FileInfrastructureModule(),
                 new AndroidLoggingModule());
+
+            MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
+            MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
+
+            this.kernel.Bind<IUserInteractionService>().To<UserInteractionService>();
 
             this.kernel.Bind<SyncPackageIdsStorage>().ToSelf().InSingletonScope();
             this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();
@@ -300,14 +315,18 @@ namespace WB.UI.Capi
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
-            var bus = new InProcessEventBus(Kernel.Get<IEventStore>());
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            kernel.Bind<IEventBus>().ToConstant(bus).Named("interviewViewBus");
-            kernel.Bind<ILiteEventBus>().ToConstant(bus).Named("interviewViewBus");
+            var liteEventBus = this.kernel.Get<ILiteEventBus>();
+            kernel.Unbind<ILiteEventBus>();
+
+            var cqrsEventBus = new InProcessEventBus(Kernel.Get<IEventStore>());
+
+            var hybridEventBus = new HybridEventBus(liteEventBus, cqrsEventBus);
+
+            NcqrsEnvironment.SetDefault<IEventBus>(hybridEventBus);
+
+            kernel.Bind<IEventBus>().ToConstant(hybridEventBus);
+            kernel.Bind<ILiteEventBus>().ToConstant(hybridEventBus);
 
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
@@ -339,20 +358,35 @@ namespace WB.UI.Capi
             var answerOptionsForCascadingQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForCascadingQuestionsDenormalizer>();
 
             this.RegisterInterviewHandlerInBus(
-                bus, 
+                cqrsEventBus, 
                 eventHandler, 
                 answerOptionsForLinkedQuestionsDenormalizer, 
                 answerOptionsForCascadingQuestionsDenormalizer);
 
-            this.InitTemplateStorage(bus);
+            this.InitTemplateStorage(cqrsEventBus);
 
-            this.InitUserStorage(bus);
+            this.InitUserStorage(cqrsEventBus);
 
-            this.InitFileStorage(bus);
+            this.InitFileStorage(cqrsEventBus);
 
-            this.InitDashboard(bus);
+            this.InitDashboard(cqrsEventBus);
             
             #endregion
+
+            this.kernel.VerifyIfDebug();
+        }
+
+        private static string GetPathToSubfolderInLocalDirectory(string subFolderName)
+        {
+            var pathToSubfolderInLocalDirectory = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, subFolderName);
+
+            var subfolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
+            if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
+            {
+                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory, CreationCollisionOption.FailIfExists).Wait();
+            }
+
+            return pathToSubfolderInLocalDirectory;
         }
 
         private void RestoreAppState()

@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -35,7 +36,8 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             ICapiSynchronizationCacheService capiSynchronizationCacheService, 
             IJsonUtils jsonUtils, 
             IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireImportService questionnaireImportService)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
@@ -47,6 +49,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             this.loginViewFactory = loginViewFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+            this.questionnaireImportService = questionnaireImportService;
         }
 
         private readonly ILogger logger;
@@ -60,6 +63,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory;
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireImportService questionnaireImportService;
 
         public void ProcessDownloadedPackage(UserSyncPackageDto item)
         {
@@ -179,6 +183,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
 
+            this.questionnaireImportService.ImportQuestionnaireModel(template);
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
             
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode, string.Empty));

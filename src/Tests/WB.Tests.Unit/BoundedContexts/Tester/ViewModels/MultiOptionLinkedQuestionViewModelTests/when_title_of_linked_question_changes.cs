@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    public class when_title_of_linked_question_changes : MultiOptionLinkedQuestionViewModelTestsContext
+    internal class when_title_of_linked_question_changes : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

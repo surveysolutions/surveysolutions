@@ -77,14 +77,8 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
         {
             WrapConnection(connection =>
             {
-                try
-                {
-                    connection.Insert(row);
-                }
-                catch
-                {
-                    connection.Update(row);
-                }
+                connection.Delete<PlainStorageRow>(row.Id.ToString());
+                connection.Insert(row);
             });
         }
 
@@ -94,14 +88,8 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
             {
                 foreach (PlainStorageRow row in rows)
                 {
-                    try
-                    {
-                        connection.Insert(row);
-                    }
-                    catch
-                    {
-                        connection.Update(row);
-                    }
+                    connection.Delete<PlainStorageRow>(row.Id.ToString());
+                    connection.Insert(row);
                 }
             });
         }

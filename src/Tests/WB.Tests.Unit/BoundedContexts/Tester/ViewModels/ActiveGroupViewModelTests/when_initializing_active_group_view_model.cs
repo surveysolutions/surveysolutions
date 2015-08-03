@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTests
 {
-    public class when_initializing_active_group_view_model : ActiveGroupViewModelTestContext
+    internal class when_initializing_active_group_view_model : ActiveGroupViewModelTestContext
     {
         Establish context = () =>
         {

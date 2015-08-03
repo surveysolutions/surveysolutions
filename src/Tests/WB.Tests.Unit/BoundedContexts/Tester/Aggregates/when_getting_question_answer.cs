@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {
-    public class when_getting_question_answer : StatefulInterviewTestsContext
+    internal class when_getting_question_answer : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {

@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    public class when_linked_to_question_is_answered : MultiOptionLinkedQuestionViewModelTestsContext
+    internal class when_linked_to_question_is_answered : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
