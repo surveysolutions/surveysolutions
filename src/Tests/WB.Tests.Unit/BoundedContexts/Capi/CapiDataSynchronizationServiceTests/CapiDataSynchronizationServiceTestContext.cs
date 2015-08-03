@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -39,7 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(),
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewMetaInfoFactory ?? Mock.Of<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>(),
-                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                Mock.Of < IQuestionnaireImportService>());
         }
 
         protected static string GetItemAsContent(object item)
