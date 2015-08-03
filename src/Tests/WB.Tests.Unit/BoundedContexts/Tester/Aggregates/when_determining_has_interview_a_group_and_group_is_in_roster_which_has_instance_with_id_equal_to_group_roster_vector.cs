@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
         {
             Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
                 => _.HasGroup(group.Id) == true
-                   && _.GetRostersFromTopToSpecifiedGroup(group.Id) == new [] { rosterId });
+                && _.GetRostersFromTopToSpecifiedGroup(group.Id) == new [] { rosterId });
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId);
 

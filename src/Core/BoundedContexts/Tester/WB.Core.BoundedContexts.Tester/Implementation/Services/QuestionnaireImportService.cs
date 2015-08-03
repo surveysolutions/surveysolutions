@@ -40,8 +40,15 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly)
         {
+            this.ImportQuestionnaireModel(questionnaireDocument);
+            this.ImportQuestionnaireDocument(questionnaireDocument.PublicKey, 1, questionnaireDocument);
+            this.ImportAssembly(questionnaireDocument.PublicKey, 1, supportingAssembly);
+        }
+
+        public void ImportQuestionnaireModel(QuestionnaireDocument questionnaireDocument)
+        {
             questionnaireDocument.ConnectChildrenWithParent();
-            
+
             var questionnaireModel = new QuestionnaireModel
             {
                 Parents = new Dictionary<Guid, List<GroupReferenceModel>>(),
@@ -59,24 +66,33 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
 
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
-            questionnaireDocument.Children.TreeToEnumerable(x => x.Children).ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
+            questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
+                .ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
 
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
-            
+
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
                 .ToList();
 
-            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey, x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
+            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey,
+                x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
 
             questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => questionnaireModel.Questions[x.PublicKey]);
 
-            questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
+            this.questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
+        }
 
-            questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireDocument.PublicKey, 1, supportingAssembly);
-            questionnaireRepository.StoreQuestionnaire(questionnaireDocument.PublicKey, 1, questionnaireDocument);
+        private void ImportQuestionnaireDocument(Guid questionnaireId, int questionnaireVersion, QuestionnaireDocument questionnaireDocument)
+        {
+            this.questionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
+        }
+
+        private void ImportAssembly(Guid questionnaireId, int questionnaireVersion, string supportingAssembly)
+        {
+            this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireId, questionnaireVersion, supportingAssembly);
         }
 
         private GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup, int layerIndex)
