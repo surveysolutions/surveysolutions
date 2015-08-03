@@ -99,7 +99,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
         {
-            SideBarSectionViewModel selectedGroup = AllVisibleSections
+            var allTreeElements = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections)
+                .TreeToEnumerable(x => x.Children).ToList();
+            SideBarSectionViewModel selectedGroup = allTreeElements
                 .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
             var sideBarSectionToHighlight = selectedGroup;
@@ -121,25 +123,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             sideBarSectionToHighlight.TreeToEnumerable(s => s.Children)
                 .Where(s => !s.IsSelected)
                 .ForEach(s => s.IsSelected = true);
+            selectedGroup.Expanded = true;
 
             this.UpdateSideBarTree();
         }
 
         public void Handle(RosterInstancesAdded @event)
         {
-            using (GlobalStopwatcher.Scope("sidebar SideBarSectionsViewModel"))
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+
+            foreach (var rosterInstance in @event.Instances)
             {
-                IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-
-                foreach (var rosterInstance in @event.Instances)
-                {
-                    var addedIdentity = rosterInstance.GetIdentity();
-                    this.RefreshListWithNewItemAdded(addedIdentity, interview);
-                }
-
-                this.RefreshHasChildrenFlags();
-                this.UpdateSideBarTree();
+                var addedIdentity = rosterInstance.GetIdentity();
+                this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
+
+            this.RefreshHasChildrenFlags();
+            this.UpdateSideBarTree();
         }
 
         public void Handle(GroupsEnabled @event)

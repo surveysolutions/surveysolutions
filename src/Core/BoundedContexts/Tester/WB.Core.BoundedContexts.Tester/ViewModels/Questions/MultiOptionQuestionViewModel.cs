@@ -105,7 +105,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                           multiOptionAnswer.IsAnswered &&
                           multiOptionAnswer.Answers.Any(x => model.Value == x)
             };
-            result.CheckedOrder = this.areAnswersOrdered && result.Checked ? (int?)answerIndex + 1 : null;
+            var indexOfAnswer = Array.IndexOf(multiOptionAnswer.Answers ?? new decimal[]{}, model.Value);
+
+            result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?) null;
             result.QuestionState = this.QuestionState;
 
             return result;
