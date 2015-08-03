@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public interface ISideBarSectionViewModelsFactory
     {
-        SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity groupIdentity, NavigationState navigationState, string interviewId);
+        SideBarSectionViewModel BuildSectionItem(SideBarSectionsViewModel root, SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity, NavigationState navigationState, string interviewId);
     }
 }

@@ -131,7 +131,6 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\ButtonRosterTitleBinding.cs" />
     <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
@@ -713,11 +712,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_current_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_disabled_group.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -853,16 +847,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_roster.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_roster_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />

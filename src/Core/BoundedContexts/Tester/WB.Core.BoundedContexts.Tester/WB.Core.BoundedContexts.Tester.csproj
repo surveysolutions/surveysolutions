@@ -37,7 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Implementation\Entities\RosterModel.cs" />
     <Compile Include="Implementation\Services\FriendlyMessageService.cs" />
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Services\IFriendlyMessageService.cs" />
