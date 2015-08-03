@@ -10,7 +10,7 @@
       local:maxHeight="@dimen/Interview_Sidebar_PrefilledQuestions_max_height"
       style="@style/Interview_Sidebar_PrefilledQuestions_Container">
 
-      <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
+      <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
                    local:MvxBind="ItemsSource PrefilledQuestions"
                    local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
     </WB.UI.Tester.CustomControls.MaxHeightLinearLayout>
