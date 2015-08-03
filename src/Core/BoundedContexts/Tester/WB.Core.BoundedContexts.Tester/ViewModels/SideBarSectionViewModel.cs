@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (this.Expanded != value)
                 {
                     this.expanded = value;
-                    if (this.expanded && this.NodeDepth <= 5)
+                    if (this.expanded)
                     {
                         this.Children = this.GenerateChildNodes();
                     }

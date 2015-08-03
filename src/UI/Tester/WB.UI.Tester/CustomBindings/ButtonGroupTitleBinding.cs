@@ -23,12 +23,19 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (value == null) return;
 
-            var rosterTitle = this.SubstitutionService.GenerateRosterName(value.Title, value.RosterTitle);
+            if (!value.IsRoster)
+            {
+                control.Text = value.Title;
+            }
+            else
+            {
+                var rosterTitle = this.SubstitutionService.GenerateRosterName(value.Title, value.RosterTitle);
+                var span = new SpannableString(rosterTitle);
+                span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.Title.Length, rosterTitle.Length,
+                    SpanTypes.ExclusiveExclusive);
 
-            var span = new SpannableString(rosterTitle);
-            span.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), value.Title.Length, rosterTitle.Length, SpanTypes.ExclusiveExclusive);
-
-            control.TextFormatted = span;
+                control.TextFormatted = span;
+            }
         }
     }
 }

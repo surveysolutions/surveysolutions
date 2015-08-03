@@ -9,7 +9,7 @@ using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
-
+using Java.Lang;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Tester.CustomControls;
 
@@ -26,6 +26,7 @@ namespace WB.UI.Tester.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
+        private MvxSubscriptionToken updateEntityStateSubscriptionToken;
 
         private Toolbar toolbar;
 
@@ -79,6 +80,7 @@ namespace WB.UI.Tester.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            this.updateEntityStateSubscriptionToken = messenger.Subscribe<UpdateInterviewEntityStateMessage>(this.OnUpdateQuestionState);
             base.OnStart();
         }
 
@@ -97,8 +99,25 @@ namespace WB.UI.Tester.Activities
         {
             if (this.layoutManager != null)
             {
-                Application.SynchronizationContext.Post(_ => { this.recyclerView.SmoothScrollToPosition(msg.AnchorElementIndex); }, null);
+                Application.SynchronizationContext.Post(_ =>
+                {
+                    this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
+                }, 
+                null);
             }
+        }
+
+        private void OnUpdateQuestionState(UpdateInterviewEntityStateMessage msg)
+        {
+            Application.SynchronizationContext.Post(_ =>
+            {
+                try
+                {
+                    adapter.NotifyItemChanged(msg.ElementPosition);
+                }
+                catch (IllegalStateException) { }
+            },
+            null);
         }
 
         protected override void OnStop()
@@ -106,6 +125,7 @@ namespace WB.UI.Tester.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
+            messenger.Unsubscribe<UpdateInterviewEntityStateMessage>(this.updateEntityStateSubscriptionToken);
             base.OnStop();
         }
 
