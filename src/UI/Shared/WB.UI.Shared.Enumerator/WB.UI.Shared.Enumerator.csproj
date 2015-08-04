@@ -115,7 +115,8 @@
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseMvxActivity.cs" />
-    <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Activities\BaseInterviewActivity.cs" />
+    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
@@ -699,11 +700,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_focused_holo_light.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\dashboard.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\interview.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -865,15 +861,6 @@
     <AndroidResource Include="Resources\layout\questionnaire_list_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\menu\dashboard.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\menu\interview.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\menu\login.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Attrs.xml" />
