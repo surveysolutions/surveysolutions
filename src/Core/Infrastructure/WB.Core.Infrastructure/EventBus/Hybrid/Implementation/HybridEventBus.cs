@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 
@@ -24,7 +25,7 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
 
         public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool isBulk = false)
         {
-            ExecuteAllThrowOneAggregate(
+            ActionUtils.ExecuteInIndependentTryCatchBlocks(
                 () => this.liteEventBus.PublishUncommittedEvents(aggregateRoot, isBulk),
                 () => this.cqrsEventBus.PublishUncommittedEvents(aggregateRoot, isBulk));
         }
@@ -37,28 +38,6 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
             this.cqrsEventBus.Publish(eventMessages);
-        }
-
-        private static void ExecuteAllThrowOneAggregate(params Action[] actions)
-        {
-            var exceptions = new List<Exception>();
-
-            foreach (var action in actions)
-            {
-                try
-                {
-                    action.Invoke();
-                }
-                catch (Exception exception)
-                {
-                    exceptions.Add(exception);
-                }
-            }
-
-            if (exceptions.Count > 0)
-            {
-                throw new AggregateException(exceptions);
-            }
         }
     }
 }
