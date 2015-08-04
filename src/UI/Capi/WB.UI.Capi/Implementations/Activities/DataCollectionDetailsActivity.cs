@@ -76,11 +76,16 @@ namespace WB.UI.Capi.Implementations.Activities
             this.cqrsEventBus = cqrsEventBus;
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool isBulk = false)
+        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
+        {
+            this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
+        }
+
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool isBulk = false)
         {
             ExecuteAllThrowOneAggregate(
-                () => this.liteEventBus.PublishUncommitedEventsFromAggregateRoot(aggregateRoot, origin, isBulk),
-                () => this.cqrsEventBus.PublishUncommitedEventsFromAggregateRoot(aggregateRoot, origin, isBulk));
+                () => this.liteEventBus.PublishUncommittedEvents(aggregateRoot, isBulk),
+                () => this.cqrsEventBus.PublishUncommittedEvents(aggregateRoot, isBulk));
         }
 
         public void Publish(IPublishableEvent eventMessage)

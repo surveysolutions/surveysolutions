@@ -172,23 +172,21 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool asBulk)
+        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin);
-
-            foreach (UncommittedEvent @event in aggregateRoot.GetUncommittedChanges())
-            {
-                eventStream.Append(@event);
-            }
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUncommittedChanges());
 
             this.eventStore.Store(eventStream);
+        }
+
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool asBulk)
+        {
+            var uncommittedChanges = aggregateRoot.GetUncommittedChanges();
 
             if(asBulk)
-                this.PublishInBatch(eventStream);
+                this.PublishInBatch(uncommittedChanges);
             else
-                this.Publish(eventStream);
-
-            aggregateRoot.MarkChangesAsCommitted();
+                this.Publish(uncommittedChanges);
         }
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,

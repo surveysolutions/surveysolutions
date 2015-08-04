@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommitedEventsFromAggregateRoot(aggregateRoot, null);
+            eventBus.PublishUncommittedEvents(aggregateRoot);
 
         It should_not_call_Handle_for_this_handler = () =>
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);
