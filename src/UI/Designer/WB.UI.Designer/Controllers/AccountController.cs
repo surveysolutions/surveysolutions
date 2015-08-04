@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Security;
-using System.Web.SessionState;
 using System.Web.UI;
 using Recaptcha;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Mailers;
@@ -122,7 +122,7 @@ namespace WB.UI.Designer.Controllers
                 existingLoginAttempts,
                 null,
                 expire,
-                System.Web.Caching.Cache.NoSlidingExpiration);
+                Cache.NoSlidingExpiration);
         }
 
         private void ResetInvalidAttemptsCount(string userName)

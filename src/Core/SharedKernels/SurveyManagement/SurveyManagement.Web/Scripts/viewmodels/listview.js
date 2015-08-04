@@ -73,7 +73,7 @@
     self.search = function() {
         var params = {
             Pager: {
-                Page: self.Pager().CurrentPage(),
+                Page: 1,
                 PageSize: self.Pager().PageSize()
             },
             SortOrder: self.OrderBy(),

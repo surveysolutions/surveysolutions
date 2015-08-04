@@ -1,0 +1,26 @@
+﻿@{
+    this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
+    this.ViewBag.Title = "Control Panel: Settings";
+}
+@model IEnumerable<WB.UI.Shared.Web.Settings.ApplicationSetting>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        All settings with values
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed">
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+            @foreach (var setting in Model)
+            {
+                <tr>
+                    <td>@setting.Name</td>
+                    <td>@setting.Value</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

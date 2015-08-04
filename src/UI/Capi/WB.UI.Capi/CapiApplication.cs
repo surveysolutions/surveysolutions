@@ -29,9 +29,9 @@ using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.GenericSubdomains.Android.Logging;
 using WB.Core.GenericSubdomains.ErrorReporting;
-using WB.Core.GenericSubdomains.Logging.AndroidLogger;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Files;
@@ -56,7 +56,7 @@ using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
-using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Utils.Services.IInfoFileSupplierRegistry;
+using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 
 namespace WB.UI.Capi
 {
@@ -312,7 +312,7 @@ namespace WB.UI.Capi
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
-            this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
+            this.kernel.Bind<IAnswerProgressIndicator>().To<Shared.Android.Controls.ScreenItems.AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
 

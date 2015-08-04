@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="applicationBackground">#FFFAFAFA</color>
+  <color name="colorBlueThemePrimary">#FF2A81CB</color>
+  
+  <color name="errorTextColor">#FFE32102</color>
+  
+  <color name="sideBarPrefilledQuestionText">#FF747474</color>
+  <color name="sideBarPrefilledAnswerText">#000000</color>
+  
+  <color name="commentInterviewerTextColor">#FF747474</color>
+  <color name="commentDetailsInterviewerTextColor">#FF000000</color>
+  <color name="commentSupervisorTextColor">#FFF6D6D0</color>
+
+  <color name="colorToolbarText">#FFFFFFFF</color>
+  <color name="colorToolbarTransp">#BFFFFFFF</color>
+
+  <color name="emptyOptionsText">#a5a5a5</color>
+  
+  <color name="editorTextColor">#FF3F3F3F</color>
+  <color name="editorAnsweredBorder">#D0D0D0</color>
+  <color name="editorHintTextColor">#FFB2B2B2</color>
+  <color name="btn_default">#2a81cb</color>
+  <color name="button_pressed">#0d6dbf</color>
+  <color name="button_unpressed">#2a81cb</color>
+  
+  <color name="group_title_text">#FFFFFFFF</color>
+
+  <color name="group_not_started">#C6C6C6</color>
+  <color name="group_started">#2A81CB</color>
+  <color name="group_started_pressed">#0D6DBF</color>
+  <color name="group_completed">#38AC14</color>
+  <color name="group_completed_pressed">#309211</color>
+  <color name="group_with_invalid_answers">#F05A26</color>
+  <color name="group_with_invalid_answers_pressed">#CC4D20</color>
+
+  <color name="default_input_button_pressed">#0D6DBF</color>
+  <color name="default_input_button_unpressed">#2A81CB</color>
+  <color name="default_input_button_disabled">#C6C6C6</color>
+
+  <color name="question_input_button_pressed">#FAFAFA</color>
+  <color name="question_input_button_unpressed">@android:color/white</color>
+  <color name="question_input_button_disabled">#C6C6C6</color>
+
+  <color name="dashboard_questionnaire_list_item_title">#3f3f3f</color>
+  <color name="dashboard_questionnaire_list_item_bg">#FFFFFF</color>
+  <color name="dashboard_questionnaire_list_item_modified_date">#5D6468</color>
+  <color name="dashboard_questionnaire_list_item_bg_pressed">#ECECEC</color>
+
+
+  <color name="dashboard_my_questionnaire">#e8e8e8</color>
+  <color name="dashboard_my_questionnaire_link">#666666</color>
+  <color name="dashboard_public_questionnaire">@color/colorBlueThemePrimary</color>
+
+  <color name="dashboard_questionnairelist_border_top">#6d757a</color>
+  <color name="dashboard_questionnairelist_empty_text">#a3a3a3</color>
+  <color name="dashboard_questionnairelistitem_border_bottom">#e2e3e4</color>
+
+  <color name="previous_group_navigation_answered">#7AC16B</color>
+  <color name="previous_group_navigation_unanswered">#2A81CB</color>
+
+  <color name="sections_list_background_color">#ffffff</color>
+  <color name="sections_list_selected_background_color">#EFF1F3</color>
+  <color name="sections_list_text_color">#000000</color>
+  <color name="sections_list_pressed_background_color">#DFE2E6</color>
+  <color name="sections_list_current_background_color">#DFE2E6</color>
+  
+  <color name="list_style_divider_color">#EDEDED</color>
+
+  <color name="darkActionBar">#575757</color>
+  <color name="interviewActionBar">#246EAD</color>
+
+  <color name="interviewHeaderComplited">#38ac14</color>
+  <color name="interviewHeaderInProgress">#2a81cb</color>
+  <color name="interviewHeaderErrors">#f05a26</color>
+  
+  <color name="interviewStatusBarComplited">#309211</color>
+  <color name="interviewStatusBarInProgress">#246EAD</color>
+  <color name="interviewStatusBarErrors">#CC4D20</color>
+  
+</resources>

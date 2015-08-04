@@ -1,5 +1,5 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.UI.Designer

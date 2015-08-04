@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Machine.Specifications.Annotations;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,11 +12,8 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 {
@@ -504,7 +500,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaireDocument, new Version(6, 0, 0), out resultAssembly);
+                questionnaireDocument, new Version(8, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -534,17 +530,26 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
+            var fileSystemAccessor = new FileSystemIOAccessor();
+
+            const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll" };
+
+            var settings = new List<IDynamicCompilerSettings>
+            {
+                Mock.Of<IDynamicCompilerSettings>(_ 
+                    => _.PortableAssembliesPath == pathToProfile
+                    && _.DefaultReferencedPortableAssemblies == referencesToAdd 
+                    && _.Name == "profile111")
+            };
+
+            var defaultDynamicCompilerSettings = Mock.Of<IDynamicCompilerSettingsGroup>(_ => _.SettingsCollection == settings);
+            
             return
                 new QuestionnaireExpressionProcessorGenerator(
-                    new RoslynCompiler(
-                        new DefaultDynamicCompillerSettings()
-                        {
-                            PortableAssembliesPath =
-                                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111",
-                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
-                                "System.Collections.dll", "System.Linq.dll" }
-                        }, new FileSystemIOAccessor()),
-                    new CodeGenerator());
+                    new RoslynCompiler(),
+                    new CodeGenerator(),
+                    new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndConditionContainingUsageOfSelf(Guid questionId)

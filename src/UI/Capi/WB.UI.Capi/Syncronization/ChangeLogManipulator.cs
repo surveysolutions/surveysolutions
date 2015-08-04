@@ -5,7 +5,7 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

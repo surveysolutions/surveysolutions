@@ -1,0 +1,8 @@
+@using Main.Core.Entities.SubEntities
+@model WB.UI.Designer.Models.SharingNotificationModel
+
+Hello @(String.IsNullOrWhiteSpace(Model.UserName) ? Model.Email : Model.UserName),
+<br/>
+@(String.IsNullOrWhiteSpace(Model.ActionPersonEmail) ? "user" : Model.ActionPersonEmail) has invited you to @(Model.ShareType == ShareType.View ? "view" : "edit") the following questionnaire: 
+@Html.ActionLink((String.IsNullOrWhiteSpace(Model.QiestionnaireTitle) ? "link" : Model.QiestionnaireTitle), "Open", "App", @Model.QiestionnaireId, null) 
+
