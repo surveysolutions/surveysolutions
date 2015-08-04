@@ -50,6 +50,7 @@
     <Compile Include="CommandBus\ICommandValidator.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
+    <Compile Include="EventBus\Hybrid\Implementation\HybridEventBus.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
