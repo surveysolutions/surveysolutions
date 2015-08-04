@@ -707,11 +707,13 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public IEnumerable<Identity> GetChildEntities(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            IEnumerable<Guid> allEntitiesInGroup = questionnaire.GetChildEntities(groupIdentity.Id);
+            IEnumerable<Guid> allEntitiesInGroup = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
             foreach (var entity in allEntitiesInGroup)
             {
-                if (questionnaire.GetAllUnderlyingChildRosters(groupIdentity.Id).Contains(entity))
+                if (questionnaire.IsQuestion(entity) && !questionnaire.IsInterviewierQuestion(entity)) continue;
+
+                if (questionnaire.IsRosterGroup(entity))
                 {
                     foreach (var rosterInstance in GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
@@ -721,8 +723,6 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
                 }
                 else
                 {
-                    if (questionnaire.IsQuestion(entity) && !questionnaire.IsInterviewierQuestion(entity)) continue;
-
                     foreach (var entityInstance in GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
                     {
