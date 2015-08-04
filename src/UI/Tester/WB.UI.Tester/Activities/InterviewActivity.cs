@@ -16,14 +16,14 @@ namespace WB.UI.Tester.Activities
             switch (resourceId)
             {
                 case Resource.Id.interview_dashboard:
-                    this.ViewModel.NavigateToDashboardCommand.Execute();
+                    //this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
                     break;
                 case Resource.Id.interview_signout:
-                    this.ViewModel.SignOutCommand.Execute();
+                    //this.ViewModel.SignOutCommand.Execute();
                     break;
 
             }
