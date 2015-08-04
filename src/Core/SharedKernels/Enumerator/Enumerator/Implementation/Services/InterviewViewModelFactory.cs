@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
@@ -23,7 +21,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        private readonly Dictionary<Type, Func<IInterviewEntityViewModel>> QuestionnaireEntityTypeToViewModelMap =
+        private readonly Dictionary<Type, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
             new Dictionary<Type, Func<IInterviewEntityViewModel>>
             {
                 { typeof(StaticTextModel), Load<StaticTextViewModel> },
@@ -42,10 +40,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
                 { typeof(GroupModel), Load<GroupViewModel> },
-                { typeof(RosterModel), NothingToRender}
+                { typeof(RosterModel), Load<GroupViewModel>}
             };
-
-        public static Func<IInterviewEntityViewModel> NothingToRender { get { return () => null; } }
 
         private static T Load<T>() where T : class
         {
@@ -60,7 +56,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             this.interviewRepository = interviewRepository;
         }
 
-        public IList<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             return GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
@@ -70,7 +66,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             return GetPrefilledQuestionsImpl(interviewId);
         }
 
-        private IList<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
@@ -83,22 +79,16 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.ContainsKey(groupIdentity.Id))
                 throw new KeyNotFoundException(string.Format("Group with id : {0} don't found", groupIdentity));
 
-            var groupWithoutNestedChildren = questionnaire.GroupsWithFirstLevelChildrenAsReferences[groupIdentity.Id];
+            var referencesOfQuestionnaireEntities = questionnaire.GroupsWithFirstLevelChildrenAsReferences[groupIdentity.Id].Children;
 
-            var viewModels = groupWithoutNestedChildren
-                .Children
-                .Select(child => CreateInterviewEntityViewModel(
-                    entityId: child.Id, 
-                    rosterVector: groupIdentity.RosterVector, 
-                    entityModelType: child.ModelType, 
-                    interviewId: interviewId,
-                    navigationState: navigationState))
-                .Where(child=>child != null)
-                .ToList();
+            var groupWithoutNestedChildren = interview.GetChildEntities(groupIdentity);
 
-            
-
-            return viewModels;
+            return groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
+                entityId: questionnaireEntity.Id,
+                rosterVector: questionnaireEntity.RosterVector,
+                entityModelType: referencesOfQuestionnaireEntities.Find(y => y.Id == questionnaireEntity.Id).ModelType,
+                interviewId: interviewId,
+                navigationState: navigationState));
         }
 
         private IList GetPrefilledQuestionsImpl(string interviewId)
@@ -129,18 +119,16 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         {
             var identity = new Identity(entityId, rosterVector);
 
-            if (!QuestionnaireEntityTypeToViewModelMap.ContainsKey(entityModelType))
+            if (!this.EntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
-                var text = (StaticTextViewModel)QuestionnaireEntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
+                var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
                 text.StaticText = entityModelType.ToString();
                 return text;
             }
 
-            var viewModelActivator = QuestionnaireEntityTypeToViewModelMap[entityModelType];
+            var viewModelActivator = this.EntityTypeToViewModelMap[entityModelType];
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
-
-            if (viewModel == null) return null;
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;

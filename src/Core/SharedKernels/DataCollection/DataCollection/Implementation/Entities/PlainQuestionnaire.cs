@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
+        private Dictionary<Guid, IComposite> entityCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -39,6 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
 
@@ -50,6 +52,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? ResponsibleId
         {
             get { return this.responsibleId; }
+        }
+
+        private Dictionary<Guid, IComposite> EntityCache
+        {
+            get
+            {
+                return this.entityCache ?? (this.entityCache
+                    = this.innerDocument
+                        .Find<IComposite>(_ => true)
+                        .ToDictionary(
+                            entity => entity.PublicKey,
+                            entity => entity));
+            }
         }
         
         private Dictionary<Guid, IQuestion> QuestionCache
@@ -241,6 +256,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return IsExpressionDefined(validationExpression);
         }
 
+        public bool IsQuestion(Guid entityId)
+        {
+            return this.GetQuestion(entityId) != null;
+        }
+
+        public bool IsInterviewierQuestion(Guid questionId)
+        {
+            var question = this.GetQuestion(questionId);
+
+            return question != null && question.QuestionScope == QuestionScope.Interviewer;
+        }
+
         public string GetCustomValidationExpression(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -251,6 +278,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
         {
             return this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
+        }
+
+        public IEnumerable<Guid> GetAllParentGroupsForEntity(Guid entityId)
+        {
+            return this.GetAllParentGroupsForEntityStartingFromBottom(entityId);
         }
 
         public Guid? GetParentGroup(Guid groupOrQuestionId)
@@ -314,6 +346,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
+        public IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid entityId)
+        {
+            return this
+                .GetAllParentGroupsForEntityStartingFromBottom(entityId)
+                .Where(this.IsRosterGroup)
+                .Reverse()
+                .ToList();
+        }
+
         public IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
@@ -360,6 +401,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.ThrowIfQuestionDoesNotExist(questionId);
 
             return this.GetRosterLevelForQuestion(questionId, this.GetAllParentGroupsForQuestion, this.IsRosterGroup);
+        }
+
+        public int GetRosterLevelForEntity(Guid entityId)
+        {
+            this.ThrowIfEntityDoesNotExist(entityId);
+
+            return this.GetRosterLevelForEntity(entityId, this.GetAllParentGroupsForEntity, this.IsRosterGroup);
         }
 
         public int GetRosterLevelForGroup(Guid groupId)
@@ -418,6 +466,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return this.cacheOfChildQuestions[groupId];
+        }
+
+        public ReadOnlyCollection<Guid> GetChildEntities(Guid groupId)
+        {
+            if (!this.cacheOfChildEntities.ContainsKey(groupId))
+            {
+                this.cacheOfChildEntities[groupId] = new ReadOnlyCollection<Guid>(
+                    this.GetGroupOrThrow(groupId)
+                        .Children
+                        .Select(entity => entity.PublicKey)
+                        .ToList());
+            }
+
+            return this.cacheOfChildEntities[groupId];
         }
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
@@ -757,11 +819,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return getAllParentGroupsForQuestion(questionId).Count(isRosterGroup);
         }
 
+        private int GetRosterLevelForEntity(Guid entityId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForEntity,
+            Func<Guid, bool> isRosterGroup)
+        {
+            return getAllParentGroupsForEntity(entityId).Count(isRosterGroup);
+        }
+
         private IEnumerable<Guid> GetAllParentGroupsForQuestionStartingFromBottom(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             var parentGroup = (IGroup)question.GetParent();
+
+            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private IEnumerable<Guid> GetAllParentGroupsForEntityStartingFromBottom(Guid entityId)
+        {
+            IComposite entity = this.GetEntityOrThrow(entityId);
+
+            var parentGroup = (IGroup)entity.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -882,9 +959,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.GetQuestionOrThrow(questionId);
         }
 
+        private void ThrowIfEntityDoesNotExist(Guid entityId)
+        {
+            this.GetEntityOrThrow(entityId);
+        }
+
         private IQuestion GetQuestionOrThrow(Guid questionId)
         {
             return GetQuestionOrThrow(this.QuestionCache, questionId);
+        }
+
+        private IComposite GetEntityOrThrow(Guid entityId)
+        {
+            return GetEntityOrThrow(this.EntityCache, entityId);
         }
 
         private IQuestion GetQuestion(Guid questionId)
@@ -915,10 +1002,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question;
         }
 
+        private static IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)
+        {
+            IComposite entity = GetEntity(entities, entityId);
+
+            if (entity == null)
+                throw new QuestionnaireException(string.Format("Entity with id '{0}' is not found.", entityId));
+
+            return entity;
+        }
+
         private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
         {
             return questions.ContainsKey(questionId)
                 ? questions[questionId]
+                : null;
+        }
+
+        private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId)
+        {
+            return entities.ContainsKey(entityId)
+                ? entities[entityId]
                 : null;
         }
 

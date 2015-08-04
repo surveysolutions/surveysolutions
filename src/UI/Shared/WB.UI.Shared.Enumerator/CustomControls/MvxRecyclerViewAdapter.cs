@@ -103,7 +103,11 @@ namespace WB.UI.Tester.CustomControls
 
         protected virtual void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.NotifyDataSetChanged(e);
+            try
+            {
+                this.NotifyDataSetChanged(e);
+            }
+            catch { }
         }
 
         protected virtual void NotifyDataSetChanged(NotifyCollectionChangedEventArgs e)

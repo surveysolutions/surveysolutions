@@ -60,6 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
             var staticTexts = questionnaireDocument.GetEntitiesByType<IStaticText>().ToList();
+            var entities = questionnaireDocument.GetEntitiesByType<IComposite>().ToList();
 
             questionnaireModel.Id = questionnaireDocument.PublicKey;
             questionnaireModel.Title = questionnaireDocument.Title;
@@ -72,6 +73,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
 
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
+            questionnaireModel.EntityReferences = entities.Select(x=>new QuestionnaireReferenceModel { Id = x.PublicKey, ModelType = x.GetType() });
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
