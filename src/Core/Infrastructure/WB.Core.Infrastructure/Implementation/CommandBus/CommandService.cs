@@ -124,6 +124,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();
+
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -134,6 +135,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             }
 
             cancellationToken.ThrowIfCancellationRequested();
+
             foreach (var validator in validators)
             {
                 var validatorInstance = serviceLocator.GetInstance(validator);
@@ -150,8 +152,18 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
-            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin, handleInBatch);
-            this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
+
+            this.eventBus.CommitUncommittedEvents(aggregate, origin);
+
+            try
+            {
+                this.eventBus.PublishUncommittedEvents(aggregate, handleInBatch);
+            }
+            finally
+            {
+                aggregate.MarkChangesAsCommitted();
+                this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
+            }
         }
     }
 }

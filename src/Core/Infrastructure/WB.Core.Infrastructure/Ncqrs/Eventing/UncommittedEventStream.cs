@@ -20,6 +20,12 @@ namespace Ncqrs.Eventing
         public UncommittedEventStream(string origin)
             : this(Guid.NewGuid(), origin) { }
 
+        public UncommittedEventStream(string origin, IEnumerable<UncommittedEvent> events)
+            : this(Guid.NewGuid(), origin)
+        {
+            this.Append(events);
+        }
+
         /// <summary>
         /// Creates new uncommitted event stream.
         /// </summary>
@@ -27,6 +33,14 @@ namespace Ncqrs.Eventing
         {
             _commitId = commitId;
             _origin = origin;
+        }
+
+        public void Append(IEnumerable<UncommittedEvent> events)
+        {
+            foreach (var @event in events)
+            {
+                this.Append(@event);
+            }
         }
 
         /// <summary>

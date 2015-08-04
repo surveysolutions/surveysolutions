@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             fakeInterview = Mock.Of<IAggregateRoot>(x => x.GetUncommittedChanges() == eventsToBePublished);
         };
 
-        Because of = () => liteEventBus.PublishUncommitedEventsFromAggregateRoot(fakeInterview, null);
+        Because of = () => liteEventBus.PublishUncommittedEvents(fakeInterview);
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");
 
