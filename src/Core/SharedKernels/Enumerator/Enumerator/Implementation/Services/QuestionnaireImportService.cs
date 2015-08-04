@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-using Cirrious.CrossCore;
-
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.Services;
@@ -38,14 +37,14 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
         }
 
-        public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly)
+        public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly, long version)
         {
-            this.ImportQuestionnaireModel(questionnaireDocument);
+            this.ImportQuestionnaireModel(questionnaireDocument, version);
             this.ImportQuestionnaireDocument(questionnaireDocument.PublicKey, 1, questionnaireDocument);
             this.ImportAssembly(questionnaireDocument.PublicKey, 1, supportingAssembly);
         }
 
-        public void ImportQuestionnaireModel(QuestionnaireDocument questionnaireDocument)
+        public void ImportQuestionnaireModel(QuestionnaireDocument questionnaireDocument, long version)
         {
             questionnaireDocument.ConnectChildrenWithParent();
 
@@ -84,7 +83,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
             questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => questionnaireModel.Questions[x.PublicKey]);
 
-            this.questionnaireModelRepository.Store(questionnaireModel, questionnaireDocument.PublicKey.FormatGuid());
+            this.questionnaireModelRepository.Store(questionnaireModel, Helpers.CreateHistoricId(questionnaireDocument.PublicKey, version));
         }
 
         private void ImportQuestionnaireDocument(Guid questionnaireId, int questionnaireVersion, QuestionnaireDocument questionnaireDocument)

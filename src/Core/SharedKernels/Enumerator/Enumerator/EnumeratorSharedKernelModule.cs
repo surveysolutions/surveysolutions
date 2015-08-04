@@ -20,6 +20,8 @@ namespace WB.Core.BoundedContexts.Tester
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
+            this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
+
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<ApplySynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.ApplySynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.Valid, command.CreatedOnClient))

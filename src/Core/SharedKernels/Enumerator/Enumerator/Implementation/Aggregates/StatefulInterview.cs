@@ -56,8 +56,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             this.ResetCalculatedState();
 
             this.Id = this.EventSourceId;
-            this.QuestionnaireId = @event.QuestionnaireId.FormatGuid();
+            this.QuestionnaireId = Helpers.CreateHistoricId(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.QuestionnaireVersion = @event.QuestionnaireVersion;
+            this.QuestionnaireGuid = @event.QuestionnaireId;
         }
 
         #region Applying answers
@@ -410,6 +411,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public string QuestionnaireId { get; set; }
 
         public long QuestionnaireVersion { get; set; }
+        public Guid QuestionnaireGuid { get; set; }
 
         public Guid Id { get; set; }
 
@@ -955,7 +957,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 
         private IQuestionnaire GetQuestionnaireOrThrow()
         {
-            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetHistoricalQuestionnaireOrThrow(Guid.Parse(this.QuestionnaireId), this.QuestionnaireVersion));
+            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetHistoricalQuestionnaireOrThrow(this.QuestionnaireGuid, this.QuestionnaireVersion));
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)
