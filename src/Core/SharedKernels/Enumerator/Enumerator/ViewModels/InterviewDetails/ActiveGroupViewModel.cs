@@ -39,8 +39,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { name = value; RaisePropertyChanged(); }
         }
 
-        private ObservableRangeCollection<IInterviewEntityViewModel> items;
-        public ObservableRangeCollection<IInterviewEntityViewModel> Items
+        private ObservableRangeCollection<dynamic> items;
+        public ObservableRangeCollection<dynamic> Items
         {
             get { return items; }
             set { items = value; RaisePropertyChanged(); }
@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void LoadFromModel(Identity groupIdentity)
         {
-            this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
+            this.Items = new ObservableRangeCollection<dynamic>();
 
             this.interviewViewModelFactory.GetEntities(
                 interviewId: this.navigationState.InterviewId,
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            var itemsToRemove = this.Items.Where(x => x.Identity != null && @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+            var itemsToRemove = this.Items.OfType<IInterviewEntityViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
 
             this.Items.RemoveRange(itemsToRemove);
         }
@@ -200,7 +200,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             foreach (var viewModelIdentity in viewModelIdentities)
             {
-                var interviewEntity = this.Items.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(viewModelIdentity));
+                var interviewEntity = this.Items.OfType<IInterviewEntityViewModel>().FirstOrDefault(x => x.Identity.Equals(viewModelIdentity));
 
                 if (interviewEntity != null)
                     this.Items[this.Items.IndexOf(interviewEntity)] = interviewEntity;

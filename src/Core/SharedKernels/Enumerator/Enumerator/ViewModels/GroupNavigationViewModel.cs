@@ -4,13 +4,12 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class GroupNavigationViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class GroupNavigationViewModel : MvxNotifyPropertyChanged
     {
         public class GroupStatistics
         {
@@ -41,8 +40,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.interviewRepository = interviewRepository;
             this.NavigateToGroupViewModel = navigateToGroupViewModel;
         }
-
-        public Identity Identity { get { return null; } }
 
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
