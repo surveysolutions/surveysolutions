@@ -239,6 +239,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
@@ -256,11 +258,10 @@
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
     <Compile Include="Ninject\PlainStorageInfrastructureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +275,9 @@
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\menu\interview.xml" />
+    <AndroidResource Include="Resources\menu\dashboard.xml" />
+    <AndroidResource Include="Resources\menu\login.xml" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
@@ -287,6 +291,9 @@
     </None>
     <AndroidResource Include="Resources\layout\login.axml" />
     <AndroidResource Include="Resources\layout\splash.axml" />
+    <AndroidResource Include="Resources\layout\dashboard.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
@@ -335,8 +342,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CustomBindings\" />
-    <Folder Include="CustomControls\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

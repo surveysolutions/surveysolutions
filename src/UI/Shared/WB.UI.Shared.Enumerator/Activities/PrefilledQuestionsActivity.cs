@@ -4,6 +4,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Tester.CustomControls;
 
 namespace WB.UI.Tester.Activities

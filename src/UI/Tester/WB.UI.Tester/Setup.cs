@@ -30,6 +30,7 @@ using WB.UI.Tester.CustomControls.MaskedEditTextControl;
 using WB.UI.Tester.CustomServices.Location;
 using WB.UI.Tester.CustomServices.UserInteraction;
 using WB.UI.Tester.Ninject;
+using WB.UI.Tester.ValueCombiners;
 using Xamarin;
 
 
@@ -84,7 +85,7 @@ namespace WB.UI.Tester
             base.FillValueConverters(registry);
             
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
-                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
+                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
