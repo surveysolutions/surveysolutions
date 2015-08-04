@@ -25,6 +25,7 @@ using WB.UI.Tester.CustomBindings;
 using WB.UI.Tester.CustomControls;
 using WB.UI.Tester.CustomControls.MaskedEditTextControl;
 using WB.UI.Tester.Ninject;
+using WB.UI.Tester.ValueCombiners;
 using FinishIntallationViewModel = WB.UI.Capi.Views.FinishIntallationViewModel;
 using LoginViewModel = WB.Core.BoundedContexts.Capi.Views.Login.LoginViewModel;
 
@@ -69,7 +70,7 @@ namespace WB.UI.Capi
             base.FillValueConverters(registry);
 
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry =>
-                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
+                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());

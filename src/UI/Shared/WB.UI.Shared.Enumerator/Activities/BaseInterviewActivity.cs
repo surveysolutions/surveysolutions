@@ -1,5 +1,4 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
@@ -9,16 +8,14 @@ using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Tester.CustomControls;
 
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
-    [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
-        WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : BaseActivity<InterviewViewModel>
+    public abstract class BaseInterviewActivity : BaseActivity<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
@@ -45,7 +42,7 @@ namespace WB.UI.Tester.Activities
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 
-            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnaireEntitiesList);
+            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
             this.SetSupportActionBar(this.toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
@@ -115,7 +112,7 @@ namespace WB.UI.Tester.Activities
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            this.MenuInflater.Inflate(Resource.Menu.interview, menu);
+            this.MenuInflater.Inflate(this.MenuResourceId, menu);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -126,21 +123,12 @@ namespace WB.UI.Tester.Activities
                 return true;
             }
 
-            switch (item.ItemId)
-            {
-                case Resource.Id.interview_dashboard:
-                    this.ViewModel.NavigateToDashboardCommand.Execute();
-                    break;
-                case Resource.Id.interview_settings:
-                    Intent intent = new Intent(this, typeof(PrefsActivity));
-                    this.StartActivity(intent);
-                    break;
-                case Resource.Id.interview_signout:
-                    this.ViewModel.SignOutCommand.Execute();
-                    break;
+            this.OnMenuItemSelected(item.ItemId);
 
-            }
             return base.OnOptionsItemSelected(item);
         }
+
+        protected abstract int MenuResourceId { get; }
+        protected abstract void OnMenuItemSelected(int resourceId);
     }
 }
