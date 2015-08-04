@@ -288,7 +288,7 @@ namespace WB.UI.Capi
                 new TesterBoundedContextModule(),
                 new InfrastructureModuleMobile().AsNinject(),
 
-                new FileInfrastructureModule(),
+                new WB.Core.Infrastructure.Files.Android.FileInfrastructureModule(),
                 new AndroidLoggingModule());
 
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
