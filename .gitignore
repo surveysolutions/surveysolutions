@@ -58,4 +58,5 @@ Thumbs.db
 /src/UI/Tester/WB.UI.Tester/Resources/Resource.designer.cs
 src/UI/Shared/WB.UI.Shared.Enumerator/Resources/Resource.Designer.cs
 src/UI/Capi/WB.UI.Capi/Resources/Resource.Designer.cs
+src/UI/Shared/WB.UI.Shared.Android/Resources/Resource.Designer.cs
 
