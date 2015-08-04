@@ -1,39 +1,39 @@
-﻿ko.bindingHandlers.datepicker = {
+﻿ko.bindingHandlers.dateTimePicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
-        var options = allBindingsAccessor().datepickerOptions || {},
-            $el = $(element);
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().dateTimePickerOptions || {};
+        $(element).datetimepicker(options);
 
-        $el.datepicker(options);
-
-        var previousValue = $el.datepicker("getDate");
-
-        ko.utils.registerEventHandler(element, "hide", function (e) {
-            var observable = valueAccessor();
-            // hack to prevent toggling selected day error https://github.com/eternicode/bootstrap-datepicker/issues/775
-            if (e.date === undefined) {
-                observable(previousValue instanceof Date && isFinite(previousValue) ? previousValue : null);
-            } else {
-                var date = $el.datepicker("getDate");
-                previousValue = date;
+        //when a user changes the date, update the view model
+        ko.utils.registerEventHandler(element, "dp.change", function (event) {
+            var value = valueAccessor();
+            if (ko.isObservable(value)) {
+                if (event.date != null && !(event.date instanceof Date)) {
+                    value(event.date.toDate());
+                } else {
+                    value(event.date);
+                }
             }
         });
-        
+
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            $el.datepicker("destroy");
+            var picker = $(element).data("DateTimePicker");
+            if (picker) {
+                picker.destroy();
+            }
         });
     },
     update: function (element, valueAccessor) {
-        var value = ko.utils.unwrapObservable(valueAccessor()),
-            $el = $(element);
 
-        if (String(value).indexOf('/Date(') == 0) {
-            value = new Date(parseInt(value.replace(/\/Date\((.*?)\)\//gi, "$1")));
-        }
+        var picker = $(element).data("DateTimePicker");
+        //when the view model is updated, update the widget
+        if (picker) {
+            var koDate = ko.utils.unwrapObservable(valueAccessor());
 
-        var current = $el.datepicker("getDate");
+            //in case return from server datetime i am get in this form for example /Date(93989393)/ then fomat this
+            //koDate = (typeof (koDate) !== 'object') ? new Date(parseFloat(koDate.replace(/[^0-9]/g, ''))) : koDate;
 
-        if (value - current !== 0) {
-            $el.datepicker("setDate", value);
+            picker.date(koDate);
         }
     }
 };

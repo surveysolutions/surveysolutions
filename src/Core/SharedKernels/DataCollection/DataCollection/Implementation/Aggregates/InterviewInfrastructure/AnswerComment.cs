@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal struct AnswerComment
+    public struct AnswerComment
     {
         public Guid UserId { get; private set; }
         public DateTime CommentTime { get; private set; }

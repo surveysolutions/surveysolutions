@@ -1,4 +1,4 @@
-﻿using WB.Core.GenericSubdomains.Utils;
+﻿using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Designer
 {

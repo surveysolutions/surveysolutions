@@ -77,7 +77,15 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("ClientVersionIsNotSupported", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later..
+        /// </summary>
+        internal static string Maintenance
+        {
+            get { return ResourceManager.GetString("Maintenance", resourceCulture); }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to A message was sent to your email account. Please follow instructions in the email to complete the registration..
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -51,6 +52,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
 
+        Guid? GetParentGroup(Guid groupOrQuestionId);
+
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
@@ -67,6 +70,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
+        Guid[] GetRosterSizeSourcesForQuestion(Guid questionId);
+
         int GetRosterLevelForQuestion(Guid questionId);
 
         int GetRosterLevelForGroup(Guid groupId);
@@ -77,7 +82,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
+        ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId);
+
         IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingChildRosters(Guid groupId);
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
         
@@ -93,6 +104,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
 
+        bool IsRosterTitleQuestionAvailable(Guid rosterId);
+
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
         Guid? GetRosterSizeQuestion(Guid rosterId);
@@ -104,5 +117,19 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetAllChildCascadingQuestions();
 
         bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
+
+        /// <summary>
+        /// Gets list of question ids that use question with provided <param name="questionId">questionId</param> as a substitution
+        /// </summary>
+        /// <param name="questionId">Substituted question id</param>
+        /// <returns>List of questions that depend on provided question</returns>
+        IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId);
+
+        /// <summary>
+        /// Gets first level child questions of a group
+        /// </summary>
+        ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
+
+        ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
     }
 }

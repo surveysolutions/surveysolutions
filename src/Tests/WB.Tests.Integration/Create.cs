@@ -10,6 +10,7 @@ using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.CommandBus;
@@ -400,6 +401,14 @@ namespace WB.Tests.Integration
         public static FileSystemIOAccessor FileSystemIOAccessor()
         {
             return new FileSystemIOAccessor();
+        }
+
+        public static SequentialCommandService SequentialCommandService(IAggregateRootRepository repository = null, ILiteEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        {
+            return new SequentialCommandService(
+                repository ?? Mock.Of<IAggregateRootRepository>(),
+                eventBus ?? Mock.Of<ILiteEventBus>(),
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>());
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using Ninject;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -21,12 +19,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
@@ -36,14 +32,15 @@ namespace WB.Core.BoundedContexts.Designer
 {
     public class DesignerBoundedContextModule : NinjectModule
     {
-        private readonly IDynamicCompilerSettings dynamicCompilerSettings;
+        private readonly IDynamicCompilerSettingsGroup dynamicCompilerSettingsGroup;
 
-        public DesignerBoundedContextModule(IDynamicCompilerSettings dynamicCompilerSettings)
+        public DesignerBoundedContextModule(IDynamicCompilerSettingsGroup dynamicCompilerSettingsGroup)
         {
-            this.dynamicCompilerSettings = dynamicCompilerSettings;
+            this.dynamicCompilerSettingsGroup = dynamicCompilerSettingsGroup;
         }
         public override void Load()
         {
+
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
@@ -55,8 +52,9 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
-            this.Unbind<IDynamicCompilerSettings>();
-            this.Bind<IDynamicCompilerSettings>().ToConstant(this.dynamicCompilerSettings);
+            this.Unbind<IDynamicCompilerSettingsGroup>();
+            this.Bind<IDynamicCompilerSettingsGroup>().ToConstant(this.dynamicCompilerSettingsGroup);
+            this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);

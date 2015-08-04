@@ -46,6 +46,12 @@ namespace WB.UI.Designer.Api.Attributes
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
+            {
+                this.ResponseMaintenanceMessage(actionContext);
+                return;
+            }
+
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
@@ -123,6 +129,11 @@ namespace WB.UI.Designer.Api.Attributes
         private void ThrowLockedOutException(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.UserLockedOut };
+        }
+
+        private void ResponseMaintenanceMessage(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = ErrorMessages.Maintenance };
         }
 
         private bool Authorize(string username, string password)
