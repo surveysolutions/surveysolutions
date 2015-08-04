@@ -54,6 +54,7 @@ using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -2084,6 +2085,13 @@ namespace WB.Tests.Unit
         public static UserPreloadingVerificationError UserPreloadingVerificationError()
         {
             return new UserPreloadingVerificationError();
+        }
+
+        public static HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
+        {
+            return new HybridEventBus(
+                liteEventBus ?? Mock.Of<ILiteEventBus>(),
+                cqrsEventBus ?? Mock.Of<IEventBus>());
         }
     }
 }
