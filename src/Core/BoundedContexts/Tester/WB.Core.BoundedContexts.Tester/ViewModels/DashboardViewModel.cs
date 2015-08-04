@@ -206,7 +206,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     questionnairePackage.Document.PublicKey = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
-                    questionnaireImportService.ImportQuestionnaire(questionnairePackage.Document, questionnairePackage.Assembly);
+                    questionnaireImportService.ImportQuestionnaire(questionnairePackage.Document, questionnairePackage.Assembly, 1);
                     
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 

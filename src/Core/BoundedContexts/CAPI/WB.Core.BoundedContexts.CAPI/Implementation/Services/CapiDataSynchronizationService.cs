@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
 
-            this.questionnaireImportService.ImportQuestionnaireModel(template);
+            this.questionnaireImportService.ImportQuestionnaireModel(template, metadata.Version);
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
             
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode, string.Empty));

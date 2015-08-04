@@ -1912,6 +1912,7 @@ namespace WB.Tests.Unit
             {
                 QuestionnaireId = questionnaireId.FormatGuid(),
                 QuestionnaireVersion = 1,
+                QuestionnaireGuid = questionnaireId.Value
             };
         }
 
