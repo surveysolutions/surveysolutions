@@ -256,7 +256,6 @@
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
     <Compile Include="Ninject\PlainStorageInfrastructureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\DashboardActivity.cs" />
