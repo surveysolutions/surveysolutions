@@ -1,10 +1,11 @@
 ﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.Tests.Unit.Applications.Headquarters.InstallControllerTests;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
@@ -21,7 +22,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
             commandServiceMock.Setup(_ => _.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Callback<ICommand, string, bool>((command, origin, isBulk) => executedCommand = command);
 
-            controller = CreateController(commandService: commandServiceMock.Object, passwordHasher: passwordHasherMock.Object);
+            controller = CreateController(commandService: commandServiceMock.Object, 
+                                          passwordHasher: passwordHasherMock.Object, 
+                                          authentication: authenticationServiceMock.Object);
         };
 
         Because of = () =>
@@ -54,12 +57,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewControllerTests
         It should_execute_command_Password_be_computed_hash_by_model_password = () =>
             GetSpecifiedCommand().Password.ShouldEqual(hashedPassword);
 
+        It should_user_be_signed_in_by_authentication_service = () =>
+            authenticationServiceMock.Verify(_=>_.SignIn(model.UserName, Moq.It.IsAny<bool>()), Times.Once);
+
         private static CreateUserCommand GetSpecifiedCommand()
         {
             return executedCommand as CreateUserCommand;
         }
 
         private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
+        private static Mock<IFormsAuthentication> authenticationServiceMock = new Mock<IFormsAuthentication>();
         private static ICommand executedCommand;
         private static InstallController controller;
 

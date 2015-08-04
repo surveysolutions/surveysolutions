@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Android.Views;
 using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Capi.Controls.Navigation
 {

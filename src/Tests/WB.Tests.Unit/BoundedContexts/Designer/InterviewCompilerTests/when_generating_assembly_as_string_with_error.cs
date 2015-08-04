@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
@@ -13,6 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         Establish context = () =>
         {
             compiler = CreateRoslynCompiler();
+            referencedPortableAssemblies = CreateReferencesForCompiler();
 
             var classes = new Dictionary<string, string>();
             classes.Add("main", testClassToCompile);
@@ -22,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
         };
 
         Because of = () =>
-            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, new string[0], out resultAssembly);
+            emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(id, generatedClasses, referencedPortableAssemblies, out resultAssembly);
 
 
         It should_faled = () =>
@@ -33,13 +36,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 
         It should_diagnostics_FilePath_equals_fileName = () =>
             emitResult.Diagnostics.First().Location.SourceTree.FilePath.ShouldEqual(fileName);
-        
 
         private static IDynamicCompiler compiler;
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
         private static Dictionary<string, string> generatedClasses;
+        private static PortableExecutableReference[] referencedPortableAssemblies;
+
 
         private static string fileName = "validation:11111111111111111111111111111112";
 

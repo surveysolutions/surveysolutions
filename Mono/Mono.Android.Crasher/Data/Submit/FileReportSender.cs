@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using Android.App;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
+
 using Environment = Android.OS.Environment;
 
 namespace Mono.Android.Crasher.Data.Submit

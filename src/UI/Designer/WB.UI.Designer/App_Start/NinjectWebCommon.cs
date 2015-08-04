@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
-using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
@@ -14,14 +13,13 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Native.Logging;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.ReadSide;
@@ -36,6 +34,8 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Settings;
+
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -75,7 +75,7 @@ namespace WB.UI.Designer.App_Start
             // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            var dynamicCompilerSettings = (DynamicCompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettings");
+            var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
@@ -107,6 +107,10 @@ namespace WB.UI.Designer.App_Start
                 new MainModule(),
                 new FileInfrastructureModule()
                 );
+
+
+            kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
+
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
             kernel.Load(ModulesFactory.GetEventStoreModule());
@@ -138,7 +142,9 @@ namespace WB.UI.Designer.App_Start
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             NcqrsEnvironment.SetGetter<IEventBus>(() => GetEventBus(kernel));
+            NcqrsEnvironment.SetGetter<ILiteEventBus>(() => GetEventBus(kernel));
             kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
+            kernel.Bind<ILiteEventBus>().ToMethod(_ => GetEventBus(kernel));
             kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));
         }
 

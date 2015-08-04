@@ -1,5 +1,6 @@
+using System;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Capi.Settings
 {
@@ -12,9 +13,24 @@ namespace WB.UI.Capi.Settings
             this.interviewerSettings = interviewerSettings;
         }
 
-        public string BaseAddress()
+        public string Endpoint
         {
-            return this.interviewerSettings.GetSyncAddressPoint();
+            get { return this.interviewerSettings.GetSyncAddressPoint(); }
+        }
+
+        public TimeSpan Timeout
+        {
+            get { return new TimeSpan(0, 0, 0, 30); }
+        }
+
+        public int BufferSize
+        {
+            get { return 512; }
+        }
+
+        public bool AcceptUnsignedSslCertificate
+        {
+            get { return false; }
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 
         protected static void WaitRebuildReadsideFinish(ReadSideService readSideService)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
 
             while (readSideService.AreViewsBeingRebuiltNow())
             {

@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {

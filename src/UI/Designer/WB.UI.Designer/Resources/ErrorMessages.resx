@@ -189,6 +189,9 @@
   <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
     <value>User name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol.</value>
   </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
+  </data>
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Your questionnaire "{0}" contains new functionality which is not supported by your installation. Please update.</value>
   </data>

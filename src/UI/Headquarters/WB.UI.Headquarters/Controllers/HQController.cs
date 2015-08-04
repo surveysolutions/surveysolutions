@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils.Services;
+
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage;

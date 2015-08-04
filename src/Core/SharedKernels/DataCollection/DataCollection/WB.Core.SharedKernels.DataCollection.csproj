@@ -16,6 +16,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>c5ec3191</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,15 +47,29 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
@@ -65,6 +80,7 @@
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
+    <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserArchived.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
@@ -259,8 +275,10 @@
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
+    <Compile Include="Utils\RosterInstanceExtensions.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
+    <Compile Include="ValueObjects\Interview\QuestionState.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
@@ -292,9 +310,9 @@
     <Compile Include="Views\UserDocument.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -328,7 +346,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

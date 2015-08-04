@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 using Main.DenormalizerStorage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests

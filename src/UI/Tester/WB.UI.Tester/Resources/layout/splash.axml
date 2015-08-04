@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/Splash_Logo_size"
+    android:layout_height="@dimen/Splash_Logo_size"
+    android:padding="@dimen/Splash_Logo_padding"
+    android:layout_gravity="center"
+    android:src="@drawable/loginLogo" />

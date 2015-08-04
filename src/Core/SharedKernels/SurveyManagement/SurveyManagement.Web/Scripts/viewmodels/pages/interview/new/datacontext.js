@@ -51,6 +51,14 @@
                         };
                         break;
                 case "DateTime":
+                    var dateAnswer = question.selectedOption();
+                    var answerUTC = dateAnswer.getFullYear() + '-' + (dateAnswer.getMonth() + 1) + '-' + dateAnswer.getDate();
+                    answer = {
+                        id: question.id(),
+                        answer: answerUTC,
+                        type: question.type()
+                    };
+                    break;
                 case "GpsCoordinates":
                 case "SingleOption":
                     answer = {

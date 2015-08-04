@@ -10,7 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -24,6 +24,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 {
     public class InterviewViewModel : MvxViewModel, IView
     {
+        public InterviewViewModel()
+        {
+
+        }
+
         protected InterviewViewModel(Guid id)
         {
             this.PublicKey = id;
@@ -102,6 +107,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.SubscribePrefilledQuestionsOnPropertiesChanges();
 
             #endregion
+        }
+
+        public void Init(Guid interviewId)
+        {
+            
         }
 
         private void SubscribePrefilledQuestionsOnPropertiesChanges()

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     public class InterviewQuestion
@@ -39,14 +41,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             return QuestionState.HasFlag(QuestionState.Answered);
         }
-    }
-
-    [Flags]
-    public enum QuestionState
-    {
-        Valid = 8,
-        Enabled = 1,
-        Flagged = 2,
-        Answered = 4
     }
 }

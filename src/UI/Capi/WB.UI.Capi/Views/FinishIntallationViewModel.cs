@@ -4,7 +4,7 @@ using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.ValueObjects;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Views

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

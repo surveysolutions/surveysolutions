@@ -136,6 +136,7 @@
                                 var itemIdToDelete = $stateParams.itemId;
                                 questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                 $scope.resetSelection();
+                                $rootScope.$emit('rosterDeleted', itemIdToDelete);
                             });
                         }
                     });
