@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// <summary>
         /// Gets first level child entities of a group
         /// </summary>
-        ReadOnlyCollection<Guid> GetChildEntities(Guid groupId);
+        ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
     }
