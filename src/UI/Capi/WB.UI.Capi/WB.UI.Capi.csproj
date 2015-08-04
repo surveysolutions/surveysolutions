@@ -533,10 +533,6 @@
       <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Tester\WB.UI.Tester\WB.UI.Tester.csproj">
-      <Project>{F18F9422-2624-44C6-934D-B5F48C9587C1}</Project>
-      <Name>WB.UI.Tester</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />

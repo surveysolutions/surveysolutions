@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Preferences;
+using WB.UI.Shared.Enumerator;
 
 namespace WB.UI.Tester.Activities
 {
@@ -18,7 +19,7 @@ namespace WB.UI.Tester.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.AddPreferencesFromResource(Resource.Xml.preferences);
+            this.AddPreferencesFromResource(WB.UI.Capi.Resource.Xml.preferences);
 
             this.devSettingsCategory = this.FindPreference("dev_settings_category");
 
