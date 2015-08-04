@@ -48,6 +48,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsCustomValidationDefined(Guid questionId);
 
+        bool IsQuestion(Guid entityId);
+
+        bool IsInterviewierQuestion(Guid questionId);
+
         string GetCustomValidationExpression(Guid questionId);
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
@@ -66,6 +70,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid questionId);
+
         IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
@@ -75,6 +81,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int GetRosterLevelForQuestion(Guid questionId);
 
         int GetRosterLevelForGroup(Guid groupId);
+
+        int GetRosterLevelForEntity(Guid entityId);
 
         IEnumerable<Guid> GetAllMandatoryQuestions();
 
@@ -129,6 +137,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets first level child questions of a group
         /// </summary>
         ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
+
+        /// <summary>
+        /// Gets first level child entities of a group
+        /// </summary>
+        ReadOnlyCollection<Guid> GetChildEntities(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
     }

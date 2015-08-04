@@ -1112,6 +1112,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     getRosterInstanceIds));
         }
 
+        protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
+            InterviewStateDependentOnAnswers state,
+            IEnumerable<Guid> entityIds, decimal[] rosterVector, IQuestionnaire questionnare,
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
+        {
+            return entityIds.SelectMany(entityId =>
+                GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, entityId, rosterVector, questionnare,
+                    getRosterInstanceIds));
+        }
+
         protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
@@ -1135,6 +1145,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 yield return new Identity(questionId, questionRosterVector);
             }
+        }
+
+        protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
+            InterviewStateDependentOnAnswers state,
+            Guid entityId, decimal[] rosterVector, IQuestionnaire questionnare,
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
+        {
+            int vectorRosterLevel = rosterVector.Length;
+            int entityRosterLevel = questionnare.GetRosterLevelForEntity(entityId);
+
+            if (entityRosterLevel < vectorRosterLevel)
+                throw new InterviewException(string.Format(
+                    "Entity {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
+                    FormatQuestionForException(entityId, questionnare), vectorRosterLevel, entityRosterLevel, EventSourceId));
+
+            Guid[] parentRosterGroupsStartingFromTop =
+                questionnare.GetRostersFromTopToSpecifiedEntity(entityId).ToArray();
+
+            IEnumerable<decimal[]> entityRosterVectors = ExtendRosterVector(state,
+                rosterVector, entityRosterLevel, parentRosterGroupsStartingFromTop, getRosterInstanceIds);
+
+            return entityRosterVectors.Select(entityRosterVector => new Identity(entityId, entityRosterVector));
         }
 
         protected IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
