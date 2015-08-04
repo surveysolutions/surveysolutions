@@ -1,9 +1,11 @@
 using System;
-using System.Collections;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -16,12 +18,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IViewModelNavigationService viewModelNavigationService;
         private string interviewId;
 
-        public PrefilledQuestionsViewModel(ILogger logger,
+        public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelNavigationService viewModelNavigationService)
-            : base()
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException("interviewViewModelFactory");
             if (plainQuestionnaireRepository == null) throw new ArgumentNullException("plainQuestionnaireRepository");
@@ -36,8 +37,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public string QuestionnaireTitle { get; set; }
 
-        private IList prefilledQuestions;
-        public IList PrefilledQuestions
+        private ObservableCollection<dynamic> prefilledQuestions;
+        public ObservableCollection<dynamic> PrefilledQuestions
         {
             get { return prefilledQuestions; }
             set { prefilledQuestions = value; RaisePropertyChanged(); }
@@ -54,14 +55,22 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
             if (questionnaire == null) throw new Exception("questionnaire is null");
-            
-            this.QuestionnaireTitle = questionnaire.Title;
+
             if (questionnaire.PrefilledQuestionsIds.Count == 0)
             {
                 this.viewModelNavigationService.NavigateTo<InterviewViewModel>(new { interviewId = this.interviewId });
+                return;
             }
 
-            this.PrefilledQuestions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
+            this.QuestionnaireTitle = questionnaire.Title;
+            this.PrefilledQuestions = new ObservableCollection<dynamic>();
+
+            this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId)
+                .ForEach(x => this.PrefilledQuestions.Add(x));
+
+            var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
+            startButton.Init(interviewId, null, null);
+            this.PrefilledQuestions.Add(startButton);
         }
         
         public override void NavigateToPreviousViewModel()

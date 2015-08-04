@@ -7,8 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class StartInterviewViewModel : MvxViewModel,
-        IInterviewEntityViewModel
+    public class StartInterviewViewModel : MvxViewModel
     {
         private readonly ICommandService commandService;
         private readonly IViewModelNavigationService viewModelNavigationService;
@@ -20,8 +19,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private string interviewId;
-
-        public Identity Identity { get { return null; } }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
