@@ -65,62 +65,6 @@ using InterviewViewModel = WB.Core.BoundedContexts.Capi.Views.InterviewDetails.I
 
 namespace WB.UI.Capi.Implementations.Activities
 {
-    public class HybridEventBus : IEventBus
-    {
-        private readonly ILiteEventBus liteEventBus;
-        private readonly IEventBus cqrsEventBus;
-
-        public HybridEventBus(ILiteEventBus liteEventBus, IEventBus cqrsEventBus)
-        {
-            this.liteEventBus = liteEventBus;
-            this.cqrsEventBus = cqrsEventBus;
-        }
-
-        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
-        {
-            this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
-        }
-
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool isBulk = false)
-        {
-            ExecuteAllThrowOneAggregate(
-                () => this.liteEventBus.PublishUncommittedEvents(aggregateRoot, isBulk),
-                () => this.cqrsEventBus.PublishUncommittedEvents(aggregateRoot, isBulk));
-        }
-
-        public void Publish(IPublishableEvent eventMessage)
-        {
-            this.cqrsEventBus.Publish(eventMessage);
-        }
-
-        public void Publish(IEnumerable<IPublishableEvent> eventMessages)
-        {
-            this.cqrsEventBus.Publish(eventMessages);
-        }
-
-        private static void ExecuteAllThrowOneAggregate(params Action[] actions)
-        {
-            var exceptions = new List<Exception>();
-
-            foreach (var action in actions)
-            {
-                try
-                {
-                    action.Invoke();
-                }
-                catch (Exception exception)
-                {
-                    exceptions.Add(exception);
-                }
-            }
-
-            if (exceptions.Count > 0)
-            {
-                throw new AggregateException(exceptions);
-            }
-        }
-    }
-
     public static class NinjectKernelExtensions
     {
         public static void VerifyIfDebug(this IKernel kernel)
