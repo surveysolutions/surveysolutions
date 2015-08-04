@@ -42,8 +42,6 @@
     <Compile Include="Services\IFriendlyMessageService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Implementation\Services\GpsLocationService.cs" />
-    <Compile Include="Services\IQuestionnaireImportService.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\DesignerApiService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />

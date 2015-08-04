@@ -75,7 +75,7 @@ namespace WB.UI.Capi
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
-            var questionnaireModelStore = new InMemoryPlainStorageAccessor<QuestionnaireModel>();
+            var questionnaireModelStore = new SqlitePlainStorageAccessor<QuestionnaireModel>(plainStore);
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
 
@@ -110,9 +110,10 @@ namespace WB.UI.Capi
             this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             this.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
+
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
-            this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().ToConstant(questionnaireModelStore);
+
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
             this.Bind<IDataCollectionAuthentication, IAuthentication>().To<AndroidAuthentication>().InSingletonScope();

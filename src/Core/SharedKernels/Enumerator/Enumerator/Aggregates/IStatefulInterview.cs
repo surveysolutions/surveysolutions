@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
     public interface IStatefulInterview
     {
         string QuestionnaireId { get; set; }
-        long QuestionnaireVersion { get; set; }
+        //long QuestionnaireVersion { get; set; }
         Guid Id { get; set; }
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
         IReadOnlyDictionary<string, List<Identity>> RosterInstancesIds { get; }
