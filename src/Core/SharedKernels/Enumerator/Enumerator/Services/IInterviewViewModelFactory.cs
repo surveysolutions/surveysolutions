@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IInterviewViewModelFactory
     {
-        IList<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState);
+        IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState);
         IList GetPrefilledQuestions(string interviewId);
         T GetNew<T>() where T : class;
     }

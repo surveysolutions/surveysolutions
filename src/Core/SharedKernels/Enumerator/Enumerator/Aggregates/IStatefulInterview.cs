@@ -88,6 +88,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
 
+        IEnumerable<Identity> GetChildEntities(Identity groupIdentity);
+
         IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector);
 
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);

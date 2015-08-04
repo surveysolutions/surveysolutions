@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 
         public Dictionary<Guid, BaseQuestionModel> Questions { get; set; }
 
+        public IEnumerable<QuestionnaireReferenceModel> EntityReferences { get; set; }
+
         public Dictionary<Guid, StaticTextModel> StaticTexts { get; set; }
 
         public List<QuestionnaireReferenceModel> PrefilledQuestionsIds { get; set; }
