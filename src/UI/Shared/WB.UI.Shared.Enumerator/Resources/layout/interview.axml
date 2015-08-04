@@ -31,12 +31,12 @@
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true">
-      <WB.UI.Tester.CustomControls.MvxRecyclerView
+      <!--<WB.UI.Tester.CustomControls.MvxRecyclerView
         style="@style/Interview_List"
         android:id="@+id/interviewEntitiesList"
         android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
         android:scrollbars="vertical"
-        local:MvxBind="ItemsSource CurrentGroup.Items" />
+        local:MvxBind="ItemsSource CurrentGroup.Items" />-->
     </ScrollView>
   </LinearLayout>
   <LinearLayout style="@style/Interview_Sidebar">

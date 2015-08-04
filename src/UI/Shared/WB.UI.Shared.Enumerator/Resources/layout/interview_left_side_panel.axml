@@ -10,14 +10,14 @@
       local:maxHeight="@dimen/Interview_Sidebar_PrefilledQuestions_max_height"
       style="@style/Interview_Sidebar_PrefilledQuestions_Container">
 
-      <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
+      <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
                    local:MvxBind="ItemsSource PrefilledQuestions"
                    local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
     </WB.UI.Tester.CustomControls.MaxHeightLinearLayout>
   </LinearLayout>
 
   <View style="@style/Interview_Entity_Divider" />
-  <MvxListView
+  <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView
         style="@style/Interview_Sidebar_Sections"
         local:MvxBind="ItemsSource Sections.AllVisibleSections"
         local:MvxItemTemplate="@layout/interview_left_side_panel_item_section" />
