@@ -37,6 +37,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.UI.Capi.Authorization;
 using WB.UI.Capi.Backup;
 using WB.UI.Capi.FileStorage;
+using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.ReadSideStore;
 using WB.UI.Capi.SharedPreferences;
 using WB.UI.Capi.SnapshotStore;
@@ -75,7 +76,7 @@ namespace WB.UI.Capi
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
-            var questionnaireModelStore = new SqlitePlainStorageAccessor<QuestionnaireModel>(plainStore);
+            var questionnaireModelStore = new QuestionnaireModelRepository(new SqlitePlainStorageAccessor<QuestionnaireModel>(plainStore));
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
 
