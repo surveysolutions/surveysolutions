@@ -75,5 +75,10 @@ namespace WB.UI.Tester.CustomControls
             get { return this.Adapter.ItemLongClick; }
             set { this.Adapter.ItemLongClick = value; }
         }
+
+        public override bool Fling(int velocityX, int velocityY)
+        {
+            return base.Fling(velocityX, (int)(velocityY * 0.7));
+        }
     }
 }
