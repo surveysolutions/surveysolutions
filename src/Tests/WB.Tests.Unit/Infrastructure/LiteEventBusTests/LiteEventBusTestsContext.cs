@@ -4,7 +4,6 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 
-
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
     public class LiteEventBusTestsContext
