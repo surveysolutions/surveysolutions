@@ -32,7 +32,7 @@
                 android:layout_height="match_parent">
 
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
-               local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible IsInitialized"/>
+               local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible IsViewModelInitialized"/>
   </LinearLayout>
 </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
 
