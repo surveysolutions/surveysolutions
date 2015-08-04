@@ -39,6 +39,7 @@ using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Android;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Ncqrs;
