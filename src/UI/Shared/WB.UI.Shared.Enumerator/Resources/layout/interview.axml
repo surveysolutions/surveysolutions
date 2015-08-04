@@ -11,12 +11,12 @@
                    android:orientation="vertical">
     <LinearLayout style="@style/Interview_BreadCrumbsContainer"
                   local:MvxBind="ColorByInterviewStatus Status;">
-      <WB.UI.Tester.CustomControls.FlowLayout orienation="horizontal"
+      <FlowLayout orienation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   local:MvxBind="ItemsSource BreadCrumbs.Items;"
                   local:MvxItemTemplate="@layout/interview_breadcrumb_item">
-      </WB.UI.Tester.CustomControls.FlowLayout>
+      </FlowLayout>
     </LinearLayout>
     <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
                                        android:layout_width="match_parent"
