@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
@@ -61,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             return GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
 
-        public IList GetPrefilledQuestions(string interviewId)
+        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId)
         {
             return GetPrefilledQuestionsImpl(interviewId);
         }
@@ -91,23 +90,18 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 navigationState: navigationState));
         }
 
-        private IList GetPrefilledQuestionsImpl(string interviewId)
+        private IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestionsImpl(string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var result = questionnaire.PrefilledQuestionsIds.Select(
+            return questionnaire.PrefilledQuestionsIds.Select(
                 question => CreateInterviewEntityViewModel(
                     entityId: question.Id,
                     rosterVector: new decimal[0],
                     entityModelType: question.ModelType,
                     interviewId: interviewId,
-                    navigationState: null)).ToList();
-
-            var startButton = Load<StartInterviewViewModel>();
-            startButton.Init(interviewId, null, null);
-            result.Add(startButton);
-            return result;
+                    navigationState: null));
         }
 
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(
