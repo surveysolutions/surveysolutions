@@ -711,16 +711,18 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IEnumerable<Guid> allEntitiesInGroup = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
+            var list = new List<Identity>();
             foreach (var entity in allEntitiesInGroup)
             {
-                if (questionnaire.IsQuestion(entity) && !questionnaire.IsInterviewierQuestion(entity)) continue;
+                var isQuestion = questionnaire.IsQuestion(entity);
+                if (isQuestion && !questionnaire.IsInterviewierQuestion(entity)) continue;
 
-                if (questionnaire.IsRosterGroup(entity))
+                if (!isQuestion && questionnaire.IsRosterGroup(entity))
                 {
                     foreach (var rosterInstance in GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
                     {
-                        yield return rosterInstance;
+                        list.Add(rosterInstance);
                     }
                 }
                 else
@@ -728,10 +730,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
                     foreach (var entityInstance in GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
                     {
-                        yield return entityInstance;
+                        list.Add(entityInstance);
                     }
                 }
             }
+            return list;
         }
 
         public IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector)

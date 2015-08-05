@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Guid? responsibleId;
 
         private Dictionary<Guid, IQuestion> questionCache = null;
-        private Dictionary<Guid, IGroup> groupCache = null;
+        private Dictionary<string, IGroup> groupCache = null;
         private Dictionary<Guid, IComposite> entityCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -80,15 +80,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        private Dictionary<Guid, IGroup> GroupCache
+        private Dictionary<string, IGroup> GroupCache
         {
             get
             {
-                return this.groupCache ?? (this.groupCache
-                    = this.innerDocument
-                        .Find<IGroup>(_ => true)
+                return this.groupCache ?? (
+                    this.groupCache = this.innerDocument.Find<IGroup>(_ => true)
                         .ToDictionary(
-                            group => group.PublicKey,
+                            group => group.PublicKey.FormatGuid(),
                             group => group));
             }
         }
@@ -114,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
             : this(document, getVersion, responsibleId)
         {
-            this.groupCache = groupCache;
+            this.groupCache = groupCache.ToDictionary(x => x.Key.FormatGuid(), x => x.Value);
             this.questionCache = questionCache;
         }
 
@@ -951,7 +950,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IGroup GetGroup(Guid groupId)
         {
-            return GetGroup(this.GroupCache, groupId);
+            return GetGroup(this.GroupCache, groupId.FormatGuid());
         }
 
         private void ThrowIfQuestionDoesNotExist(Guid questionId)
@@ -1026,7 +1025,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 : null;
         }
 
-        private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId)
+        private static IGroup GetGroup(Dictionary<string, IGroup> groups, string groupId)
         {
             return groups.ContainsKey(groupId)
                 ? groups[groupId]
