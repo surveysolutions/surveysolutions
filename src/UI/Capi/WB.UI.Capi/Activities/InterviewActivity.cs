@@ -1,7 +1,6 @@
 using Android.App;
 using Android.Content;
 using Android.Views;
-using WB.UI.Tester;
 using WB.UI.Tester.Activities;
 
 namespace WB.UI.Capi.Activities
