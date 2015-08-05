@@ -6,7 +6,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Cirrious.MvvmCross.Droid.Views;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator;
@@ -16,7 +15,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
-    public abstract class BaseInterviewActivity : MvxActivity //BaseActivity<InterviewViewModel>
+    public abstract class BaseInterviewActivity : BaseActivity<InterviewViewModel>
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
@@ -25,31 +24,29 @@ namespace WB.UI.Tester.Activities
 
         private Toolbar toolbar;
 
-        //private MvxRecyclerView recyclerView;
+        private MvxRecyclerView recyclerView;
 
         private LinearLayoutManager layoutManager;
 
-        //private InterviewEntityAdapter adapter;
+        private InterviewEntityAdapter adapter;
 
-        //protected override int ViewResourceId
-        //{
-        //    get { return Resource.Layout.interview; }
-        //}
+        protected override int ViewResourceId
+        {
+            get { return Resource.Layout.interview; }
+        }
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            this.SetContentView(Resource.Layout.interview);
-
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 
-            //this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
+            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
-            //this.SetSupportActionBar(this.toolbar);
-            //this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            //this.SupportActionBar.SetHomeButtonEnabled(true);
+            this.SetSupportActionBar(this.toolbar);
+            this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            this.SupportActionBar.SetHomeButtonEnabled(true);
 
             this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, this.toolbar, 0, 0);
             drawerLayout.SetDrawerListener(this.drawerToggle);
@@ -60,12 +57,12 @@ namespace WB.UI.Tester.Activities
             };
 
             this.layoutManager = new LinearLayoutManager(this);
-            //this.recyclerView.SetLayoutManager(this.layoutManager);
-            //this.recyclerView.HasFixedSize = true;
+            this.recyclerView.SetLayoutManager(this.layoutManager);
+            this.recyclerView.HasFixedSize = true;
 
-            //this.adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
-            
-            //this.recyclerView.Adapter = this.adapter;
+            this.adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+
+            this.recyclerView.Adapter = this.adapter;
         }
 
         protected override void OnStart()
@@ -93,7 +90,7 @@ namespace WB.UI.Tester.Activities
             {
                 Application.SynchronizationContext.Post(_ =>
                 {
-                    this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
+                   // this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
                 }, 
                 null);
             }
