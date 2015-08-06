@@ -297,7 +297,6 @@
     <Compile Include="Core\CAPIParcelableCreator.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="Core\ParcelableWrapper.cs" />
-    <Compile Include="CreateInterviewActivity.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
@@ -358,6 +357,7 @@
     <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
+    <Compile Include="ViewModel\InterviewerPrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
