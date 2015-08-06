@@ -1,7 +1,7 @@
 using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
-namespace WB.UI.Tester.Ninject
+namespace WB.Infrastructure.Shared.Enumerator.Ninject
 {
     public class NinjectModuleAdapter<TModule> : NinjectModule, IIocRegistry
         where TModule : IModule
@@ -23,7 +23,7 @@ namespace WB.UI.Tester.Ninject
             this.Kernel.Bind<TInterface>().To<TImplementation>();
         }
 
-        void IIocRegistry.BindAsSingleton<TInterface, TImplementation>() 
+        void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
         }

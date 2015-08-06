@@ -28,17 +28,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly bool usePlainQuestionnaireRepository;
         private readonly string basePath;
         private readonly string syncDirectoryName;
-        private readonly string dataDirectoryName;
-        private readonly string questionnaireAssembliesDirectoryName;
 
         public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC",
-            string dataDirectoryName = "InterviewData", string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
+            string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
         {
             this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
             this.basePath = basePath;
             this.syncDirectoryName = syncDirectoryName;
-            this.dataDirectoryName = dataDirectoryName;
-            this.questionnaireAssembliesDirectoryName = questionnaireAssembliesFolder;
         }
 
         public override void Load()
@@ -58,20 +54,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
-            this.Bind<IPlainInterviewFileStorage>()
-              .To<PlainInterviewFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("dataDirectoryName", this.dataDirectoryName);
-
             this.Bind<IInterviewSynchronizationFileStorage>()
                 .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
-
-//            this.Bind<IQuestionnaireAssemblyFileAccessor>()
-//                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.basePath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
 
             this.Bind<ICapiExpressionsEngineVersionService>().To<CapiExpressionsEngineVersionService>().InSingletonScope();
-//            this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
             CommandRegistry
                 .Setup<Questionnaire>()
