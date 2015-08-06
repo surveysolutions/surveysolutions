@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using Cirrious.MvvmCross.Test.Core;
+
+using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
@@ -13,8 +15,12 @@ using it = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests
 {
-    public class TextListQuestionViewModelTestContext
+    public class TextListQuestionViewModelTestContext : MvxIoCSupportingTest
     {
+        public TextListQuestionViewModelTestContext()
+        {
+            base.Setup();
+        }
         protected static TextListQuestionViewModel CreateTextListQuestionViewModel(
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,

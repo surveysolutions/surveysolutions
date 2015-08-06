@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
+using Cirrious.MvvmCross.Test.Core;
+
 using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
@@ -17,8 +20,13 @@ using it = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class CascadingSingleOptionQuestionViewModelTestContext 
+    public class CascadingSingleOptionQuestionViewModelTestContext : MvxIoCSupportingTest
     {
+        public CascadingSingleOptionQuestionViewModelTestContext()
+        {
+            base.Setup();
+        }
+
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null)
@@ -37,6 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
 
         protected static void SetUp()
         {
+            
             navigationState = Create.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };

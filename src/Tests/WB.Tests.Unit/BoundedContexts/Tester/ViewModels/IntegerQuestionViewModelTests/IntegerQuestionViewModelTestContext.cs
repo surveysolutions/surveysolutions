@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Cirrious.MvvmCross.Test.Core;
+
 using Moq;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
@@ -16,8 +18,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.IntegerQuestionViewModelTests
 {
-    public class IntegerQuestionViewModelTestContext
+    public class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
     {
+        public IntegerQuestionViewModelTestContext()
+        {
+            base.Setup();
+        }
+        
         public static IntegerQuestionViewModel CreateIntegerQuestionViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
