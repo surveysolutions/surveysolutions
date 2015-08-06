@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
+namespace WB.UI.Capi.Implementations.PlainStorage
 {
     public class SqlitePlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>,
         IPlainKeyValueStorage<TEntity> 

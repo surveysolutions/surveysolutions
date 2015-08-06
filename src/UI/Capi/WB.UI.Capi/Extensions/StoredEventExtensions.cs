@@ -1,8 +1,9 @@
 using System;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
+using WB.UI.Capi.Implementations.Services;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite
+namespace WB.UI.Capi.Extensions
 {
     public static class StoredEventExtensions
     {

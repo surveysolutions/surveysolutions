@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Android.OS;
 
 using AndroidNcqrs.Eventing.Storage.SQLite;
-using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
@@ -37,6 +36,8 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.UI.Capi.Authorization;
 using WB.UI.Capi.Backup;
 using WB.UI.Capi.FileStorage;
+using WB.UI.Capi.Implementations.DenormalizerStorage;
+using WB.UI.Capi.Implementations.PlainStorage;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.ReadSideStore;
 using WB.UI.Capi.SharedPreferences;

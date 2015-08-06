@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using WB.Core.Infrastructure.Backup;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
+namespace WB.UI.Capi.Implementations.PlainStorage
 {
     public class SqlitePlainStore : IBackupable
     {
@@ -21,7 +21,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
             this.dbName = dbName;
 
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
+            this.connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
         }
 
         private string FullPathToDataBase
@@ -30,15 +30,15 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
             {
                 return
                     System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
-                                           dbName);
+                                           this.dbName);
             }
         }
 
         private void WrapConnection(Action<ISQLiteConnection> action)
         {
-            lock (locker)
+            lock (this.locker)
             {
-                using (var connection = connectionFactory.Create(FullPathToDataBase))
+                using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
                 {
                     connection.CreateTable<PlainStorageRow>();
                     action(connection);
@@ -48,9 +48,9 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
 
         private TResult WrapConnectionWithQuery<TResult>(Func<ITableQuery<PlainStorageRow>, TResult> query)
         {
-            lock (locker)
+            lock (this.locker)
             {
-                using (var connection = connectionFactory.Create(FullPathToDataBase))
+                using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
                 {
                     connection.CreateTable<PlainStorageRow>();
                     return query.Invoke(connection.Table<PlainStorageRow>());
@@ -65,17 +65,17 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
         
         public IEnumerable<T> Query<T>(Expression<Func<T, bool>> predExpr) where T : new()
         {
-            return WrapConnectionWithQuery<IEnumerable<T>, T>((table) => table.Where(predExpr).ToList());
+            return this.WrapConnectionWithQuery<IEnumerable<T>, T>((table) => table.Where(predExpr).ToList());
         }
 
         public void Remove(string id)
         {
-            WrapConnection(c => c.Delete<PlainStorageRow>(id.ToString()));
+            this.WrapConnection(c => c.Delete<PlainStorageRow>(id.ToString()));
         }
 
         public void Store(PlainStorageRow row)
         {
-            WrapConnection(connection =>
+            this.WrapConnection(connection =>
             {
                 connection.Delete<PlainStorageRow>(row.Id.ToString());
                 connection.Insert(row);
@@ -84,7 +84,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
 
         public void Store(IEnumerable<PlainStorageRow> rows)
         {
-            WrapConnection(connection =>
+            this.WrapConnection(connection =>
             {
                 foreach (PlainStorageRow row in rows)
                 {
@@ -96,19 +96,19 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
 
         public string GetPathToBackupFile()
         {
-            return FullPathToDataBase;
+            return this.FullPathToDataBase;
         }
 
         public void RestoreFromBackupFolder(string path)
         {
-            var pathToEventStore = Path.Combine(path, dbName);
+            var pathToEventStore = Path.Combine(path, this.dbName);
 
-            lock (locker)
+            lock (this.locker)
             {
                 if (!File.Exists(pathToEventStore))
-                    File.Delete(FullPathToDataBase);
+                    File.Delete(this.FullPathToDataBase);
                 else
-                    File.Copy(pathToEventStore, FullPathToDataBase, true);
+                    File.Copy(pathToEventStore, this.FullPathToDataBase, true);
             }
         }
 

@@ -1,7 +1,7 @@
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
+namespace WB.UI.Capi.Implementations.DenormalizerStorage
 {
     public abstract class DenormalizerRow : IView
     {

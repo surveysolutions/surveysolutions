@@ -1,9 +1,8 @@
 using System;
 using Cirrious.MvvmCross.Plugins.Sqlite;
-
 using Newtonsoft.Json;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite
+namespace WB.UI.Capi.Implementations.Services
 {
     public class StoredEvent
     {
@@ -13,12 +12,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public StoredEvent(Guid commitId, string origin, Guid eventId, int sequence, DateTime timeStamp, object data)
         {
-            CommitId = commitId.ToString();
-            Origin = origin;
-            EventId = eventId.ToString();
-            Sequence = sequence;
-            TimeStamp = timeStamp.Ticks;
-            Data = GetJsonData(data);
+            this.CommitId = commitId.ToString();
+            this.Origin = origin;
+            this.EventId = eventId.ToString();
+            this.Sequence = sequence;
+            this.TimeStamp = timeStamp.Ticks;
+            this.Data = this.GetJsonData(data);
         }
 
         private string GetJsonData(object payload)

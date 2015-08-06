@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
+namespace WB.UI.Capi.Implementations.DenormalizerStorage
 {
     public class SqliteReadSideRepositoryAccessor<TView> : 
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>

@@ -7,9 +7,9 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.FileSystem;
+using WB.UI.Capi.Extensions;
 
-namespace AndroidNcqrs.Eventing.Storage.SQLite
+namespace WB.UI.Capi.Implementations.Services
 {
     public class MvvmCrossSqliteEventStore : IEventStore, IBackupable
     {
@@ -21,28 +21,28 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
             this.folderName = folderName;
 
-            if (!Directory.Exists(FullPathToFolder))
+            if (!Directory.Exists(this.FullPathToFolder))
             {
-                Directory.CreateDirectory(FullPathToFolder);
+                Directory.CreateDirectory(this.FullPathToFolder);
             }
 
             PluginLoader.Instance.EnsureLoaded();
-            connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
+            this.connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
         }
 
         private string FullPathToFolder 
         {
             get
             {
-               return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), folderName);
+               return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), this.folderName);
             }
         }
 
         private void WrapConnection(Guid eventSourceId, Action<ISQLiteConnection> action)
         {
-            lock (locker)
+            lock (this.locker)
             {
-                using (var connection = connectionFactory.Create(Path.Combine(FullPathToFolder, eventSourceId.ToString())))
+                using (var connection = this.connectionFactory.Create(Path.Combine(this.FullPathToFolder, eventSourceId.ToString())))
                 {
                     connection.CreateTable<StoredEvent>();
                     action(connection);
@@ -52,14 +52,14 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public void Store(UncommittedEventStream eventStream)
         {
-            WrapConnection(eventStream.SourceId, connection => connection.InsertAll(eventStream.Select(x => x.ToStoredEvent())));
+            this.WrapConnection(eventStream.SourceId, connection => connection.InsertAll(eventStream.Select(x => x.ToStoredEvent())));
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
             IEnumerable<CommittedEvent> events = Enumerable.Empty<CommittedEvent>();
             
-            WrapConnection(id, connection =>
+            this.WrapConnection(id, connection =>
             {
                 events = connection.Table<StoredEvent>()
                     .Where(
@@ -73,20 +73,20 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public void CleanStream(Guid id)
         {
-            var file = Path.Combine(FullPathToFolder, id.ToString());
+            var file = Path.Combine(this.FullPathToFolder, id.ToString());
             if (File.Exists(file)) File.Delete(file);
         }
 
         public string GetPathToBackupFile()
         {
-            return FullPathToFolder;
+            return this.FullPathToFolder;
         }
 
         public void RestoreFromBackupFolder(string path)
         {
-            var dirWithImages = Path.Combine(path, folderName);
+            var dirWithImages = Path.Combine(path, this.folderName);
            
-            foreach (var file in Directory.EnumerateFiles(FullPathToFolder))
+            foreach (var file in Directory.EnumerateFiles(this.FullPathToFolder))
             {
                 File.Delete(file);
             } 
@@ -95,7 +95,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                 return;
 
             foreach (var file in Directory.GetFiles(dirWithImages))
-                File.Copy(file, Path.Combine(FullPathToFolder, Path.GetFileName(file)));
+                File.Copy(file, Path.Combine(this.FullPathToFolder, Path.GetFileName(file)));
         }
     }
 }
