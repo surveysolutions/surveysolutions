@@ -134,21 +134,32 @@ angular.module('designerApp')
                 $scope.verificationStatus.errors = _.filter(errors, function (item) {
                     return item.ItemId != itemId;
                 });
-
                 _.each(errors, function(error) {
                     if (error.isGroupOfErrors) {
-                        error.references = _.filter(error.references, function(reference) {
+                        error.references = _.filter(error.references, function (reference) {
+                            
                             return reference.itemId != itemId;
                         });
                     }
                 })
 
+                var errorsCount = 0;
+                _.each(errors, function (error) {
+                    if (error.isGroupOfErrors) {
+                        _.each(error.references, function(reference) {
+                            errorsCount++;
+                        });
+                    } else {
+                        errorsCount++;
+                    }
+                });
+                    
                 errors = _.filter(errors, function(error) {
                     return !error.isGroupOfErrors || error.references.length;
                 });
 
                 $scope.verificationStatus.errors = errors;
-                $scope.verificationStatus.errorsCount = errors.length;
+                $scope.verificationStatus.errorsCount = errorsCount;
             }
 
             $scope.currentChapter = null;
