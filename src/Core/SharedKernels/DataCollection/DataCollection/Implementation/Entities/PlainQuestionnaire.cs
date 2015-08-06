@@ -264,7 +264,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var question = this.GetQuestion(questionId);
 
-            return question != null && question.QuestionScope == QuestionScope.Interviewer;
+            return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
 
         public string GetCustomValidationExpression(Guid questionId)
