@@ -76,10 +76,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid">
+    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -95,7 +95,7 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Cirrious.MvvmCross.Binding">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
       <Private>True</Private>
     </Reference>

@@ -17,7 +17,7 @@
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NuGetPackageImportStamp>469bfefe</NuGetPackageImportStamp>
