@@ -20,7 +20,7 @@
         android:layout_height="fill_parent"
         android:fillViewport="true">
 
-      <WB.UI.Tester.CustomControls.MvxRecyclerView
+      <MvxRecyclerView
         style="@style/PrefilledQuestions_List"
         android:id="@+id/questionnaireEntitiesList"
         local:MvxBind="ItemsSource PrefilledQuestions" />
