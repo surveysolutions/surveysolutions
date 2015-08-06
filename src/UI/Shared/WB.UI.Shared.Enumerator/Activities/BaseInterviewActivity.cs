@@ -90,7 +90,7 @@ namespace WB.UI.Tester.Activities
             {
                 Application.SynchronizationContext.Post(_ =>
                 {
-                   // this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
+                    this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
                 }, 
                 null);
             }
