@@ -135,7 +135,7 @@ namespace WB.UI.Tester
                 var toReturn = base.AndroidViewAssemblies;
 
                 // Add assemblies with other views we use.  When the XML is inflated
-                // MvvmCross knows about the types and won't compain about them.  This
+                // MvvmCross knows about the types and won't complain about them.  This
                 // speeds up inflation noticeably.
                 toReturn.Add(typeof(MvxRecyclerView).Assembly);
                 toReturn.Add(typeof(DrawerLayout).Assembly);
@@ -158,7 +158,7 @@ namespace WB.UI.Tester
                     Insights.PurgePendingCrashReports().Wait();
                 }
             };
-            Insights.Initialize("24d22f99f3068798f24f20d297baaa0fbfe9f528", applicationContext);
+            Insights.Initialize("42692ba29c8395f41cf92fc810d365a4ec0c98d7", applicationContext);
         }
 
         protected override void InitializeLastChance()
