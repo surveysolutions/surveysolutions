@@ -184,8 +184,6 @@
     <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
     <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
-    <Compile Include="Ninject\ModuleExtensions.cs" />
-    <Compile Include="Ninject\NinjectModuleAdapter.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

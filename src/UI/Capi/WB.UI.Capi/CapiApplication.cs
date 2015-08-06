@@ -52,6 +52,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Capi.EventHandlers;
 using WB.UI.Capi.FileStorage;
 using WB.UI.Capi.Implementations.Activities;
@@ -303,9 +304,9 @@ namespace WB.UI.Capi
             this.kernel.Load(new AndroidModelModule(basePath,
                     new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}, this.kernel.Get<SyncPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
+                new EnumeratorInfrastructureModule(basePath: basePath),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath,
-                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder,
-                    questionnaireAssembliesFolder: QuestionnaireAssembliesFolder));
+                    syncDirectoryName: SynchronizationFolder));
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));

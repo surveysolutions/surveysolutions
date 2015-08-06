@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Android;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Infrastructure.Shared.Enumerator.Ninject;
 
 namespace WB.UI.Tester.Ninject
 {
@@ -25,7 +26,8 @@ namespace WB.UI.Tester.Ninject
                 new PlainStorageInfrastructureModule(),
                 new EnumeratorSharedKernelModule(),
                 new TesterBoundedContextModule(),
-                new DataCollectionModule(basePath),
+                new DataCollectionModule(),
+                new EnumeratorInfrastructureModule(basePath),
                 new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject());
         }
