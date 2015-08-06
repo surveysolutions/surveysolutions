@@ -47,7 +47,7 @@ namespace WB.UI.Capi.Views
             this.SyncEndpoint = "";
 #if DEBUG
             this.SyncEndpoint = "http://superhq-dev.mysurvey.solutions";
-            this.Login = "ira";
+            this.Login = "Interviewer1";
             this.Password = "Qwerty1234";
 #endif
         }
