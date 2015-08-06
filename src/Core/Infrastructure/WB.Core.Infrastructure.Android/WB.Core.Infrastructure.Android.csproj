@@ -19,7 +19,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NuGetPackageImportStamp>0b69e6e3</NuGetPackageImportStamp>
-    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,7 +59,7 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding">
+    <Reference Include="Cirrious.MvvmCross.Binding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -71,7 +71,7 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization">
+    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -158,6 +158,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Implementation\Services\FileSystem\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Services\Settings\ApplicationSettings.cs" />
     <Compile Include="Implementation\Services\Compression\Compressor.cs" />
