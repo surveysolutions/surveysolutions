@@ -5,7 +5,6 @@ using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;

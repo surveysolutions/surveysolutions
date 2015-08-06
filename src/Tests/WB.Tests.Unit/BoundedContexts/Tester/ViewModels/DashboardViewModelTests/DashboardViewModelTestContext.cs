@@ -1,4 +1,6 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using Cirrious.MvvmCross.Test.Core;
+
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -7,8 +9,13 @@ using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class DashboardViewModelTestContext
+    public class DashboardViewModelTestContext : MvxIoCSupportingTest
     {
+        public DashboardViewModelTestContext()
+        {
+            base.Setup();
+        }
+
         public static DashboardViewModel CreateDashboardViewModel(IPrincipal principal = null,
             ILogger logger = null,
             IDesignerApiService designerApiService = null,
