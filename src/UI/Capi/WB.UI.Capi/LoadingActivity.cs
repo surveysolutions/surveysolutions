@@ -6,11 +6,13 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Cirrious.MvvmCross.Droid.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,13 +20,14 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Implementations.Activities;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android.Helpers;
-using Environment = System.Environment;
+using InterviewViewModel = WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel;
 
 namespace WB.UI.Capi
 {
     [Activity(Label = "Loading", NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoadingActivity : Activity
+    public class LoadingActivity : MvxActivity
     {
         private CancellationTokenSource cancellationToken;
         private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
@@ -124,7 +127,7 @@ namespace WB.UI.Capi
 
                 if (!string.IsNullOrEmpty(additionalMessage))
                 {
-                    this.tvMessage.Text += Environment.NewLine +
+                    this.tvMessage.Text += System.Environment.NewLine +
                         string.Format(Resources.GetText(Resource.String.DetailsFormat), additionalMessage);
                 }
             });
@@ -150,10 +153,8 @@ namespace WB.UI.Capi
                     return;
                 }
 
-                var intent = new Intent(this, typeof(CreateInterviewActivity));
-                intent.PutExtra("publicKey", interviewId.ToString());
-                intent.AddFlags(ActivityFlags.NoHistory);
-                this.StartActivity(intent);
+                var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
+                viewModelNavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
             catch (Exception e)
             {
@@ -208,20 +209,14 @@ namespace WB.UI.Capi
                 return;
             }
 
+            var navigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
             if (createdOnClient)
             {
-                var intent = new Intent(this, typeof (CreateInterviewActivity));
-                intent.PutExtra("publicKey", interviewId.ToString());
-                intent.AddFlags(ActivityFlags.NoHistory);
-                this.StartActivity(intent);
+                navigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
             else
             {
-                ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateTo<InterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
-
-//                var intent = new Intent(this, typeof(DataCollectionDetailsActivity));
-//                intent.PutExtra("publicKey", interviewId.ToString());
-//                this.StartActivity(intent);
+                navigationService.NavigateTo<InterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
         }
 

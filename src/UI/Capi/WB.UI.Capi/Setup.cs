@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Capi.Activities;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Injections;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
@@ -45,6 +46,7 @@ namespace WB.UI.Capi
             container.Add(typeof(LoginViewModel), typeof(LoginActivity));
             container.Add(typeof(FinishIntallationViewModel), typeof(FinishInstallationActivity));
             container.Add(typeof(InterviewViewModel), typeof(InterviewActivity));
+            container.Add(typeof(InterviewerPrefilledQuestionsViewModel), typeof(PrefilledQuestionsActivity));
         }
 
         protected override IMvxApplication CreateApp()
