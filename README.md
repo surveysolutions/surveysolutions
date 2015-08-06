@@ -1,0 +1,4 @@
+- Rebuild read side is requred
+- Release Designer is requried
+- Don't forget to move SMTP settings from designer configuration folder to web.config
+- CAPI is *NOT* backward compatible
