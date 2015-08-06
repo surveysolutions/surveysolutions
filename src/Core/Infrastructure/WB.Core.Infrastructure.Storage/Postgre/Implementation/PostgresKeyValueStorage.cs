@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public TEntity GetById(string id)
         {
             string queryResult;
-            using (var command = sessionProvider.GetSession().Connection.CreateCommand())
+            using (var command = new NpgsqlCommand())
             {
                 string commandText = string.Format("SELECT value FROM {0} WHERE id = :id", this.tableName);
 
@@ -31,9 +31,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 command.Parameters.Add(parameter);
 
-                EnlistIntoCurrentTransaction(command);
-
-                queryResult = (string) command.ExecuteScalar();
+                queryResult = (string) ExecuteScalar(command);
             }
 
             if (queryResult != null)
@@ -44,17 +42,19 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             return null;
         }
 
+        protected abstract object ExecuteScalar(IDbCommand command);
+        protected abstract int ExecuteNonQuery(IDbCommand command);
+        
         public void Remove(string id)
         {
             int queryResult;
-            using (var command = sessionProvider.GetSession().Connection.CreateCommand())
+            using (var command = new NpgsqlCommand())
             {
                 command.CommandText = string.Format("DELETE FROM {0} WHERE id = :id", this.tableName);
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 command.Parameters.Add(parameter);
 
-                EnlistIntoCurrentTransaction(command);
-                queryResult = command.ExecuteNonQuery();
+                queryResult = ExecuteNonQuery(command);
             }
             if (queryResult > 1)
             {
@@ -68,7 +68,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public void Store(TEntity view, string id)
         {
             object existsResult;
-            using (var existsCommand = sessionProvider.GetSession().Connection.CreateCommand())
+            using (var existsCommand = new NpgsqlCommand())
             {
                 existsCommand.CommandText = string.Format("SELECT 1 FROM {0} WHERE id = :id LIMIT 1", this.tableName);
 
@@ -76,8 +76,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
                 existsCommand.Parameters.Add(idParameter);
 
-                EnlistIntoCurrentTransaction(existsCommand);
-                existsResult = existsCommand.ExecuteScalar();
+                existsResult = ExecuteScalar(existsCommand);
             }
 
             var existing = existsResult != null;
@@ -94,7 +93,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
 
             int queryResult;
-            using (var upsertCommand = sessionProvider.GetSession().Connection.CreateCommand())
+            using (var upsertCommand = new NpgsqlCommand())
             {
                 upsertCommand.CommandText = commandText;
 
@@ -105,8 +104,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 upsertCommand.Parameters.Add(parameter);
                 upsertCommand.Parameters.Add(valueParameter);
 
-                EnlistIntoCurrentTransaction(upsertCommand);
-                queryResult = upsertCommand.ExecuteNonQuery();
+                queryResult = ExecuteNonQuery(upsertCommand);
             }
             if (queryResult > 1)
             {
@@ -118,11 +116,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             EnshureTableExists();
 
-            using (var command = sessionProvider.GetSession().Connection.CreateCommand())
+            using (var command = new NpgsqlCommand())
             {
                 command.CommandText = string.Format("DELETE FROM {0}", this.tableName);
-                EnlistIntoCurrentTransaction(command);
-                command.ExecuteNonQuery();
+                ExecuteNonQuery(command);
             }
         }
 
@@ -168,15 +165,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Ignore
                 };
-            }
-        }
-
-        private void EnlistIntoCurrentTransaction(IDbCommand command)
-        {
-            var activeTransaction = sessionProvider.GetSession().Transaction;
-            if (activeTransaction.IsActive)
-            {
-                activeTransaction.Enlist(command);
             }
         }
     }

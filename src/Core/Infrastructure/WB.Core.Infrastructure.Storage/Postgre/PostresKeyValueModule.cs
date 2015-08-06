@@ -27,8 +27,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 .InSingletonScope();
 
             this.Kernel.Bind(typeof (IPlainKeyValueStorage<>))
-                .To(typeof(PostgresPlainKeyValueStorage<>))
-                .InSingletonScope();
+                .To(typeof(PostgresPlainKeyValueStorage<>));
         }
 
         protected object GetReadSideKeyValueStorage(IContext context)
