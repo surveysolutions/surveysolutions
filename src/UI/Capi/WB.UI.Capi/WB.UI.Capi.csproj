@@ -306,13 +306,22 @@
     <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\Activities\DataCollectionDetailsActivity.cs" />
     <Compile Include="Implementations\Adapters\DataCollectionContentFrameAdapter.cs" />
+    <Compile Include="Implementations\DenormalizerStorage\DenormalizerRow.cs" />
+    <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />
+    <Compile Include="Implementations\DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionGridContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Implementations\Navigation\NavigationService.cs" />
+    <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />
+    <Compile Include="Implementations\PlainStorage\SqlitePlainStorageAccessor.cs" />
+    <Compile Include="Implementations\PlainStorage\SqlitePlainStore.cs" />
     <Compile Include="Implementations\Services\InterviewerSynchronizationService.cs" />
+    <Compile Include="Implementations\Services\MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Implementations\Services\QuestionnaireModelRepository.cs" />
+    <Compile Include="Implementations\Services\StoredEvent.cs" />
+    <Compile Include="Extensions\StoredEventExtensions.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -461,10 +470,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Mono\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
-      <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
-      <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>
       <Name>Mono.Android.Crasher</Name>

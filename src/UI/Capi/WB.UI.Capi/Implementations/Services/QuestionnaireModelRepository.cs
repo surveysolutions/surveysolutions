@@ -1,6 +1,7 @@
 ﻿using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Capi.Implementations.PlainStorage;
 
 namespace WB.UI.Capi.Implementations.Services
 {

@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.SnapshotStore;
 using WB.UI.Capi.ViewModel.Dashboard;
 
