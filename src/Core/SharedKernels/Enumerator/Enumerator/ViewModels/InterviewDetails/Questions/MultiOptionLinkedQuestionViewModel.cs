@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
     {
         private readonly AnswerNotifier answerNotifier;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IAnswerToStringService answerToStringService;
+        private readonly IAnswerToUIStringService answerToUIStringService;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IPrincipal userIdentity;
         readonly ILiteEventRegistry eventRegistry;
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             AnsweringViewModel answering,
             AnswerNotifier answerNotifier,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToStringService answerToStringService,
+            IAnswerToUIStringService answerToUIStringService,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             this.answerNotifier = answerNotifier;
             this.interviewRepository = interviewRepository;
-            this.answerToStringService = answerToStringService;
+            this.answerToUIStringService = answerToUIStringService;
             this.questionnaireStorage = questionnaireStorage;
             this.userIdentity = userIdentity;
             this.eventRegistry = eventRegistry;
@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private string BuildOptionTitle(IStatefulInterview interview, BaseQuestionModel linkedToQuestion, BaseInterviewAnswer linkedToAnswer)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestion, linkedToAnswer);
+            string answerAsTitle = this.answerToUIStringService.AnswerToUIString(linkedToQuestion, linkedToAnswer);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 

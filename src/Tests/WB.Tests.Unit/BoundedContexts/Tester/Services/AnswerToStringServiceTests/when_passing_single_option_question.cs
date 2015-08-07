@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
     {
         Establish context = () =>
         {
-            answerToStringService = CreateAnswerToStringService();
+            answerToUIStringService = CreateAnswerToStringService();
             singleOptionAnswer = CreateSingleOptionAnswer(3);
             singleOptionQuestionModel = CreateSingleOptionQuestionModel(
                 new[]
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
         };
 
         Because of = () =>
-            result = answerToStringService.AnswerToUIString(singleOptionQuestionModel, singleOptionAnswer);
+            result = answerToUIStringService.AnswerToUIString(singleOptionQuestionModel, singleOptionAnswer);
 
         It should_return_3 = () =>
             result.ShouldEqual("3");
@@ -32,6 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
         static string result;
         static SingleOptionAnswer singleOptionAnswer;
         static SingleOptionQuestionModel singleOptionQuestionModel;
-        static IAnswerToStringService answerToStringService;
+        static IAnswerToUIStringService answerToUIStringService;
     }
 }

@@ -1,8 +1,11 @@
+using Cirrious.MvvmCross.Plugins.Location;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.Android.Implementation.Services.FileSystem;
 using WB.Core.Infrastructure.Android.Implementation.Services.Security;
 using WB.Core.Infrastructure.Android.Implementation.Services.Settings;
@@ -11,6 +14,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Tester.CustomServices.Location;
 
 namespace WB.Infrastructure.Shared.Enumerator.Ninject
 {
@@ -49,6 +53,9 @@ namespace WB.Infrastructure.Shared.Enumerator.Ninject
                 .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
 
             this.Bind<IQrBarcodeScanService>().To<QrBarcodeScanService>();
+
+            this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
+            this.Bind<IMvxLocationWatcher>().To<PlayServicesLocationWatcher>();
         }
     }
 }

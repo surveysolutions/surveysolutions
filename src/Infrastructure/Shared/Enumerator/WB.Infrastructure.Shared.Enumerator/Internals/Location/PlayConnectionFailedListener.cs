@@ -3,7 +3,7 @@ using Android.Gms.Common.Apis;
 
 namespace WB.UI.Tester.CustomServices.Location
 {
-    public class PlayConnectionFailedListener
+    internal class PlayConnectionFailedListener
         : Java.Lang.Object
         , IGoogleApiClientOnConnectionFailedListener
     {

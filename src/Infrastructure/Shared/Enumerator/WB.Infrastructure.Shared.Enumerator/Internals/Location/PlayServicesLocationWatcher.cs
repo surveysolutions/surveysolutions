@@ -12,10 +12,11 @@ using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.CrossCore.Exceptions;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
+using Cirrious.MvvmCross.Plugins.Location.Droid;
 
 namespace WB.UI.Tester.CustomServices.Location
 {
-    public class PlayServicesLocationWatcher
+    internal class PlayServicesLocationWatcher
         : MvxLocationWatcher
         , IMvxLocationReceiver
         , IPlayConnectionCallbacksReceiver

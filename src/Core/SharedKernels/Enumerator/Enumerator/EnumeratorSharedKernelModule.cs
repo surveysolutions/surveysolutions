@@ -6,7 +6,11 @@ using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Tester
 {
@@ -17,10 +21,14 @@ namespace WB.Core.BoundedContexts.Tester
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
             this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
-            this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
+
+            this.Bind<ISubstitutionService>().To<SubstitutionService>();
+
+            this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
+            this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
             CommandRegistry
                 .Setup<StatefulInterview>()
