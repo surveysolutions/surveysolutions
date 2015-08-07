@@ -12,15 +12,13 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     internal class DesignerApiService : IDesignerApiService
     {
-        private readonly ILogger logger;
         private readonly IRestService restService;
         private readonly IUserIdentity userIdentity;
 
-        public DesignerApiService(ILogger logger, 
+        public DesignerApiService(
             IRestService restService, 
             IUserIdentity userIdentity)
         {
-            this.logger = logger;
             this.restService = restService;
             this.userIdentity = userIdentity;
         }
