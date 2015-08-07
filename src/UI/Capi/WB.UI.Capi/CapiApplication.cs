@@ -32,7 +32,6 @@ using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Android.Logging;
 using WB.Core.GenericSubdomains.ErrorReporting;
@@ -283,9 +282,8 @@ namespace WB.UI.Capi
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
 
-                new AndroidInfrastructureModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries"),
-                    plainStorageSettings: new PlainStorageSettings() { StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
-                new EnumeratorSharedKernelModule(),
+                new AndroidInfrastructureModule(), // verified
+                new EnumeratorSharedKernelModule(), // verified
                 new TesterBoundedContextModule(),
                 new InfrastructureModuleMobile().AsNinject(),
 
@@ -304,7 +302,7 @@ namespace WB.UI.Capi
                     new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}, this.kernel.Get<SyncPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
                 new EnumeratorInfrastructureModule(basePath: basePath),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath,
+                new DataCollectionSharedKernelModule(basePath: basePath,
                     syncDirectoryName: SynchronizationFolder));
 
             CrashManager.Initialize(this);
@@ -375,19 +373,6 @@ namespace WB.UI.Capi
             #endregion
 
             this.kernel.VerifyIfDebug();
-        }
-
-        private static string GetPathToSubfolderInLocalDirectory(string subFolderName)
-        {
-            var pathToSubfolderInLocalDirectory = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, subFolderName);
-
-            var subfolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
-            if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
-            {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory, CreationCollisionOption.FailIfExists).Wait();
-            }
-
-            return pathToSubfolderInLocalDirectory;
         }
 
         private void RestoreAppState()

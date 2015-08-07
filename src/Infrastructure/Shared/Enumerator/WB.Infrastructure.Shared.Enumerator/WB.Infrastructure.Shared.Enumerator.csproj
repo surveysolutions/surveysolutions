@@ -44,12 +44,19 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="PCLStorage">
+      <HintPath>..\..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions">
+      <HintPath>..\..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidPathUtils.cs" />
     <Compile Include="Ninject\EnumeratorInfrastructureModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />
     <Compile Include="Ninject\NinjectModuleAdapter.cs" />
