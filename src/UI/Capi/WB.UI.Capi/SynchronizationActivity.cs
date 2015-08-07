@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Portable;
@@ -29,6 +30,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -37,7 +39,6 @@ using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Shared.Android.Extensions;
-using OperationCanceledException = System.OperationCanceledException;
 using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgs;
 using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgsWithPercent;
 
@@ -306,7 +307,8 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IJsonUtils>(),
                         CapiApplication.Kernel.Get<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>(),
                         CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>(),
-                        CapiApplication.Kernel.Get<IQuestionnaireImportService>()),
+                        CapiApplication.Kernel.Get<IQuestionnaireImportService>(),
+                        CapiApplication.Kernel.Get<IPlainKeyValueStorage<QuestionnaireModel>>()),
                     cleaner,
                     CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
                     CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
@@ -501,7 +503,7 @@ namespace WB.UI.Capi
         {
             var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
 
-            var taskCancellationException = exception as OperationCanceledException;
+            var taskCancellationException = exception as System.OperationCanceledException;
             if (taskCancellationException != null)
             {
                 errorMessage = Properties.Resources.SynchronizationCanceledExceptionMessage;
