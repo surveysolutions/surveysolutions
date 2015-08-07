@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
             var referencesOfQuestionnaireEntities = questionnaire.GroupsWithFirstLevelChildrenAsReferences[groupIdentity.Id].Children;
 
-            var groupWithoutNestedChildren = interview.GetChildEntities(groupIdentity);
+            var groupWithoutNestedChildren = interview.GetInterviewerEntities(groupIdentity);
 
             return groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
                 entityId: questionnaireEntity.Id,
