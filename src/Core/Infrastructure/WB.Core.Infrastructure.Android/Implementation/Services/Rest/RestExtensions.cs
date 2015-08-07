@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.Android.Implementation.Services.Json;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
 {
-    public static class RestExtensions
+    internal static class RestExtensions
     {
         private static Compressor Compressor
         {

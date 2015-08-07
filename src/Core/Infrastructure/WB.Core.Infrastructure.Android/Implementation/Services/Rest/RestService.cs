@@ -14,18 +14,15 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
     internal class RestService : IRestService
     {
         private readonly ISettingsProvider settingsProvider;
-        private readonly ILogger logger;
         private readonly INetworkService networkService;
         private static RemoteCertificateValidationCallback defautCallback = null;
 
         public RestService(ISettingsProvider settingsProvider, ILogger logger, INetworkService networkService)
         {
             if (settingsProvider == null) throw new ArgumentNullException("settingsProvider");
-            if (logger == null) throw new ArgumentNullException("logger");
             if (networkService == null) throw new ArgumentNullException("networkService");
 
             this.settingsProvider = settingsProvider;
-            this.logger = logger;
             this.networkService = networkService;
         }
 
