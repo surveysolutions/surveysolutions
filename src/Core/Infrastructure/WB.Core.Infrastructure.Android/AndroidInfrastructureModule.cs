@@ -3,6 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
+using PCLStorage;
 using Sqo;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure.Android.Implementation.Services.FileSystem;
@@ -21,15 +22,6 @@ namespace WB.Core.Infrastructure.Android
 {
     public class AndroidInfrastructureModule : NinjectModule
     {
-        private readonly string pathToQuestionnaireAssemblies;
-        private readonly PlainStorageSettings plainStorageSettings;
-
-        public AndroidInfrastructureModule(string pathToQuestionnaireAssemblies, PlainStorageSettings plainStorageSettings)
-        {
-            this.pathToQuestionnaireAssemblies = pathToQuestionnaireAssemblies;
-            this.plainStorageSettings = plainStorageSettings;
-        }
-
         public override void Load()
         {
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
@@ -49,12 +41,7 @@ namespace WB.Core.Infrastructure.Android
             this.Bind<ISettingsProvider>().To<ApplicationSettings>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
-            this.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope()
-                .WithConstructorArgument("assemblyStorageDirectory", this.pathToQuestionnaireAssemblies);
 
-            SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(this.plainStorageSettings.StorageFolderPath));
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PlainStorageAccessor<>)).InSingletonScope();
 
             this.Bind<IQrBarcodeScanService>().To<QrBarcodeScanService>();

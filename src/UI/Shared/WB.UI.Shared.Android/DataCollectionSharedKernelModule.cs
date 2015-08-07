@@ -25,31 +25,18 @@ namespace WB.Core.SharedKernels.SurveyManagement
 {
     public class DataCollectionSharedKernelModule : NinjectModule
     {
-        private readonly bool usePlainQuestionnaireRepository;
         private readonly string basePath;
         private readonly string syncDirectoryName;
 
-        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC",
+        public DataCollectionSharedKernelModule(string basePath, string syncDirectoryName = "SYNC",
             string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
         {
-            this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
             this.basePath = basePath;
             this.syncDirectoryName = syncDirectoryName;
         }
 
         public override void Load()
         {
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
-
-            if (this.usePlainQuestionnaireRepository)
-            {
-                this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
-            }
-            else
-            {
-                this.Bind<IQuestionnaireRepository>().To<DomainQuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
-            }
-
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
