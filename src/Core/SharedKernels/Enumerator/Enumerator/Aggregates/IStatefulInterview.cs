@@ -93,5 +93,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector);
 
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
+
+        int CountAnsweredQuestionsInInterview();
+
+        int CountActiveQuestionsInInterview();
+
+        int CountInvalidQuestionsInInterview();
     }
 }

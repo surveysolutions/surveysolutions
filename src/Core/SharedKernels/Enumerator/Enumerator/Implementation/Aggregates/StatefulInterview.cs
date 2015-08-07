@@ -626,6 +626,30 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
                 .Count;
         }
 
+        public int CountAnsweredQuestionsInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+
+            return sectionInstances.Sum(section => this.CountAnsweredInterviewerQuestionsInGroupRecursively(section));
+        }
+
+        public int CountActiveQuestionsInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+
+            return sectionInstances.Sum(section => this.CountActiveInterviewerQuestionsInGroupOnly(section));
+        }
+
+        public int CountInvalidQuestionsInInterview()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+
+            return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section));
+        }
+
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();

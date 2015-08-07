@@ -7,6 +7,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
@@ -95,21 +96,48 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
-            if (group is RosterModel)
+            if (navigationParams.TargetGroup.Id == questionnaire.FinishGroupId)
             {
-                string title = group.Title;
-                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(navigationParams.TargetGroup));
+                this.CreateCompleteScreen(navigationParams);
             }
             else
             {
-                this.Name = group.Title;
+                this.CreateRegularGroupScreen(navigationParams, @group);
+            }
+        }
+
+        void CreateCompleteScreen(GroupChangedEventArgs navigationParams)
+        {
+            this.Items = new ObservableRangeCollection<dynamic>();
+
+            var completeScreenItems = this.interviewViewModelFactory
+                .GetCompleteScreenEntities(this.navigationState.InterviewId);
+            
+            completeScreenItems.ForEach(x => this.Items.Add(x)); ;
+            this.Name = UIResources.Interview_Complete_Screen_Title;
+        }
+
+
+        void CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
+        {
+            if (@group is RosterModel)
+            {
+                string title = @group.Title;
+                this.Name = this.substitutionService.GenerateRosterName(
+                    title,
+                    this.interview.GetRosterTitle(navigationParams.TargetGroup));
+            }
+            else
+            {
+                this.Name = @group.Title;
             }
 
-            Task.Run(() =>
-            {
-                this.LoadFromModel(navigationParams.TargetGroup);
-                this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
-            });
+            Task.Run(
+                () =>
+                {
+                    this.LoadFromModel(navigationParams.TargetGroup);
+                    this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
+                });
         }
 
         private void SendScrollToMessage(Identity scrollTo)
