@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
+                new SurveyManagementDataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),

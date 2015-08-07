@@ -19,14 +19,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
-        private readonly IAnswerToUIStringService answerToUIStringService;
+        private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
         protected string interviewId;
 
         public EnumeratorInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToUIStringService answerToUIStringService,
+            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
             BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel, 
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
-            this.answerToUIStringService = answerToUIStringService;
+            this.answerToStringService = answerToStringService;
             this.groupState = groupState;
 
             this.BreadCrumbs = breadCrumbsViewModel;
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
             var questionModel = questionnaire.Questions[referenceToQuestion.Id];
-            return this.answerToUIStringService.AnswerToUIString(questionModel, interviewAnswer);
+            return this.answerToStringService.AnswerToUIString(questionModel, interviewAnswer);
         }
 
         private GroupStatus status;

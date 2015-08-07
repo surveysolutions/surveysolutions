@@ -21,7 +21,7 @@ namespace WB.UI.Capi.ViewModel
         public InterviewerInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToUIStringService answerToUIStringService,
+            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel,
@@ -30,7 +30,7 @@ namespace WB.UI.Capi.ViewModel
             IViewModelNavigationService viewModelNavigationService,
             GroupStateViewModel groupState,
             IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity)
-            : base(questionnaireRepository, interviewRepository, answerToUIStringService, sectionsViewModel,
+            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
         {
             this.viewModelNavigationService = viewModelNavigationService;

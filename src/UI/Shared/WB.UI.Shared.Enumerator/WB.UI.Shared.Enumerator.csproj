@@ -177,7 +177,8 @@
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
-    <Compile Include="Ninject\EnumeratorUIModule.cs" />
+    <Compile Include="Internals\ViewModelNavigationService.cs" />
+    <Compile Include="EnumeratorUIModule.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -961,6 +962,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Shared\Enumerator\WB.Infrastructure.Shared.Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
+      <Project>{E41DEB5C-2AD6-463F-9F76-10299FC2D9D1}</Project>
+      <Name>WB.Infrastructure.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

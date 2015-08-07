@@ -1771,9 +1771,9 @@ namespace WB.Tests.Unit
             return new SubstitutionService();
         }
 
-        public static IAnswerToUIStringService AnswerToStringService()
+        public static IAnswerToStringService AnswerToStringService()
         {
-            return new AnswerToUIStringService();
+            return new AnswerToStringService();
         }
 
         public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)

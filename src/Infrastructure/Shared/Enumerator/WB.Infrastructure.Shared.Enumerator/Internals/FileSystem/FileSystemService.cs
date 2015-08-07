@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
+namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 {
     internal class FileSystemService : IFileSystemAccessor
     {
@@ -77,7 +77,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            return RemoveNonAscii(Regex.Replace(name, invalidReStr, "_"));
+            return this.RemoveNonAscii(Regex.Replace(name, invalidReStr, "_"));
         }
 
         public string[] GetDirectoriesInDirectory(string pathToDirectory)
@@ -120,17 +120,17 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
             FileAttributes attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                var sourceDirectoryName = GetFileName(sourceDir);
+                var sourceDirectoryName = this.GetFileName(sourceDir);
                 if (sourceDirectoryName == null)
                     return;
                 var destDir = this.CombinePath(targetDir, sourceDirectoryName);
-                CreateDirectory(destDir);
+                this.CreateDirectory(destDir);
 
-                foreach (var file in GetFilesInDirectory(sourceDir))
-                    File.Copy(file, CombinePath(destDir, GetFileName(file)));
+                foreach (var file in this.GetFilesInDirectory(sourceDir))
+                    File.Copy(file, this.CombinePath(destDir, this.GetFileName(file)));
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
-                    CopyFileOrDirectory(directory, destDir);
+                    this.CopyFileOrDirectory(directory, destDir);
             }
             else
             {
@@ -162,10 +162,10 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
 
         private void CopyFile(string sourcePath, string backupFolderPath)
         {
-            var sourceFileName = GetFileName(sourcePath);
+            var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
-            File.Copy(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
+            File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), true);
         }
 
         public string ChangeExtension(string path1, string newExtension)

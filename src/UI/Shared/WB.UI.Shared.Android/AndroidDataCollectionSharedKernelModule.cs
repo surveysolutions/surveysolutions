@@ -23,12 +23,12 @@ using WB.UI.Shared.Android.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
-    public class DataCollectionSharedKernelModule : NinjectModule
+    public class AndroidDataCollectionSharedKernelModule : NinjectModule
     {
         private readonly string basePath;
         private readonly string syncDirectoryName;
 
-        public DataCollectionSharedKernelModule(string basePath, string syncDirectoryName = "SYNC",
+        public AndroidDataCollectionSharedKernelModule(string basePath, string syncDirectoryName = "SYNC",
             string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
         {
             this.basePath = basePath;

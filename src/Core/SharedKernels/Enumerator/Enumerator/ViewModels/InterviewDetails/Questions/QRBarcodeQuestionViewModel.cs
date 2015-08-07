@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private readonly IUserIdentity userIdentity;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQrBarcodeScanService qrBarcodeScanService;
+        private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly IUserInteractionService userInteractionService;
 
         private Identity questionIdentity;
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         public QRBarcodeQuestionViewModel(
             IUserIdentity userIdentity,
             IStatefulInterviewRepository interviewRepository,
-            IQrBarcodeScanService qrBarcodeScanService,
+            IQRBarcodeScanService qrBarcodeScanService,
             IUserInteractionService userInteractionService,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)

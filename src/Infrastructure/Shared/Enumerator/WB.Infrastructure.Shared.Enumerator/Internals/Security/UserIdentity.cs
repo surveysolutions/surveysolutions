@@ -1,7 +1,7 @@
 using System;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Security
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Security
 {
     internal class UserIdentity : IUserIdentity
     {

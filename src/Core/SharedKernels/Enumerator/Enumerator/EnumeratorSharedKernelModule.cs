@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Tester
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
+            this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
 
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
