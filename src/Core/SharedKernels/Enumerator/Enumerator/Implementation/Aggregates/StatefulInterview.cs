@@ -706,7 +706,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             return questionInstances;
         }
 
-        public IEnumerable<Identity> GetChildEntities(Identity groupIdentity)
+        public IEnumerable<Identity> GetInterviewerEntities(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IEnumerable<Guid> allEntitiesInGroup = questionnaire.GetChildEntityIds(groupIdentity.Id);
