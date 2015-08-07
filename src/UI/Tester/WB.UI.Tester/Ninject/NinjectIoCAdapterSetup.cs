@@ -20,29 +20,18 @@ namespace WB.UI.Tester.Ninject
                : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
             return new NinjectMvxIocProvider(
-                new AndroidInfrastructureModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries"),
-                    plainStorageSettings: new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
-                new ApplicationModule(),
-                new PlainStorageInfrastructureModule(),
-                new EnumeratorSharedKernelModule(),
+
+                new AndroidInfrastructureModule(), // verified as shared
+                new EnumeratorSharedKernelModule(), // verified as shared
+
+                new TesterInfrastructureModule(), // verified as specific
+                new TesterUIModule(), // verified as specific
+
                 new TesterBoundedContextModule(),
                 new DataCollectionModule(),
                 new EnumeratorInfrastructureModule(basePath),
                 new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject());
-        }
-
-        private static string GetPathToSubfolderInLocalDirectory(string subFolderName)
-        {
-            var pathToSubfolderInLocalDirectory = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, subFolderName);
-
-            var subfolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
-            if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
-            {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory, CreationCollisionOption.FailIfExists).Wait();
-            }
-
-            return pathToSubfolderInLocalDirectory;
         }
     }
 }

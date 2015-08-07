@@ -87,7 +87,6 @@
     <Compile Include="Interface\IRestService.cs" />
     <Compile Include="Interface\ISettingsProvider.cs" />
     <Compile Include="Interface\IUserIdentity.cs" />
-    <Compile Include="Interface\PlainStorageSettings.cs" />
     <Compile Include="Interface\RestCredentials.cs" />
     <Compile Include="Interface\RestException.cs" />
     <Compile Include="Interface\ScanResult.cs" />
