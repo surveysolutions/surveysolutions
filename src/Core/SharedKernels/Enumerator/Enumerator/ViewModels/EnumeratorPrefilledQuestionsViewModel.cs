@@ -1,7 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
@@ -10,15 +8,15 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class PrefilledQuestionsViewModel : BaseViewModel
+    public class EnumeratorPrefilledQuestionsViewModel : BaseViewModel
     {
-        private readonly IInterviewViewModelFactory interviewViewModelFactory;
+        protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IViewModelNavigationService viewModelNavigationService;
-        private string interviewId;
+        protected readonly IViewModelNavigationService viewModelNavigationService;
+        protected string interviewId;
 
-        public PrefilledQuestionsViewModel(
+        public EnumeratorPrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -58,7 +56,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             if (questionnaire.PrefilledQuestionsIds.Count == 0)
             {
-                this.viewModelNavigationService.NavigateTo<InterviewViewModel>(new { interviewId = this.interviewId });
+                this.NavigateToInterview();
                 return;
             }
 
@@ -68,15 +66,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId)
                 .ForEach(x => this.PrefilledQuestions.Add(x));
 
-            var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
-            startButton.Init(interviewId, null, null);
-            this.PrefilledQuestions.Add(startButton);
+            this.AfterInterviewItemsAdded();
         }
-        
+
+        protected virtual void AfterInterviewItemsAdded()
+        {
+            
+        }
+
         public override void NavigateToPreviousViewModel()
         {
-//            TODO: CAPI-Interview-Details
-//            this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
+        }
+
+        protected virtual void NavigateToInterview()
+        {
         }
     }
 }

@@ -141,7 +141,7 @@
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\SimpleGroupStatus.cs" />
     <Compile Include="ViewModels\InterviewDetails\IInterviewEntityViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\InterviewViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\EnumeratorInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\ISideBarSectionViewModelsFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\CascadingSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\DateTimeQuestionViewModel.cs" />
@@ -178,8 +178,8 @@
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\ObservableRangeCollection.cs" />
-    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
-    <Compile Include="ViewModels\StartInterviewViewModel.cs" />
+    <Compile Include="ViewModels\EnumeratorPrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\EnumeratorStartInterviewViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

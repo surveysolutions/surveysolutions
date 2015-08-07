@@ -13,7 +13,7 @@ namespace WB.UI.Tester.Activities
         HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class PrefilledQuestionsActivity : BaseActivity<PrefilledQuestionsViewModel>
+    public class PrefilledQuestionsActivity : BaseActivity<EnumeratorPrefilledQuestionsViewModel>
     {
         protected override int ViewResourceId
         {

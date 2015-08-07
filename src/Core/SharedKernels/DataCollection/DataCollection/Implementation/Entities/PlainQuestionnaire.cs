@@ -428,7 +428,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsRosterGroup(Guid groupId)
         {
-            IGroup @group = this.GetGroupOrThrow(groupId);
+            IGroup @group = this.GetGroup(groupId);
+
+            if (@group == null) return false;
 
             return IsRosterGroup(@group);
         }
