@@ -6,10 +6,13 @@ using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.BoundedContexts.Tester;
+using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -26,6 +29,8 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 {
     public class CapiDataSynchronizationService : ICapiDataSynchronizationService
     {
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
+
         public CapiDataSynchronizationService(
             IChangeLogManipulator changelog, 
             ICommandService commandService,
@@ -37,7 +42,8 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             IJsonUtils jsonUtils, 
             IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IQuestionnaireImportService questionnaireImportService)
+            IQuestionnaireImportService questionnaireImportService, 
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
@@ -50,6 +56,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             this.questionnaireRepository = questionnaireRepository;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireImportService = questionnaireImportService;
+            this.questionnaireModelRepository = questionnaireModelRepository;
         }
 
         private readonly ILogger logger;
@@ -207,6 +214,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
                 this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
                 this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
+                this.questionnaireModelRepository.Remove(Helpers.CreateHistoricId(metadata.QuestionnaireId, metadata.Version));
 
                 this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
             }
