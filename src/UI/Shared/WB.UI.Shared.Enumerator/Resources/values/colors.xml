@@ -77,5 +77,12 @@
   <color name="interviewStatusBarComplited">#309211</color>
   <color name="interviewStatusBarInProgress">#246EAD</color>
   <color name="interviewStatusBarErrors">#CC4D20</color>
+
+  <color name="complete_screen_title_text">#747474</color>
+  <color name="complete_screen_statistics_border">#dadada</color>
+  <color name="complete_screen_statistics_answered_color">#2a81cb</color>
+  <color name="complete_screen_statistics_unanswered_color">#000000</color>
+  <color name="complete_screen_statistics_error_color">#f45d28</color>
+  <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
   
 </resources>

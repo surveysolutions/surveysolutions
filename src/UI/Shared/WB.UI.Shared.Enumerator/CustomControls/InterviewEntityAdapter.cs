@@ -6,6 +6,7 @@ using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Microsoft.CSharp.RuntimeBinder;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
@@ -43,6 +44,8 @@ namespace WB.UI.Tester.CustomControls
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (EnumeratorStartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
+            {typeof (InterviewCompletionStatisticsViewModel), Resource.Layout.interview_complete_statistics},
+            {typeof (InterviewStatusChangeViewModel), Resource.Layout.interview_complete_status_change},
         };
 
         public override int GetItemViewType(int position)

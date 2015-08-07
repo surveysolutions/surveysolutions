@@ -177,8 +177,8 @@
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
-    <Compile Include="Internals\ViewModelNavigationService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
+    <Compile Include="Internals\ViewModelNavigationService.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -941,6 +941,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <AndroidResource Include="Resources\layout\interview_complete_statistics.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_complete_status_change.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -968,6 +974,9 @@
     <AndroidResource Include="Resources\values\MvxBindingAttributes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\complete_screen_statistics_column_background.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

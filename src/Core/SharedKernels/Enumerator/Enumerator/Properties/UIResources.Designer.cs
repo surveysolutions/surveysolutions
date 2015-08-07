@@ -415,6 +415,96 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answered.
+        /// </summary>
+        public static string Interview_Complete_Answered {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Answered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        public static string Interview_Complete_Button {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization.
+        /// </summary>
+        public static string Interview_Complete_Consequences_Instrunction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Consequences_Instrunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        public static string Interview_Complete_Errors {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Interview_Complete_No {
+            get {
+                return ResourceManager.GetString("Interview_Complete_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note for supervisor.
+        /// </summary>
+        public static string Interview_Complete_Note_For_Supervisor {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Note_For_Supervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions status.
+        /// </summary>
+        public static string Interview_Complete_Questions_Status {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Questions_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are about to complete&lt;br /&gt;this questionnaire.
+        /// </summary>
+        public static string Interview_Complete_Screen_Description {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Screen_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        public static string Interview_Complete_Screen_Title {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Screen_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unanswered.
+        /// </summary>
+        public static string Interview_Complete_Unanswered {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Unanswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not locate your position.
         /// </summary>
         public static string Interview_GeoLocation_Confirm_NoLocation {

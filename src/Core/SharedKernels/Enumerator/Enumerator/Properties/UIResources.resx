@@ -428,4 +428,34 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
     <value>Empty values are not allowed</value>
   </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>Answered</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>Errors</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>Note for supervisor</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>Questions status</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>Unanswered</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>You are about to complete&lt;br /&gt;this questionnaire</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>Complete</value>
+  </data>
 </root>

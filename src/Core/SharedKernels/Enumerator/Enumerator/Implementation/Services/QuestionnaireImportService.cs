@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -55,6 +56,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                 GroupsRosterLevelDepth = new Dictionary<Guid, int>(),
                 QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>()
             };
+
+            questionnaireDocument.Children.Add(new Group(UIResources.Interview_Complete_Screen_Title)
+            {
+                PublicKey = questionnaireModel.FinishGroupId
+            });
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();

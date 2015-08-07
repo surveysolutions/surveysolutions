@@ -126,6 +126,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
 
+        IEnumerable<Guid> GetAllSections();
+
         /// <summary>
         /// Gets list of question ids that use question with provided <param name="questionId">questionId</param> as a substitution
         /// </summary>
