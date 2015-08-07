@@ -1,8 +1,7 @@
-using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.OS;
 
-namespace WB.UI.Tester.CustomServices.Location
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
 {
     internal class PlayConnectionCallbacksListener
             : Java.Lang.Object

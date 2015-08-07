@@ -1,7 +1,7 @@
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 
-namespace WB.UI.Tester.CustomServices.Location
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
 {
     internal class PlayConnectionFailedListener
         : Java.Lang.Object

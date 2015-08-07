@@ -4,6 +4,7 @@ using Cirrious.CrossCore.Core;
 using Cirrious.CrossCore.IoC;
 using Ninject;
 using Ninject.Modules;
+using WB.Infrastructure.Shared.Enumerator.Ninject;
 
 namespace WB.UI.Tester.Ninject
 {

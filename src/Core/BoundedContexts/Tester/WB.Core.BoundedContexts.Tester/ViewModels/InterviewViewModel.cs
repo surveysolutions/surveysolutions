@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToUIStringService answerToUIStringService,
+            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
             ActiveGroupViewModel groupViewModel,
@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
             GroupStateViewModel groupState)
-            : base(questionnaireRepository, interviewRepository, answerToUIStringService, sectionsViewModel,
+            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
         {
             this.principal = principal;

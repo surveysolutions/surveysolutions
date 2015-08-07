@@ -38,4 +38,3 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.UI.Tester")]
 [assembly: InternalsVisibleTo("WB.UI.Capi")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.Enumerator")]
-[assembly: InternalsVisibleTo("WB.Infrastructure.Shared.Enumerator")]

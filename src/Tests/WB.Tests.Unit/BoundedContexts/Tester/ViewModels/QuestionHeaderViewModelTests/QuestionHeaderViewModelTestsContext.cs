@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 registry ?? Create.LiteEventRegistry(),
                 new SubstitutionService(),
-                new AnswerToUIStringService(),
+                new AnswerToStringService(),
                 rosterTitleSubstitutionService);
         }
     }

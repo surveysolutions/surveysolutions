@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IAnswerToUIStringService answerToUIStringService;
+        private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToUIStringService answerToUIStringService,
+            IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
@@ -48,13 +48,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-            if (answerToUIStringService == null) throw new ArgumentNullException("answerToUIStringService");
+            if (answerToStringService == null) throw new ArgumentNullException("answerToStringService");
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.userId = principal.CurrentUserIdentity.UserId;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewRepository = interviewRepository;
-            this.answerToUIStringService = answerToUIStringService;
+            this.answerToStringService = answerToStringService;
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher ?? MvxMainThreadDispatcher.Instance;
 
@@ -263,7 +263,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private string GenerateOptionTitle(BaseQuestionModel referencedQuestion, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview)
         {
-            string answerAsTitle = this.answerToUIStringService.AnswerToUIString(referencedQuestion, referencedAnswer);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestion, referencedAnswer);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 

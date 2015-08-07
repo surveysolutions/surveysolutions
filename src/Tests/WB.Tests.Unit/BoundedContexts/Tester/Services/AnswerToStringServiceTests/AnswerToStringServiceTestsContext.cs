@@ -10,9 +10,9 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
 {
     internal class AnswerToStringServiceTestsContext
     {
-        public static IAnswerToUIStringService CreateAnswerToStringService()
+        public static IAnswerToStringService CreateAnswerToStringService()
         {
-            return new AnswerToUIStringService();
+            return new AnswerToStringService();
         }
 
         public static SingleOptionAnswer CreateSingleOptionAnswer(decimal answer)

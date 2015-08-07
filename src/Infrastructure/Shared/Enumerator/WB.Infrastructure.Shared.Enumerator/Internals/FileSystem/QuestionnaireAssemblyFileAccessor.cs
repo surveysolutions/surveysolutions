@@ -3,9 +3,9 @@ using System.Linq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
+namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 {
-    public class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    internal class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         
@@ -19,27 +19,27 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
 
         public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            return GetFullPathToAssembly(questionnaireId);
+            return this.GetFullPathToAssembly(questionnaireId);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64String)
         {
-            string folderName = GetFolderNameForTemplate(questionnaireId);
-            string pathToFolder = fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
+            string folderName = this.GetFolderNameForTemplate(questionnaireId);
+            string pathToFolder = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
 
             //version doesn't have sense to the tester
             //we are trying to delete old versions before saving the last one
-            if (!fileSystemAccessor.IsDirectoryExists(pathToFolder))
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToFolder))
             {
-                fileSystemAccessor.CreateDirectory(pathToFolder);
+                this.fileSystemAccessor.CreateDirectory(pathToFolder);
             }
             else
             {
-                foreach (var file in fileSystemAccessor.GetFilesInDirectory(pathToFolder))
+                foreach (var file in this.fileSystemAccessor.GetFilesInDirectory(pathToFolder))
                 {
                     try
                     {
-                        fileSystemAccessor.DeleteFile(file);
+                        this.fileSystemAccessor.DeleteFile(file);
                     }
                     catch
                     {
@@ -50,11 +50,11 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
 
             //generate unique new file name due to version is not valid for tester
             var fileName = string.Format("{0}.dll", Guid.NewGuid());
-            var pathToSaveAssembly = fileSystemAccessor.CombinePath(pathToFolder, fileName);
+            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(pathToFolder, fileName);
 
-            fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
+            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
 
-            fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);  
+            this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);  
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
@@ -74,11 +74,11 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            var assemblyPath = GetFullPathToAssembly(questionnaireId);
-            if (!fileSystemAccessor.IsFileExists(assemblyPath))
+            var assemblyPath = this.GetFullPathToAssembly(questionnaireId);
+            if (!this.fileSystemAccessor.IsFileExists(assemblyPath))
                 return null;
 
-            return fileSystemAccessor.ReadAllBytes(GetFullPathToAssembly(questionnaireId));
+            return this.fileSystemAccessor.ReadAllBytes(this.GetFullPathToAssembly(questionnaireId));
         }
 
         private string GetFolderNameForTemplate(Guid questionnaireId)
@@ -88,11 +88,11 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.FileSystem
 
         private string GetFullPathToAssembly(Guid questionnaireId)
         {
-            var folderName = GetFolderNameForTemplate(questionnaireId);
-            var assemblySearchPath = fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
-            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(assemblySearchPath);
+            var folderName = this.GetFolderNameForTemplate(questionnaireId);
+            var assemblySearchPath = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
+            var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(assemblySearchPath);
 
-            return filesInDirectory.OrderByDescending(f => fileSystemAccessor.GetCreationTime(f)).First();
+            return filesInDirectory.OrderByDescending(f => this.fileSystemAccessor.GetCreationTime(f)).First();
         }
     }
 }

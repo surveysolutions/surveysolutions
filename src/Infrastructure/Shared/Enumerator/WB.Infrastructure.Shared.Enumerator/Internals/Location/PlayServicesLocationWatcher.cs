@@ -12,9 +12,8 @@ using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.CrossCore.Exceptions;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
-using Cirrious.MvvmCross.Plugins.Location.Droid;
 
-namespace WB.UI.Tester.CustomServices.Location
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
 {
     internal class PlayServicesLocationWatcher
         : MvxLocationWatcher
@@ -75,7 +74,7 @@ namespace WB.UI.Tester.CustomServices.Location
                 ? LocationRequest.PriorityHighAccuracy
                 : LocationRequest.PriorityBalancedPowerAccuracy);
 
-            this.googleApiClient = new GoogleApiClientBuilder(Context)
+            this.googleApiClient = new GoogleApiClientBuilder(this.Context)
                                     .AddApi(LocationServices.Api)
                                     .AddConnectionCallbacks(this.connectionCallbacksListener)
                                     .AddOnConnectionFailedListener(this.connectionFailedListener)

@@ -1,9 +1,9 @@
 using System;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Settings
 {
-    public class ExpressionsEngineVersionService : IExpressionsEngineVersionService
+    internal class ExpressionsEngineVersionService : IExpressionsEngineVersionService
     {
         private readonly Version questionnaireVersion = new Version(major: 6, minor: 0, build: 0);
 
