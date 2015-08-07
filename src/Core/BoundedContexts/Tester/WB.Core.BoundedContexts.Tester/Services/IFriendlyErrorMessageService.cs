@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Tester.Services
 {
-    public interface IFriendlyMessageService
+    public interface IFriendlyErrorMessageService
     {
         string GetFriendlyErrorMessageByRestException(RestException ex);
     }

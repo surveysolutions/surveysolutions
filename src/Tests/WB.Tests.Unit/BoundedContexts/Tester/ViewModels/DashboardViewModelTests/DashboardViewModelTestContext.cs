@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             ICommandService commandService = null,
             IQuestionnaireImportService questionnaireImportService = null,
             IViewModelNavigationService viewModelNavigationService = null,
-            IFriendlyMessageService friendlyMessageService = null,
+            IFriendlyErrorMessageService friendlyErrorMessageService = null,
             IUserInteractionService userInteractionService = null,
             IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor = null)
         {
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 commandService: commandService,
                 questionnaireImportService: questionnaireImportService,
                 viewModelNavigationService: viewModelNavigationService,
-                friendlyMessageService: friendlyMessageService,
+                friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
                 questionnaireListStorageAccessor: questionnaireListStorageAccessor);
         }
