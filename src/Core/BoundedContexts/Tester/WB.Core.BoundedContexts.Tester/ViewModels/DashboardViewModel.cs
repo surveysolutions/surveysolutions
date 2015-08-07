@@ -35,7 +35,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public DashboardViewModel(
             IPrincipal principal,
-            ILogger logger,
             IDesignerApiService designerApiService, 
             ICommandService commandService, 
             IQuestionnaireImportService questionnaireImportService,
@@ -43,7 +42,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyMessageService friendlyMessageService,
             IUserInteractionService userInteractionService,
             IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
-            : base()
         {
             this.principal = principal;
             this.designerApiService = designerApiService;

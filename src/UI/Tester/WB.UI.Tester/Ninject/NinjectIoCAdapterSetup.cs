@@ -5,7 +5,6 @@ using PCLStorage;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Android;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 
@@ -21,16 +20,16 @@ namespace WB.UI.Tester.Ninject
 
             return new NinjectMvxIocProvider(
 
-                new AndroidInfrastructureModule(), // verified as shared
+                new NcqrsModule().AsNinject(), // verified as shared
+
                 new EnumeratorSharedKernelModule(), // verified as shared
+                new EnumeratorInfrastructureModule(basePath), // verified as shared
 
                 new TesterInfrastructureModule(), // verified as specific
                 new TesterUIModule(), // verified as specific
 
                 new TesterBoundedContextModule(),
                 new DataCollectionModule(),
-                new EnumeratorInfrastructureModule(basePath),
-                new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject());
         }
     }

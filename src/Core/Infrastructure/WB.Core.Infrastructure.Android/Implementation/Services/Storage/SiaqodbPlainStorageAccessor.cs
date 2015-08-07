@@ -8,11 +8,11 @@ using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
 {
-    internal class PlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity> where TEntity: class, IPlainStorageEntity
+    internal class SiaqodbPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity> where TEntity: class, IPlainStorageEntity
     {
         protected readonly ISiaqodb Storage;
 
-        public PlainStorageAccessor(ISiaqodb storage)
+        public SiaqodbPlainStorageAccessor(ISiaqodb storage)
         {
             this.Storage = storage;
         }

@@ -36,7 +36,6 @@ using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Android.Logging;
 using WB.Core.GenericSubdomains.ErrorReporting;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Android;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -277,13 +276,16 @@ namespace WB.UI.Capi
             const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
             this.kernel = new StandardKernel(
-                new NcqrsModule().AsNinject(),
+
+                new NcqrsModule().AsNinject(), // verified as shared
+
+                new EnumeratorSharedKernelModule(), // verified as shared
+                new EnumeratorInfrastructureModule(basePath), // verified as shared
+
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
 
-                new AndroidInfrastructureModule(), // verified
-                new EnumeratorSharedKernelModule(), // verified
                 new TesterBoundedContextModule(),
                 new InfrastructureModuleMobile().AsNinject(),
 
@@ -301,7 +303,6 @@ namespace WB.UI.Capi
             this.kernel.Load(new AndroidModelModule(basePath,
                     new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}, this.kernel.Get<SyncPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
-                new EnumeratorInfrastructureModule(basePath: basePath),
                 new DataCollectionSharedKernelModule(basePath: basePath,
                     syncDirectoryName: SynchronizationFolder));
 
