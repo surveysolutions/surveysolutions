@@ -121,7 +121,7 @@
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseMvxActivity.cs" />
-    <Compile Include="Activities\BaseInterviewActivity.cs" />
+    <Compile Include="Activities\EnumeratorInterviewActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />

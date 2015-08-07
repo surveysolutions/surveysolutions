@@ -216,7 +216,7 @@ namespace WB.UI.Capi
             }
             else
             {
-                navigationService.NavigateTo<InterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
+                navigationService.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
         }
 

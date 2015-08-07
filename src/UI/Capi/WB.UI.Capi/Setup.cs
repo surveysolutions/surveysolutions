@@ -11,13 +11,11 @@ using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
+using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Capi.Activities;
-using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Injections;
 using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android;
@@ -33,7 +31,7 @@ using LoginViewModel = WB.Core.BoundedContexts.Capi.Views.Login.LoginViewModel;
 
 namespace WB.UI.Capi
 {
-    public class Setup : CapiSharedSetup
+    public class Setup : MvxAndroidSetup
     {
         public Setup(Context applicationContext) : base(applicationContext)
         {
@@ -45,8 +43,8 @@ namespace WB.UI.Capi
             var container = Mvx.Resolve<IMvxViewsContainer>();
             container.Add(typeof(LoginViewModel), typeof(LoginActivity));
             container.Add(typeof(FinishIntallationViewModel), typeof(FinishInstallationActivity));
-            container.Add(typeof(InterviewViewModel), typeof(InterviewActivity));
             container.Add(typeof(InterviewerPrefilledQuestionsViewModel), typeof(PrefilledQuestionsActivity));
+            container.Add(typeof(InterviewerInterviewViewModel), typeof(InterviewActivity));
         }
 
         protected override IMvxApplication CreateApp()

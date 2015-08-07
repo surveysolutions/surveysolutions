@@ -1,24 +1,20 @@
 ﻿using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class StartInterviewViewModel : MvxViewModel
+    public class EnumeratorStartInterviewViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
-        private readonly IViewModelNavigationService viewModelNavigationService;
 
-        public StartInterviewViewModel(ICommandService commandService, IViewModelNavigationService viewModelNavigationService)
+        public EnumeratorStartInterviewViewModel(ICommandService commandService)
         {
             this.commandService = commandService;
-            this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        private string interviewId;
+        protected string interviewId;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -30,7 +26,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return startInterviewCommand ?? (startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
+                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
             }
         }
 
@@ -38,7 +34,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            this.viewModelNavigationService.NavigateTo<InterviewViewModel>(new { interviewId = this.interviewId });
+            this.NavigateToInterview();
+        }
+
+        protected virtual void NavigateToInterview()
+        {
+            
         }
     }
 }

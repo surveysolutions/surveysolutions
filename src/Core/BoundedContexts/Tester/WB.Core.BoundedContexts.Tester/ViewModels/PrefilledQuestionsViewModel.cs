@@ -1,17 +1,13 @@
-﻿using Android.Content;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.UI.Capi.ViewModel
+namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class InterviewerPrefilledQuestionsViewModel : EnumeratorPrefilledQuestionsViewModel
+    public class PrefilledQuestionsViewModel : EnumeratorPrefilledQuestionsViewModel
     {
-        public InterviewerPrefilledQuestionsViewModel(IInterviewViewModelFactory interviewViewModelFactory,
+        public PrefilledQuestionsViewModel(IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository, 
             IViewModelNavigationService viewModelNavigationService) : 
@@ -21,15 +17,7 @@ namespace WB.UI.Capi.ViewModel
 
         protected override void NavigateToInterview()
         {
-            this.viewModelNavigationService.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = this.interviewId });
-        }
-
-        public override void NavigateToPreviousViewModel()
-        {
-            var mvxAndroidCurrentTopActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
-            var intent = new Intent(mvxAndroidCurrentTopActivity.Activity, typeof(DashboardActivity));
-            intent.AddFlags(ActivityFlags.NoHistory);
-            mvxAndroidCurrentTopActivity.Activity.StartActivity(intent);
+            this.viewModelNavigationService.NavigateTo<InterviewViewModel>(new { interviewId = this.interviewId });
         }
 
         protected override void AfterInterviewItemsAdded()
@@ -37,6 +25,11 @@ namespace WB.UI.Capi.ViewModel
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.Init(interviewId, null, null);
             this.PrefilledQuestions.Add(startButton);
+        }
+
+        public override void NavigateToPreviousViewModel()
+        {
+            this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
         }
     }
 }

@@ -50,6 +50,9 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
     <Compile Include="ViewModels\SplashViewModel.cs" />
+    <Compile Include="ViewModels\InterviewViewModel.cs" />
+    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
   </ItemGroup>

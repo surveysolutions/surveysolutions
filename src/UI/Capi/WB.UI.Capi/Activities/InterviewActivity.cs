@@ -1,6 +1,6 @@
 using Android.App;
-using Android.Content;
 using Android.Views;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Tester.Activities;
 
 namespace WB.UI.Capi.Activities
@@ -8,7 +8,7 @@ namespace WB.UI.Capi.Activities
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : BaseInterviewActivity
+    public class InterviewActivity : EnumeratorInterviewActivity<InterviewerInterviewViewModel>
     {
         protected override int MenuResourceId { get { return Resource.Menu.interview; } }
 
@@ -17,13 +17,10 @@ namespace WB.UI.Capi.Activities
             switch (resourceId)
             {
                 case Resource.Id.interview_dashboard:
-                    this.StartActivity(new Intent(this, typeof(DashboardActivity)));
-                    break;
-                case Resource.Id.interview_settings:
-                    this.StartActivity(new Intent(this, typeof(PrefsActivity)));
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_signout:
-                    this.StartActivity(new Intent(this, typeof(LoginActivity)));
+                    this.ViewModel.SignOutCommand.Execute();
                     break;
 
             }

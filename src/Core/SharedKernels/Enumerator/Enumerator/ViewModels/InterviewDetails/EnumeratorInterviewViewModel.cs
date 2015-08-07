@@ -1,38 +1,29 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class InterviewViewModel : BaseViewModel
+    public class EnumeratorInterviewViewModel : BaseViewModel
     {
-        private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly NavigationState navigationState;
+        protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly GroupStateViewModel groupState;
-        private string interviewId;
+        protected string interviewId;
 
-        public InterviewViewModel(IPrincipal principal,
+        public EnumeratorInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
@@ -41,16 +32,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
-            IViewModelNavigationService viewModelNavigationService,
             GroupStateViewModel groupState)
         {
-            this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.groupState = groupState;
 
             this.BreadCrumbs = breadCrumbsViewModel;
@@ -136,54 +124,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public ActiveGroupViewModel CurrentGroup { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public IEnumerable PrefilledQuestions { get; set; }
+        public IEnumerable<dynamic> PrefilledQuestions { get; set; }
 
-        private IMvxCommand navigateToDashboardCommand;
-
-        public IMvxCommand NavigateToDashboardCommand
-        {
-            get
-            {
-                return navigateToDashboardCommand ?? (navigateToDashboardCommand = new MvxCommand(() =>
-                {
-//                    TODO: CAPI-Interview-Details
-//                    this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
-                }));
-            }
-        }
-
-        private IMvxCommand navigateToHelpCommand;
-
-        public IMvxCommand NavigateToHelpCommand
-        {
-            get
-            {
-                return navigateToHelpCommand ?? (navigateToHelpCommand = new MvxCommand(() =>
-                {
-//                    TODO: CAPI-Interview-Details
-//                    this.viewModelNavigationService.NavigateTo<HelpViewModel>();
-                }));
-            }
-        }
-
-        private IMvxCommand signOutCommand;
-
-        public IMvxCommand SignOutCommand
-        {
-            get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }
-        }
-
-        private void SignOut()
-        {
-//            TODO: CAPI-Interview-Details
-//            this.principal.SignOut();
-//            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
-        }
 
         public override void NavigateToPreviousViewModel()
         {
-//            TODO: CAPI-Interview-Details
-//            this.navigationState.NavigateBackAsync(()=>this.viewModelNavigationService.NavigateTo<DashboardViewModel>()).WaitAndUnwrapException();
+            
         }
     }
 }

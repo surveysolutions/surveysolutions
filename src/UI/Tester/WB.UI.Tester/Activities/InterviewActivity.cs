@@ -1,13 +1,14 @@
 using Android.App;
 using Android.Content;
 using Android.Views;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 
 namespace WB.UI.Tester.Activities
 {
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : BaseInterviewActivity
+    public class InterviewActivity : EnumeratorInterviewActivity<InterviewViewModel>
     {
         protected override int MenuResourceId { get { return Resource.Menu.interview; } }
       
@@ -16,14 +17,14 @@ namespace WB.UI.Tester.Activities
             switch (resourceId)
             {
                 case Resource.Id.interview_dashboard:
-                    //this.ViewModel.NavigateToDashboardCommand.Execute();
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.interview_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
                     break;
                 case Resource.Id.interview_signout:
-                    //this.ViewModel.SignOutCommand.Execute();
+                    this.ViewModel.SignOutCommand.Execute();
                     break;
 
             }
