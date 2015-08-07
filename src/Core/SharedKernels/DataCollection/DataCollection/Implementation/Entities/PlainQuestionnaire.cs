@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<string, IGroup> groupCache = null;
         private Dictionary<Guid, IComposite> entityCache = null;
+        private List<Guid> sectionCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -64,6 +65,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         .ToDictionary(
                             entity => entity.PublicKey,
                             entity => entity));
+            }
+        }
+
+        private List<Guid> SectionCache
+        {
+            get
+            {
+                return this.sectionCache ?? (this.sectionCache = this.innerDocument.Children.Cast<IGroup>().Where(x => x != null).Select(x => x.PublicKey).ToList());
             }
         }
         
@@ -732,6 +741,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfUnderlyingMandatoryQuestions[groupId] = this.GetUnderlyingMandatoryQuestionsImpl(groupId);
 
             return this.cacheOfUnderlyingMandatoryQuestions[groupId];
+        }
+
+        public IEnumerable<Guid> GetAllSections()
+        {
+            return SectionCache;
         }
 
         private IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestionImpl(Guid questionId)

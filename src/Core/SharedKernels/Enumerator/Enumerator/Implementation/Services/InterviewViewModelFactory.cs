@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails;
 using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
@@ -126,6 +129,25 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;
+        }
+
+        public IEnumerable<dynamic> GetCompleteScreenEntities(string interviewId)
+        {
+            var result = new List<IInterviewEntityViewModel>();
+
+            var text = (StaticTextViewModel)EntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
+            text.StaticText = UIResources.Interview_Complete_Screen_Description;
+            result.Add(text);
+
+            var statistics = Load<InterviewCompletionStatisticsViewModel>();
+            statistics.Init(interviewId, null, null);
+            result.Add(statistics);
+
+            var completionInterview = Load<InterviewStatusChangeViewModel>();
+            completionInterview.Init(interviewId, null, null);
+            result.Add(completionInterview);
+
+            return result;
         }
 
         public T GetNew<T>() where T : class
