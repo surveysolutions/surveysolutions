@@ -20,21 +20,19 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
-    public class DataCollectionSharedKernelModule : NinjectModule
+    public class SurveyManagementDataCollectionSharedKernelModule : NinjectModule
     {
         private readonly bool usePlainQuestionnaireRepository;
         private readonly string basePath;
         private readonly string syncDirectoryName;
-        private readonly string dataDirectoryName;
         private readonly string questionnaireAssembliesDirectoryName;
 
-        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC",
-            string dataDirectoryName = "InterviewData", string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
+        public SurveyManagementDataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC",
+            string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
         {
             this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
             this.basePath = basePath;
             this.syncDirectoryName = syncDirectoryName;
-            this.dataDirectoryName = dataDirectoryName;
             this.questionnaireAssembliesDirectoryName = questionnaireAssembliesFolder;
         }
 
@@ -55,8 +53,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
-            this.Bind<IPlainInterviewFileStorage>()
-              .To<PlainInterviewFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("dataDirectoryName", this.dataDirectoryName);
+            this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>().InSingletonScope()
+              .WithConstructorArgument("rootDirectoryPath", this.basePath);
 
             this.Bind<IInterviewSynchronizationFileStorage>()
                 .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);

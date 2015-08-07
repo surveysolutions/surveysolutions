@@ -29,5 +29,4 @@ using Android.App;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("WB.Infrastructure.Shared.Enumerator")]
 [assembly: InternalsVisibleTo("WB.UI.Tester")]

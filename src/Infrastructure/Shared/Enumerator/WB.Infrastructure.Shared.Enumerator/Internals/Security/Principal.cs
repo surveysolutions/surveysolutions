@@ -3,7 +3,7 @@ using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using IHS.MvvmCross.Plugins.Keychain;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Security
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Security
 {
     internal class Principal : IPrincipal
     {
@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Security
 
         private UserIdentity currentUserIdentity;
         public bool IsAuthenticated { get; private set; }
-        public IUserIdentity CurrentUserIdentity { get { return currentUserIdentity; } }
+        public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
 
         public Principal(IKeychain securityService, ISettings settingsService)
         {

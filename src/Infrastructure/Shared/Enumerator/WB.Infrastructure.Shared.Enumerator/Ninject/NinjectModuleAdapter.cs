@@ -1,3 +1,4 @@
+using Ninject;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
@@ -26,6 +27,17 @@ namespace WB.Infrastructure.Shared.Enumerator.Ninject
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
+        }
+
+        void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
+        {
+            this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope()
+                .WithConstructorArgument(argumentName, argumentValue);
+        }
+
+        void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()
+        {
+            this.Kernel.Bind<TInterface>().ToMethod<TInterface>(context => context.Kernel.Get<TRegisteredInterface>());
         }
     }
 }

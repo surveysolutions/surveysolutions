@@ -26,7 +26,6 @@ using WB.UI.Tester.Converters;
 using WB.UI.Tester.CustomBindings;
 using WB.UI.Tester.CustomControls;
 using WB.UI.Tester.CustomControls.MaskedEditTextControl;
-using WB.UI.Tester.CustomServices.Location;
 using WB.UI.Tester.CustomServices.UserInteraction;
 using WB.UI.Tester.Ninject;
 using WB.UI.Tester.ValueCombiners;

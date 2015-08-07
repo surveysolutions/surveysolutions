@@ -4,8 +4,9 @@ using Android.Content;
 using Android.OS;
 using Android.Preferences;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.Infrastructure.Android;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Settings
 {
     internal class ApplicationSettings : ISettingsProvider
     {
@@ -91,7 +92,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Settings
 
         public string EngineVersion
         {
-            get { return versionService.GetExpressionsEngineSupportedVersion().ToString(); }
+            get { return this.versionService.GetExpressionsEngineSupportedVersion().ToString(); }
         }
 
         public string OSVersion

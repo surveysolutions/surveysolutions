@@ -49,6 +49,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Capi.EventHandlers;
 using WB.UI.Capi.FileStorage;
@@ -269,12 +270,13 @@ namespace WB.UI.Capi
 
             this.kernel = new StandardKernel(
 
-                new NcqrsModule().AsNinject(), // verified as shared
-                new InfrastructureModuleMobile().AsNinject(), // verified as shared
+                new NcqrsModule().AsNinject(),
+                new InfrastructureModuleMobile().AsNinject(),
+                new DataCollectionInfrastructureModule(basePath).AsNinject(),
 
-                new EnumeratorSharedKernelModule(), // verified as shared
-                new EnumeratorInfrastructureModule(basePath), // verified as shared
-                new EnumeratorUIModule(), // verified as shared
+                new EnumeratorSharedKernelModule(),
+                new EnumeratorInfrastructureModule(),
+                new EnumeratorUIModule(),
 
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
@@ -294,7 +296,7 @@ namespace WB.UI.Capi
             this.kernel.Load(new AndroidModelModule(basePath,
                     new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}, this.kernel.Get<SyncPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
-                new DataCollectionSharedKernelModule(basePath: basePath,
+                new AndroidDataCollectionSharedKernelModule(basePath: basePath,
                     syncDirectoryName: SynchronizationFolder));
 
             CrashManager.Initialize(this);

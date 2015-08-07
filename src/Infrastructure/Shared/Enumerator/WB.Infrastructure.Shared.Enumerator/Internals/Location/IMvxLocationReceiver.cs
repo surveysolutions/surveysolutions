@@ -1,4 +1,4 @@
-namespace WB.UI.Tester.CustomServices.Location
+namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
 {
     internal interface IMvxLocationReceiver
     {

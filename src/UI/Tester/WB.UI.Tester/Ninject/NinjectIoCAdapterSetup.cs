@@ -6,6 +6,8 @@ using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Shared.Enumerator.Ninject;
 
@@ -21,15 +23,16 @@ namespace WB.UI.Tester.Ninject
 
             return new NinjectMvxIocProvider(
 
-                new NcqrsModule().AsNinject(), // verified as shared
-                new InfrastructureModuleMobile().AsNinject(), // verified as shared
+                new NcqrsModule().AsNinject(),
+                new InfrastructureModuleMobile().AsNinject(),
+                new DataCollectionInfrastructureModule(basePath).AsNinject(),
 
-                new EnumeratorSharedKernelModule(), // verified as shared
-                new EnumeratorInfrastructureModule(basePath), // verified as shared
-                new EnumeratorUIModule(), // verified as shared
+                new EnumeratorSharedKernelModule(),
+                new EnumeratorInfrastructureModule(),
+                new EnumeratorUIModule(),
 
-                new TesterInfrastructureModule(), // verified as specific
-                new TesterUIModule()); // verified as specific
+                new TesterInfrastructureModule(),
+                new TesterUIModule());
         }
     }
 }

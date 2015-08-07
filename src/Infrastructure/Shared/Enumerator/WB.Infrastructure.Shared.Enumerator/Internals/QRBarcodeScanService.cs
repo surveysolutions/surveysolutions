@@ -1,15 +1,14 @@
 using System.Threading.Tasks;
-using Android.Content.PM;
 using Cirrious.CrossCore.Droid.Platform;
 using MWBarcodeScanner;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Utility
+namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
-    internal class QrBarcodeScanService : IQrBarcodeScanService
+    internal class QRBarcodeScanService : IQRBarcodeScanService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
-        public QrBarcodeScanService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity)
+        public QRBarcodeScanService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
         }

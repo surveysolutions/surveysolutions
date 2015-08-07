@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Location;
 using WB.Core.BoundedContexts.Tester.Services;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Services
+namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
     internal class GpsLocationService : IGpsLocationService
     {
@@ -16,11 +16,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
             public MvxGeoLocation GetLocation()
             {
-                if (BestLocation != null) 
-                    return BestLocation;
-                if (CurrentLocation != null)
-                    return CurrentLocation;
-                return LastSeenLocation;
+                if (this.BestLocation != null) 
+                    return this.BestLocation;
+                if (this.CurrentLocation != null)
+                    return this.CurrentLocation;
+                return this.LastSeenLocation;
             }
         }
 
@@ -41,11 +41,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             try
             {
                 this.ThreadSafeStart();
-                location.LastSeenLocation = this.locationWatcher.LastSeenLocation;
+                this.location.LastSeenLocation = this.locationWatcher.LastSeenLocation;
 
-                while (location.BestLocation == null)
+                while (this.location.BestLocation == null)
                 {
-                    location.CurrentLocation = this.locationWatcher.CurrentLocation;
+                    this.location.CurrentLocation = this.locationWatcher.CurrentLocation;
 
                     if (cancellationToken.IsCancellationRequested)
                         break;
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             {
                 if (!this.locationWatcher.Started)
                 {
-                    location = new GpsLocation();
+                    this.location = new GpsLocation();
                     var locationOptions = new MvxLocationOptions() { Accuracy = MvxLocationAccuracy.Fine };
                     this.locationWatcher.Start(locationOptions, this.OnSuccess, this.OnError);
                 }
