@@ -1,6 +1,6 @@
 using Ninject;
 using Ninject.Modules;
-using WB.Core.SharedKernels.DataCollection.Accessors;
+using WB.Core.Infrastructure.Android.Implementation.Services.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;

@@ -65,48 +65,6 @@ using InterviewViewModel = WB.Core.BoundedContexts.Capi.Views.InterviewDetails.I
 
 namespace WB.UI.Capi.Implementations.Activities
 {
-    public static class NinjectKernelExtensions
-    {
-        public static void VerifyIfDebug(this IKernel kernel)
-        {
-#if DEBUG
-            kernel.Verify();
-#endif
-        }
-
-        private static void Verify(this IKernel kernel)
-        {
-            List<string> errors = new List<string>();
-
-            foreach (var type in kernel.GetAllRegisteredTypes().Where(t => !t.ContainsGenericParameters))
-            {
-                try
-                {
-                    kernel.Get(type);
-                }
-                catch (Exception exception)
-                {
-                    var split = exception.Message.Split(new [] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-                    errors.Add(string.Format("{0} - {1}", type.Name, string.Join(Environment.NewLine, split.Take(2))));
-                }
-            }
-
-            if (errors.Count > 0)
-                throw new Exception(string.Format(
-                    "Failed to resolve {1} following non-generic types:{0}{2}",
-                    Environment.NewLine,
-                    errors.Count,
-                    string.Join(Environment.NewLine, errors)));
-        }
-
-        private static Type[] GetAllRegisteredTypes(this IKernel kernel)
-        {
-            return ((Multimap<Type, IBinding>)typeof(KernelBase)
-               .GetField("bindings", BindingFlags.Instance)
-               .GetValue(kernel)).Select(x => x.Key).ToArray();
-        }
-    }
-
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DataCollectionDetailsActivity : DetailsActivity
     {
