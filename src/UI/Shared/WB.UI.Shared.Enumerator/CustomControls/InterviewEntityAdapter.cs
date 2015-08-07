@@ -23,7 +23,7 @@ namespace WB.UI.Tester.CustomControls
         {
         }
 
-        private static readonly Dictionary<Type, int> QuestionTemplates = new Dictionary<Type, int>
+        private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
             {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
@@ -42,7 +42,7 @@ namespace WB.UI.Tester.CustomControls
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
-            {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
+            {typeof (EnumeratorStartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
         };
 
         public override int GetItemViewType(int position)
@@ -69,7 +69,12 @@ namespace WB.UI.Tester.CustomControls
                 }
             }
 
-            return QuestionTemplates.ContainsKey(typeOfViewModel) ?  QuestionTemplates[typeOfViewModel] : UnknownViewType;
+            if (source is EnumeratorStartInterviewViewModel)
+            {
+                typeOfViewModel = typeof (EnumeratorStartInterviewViewModel);
+            }
+
+            return EntityTemplates.ContainsKey(typeOfViewModel) ?  EntityTemplates[typeOfViewModel] : UnknownViewType;
         }
 
         private EnablementViewModel GetEnablementViewModel(dynamic item)

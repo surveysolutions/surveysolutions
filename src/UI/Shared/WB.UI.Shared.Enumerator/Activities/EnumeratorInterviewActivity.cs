@@ -15,7 +15,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
-    public abstract class BaseInterviewActivity : BaseActivity<InterviewViewModel>
+    public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : BaseViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;

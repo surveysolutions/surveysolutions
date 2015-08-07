@@ -6,10 +6,6 @@
       local:showAsAction="never"
       android:title="@string/MenuItem_Title_Dashboard" />
   <item
-      android:id="@+id/interview_settings"
-      local:showAsAction="never"
-      android:title="@string/MenuItem_Title_Settings" />
-  <item
       android:id="@+id/interview_signout"
       local:showAsAction="never"
       android:title="@string/MenuItem_Title_SignOut" />

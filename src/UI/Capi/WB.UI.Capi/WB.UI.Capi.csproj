@@ -268,7 +268,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\InterviewActivity.cs" />
-    <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
@@ -364,9 +363,11 @@
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
     <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
     <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
+    <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="ViewModel\InterviewerPrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModel\StartInterviewViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
@@ -465,9 +466,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\xml\preferences.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
