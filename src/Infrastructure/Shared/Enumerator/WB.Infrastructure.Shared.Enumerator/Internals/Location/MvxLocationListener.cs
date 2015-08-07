@@ -10,7 +10,7 @@ using ILocationListener = Android.Gms.Location.ILocationListener;
 
 namespace WB.UI.Tester.CustomServices.Location
 {
-    public class MvxLocationListener
+    internal class MvxLocationListener
         : Java.Lang.Object
         , ILocationListener
     {

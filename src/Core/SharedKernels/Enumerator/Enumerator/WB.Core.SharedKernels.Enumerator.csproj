@@ -81,10 +81,11 @@
     <Compile Include="Helpers.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
-    <Compile Include="Implementation\Services\AnswerToStringService.cs" />
+    <Compile Include="Implementation\Services\AnswerToUIStringService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
+    <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
@@ -119,7 +120,7 @@
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
-    <Compile Include="Services\IAnswerToStringService.cs" />
+    <Compile Include="Services\IAnswerToUIStringService.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IViewModelNavigationService.cs" />

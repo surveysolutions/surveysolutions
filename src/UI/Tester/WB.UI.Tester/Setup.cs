@@ -16,7 +16,6 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
-using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
@@ -160,7 +159,7 @@ namespace WB.UI.Tester
         {
             return new[]
             {
-                typeof(TesterBoundedContextModule).Assembly,
+                typeof(TesterBoundedContext).Assembly,
                 typeof(EnumeratorSharedKernelModule).Assembly,
             };
         }
@@ -175,13 +174,6 @@ namespace WB.UI.Tester
                 }
             };
             Insights.Initialize("f4aa9cb599d509b96cb2ac2d36ca9f66caafd85f", applicationContext);
-        }
-
-        protected override void InitializeLastChance()
-        {
-            base.InitializeLastChance();
-
-            Mvx.RegisterSingleton<IMvxLocationWatcher>(() => new PlayServicesLocationWatcher());
         }
     }
 }

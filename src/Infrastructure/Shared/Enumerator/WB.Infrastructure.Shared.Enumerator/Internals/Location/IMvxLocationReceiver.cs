@@ -1,6 +1,6 @@
 namespace WB.UI.Tester.CustomServices.Location
 {
-    public interface IMvxLocationReceiver
+    internal interface IMvxLocationReceiver
     {
         void OnLocationChanged(Android.Locations.Location p0);
     }

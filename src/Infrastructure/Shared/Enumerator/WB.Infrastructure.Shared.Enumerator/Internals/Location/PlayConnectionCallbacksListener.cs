@@ -4,7 +4,7 @@ using Android.OS;
 
 namespace WB.UI.Tester.CustomServices.Location
 {
-    public class PlayConnectionCallbacksListener
+    internal class PlayConnectionCallbacksListener
             : Java.Lang.Object
             , IGoogleApiClientConnectionCallbacks
     {

@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
-        private readonly IAnswerToStringService answerToStringService;
+        private readonly IAnswerToUIStringService answerToUIStringService;
         private readonly IRosterTitleSubstitutionService rosterTitleSubstitutionService;
         private Identity questionIdentity;
         private string interviewId;
@@ -60,14 +60,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry registry,
             ISubstitutionService substitutionService,
-            IAnswerToStringService answerToStringService,
+            IAnswerToUIStringService answerToUIStringService,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
             this.substitutionService = substitutionService;
-            this.answerToStringService = answerToStringService;
+            this.answerToUIStringService = answerToUIStringService;
             this.rosterTitleSubstitutionService = rosterTitleSubstitutionService;
         }
 
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
                 BaseQuestionModel substitutedQuestionModel = questionnaire.QuestionsByVariableNames[variable];
 
                 var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionModel.Id, this.questionIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer) : null;
+                string answerString = baseInterviewAnswer != null ? this.answerToUIStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
                     questionTitle, variable, answerString ?? this.substitutionService.DefaultSubstitutionText);

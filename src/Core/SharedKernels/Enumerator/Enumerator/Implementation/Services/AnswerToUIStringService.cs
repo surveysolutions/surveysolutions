@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    internal class AnswerToStringService : IAnswerToStringService
+    internal class AnswerToUIStringService : IAnswerToUIStringService
     {
         public string AnswerToUIString(BaseQuestionModel question, BaseInterviewAnswer answer)
         {
