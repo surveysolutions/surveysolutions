@@ -29,14 +29,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0 (build 1)")]
 
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.DataCollection.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-[assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
-[assembly: InternalsVisibleTo("WB.Tests.Integration")]
-[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Supervisor.Tests")]
-[assembly: InternalsVisibleTo("Core.Supervisor.Tests")]
-[assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Capi.Tests")]
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.SurveyManagement.Tests")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
 
@@ -44,4 +37,5 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.UI.Shared.Android")]
 [assembly: InternalsVisibleTo("WB.UI.Tester")]
 [assembly: InternalsVisibleTo("WB.UI.Capi")]
+[assembly: InternalsVisibleTo("WB.Core.SharedKernels.Enumerator")]
 [assembly: InternalsVisibleTo("WB.Infrastructure.Shared.Enumerator")]

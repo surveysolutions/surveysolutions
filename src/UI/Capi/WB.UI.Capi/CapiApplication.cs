@@ -62,6 +62,7 @@ using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
+using WB.UI.Shared.Enumerator.Ninject;
 using WB.UI.Tester.CustomServices.UserInteraction;
 using WB.UI.Tester.Ninject;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
@@ -77,15 +78,6 @@ namespace WB.UI.Capi
     [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {
-        public class ServiceLocationModule : NinjectModule
-        {
-            public override void Load()
-            {
-                ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
-                this.Kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
-            }
-        }
-
         #region static properties
 
         public static TOutput LoadView<TInput, TOutput>(TInput input)
@@ -278,16 +270,15 @@ namespace WB.UI.Capi
             this.kernel = new StandardKernel(
 
                 new NcqrsModule().AsNinject(), // verified as shared
+                new InfrastructureModuleMobile().AsNinject(), // verified as shared
 
                 new EnumeratorSharedKernelModule(), // verified as shared
                 new EnumeratorInfrastructureModule(basePath), // verified as shared
+                new EnumeratorUIModule(), // verified as shared
 
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
-
-                new TesterBoundedContextModule(),
-                new InfrastructureModuleMobile().AsNinject(),
 
                 new WB.Core.Infrastructure.Files.Android.FileInfrastructureModule(),
                 new AndroidLoggingModule());

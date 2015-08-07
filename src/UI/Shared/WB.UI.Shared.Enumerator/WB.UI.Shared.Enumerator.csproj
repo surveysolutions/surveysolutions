@@ -176,14 +176,8 @@
     <Compile Include="CustomControls\MvxRecyclerView.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
-    <Compile Include="CustomServices\Location\IMvxLocationReceiver.cs" />
-    <Compile Include="CustomServices\Location\IPlayConnectionCallbacksReceiver.cs" />
-    <Compile Include="CustomServices\Location\IPlayConnectionFailedReceiver.cs" />
-    <Compile Include="CustomServices\Location\MvxLocationListener.cs" />
-    <Compile Include="CustomServices\Location\PlayConnectionCallbacksListener.cs" />
-    <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
-    <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
+    <Compile Include="Ninject\EnumeratorUIModule.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
