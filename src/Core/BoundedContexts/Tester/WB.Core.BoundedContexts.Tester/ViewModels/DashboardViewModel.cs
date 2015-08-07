@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         readonly IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor;
 
-        private readonly IFriendlyMessageService friendlyMessageService;
+        private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public DashboardViewModel(
             IPrincipal principal,
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             ICommandService commandService, 
             IQuestionnaireImportService questionnaireImportService,
             IViewModelNavigationService viewModelNavigationService,
-            IFriendlyMessageService friendlyMessageService,
+            IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
         {
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.questionnaireListStorageAccessor = questionnaireListStorageAccessor;
-            this.friendlyMessageService = friendlyMessageService;
+            this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         public async void Init()
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         errorMessage = String.Format(UIResources.ImportQuestionnaire_Error_NotFound, selectedQuestionnaire.Title);
                         break;
                     default:
-                        errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                        errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
                         break;
                 }
 
@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
-                errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
 
                 if (string.IsNullOrEmpty(errorMessage))
                     throw;

@@ -5,11 +5,11 @@ using WB.Core.BoundedContexts.Tester.Services;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    public class FriendlyMessageService : IFriendlyMessageService
+    public class FriendlyErrorMessageService : IFriendlyErrorMessageService
     {
         readonly ILogger logger;
 
-        public FriendlyMessageService(ILogger logger)
+        public FriendlyErrorMessageService(ILogger logger)
         {
             this.logger = logger;
         }

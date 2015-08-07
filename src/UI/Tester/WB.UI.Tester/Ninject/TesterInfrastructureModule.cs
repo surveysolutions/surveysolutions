@@ -3,7 +3,9 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Sqo;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.Android.Implementation.Services.Json;
 using WB.Core.Infrastructure.Android.Implementation.Services.Log;
 using WB.Core.Infrastructure.Android.Implementation.Services.Network;
@@ -36,6 +38,9 @@ namespace WB.UI.Tester.Ninject
             this.Bind<IRestService>().To<RestService>().InSingletonScope();
 
             this.Bind<NewtonJsonSerializer>().ToSelf().InSingletonScope();
+
+            this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
+            this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
         }
     }
 }
