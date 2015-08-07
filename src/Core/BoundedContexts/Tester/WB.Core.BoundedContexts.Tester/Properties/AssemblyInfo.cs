@@ -31,3 +31,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: InternalsVisibleTo("WB.UI.Tester")]

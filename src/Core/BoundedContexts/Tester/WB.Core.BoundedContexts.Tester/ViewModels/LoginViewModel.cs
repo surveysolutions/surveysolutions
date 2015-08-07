@@ -15,16 +15,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IDesignerApiService designerApiService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IFriendlyMessageService friendlyMessageService;
+        private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public LoginViewModel(IPrincipal principal, IDesignerApiService designerApiService, IViewModelNavigationService viewModelNavigationService,
-            IUserInteractionService userInteractionService, IFriendlyMessageService friendlyMessageService)
+            IUserInteractionService userInteractionService, IFriendlyErrorMessageService friendlyErrorMessageService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.friendlyMessageService = friendlyMessageService;
+            this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         private bool isInProgress = false;
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         errorMessage = UIResources.Login_Error_NotFound;
                         break;
                     default:
-                        errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                        errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
                         break;
                 }
 

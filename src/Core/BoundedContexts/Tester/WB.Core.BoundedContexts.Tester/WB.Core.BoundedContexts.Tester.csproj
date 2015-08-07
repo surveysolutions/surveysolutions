@@ -37,9 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Implementation\Services\FriendlyMessageService.cs" />
+    <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
-    <Compile Include="Services\IFriendlyMessageService.cs" />
+    <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Implementation\Services\GpsLocationService.cs" />
     <Compile Include="Implementation\Services\DesignerApiService.cs" />

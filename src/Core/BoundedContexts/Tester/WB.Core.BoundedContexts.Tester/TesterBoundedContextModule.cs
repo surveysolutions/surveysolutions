@@ -10,10 +10,6 @@ namespace WB.Core.BoundedContexts.Tester
     {
         public override void Load()
         {
-            this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
-            this.Bind<IFriendlyMessageService>().To<FriendlyMessageService>().InSingletonScope();
-
-            
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
