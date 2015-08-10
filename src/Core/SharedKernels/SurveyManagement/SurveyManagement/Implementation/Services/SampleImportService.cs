@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
+        private readonly ITransactionManagerProvider transactionManager;
         
         private static ILogger Logger
         {
@@ -36,13 +38,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, ITransactionManagerProvider transactionManager)
         {
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.transactionManager = transactionManager;
         }
 
         public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
@@ -78,29 +81,46 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return this.tempSampleCreationStorage.GetByName(id);
         }
 
-        private void CreateInterviewInternal(Guid questionnaireId, 
-            long version, 
+        void CreateInterviewInternal(Guid questionnaireId,
+            long version,
             string id,
             Func<IPreloadedDataService, PreloadedDataRecord[]> preloadedDataDtoCreator,
-            Guid responsibleHeadquarterId, 
+            Guid responsibleHeadquarterId,
             Guid? responsibleSupervisorId)
         {
             var result = this.GetSampleCreationStatus(id);
 
-            var bigTemplateObject = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+            QuestionnaireDocumentVersioned bigTemplateObject;
+            QuestionnaireExportStructure questionnaireExportStructure;
+            QuestionnaireRosterStructure questionnaireRosterStructure;
+
+            this.transactionManager.GetTransactionManager().BeginQueryTransaction();
+            try
+            {
+                bigTemplateObject =
+                    this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+                questionnaireExportStructure =
+                    this.questionnaireExportStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+                questionnaireRosterStructure =
+                    this.questionnaireRosterStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+            }
+            finally
+            {
+                this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
+            }
+
             var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
 
-            if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure==null)
+            if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
             {
                 result.SetErrorMessage("Questionnaire is absent");
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
 
-            var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                questionnaireRosterStructure, bigTemplateObject.Questionnaire);
+            var preloadedDataService =
+                this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
+                    questionnaireRosterStructure, bigTemplateObject.Questionnaire);
 
             result.SetStatusMessage("Data parsing");
             this.tempSampleCreationStorage.Store(result, id);
@@ -117,7 +137,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             int errorCountOccuredOnInterviewsCreaition = 0;
             bool interviewLimitReached = false;
             DateTime startTime = DateTime.Now;
-            
+
             var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
             for (int interviewIndex = 0; interviewIndex < interviewForCreate.Length; interviewIndex++)
             {
@@ -127,11 +147,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         ? interviewForCreate[interviewIndex].SupervisorId.Value
                         : responsibleSupervisorId.Value;
 
-                    commandInvoker.Execute(new CreateInterviewWithPreloadedData(Guid.NewGuid(), responsibleHeadquarterId,
-                        bigTemplate.PublicKey, version, 
-                        interviewForCreate[interviewIndex].PreloadedDataDto,
-                        DateTime.UtcNow,
-                        responsibleId), handleInBatch: true);
+                    commandInvoker.Execute(
+                        new CreateInterviewWithPreloadedData(Guid.NewGuid(), responsibleHeadquarterId,
+                            bigTemplate.PublicKey, version,
+                            interviewForCreate[interviewIndex].PreloadedDataDto,
+                            DateTime.UtcNow,
+                            responsibleId), handleInBatch: true);
 
                     result.SetStatusMessage(string.Format(
                         @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",
@@ -148,7 +169,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
                     errorCountOccuredOnInterviewsCreaition ++;
                     var interviewException = e as InterviewException;
-                    if (interviewException != null && interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
+                    if (interviewException != null &&
+                        interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
                     {
                         interviewLimitReached = true;
                         break;
