@@ -26,10 +26,7 @@ namespace WB.UI.Capi.ViewModel
 
         public override void NavigateToPreviousViewModel()
         {
-            var mvxAndroidCurrentTopActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
-            var intent = new Intent(mvxAndroidCurrentTopActivity.Activity, typeof(DashboardActivity));
-            intent.AddFlags(ActivityFlags.NoHistory);
-            mvxAndroidCurrentTopActivity.Activity.StartActivity(intent);
+            viewModelNavigationService.NavigateToDashboard();
         }
 
         protected override void AfterInterviewItemsAdded()

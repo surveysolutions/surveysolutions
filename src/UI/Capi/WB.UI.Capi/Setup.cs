@@ -16,7 +16,7 @@ using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.UI.Capi.Activities;
-using WB.UI.Capi.Injections;
+using WB.UI.Capi.Ninject;
 using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android;
 using WB.UI.Tester.Activities;

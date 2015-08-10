@@ -6,5 +6,6 @@ namespace WB.Core.BoundedContexts.Tester.Services
     {
         void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel;
         void NavigateTo<TViewModel>(object perameters) where TViewModel : IMvxViewModel;
+        void NavigateToDashboard();
     }
 }

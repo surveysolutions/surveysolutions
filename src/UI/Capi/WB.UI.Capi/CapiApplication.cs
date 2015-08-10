@@ -56,7 +56,7 @@ using WB.UI.Capi.FileStorage;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Infrastructure;
-using WB.UI.Capi.Injections;
+using WB.UI.Capi.Ninject;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Capi.ViewModel.Dashboard;
@@ -276,7 +276,7 @@ namespace WB.UI.Capi
 
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
-                new EnumeratorUIModule(),
+                new InterviewerUIModule(),
 
                 new InterviewerInfrastructureModule(),
 

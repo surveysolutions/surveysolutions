@@ -264,7 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\InterviewActivity.cs" />
-    <Compile Include="AndroidModelModule.cs" />
+    <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
@@ -311,11 +311,13 @@
     <Compile Include="Implementations\Services\QuestionnaireModelRepository.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Extensions\StoredEventExtensions.cs" />
+    <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\Internals\Settings\InterviewerSettings.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
-    <Compile Include="Injections\AndroidCoreRegistry.cs" />
+    <Compile Include="Ninject\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="Ninject\InterviewerUIModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
