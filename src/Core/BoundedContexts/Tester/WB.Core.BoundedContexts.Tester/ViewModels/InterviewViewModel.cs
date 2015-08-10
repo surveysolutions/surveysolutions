@@ -12,8 +12,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class InterviewViewModel : EnumeratorInterviewViewModel
     {
-        readonly IPrincipal principal;
-        readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IPrincipal principal;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public InterviewViewModel(IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,

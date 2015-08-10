@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class StartInterviewViewModel : EnumeratorStartInterviewViewModel
     {
-        readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         protected override void NavigateToInterview()
         {

@@ -5,11 +5,11 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class EnumeratorStartInterviewViewModel : MvxNotifyPropertyChanged
+    public abstract class EnumeratorStartInterviewViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
 
-        public EnumeratorStartInterviewViewModel(ICommandService commandService)
+        protected EnumeratorStartInterviewViewModel(ICommandService commandService)
         {
             this.commandService = commandService;
         }
@@ -37,9 +37,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.NavigateToInterview();
         }
 
-        protected virtual void NavigateToInterview()
-        {
-            
-        }
+        protected abstract void NavigateToInterview();
     }
 }
