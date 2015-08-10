@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WB.Core.BoundedContexts.Tester.Infrastructure
+namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IPlainStorageAccessor<TEntity> where TEntity : class, IPlainStorageEntity
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Windows.Input;
 using Cirrious.MvvmCross.Binding.Attributes;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public interface IMvxRecyclerViewAdapter
     {

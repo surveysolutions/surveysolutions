@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Globalization;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
@@ -39,7 +38,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 if (this.answerAsString != value)
                 {
                     this.answerAsString = value; 
-                    RaisePropertyChanged();
+                    this.RaisePropertyChanged();
                 }
             }
         }
@@ -48,13 +47,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(SendAnswerRealQuestionCommand)); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.SendAnswerRealQuestionCommand)); }
         }
 
         public int? CountOfDecimalPlaces
         {
             get { return this.countOfDecimalPlaces; }
-            set { this.countOfDecimalPlaces = value; RaisePropertyChanged(); }
+            set { this.countOfDecimalPlaces = value; this.RaisePropertyChanged(); }
         }
 
         public RealQuestionViewModel(
@@ -99,7 +98,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private async void SendAnswerRealQuestionCommand()
         {
-            if (string.IsNullOrWhiteSpace(AnswerAsString))
+            if (string.IsNullOrWhiteSpace(this.AnswerAsString))
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
@@ -113,8 +112,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             }
 
             var command = new AnswerNumericRealQuestionCommand(
-                interviewId: Guid.Parse(interviewId),
-                userId: principal.CurrentUserIdentity.UserId,
+                interviewId: Guid.Parse(this.interviewId),
+                userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,

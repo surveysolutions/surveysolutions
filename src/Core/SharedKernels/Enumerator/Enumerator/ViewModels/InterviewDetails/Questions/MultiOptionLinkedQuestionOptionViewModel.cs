@@ -1,9 +1,9 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
     {

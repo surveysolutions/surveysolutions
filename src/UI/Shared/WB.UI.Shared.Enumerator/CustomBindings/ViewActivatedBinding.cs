@@ -1,6 +1,6 @@
 ﻿using Android.Views;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewActivatedBinding : BaseBinding<View, bool>
     {

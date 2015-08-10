@@ -4,25 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.SurveySolutions.Services;
-
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
@@ -36,15 +33,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private string name;
         public string Name
         {
-            get { return name; }
-            set { name = value; RaisePropertyChanged(); }
+            get { return this.name; }
+            set { this.name = value; this.RaisePropertyChanged(); }
         }
 
         private ObservableRangeCollection<dynamic> items;
         public ObservableRangeCollection<dynamic> Items
         {
-            get { return items; }
-            set { items = value; RaisePropertyChanged(); }
+            get { return this.items; }
+            set { this.items = value; this.RaisePropertyChanged(); }
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
@@ -87,16 +84,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.interview = this.interviewRepository.Get(interviewId);
             this.questionnaire = this.questionnaireRepository.GetById(this.interview.QuestionnaireId);
 
-            eventRegistry.Subscribe(this, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
-            this.navigationState.GroupChanged += navigationState_OnGroupChanged;
+            this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
         }
 
         public void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            GroupModel group = questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+            GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
-            if (navigationParams.TargetGroup.Id == questionnaire.FinishGroupId)
+            if (navigationParams.TargetGroup.Id == this.questionnaire.FinishGroupId)
             {
                 this.CreateCompleteScreen(navigationParams);
             }

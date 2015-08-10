@@ -1,7 +1,7 @@
 ﻿using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ProgressBarIndeterminateBinding : BaseBinding<ProgressBar, bool>
     {
@@ -12,7 +12,7 @@ namespace WB.UI.Tester.CustomBindings
 
         protected override void SetValueToView(ProgressBar view, bool value)
         {
-            Target.Indeterminate = value;
+            this.Target.Indeterminate = value;
         }
 
         public override MvxBindingMode DefaultMode

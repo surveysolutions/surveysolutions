@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals
 {

@@ -1,5 +1,5 @@
 using Ninject.Modules;
-using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Capi.Implementations.Services;
 
 namespace WB.UI.Capi.Ninject

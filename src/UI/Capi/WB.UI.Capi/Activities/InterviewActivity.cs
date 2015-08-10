@@ -1,7 +1,7 @@
 using Android.App;
 using Android.Views;
 using WB.UI.Capi.ViewModel;
-using WB.UI.Tester.Activities;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Capi.Activities
 {

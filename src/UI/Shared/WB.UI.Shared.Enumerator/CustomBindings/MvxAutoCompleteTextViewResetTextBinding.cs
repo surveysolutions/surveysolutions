@@ -4,7 +4,7 @@ using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class MvxAutoCompleteTextViewResetTextBinding : BaseBinding<MvxAutoCompleteTextView, string>
     {
@@ -20,24 +20,24 @@ namespace WB.UI.Tester.CustomBindings
 
         protected override void SetValueToView(MvxAutoCompleteTextView control, string value)
         {
-            Target.ClearListSelection();
-            Target.DismissDropDown();
+            this.Target.ClearListSelection();
+            this.Target.DismissDropDown();
 
             // this is hack. http://www.grokkingandroid.com/how-androids-autocompletetextview-nearly-drove-me-nuts/
-            var adapter = Target.Adapter;
-            Target.Adapter = null;
+            var adapter = this.Target.Adapter;
+            this.Target.Adapter = null;
 
             if (value == null)
             {
-                Target.Text = string.Empty;
+                this.Target.Text = string.Empty;
             }
             else
             {
-                Target.SetText(value, true);
-                Target.SetSelection(value.Length);
+                this.Target.SetText(value, true);
+                this.Target.SetSelection(value.Length);
             }
 
-            Target.Adapter = adapter;
+            this.Target.Adapter = adapter;
         }
 
         public override void SubscribeToEvents()
@@ -45,8 +45,8 @@ namespace WB.UI.Tester.CustomBindings
             if (this.Target != null)
             {
                 this.Target.ItemClick += this.OnItemClick;
-                this.Target.FocusChange += TargetOnFocusChange;
-                this.Target.EditorAction += HandleEditorAction;
+                this.Target.FocusChange += this.TargetOnFocusChange;
+                this.Target.EditorAction += this.HandleEditorAction;
             }
 
             base.SubscribeToEvents();
@@ -72,8 +72,8 @@ namespace WB.UI.Tester.CustomBindings
             if (isDisposing && this.Target != null)
             {
                 this.Target.ItemClick -= this.OnItemClick;
-                this.Target.FocusChange -= TargetOnFocusChange;
-                this.Target.EditorAction -= HandleEditorAction;
+                this.Target.FocusChange -= this.TargetOnFocusChange;
+                this.Target.EditorAction -= this.HandleEditorAction;
 
             }
 
@@ -82,7 +82,7 @@ namespace WB.UI.Tester.CustomBindings
 
         private void OnItemClick(object sender, AdapterView.ItemClickEventArgs itemClickEventArgs)
         {
-            Target.ClearFocus();
+            this.Target.ClearFocus();
         }
 
         private void HandleEditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -90,7 +90,7 @@ namespace WB.UI.Tester.CustomBindings
             if (e.ActionId != ImeAction.Done)
                 return;
 
-            Target.DismissDropDown();
+            this.Target.DismissDropDown();
         }
     }
 }

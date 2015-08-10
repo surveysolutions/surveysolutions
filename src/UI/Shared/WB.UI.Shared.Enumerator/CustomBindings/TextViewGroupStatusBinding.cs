@@ -3,16 +3,12 @@ using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Shared.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewGroupStatusBinding : BaseBinding<TextView, GroupNavigationViewModel.GroupStatistics>
     {
@@ -66,7 +62,7 @@ namespace WB.UI.Tester.CustomBindings
 
         private Color GetColorFromResources(int resourceId)
         {
-            return Target.Resources.GetColor(resourceId);
+            return this.Target.Resources.GetColor(resourceId);
         }
     }
 }

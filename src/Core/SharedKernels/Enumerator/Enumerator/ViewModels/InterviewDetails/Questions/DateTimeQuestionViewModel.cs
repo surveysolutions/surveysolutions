@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Globalization;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -54,13 +53,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             var answerModel = interview.GetDateTimeAnswer(entityIdentity);
             if (answerModel.IsAnswered)
             {
-                SetToView(answerModel.Answer.Value);
+                this.SetToView(answerModel.Answer.Value);
             }
         }
 
         public IMvxCommand AnswerCommand
         {
-            get { return new MvxCommand<DateTime>(SendAnswerCommand); }
+            get { return new MvxCommand<DateTime>(this.SendAnswerCommand); }
         }
 
         private async void SendAnswerCommand(DateTime answerValue)
@@ -87,14 +86,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private void SetToView(DateTime answerValue)
         {
-            Answer = answerValue.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+            this.Answer = answerValue.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
         }
 
         private string answer;
         public string Answer
         {
-            get { return answer; }
-            set { answer = value; RaisePropertyChanged(); }
+            get { return this.answer; }
+            set { this.answer = value; this.RaisePropertyChanged(); }
         }
     }
 }

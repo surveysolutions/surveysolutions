@@ -1,6 +1,6 @@
 ﻿using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.UI.Capi.Implementations.PlainStorage;
 
 namespace WB.UI.Capi.Implementations.Services

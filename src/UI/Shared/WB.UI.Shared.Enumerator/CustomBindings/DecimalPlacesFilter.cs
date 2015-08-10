@@ -5,7 +5,7 @@ using Android.Text;
 using Java.Lang;
 using Math = System.Math;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class DecimalPlacesFilter : Java.Lang.Object, IInputFilter
     {
@@ -26,14 +26,14 @@ namespace WB.UI.Tester.CustomBindings
             if (decimal.TryParse(numberInInvariantCulture, NumberStyles.Number, CultureInfo.InvariantCulture, out decimalNumber))
             {
                 int countOfDecimalPlaces = BitConverter.GetBytes(decimal.GetBits(decimalNumber)[3])[2];
-                if (countOfDecimalPlaces <= decimalPlacesCount)
+                if (countOfDecimalPlaces <= this.decimalPlacesCount)
                 {
                     return null;
                 }
                 return new Java.Lang.String("");
             }
 
-            if (allowedStringValues.Contains(numberInInvariantCulture)) 
+            if (this.allowedStringValues.Contains(numberInInvariantCulture)) 
                 return null;
            
             return new Java.Lang.String("");

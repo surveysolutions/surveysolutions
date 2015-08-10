@@ -3,7 +3,7 @@ using Android.Text;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewHtmlBinding : BaseBinding<TextView, string>
     {

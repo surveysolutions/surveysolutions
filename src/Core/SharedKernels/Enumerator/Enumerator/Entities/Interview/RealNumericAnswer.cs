@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
     public class RealNumericAnswer : BaseInterviewAnswer
     {

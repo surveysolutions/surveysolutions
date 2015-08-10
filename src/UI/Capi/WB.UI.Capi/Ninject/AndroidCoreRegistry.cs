@@ -8,7 +8,6 @@ using Main.DenormalizerStorage;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
-
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Android;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;

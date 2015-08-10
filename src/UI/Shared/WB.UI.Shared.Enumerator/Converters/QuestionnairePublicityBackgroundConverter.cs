@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
-using WB.UI.Shared.Enumerator;
 
-namespace WB.UI.Tester.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class QuestionnairePublicityBackgroundConverter : MvxValueConverter<bool, int>
     {
@@ -12,7 +11,6 @@ namespace WB.UI.Tester.Converters
             if (value)
             {
                 return Resource.Drawable.dashboard_public_questionnaires_bg;
-
             }
             else
             {

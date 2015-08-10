@@ -1,6 +1,6 @@
 using Main.Core.Documents;
 
-namespace WB.Core.BoundedContexts.Tester.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IQuestionnaireImportService
     {

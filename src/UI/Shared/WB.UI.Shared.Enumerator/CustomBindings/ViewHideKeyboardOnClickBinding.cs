@@ -1,15 +1,10 @@
 using System;
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Util;
 using Android.Views;
-using Android.Views.InputMethods;
-using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using WB.UI.Tester.Activities;
+using WB.UI.Shared.Enumerator.Activities;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewHideKeyboardOnClickBinding : BaseBinding<View, object>
     {
@@ -37,7 +32,7 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (isDisposing && this.Target != null)
             {
-                this.Target.Click -= HandleClick;
+                this.Target.Click -= this.HandleClick;
             }
 
             base.Dispose(isDisposing);

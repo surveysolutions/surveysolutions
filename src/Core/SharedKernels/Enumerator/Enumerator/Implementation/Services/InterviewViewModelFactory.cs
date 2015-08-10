@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using GroupViewModel = WB.Core.BoundedContexts.Tester.ViewModels.Groups.GroupViewModel;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups.GroupViewModel;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class InterviewViewModelFactory : IInterviewViewModelFactory
     {
@@ -60,12 +58,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
-            return GenerateViewModels(interviewId, groupIdentity, navigationState);
+            return this.GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
 
         public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId)
         {
-            return GetPrefilledQuestionsImpl(interviewId);
+            return this.GetPrefilledQuestionsImpl(interviewId);
         }
 
         private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
@@ -99,7 +97,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
 
             return questionnaire.PrefilledQuestionsIds.Select(
-                question => CreateInterviewEntityViewModel(
+                question => this.CreateInterviewEntityViewModel(
                     entityId: question.Id,
                     rosterVector: new decimal[0],
                     entityModelType: question.ModelType,
@@ -135,7 +133,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         {
             var result = new List<IInterviewEntityViewModel>();
 
-            var text = (StaticTextViewModel)EntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
+            var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
             text.StaticText = UIResources.Interview_Complete_Screen_Description;
             result.Add(text);
 

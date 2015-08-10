@@ -4,7 +4,8 @@ using Android.Content;
 using Android.OS;
 using Android.Preferences;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {

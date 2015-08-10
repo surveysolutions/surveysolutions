@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
     public class GpsCoordinatesAnswer : BaseInterviewAnswer
     {
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 
         public override bool IsAnswered
         {
-            get { return Latitude.HasValue && Longitude.HasValue && Altitude.HasValue && Accuracy.HasValue; }
+            get { return this.Latitude.HasValue && this.Longitude.HasValue && this.Altitude.HasValue && this.Accuracy.HasValue; }
         }
 
         public override void RemoveAnswer()

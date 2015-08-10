@@ -3,8 +3,7 @@ using Android.Content;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
-
-using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Capi.Implementations.Services
 {

@@ -1,6 +1,6 @@
-using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.UI.Tester.Activities
+namespace WB.UI.Shared.Enumerator.Activities
 {
     public abstract class BaseActivity<TViewModel> : BaseMvxActivity where TViewModel : BaseViewModel
     {

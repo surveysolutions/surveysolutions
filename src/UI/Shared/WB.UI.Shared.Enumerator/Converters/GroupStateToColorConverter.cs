@@ -4,10 +4,9 @@ using Android.Graphics;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.Droid.Platform;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.UI.Shared.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-namespace WB.UI.Tester.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class GroupStateToColorConverter : MvxValueConverter<SimpleGroupStatus, Color>
     {

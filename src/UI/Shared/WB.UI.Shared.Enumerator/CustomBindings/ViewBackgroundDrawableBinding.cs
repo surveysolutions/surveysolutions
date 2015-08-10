@@ -1,8 +1,7 @@
-﻿using Android.Graphics.Drawables;
-using Android.Views;
+﻿using Android.Views;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewBackgroundDrawableBinding : BaseBinding<View, int?>
     {
@@ -13,7 +12,7 @@ namespace WB.UI.Tester.CustomBindings
 
         protected override void SetValueToView(View control, int? drawableBackgroundId)
         {
-            SetBackgroundDrawable(control, drawableBackgroundId);
+            this.SetBackgroundDrawable(control, drawableBackgroundId);
         }
 
         public override MvxBindingMode DefaultMode

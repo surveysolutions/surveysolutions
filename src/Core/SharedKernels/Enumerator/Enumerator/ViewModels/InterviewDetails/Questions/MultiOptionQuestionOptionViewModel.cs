@@ -1,9 +1,9 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
@@ -27,11 +27,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         public bool Checked
         {
-            get { return @checked; }
+            get { return this.@checked; }
             set
             {
-                if (@checked == value) return;
-                @checked = value;
+                if (this.@checked == value) return;
+                this.@checked = value;
                 if (value)
                 {
                     this.CheckedTimeStamp = DateTime.Now;
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     this.CheckedTimeStamp = DateTime.MinValue;
                 }
 
-                RaisePropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
 
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             get { return this.checkedOrder; }
             set
             {
-                if (checkedOrder == value) return;
+                if (this.checkedOrder == value) return;
                 this.checkedOrder = value; 
                 this.RaisePropertyChanged();
             }
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             get
             {
-                return new MvxCommand(async () => await QuestionViewModel.ToggleAnswerAsync(this));
+                return new MvxCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this));
             }
         }
 

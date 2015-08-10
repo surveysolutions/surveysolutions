@@ -1,6 +1,6 @@
 using Ninject.Modules;
 
-namespace WB.UI.Shared.Enumerator.Ninject
+namespace WB.UI.Shared.Enumerator
 {
     public class EnumeratorUIModule : NinjectModule
     {

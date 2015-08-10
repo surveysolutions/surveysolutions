@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Tester
+﻿namespace WB.Core.SharedKernels.Enumerator
 {
     public interface IEnumeratorSettings
     {

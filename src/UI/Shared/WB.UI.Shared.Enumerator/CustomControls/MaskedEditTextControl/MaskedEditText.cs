@@ -4,15 +4,13 @@ using System.Linq;
 using Android.Content;
 using Android.Text;
 using Android.Util;
-using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
-using WB.Core.BoundedContexts.Tester.Services.MaskText;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Services.MaskText;
 
-
-namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
+namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
 {
     public class MaskedEditText : EditText, IInputFilter
     {
@@ -50,7 +48,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 
             this.selection = this.maskedText.FindFirstValidMaskPosition();
 
-            this.lastValidMaskPosition = maskedText.FindLastValidMaskPosition();
+            this.lastValidMaskPosition = this.maskedText.FindLastValidMaskPosition();
             this.initialized = true;
         }
 
@@ -63,7 +61,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
 
         public string Mask
         {
-            get { return maskedText.Mask; }
+            get { return this.maskedText.Mask; }
             set
             {
                 this.maskedText = new MaskedText();
@@ -79,7 +77,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
             var inputTypes = this.InputType;
             var inputTypeOverrided = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword;
 
-            if (Mask.IsNullOrEmpty())
+            if (this.Mask.IsNullOrEmpty())
                 inputTypes &= ~inputTypeOverrided;
             else
                 inputTypes |= inputTypeOverrided;
@@ -115,13 +113,13 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
         private void Init()
         {
             this.SetFilters(new IInputFilter[] { this });
-            this.AfterTextChanged += (sender, args) => AfterTextChangedHandler(args.Editable);
-            this.BeforeTextChanged += (sender, args) => BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
-            this.TextChanged += (sender, args) => OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
+            this.AfterTextChanged += (sender, args) => this.AfterTextChangedHandler(args.Editable);
+            this.BeforeTextChanged += (sender, args) => this.BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
+            this.TextChanged += (sender, args) => this.OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);
 
             this.UpdatetInputType();
 
-            this.FocusChange += OnFocusChangeHandle;
+            this.FocusChange += this.OnFocusChangeHandle;
         }
 
         private void OnFocusChangeHandle(object sender, FocusChangeEventArgs args)
@@ -183,7 +181,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
                     this.ignore = true;
                 }
 
-                maskedText.RemoveRange(start, count, after, ref this.selection);
+                this.maskedText.RemoveRange(start, count, after, ref this.selection);
             }
         }
 
@@ -202,7 +200,7 @@ namespace WB.UI.Tester.CustomControls.MaskedEditTextControl
                 if (count > 0)
                 {
                     string addedString = s.Substring(start, count);
-                    maskedText.AddString(addedString, start, ref this.selection);
+                    this.maskedText.AddString(addedString, start, ref this.selection);
                 }
             }
         }

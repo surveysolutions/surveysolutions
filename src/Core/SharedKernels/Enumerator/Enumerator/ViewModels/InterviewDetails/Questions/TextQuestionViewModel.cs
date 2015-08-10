@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -14,8 +8,13 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel, 
@@ -57,30 +56,30 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
-            liteEventRegistry.Subscribe(this, interviewId);
+            this.liteEventRegistry.Subscribe(this, interviewId);
 
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
-            InitQuestionSettings();
-            UpdateSelfFromModel();
+            this.InitQuestionSettings();
+            this.UpdateSelfFromModel();
         }
 
         private string answer;
         public string Answer
         {
-            get { return answer; }
+            get { return this.answer; }
             set
             {
-                answer = value;
-                RaisePropertyChanged();
+                this.answer = value;
+                this.RaisePropertyChanged();
             }
         }
 
         private string mask;
         public string Mask
         {
-            get { return mask; }
-            private set { mask = value; RaisePropertyChanged(); RaisePropertyChanged(() => Hint); }
+            get { return this.mask; }
+            private set { this.mask = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(() => this.Hint); }
         }
 
         public string Hint
@@ -101,20 +100,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(SendAnswerTextQuestionCommand)); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerTextQuestionCommand)); }
         }
 
         private async void SendAnswerTextQuestionCommand(string text)
         {
-            if (!Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
+            if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
                 return;
             }
 
             var command = new AnswerTextQuestionCommand(
-                interviewId: Guid.Parse(interviewId),
-                userId: principal.CurrentUserIdentity.UserId,
+                interviewId: Guid.Parse(this.interviewId),
+                userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
@@ -133,27 +132,27 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private void InitQuestionSettings()
         {
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            var textQuestionModel = questionnaire.GetTextQuestion(questionIdentity.Id);
+            var textQuestionModel = questionnaire.GetTextQuestion(this.questionIdentity.Id);
             this.Mask = textQuestionModel.Mask;
         }
 
         private void UpdateSelfFromModel()
         {
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.Get(this.interviewId);
 
-            var answerModel = interview.GetTextAnswer(questionIdentity);
+            var answerModel = interview.GetTextAnswer(this.questionIdentity);
             this.Answer = answerModel.Answer;
         }
 
         public void Handle(TextQuestionAnswered @event)
         {
-            if (@event.QuestionId == questionIdentity.Id &&
-                @event.PropagationVector.SequenceEqual(questionIdentity.RosterVector))
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.PropagationVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                UpdateSelfFromModel();
+                this.UpdateSelfFromModel();
             }
         }
     }

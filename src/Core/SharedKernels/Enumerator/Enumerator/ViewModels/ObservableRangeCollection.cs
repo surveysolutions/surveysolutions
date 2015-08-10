@@ -7,7 +7,7 @@ using System.Linq;
 using Cirrious.CrossCore.Core;
 using Microsoft.Practices.ServiceLocation;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class ObservableRangeCollection<T> : ObservableCollection<T>
     {

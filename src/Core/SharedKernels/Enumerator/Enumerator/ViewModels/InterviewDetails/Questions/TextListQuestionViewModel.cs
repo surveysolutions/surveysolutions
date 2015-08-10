@@ -2,21 +2,20 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -50,11 +49,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             get
             {
-                return newListItem;
+                return this.newListItem;
             }
             set
             {
-                newListItem = value;
+                this.newListItem = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -63,14 +62,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(AddNewItemCommand)); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.AddNewItemCommand)); }
         }
 
         private void AddNewItemCommand()
         {
-            if (!string.IsNullOrWhiteSpace(NewListItem))
+            if (!string.IsNullOrWhiteSpace(this.NewListItem))
             {
-                this.AddNewItemAndSaveAnswers(NewListItem.Trim());
+                this.AddNewItemAndSaveAnswers(this.NewListItem.Trim());
             }
         }
 
@@ -137,32 +136,32 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 }
             }
 
-            Answers.Remove(listItem);
+            this.Answers.Remove(listItem);
 
-            SaveAnswers();
+            this.SaveAnswers();
         }
 
         private void ListItemEdited(object sender, EventArgs eventArgs)
         {
-            SaveAnswers();
+            this.SaveAnswers();
         }
 
         private void AddNewItemAndSaveAnswers(string title)
         {
-            var maxValue = Answers.Count == 0 ? -1 : Answers.Max(x => x.Value) + 1;
+            var maxValue = this.Answers.Count == 0 ? -1 : this.Answers.Max(x => x.Value) + 1;
 
-            Answers.Add(this.CreateListItemViewModel(maxValue, title));
+            this.Answers.Add(this.CreateListItemViewModel(maxValue, title));
 
-            SaveAnswers();
+            this.SaveAnswers();
             
-            NewListItem = string.Empty;
+            this.NewListItem = string.Empty;
         }
 
         private async void SaveAnswers()
         {
-            if (maxAnswerCount.HasValue)
+            if (this.maxAnswerCount.HasValue)
             {
-                IsAddNewItemVisible = Answers.Count < maxAnswerCount.Value;
+                this.IsAddNewItemVisible = this.Answers.Count < this.maxAnswerCount.Value;
             }
 
             if (this.Answers.Any(x => string.IsNullOrWhiteSpace(x.Title)))
@@ -174,8 +173,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             var answers = this.Answers.Select(x => new Tuple<decimal, string>(x.Value, x.Title)).ToArray();
 
             var command = new AnswerTextListQuestionCommand(
-                interviewId: Guid.Parse(interviewId),
-                userId: principal.CurrentUserIdentity.UserId,
+                interviewId: Guid.Parse(this.interviewId),
+                userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
@@ -196,14 +195,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             var optionViewModel = new TextListItemViewModel
             {
-                Enablement = QuestionState.Enablement,
+                Enablement = this.QuestionState.Enablement,
 
                 Value = value,
                 Title = title
             };
 
-            optionViewModel.ItemEdited += ListItemEdited;
-            optionViewModel.ItemDeleted += ListItemDeleted;
+            optionViewModel.ItemEdited += this.ListItemEdited;
+            optionViewModel.ItemDeleted += this.ListItemDeleted;
 
             return optionViewModel;
         }

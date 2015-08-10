@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Preferences;
-using WB.Core.BoundedContexts.Tester;
+using WB.Core.SharedKernels.Enumerator;
 
 namespace WB.UI.Capi.Infrastructure.Internals.Settings
 {

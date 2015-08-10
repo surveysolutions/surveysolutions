@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
 {

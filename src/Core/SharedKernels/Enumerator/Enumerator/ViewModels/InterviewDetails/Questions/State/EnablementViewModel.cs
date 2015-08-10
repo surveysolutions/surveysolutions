@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions.State
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class EnablementViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<GroupsEnabled>,

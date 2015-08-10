@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {

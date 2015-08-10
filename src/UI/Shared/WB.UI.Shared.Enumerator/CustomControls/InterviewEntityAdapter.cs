@@ -4,16 +4,13 @@ using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Microsoft.CSharp.RuntimeBinder;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
-using WB.UI.Shared.Enumerator;
-using GroupViewModel = WB.Core.BoundedContexts.Tester.ViewModels.Groups.GroupViewModel;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups.GroupViewModel;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class InterviewEntityAdapter : MvxRecyclerViewAdapter
     {
@@ -56,7 +53,7 @@ namespace WB.UI.Tester.CustomControls
 
             if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
             {
-                var enablementModel = GetEnablementViewModel(source);
+                var enablementModel = this.GetEnablementViewModel(source);
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
                     return Resource.Layout.interview_disabled_question;
@@ -65,7 +62,7 @@ namespace WB.UI.Tester.CustomControls
 
             if (typeOfViewModel == typeof(GroupViewModel))
             {
-                var enablementModel = GetEnablementViewModel(source);
+                var enablementModel = this.GetEnablementViewModel(source);
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
                     return Resource.Layout.interview_disabled_group;

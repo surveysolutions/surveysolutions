@@ -8,7 +8,7 @@ using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
 using Cirrious.MvvmCross.Plugins.DownloadCache;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class HttpImageView : ImageView
     {
@@ -18,7 +18,7 @@ namespace WB.UI.Tester.CustomControls
             : base(context, attrs)
         { 
             this._imageHelper = new MvxDynamicImageHelper<Bitmap>();
-            this._imageHelper.ImageChanged += ImageHelperOnImageChanged;
+            this._imageHelper.ImageChanged += this.ImageHelperOnImageChanged;
             var typedArray = context.ObtainStyledAttributes(attrs, MvxAndroidBindingResource.Instance.ImageViewStylableGroupId);
 
             int numStyles = typedArray.IndexCount;

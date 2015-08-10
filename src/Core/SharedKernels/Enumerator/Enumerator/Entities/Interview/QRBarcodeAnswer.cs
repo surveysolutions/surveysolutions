@@ -1,8 +1,7 @@
 ﻿using System;
-
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
     public class QRBarcodeAnswer : BaseInterviewAnswer
     {

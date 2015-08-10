@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -41,13 +39,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private string answerAsString;
         public string AnswerAsString
         {
-            get { return answerAsString; }
+            get { return this.answerAsString; }
             set
             {
-                if (answerAsString != value)
+                if (this.answerAsString != value)
                 {
-                    answerAsString = value;
-                    RaisePropertyChanged();
+                    this.answerAsString = value;
+                    this.RaisePropertyChanged();
                 }
             }
         }
@@ -55,7 +53,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync())); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync())); }
         }
 
         public IntegerQuestionViewModel(
@@ -105,7 +103,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private async Task SendAnswerIntegerQuestionCommandAsync()
         {
-            if (string.IsNullOrWhiteSpace(AnswerAsString))
+            if (string.IsNullOrWhiteSpace(this.AnswerAsString))
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
@@ -118,37 +116,37 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 return;
             }
 
-            if (isRosterSizeQuestion)
+            if (this.isRosterSizeQuestion)
             {
                 if (answer < 0)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, AnswerAsString);
+                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, this.AnswerAsString);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
                 if (answer > this.answerMaxValue)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, AnswerAsString, this.answerMaxValue);
+                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, this.AnswerAsString, this.answerMaxValue);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
-                if (previousAnswer.HasValue && answer < previousAnswer)
+                if (this.previousAnswer.HasValue && answer < this.previousAnswer)
                 {
-                    var amountOfRostersToRemove = previousAnswer - answer;
+                    var amountOfRostersToRemove = this.previousAnswer - answer;
                     var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                     if (!(await this.userInteractionService.ConfirmAsync(message)))
                     {
-                        AnswerAsString = NullableIntToAnswerString(previousAnswer);
+                        this.AnswerAsString = NullableIntToAnswerString(this.previousAnswer);
                         return;
                     }
                 }
             }
 
             var command = new AnswerNumericIntegerQuestionCommand(
-                interviewId: Guid.Parse(interviewId),
-                userId: principal.CurrentUserIdentity.UserId,
+                interviewId: Guid.Parse(this.interviewId),
+                userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,

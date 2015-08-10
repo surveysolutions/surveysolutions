@@ -14,18 +14,18 @@ using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using WB.Core.BoundedContexts.Tester;
+using WB.Core.SharedKernels.Enumerator;
 using WB.UI.Capi.Activities;
 using WB.UI.Capi.Ninject;
 using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android;
-using WB.UI.Tester.Activities;
-using WB.UI.Tester.Converters;
-using WB.UI.Tester.CustomBindings;
-using WB.UI.Tester.CustomControls;
-using WB.UI.Tester.CustomControls.MaskedEditTextControl;
-using WB.UI.Tester.Ninject;
-using WB.UI.Tester.ValueCombiners;
+using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Converters;
+using WB.UI.Shared.Enumerator.CustomBindings;
+using WB.UI.Shared.Enumerator.CustomControls;
+using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
+using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator.ValueCombiners;
 using FinishIntallationViewModel = WB.UI.Capi.Views.FinishIntallationViewModel;
 using LoginViewModel = WB.Core.BoundedContexts.Capi.Views.Login.LoginViewModel;
 
@@ -114,16 +114,6 @@ namespace WB.UI.Capi
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
 
             base.FillTargetFactories(registry);
-        }
-
-        protected override IDictionary<string, string> ViewNamespaceAbbreviations
-        {
-            get
-            {
-                var namespaceAbbreviations = base.ViewNamespaceAbbreviations;
-                namespaceAbbreviations["Wb"] = "WB.UI.Tester.Controls";
-                return namespaceAbbreviations;
-            }
         }
 
         protected override IList<Assembly> AndroidViewAssemblies

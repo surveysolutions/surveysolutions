@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class InterviewStatusChangeViewModel : MvxViewModel, IInterviewEntityViewModel
     {
@@ -49,7 +48,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails
         public string CompleteComment
         {
             get { return this.completeComment; }
-            set { this.completeComment = value; RaisePropertyChanged(); }
+            set { this.completeComment = value; this.RaisePropertyChanged(); }
         }
 
         private async Task StartInterviewAsync()
@@ -59,7 +58,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails
             var completeInterviewCommand = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                comment: CompleteComment,
+                comment: this.CompleteComment,
                 completeTime: DateTime.UtcNow);
 
             this.commandService.Execute(completeInterviewCommand);

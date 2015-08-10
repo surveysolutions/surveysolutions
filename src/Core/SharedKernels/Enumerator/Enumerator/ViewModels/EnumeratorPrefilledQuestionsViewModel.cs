@@ -1,12 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class EnumeratorPrefilledQuestionsViewModel : BaseViewModel
     {
@@ -38,8 +38,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private ObservableCollection<dynamic> prefilledQuestions;
         public ObservableCollection<dynamic> PrefilledQuestions
         {
-            get { return prefilledQuestions; }
-            set { prefilledQuestions = value; RaisePropertyChanged(); }
+            get { return this.prefilledQuestions; }
+            set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
         }
 
         public void Init(string interviewId)

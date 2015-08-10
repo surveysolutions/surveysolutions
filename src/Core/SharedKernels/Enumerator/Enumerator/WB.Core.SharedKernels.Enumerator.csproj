@@ -8,7 +8,7 @@
     <ProjectGuid>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContexts.Tester</RootNamespace>
+    <RootNamespace>WB.Core.SharedKernels.Enumerator</RootNamespace>
     <AssemblyName>WB.Core.SharedKernels.Enumerator</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -86,6 +86,18 @@
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
+    <Compile Include="Services\Infrastructure\IExpressionsEngineVersionService.cs" />
+    <Compile Include="Services\Infrastructure\ILogger.cs" />
+    <Compile Include="Services\Infrastructure\INetworkService.cs" />
+    <Compile Include="Services\Infrastructure\IPlainStorageAccessor.cs" />
+    <Compile Include="Services\Infrastructure\IPlainStorageEntity.cs" />
+    <Compile Include="Services\Infrastructure\IPrincipal.cs" />
+    <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
+    <Compile Include="Services\Infrastructure\IRestService.cs" />
+    <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
+    <Compile Include="Services\Infrastructure\RestCredentials.cs" />
+    <Compile Include="Services\Infrastructure\RestException.cs" />
+    <Compile Include="Services\Infrastructure\ScanResult.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />

@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public interface ISideBarSectionViewModelsFactory
     {
