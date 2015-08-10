@@ -19,7 +19,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Capi.Controls;
-using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android.Helpers;
 using InterviewViewModel = WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel;

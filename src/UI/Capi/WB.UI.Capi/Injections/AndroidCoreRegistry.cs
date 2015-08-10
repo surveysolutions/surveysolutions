@@ -24,7 +24,6 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Android;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Views.Login;
 
 namespace WB.UI.Capi.Injections

@@ -53,7 +53,6 @@ using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Capi.EventHandlers;
 using WB.UI.Capi.FileStorage;
-using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Infrastructure;
@@ -327,10 +326,6 @@ namespace WB.UI.Capi
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
 
-            this.kernel.Unbind<IAnswerOnQuestionCommandService>();
-            this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
-            this.kernel.Bind<IAnswerProgressIndicator>().To<Shared.Android.Controls.ScreenItems.AnswerProgressIndicator>().InSingletonScope();
-            this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
             this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
 
 

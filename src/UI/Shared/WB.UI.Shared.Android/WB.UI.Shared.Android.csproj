@@ -121,11 +121,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\DetailsActivity.cs" />
-    <Compile Include="Activities\DoubleBackMvxFragmentActivity.cs" />
-    <Compile Include="Adapters\ContentFrameAdapter.cs" />
-    <Compile Include="Adapters\GridContentAdapter.cs" />
-    <Compile Include="Adapters\ScreenContentAdapter.cs" />
     <Compile Include="Adapters\SmartAdapter.cs" />
     <Compile Include="Adapters\StatisticsDataAdapter.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
@@ -141,40 +136,12 @@
     <Compile Include="Controls\Breadcrumbs.cs" />
     <Compile Include="Controls\IScreenChanging.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />
-    <Compile Include="Controls\PartialRosterRowView.cs" />
-    <Compile Include="Controls\PartOfRosterView.cs" />
     <Compile Include="Controls\QuestionnaireNavigationView.cs" />
     <Compile Include="Controls\QuestionnarieNavigationItem.cs" />
     <Compile Include="Controls\RosterTable.cs" />
-    <Compile Include="Controls\Roster\RosterItemClickEventArgs.cs" />
-    <Compile Include="Controls\Roster\RosterQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\AbstractMultyQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\AbstractQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\AbstractSingleOptionQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\AnswerOnQuestionCommandService.cs" />
-    <Compile Include="Controls\ScreenItems\AutoPropagateQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\CascadingComboboxQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\AnswerProgressIndicator.cs" />
-    <Compile Include="Controls\ScreenItems\FilteredComboboxQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\PictureQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\StaticTextView.cs" />
-    <Compile Include="Controls\ScreenItems\QRBarcodeQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\DateQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\DecimalPlacesFilter.cs" />
-    <Compile Include="Controls\ScreenItems\DefaultQuestionViewFactory.cs" />
-    <Compile Include="Controls\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\GroupView.cs" />
-    <Compile Include="Controls\ScreenItems\IAnswerOnQuestionCommandService.cs" />
-    <Compile Include="Controls\ScreenItems\IQuestionViewFactory.cs" />
-    <Compile Include="Controls\ScreenItems\MultyOptionLinkedQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\MultyQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\NumericIntegerQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\NumericQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\NumericRealQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\SingleOptionLinkedQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\SingleOptionQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\TextListQuestionView.cs" />
-    <Compile Include="Controls\ScreenItems\TextQuestionView.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="Events\AnswerSavedEventArgs.cs" />
     <Compile Include="Events\AnswerSetEventArgs.cs" />
@@ -182,8 +149,6 @@
     <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Frames\AbstractScreenChangingFragment.cs" />
-    <Compile Include="Frames\GridContentFragment.cs" />
-    <Compile Include="Frames\ScreenContentFragment.cs" />
     <Compile Include="Frames\StatisticsContentFragment.cs" />
     <Compile Include="GeolocationServices\GeoService.cs" />
     <Compile Include="GeolocationServices\IGeoService.cs" />
