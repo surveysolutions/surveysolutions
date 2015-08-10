@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="AbstractConditionalLevel.cs" />
     <Compile Include="AbstractInterviewExpressionState.cs" />
-    <Compile Include="AnswerProgressIndicator.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="IInterviewExpressionStateUpgrader.cs" />
@@ -57,7 +56,6 @@
     <Compile Include="DummyInterviewExpressionState.cs" />
     <Compile Include="EnablementChanges.cs" />
     <Compile Include="GeoLocation.cs" />
-    <Compile Include="IAnswerProgressIndicator.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
     <Compile Include="IInterviewEvaluator.cs" />
