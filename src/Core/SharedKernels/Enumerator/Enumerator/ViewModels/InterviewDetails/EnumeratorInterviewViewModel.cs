@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public abstract class EnumeratorInterviewViewModel : BaseViewModel
     {
@@ -60,7 +59,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 .Select(referenceToQuestion => new SideBarPrefillQuestion
                 {
                     Question = questionnaire.Questions[referenceToQuestion.Id].Title,
-                    Answer = GetAnswer(interview, questionnaire, referenceToQuestion)
+                    Answer = this.GetAnswer(interview, questionnaire, referenceToQuestion)
                 })
                 .ToList();
 
@@ -69,20 +68,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.CurrentGroup.Init(interviewId, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.GroupChanged += NavigationStateOnOnGroupChanged;
+            this.navigationState.GroupChanged += this.NavigationStateOnOnGroupChanged;
             await this.navigationState.NavigateToAsync(groupIdentity: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]));
 
-            this.answerNotifier.QuestionAnswered += AnswerNotifierOnQuestionAnswered;
+            this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            this.UpdateInterviewStatus(navigationState.CurrentGroup);
+            this.UpdateInterviewStatus(this.navigationState.CurrentGroup);
         }
 
         private void NavigationStateOnOnGroupChanged(GroupChangedEventArgs newGroupIdentity)
         {
-            var interview = this.interviewRepository.Get(navigationState.InterviewId);
+            var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
             IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
 
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
@@ -112,7 +111,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return this.status; }
             private set
             {
-                if (status != value)
+                if (this.status != value)
                 {
                     this.status = value;
                     this.RaisePropertyChanged();

@@ -3,7 +3,7 @@ using System.Globalization;
 using Android.Graphics;
 using Cirrious.CrossCore.Converters;
 
-namespace WB.UI.Tester.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class ByteArrayToImageConverter : MvxValueConverter<byte[], Bitmap>
     {

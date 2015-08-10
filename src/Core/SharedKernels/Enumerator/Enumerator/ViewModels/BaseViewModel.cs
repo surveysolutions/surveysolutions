@@ -1,6 +1,6 @@
 using Cirrious.MvvmCross.ViewModels;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {

@@ -1,18 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
-using WB.UI.Shared.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewGroupInfoBinding : BaseBinding<TextView, GroupStateViewModel>
     {
@@ -40,7 +36,7 @@ namespace WB.UI.Tester.CustomBindings
             string fullInfo = GetGroupInformationText(value);
             string errorInfo = GetInformationByInvalidAnswers(value);
 
-            var mainColor = GetGroupColorByStatus(value);
+            var mainColor = this.GetGroupColorByStatus(value);
             var errorColor = this.GetColorFromResources(Resource.Color.group_with_invalid_answers);
 
             var spannableString = new SpannableString(fullInfo);

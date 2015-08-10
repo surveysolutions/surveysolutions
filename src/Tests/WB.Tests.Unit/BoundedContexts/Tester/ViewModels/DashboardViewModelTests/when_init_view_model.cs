@@ -7,10 +7,9 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
-
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests

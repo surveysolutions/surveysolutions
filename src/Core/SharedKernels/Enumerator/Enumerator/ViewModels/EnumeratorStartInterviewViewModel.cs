@@ -3,7 +3,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class EnumeratorStartInterviewViewModel : MvxNotifyPropertyChanged
     {

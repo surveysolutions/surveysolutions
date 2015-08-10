@@ -1,7 +1,6 @@
 ﻿using Android.Views;
-using WB.UI.Shared.Enumerator;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewPaddingLeftBinding : BaseBinding<View, int>
     {

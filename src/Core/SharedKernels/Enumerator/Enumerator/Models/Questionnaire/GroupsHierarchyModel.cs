@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 {
     public class GroupsHierarchyModel
     {

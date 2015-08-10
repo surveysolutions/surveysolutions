@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.RosterTitleSubstitutionServiceTests

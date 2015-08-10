@@ -1,11 +1,10 @@
-using System;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupStateViewModel : MvxNotifyPropertyChanged
     {

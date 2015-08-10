@@ -8,7 +8,7 @@ using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
 using Cirrious.MvvmCross.Plugins.DownloadCache;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class DynamicImageView : ImageView
     {
@@ -18,7 +18,7 @@ namespace WB.UI.Tester.CustomControls
             : base(context, attrs)
         { 
             this.imageHelper = new MvxDynamicImageHelper<Bitmap>();
-            this.imageHelper.ImageChanged += ImageHelperOnImageChanged;
+            this.imageHelper.ImageChanged += this.ImageHelperOnImageChanged;
             var typedArray = context.ObtainStyledAttributes(attrs, MvxAndroidBindingResource.Instance.ImageViewStylableGroupId);
 
             int numStyles = typedArray.IndexCount;
@@ -27,7 +27,7 @@ namespace WB.UI.Tester.CustomControls
                 int attributeId = typedArray.GetIndex(i);
                 if (attributeId == MvxAndroidBindingResource.Instance.SourceBindId)
                 {
-                    HttpImageUrl = typedArray.GetString(attributeId);
+                    this.HttpImageUrl = typedArray.GetString(attributeId);
                 }
             }
             typedArray.Recycle();
@@ -35,8 +35,8 @@ namespace WB.UI.Tester.CustomControls
 
         public string HttpImageUrl
         {
-            get { return Image.ImageUrl; }
-            set { Image.ImageUrl = value; }
+            get { return this.Image.ImageUrl; }
+            set { this.Image.ImageUrl = value; }
         }
 
         public DynamicImageView(Context context)
@@ -53,7 +53,7 @@ namespace WB.UI.Tester.CustomControls
 
         private void ImageHelperOnImageChanged(object sender, MvxValueEventArgs<Bitmap> mvxValueEventArgs)
         {
-            SetImageBitmap(mvxValueEventArgs.Value);
+            this.SetImageBitmap(mvxValueEventArgs.Value);
             this.Invalidate();
         }
     }

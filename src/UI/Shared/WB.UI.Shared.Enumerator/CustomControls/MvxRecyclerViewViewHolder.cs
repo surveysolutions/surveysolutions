@@ -5,7 +5,7 @@ using Android.Views;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class MvxRecyclerViewViewHolder : RecyclerView.ViewHolder, IMvxRecyclerViewViewHolder
     {

@@ -3,10 +3,10 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using Cirrious.CrossCore;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ButtonGroupTitleBinding : BaseBinding<Button, GroupViewModel>
     {

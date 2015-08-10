@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
     public class TextListAnswer : BaseInterviewAnswer
     {
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 
         public override bool IsAnswered
         {
-            get { return Answers != null && Answers.Any(); }
+            get { return this.Answers != null && this.Answers.Any(); }
         }
 
         public override void RemoveAnswer()

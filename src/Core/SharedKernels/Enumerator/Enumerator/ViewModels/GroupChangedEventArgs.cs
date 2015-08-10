@@ -1,7 +1,7 @@
 using System;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class GroupChangedEventArgs : EventArgs
     {

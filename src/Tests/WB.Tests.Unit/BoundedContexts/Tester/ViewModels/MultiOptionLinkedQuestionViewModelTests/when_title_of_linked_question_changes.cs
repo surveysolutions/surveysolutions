@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.MultiOptionLinkedQuestionViewModelTests

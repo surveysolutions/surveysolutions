@@ -2,10 +2,10 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.TextListQuestionViewModelTests

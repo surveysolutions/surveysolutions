@@ -5,7 +5,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 
-namespace WB.UI.Tester.Activities
+namespace WB.UI.Shared.Enumerator.Activities
 {
     public static class ActivityExtensions
     {

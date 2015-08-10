@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
-using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
-namespace WB.UI.Tester.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class LocalizationValueConverter : MvxValueConverter<string, string>
     {

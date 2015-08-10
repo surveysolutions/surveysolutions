@@ -1,6 +1,6 @@
 using System;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {

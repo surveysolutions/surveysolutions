@@ -1,10 +1,12 @@
 using Machine.Specifications;
 
 using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using It = Machine.Specifications.It;
 
 

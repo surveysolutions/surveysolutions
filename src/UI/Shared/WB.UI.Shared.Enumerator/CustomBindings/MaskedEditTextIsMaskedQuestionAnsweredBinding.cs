@@ -1,10 +1,8 @@
 ﻿using System;
-using Android.Locations;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
-using WB.UI.Tester.CustomControls.MaskedEditTextControl;
+using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class MaskedEditTextIsMaskedQuestionAnsweredBinding : BaseBinding<MaskedEditText, bool>
     {
@@ -15,7 +13,7 @@ namespace WB.UI.Tester.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            Target.IsMaskedFormAnsweredChanged += this.IsMaskedFormAnsweredChangedHandler;
+            this.Target.IsMaskedFormAnsweredChanged += this.IsMaskedFormAnsweredChangedHandler;
         }
 
         protected override void SetValueToView(MaskedEditText control, bool value)
@@ -31,7 +29,7 @@ namespace WB.UI.Tester.CustomBindings
                 return;
 
             var value = target.IsMaskedFormAnswered;
-            FireValueChanged(value);
+            this.FireValueChanged(value);
         }
 
         public override MvxBindingMode DefaultMode
@@ -43,7 +41,7 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (isDisposing)
             {
-                var target = Target as MaskedEditText;
+                var target = this.Target as MaskedEditText;
                 if (target != null)
                 {
                     target.IsMaskedFormAnsweredChanged -= this.IsMaskedFormAnsweredChangedHandler;

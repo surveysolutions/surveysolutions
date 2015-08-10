@@ -2,10 +2,9 @@
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.UI.Shared.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewSideBarPrefillQuestionBinding : BaseBinding<TextView, SideBarPrefillQuestion>
     {
@@ -28,7 +27,7 @@ namespace WB.UI.Tester.CustomBindings
                 message.Length - answerText.Length,
                 message.Length,
                 SpanTypes.ExclusiveExclusive);
-            str.SetSpan(new ForegroundColorSpan(GetAnswerColor(control)),
+            str.SetSpan(new ForegroundColorSpan(this.GetAnswerColor(control)),
                 message.Length - answerText.Length,
                 message.Length,
                 SpanTypes.ExclusiveExclusive);

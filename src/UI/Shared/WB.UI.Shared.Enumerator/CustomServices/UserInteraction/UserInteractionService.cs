@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Android.App;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
-using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.UI.Tester.CustomServices.UserInteraction
+namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
 {
     public class UserInteractionService : IUserInteractionService
     {

@@ -1,12 +1,10 @@
 using System;
-
 using Android.Content;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using WB.UI.Shared.Enumerator;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public sealed class MaxHeightLinearLayout: LinearLayout
     {
@@ -20,27 +18,27 @@ namespace WB.UI.Tester.CustomControls
         public MaxHeightLinearLayout(Context context, IAttributeSet attrs)
             : base(context, attrs)
         {
-            if (!IsInEditMode)
+            if (!this.IsInEditMode)
             {
-                Init(context, attrs);
+                this.Init(context, attrs);
             }
         }
 
         public MaxHeightLinearLayout(Context context, IAttributeSet attrs, int defStyleAttr)
             : base(context, attrs, defStyleAttr)
         {
-            if (!IsInEditMode)
+            if (!this.IsInEditMode)
             {
-                Init(context, attrs);
+                this.Init(context, attrs);
             }
         }
 
         public MaxHeightLinearLayout(Context context, IAttributeSet attrs, int defStyleAttr, int defStyleRes)
             : base(context, attrs, defStyleAttr, defStyleRes)
         {
-            if (!IsInEditMode)
+            if (!this.IsInEditMode)
             {
-                Init(context, attrs);
+                this.Init(context, attrs);
             }
         }
 
@@ -49,7 +47,7 @@ namespace WB.UI.Tester.CustomControls
             if (attrs != null)
             {
                 var styledAttrs = context.ObtainStyledAttributes(attrs, Resource.Styleable.MaxHeightScrollView);
-                maxHeight = styledAttrs.GetDimensionPixelSize(Resource.Styleable.MaxHeightScrollView_maxHeight, 0);
+                this.maxHeight = styledAttrs.GetDimensionPixelSize(Resource.Styleable.MaxHeightScrollView_maxHeight, 0);
 
                 styledAttrs.Recycle();
             }
@@ -57,7 +55,7 @@ namespace WB.UI.Tester.CustomControls
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
-            if (maxHeight > 0)
+            if (this.maxHeight > 0)
             {
                 var innerHeight = this.GetInnerHeight();
 

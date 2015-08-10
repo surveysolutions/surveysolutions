@@ -21,14 +21,15 @@ using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator;
+using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Converters;
+using WB.UI.Shared.Enumerator.CustomBindings;
+using WB.UI.Shared.Enumerator.CustomControls;
+using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
+using WB.UI.Shared.Enumerator.ValueCombiners;
 using WB.UI.Tester.Activities;
-using WB.UI.Tester.Converters;
-using WB.UI.Tester.CustomBindings;
-using WB.UI.Tester.CustomControls;
-using WB.UI.Tester.CustomControls.MaskedEditTextControl;
-using WB.UI.Tester.CustomServices.UserInteraction;
 using WB.UI.Tester.Ninject;
-using WB.UI.Tester.ValueCombiners;
 using Xamarin;
 
 
@@ -126,16 +127,6 @@ namespace WB.UI.Tester
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
 
             base.FillTargetFactories(registry);
-        }
-
-        protected override IDictionary<string, string> ViewNamespaceAbbreviations
-        {
-            get
-            {
-                var namespaceAbbreviations = base.ViewNamespaceAbbreviations;
-                namespaceAbbreviations["Wb"] = "WB.UI.Tester.Controls";
-                return namespaceAbbreviations;
-            }
         }
 
         protected override IList<Assembly> AndroidViewAssemblies

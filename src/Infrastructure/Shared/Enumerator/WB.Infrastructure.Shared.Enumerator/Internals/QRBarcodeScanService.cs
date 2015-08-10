@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Cirrious.CrossCore.Droid.Platform;
 using MWBarcodeScanner;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
 {

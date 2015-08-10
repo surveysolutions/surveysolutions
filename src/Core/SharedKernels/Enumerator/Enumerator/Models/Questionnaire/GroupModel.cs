@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels
+namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 {
     public class GroupModel
     {

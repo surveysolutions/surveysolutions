@@ -3,20 +3,20 @@ using System.IO;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.PictureChooser;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {

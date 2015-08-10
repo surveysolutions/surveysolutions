@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
     public class DateTimeAnswer : BaseInterviewAnswer
     {
@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 
         public override bool IsAnswered
         {
-            get { return Answer.HasValue; }
+            get { return this.Answer.HasValue; }
         }
 
         public override void RemoveAnswer()

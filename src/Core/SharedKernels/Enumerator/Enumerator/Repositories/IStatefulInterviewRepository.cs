@@ -1,7 +1,6 @@
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 
-namespace WB.Core.BoundedContexts.Tester.Repositories
+namespace WB.Core.SharedKernels.Enumerator.Repositories
 {
     public interface IStatefulInterviewRepository
     {

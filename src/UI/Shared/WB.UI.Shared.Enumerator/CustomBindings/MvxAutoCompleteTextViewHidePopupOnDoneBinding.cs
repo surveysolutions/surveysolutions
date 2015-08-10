@@ -3,7 +3,7 @@ using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class MvxAutoCompleteTextViewHidePopupOnDoneBinding : BaseBinding<MvxAutoCompleteTextView, object>
     {
@@ -22,7 +22,7 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (this.Target != null)
             {
-                this.Target.EditorAction += HandleEditorAction;
+                this.Target.EditorAction += this.HandleEditorAction;
             }
 
             base.SubscribeToEvents();
@@ -32,7 +32,7 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (isDisposing && this.Target != null)
             {
-                this.Target.EditorAction -= HandleEditorAction;
+                this.Target.EditorAction -= this.HandleEditorAction;
             }
 
             base.Dispose(isDisposing);
@@ -43,7 +43,7 @@ namespace WB.UI.Tester.CustomBindings
             if (e.ActionId != ImeAction.Done)
                 return;
 
-            Target.DismissDropDown();
+            this.Target.DismissDropDown();
         }
     }
 }

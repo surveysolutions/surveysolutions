@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Location;
 
-namespace WB.Core.BoundedContexts.Tester.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public interface IGpsLocationService
     {

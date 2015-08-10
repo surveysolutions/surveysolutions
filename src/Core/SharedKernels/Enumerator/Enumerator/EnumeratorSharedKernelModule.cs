@@ -1,18 +1,18 @@
 ﻿using Ninject.Modules;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Repositories;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.Core.BoundedContexts.Tester
+namespace WB.Core.SharedKernels.Enumerator
 {
     public class EnumeratorSharedKernelModule : NinjectModule
     {

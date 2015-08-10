@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class QuestionnaireImportService : IQuestionnaireImportService
     {

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
     public class LinkedSingleOptionAnswer : BaseInterviewAnswer
     {
@@ -20,7 +19,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
 
         public override bool IsAnswered
         {
-            get { return Answer != null; }
+            get { return this.Answer != null; }
         }
 
         public override void RemoveAnswer()

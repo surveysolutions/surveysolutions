@@ -1,7 +1,7 @@
 ﻿using Android.Graphics;
 using Android.Widget;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewBoldBinding : BaseBinding<TextView, bool>
     {

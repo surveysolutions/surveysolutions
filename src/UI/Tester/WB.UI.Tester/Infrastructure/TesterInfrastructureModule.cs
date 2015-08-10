@@ -3,12 +3,13 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Sqo;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Json;
@@ -33,7 +34,7 @@ namespace WB.UI.Tester.Infrastructure
             SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
 
-            this.Bind(typeof(Core.BoundedContexts.Tester.Infrastructure.IPlainStorageAccessor<>)).To(typeof(SiaqodbPlainStorageAccessor<>)).InSingletonScope();
+            this.Bind(typeof(Core.SharedKernels.Enumerator.Services.Infrastructure.IPlainStorageAccessor<>)).To(typeof(SiaqodbPlainStorageAccessor<>)).InSingletonScope();
 
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 

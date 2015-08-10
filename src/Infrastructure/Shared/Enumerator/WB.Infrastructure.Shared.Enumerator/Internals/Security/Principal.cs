@@ -1,7 +1,7 @@
 ﻿using System;
 using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using IHS.MvvmCross.Plugins.Keychain;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using ISettings = Cheesebaron.MvxPlugins.Settings.Interfaces.ISettings;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.Security

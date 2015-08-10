@@ -14,7 +14,7 @@ using Cirrious.MvvmCross.Binding.Attributes;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Binding.ExtensionMethods;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class MvxRecyclerViewAdapter : RecyclerView.Adapter, IMvxRecyclerViewAdapter
     {
@@ -96,7 +96,7 @@ namespace WB.UI.Tester.CustomControls
 
             var newObservable = this.itemsSource as INotifyCollectionChanged;
             if (newObservable != null)
-                this.subscription = newObservable.WeakSubscribe(OnItemsSourceCollectionChanged);
+                this.subscription = newObservable.WeakSubscribe(this.OnItemsSourceCollectionChanged);
 
             this.NotifyDataSetChanged();
         }

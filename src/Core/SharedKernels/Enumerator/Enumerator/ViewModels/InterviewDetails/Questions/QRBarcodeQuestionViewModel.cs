@@ -1,17 +1,15 @@
 ﻿using System;
-
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -22,21 +20,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return isInProgress; }
-            set { isInProgress = value; RaisePropertyChanged(); }
+            get { return this.isInProgress; }
+            set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
 
         private string answer;
         public string Answer
         {
-            get { return answer; }
-            set { answer = value; RaisePropertyChanged(); }
+            get { return this.answer; }
+            set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
-            get { return saveAnswerCommand ?? (saveAnswerCommand = new MvxCommand(SaveAnswer, () => !this.IsInProgress)); }
+            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(this.SaveAnswer, () => !this.IsInProgress)); }
         }
 
         private readonly IUserIdentity userIdentity;

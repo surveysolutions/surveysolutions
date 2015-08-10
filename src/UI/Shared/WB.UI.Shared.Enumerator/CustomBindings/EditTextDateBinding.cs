@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Reflection;
 using Android.App;
-using Android.Views;
 using Android.Widget;
-
-using Cirrious.MvvmCross.Binding.Bindings.Target;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
-using WB.UI.Tester.CustomControls;
+using WB.UI.Shared.Enumerator.CustomControls;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextDateBinding : MvxAndroidTargetBinding
     {
@@ -23,7 +18,7 @@ namespace WB.UI.Tester.CustomBindings
 
         public EditTextDateBinding(EditText androidControl) : base(androidControl)
         {
-            Target.Click += InputClick;
+            this.Target.Click += this.InputClick;
         }
 
         public override Type TargetType
@@ -34,13 +29,13 @@ namespace WB.UI.Tester.CustomBindings
         private void InputClick(object sender, EventArgs args)
         {
             DateTime parsedDate;
-            if (!DateTime.TryParse(Target.Text, out parsedDate))
+            if (!DateTime.TryParse(this.Target.Text, out parsedDate))
             {
                 parsedDate = DateTime.Now;
             };
 
-            var dialog = new DatePickerDialogFragment(Target.Context, parsedDate, OnDateSet);
-            Activity act = (Activity) Target.Context;
+            var dialog = new DatePickerDialogFragment(this.Target.Context, parsedDate, this.OnDateSet);
+            Activity act = (Activity) this.Target.Context;
 
             dialog.Show(
                 act.FragmentManager, 
@@ -60,16 +55,16 @@ namespace WB.UI.Tester.CustomBindings
             base.Dispose(isDisposing);
             if (isDisposing)
             {
-                if (Target != null)
+                if (this.Target != null)
                 {
-                    Target.Click -= InputClick;
+                    this.Target.Click -= this.InputClick;
                 }
             }
         }
 
         protected override void SetValueImpl(object target, object value)
         {
-            Command = (IMvxCommand)value;
+            this.Command = (IMvxCommand)value;
         }
     }
 }

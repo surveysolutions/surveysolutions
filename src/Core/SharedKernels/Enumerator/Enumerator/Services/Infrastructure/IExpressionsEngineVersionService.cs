@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Tester.Infrastructure
+namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IExpressionsEngineVersionService
     {

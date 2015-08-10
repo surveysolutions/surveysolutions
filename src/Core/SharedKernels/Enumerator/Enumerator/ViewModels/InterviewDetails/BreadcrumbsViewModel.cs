@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class BreadCrumbsViewModel : MvxNotifyPropertyChanged, 
         ILiteEventHandler<RosterInstancesTitleChanged>
@@ -43,14 +43,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.navigationState = navigationState;
             this.interviewId = interviewId;
-            this.navigationState.GroupChanged += navigationState_OnGroupChanged;
+            this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             foreach (var changedRosterInstance in @event.ChangedInstances)
             {
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (breadCrumb != null)
                 {
                     var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[changedRosterInstance.RosterInstance.GroupId].Title;
-                    breadCrumb.Text = GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
+                    breadCrumb.Text = this.GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void BuildBreadCrumbs(Identity newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             List<GroupReferenceModel> parentItems = questionnaire.Parents[newGroupIdentity.Id];
 
@@ -99,8 +99,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     var rosterInstance = interview.GetRoster(itemIdentity);
                         
-                    var title = GenerateRosterTitle(groupTitle, rosterInstance.Title);
-                    breadCrumbs.Add(new BreadCrumbItemViewModel(navigationState)
+                    var title = this.GenerateRosterTitle(groupTitle, rosterInstance.Title);
+                    breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
                     {
                         Text = title,
                         ItemId = itemIdentity
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 else
                 {
                     var itemId = new Identity(reference.Id, newGroupIdentity.RosterVector.Take(metRosters).ToArray());
-                    breadCrumbs.Add(new BreadCrumbItemViewModel(navigationState)
+                    breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
                     {
                         ItemId = itemId,
                         Text = groupTitle + " / "
@@ -129,8 +129,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private ReadOnlyCollection<BreadCrumbItemViewModel> items;
         public ReadOnlyCollection<BreadCrumbItemViewModel> Items
         {
-            get { return items; }
-            set { items = value; RaisePropertyChanged(); }
+            get { return this.items; }
+            set { this.items = value; this.RaisePropertyChanged(); }
         }
     }
 }

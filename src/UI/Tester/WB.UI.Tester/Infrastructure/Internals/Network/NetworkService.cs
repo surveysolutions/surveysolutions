@@ -1,6 +1,6 @@
 ﻿using System;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Network
 {

@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -21,8 +12,16 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
@@ -73,7 +72,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
-            eventRegistry.Subscribe(this, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
 
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
@@ -126,14 +125,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     }
                 }
 
-                this.RaisePropertyChanged(() => HasOptions);
+                this.RaisePropertyChanged(() => this.HasOptions);
             });
         }
 
         public ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options
         {
             get { return this.options; }
-            private set { this.options = value; this.RaisePropertyChanged(() => HasOptions);}
+            private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions);}
         }
 
         public bool HasOptions
@@ -151,7 +150,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                     if (shownAnswer != null)
                     {
                         this.InvokeOnMainThread(() => this.Options.Remove(shownAnswer));
-                        this.RaisePropertyChanged(() => HasOptions);
+                        this.RaisePropertyChanged(() => this.HasOptions);
                     }
                 }
             }
@@ -164,7 +163,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder).ToList() :
                 this.Options.Where(x => x.Checked).ToList();
 
-            if (maxAllowedAnswers.HasValue && allSelectedOptions.Count > maxAllowedAnswers)
+            if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
             {
                 changedModel.Checked = false;
                 return;
@@ -196,7 +195,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == questionIdentity.Id && @event.PropagationVector.Identical(questionIdentity.RosterVector))
+            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.PropagationVector.Identical(this.questionIdentity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
             }

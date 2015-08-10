@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
+﻿using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
-namespace WB.Core.BoundedContexts.Tester.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IInterviewViewModelFactory
     {

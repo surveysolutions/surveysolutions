@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Tester.Infrastructure.Internals.Compression;
 using WB.UI.Tester.Infrastructure.Internals.Json;
 

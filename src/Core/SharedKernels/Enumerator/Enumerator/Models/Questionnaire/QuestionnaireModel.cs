@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 {
     public class QuestionnaireModel
     {

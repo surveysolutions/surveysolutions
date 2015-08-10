@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class SideBarPrefillQuestion
     {

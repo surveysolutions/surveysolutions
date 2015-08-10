@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,19 +7,19 @@ using System.Windows.Input;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged,
@@ -93,9 +92,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.Title = groupModel.Title;
             }
-            if (Parent != null)
+            if (this.Parent != null)
             {
-                IsSelected = Parent.IsSelected;
+                this.IsSelected = this.Parent.IsSelected;
             }
             
             this.NavigationState = navigationState;
@@ -159,11 +158,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private bool hasChildren;
         public bool HasChildren
         {
-            get { return hasChildren; }
+            get { return this.hasChildren; }
             set
             {
-                if (hasChildren == value) return;
-                hasChildren = value;
+                if (this.hasChildren == value) return;
+                this.hasChildren = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -183,7 +182,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
                     else
                     {
-                        Children.TreeToEnumerable(x => x.Children)
+                        this.Children.TreeToEnumerable(x => x.Children)
                                 .ToList() 
                                 .ForEach(x => x.Dispose());
 
@@ -226,14 +225,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 return new MvxCommand(() =>
                 {
                     this.Expanded = !this.Expanded;
-                    root.UpdateSideBarTree();
+                    this.root.UpdateSideBarTree();
                 });
             }
         }
 
         private async Task NavigateToSectionAsync()
         {
-            messenger.Publish(new SectionChangeMessage(this));
+            this.messenger.Publish(new SectionChangeMessage(this));
             await this.NavigationState.NavigateToAsync(this.SectionIdentity);
         }
 
@@ -242,7 +241,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
             var result = interview.GetEnabledSubgroups(this.SectionIdentity)
-                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(root, this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
+                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
 
             return new List<SideBarSectionViewModel>(result);
         }
