@@ -10,6 +10,12 @@ ko.bindingHandlers.typeahead = {
                 observable(selectedItem);
             }
         });
+        if (options.shouldOpenOnParentClick) {
+            $(element).parent().click(function() {
+                $(element).focus();
+            });
+        }
+        
     },
     update: function (element, valueAccessor, allBindingsAccessor) {
         var options = allBindingsAccessor().typeaheadOptions || {};
@@ -17,3 +23,17 @@ ko.bindingHandlers.typeahead = {
         $(element).val(options.displayText(value));
     }
 };
+
+!function ($) {
+    "use strict";
+    var BetterTypeahead = {
+        focus: function (e) {
+            this.focused = true;
+
+            if (!this.mousedover) {
+                this.lookup('');
+            }
+        }
+    };
+    $.extend($.fn.typeahead.Constructor.prototype, BetterTypeahead);
+}(window.jQuery);

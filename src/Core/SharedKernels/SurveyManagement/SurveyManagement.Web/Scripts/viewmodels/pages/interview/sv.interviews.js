@@ -18,6 +18,9 @@
             "#confirm-continue-message-template",
             function() {
                 self.AssignTo(undefined);
+            },
+            function() {
+                self.AssignTo(undefined);
             }
         );
     };

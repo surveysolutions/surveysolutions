@@ -73,7 +73,7 @@
         self.search();
     };
 
-    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId, onSuccessCommandExecuting) {
+    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId, onSuccessCommandExecuting, onCancelConfirmation) {
         var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
@@ -85,8 +85,13 @@
         messageHtml += $(continueMessageTemplateId).html();
 
         bootbox.confirm(messageHtml, function (result) {
-            if (result)
+            if (result) {
                 self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
+            } else {
+                if (!_.isUndefined(onCancelConfirmation)) {
+                    onCancelConfirmation();
+                }
+            }
         });
     };
 
