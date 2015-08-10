@@ -127,6 +127,9 @@ namespace WB.UI.Capi
         {
             
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
+            bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
+            bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericIntegerQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericRealQuestionAnswered));
@@ -141,8 +144,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredInvalid));
             bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredValid));
             bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
-            bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
-            bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesAdded));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
@@ -155,7 +156,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
+            
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
