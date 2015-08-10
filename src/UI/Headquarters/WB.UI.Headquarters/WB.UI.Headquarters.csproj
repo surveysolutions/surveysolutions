@@ -514,6 +514,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
