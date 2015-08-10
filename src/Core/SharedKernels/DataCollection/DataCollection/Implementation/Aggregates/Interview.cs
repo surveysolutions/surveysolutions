@@ -817,7 +817,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : this(() => questionnaireId, () => questionnaireVersion, id)
         {
-            this.ApplySynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
+            this.CreateInterviewFromSynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
@@ -1879,16 +1879,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ThrowIfOtherUserIsResponsible(Guid userId)
-        {
-            if (this.interviewerId != Guid.Empty && userId != this.interviewerId)
-                throw new InterviewException(
-                    string.Format(
-                        "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
-                        userId, interviewerId), InterviewDomainExceptionType.OtherUserIsResponsible);
-        }
-
-        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
+        public void CreateInterviewFromSynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid,
             bool createdOnClient)
@@ -1910,6 +1901,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 
             ApplyValidationEvent(valid);
+        }
+
+        private void ThrowIfOtherUserIsResponsible(Guid userId)
+        {
+            if (this.interviewerId != Guid.Empty && userId != this.interviewerId)
+                throw new InterviewException(
+                    string.Format(
+                        "interviewer with id {0} is not responsible for the interview anymore, interviewer with id {1} is.",
+                        userId, this.interviewerId), InterviewDomainExceptionType.OtherUserIsResponsible);
         }
 
         private void ApplyValidationEvent(bool isValid)

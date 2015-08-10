@@ -50,15 +50,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.calculated = new CalculatedState();
         }
 
+
+        protected new void Apply(SynchronizationMetadataApplied @event)
+        {
+            base.Apply(@event);
+            this.InitializeCreatedInterview(this.EventSourceId, @event.QuestionnaireId, @event.QuestionnaireVersion);
+        }
+
         protected new void Apply(InterviewOnClientCreated @event)
         {
             base.Apply(@event);
+            this.InitializeCreatedInterview(this.EventSourceId, @event.QuestionnaireId,  @event.QuestionnaireVersion);
+        }
+
+        private void InitializeCreatedInterview(Guid eventSourceId, Guid questionnaireGuid, long version)
+        {
             this.ResetCalculatedState();
 
-            this.Id = this.EventSourceId;
-            this.QuestionnaireId = Helpers.CreateHistoricId(@event.QuestionnaireId, @event.QuestionnaireVersion);
-            this.QuestionnaireVersion = @event.QuestionnaireVersion;
-            this.QuestionnaireGuid = @event.QuestionnaireId;
+            this.Id = eventSourceId;
+            this.QuestionnaireId = Helpers.CreateHistoricId(questionnaireGuid, version);
+            this.QuestionnaireVersion = version;
+            this.QuestionnaireGuid = questionnaireGuid;
         }
 
         #region Applying answers
