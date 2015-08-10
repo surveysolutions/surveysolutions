@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -212,9 +213,11 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
             {
                 this.commandService.Execute(new DisableQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
 
+                var questionnaireIdentity = new QuestionnaireIdentity(metadata.QuestionnaireId, metadata.Version);
+
                 this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
                 this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
-                this.questionnaireModelRepository.Remove(Helpers.CreateHistoricId(metadata.QuestionnaireId, metadata.Version));
+                this.questionnaireModelRepository.Remove(questionnaireIdentity.ToString());
 
                 this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
             }

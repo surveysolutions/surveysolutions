@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
@@ -68,10 +69,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             this.Id = eventSourceId;
-            this.QuestionnaireId = Helpers.CreateHistoricId(questionnaireGuid, version);
-            this.QuestionnaireVersion = version;
-            this.QuestionnaireGuid = questionnaireGuid;
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireGuid, version);
+            this.QuestionnaireId = QuestionnaireIdentity.ToString();
         }
+        
 
         #region Applying answers
 
@@ -421,9 +422,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         #endregion
 
         public string QuestionnaireId { get; set; }
-
-        public long QuestionnaireVersion { get; set; }
-        public Guid QuestionnaireGuid { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
 
         public Guid Id { get; set; }
 
@@ -993,7 +992,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private IQuestionnaire GetQuestionnaireOrThrow()
         {
-            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetHistoricalQuestionnaireOrThrow(this.QuestionnaireGuid, this.QuestionnaireVersion));
+            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetHistoricalQuestionnaireOrThrow(
+                this.QuestionnaireIdentity.QuestionnaireId, 
+                this.QuestionnaireIdentity.Version));
         }
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)

@@ -80,6 +80,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -1918,8 +1919,7 @@ namespace WB.Tests.Unit
             return new StatefulInterview
             {
                 QuestionnaireId = questionnaireId.FormatGuid(),
-                QuestionnaireVersion = 1,
-                QuestionnaireGuid = questionnaireId.Value
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };
         }
 
