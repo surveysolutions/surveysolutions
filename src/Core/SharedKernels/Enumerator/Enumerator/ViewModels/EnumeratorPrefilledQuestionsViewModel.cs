@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class EnumeratorPrefilledQuestionsViewModel : BaseViewModel
+    public abstract class EnumeratorPrefilledQuestionsViewModel : BaseViewModel
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         protected readonly IViewModelNavigationService viewModelNavigationService;
         protected string interviewId;
 
-        public EnumeratorPrefilledQuestionsViewModel(
+        protected EnumeratorPrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -69,17 +69,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.AfterInterviewItemsAdded();
         }
 
-        protected virtual void AfterInterviewItemsAdded()
-        {
-            
-        }
-
-        public override void NavigateToPreviousViewModel()
-        {
-        }
-
-        protected virtual void NavigateToInterview()
-        {
-        }
+        protected abstract void AfterInterviewItemsAdded();
+        protected abstract void NavigateToInterview();
     }
 }
