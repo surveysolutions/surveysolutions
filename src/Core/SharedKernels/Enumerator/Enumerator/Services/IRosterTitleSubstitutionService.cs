@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.BoundedContexts.Tester.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IRosterTitleSubstitutionService
     {

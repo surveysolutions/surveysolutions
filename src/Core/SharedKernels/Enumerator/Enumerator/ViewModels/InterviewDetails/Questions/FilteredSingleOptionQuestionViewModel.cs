@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
@@ -28,7 +26,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
             public override string ToString()
             {
-                return Text.Replace("</b>", "").Replace("<b>", "");
+                return this.Text.Replace("</b>", "").Replace("<b>", "");
             }
         }
 
@@ -87,8 +85,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             {
                 var selectedValue = answerModel.Answer;
                 var answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
-                SelectedObject = answerOption;
-                DefaultText = answerOption == null ? String.Empty : answerOption.Text;
+                this.SelectedObject = answerOption;
+                this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
             }
             else
             {
@@ -110,7 +108,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand<string>(SendAnswerFilteredComboboxQuestionCommand)); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerFilteredComboboxQuestionCommand)); }
         }
 
         private FilteredComboboxItemViewModel selectedObject;
@@ -120,7 +118,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             set
             {
                 this.selectedObject = value;
-                RaisePropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
 
@@ -138,11 +136,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
                 if (list.Any())
                 {
-                    AutoCompleteSuggestions = list;
+                    this.AutoCompleteSuggestions = list;
                 }
                 else
                 {
-                    SetSuggestionsEmpty();
+                    this.SetSuggestionsEmpty();
                 }
             }
         }
@@ -151,7 +149,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         {
             var upperTextHint = textHint.ToUpper();
 
-            foreach (var model in Options)
+            foreach (var model in this.Options)
             {
                 if (model.Text.IsNullOrEmpty())
                     continue;
@@ -172,7 +170,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private void SetSuggestionsEmpty()
         {
-            AutoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
+            this.AutoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
         }
 
         private List<FilteredComboboxItemViewModel> autoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
@@ -186,7 +184,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
                 }
                 return this.autoCompleteSuggestions;
             }
-            set { this.autoCompleteSuggestions = value; RaisePropertyChanged(); }
+            set { this.autoCompleteSuggestions = value; this.RaisePropertyChanged(); }
         }
 
         private async void SendAnswerFilteredComboboxQuestionCommand(string text)

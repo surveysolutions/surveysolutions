@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cirrious.CrossCore.Core;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
@@ -62,19 +61,19 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
 
-            eventRegistry.Subscribe(this, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
 
             this.navigationState = navigationState;
             this.navigationState.GroupChanged += this.NavigationStateGroupChanged;
             this.questionnaireId = questionnaireId;
             this.interviewId = interviewId;
 
-            BuildSectionsList();
+            this.BuildSectionsList();
         }
 
         private void BuildSectionsList()
         {
-            var questionnaire = this.questionnaireRepository.GetById(questionnaireId);
+            var questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
@@ -94,7 +93,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            HighlightCurrentSection(navigationParams);
+            this.HighlightCurrentSection(navigationParams);
         }
 
         private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
@@ -144,7 +143,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void Handle(GroupsEnabled @event)
         {
-            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(questionnaireId);
+            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             foreach (var groupId in @event.Groups)
@@ -170,13 +169,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 .Where(s => interview.IsEnabled(sectionIdentity))
                 .ToList()
                 .IndexOf(section);
-            Sections.Insert(index, sectionViewModel);
+            this.Sections.Insert(index, sectionViewModel);
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = AllVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
@@ -221,7 +220,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             foreach (var groupIdentity in identities)
             {
-                var section = AllVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                var section = this.AllVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
                 if (section != null)
                 {
                     if (section.Parent != null)
@@ -247,7 +246,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void RefreshHasChildrenFlags()
         {
-            foreach (var section in AllVisibleSections)
+            foreach (var section in this.AllVisibleSections)
             {
                 section.RefreshHasChildrenFlag();
             }

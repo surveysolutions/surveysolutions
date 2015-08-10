@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class NavigationState
     {
@@ -103,7 +104,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 NavigationParams previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
-                while (!CanNavigateTo(previousNavigationItem.TargetGroup) || previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
+                while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) || previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
                 {
                     if (this.navigationStack.Count == 0)
                     {

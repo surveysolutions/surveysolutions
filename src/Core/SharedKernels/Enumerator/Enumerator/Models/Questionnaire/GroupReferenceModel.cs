@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 {
     public class GroupReferenceModel
     {

@@ -9,9 +9,8 @@ using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Attributes;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.Views;
-using WB.UI.Shared.Enumerator;
 
-namespace WB.UI.Tester.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class FlowLayout : ViewGroup, IMvxWithChangeAdapter
     {

@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Android.Content.Res;
 using Android.Graphics;
 using Android.Text;
-using Android.Util;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
-
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewHintBinding : BaseBinding<TextView, string>
     {
@@ -17,23 +14,23 @@ namespace WB.UI.Tester.CustomBindings
         public TextViewHintBinding(TextView target)
             : base(target)
         {
-            Target.TextChanged += TextChangedHandler;
-            subscribed = true;
+            this.Target.TextChanged += this.TextChangedHandler;
+            this.subscribed = true;
         }
 
         protected override void SetValueToView(TextView view, string value)
         {
             view.Hint = value;
-            SetupHintStyle(view.Text);
+            this.SetupHintStyle(view.Text);
         }
 
 
         private void TextChangedHandler(object sender, TextChangedEventArgs e)
         {
-            if (e.AfterCount > 0 && e.BeforeCount > 0 && Target.Typeface.IsBold)
+            if (e.AfterCount > 0 && e.BeforeCount > 0 && this.Target.Typeface.IsBold)
                 return;
 
-            if (e.AfterCount == 0 && e.BeforeCount == 0 && Target.Typeface.IsItalic)
+            if (e.AfterCount == 0 && e.BeforeCount == 0 && this.Target.Typeface.IsItalic)
                 return;
            
             this.SetupHintStyle(e.Text);
@@ -60,11 +57,11 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (isDisposing)
             {
-                var editText = Target;
-                if (editText != null && subscribed)
+                var editText = this.Target;
+                if (editText != null && this.subscribed)
                 {
-                    editText.TextChanged -= TextChangedHandler;
-                    subscribed = false;
+                    editText.TextChanged -= this.TextChangedHandler;
+                    this.subscribed = false;
                 }
             }
             base.Dispose(isDisposing);

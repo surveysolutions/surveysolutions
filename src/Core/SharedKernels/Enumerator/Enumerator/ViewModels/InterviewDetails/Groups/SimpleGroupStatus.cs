@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Groups
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public enum SimpleGroupStatus
     {

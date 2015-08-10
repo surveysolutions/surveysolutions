@@ -2,7 +2,7 @@
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.BoundedContexts.Tester.Services.MaskText
+namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
 {
     public class MaskedText
     {
@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Tester.Services.MaskText
             if (addedString.IsNullOrEmpty())
                 return;
 
-            addedString = FilterOnlyMaskedChars(addedString, insertPosition);
+            addedString = this.FilterOnlyMaskedChars(addedString, insertPosition);
 
             int startingPosition = this.maskToRaw[this.NextValidPosition(insertPosition)].GetValueOrDefault(-1);
             var newString = this.Clear(addedString);
@@ -350,7 +350,7 @@ namespace WB.Core.BoundedContexts.Tester.Services.MaskText
 
         private string Clear(String str)
         {
-            str = str.TrimEnd(this.maskFill).Replace(this.maskFill, rawText.EmptyChar);
+            str = str.TrimEnd(this.maskFill).Replace(this.maskFill, this.rawText.EmptyChar);
             return str;
         }
 

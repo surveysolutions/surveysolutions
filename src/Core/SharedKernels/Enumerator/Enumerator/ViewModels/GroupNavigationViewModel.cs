@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class GroupNavigationViewModel : MvxNotifyPropertyChanged
     {
@@ -64,23 +64,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public bool IsInSection
         {
             get { return this.isInSection; }
-            set { this.isInSection = value; RaisePropertyChanged(); }
+            set { this.isInSection = value; this.RaisePropertyChanged(); }
         }
 
         public IMvxCommand NavigateCommand
         {
-            get { return new MvxCommand(async () => await this.NavigateAsync(), () => NavigateToIdentity != null); }
+            get { return new MvxCommand(async () => await this.NavigateAsync(), () => this.NavigateToIdentity != null); }
         }
 
         private async Task NavigateAsync()
         {
-            if (IsInSection)
+            if (this.IsInSection)
             {
-                await navigationState.NavigateToAsync(NavigateToIdentity);
+                await this.navigationState.NavigateToAsync(this.NavigateToIdentity);
             }
             else
             {
-                await navigationState.NavigateToAsync(NavigateToIdentity, groupIdentity);
+                await this.navigationState.NavigateToAsync(this.NavigateToIdentity, this.groupIdentity);
             }
         }
 

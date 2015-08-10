@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels
+namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions
 {
     public abstract class BaseQuestionModel
     {

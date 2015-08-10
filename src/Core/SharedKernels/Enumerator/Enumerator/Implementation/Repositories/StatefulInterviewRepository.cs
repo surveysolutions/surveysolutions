@@ -1,10 +1,10 @@
 using System;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Repositories
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {

@@ -1,5 +1,5 @@
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services

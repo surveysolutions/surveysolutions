@@ -1,8 +1,8 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class TextListItemViewModel : MvxNotifyPropertyChanged
     {
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
         {
-            get { return valueChangeCommand ?? (valueChangeCommand = new MvxCommand(OnItemEdited)); }
+            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.OnItemEdited)); }
         }
 
         public IMvxCommand DeleteListItemCommand

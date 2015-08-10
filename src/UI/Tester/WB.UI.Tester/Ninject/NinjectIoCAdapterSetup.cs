@@ -3,12 +3,13 @@ using System.IO;
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Ninject;
 using WB.UI.Tester.Infrastructure;
 

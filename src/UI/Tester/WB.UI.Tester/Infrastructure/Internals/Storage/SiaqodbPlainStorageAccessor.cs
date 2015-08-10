@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
 using Sqo.Transactions;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {

@@ -1,13 +1,7 @@
-﻿using System;
-using Android.Graphics;
-using Android.Support.V7.Widget;
-using Android.Views;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
-using WB.UI.Shared.Enumerator;
+﻿using Android.Views;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewGroupColorByInterviewStatusBinding : BaseBinding<ViewGroup, GroupStatus>
     {

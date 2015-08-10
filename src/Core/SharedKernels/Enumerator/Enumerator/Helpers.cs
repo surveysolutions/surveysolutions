@@ -1,8 +1,7 @@
 ﻿using System;
-
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.BoundedContexts.Tester
+namespace WB.Core.SharedKernels.Enumerator
 {
     public static class Helpers
     {

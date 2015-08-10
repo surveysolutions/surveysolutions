@@ -1,5 +1,5 @@
 using System;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.Settings
 {

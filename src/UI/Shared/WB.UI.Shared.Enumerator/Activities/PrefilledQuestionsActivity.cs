@@ -3,11 +3,10 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.UI.Shared.Enumerator;
-using WB.UI.Tester.CustomControls;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.CustomControls;
 
-namespace WB.UI.Tester.Activities
+namespace WB.UI.Shared.Enumerator.Activities
 {
     [Activity(Label = "", Theme = "@style/BlueAppTheme", 
         HardwareAccelerated = true,

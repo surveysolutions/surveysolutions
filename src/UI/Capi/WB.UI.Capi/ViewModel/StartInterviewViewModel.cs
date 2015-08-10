@@ -1,6 +1,6 @@
-﻿using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.Infrastructure.CommandBus;
+﻿using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Capi.ViewModel
 {

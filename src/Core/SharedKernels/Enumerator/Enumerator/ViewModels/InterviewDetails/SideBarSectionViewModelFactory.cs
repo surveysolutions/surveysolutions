@@ -1,8 +1,8 @@
 ﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Tester.ViewModels.Groups;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     internal class SideBarSectionViewModelFactory : ISideBarSectionViewModelsFactory
     {
@@ -19,8 +19,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             NavigationState navigationState, 
             string interviewId)
         {
-            var sideBarItem = serviceLocator.GetInstance<SideBarSectionViewModel>();
-            var groupStateViewModel = serviceLocator.GetInstance<GroupStateViewModel>();
+            var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
+            var groupStateViewModel = this.serviceLocator.GetInstance<GroupStateViewModel>();
             sideBarItem.Init(interviewId, enabledSubgroupIdentity, root, sectionToAddTo, groupStateViewModel, navigationState);
             return sideBarItem;
         }

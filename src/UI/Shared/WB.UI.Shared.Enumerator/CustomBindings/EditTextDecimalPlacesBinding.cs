@@ -2,7 +2,7 @@
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextDecimalPlacesBinding : BaseBinding<EditText, int?>
     {
@@ -19,7 +19,7 @@ namespace WB.UI.Tester.CustomBindings
         protected override void SetValueToView(EditText control, int? value)
         {
             if (value.HasValue)
-                EditText.SetFilters(new IInputFilter[] { new DecimalPlacesFilter(value.Value) });
+                this.EditText.SetFilters(new IInputFilter[] { new DecimalPlacesFilter(value.Value) });
         }
 
         public override MvxBindingMode DefaultMode

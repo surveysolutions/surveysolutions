@@ -2,7 +2,7 @@
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class MvxAutoCompleteTextViewShowPopupOnFocusBinding : BaseBinding<MvxAutoCompleteTextView, object>
     {
@@ -16,7 +16,7 @@ namespace WB.UI.Tester.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            Target.FocusChange += Target_FocusChange;
+            this.Target.FocusChange += this.Target_FocusChange;
 
             base.SubscribeToEvents();
         }
@@ -25,7 +25,7 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (e.HasFocus)
             {
-                Target.ShowDropDown();
+                this.Target.ShowDropDown();
             }
         }
 
@@ -33,10 +33,10 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (isDisposing)
             {
-                var editText = Target;
+                var editText = this.Target;
                 if (editText != null)
                 {
-                    editText.FocusChange -= Target_FocusChange;
+                    editText.FocusChange -= this.Target_FocusChange;
                 }
             }
             base.Dispose(isDisposing);

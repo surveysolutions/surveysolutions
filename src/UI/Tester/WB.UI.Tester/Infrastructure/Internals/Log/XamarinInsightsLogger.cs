@@ -1,5 +1,5 @@
 using System;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using Xamarin;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Log

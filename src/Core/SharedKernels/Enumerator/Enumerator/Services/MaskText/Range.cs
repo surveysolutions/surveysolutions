@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Tester.Services.MaskText
+namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
 {
     public class Range
     {

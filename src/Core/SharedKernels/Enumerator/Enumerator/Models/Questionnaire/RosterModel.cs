@@ -1,6 +1,4 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-
-namespace WB.Core.BoundedContexts.Tester.Implementation.Entities
+﻿namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 {
     public class RosterModel : GroupModel
     {

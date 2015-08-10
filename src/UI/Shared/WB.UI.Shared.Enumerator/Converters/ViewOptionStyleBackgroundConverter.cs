@@ -1,9 +1,8 @@
 using System;
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
-using WB.UI.Shared.Enumerator;
 
-namespace WB.UI.Tester.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class ViewOptionStyleBackgroundConverter : MvxValueConverter<QuestionStateStyle, int>
     {

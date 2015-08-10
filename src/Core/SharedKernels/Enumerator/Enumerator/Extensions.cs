@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
-namespace WB.Core.BoundedContexts.Tester
+namespace WB.Core.SharedKernels.Enumerator
 {
     internal static class Extensions
     {

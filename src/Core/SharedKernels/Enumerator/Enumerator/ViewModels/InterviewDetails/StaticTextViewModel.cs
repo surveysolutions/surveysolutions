@@ -1,11 +1,11 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 
-namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewEntities
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {

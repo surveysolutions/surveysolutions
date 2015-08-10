@@ -1,15 +1,12 @@
-﻿using Android.Views;
+﻿using Android.App;
+using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
-using System;
-using Android.App;
-using Android.Content;
-using Android.Views.InputMethods;
-using WB.UI.Tester.Activities;
+using WB.UI.Shared.Enumerator.Activities;
 
-namespace WB.UI.Tester.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class EditTextFocusValueChangedBinding : BaseBinding<EditText, IMvxCommand>
     {
@@ -25,20 +22,20 @@ namespace WB.UI.Tester.CustomBindings
 
         public override void SubscribeToEvents()
         {
-            this.Target.FocusChange += FocusChange;
-            this.Target.EditorAction += HandleEditorAction;
+            this.Target.FocusChange += this.FocusChange;
+            this.Target.EditorAction += this.HandleEditorAction;
         }
 
         private void FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
-                oldEditTextValue = Target.Text;
+                this.oldEditTextValue = this.Target.Text;
             }
             else
             {
-                TrySendAnswerTextQuestionCommand();
-                HideKeyboard(Target);
+                this.TrySendAnswerTextQuestionCommand();
+                this.HideKeyboard(this.Target);
             }
         }
 
@@ -51,20 +48,20 @@ namespace WB.UI.Tester.CustomBindings
 
             e.Handled = true;
 
-            TrySendAnswerTextQuestionCommand();
-            HideKeyboard(Target);
+            this.TrySendAnswerTextQuestionCommand();
+            this.HideKeyboard(this.Target);
         }
 
         private void TrySendAnswerTextQuestionCommand()
         {
-            var isTextChanged = oldEditTextValue != Target.Text;
+            var isTextChanged = this.oldEditTextValue != this.Target.Text;
             if (!isTextChanged)
                 return;
 
-            if (Target == null)
+            if (this.Target == null)
                 return;
 
-            if (Target.Visibility != ViewStates.Visible)
+            if (this.Target.Visibility != ViewStates.Visible)
                 return;
 
             if (this.command == null)
@@ -73,13 +70,13 @@ namespace WB.UI.Tester.CustomBindings
             if (!this.command.CanExecute())
                 return;
 
-            this.command.Execute(Target.Text);
-            this.oldEditTextValue = Target.Text;
+            this.command.Execute(this.Target.Text);
+            this.oldEditTextValue = this.Target.Text;
         }
 
         protected override void SetValueToView(EditText control, IMvxCommand value)
         {
-            if (Target == null)
+            if (this.Target == null)
                 return;
 
             this.command = value;
@@ -94,10 +91,10 @@ namespace WB.UI.Tester.CustomBindings
         {
             if (isDisposing)
             {
-                if (Target != null)
+                if (this.Target != null)
                 {
-                    this.Target.FocusChange -= FocusChange;
-                    this.Target.EditorAction -= HandleEditorAction;
+                    this.Target.FocusChange -= this.FocusChange;
+                    this.Target.EditorAction -= this.HandleEditorAction;
                 }
             }
             base.Dispose(isDisposing);

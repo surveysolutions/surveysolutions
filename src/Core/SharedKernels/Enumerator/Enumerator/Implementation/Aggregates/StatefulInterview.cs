@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -11,10 +10,11 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
     internal class StatefulInterview : Interview, IStatefulInterview
     {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             @event.Questions.ForEach(x =>
             {
                 var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
-                var answer = GetExistingAnswerOrNull(questionKey);
+                var answer = this.GetExistingAnswerOrNull(questionKey);
                 if (answer != null)
                 {
                     answer.IsEnabled = true;
@@ -550,7 +550,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
                this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, referencedQuestionId, rosterVectorToStartFrom, questionnaire, GetRosterInstanceIds);
 
             var answers = targetQuestions
-                .Select(GetExistingAnswerOrNull)
+                .Select(this.GetExistingAnswerOrNull)
                 .Where(answer => answer != null);
 
             return answers;
@@ -596,7 +596,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             {
                 int parentRosterLevel = questionnaire.GetRosterLevelForGroup(parentRosterId);
                 var parentRosterVector = this.ShrinkRosterVector(rosterVector, parentRosterLevel);
-                yield return GetRosterTitle(new Identity(parentRosterId, parentRosterVector));
+                yield return this.GetRosterTitle(new Identity(parentRosterId, parentRosterVector));
             }
         }
 
@@ -739,7 +739,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
             {
                 if (questionnaire.IsRosterGroup(entity))
                 {
-                    foreach (var rosterInstance in GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
+                    foreach (var rosterInstance in this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
                     {
                         yield return rosterInstance;
@@ -749,7 +749,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
                 {
                     if (questionnaire.IsQuestion(entity) && !questionnaire.IsInterviewierQuestion(entity)) continue;
 
-                    foreach (var entityInstance in GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
+                    foreach (var entityInstance in this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
                     {
                         yield return entityInstance;
@@ -824,27 +824,27 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Aggregates
         public bool WasAnswered(Identity entityIdentity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            if (!Answers.ContainsKey(questionKey))
+            if (!this.Answers.ContainsKey(questionKey))
                 return false;
 
-            if (!IsEnabled(entityIdentity))
+            if (!this.IsEnabled(entityIdentity))
                 return false;
 
-            var interviewAnswerModel = Answers[questionKey];
+            var interviewAnswerModel = this.Answers[questionKey];
             return interviewAnswerModel.IsAnswered;
         }
 
         public string GetInterviewerAnswerComment(Identity entityIdentity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
-            if (!Answers.ContainsKey(questionKey))
+            if (!this.Answers.ContainsKey(questionKey))
             {
                 return this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey)
                     ? this.notAnsweredQuestionsInterviewerComments[questionKey]
                     : null;
             }
 
-            var interviewAnswerModel = Answers[questionKey];
+            var interviewAnswerModel = this.Answers[questionKey];
             return interviewAnswerModel.InterviewerComment;
         }
 

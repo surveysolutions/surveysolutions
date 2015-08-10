@@ -7,13 +7,12 @@ using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.UI.Shared.Enumerator;
-using WB.UI.Tester.CustomControls;
-
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace WB.UI.Tester.Activities
+namespace WB.UI.Shared.Enumerator.Activities
 {
     public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : BaseViewModel
     {
@@ -40,7 +39,7 @@ namespace WB.UI.Tester.Activities
             base.OnCreate(bundle);
 
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-            drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 
             this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
@@ -48,12 +47,12 @@ namespace WB.UI.Tester.Activities
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             this.SupportActionBar.SetHomeButtonEnabled(true);
 
-            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, this.toolbar, 0, 0);
-            drawerLayout.SetDrawerListener(this.drawerToggle);
-            drawerLayout.DrawerOpened += (sender, args) =>
+            this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
+            this.drawerLayout.SetDrawerListener(this.drawerToggle);
+            this.drawerLayout.DrawerOpened += (sender, args) =>
             {
                 this.RemoveFocusFromEditText();
-                this.HideKeyboard(drawerLayout.WindowToken);
+                this.HideKeyboard(this.drawerLayout.WindowToken);
             };
 
             this.layoutManager = new LinearLayoutManager(this);
@@ -68,8 +67,8 @@ namespace WB.UI.Tester.Activities
         protected override void OnStart()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
-            sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
-            scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
+            this.scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
             base.OnStart();
         }
 
@@ -81,7 +80,7 @@ namespace WB.UI.Tester.Activities
 
         private void OnSectionChange(SectionChangeMessage msg)
         {
-            Application.SynchronizationContext.Post(_ => { drawerLayout.CloseDrawers();}, null);
+            Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers();}, null);
         }
 
         private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
@@ -99,8 +98,8 @@ namespace WB.UI.Tester.Activities
         protected override void OnStop()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
-            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<ScrollToAnchorMessage>(scrollToAnchorSubscriptionToken);
+            messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
+            messenger.Unsubscribe<ScrollToAnchorMessage>(this.scrollToAnchorSubscriptionToken);
             base.OnStop();
         }
 

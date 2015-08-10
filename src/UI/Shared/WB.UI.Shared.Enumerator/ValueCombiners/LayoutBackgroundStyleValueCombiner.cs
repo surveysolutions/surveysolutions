@@ -5,9 +5,9 @@ using Cirrious.CrossCore.Converters;
 using Cirrious.MvvmCross.Binding.Bindings.SourceSteps;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.ExtensionMethods;
-using WB.UI.Tester.Converters;
+using WB.UI.Shared.Enumerator.Converters;
 
-namespace WB.UI.Tester.ValueCombiners
+namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
     public class LayoutBackgroundStyleValueCombiner: MvxValueCombiner
     {
