@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Json
+namespace WB.UI.Tester.Infrastructure.Internals.Json
 {
     internal class NewtonJsonSerializer
     {
@@ -24,7 +23,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Json
             var input = new MemoryStream(payload);
             using (var reader = new StreamReader(input))
             {
-                return jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+                return this.jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
             }
         }
     }

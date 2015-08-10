@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Compression
+namespace WB.UI.Tester.Infrastructure.Internals.Compression
 {
     internal class Compressor
     {

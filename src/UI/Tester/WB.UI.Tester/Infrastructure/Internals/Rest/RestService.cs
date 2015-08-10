@@ -9,20 +9,20 @@ using Flurl;
 using Flurl.Http;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
+namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {
     internal class RestService : IRestService
     {
-        private readonly ISettingsProvider settingsProvider;
+        private readonly ITesterSettings settings;
         private readonly INetworkService networkService;
         private static RemoteCertificateValidationCallback defautCallback = null;
 
-        public RestService(ISettingsProvider settingsProvider, ILogger logger, INetworkService networkService)
+        public RestService(ITesterSettings settings, ILogger logger, INetworkService networkService)
         {
-            if (settingsProvider == null) throw new ArgumentNullException("settingsProvider");
+            if (settings == null) throw new ArgumentNullException("settings");
             if (networkService == null) throw new ArgumentNullException("networkService");
 
-            this.settingsProvider = settingsProvider;
+            this.settings = settings;
             this.networkService = networkService;
         }
 
@@ -33,15 +33,15 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             {
                 throw new RestException("No network");
             }
-            AcceptUnsignedSslCertificate();
+            this.AcceptUnsignedSslCertificate();
 
-            var fullUrl = this.settingsProvider.Endpoint
+            var fullUrl = this.settings.Endpoint
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
 
             var restClient = fullUrl
                 .ConfigureHttpClient(http => new HttpClient(new RestMessageHandler(token)))
-                .WithTimeout(this.settingsProvider.RequestTimeout)
+                .WithTimeout(this.settings.RequestTimeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
             if (credentials != null)
@@ -54,14 +54,14 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             catch (ArgumentException ex)
             {
                 throw new RestException(
-                    message: string.Format("Invalid endpoint url {0}", this.settingsProvider.Endpoint),
+                    message: string.Format("Invalid endpoint url {0}", this.settings.Endpoint),
                     statusCode: HttpStatusCode.BadRequest,
                     innerException: ex);
             }
             catch (UriFormatException ex)
             {
                 throw new RestException(
-                    message: string.Format("Invalid endpoint url {0}", this.settingsProvider.Endpoint),
+                    message: string.Format("Invalid endpoint url {0}", this.settings.Endpoint),
                     statusCode: HttpStatusCode.BadRequest,
                     innerException: ex);
             }
@@ -97,7 +97,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
             }
 
             ServicePointManager.ServerCertificateValidationCallback =
-                this.settingsProvider.AcceptUnsignedSslCertificate ? AcceptAnyCertificateValidationCallback : defautCallback;
+                this.settings.AcceptUnsignedSslCertificate ? AcceptAnyCertificateValidationCallback : defautCallback;
         }
 
         private static bool AcceptAnyCertificateValidationCallback(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslPolicyErrors)

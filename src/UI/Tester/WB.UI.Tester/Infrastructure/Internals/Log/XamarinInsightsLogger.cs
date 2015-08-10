@@ -2,7 +2,7 @@ using System;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using Xamarin;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Log
+namespace WB.UI.Tester.Infrastructure.Internals.Log
 {
     internal class XamarinInsightsLogger : ILogger
     {

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Services
+namespace WB.UI.Tester.Infrastructure.Internals
 {
     internal class DesignerApiService : IDesignerApiService
     {
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(bool isPublic, int pageIndex, CancellationToken token)
         {
-            var  batchOfServerQuestionnaires= await this.restService.GetAsync<SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
+            var  batchOfServerQuestionnaires= await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
                 credentials: 
