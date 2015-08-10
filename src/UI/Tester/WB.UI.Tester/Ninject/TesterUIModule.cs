@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.UI.Tester.CustomServices.UserInteraction;
 
@@ -10,6 +11,7 @@ namespace WB.UI.Tester.Ninject
         public override void Load()
         {
             this.Bind<IUserInteractionService>().To<UserInteractionService>();
+            this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
         }
     }
 }

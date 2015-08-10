@@ -2,8 +2,6 @@ using System.Collections.Generic;
 
 using Android.OS;
 
-using AndroidNcqrs.Eventing.Storage.SQLite;
-using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Documents;
@@ -23,10 +21,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -46,7 +41,7 @@ using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Capi.ViewModel.InterviewMetaInfo;
 using WB.UI.Capi.ViewModel.Synchronization;
 
-namespace WB.UI.Capi
+namespace WB.UI.Capi.Ninject
 {
     public class AndroidModelModule : NinjectModule
     {

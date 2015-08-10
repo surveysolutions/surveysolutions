@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.InterviewDetails
 
             this.commandService.Execute(completeInterviewCommand);
 
-            //this.viewModelNavigationService.NavigateTo<>();
+            this.viewModelNavigationService.NavigateToDashboard();
         }
     }
 }

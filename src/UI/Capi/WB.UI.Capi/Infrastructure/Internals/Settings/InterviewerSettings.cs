@@ -1,10 +1,7 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Preferences;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 
 namespace WB.UI.Capi.Infrastructure.Internals.Settings
 {

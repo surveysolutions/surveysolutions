@@ -69,7 +69,7 @@ namespace WB.UI.Capi.Views
         public LoginActivityViewModel()
         {
 #if DEBUG
-            this.Login = "ira";
+            this.Login = "interviewer1";
             this.Password = "Qwerty1234";
 #endif
         }

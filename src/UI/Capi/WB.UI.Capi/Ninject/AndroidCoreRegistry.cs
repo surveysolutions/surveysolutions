@@ -1,32 +1,26 @@
-// -----------------------------------------------------------------------
-// <copyright file="AndroidCoreRegistry.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
+using Main.DenormalizerStorage;
+
+using Ninject;
+using Ninject.Activation;
+using Ninject.Modules;
+
 using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.Core.GenericSubdomains.Android;
 using WB.Core.GenericSubdomains.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Capi.Settings;
-
-using System;
-using Main.DenormalizerStorage;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ninject;
-using Ninject.Activation;
-using Ninject.Modules;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.GenericSubdomains.Android;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Capi.Views.Login;
 
-namespace WB.UI.Capi.Injections
+namespace WB.UI.Capi.Ninject
 {
     public abstract class CoreRegistry : NinjectModule
     {
@@ -35,11 +29,6 @@ namespace WB.UI.Capi.Injections
             return new[] { (typeof(CoreRegistry)).Assembly };
         }
 
-        /// <summary>
-        /// Gets pairs of interface/type which should be registered.
-        /// Usually is used to return implementation of interfaces declared not in assemblies returned by GetAssemblies method.
-        /// </summary>
-        /// <returns>Pairs of interface/implementation.</returns>
         protected virtual IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {
             return Enumerable.Empty<KeyValuePair<Type, Type>>();
@@ -47,9 +36,9 @@ namespace WB.UI.Capi.Injections
 
         public override void Load()
         {
-            RegisterDenormalizers();
-            RegisterEventHandlers();
-            RegisterAdditionalElements();
+            this.RegisterDenormalizers();
+            this.RegisterEventHandlers();
+            this.RegisterAdditionalElements();
         }
 
         protected virtual void RegisterAdditionalElements()
@@ -62,7 +51,7 @@ namespace WB.UI.Capi.Injections
 
         protected virtual void RegisterViewFactories()
         {
-            BindInterface(this.GetAssembliesForRegistration(), typeof(IViewFactory<,>), (c) => Guid.NewGuid());
+            this.BindInterface(this.GetAssembliesForRegistration(), typeof(IViewFactory<,>), (c) => Guid.NewGuid());
         }
 
         protected virtual void RegisterEventHandlers()
@@ -91,7 +80,7 @@ namespace WB.UI.Capi.Injections
         {
 
             var implementations =
-             assembyes.SelectMany(a => a.GetTypes()).Where(t => t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
+             assembyes.SelectMany(a => a.GetTypes()).Where(t => t.IsPublic && this.ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
                 if (interfaceType != typeof(IViewFactory<,>))
@@ -101,7 +90,7 @@ namespace WB.UI.Capi.Injections
                 if (interfaceType.IsGenericType)
                 {
                     var interfaceImplementations =
-                        implementation.GetInterfaces().Where(i => IsInterfaceInterface(i, interfaceType));
+                        implementation.GetInterfaces().Where(i => this.IsInterfaceInterface(i, interfaceType));
                     foreach (Type interfaceImplementation in interfaceImplementations)
                     {
                         this.Kernel.Bind(interfaceType.MakeGenericType(interfaceImplementation.GetGenericArguments())).
@@ -114,7 +103,7 @@ namespace WB.UI.Capi.Injections
         private bool ImplementsAtLeastOneInterface(Type type, Type interfaceType)
         {
             return type.IsClass && !type.IsAbstract &&
-                   type.GetInterfaces().Any(i => IsInterfaceInterface(i, interfaceType));
+                   type.GetInterfaces().Any(i => this.IsInterfaceInterface(i, interfaceType));
         }
 
         private bool IsInterfaceInterface(Type type, Type interfaceType)
