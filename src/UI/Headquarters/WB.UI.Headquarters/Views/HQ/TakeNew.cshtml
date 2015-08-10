@@ -86,7 +86,12 @@
         <div class="form-group" data-bind="validationElement: value">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
-                <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return _.isUndefined(item) ? '' : item.label()}, autoselect: true}, valueupdate:'afterkeydown'" type="text" />
+                <div class="input-group">
+                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return _.isUndefined(item) ? '' : item.label()}, minLength: 0, autoSelect: true, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
+                    <div class="input-group-btn">
+                        <div class="btn btn-default"><span class="caret"></span></div>
+                    </div>
+                </div>
                 <span class="help-block" data-bind="validationMessage: value"></span>
             </div>
         </div>
@@ -181,7 +186,12 @@
         <div class="form-group" data-bind="validationElement: responsible">
             <label class="col-sm-2 control-label">Responsible</label>
             <div class="col-md-2">
-                <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return _.isUndefined(item) ? '' : item.name()}, autoselect: true}, valueupdate:'afterkeydown'" type="text" />
+                <div class="input-group">
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return _.isUndefined(item) ? '' : item.name()}, minLength: 0, autoselect: true, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
+                    <div class="input-group-btn">
+                        <div class="btn btn-default"><span class="caret"></span></div>
+                    </div>
+                </div>
                 <span class="help-block" data-bind="validationMessage: responsible"></span>
             </div>
         </div>
