@@ -23,18 +23,25 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         protected override object ExecuteScalar(IDbCommand command)
         {
-            var session = sessionProvider.GetSession();
-            command.Connection = session.Connection;
-            session.Transaction.Enlist(command);
+            this.EnshureTableExists();
+
+            this.EnlistInTransaction(command);
             return command.ExecuteScalar();
         }
 
         protected override int ExecuteNonQuery(IDbCommand command)
         {
-            var session = sessionProvider.GetSession();
+            this.EnshureTableExists();
+
+            this.EnlistInTransaction(command);
+            return command.ExecuteNonQuery();
+        }
+
+        void EnlistInTransaction(IDbCommand command)
+        {
+            var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection;
             session.Transaction.Enlist(command);
-            return command.ExecuteNonQuery();
         }
     }
 }
