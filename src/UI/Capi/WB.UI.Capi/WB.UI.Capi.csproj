@@ -296,15 +296,10 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="FileStorage\IFileStorageService.cs" />
-    <Compile Include="Implementations\Activities\DataCollectionDetailsActivity.cs" />
-    <Compile Include="Implementations\Adapters\DataCollectionContentFrameAdapter.cs" />
     <Compile Include="Implementations\DenormalizerStorage\DenormalizerRow.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
-    <Compile Include="Implementations\Fragments\DataCollectionGridContentFragment.cs" />
-    <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
-    <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Implementations\Navigation\NavigationService.cs" />
     <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStorageAccessor.cs" />
