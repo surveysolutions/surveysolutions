@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -45,6 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void ImportQuestionnaireModel(QuestionnaireDocument questionnaireDocument, long version)
         {
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version);
+
             questionnaireDocument.ConnectChildrenWithParent();
 
             var questionnaireModel = new QuestionnaireModel
@@ -87,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => questionnaireModel.Questions[x.PublicKey]);
 
-            this.questionnaireModelRepository.Store(questionnaireModel, Helpers.CreateHistoricId(questionnaireDocument.PublicKey, version));
+            this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
         }
 
         private void ImportQuestionnaireDocument(Guid questionnaireId, int questionnaireVersion, QuestionnaireDocument questionnaireDocument)
