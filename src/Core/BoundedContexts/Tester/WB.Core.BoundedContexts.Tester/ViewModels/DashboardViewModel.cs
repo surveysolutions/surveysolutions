@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             await this.LoadServerQuestionnairesAsync();
 
-            this.IsViewModelInitialized = true;
+            this.ShowEmptyQuestionnaireListText = true;
         }
 
         private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
@@ -82,11 +82,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { this.questionnaires = value; RaisePropertyChanged(); }
         }
 
-        private bool isViewModelInitialized;
-        public bool IsViewModelInitialized
+        private bool showEmptyQuestionnaireListText;
+        public bool ShowEmptyQuestionnaireListText
         {
-            get { return this.isViewModelInitialized; }
-            set { this.isViewModelInitialized = value; RaisePropertyChanged(); }
+            get { return this.showEmptyQuestionnaireListText; }
+            set { this.showEmptyQuestionnaireListText = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
@@ -161,7 +161,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void SignOut()
         {
-            this.IsViewModelInitialized = false;
             this.principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
@@ -218,7 +217,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
-                    this.IsViewModelInitialized = false;
                     this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
                 }
             }
