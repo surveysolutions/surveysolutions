@@ -255,9 +255,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task FindMatchOptionAndSendAnswerQuestionCommandAsync(string enteredText)
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText);
+            var answerViewModel = this.Options.SingleOrDefault(i => i.Title == enteredText && i.ParentValue == answerOnParentQuestion);
 
-            if (answerViewModel == null || answerViewModel.ParentValue != this.answerOnParentQuestion)
+            if (answerViewModel == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(string.Format(UIResources.Interview_Question_Cascading_NoMatchingValue, enteredText));
                 return;
