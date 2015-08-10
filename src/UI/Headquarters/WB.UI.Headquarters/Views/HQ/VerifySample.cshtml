@@ -87,7 +87,12 @@
                         <div class="col-sm-8">
                             @if (!Model.WasSupervsorProvided)
                             {
-                                <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return _.isUndefined(item) ? '' : item.UserName}, autoselect: true}, valueupdate:'afterkeydown'" type="text" />
+                                <div class="input-group">
+                                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return _.isUndefined(item) ? '' : item.UserName}, minLength: 0, autoSelect: false, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
+                                    <div class="input-group-btn">
+                                        <div class="btn btn-default"><span class="caret"></span></div>
+                                    </div>
+                                </div>
                             }
                             else
                             {

@@ -32,7 +32,12 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Supervisors</h4>
             <p class="list-group-item-text">
-                <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}, autoselect: true, addItem: DefaultResponsible}, valueupdate:'afterkeydown'" type="text" />
+                <div class="input-group">
+                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}, minLength: 0, autoSelect: false, addItem: DefaultResponsible, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
+                    <div class="input-group-btn">
+                        <div class="btn btn-default"><span class="caret"></span></div>
+                    </div>
+                </div>
             </p>
         </li>
     </ul>
