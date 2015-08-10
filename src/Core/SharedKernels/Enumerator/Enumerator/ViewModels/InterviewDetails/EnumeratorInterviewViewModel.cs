@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
-    public class EnumeratorInterviewViewModel : BaseViewModel
+    public abstract class EnumeratorInterviewViewModel : BaseViewModel
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly GroupStateViewModel groupState;
         protected string interviewId;
 
-        public EnumeratorInterviewViewModel(
+        protected EnumeratorInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
@@ -125,11 +125,5 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable<dynamic> PrefilledQuestions { get; set; }
-
-
-        public override void NavigateToPreviousViewModel()
-        {
-            
-        }
     }
 }
