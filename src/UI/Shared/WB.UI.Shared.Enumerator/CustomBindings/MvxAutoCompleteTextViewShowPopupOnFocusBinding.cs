@@ -1,4 +1,6 @@
 ﻿using Android.Views;
+using Android.Widget;
+
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 
@@ -17,8 +19,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         public override void SubscribeToEvents()
         {
             this.Target.FocusChange += this.Target_FocusChange;
+            this.Target.ItemClick += this.OnItemClick;
 
             base.SubscribeToEvents();
+        }
+
+        void OnItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            this.Target.ClearFocus();
         }
 
         private void Target_FocusChange(object sender, View.FocusChangeEventArgs e)
@@ -37,6 +45,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 if (editText != null)
                 {
                     editText.FocusChange -= this.Target_FocusChange;
+                    editText.ItemClick -= this.OnItemClick;
                 }
             }
             base.Dispose(isDisposing);
