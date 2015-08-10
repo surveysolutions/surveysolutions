@@ -178,7 +178,6 @@
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
-    <Compile Include="Internals\ViewModelNavigationService.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -197,6 +196,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Internals\" />
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-mdpi\" />
   </ItemGroup>
