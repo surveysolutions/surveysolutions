@@ -342,9 +342,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
         private UserPreloadingService CreateUserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage=null,
             IRecordsAccessorFactory recordsAccessorFactory = null)
         {
-            return new UserPreloadingService(userPreloadingProcessStorage?? new InMemoryPlainStorageAccessor<UserPreloadingProcess>(),
-                recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>(),
-                new UserPreloadingSettings(5, 5, 12, 1, 10000, 100, 100));
+            return
+                new UserPreloadingService(
+                    userPreloadingProcessStorage ?? new InMemoryPlainStorageAccessor<UserPreloadingProcess>(),
+                    recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>(),
+                    Create.UserPreloadingSettings());
         }
     }
 }

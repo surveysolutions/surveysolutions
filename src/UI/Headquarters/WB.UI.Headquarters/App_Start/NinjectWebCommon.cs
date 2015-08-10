@@ -40,6 +40,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Intervie
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
@@ -107,16 +108,6 @@ namespace WB.UI.Headquarters
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
 
-            var userPreloadingSettings =
-                new UserPreloadingSettings(
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.VerificationIntervalInSeconds"].ParseIntOrNull() ?? 5,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.CreationIntervalInSeconds"].ParseIntOrNull() ?? 5,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.CleaningIntervalInHours"].ParseIntOrNull() ?? 12,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned"].ParseIntOrNull() ?? 1,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.MaxAllowedRecordNumber"].ParseIntOrNull() ?? 10000,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress"].ParseIntOrNull() ?? 100,
-                    WebConfigurationManager.AppSettings["UserPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation"].ParseIntOrNull() ?? 100);
-
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
@@ -149,6 +140,8 @@ namespace WB.UI.Headquarters
             int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
 
+          
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -165,8 +158,7 @@ namespace WB.UI.Headquarters
                 new SurveyManagementWebModule(),
 
                 new PostresKeyValueModule(postgresCacheSize),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
@@ -177,6 +169,22 @@ namespace WB.UI.Headquarters
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
 
+            var userPreloadingConfigurationSection = (UserPreloadingConfigurationSection)(WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ?? new UserPreloadingConfigurationSection());
+
+            var userPreloadingSettings =
+                new UserPreloadingSettings(
+                    userPreloadingConfigurationSection.VerificationIntervalInSeconds,
+                    userPreloadingConfigurationSection.CreationIntervalInSeconds,
+                    userPreloadingConfigurationSection.CleaningIntervalInHours,
+                    userPreloadingConfigurationSection.HowOldInDaysProcessShouldBeInOrderToBeCleaned,
+                    userPreloadingConfigurationSection.MaxAllowedRecordNumber,
+                    userPreloadingConfigurationSection.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress,
+                    userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
+                    loginFormatRegex: UserModel.UserNameRegularExpression,
+                    emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
+                    passwordFormatRegex: MembershipProviderSettings.Instance.PasswordStrengthRegularExpression,
+                    phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -185,7 +193,8 @@ namespace WB.UI.Headquarters
                     new InterviewHistorySettings(basePath,
                         bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
                     LegacyOptions.SupervisorFunctionsEnabled,
-                    interviewCountLimit));
+                    interviewCountLimit),
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
