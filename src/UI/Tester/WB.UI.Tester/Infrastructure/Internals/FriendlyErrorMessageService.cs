@@ -3,9 +3,9 @@ using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Services
+namespace WB.UI.Tester.Infrastructure.Internals
 {
-    public class FriendlyErrorMessageService : IFriendlyErrorMessageService
+    internal class FriendlyErrorMessageService : IFriendlyErrorMessageService
     {
         readonly ILogger logger;
 

@@ -3,6 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
+using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -26,7 +27,6 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IUserIdentity>().ToMethod(context => context.Kernel.Get<IPrincipal>().CurrentUserIdentity);
 
             this.Bind<IExpressionsEngineVersionService>().To<ExpressionsEngineVersionService>().InSingletonScope();
-            this.Bind<ISettingsProvider>().To<ApplicationSettings>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
 

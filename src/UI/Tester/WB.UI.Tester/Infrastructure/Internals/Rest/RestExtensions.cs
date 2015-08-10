@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.Infrastructure.Android.Implementation.Services.Compression;
-using WB.Core.Infrastructure.Android.Implementation.Services.Json;
+using WB.UI.Tester.Infrastructure.Internals.Compression;
+using WB.UI.Tester.Infrastructure.Internals.Json;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
+namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {
     internal static class RestExtensions
     {
@@ -48,7 +48,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
                     token.ThrowIfCancellationRequested();
                 }
 
-                var buffer = new byte[ServiceLocator.Current.GetInstance<ISettingsProvider>().BufferSize];
+                var buffer = new byte[ServiceLocator.Current.GetInstance<ITesterSettings>().BufferSize];
                 using (var ms = new MemoryStream())
                 {
                     int read;

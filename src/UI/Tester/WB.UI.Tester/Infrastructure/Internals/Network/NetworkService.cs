@@ -2,25 +2,25 @@
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Network
+namespace WB.UI.Tester.Infrastructure.Internals.Network
 {
     internal class NetworkService : INetworkService
     {
         private readonly IMvxReachability mvxReachability;
-        private readonly ISettingsProvider settingsProvider;
+        private readonly ITesterSettings settings;
 
-        public NetworkService(IMvxReachability mvxReachability, ISettingsProvider settingsProvider)
+        public NetworkService(IMvxReachability mvxReachability, ITesterSettings settings)
         {
             if(mvxReachability == null) throw new ArgumentNullException("mvxReachability");
-            if(settingsProvider == null) throw new ArgumentNullException("settingsProvider");
+            if(settings == null) throw new ArgumentNullException("settings");
 
             this.mvxReachability = mvxReachability;
-            this.settingsProvider = settingsProvider;
+            this.settings = settings;
         }
 
         public bool IsNetworkEnabled()
         {
-            return this.mvxReachability.IsHostReachable(this.settingsProvider.Endpoint);
+            return this.mvxReachability.IsHostReachable(this.settings.Endpoint);
         }
     }
 }

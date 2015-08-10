@@ -3,12 +3,12 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
+using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.Infrastructure.Android;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.Settings
+namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
-    internal class ApplicationSettings : ISettingsProvider
+    internal class TesterSettings : ITesterSettings, IEnumeratorSettings
     {
         private const string ApplicationNameParameterName = "ApplicationName";
         private const string DesignerEndpointParameterName = "DesignerEndpointV8";
@@ -19,7 +19,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.Settings
 
         private readonly IExpressionsEngineVersionService versionService;
 
-        public ApplicationSettings(IExpressionsEngineVersionService versionService)
+        public TesterSettings(IExpressionsEngineVersionService versionService)
         {
             this.versionService = versionService;
         }

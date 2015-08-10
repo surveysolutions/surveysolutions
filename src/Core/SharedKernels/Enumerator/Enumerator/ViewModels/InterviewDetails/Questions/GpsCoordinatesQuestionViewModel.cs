@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
 
         private readonly IUserIdentity userIdentity;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ISettingsProvider settingsProvider;
+        private readonly IEnumeratorSettings settings;
         private readonly IGpsLocationService locationService;
 
         private Identity questionIdentity;
@@ -52,14 +52,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
         public GpsCoordinatesQuestionViewModel(
             IUserIdentity userIdentity,
             IStatefulInterviewRepository interviewRepository,
-            ISettingsProvider settingsProvider,
+            IEnumeratorSettings settings,
             IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
             this.userIdentity = userIdentity;
             this.interviewRepository = interviewRepository;
-            this.settingsProvider = settingsProvider;
+            this.settings = settings;
             this.locationService = locationService;
 
             this.QuestionState = questionStateViewModel;
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels.Questions
             try
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settingsProvider.GpsReceiveTimeoutSec));
+                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
                 var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
                 await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }

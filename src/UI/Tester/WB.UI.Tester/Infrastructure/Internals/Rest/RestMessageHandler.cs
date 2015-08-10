@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
+namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {
     internal class RestMessageHandler : FlurlMessageHandler
     {
@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure.Android.Implementation.Services.Rest
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            return base.SendAsync(request, token == default(CancellationToken) ? cancellationToken : token);
+            return base.SendAsync(request, this.token == default(CancellationToken) ? cancellationToken : this.token);
         }
     }
 }
