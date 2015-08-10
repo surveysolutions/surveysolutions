@@ -137,7 +137,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             return "Postgres Key/Value :/";
         }
 
-        private void EnshureTableExists()
+        protected void EnshureTableExists()
         {
             using (var connection = new NpgsqlConnection(connectionString))
             {
