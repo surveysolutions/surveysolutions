@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Tester.Infrastructure;
 
 namespace WB.UI.Tester.Ninject
 {

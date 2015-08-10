@@ -6,7 +6,7 @@ using Sqo;
 using Sqo.Transactions;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 
-namespace WB.Core.Infrastructure.Android.Implementation.Services.Storage
+namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {
     internal class SiaqodbPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity> where TEntity: class, IPlainStorageEntity
     {

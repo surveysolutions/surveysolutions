@@ -85,7 +85,6 @@
     <Compile Include="Interface\IPrincipal.cs" />
     <Compile Include="Interface\IQRBarcodeScanService.cs" />
     <Compile Include="Interface\IRestService.cs" />
-    <Compile Include="Interface\ISettingsProvider.cs" />
     <Compile Include="Interface\IUserIdentity.cs" />
     <Compile Include="Interface\RestCredentials.cs" />
     <Compile Include="Interface\RestException.cs" />

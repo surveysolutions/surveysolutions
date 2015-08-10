@@ -314,6 +314,8 @@
     <Compile Include="Implementations\Services\QuestionnaireModelRepository.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Extensions\StoredEventExtensions.cs" />
+    <Compile Include="Infrastructure\Internals\Settings\InterviewerSettings.cs" />
+    <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -459,6 +461,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
+    <AndroidResource Include="Resources\Values\settings.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
@@ -480,10 +483,6 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj">
-      <Project>{c6b1ba38-e58e-4e3d-ba59-5289fa10ccbb}</Project>
-      <Name>WB.Core.Infrastructure.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>

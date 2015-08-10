@@ -2,20 +2,23 @@
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Sqo;
+using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Implementation.Entities;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.Infrastructure.Android.Implementation.Services.Json;
-using WB.Core.Infrastructure.Android.Implementation.Services.Log;
-using WB.Core.Infrastructure.Android.Implementation.Services.Network;
-using WB.Core.Infrastructure.Android.Implementation.Services.Rest;
-using WB.Core.Infrastructure.Android.Implementation.Services.Storage;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Tester.Infrastructure.Internals;
+using WB.UI.Tester.Infrastructure.Internals.Json;
+using WB.UI.Tester.Infrastructure.Internals.Log;
+using WB.UI.Tester.Infrastructure.Internals.Network;
+using WB.UI.Tester.Infrastructure.Internals.Rest;
+using WB.UI.Tester.Infrastructure.Internals.Settings;
+using WB.UI.Tester.Infrastructure.Internals.Storage;
 
-namespace WB.UI.Tester.Ninject
+namespace WB.UI.Tester.Infrastructure
 {
     public class TesterInfrastructureModule : NinjectModule
     {
@@ -41,6 +44,9 @@ namespace WB.UI.Tester.Ninject
 
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
             this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
+
+            this.Bind<ITesterSettings>().To<TesterSettings>();
+            this.Bind<IEnumeratorSettings>().To<TesterSettings>();
         }
     }
 }
