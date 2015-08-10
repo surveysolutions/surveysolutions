@@ -5,9 +5,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class ApplySynchronizationMetadata : InterviewCommand
+    public class CreateInterviewFromSynchronizationMetadata : InterviewCommand
     {
-        public ApplySynchronizationMetadata(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
+        public CreateInterviewFromSynchronizationMetadata(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient = false)
             : base(interviewId, userId)
         {

@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 commandService.Verify(
                     x =>
                         x.Execute(
-                            Moq.It.Is<ApplySynchronizationMetadata>(
+                            Moq.It.Is<CreateInterviewFromSynchronizationMetadata>(
                                 param =>
                                     param.QuestionnaireId == questionnaireMetadata.TemplateId && param.Id == questionnaireMetadata.PublicKey &&
                                     param.UserId == questionnaireMetadata.ResponsibleId && (int)param.InterviewStatus == questionnaireMetadata.Status &&

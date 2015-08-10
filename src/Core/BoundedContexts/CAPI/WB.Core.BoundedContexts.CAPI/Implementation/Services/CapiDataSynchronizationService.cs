@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
         private void UpdateInterview(InterviewSyncPackageDto item)
         {
-            var metaInfo = this.jsonUtils.Deserialize<WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>(item.MetaInfo);
+            var metaInfo = this.jsonUtils.Deserialize<InterviewMetaInfo>(item.MetaInfo);
             try
             {
                 bool createdOnClient = metaInfo.CreatedOnClient.GetValueOrDefault();
@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                     .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
                     .ToArray();
 
-                var applySynchronizationMetadata = new ApplySynchronizationMetadata(
+                var applySynchronizationMetadata = new CreateInterviewFromSynchronizationMetadata(
                     metaInfo.PublicKey, 
                     metaInfo.ResponsibleId, 
                     metaInfo.TemplateId, 
