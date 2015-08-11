@@ -264,6 +264,7 @@
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Infrastructure\Internals\FriendlyErrorMessageService.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\ITesterNetworkService.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
     <Compile Include="Infrastructure\Internals\Security\UserIdentity.cs" />
     <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
@@ -271,7 +272,7 @@
     <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
     <Compile Include="Infrastructure\Internals\Json\NewtonJsonSerializer.cs" />
     <Compile Include="Infrastructure\Internals\Log\XamarinInsightsLogger.cs" />
-    <Compile Include="Infrastructure\Internals\Network\NetworkService.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\TesterNetworkService.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestExtensions.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestMessageHandler.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestService.cs" />

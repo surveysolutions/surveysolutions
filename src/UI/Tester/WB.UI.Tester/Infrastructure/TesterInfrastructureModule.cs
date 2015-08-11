@@ -15,7 +15,6 @@ using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Json;
 using WB.UI.Tester.Infrastructure.Internals.Log;
-using WB.UI.Tester.Infrastructure.Internals.Network;
 using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
@@ -40,7 +39,7 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
-            this.Bind<INetworkService>().To<NetworkService>().InSingletonScope();
+            this.Bind<ITesterNetworkService>().To<TesterNetworkService>().InSingletonScope();
             this.Bind<IRestService>().To<RestService>().InSingletonScope();
 
             this.Bind<NewtonJsonSerializer>().ToSelf().InSingletonScope();
