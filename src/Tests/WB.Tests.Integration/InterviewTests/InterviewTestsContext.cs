@@ -188,7 +188,7 @@ namespace WB.Tests.Integration.InterviewTests
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
             var fileSystemAccessor = new FileSystemIOAccessor(); 
-            var questionnaireVersionProvider =new ExpressionsEngineVersionService();
+            var questionnaireVersionProvider =new DesignerExpressionsEngineVersionService();
 
             const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
             var referencesToAdd = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll" };

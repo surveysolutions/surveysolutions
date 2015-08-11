@@ -1,9 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
-using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -14,8 +15,8 @@ namespace WB.Tests.Integration.Versions
     {
         Establish context = () =>
         {
-            designerExpressionsEngineVersionService = new ExpressionsEngineVersionService();
-            testerExpressionsEngineVersionService = new CapiExpressionsEngineVersionService();
+            designerExpressionsEngineVersionService = new DesignerExpressionsEngineVersionService();
+            testerExpressionsEngineVersionService = new TesterExpressionsEngineVersionService();
             hqSupportedVersionProvider = new SupportedVersionProvider(() => false, new Version());
         };
 
@@ -48,8 +49,8 @@ namespace WB.Tests.Integration.Versions
         private static Version designerVersion;
         private static Version hqVersion;
 
-        private static ICapiExpressionsEngineVersionService testerExpressionsEngineVersionService;
-        private static IExpressionsEngineVersionService designerExpressionsEngineVersionService;
+        private static ITesterExpressionsEngineVersionService testerExpressionsEngineVersionService;
+        private static IDesignerExpressionsEngineVersionService designerExpressionsEngineVersionService;
         private static ISupportedVersionProvider hqSupportedVersionProvider;
     }
 }
