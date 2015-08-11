@@ -6,7 +6,7 @@
     <include layout="@layout/interview_question__title" />
     <LinearLayout style="@style/Interview_Question_Body">
       <include layout="@layout/interview_question__instructions" />
-      <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout style="@style/Interview_Question_Answer"
+      <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
         <MvxAutoCompleteTextView
@@ -22,7 +22,7 @@
                          Hint Localization('FilteredComboboxQuestion_Hint');
                          BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
 
-      </Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout>
+      </LinearLayout>
       <include layout="@layout/interview_question__errors" />
       <include layout="@layout/interview_question__comments" />
     </LinearLayout>
