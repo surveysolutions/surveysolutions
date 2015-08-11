@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
@@ -44,22 +45,21 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public string CreateUserPreloadingProcess(Stream data, string fileName)
         {
             var preloadingProcessId = Guid.NewGuid().FormatGuid();
-            var preloadingProcess = new UserPreloadingProcess()
+            var preloadingProcess = new UserPreloadingProcess
             {
                 UserPreloadingProcessId = preloadingProcessId,
                 FileName = fileName,
                 FileSize = data.Length,
                 State = UserPrelodingState.Uploaded,
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now,
+                LastUpdateDate = DateTime.Now
             };
-
-            preloadingProcess.LastUpdateDate = DateTime.Now;
 
             var records = new List<string[]>();
             try
             {
-                records = recordsAccessorFactory.CreateRecordsAccessor(data,
-                    ExportFileSettings.SeparatorOfExportedDataFile.ToString()).Records.ToList();
+                var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(data, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                records = recordsAccessor.Records.ToList();
             }
             catch (Exception e)
             {
@@ -67,24 +67,26 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             if (records.Count - 1 > userPreloadingSettings.MaxAllowedRecordNumber)
-                throw new UserPreloadingException(
-                    String.Format(UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat,
-                        records.Count - 1, userPreloadingSettings.MaxAllowedRecordNumber));
-
-            string[] header = null;
-            foreach (var record in records)
             {
-                if (header == null)
+                var exceptionMessage = UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat
+                                                                    .FormatString(records.Count - 1, this.userPreloadingSettings.MaxAllowedRecordNumber);
+                throw new UserPreloadingException(exceptionMessage);
+            }
+
+            string[] headerRow = null;
+            foreach (string[] record in records)
+            {
+                if (headerRow == null)
                 {
-                    header = record.Select(r => r.ToLower()).ToArray();
-                    ThrowIfFileStructureIsInvalid(header, fileName);
+                    headerRow = record.Select(r => r.ToLower()).ToArray();
+                    ThrowIfFileStructureIsInvalid(headerRow, fileName);
                     continue;
                 }
                 var dataRecord = new UserPreloadingDataRecord();
 
                 foreach (var dataColumnNameMappedOnRecordSetter in this.dataColumnNamesMappedOnRecordSetter)
                 {
-                    var indexOfColumn = Array.IndexOf(header, dataColumnNameMappedOnRecordSetter.Key.ToLower());
+                    var indexOfColumn = Array.IndexOf(headerRow, dataColumnNameMappedOnRecordSetter.Key.ToLower());
                     if (indexOfColumn < 0)
                         continue;
 
@@ -136,10 +138,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.CreatingUsers);
 
             if (preloadingProcess.CreatedUsersCount != preloadingProcess.RecordsCount)
-                throw new UserPreloadingException(
-                    String.Format(
-                        UserPreloadingServiceMessages.userPreloadingProcessCantBeFinishedFormat,
-                        preloadingProcess.UserPreloadingProcessId, preloadingProcess.CreatedUsersCount, preloadingProcess.RecordsCount));
+            {
+                var message = String.Format(UserPreloadingServiceMessages.userPreloadingProcessCantBeFinishedFormat,
+                    preloadingProcess.UserPreloadingProcessId, 
+                    preloadingProcess.CreatedUsersCount, 
+                    preloadingProcess.RecordsCount);
+                throw new UserPreloadingException(message);
+            }
 
             preloadingProcess.State = UserPrelodingState.Finished;
             preloadingProcess.LastUpdateDate = DateTime.Now;
@@ -179,10 +184,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validated);
 
             if (preloadingProcess.VerificationErrors.Any())
-                throw new UserPreloadingException(
-                    String.Format(
-                        UserPreloadingServiceMessages.UserPreloadingProcessWithIdHasErrorsFormat,
-                        preloadingProcess.UserPreloadingProcessId, preloadingProcess.VerificationErrors.Count));
+            {
+                var message = String.Format(UserPreloadingServiceMessages.UserPreloadingProcessWithIdHasErrorsFormat,
+                    preloadingProcess.UserPreloadingProcessId, 
+                    preloadingProcess.VerificationErrors.Count);
+                throw new UserPreloadingException(message);
+            }
 
             preloadingProcess.State = UserPrelodingState.ReadyForUserCreation;
             preloadingProcess.LastUpdateDate = DateTime.Now;
@@ -225,9 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public UserPreloadingProcess[] GetPreloadingProcesses()
         {
-            return
-                userPreloadingProcessStorage.Query(
-                    _ => _.OrderBy(p => p.LastUpdateDate).ToArray());
+            return userPreloadingProcessStorage.Query(_ => _.OrderBy(p => p.LastUpdateDate).ToArray());
         }
 
         public UserPreloadingProcess GetPreloadingProcesseDetails(string preloadingProcessId)
@@ -235,19 +240,21 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return userPreloadingProcessStorage.GetById(preloadingProcessId);
         }
 
-        public void PushVerificationError(string preloadingProcessId, string code, int rowNumber, string columnName,
+        public void PushVerificationError(string preloadingProcessId, 
+            string code, 
+            int rowNumber, 
+            string columnName,
             string cellValue)
         {
             var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
 
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
 
-            if (preloadingProcess.VerificationErrors.Count >=
-                userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation)
+            if (preloadingProcess.VerificationErrors.Count >= userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation)
             {
-                throw new UserPreloadingException(
-                    string.Format(UserPreloadingServiceMessages.MaxNumberOfValidationErrorsHaveBeenReachedFormat,
-                        userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation));
+                var message = string.Format(UserPreloadingServiceMessages.MaxNumberOfValidationErrorsHaveBeenReachedFormat,
+                    this.userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation);
+                throw new UserPreloadingException(message);
             }
 
             preloadingProcess.VerificationErrors.Add(new UserPreloadingVerificationError()
@@ -265,10 +272,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public void UpdateVerificationProgressInPercents(string preloadingProcessId, int percents)
         {
             if (percents < 0 || percents > 100)
-                throw new UserPreloadingException(
-                    String.Format(
-                        UserPreloadingServiceMessages.validationProgressInPercentsCantBeNegativeOrGreaterThen100Format,
-                        percents));
+            {
+                var message = String.Format(UserPreloadingServiceMessages.validationProgressInPercentsCantBeNegativeOrGreaterThen100Format, percents);
+                throw new UserPreloadingException(message);
+            }
 
             var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
 
@@ -287,10 +294,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.CreatingUsers);
 
             if (preloadingProcess.RecordsCount == preloadingProcess.CreatedUsersCount)
-                throw new UserPreloadingException(
-                    String.Format(
-                        "user preloading process with id '{0}' can't create more users then {1}",
-                        preloadingProcessId, preloadingProcess.RecordsCount));
+            {
+                var message = String.Format("user preloading process with id '{0}' can't create more users then {1}",
+                    preloadingProcessId, 
+                    preloadingProcess.RecordsCount);
+                throw new UserPreloadingException(message);
+            }
 
             preloadingProcess.CreatedUsersCount++;
             preloadingProcess.LastUpdateDate = DateTime.Now;
@@ -317,8 +326,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         {
             var preloadingProcess = this.userPreloadingProcessStorage.GetById(preloadingProcessId);
             if (preloadingProcess == null)
-                throw new UserPreloadingException(String.Format("user preloading process with id '{0}' is missing",
-                    preloadingProcessId));
+            {
+                var message = String.Format("user preloading process with id '{0}' is missing", preloadingProcessId);
+                throw new UserPreloadingException(message);
+            }
             return preloadingProcess;
         }
 
@@ -333,12 +344,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private UserPreloadingProcess GetOldestPreloadingProcessInState(UserPrelodingState state)
         {
-            return
-                userPreloadingProcessStorage.Query(
-                    _ =>
-                        _.Where(p => p.State == state)
-                            .OrderBy(p => p.LastUpdateDate)
-                            .FirstOrDefault());
+            return userPreloadingProcessStorage.Query(_ => _.Where(p => p.State == state)
+                                                            .OrderBy(p => p.LastUpdateDate)
+                                                            .FirstOrDefault());
         }
 
         private void ThrowIfFileStructureIsInvalid(string[] header, string fileName)
