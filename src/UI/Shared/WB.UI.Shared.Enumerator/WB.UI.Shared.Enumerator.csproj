@@ -185,9 +185,6 @@
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -914,11 +911,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-large\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-ru\strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

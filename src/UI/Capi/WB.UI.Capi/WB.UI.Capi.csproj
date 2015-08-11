@@ -462,6 +462,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
     <AndroidResource Include="Resources\Values\settings.xml" />
+    <AndroidResource Include="Resources\values-ru\strings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
