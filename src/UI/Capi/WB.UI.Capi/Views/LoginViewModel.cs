@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Android.App;
 using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
@@ -74,9 +74,10 @@ namespace WB.UI.Capi.Views
 #endif
         }
 
-        public void Init()
+        public async Task Init()
         {
-            this.Logins = DataCollectionAuthentication.GetKnownUsers().Result;
+            List<string> result = await this.DataCollectionAuthentication.GetKnownUsers();
+            this.Logins = result ?? new List<string>();
             RaisePropertyChanged(() => this.KnownUsers);
             if (this.Logins.Count == 1 && this.Login.IsNullOrEmpty())
             {
