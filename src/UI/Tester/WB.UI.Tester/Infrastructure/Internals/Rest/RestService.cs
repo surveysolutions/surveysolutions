@@ -14,10 +14,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Rest
     internal class RestService : IRestService
     {
         private readonly ITesterSettings settings;
-        private readonly INetworkService networkService;
+        private readonly ITesterNetworkService networkService;
         private static RemoteCertificateValidationCallback defautCallback = null;
 
-        public RestService(ITesterSettings settings, ILogger logger, INetworkService networkService)
+        public RestService(ITesterSettings settings, ILogger logger, ITesterNetworkService networkService)
         {
             if (settings == null) throw new ArgumentNullException("settings");
             if (networkService == null) throw new ArgumentNullException("networkService");
@@ -29,9 +29,9 @@ namespace WB.UI.Tester.Infrastructure.Internals.Rest
         private async Task<HttpResponseMessage> ExecuteRequestAsync(string url, Func<FlurlClient, Task<HttpResponseMessage>> request, CancellationToken token,
             object queryString = null, RestCredentials credentials = null)
         {
-            if (!this.networkService.IsNetworkEnabled())
+            if (!this.networkService.IsEndpointReachable())
             {
-                throw new RestException("No network");
+                throw new RestException("No connection to site endpoint");
             }
             this.AcceptUnsignedSslCertificate();
 
