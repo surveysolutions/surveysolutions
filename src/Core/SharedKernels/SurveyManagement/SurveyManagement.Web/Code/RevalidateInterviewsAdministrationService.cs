@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ncqrs;
@@ -98,15 +99,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 areInterviewsBeingRevalidatingNow = true;
 
-                this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-                var interviews = this.interviewsReader.Query(_ => _.Where(interview =>
-                         interview.IsDeleted == false &&
-                        (interview.Status == InterviewStatus.Completed ||
-                            interview.Status == InterviewStatus.RejectedBySupervisor ||
-                            interview.Status == InterviewStatus.ApprovedBySupervisor ||
-                            interview.Status == InterviewStatus.ApprovedByHeadquarters ||
-                            interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
-                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                List<InterviewSummary> interviews;
+                try
+                {
+                    this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                    interviews = this.interviewsReader.Query(_ => _.Where(interview =>
+                        interview.IsDeleted == false
+                        && (interview.Status == InterviewStatus.Completed
+                            || interview.Status == InterviewStatus.RejectedBySupervisor
+                            || interview.Status == InterviewStatus.ApprovedBySupervisor
+                            || interview.Status == InterviewStatus.ApprovedByHeadquarters
+                            || interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
+                }
+                finally
+                {
+                    this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                }
 
                 UpdateStatusMessage("Determining count of interview to be revalidated.");
 
@@ -138,9 +146,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                             UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
 
-                            this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                             this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
-                            this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
 
                             processedInterviewsCount++;
                         }
