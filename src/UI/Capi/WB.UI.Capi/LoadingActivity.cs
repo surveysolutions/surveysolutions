@@ -211,14 +211,14 @@ namespace WB.UI.Capi
                 return;
             }
 
-            var navigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
+            
             if (createdOnClient)
             {
-                navigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
+                NavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
             else
             {
-                navigationService.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
+                NavigationService.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
         }
 
