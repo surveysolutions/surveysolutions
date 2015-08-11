@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class ExpressionsEngineVersionService : IExpressionsEngineVersionService
+    internal class DesignerExpressionsEngineVersionService : IDesignerExpressionsEngineVersionService
     {
         /// <summary>
         /// New Era of c# conditions

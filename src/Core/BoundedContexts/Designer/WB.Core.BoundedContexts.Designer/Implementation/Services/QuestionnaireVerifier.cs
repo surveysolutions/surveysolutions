@@ -91,14 +91,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;

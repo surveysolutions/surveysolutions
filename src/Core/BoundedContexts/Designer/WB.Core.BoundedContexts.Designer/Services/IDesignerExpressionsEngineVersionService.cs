@@ -2,7 +2,7 @@ using System;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
-    public interface IExpressionsEngineVersionService
+    public interface IDesignerExpressionsEngineVersionService
     {
         Version GetLatestSupportedVersion();
 

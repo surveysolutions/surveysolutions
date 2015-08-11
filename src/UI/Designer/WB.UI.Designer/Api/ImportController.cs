@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
         private readonly IJsonUtils jsonUtils;
         public ImportController(
             IStringCompressor zipUtils,
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper, 
-            IExpressionsEngineVersionService expressionsEngineVersionService, 
+            IDesignerExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;

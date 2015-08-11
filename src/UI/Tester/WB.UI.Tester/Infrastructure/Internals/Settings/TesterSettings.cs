@@ -4,6 +4,7 @@ using Android.Content;
 using Android.OS;
 using Android.Preferences;
 using WB.Core.BoundedContexts.Tester;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -18,9 +19,9 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
         private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
 
-        private readonly IExpressionsEngineVersionService versionService;
+        private readonly ITesterExpressionsEngineVersionService versionService;
 
-        public TesterSettings(IExpressionsEngineVersionService versionService)
+        public TesterSettings(ITesterExpressionsEngineVersionService versionService)
         {
             this.versionService = versionService;
         }
