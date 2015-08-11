@@ -11,7 +11,7 @@
 
         <TextView style="@style/Interview_Question_EmptyOptions"
                   local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Visible If(HasOptions, false, true)"/>
-        <Cirrious.MvvmCross.Binding.Droid.Views.MvxLinearLayout
+        <MvxLinearLayout
           style="@style/Interview_Question_Answer_Options"
           local:MvxItemTemplate="@layout/interview_question_single_option_item"
           local:MvxBind="ItemsSource Options; Visible HasOptions" />
