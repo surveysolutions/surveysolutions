@@ -70,19 +70,35 @@ namespace WB.UI.Headquarters.Controllers
         private void ReexportApprovedInterviewsImpl(int skip)
         {
             int pageSize = 20;
+            int count = 0;
+            try
+            {
+                this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                count = this.GetApprovedInterviewIds().Count();
+            }
+            finally
+            {
+                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+            }
 
-            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-            int count = this.GetApprovedInterviewIds().Count();
-            this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
             int errorsCount = 0;
             int processed = skip;
             List<Guid> notExportedInterviews = new List<Guid>();
 
-            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            
             lastReexportMessage = string.Format("found {0} interviews", count);
             while (processed < count)
             {
-                List<Guid> interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
+                List<Guid> interviewIds;
+                try
+                {
+                    this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                    interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
+                }
+                finally
+                {
+                    this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                }
 
                 foreach (var interviewId in interviewIds)
                 {
@@ -97,14 +113,13 @@ namespace WB.UI.Headquarters.Controllers
                         errorsCount++;
                         notExportedInterviews.Add(interviewId);
                         this.Logger.Error(ex.Message, ex);
-                        this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                        this.transactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
                     }
 
                     processed++;
                     lastReexportMessage = string.Format("last processed interview index: {0} / {1}. Errors: {2}", processed, count, errorsCount);
                 }
             }
-            this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
             lastReexportMessage += Environment.NewLine;
             lastReexportMessage += string.Join(Environment.NewLine, notExportedInterviews);
         }
@@ -161,7 +176,6 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     try
                     {
-                        this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                         this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
                             userName: model.UserName,
                             password: passwordHasher.Hash(model.Password), email: model.Email,
@@ -169,7 +183,6 @@ namespace WB.UI.Headquarters.Controllers
                             isLockedByHQ: false, roles: new[] { role }, supervsor: null,
                             personName: model.PersonName,
                             phoneNumber: model.PhoneNumber));
-                        this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
                         return true;
                     }
                     catch (Exception ex)
@@ -202,14 +215,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 try
                 {
-                    this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                     this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
                         roles: userToCheck.Roles.ToArray(),
                         personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
-                    this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
                 }

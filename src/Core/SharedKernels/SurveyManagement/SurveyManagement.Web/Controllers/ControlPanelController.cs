@@ -84,9 +84,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             else
             {
-                this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
-                this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
+                try
+                {
+                    this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error(string.Format("Exception while repating last interview status: {0}", interviewId), exception);
+                }
 
                 return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));
             }
