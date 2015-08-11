@@ -1,15 +1,14 @@
 ﻿using System;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
-namespace WB.UI.Tester.Infrastructure.Internals.Network
+namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {
-    internal class NetworkService : INetworkService
+    internal class TesterNetworkService : ITesterNetworkService
     {
         private readonly IMvxReachability mvxReachability;
         private readonly ITesterSettings settings;
 
-        public NetworkService(IMvxReachability mvxReachability, ITesterSettings settings)
+        public TesterNetworkService(IMvxReachability mvxReachability, ITesterSettings settings)
         {
             if(mvxReachability == null) throw new ArgumentNullException("mvxReachability");
             if(settings == null) throw new ArgumentNullException("settings");
@@ -18,7 +17,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Network
             this.settings = settings;
         }
 
-        public bool IsNetworkEnabled()
+        public bool IsEndpointReachable()
         {
             return this.mvxReachability.IsHostReachable(this.settings.Endpoint);
         }
