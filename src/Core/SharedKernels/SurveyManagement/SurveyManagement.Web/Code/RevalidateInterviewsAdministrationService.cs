@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -20,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         private static readonly object RebuildAllViewsLockObject = new object();
         private static string statusMessage;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
@@ -34,11 +36,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         public RevalidateInterviewsAdministrationService(
             ILogger logger,
             ICommandService commandService, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader, 
+            ITransactionManagerProvider transactionManagerProvider)
         {
             this.logger = logger;
             this.commandService = commandService;
             this.interviewsReader = interviewsReader;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public void RevalidateAllInterviewsWithErrorsAsync()
@@ -94,13 +98,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 areInterviewsBeingRevalidatingNow = true;
 
+                this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
                 var interviews = this.interviewsReader.Query(_ => _.Where(interview =>
-                    interview.HasErrors == true && interview.IsDeleted == false &&
+                         interview.IsDeleted == false &&
                         (interview.Status == InterviewStatus.Completed ||
                             interview.Status == InterviewStatus.RejectedBySupervisor ||
                             interview.Status == InterviewStatus.ApprovedBySupervisor ||
                             interview.Status == InterviewStatus.ApprovedByHeadquarters ||
                             interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
+                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
 
                 UpdateStatusMessage("Determining count of interview to be revalidated.");
 
@@ -132,7 +138,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                             UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
 
+                            this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                             this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                            this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
 
                             processedInterviewsCount++;
                         }
