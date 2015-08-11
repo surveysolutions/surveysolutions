@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             IDataExportRepositoryWriter dataExportRepositoryWriter,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             ITransactionManagerProvider transactionManagerProvider)
-            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider)
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
@@ -161,6 +161,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     try
                     {
+                        this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                         this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
                             userName: model.UserName,
                             password: passwordHasher.Hash(model.Password), email: model.Email,
@@ -168,6 +169,7 @@ namespace WB.UI.Headquarters.Controllers
                             isLockedByHQ: false, roles: new[] { role }, supervsor: null,
                             personName: model.PersonName,
                             phoneNumber: model.PhoneNumber));
+                        this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
                         return true;
                     }
                     catch (Exception ex)
@@ -200,12 +202,14 @@ namespace WB.UI.Headquarters.Controllers
             {
                 try
                 {
+                    this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
                     this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
                         roles: userToCheck.Roles.ToArray(),
                         personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
+                    this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
                 }
