@@ -4,15 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
 using Sqo.Transactions;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {
-    internal class SiaqodbPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity> where TEntity: class, IPlainStorageEntity
+    internal class SiaqodbPlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
         protected readonly ISiaqodb Storage;
 
-        public SiaqodbPlainStorageAccessor(ISiaqodb storage)
+        public SiaqodbPlainStorage(ISiaqodb storage)
         {
             this.Storage = storage;
         }
