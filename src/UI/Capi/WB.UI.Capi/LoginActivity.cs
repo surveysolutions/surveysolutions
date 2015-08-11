@@ -34,6 +34,9 @@ namespace WB.UI.Capi
 
         protected override void OnCreate(Bundle bundle)
         {
+            this.DataContext = new LoginActivityViewModel();
+            base.OnCreate(bundle);
+
             if (CapiApplication.Membership.IsLoggedIn)
             {
                 NavigationService.NavigateTo(CapiPages.Dashboard, new Dictionary<string, string>());
@@ -46,8 +49,6 @@ namespace WB.UI.Capi
                 this.Finish();
             }
 
-            this.DataContext = new LoginActivityViewModel();
-            base.OnCreate(bundle);
             this.SetContentView(Resource.Layout.Login);
         }
 
