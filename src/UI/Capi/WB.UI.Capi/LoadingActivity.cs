@@ -56,6 +56,11 @@ namespace WB.UI.Capi
             get { return ServiceLocator.Current.GetInstance<IChangeLogManipulator>(); }
         }
 
+        private IViewModelNavigationService NavigationService
+        {
+            get { return ServiceLocator.Current.GetInstance<IViewModelNavigationService>(); }
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -151,8 +156,7 @@ namespace WB.UI.Capi
                     return;
                 }
 
-                var viewModelNavigationService = ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
-                viewModelNavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
+                NavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
             }
             catch (Exception e)
             {
