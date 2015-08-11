@@ -2,6 +2,7 @@
 
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.Infrastructure.CommandBus;
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IViewModelNavigationService viewModelNavigationService = null,
             IFriendlyErrorMessageService friendlyErrorMessageService = null,
             IUserInteractionService userInteractionService = null,
-            IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor = null)
+            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null)
         {
             return new DashboardViewModel(principal: principal,
                 designerApiService: designerApiService,
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 viewModelNavigationService: viewModelNavigationService,
                 friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
-                questionnaireListStorageAccessor: questionnaireListStorageAccessor);
+                questionnaireListStorage: questionnaireListStorage);
         }
     }
 }

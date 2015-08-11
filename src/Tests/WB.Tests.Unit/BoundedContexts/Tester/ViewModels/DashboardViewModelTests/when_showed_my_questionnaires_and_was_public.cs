@@ -9,6 +9,7 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -23,14 +24,14 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var storageAccessor = new Mock<IPlainStorageAccessor<QuestionnaireListItem>>();
+            var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
             storageAccessor.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
                 .Returns(new List<QuestionnaireListItem>());
 
             viewModel = CreateDashboardViewModel(
                 designerApiService: designerApiService,
-                questionnaireListStorageAccessor: storageAccessor.Object);
+                questionnaireListStorage: storageAccessor.Object);
 
             viewModel.Init();
             viewModel.ShowPublicQuestionnairesCommand.Execute();

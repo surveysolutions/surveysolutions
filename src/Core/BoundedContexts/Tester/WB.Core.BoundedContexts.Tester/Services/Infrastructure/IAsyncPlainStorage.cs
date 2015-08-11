@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
-namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
+namespace WB.Core.BoundedContexts.Tester.Services.Infrastructure
 {
-    public interface IPlainStorageAccessor<TEntity> where TEntity : class, IPlainStorageEntity
+    public interface IAsyncPlainStorage<TEntity> where TEntity : class, IPlainStorageEntity
     {
         TEntity GetById(string id);
 

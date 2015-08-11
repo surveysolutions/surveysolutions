@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -31,7 +32,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
 
-        readonly IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor;
+        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -43,7 +44,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
-            IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
+            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -51,18 +52,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.questionnaireListStorageAccessor = questionnaireListStorageAccessor;
+            this.questionnaireListStorage = questionnaireListStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         public async void Init()
         {
-            this.myQuestionnaires = this.questionnaireListStorageAccessor
+            this.myQuestionnaires = this.questionnaireListStorage
                     .Query(query => query
                     .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
                     .ToList());
 
-            this.publicQuestionnaires = this.questionnaireListStorageAccessor
+            this.publicQuestionnaires = this.questionnaireListStorage
                     .Query(query => query
                     .Where(questionnaire => questionnaire.IsPublic)
                     .ToList());
@@ -258,8 +259,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             string errorMessage = null;
             try
             {
-                await this.questionnaireListStorageAccessor.RemoveAsync(this.myQuestionnaires);
-                await this.questionnaireListStorageAccessor.RemoveAsync(this.publicQuestionnaires);
+                await this.questionnaireListStorage.RemoveAsync(this.myQuestionnaires);
+                await this.questionnaireListStorage.RemoveAsync(this.publicQuestionnaires);
 
                 this.myQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
                 this.publicQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
@@ -269,8 +270,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 this.ShowMyQuestionnaires();
 
-                await this.questionnaireListStorageAccessor.StoreAsync(this.myQuestionnaires);
-                await this.questionnaireListStorageAccessor.StoreAsync(this.publicQuestionnaires);
+                await this.questionnaireListStorage.StoreAsync(this.myQuestionnaires);
+                await this.questionnaireListStorage.StoreAsync(this.publicQuestionnaires);
             }
             catch (RestException ex)
             {

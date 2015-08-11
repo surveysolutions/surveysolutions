@@ -6,6 +6,7 @@ using Sqo;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator;
@@ -35,7 +36,7 @@ namespace WB.UI.Tester.Infrastructure
             SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
 
-            this.Bind(typeof(Core.SharedKernels.Enumerator.Services.Infrastructure.IPlainStorageAccessor<>)).To(typeof(SiaqodbPlainStorageAccessor<>)).InSingletonScope();
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
 
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 

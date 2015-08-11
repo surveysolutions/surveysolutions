@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
+namespace WB.Core.BoundedContexts.Tester.Services.Infrastructure
 {
     public interface IPlainStorageEntity
     {
