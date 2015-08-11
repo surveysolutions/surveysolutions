@@ -32,6 +32,7 @@ namespace WB.UI.Tester.Ninject
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
 
+                new TesterBoundedContextModule().AsNinject(),
                 new TesterInfrastructureModule(),
                 new TesterUIModule());
         }

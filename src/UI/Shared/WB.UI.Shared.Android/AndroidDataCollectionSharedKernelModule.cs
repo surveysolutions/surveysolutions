@@ -44,8 +44,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IInterviewSynchronizationFileStorage>()
                 .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
 
-            this.Bind<ICapiExpressionsEngineVersionService>().To<CapiExpressionsEngineVersionService>().InSingletonScope();
-
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>           (command => command.QuestionnaireId)

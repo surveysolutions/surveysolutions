@@ -140,7 +140,6 @@
     <Compile Include="Internals\Location\PlayConnectionFailedListener.cs" />
     <Compile Include="Internals\Location\PlayServicesLocationWatcher.cs" />
     <Compile Include="Internals\QRBarcodeScanService.cs" />
-    <Compile Include="Internals\Settings\ExpressionsEngineVersionService.cs" />
     <Compile Include="EnumeratorInfrastructureModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />
     <Compile Include="Ninject\KernelExtensions.cs" />

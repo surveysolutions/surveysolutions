@@ -149,7 +149,7 @@ namespace WB.UI.Tester
         {
             return new[]
             {
-                typeof(TesterBoundedContext).Assembly,
+                typeof(TesterBoundedContextModule).Assembly,
                 typeof(EnumeratorSharedKernelModule).Assembly,
             };
         }

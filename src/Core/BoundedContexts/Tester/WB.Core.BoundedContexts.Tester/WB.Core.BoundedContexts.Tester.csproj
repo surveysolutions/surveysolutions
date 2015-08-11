@@ -38,10 +38,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
+    <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
+    <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TesterBoundedContext.cs" />
+    <Compile Include="Services\ITesterExpressionsEngineVersionService.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />

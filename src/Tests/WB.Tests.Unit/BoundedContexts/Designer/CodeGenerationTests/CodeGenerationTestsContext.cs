@@ -223,7 +223,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static Version CreateQuestionnaireVersion()
         {
-            return new ExpressionsEngineVersionService().GetLatestSupportedVersion();
+            return new DesignerExpressionsEngineVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
