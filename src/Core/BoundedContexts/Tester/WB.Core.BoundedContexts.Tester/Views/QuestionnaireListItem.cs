@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Tester.Views

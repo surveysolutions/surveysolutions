@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             var userName = "Vasya";
 
-            var storageAccessor = new Mock<IPlainStorageAccessor<QuestionnaireListItem>>();
+            var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
             storageAccessor.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
                 .Returns(
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel = CreateDashboardViewModel(
                 principal: principal,
                 designerApiService: designerApiService,
-                questionnaireListStorageAccessor: storageAccessor.Object);
+                questionnaireListStorage: storageAccessor.Object);
         };
 
         Because of = () => viewModel.Init();
