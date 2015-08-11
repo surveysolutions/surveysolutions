@@ -83,11 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         {
             var activeUserNames = TransactionManager.ExecuteInQueryTransaction(() =>
 
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => !u.IsArchived)
-                            .Select(u => u.UserName.ToLower())).ToHashSet()
-                );
+            userStorage.Query(_ => _.Where(u => !u.IsArchived).Select(u => u.UserName.ToLower())).ToHashSet());
 
             var activeSupervisorNames = TransactionManager.ExecuteInQueryTransaction(() =>
 
