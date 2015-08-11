@@ -153,4 +153,13 @@
   <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
     <value>Synchronization partially failed. Completed interviews were sent to server, but you won't receive new assignments. Please navigate to 'Android settings' -&gt; Apps -&gt; Interviewer and push Clear Data button. Then synchronize from scratch.</value>
   </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>"This interview is completed. Do you want to reinitialize the interview?"</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -14,12 +17,18 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.ViewModel.Dashboard;
+
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Capi
 {
@@ -38,6 +47,11 @@ namespace WB.UI.Capi
         private ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
+        private IPrincipal principal
+        {
+            get { return ServiceLocator.Current.GetInstance<IPrincipal>(); }
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -152,12 +166,55 @@ namespace WB.UI.Capi
             bool createdOnClient;
 
             bool localyCreated = (id != null && bool.TryParse(id.ToString(), out createdOnClient) && createdOnClient);
-            
+            var publicKeyTag = target.GetTag(Resource.Id.QuestionnaireId).ToString();
+            var publicKey = Guid.Parse(target.GetTag(Resource.Id.QuestionnaireId).ToString());
+
+            var interviews = this.currentDashboard.Surveys.SelectMany(x => x.ActiveItems);
+            var selectedInterview = interviews.FirstOrDefault(x => x.PublicKey == publicKey);
+
+            if (selectedInterview.Status == InterviewStatus.Completed)
+            {
+                var firstConfirmationDialog = this.CreateYesNoDialog(
+                    this,
+                    yesHandler: (s, ev) =>
+                    {
+                        CapiApplication.CommandService.Execute(new RestartInterviewCommand(publicKey, CapiApplication.Membership.CurrentUser.Id, "", DateTime.UtcNow));
+                        this.ShowLoadingActivity(publicKeyTag, localyCreated);
+                    },
+                    noHandler: (s, ev) => { },
+                    message: Properties.Resources.Dashboard_Reinitialize_Interview_Message);
+
+                firstConfirmationDialog.Show();
+            }
+            else
+            {
+                this.ShowLoadingActivity(publicKeyTag, localyCreated);
+            }
+        }
+
+        void ShowLoadingActivity(string publicKeyTag, bool localyCreated)
+        {
             var intent = new Intent(this, typeof(LoadingActivity));
-            intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
+            intent.PutExtra("publicKey", publicKeyTag);
             intent.PutExtra("createdOnClient", localyCreated);
             this.StartActivity(intent);
-            
+        }
+
+        public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
+        {
+            var builder = new AlertDialog.Builder(activity);
+            builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
+            builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetCancelable(false);
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                builder.SetTitle(title);
+            }
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                builder.SetMessage(message);
+            }
+            return builder.Create();
         }
 
         void btnNewInterview_ButtonClick(object sender, EventArgs e)
