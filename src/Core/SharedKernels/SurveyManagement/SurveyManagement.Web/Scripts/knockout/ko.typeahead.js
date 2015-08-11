@@ -2,6 +2,7 @@ ko.bindingHandlers.typeahead = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize with some optional options
         var options = allBindingsAccessor().typeaheadOptions || {};
+        options.items = 12;
         $(element).typeahead(options);
         $(element).change(function () {
             var selectedItem = $(element).typeahead("getActive");
