@@ -364,7 +364,7 @@ namespace WB.UI.Capi
             
             #endregion
 
-            this.kernel.VerifyIfDebug();
+            //this.kernel.VerifyIfDebug();
         }
 
         private void RestoreAppState()

@@ -1,5 +1,6 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
+using Ninject;
 using Ninject.Modules;
 using Sqo;
 using WB.Core.BoundedContexts.Tester;
@@ -16,6 +17,7 @@ using WB.UI.Tester.Infrastructure.Internals.Json;
 using WB.UI.Tester.Infrastructure.Internals.Log;
 using WB.UI.Tester.Infrastructure.Internals.Network;
 using WB.UI.Tester.Infrastructure.Internals.Rest;
+using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
 
@@ -48,6 +50,9 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<ITesterSettings>().To<TesterSettings>();
             this.Bind<IEnumeratorSettings>().To<TesterSettings>();
+
+            this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
+            this.Bind<IUserIdentity>().ToMethod(context => context.Kernel.Get<IPrincipal>().CurrentUserIdentity);
         }
     }
 }
