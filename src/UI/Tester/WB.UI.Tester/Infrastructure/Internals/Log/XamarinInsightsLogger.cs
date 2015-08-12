@@ -13,7 +13,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Log
 
         public void Warn(string message, Exception exception = null)
         {
-            Insights.Report(exception: exception);
+            Insights.Report(exception: exception, warningLevel: Insights.Severity.Warning);
         }
     }
 }
