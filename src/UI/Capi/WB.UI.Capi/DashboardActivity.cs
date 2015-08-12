@@ -182,7 +182,7 @@ namespace WB.UI.Capi
                         this.ShowLoadingActivity(publicKeyTag, localyCreated);
                     },
                     noHandler: (s, ev) => { },
-                    message: Properties.Resources.Dashboard_Reinitialize_Interview_Message);
+                    message: Resources.GetString(Resource.String.Dashboard_Reinitialize_Interview_Message));
 
                 firstConfirmationDialog.Show();
             }
