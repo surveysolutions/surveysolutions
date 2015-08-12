@@ -140,8 +140,6 @@
     <Compile Include="Internals\Location\PlayConnectionFailedListener.cs" />
     <Compile Include="Internals\Location\PlayServicesLocationWatcher.cs" />
     <Compile Include="Internals\QRBarcodeScanService.cs" />
-    <Compile Include="Internals\Security\Principal.cs" />
-    <Compile Include="Internals\Security\UserIdentity.cs" />
     <Compile Include="Internals\Settings\ExpressionsEngineVersionService.cs" />
     <Compile Include="EnumeratorInfrastructureModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />
@@ -172,7 +170,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Internals\Security\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

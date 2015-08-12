@@ -265,6 +265,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Infrastructure\Internals\Security\InterviewerPrincipal.cs" />
+    <Compile Include="Infrastructure\Internals\Security\InterviewerUserIdentity.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />

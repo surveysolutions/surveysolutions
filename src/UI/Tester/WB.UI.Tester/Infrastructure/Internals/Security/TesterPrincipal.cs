@@ -1,12 +1,11 @@
 ﻿using System;
-using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using IHS.MvvmCross.Plugins.Keychain;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using ISettings = Cheesebaron.MvxPlugins.Settings.Interfaces.ISettings;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.Security
+namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
-    internal class Principal : IPrincipal
+    internal class TesterPrincipal : IPrincipal
     {
         public const string ServiceParameterName = "authentication";
         private const string UserNameParameterName = "authenticatedUser";
@@ -18,7 +17,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.Security
         public bool IsAuthenticated { get; private set; }
         public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
 
-        public Principal(IKeychain securityService, ISettings settingsService)
+        public TesterPrincipal(IKeychain securityService, ISettings settingsService)
         {
             this.securityService = securityService;
             this.settingsService = settingsService;

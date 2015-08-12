@@ -1,7 +1,7 @@
 using System;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.Security
+namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
     internal class UserIdentity : IUserIdentity
     {
