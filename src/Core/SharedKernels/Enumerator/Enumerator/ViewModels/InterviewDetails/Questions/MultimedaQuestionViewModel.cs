@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        private readonly IUserIdentity userIdentity;
+        private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
@@ -30,14 +30,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private byte[] answer;
 
         public MultimedaQuestionViewModel(
-            IUserIdentity userIdentity,
+            IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
-            this.userIdentity = userIdentity;
+            this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.questionnaireStorage = questionnaireStorage;
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                         var command = new AnswerPictureQuestionCommand(
                             this.interviewId,
-                            this.userIdentity.UserId,
+                            this.userId,
                             this.questionIdentity.Id,
                             this.questionIdentity.RosterVector,
                             DateTime.UtcNow,

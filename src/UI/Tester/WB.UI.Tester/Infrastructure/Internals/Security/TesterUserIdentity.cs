@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
-    internal class UserIdentity : IUserIdentity
+    internal class TesterUserIdentity : IUserIdentity
     {
         public string Name { get; set; }
         public string Password { get; set; }

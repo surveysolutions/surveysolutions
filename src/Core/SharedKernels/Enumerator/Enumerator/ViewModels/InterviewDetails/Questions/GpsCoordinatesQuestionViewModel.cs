@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(async () => await this.SaveAnswerAsync(), () => !this.IsInProgress)); }
         }
 
-        private readonly IUserIdentity userIdentity;
+        private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
         private readonly IGpsLocationService locationService;
@@ -49,14 +49,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; private set; }
 
         public GpsCoordinatesQuestionViewModel(
-            IUserIdentity userIdentity,
+            IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IEnumeratorSettings settings,
             IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
-            this.userIdentity = userIdentity;
+            this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
             this.settings = settings;
             this.locationService = locationService;
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var command = new AnswerGeoLocationQuestionCommand(
                 interviewId: this.interviewId,
-                userId: this.userIdentity.UserId,
+                userId: this.userId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,

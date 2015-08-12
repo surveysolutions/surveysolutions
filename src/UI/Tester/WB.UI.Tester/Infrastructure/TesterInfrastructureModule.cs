@@ -54,7 +54,6 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IEnumeratorSettings>().To<TesterSettings>();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
-            this.Bind<IUserIdentity>().ToMethod(context => context.Kernel.Get<IPrincipal>().CurrentUserIdentity);
         }
     }
 }
