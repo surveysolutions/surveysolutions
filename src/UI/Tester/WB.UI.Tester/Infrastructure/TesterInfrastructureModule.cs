@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Json;
