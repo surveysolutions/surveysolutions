@@ -1,7 +1,10 @@
 ﻿using System.Net;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.GenericSubdomains.Portable.Services;
+using ILogger = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.ILogger;
 
 namespace WB.UI.Tester.Infrastructure.Internals
 {
