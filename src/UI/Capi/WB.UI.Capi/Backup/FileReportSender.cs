@@ -1,12 +1,17 @@
 using System;
 using System.IO;
+
 using Android.App;
+
+using Mono.Android.Crasher;
+using Mono.Android.Crasher.Data;
+using Mono.Android.Crasher.Data.Submit;
 
 using WB.Core.GenericSubdomains.Portable.Services;
 
 using Environment = Android.OS.Environment;
 
-namespace Mono.Android.Crasher.Data.Submit
+namespace WB.UI.Capi.Backup
 {
     public class FileReportSender : IReportSender
     {
@@ -31,42 +36,42 @@ namespace Mono.Android.Crasher.Data.Submit
 
         public void Initialize(Application application)
         {
-            bugreports = Environment.ExternalStorageDirectory.AbsolutePath;
-            if (Directory.Exists(bugreports))
+            this.bugreports = Environment.ExternalStorageDirectory.AbsolutePath;
+            if (Directory.Exists(this.bugreports))
             {
-                bugreports = System.IO.Path.Combine(bugreports, BUGREPORTS);
-                if (!Directory.Exists(bugreports))
+                this.bugreports = System.IO.Path.Combine(this.bugreports, BUGREPORTS);
+                if (!Directory.Exists(this.bugreports))
                 {
-                    Directory.CreateDirectory(bugreports);
+                    Directory.CreateDirectory(this.bugreports);
                 }
-                bugreports = System.IO.Path.Combine(bugreports, appName);
-                if (!Directory.Exists(bugreports))
-                    Directory.CreateDirectory(bugreports);
-                filePath = System.IO.Path.Combine(bugreports, FILE_NAME);
+                this.bugreports = System.IO.Path.Combine(this.bugreports, this.appName);
+                if (!Directory.Exists(this.bugreports))
+                    Directory.CreateDirectory(this.bugreports);
+                this.filePath = System.IO.Path.Combine(this.bugreports, FILE_NAME);
 
             }
             else
             {
-                filePath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), FILE_NAME);
+                this.filePath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), FILE_NAME);
             }
-            bool exists = File.Exists(filePath);
+            bool exists = File.Exists(this.filePath);
             if (!exists)
             {
                 //File.CreateText(filePath);
-                using (FileStream stOut = File.Open(filePath, FileMode.OpenOrCreate))
+                using (FileStream stOut = File.Open(this.filePath, FileMode.OpenOrCreate))
                 {
                     byte[] pwBytesDate = System.Text.Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString());
                     stOut.Write(pwBytesDate, 0, pwBytesDate.Length);
                 }
             }
 
-            if (infoFileSupplierRegistry!=null)
-                infoFileSupplierRegistry.RegisterConstant(filePath);
+            if (this.infoFileSupplierRegistry!=null)
+                this.infoFileSupplierRegistry.RegisterConstant(this.filePath);
         }
 
         public void Send(ReportData errorContent)
         {
-            using (FileStream stOut = File.Open(filePath, FileMode.Append))
+            using (FileStream stOut = File.Open(this.filePath, FileMode.Append))
             {
                 byte[] pwBytesDate = System.Text.Encoding.UTF8.GetBytes(errorContent[ReportField.UserCrashDate]);
                 stOut.Write(pwBytesDate, 0, pwBytesDate.Length);

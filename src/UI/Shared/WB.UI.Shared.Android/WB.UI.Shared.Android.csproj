@@ -121,82 +121,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\SmartAdapter.cs" />
-    <Compile Include="Adapters\StatisticsDataAdapter.cs" />
-    <Compile Include="Bindings\BackgroundBinding.cs" />
-    <Compile Include="Bindings\HtmlBinding.cs" />
-    <Compile Include="Bindings\MvvmBindingWrapper.cs" />
-    <Compile Include="Bindings\MandatoryValidationMessageBinding.cs" />
-    <Compile Include="Bindings\ValidationMessageBinding.cs" />
-    <Compile Include="Bindings\VisibilityBinding.cs" />
-    <Compile Include="AndroidSharedModule.cs" />
-    <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
-    <Compile Include="CapiBoundedContextModule.cs" />
-    <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
-    <Compile Include="Controls\Breadcrumbs.cs" />
-    <Compile Include="Controls\IScreenChanging.cs" />
-    <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />
-    <Compile Include="Controls\QuestionnaireNavigationView.cs" />
-    <Compile Include="Controls\QuestionnarieNavigationItem.cs" />
-    <Compile Include="Controls\RosterTable.cs" />
-    <Compile Include="Controls\ScreenItems\StaticTextView.cs" />
-    <Compile Include="Controls\ScreenItems\DecimalPlacesFilter.cs" />
-    <Compile Include="Controls\ScreenItems\GroupView.cs" />
-    <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
-    <Compile Include="Events\AnswerSavedEventArgs.cs" />
-    <Compile Include="Events\AnswerSetEventArgs.cs" />
-    <Compile Include="Events\ScreenChangedEventArgs.cs" />
-    <Compile Include="Extensions\ContextExtensions.cs" />
-    <Compile Include="Extensions\ViewExtensions.cs" />
-    <Compile Include="Frames\AbstractScreenChangingFragment.cs" />
-    <Compile Include="Frames\StatisticsContentFragment.cs" />
-    <Compile Include="GeolocationServices\GeoService.cs" />
-    <Compile Include="GeolocationServices\IGeoService.cs" />
-    <Compile Include="Helpers\AndroidUIHelper.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AndroidNetworkService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Resources\AboutResources.txt" />
-    <AndroidResource Include="Resources\Layout\Details.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\StatisticsContent.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
-    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\StaticTextView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\FilteredComboboxRowLayout.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\CascadingComboboxRowLayout.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\GroupView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Values\Colors.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
@@ -232,52 +161,7 @@
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\questionShape.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\no_image_found.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\ic_drawer_dark.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\donecountershape.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

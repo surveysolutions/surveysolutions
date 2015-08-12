@@ -40,10 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
@@ -83,7 +79,6 @@
     <Compile Include="Data\ReportData.cs" />
     <Compile Include="Data\ReportDataFactory.cs" />
     <Compile Include="Data\Submit\EmailReportSender.cs" />
-    <Compile Include="Data\Submit\FileReportSender.cs" />
     <Compile Include="Data\Submit\GoogleFormSender.cs" />
     <Compile Include="Data\Submit\IReportSender.cs" />
     <Compile Include="ExceptionProcessor.cs" />

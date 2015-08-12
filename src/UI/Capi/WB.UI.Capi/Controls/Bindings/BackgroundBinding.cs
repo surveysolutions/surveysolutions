@@ -1,11 +1,15 @@
 using System;
+
 using Android.Views;
 using Android.Widget;
+
 using Cirrious.MvvmCross.Binding;
+
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.UI.Shared.Android.Bindings;
 using WB.UI.Shared.Android.Extensions;
 
-namespace WB.UI.Shared.Android.Bindings
+namespace WB.UI.Capi.Controls.Bindings
 {
     public class BackgroundBinding : MvvmBindingWrapper<View>
     {
