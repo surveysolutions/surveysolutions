@@ -28,8 +28,6 @@ using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.ViewModel.Dashboard;
 
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-
 namespace WB.UI.Capi
 {
     [Activity(Label = "Interviewer",
@@ -43,16 +41,6 @@ namespace WB.UI.Capi
 
         private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
         private IPlainInterviewFileStorage plainInterviewFileStorage = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
-
-        private ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
-
-        private IPrincipal principal
-        {
-            get { return ServiceLocator.Current.GetInstance<IPrincipal>(); }
-        }
 
         protected override void OnCreate(Bundle bundle)
         {
