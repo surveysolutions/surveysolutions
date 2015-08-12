@@ -86,7 +86,6 @@
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
-    <Compile Include="Services\Infrastructure\ILogger.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />

@@ -10,7 +10,7 @@ using Flurl.Http;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
-using ILogger = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.ILogger;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {
