@@ -13,7 +13,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.androidCurrentTopActivity = androidCurrentTopActivity;
         }
 
-        public async Task<ScanResult> ScanAsync()
+        public async Task<QRBarcodeScanResult> ScanAsync()
         {
             var scanner = new Scanner(this.androidCurrentTopActivity.Activity);
             scanner.setInterfaceOrientation(
@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.CustomizeScanner();
             var result = await scanner.Scan();
 
-            return result != null ? new ScanResult() {Code = result.code, RawBytes = result.bytes} : null;
+            return result != null ? new QRBarcodeScanResult() {Code = result.code, RawBytes = result.bytes} : null;
         }
 
         private void CustomizeScanner()
