@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator.Internals;
 using WB.Infrastructure.Shared.Enumerator.Internals.FileSystem;
 using WB.Infrastructure.Shared.Enumerator.Internals.Location;
-using WB.Infrastructure.Shared.Enumerator.Internals.Security;
 using WB.Infrastructure.Shared.Enumerator.Internals.Settings;
 
 namespace WB.Infrastructure.Shared.Enumerator
@@ -21,9 +20,6 @@ namespace WB.Infrastructure.Shared.Enumerator
         {
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
-
-            this.Bind<IPrincipal>().To<Principal>().InSingletonScope();
-            this.Bind<IUserIdentity>().ToMethod(context => context.Kernel.Get<IPrincipal>().CurrentUserIdentity);
 
             this.Bind<IExpressionsEngineVersionService>().To<ExpressionsEngineVersionService>().InSingletonScope();
 
