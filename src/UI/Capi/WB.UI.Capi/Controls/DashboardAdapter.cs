@@ -8,8 +8,8 @@ using Android.Views;
 using Android.Widget;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Capi.Controls.Adapters;
 using WB.UI.Capi.ViewModel.Dashboard;
-using WB.UI.Shared.Android.Adapters;
 
 namespace WB.UI.Capi.Controls
 {

@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
+
 using Android.Views;
 using Android.Widget;
-using WB.UI.Shared.Android.Controls.ScreenItems;
+
 using WB.UI.Shared.Android.Extensions;
 
-namespace WB.UI.Shared.Android.Adapters
+namespace WB.UI.Capi.Controls.Adapters
 {
     public abstract class SmartAdapter<T> : BaseAdapter<T>
     {
