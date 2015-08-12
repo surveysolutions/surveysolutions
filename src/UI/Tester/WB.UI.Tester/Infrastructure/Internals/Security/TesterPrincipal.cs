@@ -13,7 +13,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
         private readonly IKeychain securityService;
         private readonly ISettings settingsService;
 
-        private UserIdentity currentUserIdentity;
+        private TesterUserIdentity currentUserIdentity;
         public bool IsAuthenticated { get; private set; }
         public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
 
@@ -30,7 +30,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             var userName = this.settingsService.GetValue(UserNameParameterName, string.Empty);
 
             this.IsAuthenticated = !string.IsNullOrEmpty(userName);
-            this.currentUserIdentity = new UserIdentity()
+            this.currentUserIdentity = new TesterUserIdentity()
             {
                 UserId = Guid.NewGuid(),
                 Name = userName,

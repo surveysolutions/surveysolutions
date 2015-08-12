@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(this.SaveAnswer, () => !this.IsInProgress)); }
         }
 
-        private readonly IUserIdentity userIdentity;
+        private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly IUserInteractionService userInteractionService;
@@ -46,14 +46,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
 
         public QRBarcodeQuestionViewModel(
-            IUserIdentity userIdentity,
+            IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IQRBarcodeScanService qrBarcodeScanService,
             IUserInteractionService userInteractionService,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
-            this.userIdentity = userIdentity;
+            this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.userInteractionService = userInteractionService;
@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var command = new AnswerQRBarcodeQuestionCommand(
                         interviewId: this.interviewId,
-                        userId: this.userIdentity.UserId,
+                        userId: this.userId,
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
                         answerTime: DateTime.UtcNow,

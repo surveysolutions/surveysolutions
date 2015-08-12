@@ -266,7 +266,7 @@
     <Compile Include="Infrastructure\Internals\FriendlyErrorMessageService.cs" />
     <Compile Include="Infrastructure\Internals\Rest\ITesterNetworkService.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
-    <Compile Include="Infrastructure\Internals\Security\UserIdentity.cs" />
+    <Compile Include="Infrastructure\Internals\Security\TesterUserIdentity.cs" />
     <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
     <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
     <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
