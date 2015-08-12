@@ -13,7 +13,6 @@ namespace WB.UI.Capi.Infrastructure
         {
             this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
             this.Bind<IPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
-            this.Bind<IUserIdentity>().ToMethod(context => context.Kernel.Get<IPrincipal>().CurrentUserIdentity);
         }
     }
 }

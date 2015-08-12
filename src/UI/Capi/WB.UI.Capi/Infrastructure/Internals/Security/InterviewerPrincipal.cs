@@ -22,10 +22,10 @@ namespace WB.UI.Capi.Infrastructure.Internals.Security
         {
             get
             {
-                UserLight user = this.membership.CurrentUser;
-                if (user == null) return null;
-                var identity = new InterviewerUserIdentity(user.Name, user.Id);
-                return identity;
+                if (this.membership.CurrentUser == null)
+                    return null;
+
+                return new InterviewerUserIdentity(this.membership.CurrentUser.Name, this.membership.CurrentUser.Id);
             }
         }
 

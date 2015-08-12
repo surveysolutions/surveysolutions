@@ -19,10 +19,10 @@ namespace WB.UI.Tester.Infrastructure.Internals
 
         public DesignerApiService(
             IRestService restService, 
-            IUserIdentity userIdentity)
+            IPrincipal principal)
         {
             this.restService = restService;
-            this.userIdentity = userIdentity;
+            this.userIdentity = principal.CurrentUserIdentity;
         }
 
         public async Task<bool> Authorize(string login, string password)
