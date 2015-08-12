@@ -20,7 +20,7 @@ using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
-using ILogger = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.ILogger;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Tester.Infrastructure
 {
