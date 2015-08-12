@@ -8,6 +8,7 @@
     
     self.InterviewListUrl = interviewListUrl;
 
+    self.submitting = false;
     self.questionnaire = ko.observable();
     self.responsible = ko.observable().extend({ required: true });
     self.questions = ko.observableArray();
@@ -23,22 +24,25 @@
     self.saveCommand = function() {
             if (!self.isViewModelValid())
                 return;
+            if (!self.submitting) {
+                self.submitting = true;
 
-            var command = {
-                type: "CreateInterviewCommand",
-                command: ko.toJSON({
-                    interviewId: self.questionnaire().id,
-                    supervisorId: self.responsible().id(),
-                    questionnaireId: self.questionnaire().templateId,
-                    questionnaireVersion: self.questionnaire().templateVersion,
-                    answersToFeaturedQuestions: datacontext.prepareQuestion()
-                })
-            };
-            self.SendCommand(command, function(data) {
-                window.location = self.InterviewListUrl.concat("?templateId=",
-                    datacontext.questionnaire.templateId, "&templateVersion=",
-                    datacontext.questionnaire.templateVersion);
-            });
+                var command = {
+                    type: "CreateInterviewCommand",
+                    command: ko.toJSON({
+                        interviewId: self.questionnaire().id,
+                        supervisorId: self.responsible().id(),
+                        questionnaireId: self.questionnaire().templateId,
+                        questionnaireVersion: self.questionnaire().templateVersion,
+                        answersToFeaturedQuestions: datacontext.prepareQuestion()
+                    })
+                };
+                self.SendCommand(command, function(data) {
+                    window.location = self.InterviewListUrl.concat("?templateId=",
+                        datacontext.questionnaire.templateId, "&templateVersion=",
+                        datacontext.questionnaire.templateVersion);
+                });
+            }
         },
     self.load = function (isViewModelValid) {
         self.IsAjaxComplete(false);
