@@ -93,7 +93,7 @@
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\RestCredentials.cs" />
     <Compile Include="Services\Infrastructure\RestException.cs" />
-    <Compile Include="Services\Infrastructure\ScanResult.cs" />
+    <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
