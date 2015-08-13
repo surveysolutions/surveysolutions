@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool LoginDublicationInDataset(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            return data.Count(row => row.Login.ToLower() == userPreloadingDataRecord.Login) > 1;
+            return data.Count(row => row.Login.ToLower() == userPreloadingDataRecord.Login.ToLower()) > 1;
         }
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
