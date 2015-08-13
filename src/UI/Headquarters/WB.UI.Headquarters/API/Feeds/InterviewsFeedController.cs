@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.API.Feeds
 
             if (totalFeedEntriesCount % PageSize > 0)
             {
-                interviewFeedEntries = feedReader.Query(_ => _.SkipFullPages(PageSize, totalFeedEntriesCount).OrderBy(x => x.Timestamp).ToList());
+                interviewFeedEntries = feedReader.Query(_ => _.OrderBy(x => x.Timestamp).SkipFullPages(PageSize, totalFeedEntriesCount).ToList());
             }
 
             var feed = this.GetFeed(interviewFeedEntries);
