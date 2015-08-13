@@ -129,7 +129,9 @@
         }).always(function() {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);
-            onDone();
+            if (!_.isUndefined(onDone)) {
+                onDone();
+            }
         });
     };
 
