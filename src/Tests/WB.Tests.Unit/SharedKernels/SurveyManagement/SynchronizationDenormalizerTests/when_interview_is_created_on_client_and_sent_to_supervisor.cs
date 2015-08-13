@@ -36,14 +36,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         It should_not_store_any_sync_package = () =>
             interviewPackageStorageWriterMock.Verify(
                 x => x.Store(
-                    Moq.It.IsAny<InterviewSyncPackageContent>(),
                     Moq.It.IsAny<InterviewSyncPackageMeta>(),
-                    Moq.It.IsAny<string>(),
                     Moq.It.IsAny<string>()), Times.Never);
 
         static InterviewSynchronizationDenormalizer denormalizer;
         static Guid interviewId;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+        private static Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>> interviewPackageStorageWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>();
 
     }
 }
