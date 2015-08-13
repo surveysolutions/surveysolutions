@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys = null,
             IJsonUtils jsonUtils = null,
             IMetaInfoBuilder metaBuilder = null,
-            IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> interviewPackageStorageWriter = null,
+            IReadSideRepositoryWriter<InterviewSyncPackageMeta> interviewPackageStorageWriter = null,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory = null)
         {
             var result = new InterviewSynchronizationDenormalizer(
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 interviewPackageStorageWriter ??
-                Mock.Of<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>(),
+                Mock.Of<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>(),
                 Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>(),
                 synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>());
 
