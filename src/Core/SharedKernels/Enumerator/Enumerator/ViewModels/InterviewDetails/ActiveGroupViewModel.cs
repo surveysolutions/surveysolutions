@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
         }
 
-        public void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
@@ -99,11 +99,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                this.CreateRegularGroupScreen(navigationParams, @group);
+                await this.CreateRegularGroupScreen(navigationParams, @group);
             }
         }
 
-        void CreateCompleteScreen(GroupChangedEventArgs navigationParams)
+        private void CreateCompleteScreen(GroupChangedEventArgs navigationParams)
         {
             this.Items = new ObservableRangeCollection<dynamic>();
 
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
 
-        void CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
+        private async Task CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
         {
             if (@group is RosterModel)
             {
@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = @group.Title;
             }
 
-            Task.Run(
+            await Task.Run(
                 () =>
                 {
                     this.LoadFromModel(navigationParams.TargetGroup);
