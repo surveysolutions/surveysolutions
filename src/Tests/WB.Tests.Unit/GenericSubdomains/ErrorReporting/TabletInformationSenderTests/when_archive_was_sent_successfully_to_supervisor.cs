@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.TabletInformation;
 
 namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSenderTests
 {

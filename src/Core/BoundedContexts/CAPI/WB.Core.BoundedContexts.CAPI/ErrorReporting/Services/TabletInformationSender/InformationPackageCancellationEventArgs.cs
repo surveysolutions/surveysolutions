@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender
 {
     public class InformationPackageCancellationEventArgs : EventArgs
     {
@@ -12,7 +8,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSen
 
         public InformationPackageCancellationEventArgs(string reason)
         {
-            Reason = reason;
+            this.Reason = reason;
         }
     }
 }

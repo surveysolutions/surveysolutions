@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.ErrorReporting.Resources;
-using WB.Core.GenericSubdomains.ErrorReporting.Services;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Resources;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.CapiInformationService;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.TabletInformation
 {
     internal class TabletInformationSender : ITabletInformationSender
     {
@@ -34,7 +34,7 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformat
 
         public event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
         public event EventHandler<InformationPackageCancellationEventArgs> ProcessCanceled;
-        public event EventHandler ProcessFinished;
+        public event System.EventHandler ProcessFinished;
 
         public Task Run()
         {

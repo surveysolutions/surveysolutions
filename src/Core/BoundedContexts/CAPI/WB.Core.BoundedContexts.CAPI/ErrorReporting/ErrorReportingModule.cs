@@ -1,12 +1,12 @@
 ﻿using Ninject.Modules;
-using WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformation;
-using WB.Core.GenericSubdomains.ErrorReporting.Implementation.InfoFileSupplierRegistry;
-using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.CapiInformation;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.InfoFileSupplierRegistry;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.TabletInformation;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.CapiInformationService;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting
 {
     public class ErrorReportingModule : NinjectModule
     {
