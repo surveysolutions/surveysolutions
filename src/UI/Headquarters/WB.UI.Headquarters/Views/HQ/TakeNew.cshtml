@@ -87,9 +87,9 @@
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return _.isUndefined(item) ? '' : item.label()}, minLength: 0, autoSelect: true, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
-                    <div class="input-group-btn">
-                        <div class="btn btn-default"><span class="caret"></span></div>
+                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return _.isUndefined(item) ? '' : item.label()}, minLength: 0, autoSelect: true, showHintOnFocus: true}, valueupdate:'afterkeydown'" type="text" />
+                    <div class="input-group-btn" data-bind="click: function(){ selectedOption(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
                 <span class="help-block" data-bind="validationMessage: value"></span>
@@ -187,9 +187,9 @@
             <label class="col-sm-2 control-label">Responsible</label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return _.isUndefined(item) ? '' : item.name()}, minLength: 0, autoselect: true, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
-                    <div class="input-group-btn">
-                        <div class="btn btn-default"><span class="caret"></span></div>
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return _.isUndefined(item) ? '' : item.name()}, minLength: 0, autoselect: true, showHintOnFocus: true, showLoadMore: true}, valueupdate:'afterkeydown'" type="text" />
+                    <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
                 <span class="help-block" data-bind="validationMessage: responsible"></span>

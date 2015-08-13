@@ -9,9 +9,7 @@
 
     self.SelectedTemplate = ko.observable('');
 
-    self.DefaultResponsible = { UserId: '', UserName: 'Any' };
-
-    self.SelectedResponsible = ko.observable(self.DefaultResponsible);
+    self.SelectedResponsible = ko.observable();
 
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
@@ -35,7 +33,7 @@
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
         self.Url.query['status'] = self.SelectedStatus() || "";
-        self.Url.query['interviewerId'] = self.SelectedResponsible().UserId || "";
+        self.Url.query['interviewerId'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId;
         self.Url.query['searchBy'] = self.SearchBy() || "";
         
         if (Modernizr.history) {
@@ -45,7 +43,7 @@
         return {
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
-            ResponsibleId: self.SelectedResponsible().UserId,
+            ResponsibleId: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy
         };
@@ -56,7 +54,7 @@
         self.SelectedStatus(self.QueryString['status']);
 
         var selectedResponsible = _.find(self.Responsibles, function(responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
-        self.SelectedResponsible(selectedResponsible || self.DefaultResponsible);
+        self.SelectedResponsible(selectedResponsible);
 
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 

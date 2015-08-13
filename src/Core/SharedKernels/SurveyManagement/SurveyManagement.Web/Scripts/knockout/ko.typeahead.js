@@ -2,7 +2,11 @@ ko.bindingHandlers.typeahead = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize with some optional options
         var options = allBindingsAccessor().typeaheadOptions || {};
-        options.items = 12;
+        if (options.showLoadMore && options.displayText) {
+            options.extendedDisplayText = options.displayText;
+            delete options.displayText;
+        }
+
         $(element).typeahead(options);
         $(element).change(function () {
             var selectedItem = $(element).typeahead("getActive");
@@ -11,30 +15,13 @@ ko.bindingHandlers.typeahead = {
                 observable(selectedItem);
             }
         });
-        if (options.shouldOpenOnParentClick) {
-            $(element).parent().click(function() {
-                $(element).focus();
-            });
-        }
-        
     },
     update: function (element, valueAccessor, allBindingsAccessor) {
-        var options = allBindingsAccessor().typeaheadOptions || {};
         var value = ko.utils.unwrapObservable(valueAccessor());
-        $(element).val(options.displayText(value));
+        if (_.isUndefined(value)) {
+            var options = allBindingsAccessor().typeaheadOptions || {};
+            $(element).val(options.displayText(value));
+        }
+            
     }
 };
-
-!function ($) {
-    "use strict";
-    var BetterTypeahead = {
-        focus: function (e) {
-            this.focused = true;
-
-            if (!this.mousedover) {
-                this.lookup('');
-            }
-        }
-    };
-    $.extend($.fn.typeahead.Constructor.prototype, BetterTypeahead);
-}(window.jQuery);
