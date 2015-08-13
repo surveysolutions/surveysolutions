@@ -263,6 +263,7 @@
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
+    <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
     <Compile Include="Infrastructure\Internals\FriendlyErrorMessageService.cs" />
     <Compile Include="Infrastructure\Internals\Rest\ITesterNetworkService.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
@@ -304,6 +305,26 @@
     <AndroidResource Include="Resources\menu\dashboard.xml" />
     <AndroidResource Include="Resources\menu\login.xml" />
     <AndroidResource Include="Resources\values\settings.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
+    <Content Include="Resources\drawable\dashboard_refresh_icon.png" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\styles-dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\dimensions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\colors.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
@@ -318,6 +339,9 @@
     <AndroidResource Include="Resources\layout\login.axml" />
     <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\dashboard.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\questionnaire_list_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
