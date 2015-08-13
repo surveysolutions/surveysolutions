@@ -4,7 +4,12 @@
 
   <dimen name="Splash_Logo_size">300dp</dimen>
   <dimen name="Splash_Logo_padding">100dp</dimen>
-  
+
+  <dimen name="Login_ProgressBar_margin_top">-7dp</dimen>
+  <dimen name="Login_Element_width">300dp</dimen>
+  <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
+  <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+
   <dimen name="Dashboard_ProgressBar_margin_top">-7dp</dimen>
   <dimen name="Dashboard_Menu_height">80dp</dimen>
   <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
