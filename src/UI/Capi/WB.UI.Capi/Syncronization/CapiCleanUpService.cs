@@ -23,7 +23,7 @@ namespace WB.UI.Capi.Syncronization
         private readonly IChangeLogManipulator changelog;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
 
-        private ISyncPackageIdsStorage syncPackageIdsStorage;
+        private readonly ISyncPackageIdsStorage syncPackageIdsStorage;
 
         public CapiCleanUpService(
             IChangeLogManipulator changelog, 

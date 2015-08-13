@@ -44,8 +44,8 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewMetaInfoFactory ?? Mock.Of<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>(),
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of < IQuestionnaireImportService>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>());
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                Mock.Of<IQuestionnaireModelBuilder>());
         }
 
         protected static string GetItemAsContent(object item)

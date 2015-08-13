@@ -34,7 +34,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
@@ -289,31 +288,16 @@ namespace WB.UI.Capi
             try
             {
                 var deviceChangeVerifier = this.CreateDeviceChangeVerifier();
-                var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
-                var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
-                var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>());
 
                 this.synchronizer = new SynchronizationProcessor(
                     deviceChangeVerifier,
                     authenticator,
-                    new CapiDataSynchronizationService(
-                        changeLogManipulator,
-                        CapiApplication.Kernel.Get<ICommandService>(),
-                        CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
-                        CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(),
-                        cleaner,
-                        ServiceLocator.Current.GetInstance<ILogger>(),
-                        CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(),
-                        CapiApplication.Kernel.Get<IJsonUtils>(),
-                        CapiApplication.Kernel.Get<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>(),
-                        CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>(),
-                        CapiApplication.Kernel.Get<IQuestionnaireImportService>(),
-                        CapiApplication.Kernel.Get<IPlainKeyValueStorage<QuestionnaireModel>>()),
-                    cleaner,
-                    CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>(),
-                    CapiApplication.Kernel.Get<ISyncPackageIdsStorage>(),
-                    CapiApplication.Kernel.Get<ILogger>(),
-                    CapiApplication.Kernel.Get<ISynchronizationService>(),
+                    ServiceLocator.Current.GetInstance<CapiDataSynchronizationService>(),
+                    ServiceLocator.Current.GetInstance<CapiCleanUpService>(),
+                    ServiceLocator.Current.GetInstance<IInterviewSynchronizationFileStorage>(),
+                    ServiceLocator.Current.GetInstance<ISyncPackageIdsStorage>(),
+                    ServiceLocator.Current.GetInstance<ILogger>(),
+                    ServiceLocator.Current.GetInstance<ISynchronizationService>(),
                     interviewerSettings);
             }
             catch (Exception ex)

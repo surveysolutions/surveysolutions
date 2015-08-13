@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Tester
         public void Load(IIocRegistry registry)
         {
             registry.BindAsSingleton<ITesterExpressionsEngineVersionService, TesterExpressionsEngineVersionService>();
+            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
         }
     }
 }

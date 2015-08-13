@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,11 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -19,35 +15,10 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    internal class QuestionnaireImportService : IQuestionnaireImportService
+    internal class QuestionnaireModelBuilder : IQuestionnaireModelBuilder
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
-
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
-
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
-
-        public QuestionnaireImportService(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository, 
-            IPlainQuestionnaireRepository questionnaireRepository, 
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
+        public QuestionnaireModel BuildQuestionnaireModel(QuestionnaireDocument questionnaireDocument)
         {
-            this.questionnaireModelRepository = questionnaireModelRepository;
-            this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-        }
-
-        public void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly, long version)
-        {
-            this.ImportQuestionnaireModel(questionnaireDocument, version);
-            this.ImportQuestionnaireDocument(questionnaireDocument.PublicKey, 1, questionnaireDocument);
-            this.ImportAssembly(questionnaireDocument.PublicKey, 1, supportingAssembly);
-        }
-
-        public void ImportQuestionnaireModel(QuestionnaireDocument questionnaireDocument, long version)
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version);
-
             questionnaireDocument.ConnectChildrenWithParent();
 
             var questionnaireModel = new QuestionnaireModel
@@ -74,12 +45,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
-                .ForEach(x => this.PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
+                .ForEach(x => PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
 
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
 
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
-            questionnaireModel.EntityReferences = entities.Select(x=>new QuestionnaireReferenceModel { Id = x.PublicKey, ModelType = x.GetType() });
+            questionnaireModel.EntityReferences = entities.Select(x => new QuestionnaireReferenceModel { Id = x.PublicKey, ModelType = x.GetType() });
             questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
                 .Select(x => questionnaireModel.Questions[x.PublicKey])
                 .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
@@ -89,18 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
 
             questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => questionnaireModel.Questions[x.PublicKey]);
-
-            this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
-        }
-
-        private void ImportQuestionnaireDocument(Guid questionnaireId, int questionnaireVersion, QuestionnaireDocument questionnaireDocument)
-        {
-            this.questionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
-        }
-
-        private void ImportAssembly(Guid questionnaireId, int questionnaireVersion, string supportingAssembly)
-        {
-            this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireId, questionnaireVersion, supportingAssembly);
+            return questionnaireModel;
         }
 
         private GroupsHierarchyModel BuildGroupsHierarchy(Group currentGroup, int layerIndex)
@@ -120,13 +80,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return resultModel;
         }
 
-        private void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item, Dictionary<Guid, int> questionIdToRosterLevelDeep)
+        private static void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item, Dictionary<Guid, int> questionIdToRosterLevelDeep)
         {
             var parents = new List<GroupReferenceModel>();
 
             var parentAsGroup = item.GetParent() as Group;
 
-            var closestParentGroupId = parentAsGroup == null? (Guid?)null : parentAsGroup.PublicKey;
+            var closestParentGroupId = parentAsGroup == null ? (Guid?)null : parentAsGroup.PublicKey;
 
             var countOfRostersToTop = 0;
 
@@ -212,11 +172,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return staticTextModel;
         }
 
-
         private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument, Dictionary<Guid, int> questionIdToRosterLevelDeep)
         {
             BaseQuestionModel questionModel;
-            
+
             var isRosterSizeQuestion = questionnaireDocument.Find<Group>(g => g.IsRoster && g.RosterSizeQuestionId == question.PublicKey).Any();
 
             switch (question.QuestionType)
@@ -240,7 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                 Options = singleQuestion.Answers.Select(ToOptionModel).ToList(),
                             };
                         }
-                        else 
+                        else
                         {
                             if (singleQuestion.CascadeFromQuestionId.HasValue)
                             {
@@ -288,9 +247,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     if (numericQuestion.IsInteger)
                     {
                         questionModel = new IntegerNumericQuestionModel
-                                        {
-                                            IsRosterSizeQuestion = isRosterSizeQuestion
-                                        };
+                        {
+                            IsRosterSizeQuestion = isRosterSizeQuestion
+                        };
                     }
                     else
                     {
@@ -309,10 +268,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 case QuestionType.TextList:
                     var listQuestion = question as TextListQuestion;
                     questionModel = new TextListQuestionModel
-                                    {
-                                        IsRosterSizeQuestion = isRosterSizeQuestion,
-                                        MaxAnswerCount = listQuestion.MaxAnswerCount
-                                    };
+                    {
+                        IsRosterSizeQuestion = isRosterSizeQuestion,
+                        MaxAnswerCount = listQuestion.MaxAnswerCount
+                    };
                     break;
                 case QuestionType.QRBarcode:
                     questionModel = new QRBarcodeQuestionModel();
