@@ -2114,5 +2114,10 @@ namespace WB.Tests.Unit
         {
             return new QuestionnaireIdentity(Guid.NewGuid(), 7);
         }
+
+        public static QuestionnaireModelBuilder QuestionnaireModelBuilder()
+        {
+            return new QuestionnaireModelBuilder();
+        }
     }
 }
