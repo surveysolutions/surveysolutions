@@ -12,34 +12,36 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly PostgreConnectionSettings connectionSettings;
+        private readonly ISessionProvider sessionProvider;
 
         public PostgresReadSideKeyValueStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
             PostgreConnectionSettings connectionSettings)
             : base(sessionProvider, connectionSettings.ConnectionString)
         {
-            this.connectionSettings = connectionSettings;
+            this.sessionProvider = sessionProvider;
         }
-
 
         protected override object ExecuteScalar(IDbCommand command)
         {
-            using (var connection = new NpgsqlConnection(connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                command.Connection = connection;
-                return command.ExecuteScalar();
-            }
+            this.EnshureTableExists();
+
+            this.EnlistInTransaction(command);
+            return command.ExecuteScalar();
         }
 
         protected override int ExecuteNonQuery(IDbCommand command)
         {
-            using (var connection = new NpgsqlConnection(connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                command.Connection = connection;
-                return command.ExecuteNonQuery();
-            }
+            this.EnshureTableExists();
+
+            this.EnlistInTransaction(command);
+            return command.ExecuteNonQuery();
+        }
+
+        void EnlistInTransaction(IDbCommand command)
+        {
+            var session = this.sessionProvider.GetSession();
+            command.Connection = session.Connection;
+            session.Transaction.Enlist(command);
         }
     }
 }
