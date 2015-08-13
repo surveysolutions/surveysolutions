@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
+
+  <dimen name="Splash_Logo_size">300dp</dimen>
+  <dimen name="Splash_Logo_padding">100dp</dimen>
+  
   <dimen name="Dashboard_ProgressBar_margin_top">-7dp</dimen>
   <dimen name="Dashboard_Menu_height">80dp</dimen>
   <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
