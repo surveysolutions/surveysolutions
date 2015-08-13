@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
                 .Callback<QuestionnaireModel, string>((q, id) => { model = q; });
 
             var importService = Create.QuestionnaireImportService(modelStorage.Object);
-            importService.ImportQuestionnaire(questionnaire, null, 1);
+            importService.ImportQuestionnaire(Create.QuestionnaireIdentity(), questionnaire, null);
 
             var interview = Mock.Of<IStatefulInterview>();
 

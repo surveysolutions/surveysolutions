@@ -30,36 +30,6 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 {
     public class CapiDataSynchronizationService : ICapiDataSynchronizationService
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
-
-        public CapiDataSynchronizationService(
-            IChangeLogManipulator changelog, 
-            ICommandService commandService,
-            IViewFactory<LoginViewInput, LoginView> loginViewFactory, 
-            IPlainQuestionnaireRepository questionnaireRepository,
-            ICapiCleanUpService capiCleanUpService,
-            ILogger logger,
-            ICapiSynchronizationCacheService capiSynchronizationCacheService, 
-            IJsonUtils jsonUtils, 
-            IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IQuestionnaireImportService questionnaireImportService, 
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository)
-        {
-            this.logger = logger;
-            this.capiSynchronizationCacheService = capiSynchronizationCacheService;
-            this.jsonUtils = jsonUtils;
-            this.interviewIntoFactory = interviewIntoFactory;
-            this.changelog = changelog;
-            this.commandService = commandService;
-            this.capiCleanUpService = capiCleanUpService;
-            this.loginViewFactory = loginViewFactory;
-            this.questionnaireRepository = questionnaireRepository;
-            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
-            this.questionnaireImportService = questionnaireImportService;
-            this.questionnaireModelRepository = questionnaireModelRepository;
-        }
-
         private readonly ILogger logger;
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IChangeLogManipulator changelog;
@@ -71,7 +41,36 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory;
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
-        private readonly IQuestionnaireImportService questionnaireImportService;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
+        private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
+
+        public CapiDataSynchronizationService(
+            IChangeLogManipulator changelog,
+            ICommandService commandService,
+            IViewFactory<LoginViewInput, LoginView> loginViewFactory,
+            IPlainQuestionnaireRepository questionnaireRepository,
+            ICapiCleanUpService capiCleanUpService,
+            ILogger logger,
+            ICapiSynchronizationCacheService capiSynchronizationCacheService,
+            IJsonUtils jsonUtils,
+            IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
+            IQuestionnaireModelBuilder questionnaireModelBuilder)
+        {
+            this.logger = logger;
+            this.capiSynchronizationCacheService = capiSynchronizationCacheService;
+            this.jsonUtils = jsonUtils;
+            this.interviewIntoFactory = interviewIntoFactory;
+            this.changelog = changelog;
+            this.commandService = commandService;
+            this.capiCleanUpService = capiCleanUpService;
+            this.loginViewFactory = loginViewFactory;
+            this.questionnaireRepository = questionnaireRepository;
+            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
+            this.questionnaireModelRepository = questionnaireModelRepository;
+            this.questionnaireModelBuilder = questionnaireModelBuilder;
+        }
 
         public void ProcessDownloadedPackage(UserSyncPackageDto item)
         {
@@ -179,7 +178,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
 
         private void UpdateQuestionnaire(QuestionnaireSyncPackageDto item)
         {
-            var template = this.jsonUtils.Deserialize<QuestionnaireDocument>(item.Content);
+            var questionnaireDocument = this.jsonUtils.Deserialize<QuestionnaireDocument>(item.Content);
 
             QuestionnaireMetadata metadata;
             try
@@ -191,10 +190,15 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Services
                 throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
             }
 
-            this.questionnaireImportService.ImportQuestionnaireModel(template, metadata.Version);
-            this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, metadata.Version);
+
+            QuestionnaireModel questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocument);
+
+            this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
+
+            this.questionnaireRepository.StoreQuestionnaire(questionnaireDocument.PublicKey, metadata.Version, questionnaireDocument);
             
-            this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode, string.Empty));
+            this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireDocument.PublicKey, metadata.Version, metadata.AllowCensusMode, string.Empty));
         }
 
         private void DeleteQuestionnaire(QuestionnaireSyncPackageDto item)
