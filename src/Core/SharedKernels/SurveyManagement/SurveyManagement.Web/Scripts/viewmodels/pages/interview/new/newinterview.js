@@ -41,6 +41,8 @@
                     window.location = self.InterviewListUrl.concat("?templateId=",
                         datacontext.questionnaire.templateId, "&templateVersion=",
                         datacontext.questionnaire.templateVersion);
+                }, function() {
+                    self.submitting = false;
                 });
             }
         },
