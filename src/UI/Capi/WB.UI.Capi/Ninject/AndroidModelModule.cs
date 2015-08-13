@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -87,8 +86,6 @@ namespace WB.UI.Capi.Ninject
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>(this.Kernel.Get<IJsonUtils>());
 
-            var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
-
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snapshotStore);
 
             this.Bind<IEventStore>().ToConstant(evenStore);
@@ -98,8 +95,6 @@ namespace WB.UI.Capi.Ninject
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
-            this.Bind<IReadSideRepositoryWriter<InterviewViewModel>>().ToConstant(bigSurveyStore);
-            this.Bind<IReadSideRepositoryReader<InterviewViewModel>>().ToConstant(bigSurveyStore);
             this.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
             this.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDTO>>().ToConstant(questionnaireStore);
@@ -123,7 +118,7 @@ namespace WB.UI.Capi.Ninject
             var backupable = new List<IBackupable>()
             {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
-                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
+                    syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
             };
             if (this.globalBackupables != null && this.globalBackupables.Length > 0)
             {

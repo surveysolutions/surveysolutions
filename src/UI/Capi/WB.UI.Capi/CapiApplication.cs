@@ -25,7 +25,6 @@ using WB.Core.BoundedContexts.Capi.ErrorReporting;
 using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Android.Logging;
 using WB.Core.Infrastructure;
@@ -113,53 +112,6 @@ namespace WB.UI.Capi
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-        }
-
-        private void RegisterInterviewHandlerInBus(InProcessEventBus bus, InterviewViewModelDenormalizer eventHandler, 
-            AnswerOptionsForLinkedQuestionsDenormalizer answerOptionsForLinkedQuestionsDenormalizer,
-            AnswerOptionsForCascadingQuestionsDenormalizer answerOptionsForCascadingQuestionsDenormalizer)
-        {
-            
-            bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
-            bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
-            bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
-            bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
-            bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (NumericIntegerQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (NumericRealQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (TextListQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (GroupsDisabled));
-            bus.RegisterHandler(eventHandler, typeof (GroupsEnabled));
-            bus.RegisterHandler(eventHandler, typeof (QuestionsDisabled));
-            bus.RegisterHandler(eventHandler, typeof (QuestionsEnabled));
-            bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredInvalid));
-            bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredValid));
-            bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
-            bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
-            bus.RegisterHandler(eventHandler, typeof(RosterInstancesAdded));
-            bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
-            bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(AnswersRemoved));
-            bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(RosterInstancesTitleChanged));
-            bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
-            
-
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericIntegerQuestionAnswered));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericRealQuestionAnswered));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
-
-            bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(AnswersRemoved));
-            bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(SingleOptionQuestionAnswered));
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)
@@ -331,33 +283,11 @@ namespace WB.UI.Capi
             this.kernel.Bind<ISynchronizationService>().To<InterviewerSynchronizationService>().InSingletonScope();
 
             this.kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
-            #region register handlers
-
-            var eventHandler =
-                new InterviewViewModelDenormalizer(
-                    this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(),
-                    this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                    this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
-                    this.kernel.Get<IQuestionnaireRosterStructureFactory>());
-
-            var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
-            var answerOptionsForCascadingQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForCascadingQuestionsDenormalizer>();
-
-            this.RegisterInterviewHandlerInBus(
-                cqrsEventBus, 
-                eventHandler, 
-                answerOptionsForLinkedQuestionsDenormalizer, 
-                answerOptionsForCascadingQuestionsDenormalizer);
 
             this.InitTemplateStorage(cqrsEventBus);
-
             this.InitUserStorage(cqrsEventBus);
-
             this.InitFileStorage(cqrsEventBus);
-
             this.InitDashboard(cqrsEventBus);
-            
-            #endregion
 
             this.kernel.VerifyIfDebug();
         }
@@ -376,14 +306,10 @@ namespace WB.UI.Capi
 
             base.Dispose(disposing);
         }
+
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
             this.ClearAllBackStack<SplashScreen>();
-
-            var questionnarieDenormalizer = this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() 
-                                                as InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
-            if (questionnarieDenormalizer != null)
-                questionnarieDenormalizer.Clear();
         }
 
         private IKernel kernel;
