@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 
 namespace WB.Core.SharedKernels.Enumerator.Aggregates
 {
     public interface IStatefulInterview
     {
-        string QuestionnaireId { get; set; }
+        QuestionnaireIdentity QuestionnaireIdentity { get; }
+        string QuestionnaireId { get; }
 
-        Guid Id { get; set; }
+        Guid Id { get; }
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
         IReadOnlyDictionary<string, List<Identity>> RosterInstancesIds { get; }
         
-        bool HasErrors { get; set; }
-        bool IsCompleted { get; set; }
+        bool HasErrors { get; }
+        bool IsCompleted { get; }
 
         InterviewRoster GetRoster(Identity identity);
 

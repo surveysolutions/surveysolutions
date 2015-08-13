@@ -70,7 +70,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             this.Id = eventSourceId;
             this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireGuid, version);
-            this.QuestionnaireId = QuestionnaireIdentity.ToString();
         }
         
 
@@ -421,8 +420,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #endregion
 
-        public string QuestionnaireId { get; set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public string QuestionnaireId { get { return this.QuestionnaireIdentity.ToString(); } }
 
         public Guid Id { get; set; }
 
