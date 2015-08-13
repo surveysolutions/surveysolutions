@@ -34,9 +34,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
                 x => x.BuildFrom(storedInterview, userId, InterviewStatus.RejectedBySupervisor, comments) == synchronizationDto);
             
-
-            interviewSyncPackageContentMock = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
-
             denormalizer = CreateDenormalizer(
                 interviews : interviews,
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object,
@@ -48,19 +45,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         It should_create_interview_package = () =>
             interviewPackageStorageWriterMock.Verify(x => x.Store(
-                Moq.It.IsAny<InterviewSyncPackageContent>(),
                 Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.Interview),
-                partialPackageId,
-                CounterId), Times.Once);
+                partialPackageId), Times.Once);
 
-        private static InterviewSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+        static InterviewSynchronizationDenormalizer denormalizer;
+        static Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>> interviewPackageStorageWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>();
 
-        private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentMock;
-        private static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
-        private static IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
-        private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        private static string comments = "comment";
+        static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
+        static IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
+        static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        static string comments = "comment";
     }
 }

@@ -38,10 +38,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         It should_create_new_user_package = () =>
             userSyncPackageWriter.Verify(
                 x => x.Store(
-                    Moq.It.IsAny<UserSyncPackageContent>(),
                     Moq.It.Is<UserSyncPackageMeta>(u => u.UserId == userId),
-                    partialPackageId,
-                    CounterId),
+                    partialPackageId),
                 Times.Once);
 
         It should_serialize_not_empty_user = () => 
@@ -63,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             user.IsLockedByHQ.ShouldEqual(isLocked);
 
         private static UserSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>> userSyncPackageWriter= new Mock<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>>();
+        private static Mock<IReadSideRepositoryWriter<UserSyncPackageMeta>> userSyncPackageWriter = new Mock<IReadSideRepositoryWriter<UserSyncPackageMeta>>();
         private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         private static UserDocument user;

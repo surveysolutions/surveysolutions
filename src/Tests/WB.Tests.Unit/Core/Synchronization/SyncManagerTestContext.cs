@@ -24,9 +24,6 @@ namespace WB.Tests.Unit.Core.Synchronization
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null,
             ICommandService commandService = null,
             IReadSideRepositoryIndexAccessor indexAccessor = null,
-            IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage = null,
-            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore = null,
-            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore = null,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackageReader  = null,
             IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnairesReader = null,
             IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersReader = null,
@@ -36,9 +33,6 @@ namespace WB.Tests.Unit.Core.Synchronization
                 devices ?? Mock.Of<IReadSideRepositoryReader<TabletDocument>>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                userPackageStorage ?? Mock.Of<IReadSideKeyValueStorage<UserSyncPackageContent>>(),
-                interviewPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<InterviewSyncPackageContent>>(),
-                questionnaireSyncPackageContentStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>(),
                 interviewSyncPackageReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
                 usersReader ?? Stub.ReadSideRepository<UserSyncPackageMeta>(),
                 questionnairesReader ?? Stub.ReadSideRepository<QuestionnaireSyncPackageMeta>(),
@@ -93,33 +87,8 @@ namespace WB.Tests.Unit.Core.Synchronization
         {
             return new InterviewSyncPackageMeta(interviewId, Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 1, DateTime.Now, userId, itemType, 10, 5)
                    {
-                       SortIndex = sortIndex,
                        PackageId = string.Format("{0}${1}", interviewId.FormatGuid(), sortIndex)
                    };
-        }
-
-        protected static InterviewSyncPackageContent CreateInterviewSyncPackageContent(string someSyncPackageId, string someSyncPackageContent, string someSyncPackageMeta)
-        {
-            return new InterviewSyncPackageContent(someSyncPackageContent, someSyncPackageMeta)
-                   {
-                       PackageId = someSyncPackageId
-                   };
-        }
-
-        protected static QuestionnaireSyncPackageContent CreateQuestionnaireSyncPackageContent(string someSyncPackageId, string someSyncPackageContent, string someSyncPackageMeta)
-        {
-            return new QuestionnaireSyncPackageContent(someSyncPackageContent, someSyncPackageMeta)
-                   {
-                       PackageId = someSyncPackageId
-                   };
-        }
-
-        protected static UserSyncPackageContent CreateUserSyncPackageContent(string content, string someSyncPackageId)
-        {
-            return new UserSyncPackageContent(content)
-            {
-                PackageId = someSyncPackageId
-            };
         }
     }
 }

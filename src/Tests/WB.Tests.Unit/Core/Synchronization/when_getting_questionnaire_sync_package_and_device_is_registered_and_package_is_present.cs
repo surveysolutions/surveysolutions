@@ -21,12 +21,16 @@ namespace WB.Tests.Unit.Core.Synchronization
         {
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
-            questionnaireSyncPackageContent = CreateQuestionnaireSyncPackageContent(syncedPackageId, content, meta);
 
-            questionnairePackageContentStore = Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>
-                (x => x.GetById(syncedPackageId) == questionnaireSyncPackageContent);
+            questionnairePackageContentStore = Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>
+                (x => x.GetById(syncedPackageId) == new QuestionnaireSyncPackageMeta
+                {
+                    PackageId = syncedPackageId,
+                    Content = content,
+                    Meta = meta
+                });
 
-            syncManager = CreateSyncManager(devices: devices, questionnaireSyncPackageContentStore: questionnairePackageContentStore);
+            syncManager = CreateSyncManager(devices: devices, questionnairesReader: questionnairePackageContentStore);
         };
 
         Because of = () =>
@@ -55,8 +59,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private const string syncedPackageId = "some_sync_package_id";
         private const string content = "some_sync_package_content";
         private const string meta = "some_sync_package_meta";
-        private static IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore;
-
-        private static QuestionnaireSyncPackageContent questionnaireSyncPackageContent;
+        private static IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnairePackageContentStore;
     }
 }

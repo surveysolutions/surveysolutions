@@ -21,9 +21,9 @@ namespace WB.Tests.Unit.Core.Synchronization
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-            questionnairePackageContentStore = Mock.Of<IReadSideKeyValueStorage<QuestionnaireSyncPackageContent>>();
+            questionnairePackageContentStore = Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta>>();
 
-            syncManager = CreateSyncManager(devices: devices, questionnaireSyncPackageContentStore: questionnairePackageContentStore);
+            syncManager = CreateSyncManager(devices: devices, questionnairesReader: questionnairePackageContentStore);
         };
 
         Because of = () =>
@@ -46,6 +46,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static IReadSideRepositoryReader<TabletDocument> devices;
 
         private const string syncedPackageId = "some_sync_package_id";
-        private static IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnairePackageContentStore;
+        private static IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnairePackageContentStore;
     }
 }
