@@ -1919,7 +1919,6 @@ namespace WB.Tests.Unit
 
             return new StatefulInterview
             {
-                QuestionnaireId = questionnaireId.FormatGuid(),
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };
         }
