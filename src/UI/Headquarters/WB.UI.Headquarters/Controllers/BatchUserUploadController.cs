@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -61,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 return this.RedirectToAction("ImportUserDetails", new { id = preloadedDataId });
             }
-            catch (UserPreloadingException e)
+            catch (Exception e)
             {
                 this.Error(e.Message);
                 return this.View(new UserBatchUploadModel()

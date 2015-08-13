@@ -309,7 +309,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
             var columnList = userPreloadingService.GetAvaliableDataColumnNames();
 
             Assert.That(columnList,
-                Is.EqualTo(new[] {"Login", "Password", "Email", "FullName", "PhoneNumber", "Role", "Supervisor"}));
+                Is.EqualTo(new[] {"login", "password", "email", "fullname", "phonenumber", "role", "supervisor"}));
         }
 
 

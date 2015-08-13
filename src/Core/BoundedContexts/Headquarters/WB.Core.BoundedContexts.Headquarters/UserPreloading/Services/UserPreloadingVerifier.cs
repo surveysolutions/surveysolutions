@@ -34,6 +34,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly ILogger logger;
 
+        readonly Regex passwordValidationRegex;
+        readonly Regex loginValidatioRegex;
+        readonly Regex emailValidationRegex;
+        readonly Regex phoneNumberValidationRegex;
+
         public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, 
             IUserPreloadingService userPreloadingService, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
@@ -47,6 +52,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.plainTransactionManager = plainTransactionManager;
             this.userPreloadingSettings = userPreloadingSettings;
             this.logger = logger;
+            this.passwordValidationRegex = new Regex(this.userPreloadingSettings.PasswordFormatRegex);
+            this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
+            this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            this.phoneNumberValidationRegex = new Regex(this.userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
         }
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
@@ -149,14 +158,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (userPreloadingDataRecord.Password.Length > 100)
                 return true;
 
-            var regExp = new Regex(userPreloadingSettings.PasswordFormatRegex);
-            return !regExp.IsMatch(userPreloadingDataRecord.Password);
+            return !this.passwordValidationRegex.IsMatch(userPreloadingDataRecord.Password);
         }
 
         private bool LoginFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var regExp = new Regex(userPreloadingSettings.LoginFormatRegex);
-            return !regExp.IsMatch(userPreloadingDataRecord.Login);
+            return !this.loginValidatioRegex.IsMatch(userPreloadingDataRecord.Login);
         }
 
         private bool EmailFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
@@ -164,9 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (string.IsNullOrEmpty(userPreloadingDataRecord.Email))
                 return false;
 
-            var regExp = new Regex(userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
-
-            return !regExp.IsMatch(userPreloadingDataRecord.Email);
+            return !this.emailValidationRegex.IsMatch(userPreloadingDataRecord.Email);
         }
 
         private bool PhoneNumberFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
@@ -174,9 +179,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (string.IsNullOrEmpty(userPreloadingDataRecord.PhoneNumber))
                 return false;
 
-            var regExp = new Regex(userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
-
-            return !regExp.IsMatch(userPreloadingDataRecord.PhoneNumber);
+            return !this.phoneNumberValidationRegex.IsMatch(userPreloadingDataRecord.PhoneNumber);
         }
 
         private bool LoginNameUsedByExistingUser(HashSet<string> activeUserNames, UserPreloadingDataRecord userPreloadingDataRecord)

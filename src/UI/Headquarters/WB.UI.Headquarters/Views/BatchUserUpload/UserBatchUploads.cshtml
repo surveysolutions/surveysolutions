@@ -56,8 +56,8 @@
                             @Html.ActionLink(userPreloadingProcess.FileName, actionMethodName, new { id = userPreloadingProcess.UserPreloadingProcessId }, null)
                         </td>
                         <td>@FileSizeUtils.SizeSuffix(userPreloadingProcess.FileSize)</td>
-                        <td>@userPreloadingProcess.UploadDate</td>
-                        <td>@userPreloadingProcess.LastUpdateDate</td>
+                        <td>@TimeZoneInfo.ConvertTimeFromUtc(userPreloadingProcess.UploadDate, TimeZoneInfo.Local)</td>
+                        <td>@TimeZoneInfo.ConvertTimeFromUtc(userPreloadingProcess.LastUpdateDate, TimeZoneInfo.Local)</td>
                         <td>@userPreloadingProcess.State</td>
                         <td>
                             @if (!new[] { UserPrelodingState.CreatingUsers, UserPrelodingState.Validating }.Contains(userPreloadingProcess.State))
