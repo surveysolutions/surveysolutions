@@ -35,11 +35,11 @@
                 </tr>
                 <tr>
                     <th>@BatchUpload.UploadDate</th>
-                    <th>@Model.UploadDate</th>
+                    <th>@TimeZoneInfo.ConvertTimeFromUtc(Model.UploadDate, TimeZoneInfo.Local)</th>
                 </tr>
                 <tr>
                     <th>@BatchUpload.LastUpdateDate</th>
-                    <th>@Model.LastUpdateDate</th>
+                    <th>@TimeZoneInfo.ConvertTimeFromUtc(Model.LastUpdateDate, TimeZoneInfo.Local)</th>
                 </tr>
             </tbody>
 
