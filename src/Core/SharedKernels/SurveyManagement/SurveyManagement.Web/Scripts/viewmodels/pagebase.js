@@ -93,7 +93,7 @@
         }
     };
 
-    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
+    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
 
         if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -129,10 +129,11 @@
         }).always(function() {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);
+            onDone();
         });
     };
 
-    self.SendCommand = function(command, onSuccess) {
+    self.SendCommand = function(command, onSuccess, onDone) {
         self.SendRequest(commandExecutionUrl, command, function(data) {
             if (data.IsSuccess) {
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
@@ -144,7 +145,7 @@
                 else
                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
-        });
+        }, false, false, onDone);
     };
 
     self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
