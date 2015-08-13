@@ -6,6 +6,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -24,15 +25,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent> syncPackageWriter;
-
-        private const string CounterId = "QuestionnaireSyncPackageСounter";
+        private readonly IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta> syncPackageWriter;
 
         public QuestionnaireSynchronizationDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IJsonUtils jsonUtils,
-            IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent> syncPackageWriter)
+            IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta> syncPackageWriter)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -122,18 +121,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, string packageId)
         {
-
             var syncPackageMeta = new QuestionnaireSyncPackageMeta(
-                      questionnaireId,
-                      questionnaireVersion,
-                      timestamp,
-                      itemType,
-                      string.IsNullOrEmpty(content) ? 0 : content.Length,
-                      string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
+                questionnaireId,
+                questionnaireVersion,
+                timestamp,
+                itemType,
+                string.IsNullOrEmpty(content) ? 0 : content.Length,
+                string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length)
+            {
+                Content = content,
+                Meta = metaInfo,
+                PackageId = packageId
+            };
 
-            var syncPackageContent = new QuestionnaireSyncPackageContent(content, metaInfo);
-
-            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, packageId, CounterId);
+            syncPackageWriter.Store( syncPackageMeta, packageId);
         }
     }
 }

@@ -15,10 +15,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.QuestionnaireVersion);
             Property(x => x.PackageId);
             Property(x => x.Timestamp);
-            Property(x => x.SortIndex);
             Property(x => x.ItemType);
             Property(x => x.ContentSize);
             Property(x => x.MetaInfoSize);
+
+            Property(x => x.SortIndex, pm =>
+            {
+                pm.Generated(PropertyGeneration.Insert);
+                pm.Update(false);
+                pm.Insert(false);
+                pm.Column(cm => { cm.SqlType("SERIAL"); });
+            });
+
+            Property(x => x.Content, pm =>
+            {
+                pm.Lazy(true);
+                pm.Update(false);
+            });
+
+            Property(x => x.Meta, pm => pm.Update(false));
         }
     }
 }

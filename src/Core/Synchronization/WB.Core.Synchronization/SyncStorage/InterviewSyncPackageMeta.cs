@@ -28,7 +28,7 @@ namespace WB.Core.Synchronization.SyncStorage
         }
 
         public virtual string PackageId { get; set; }
-        public virtual long SortIndex { get; set; }
+        public virtual long SortIndex { get; protected set; }
         public virtual Guid InterviewId { get; protected set; }
         public virtual string VersionedQuestionnaireId { get; protected set; }
         public virtual DateTime Timestamp { get; protected set; }
@@ -36,5 +36,8 @@ namespace WB.Core.Synchronization.SyncStorage
         public virtual string ItemType { get; protected set; }
         public virtual int ContentSize { get; protected set; }
         public virtual int MetaInfoSize { get; protected set; }
+
+        public virtual string Content { get; set; }
+        public virtual string Meta { get; set; }
     }
 }
