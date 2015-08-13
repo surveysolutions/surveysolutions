@@ -87,6 +87,7 @@ namespace WB.Core.BoundedContexts.Capi.Implementation.Synchronization
                 }
                 catch (Exception e)
                 {
+                    this.logger.Error("Error while synchronization", e);
                     this.OnProcessCanceled(e);
                 }
 

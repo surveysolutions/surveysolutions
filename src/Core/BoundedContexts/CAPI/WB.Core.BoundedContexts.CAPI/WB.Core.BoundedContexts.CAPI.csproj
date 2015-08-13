@@ -114,6 +114,7 @@
     <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
+    <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\SyncPackageRestoreService.cs" />
     <Compile Include="Implementation\Synchronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Implementation\Synchronization\SynchronizationEventArgs.cs" />
