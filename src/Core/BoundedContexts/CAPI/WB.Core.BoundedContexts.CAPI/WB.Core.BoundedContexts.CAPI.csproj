@@ -67,6 +67,9 @@
       <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Extensions">
@@ -85,6 +88,20 @@
     <Compile Include="ChangeLog\ChangeLogShortRecord.cs" />
     <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\IChangeLogStore.cs" />
+    <Compile Include="ErrorReporting\ErrorReportingModule.cs" />
+    <Compile Include="ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs" />
+    <Compile Include="ErrorReporting\Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
+    <Compile Include="ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs" />
+    <Compile Include="ErrorReporting\Resources\TabletInformationSenderStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TabletInformationSenderStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorReporting\Services\CapiInformationService\ICapiInformationService.cs" />
+    <Compile Include="ErrorReporting\Services\IErrorReportingSettings.cs" />
+    <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageCancellationEventArgs.cs" />
+    <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs" />
+    <Compile Include="ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs" />
     <Compile Include="EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
@@ -210,6 +227,12 @@
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ErrorReporting\Resources\TabletInformationSenderStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TabletInformationSenderStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

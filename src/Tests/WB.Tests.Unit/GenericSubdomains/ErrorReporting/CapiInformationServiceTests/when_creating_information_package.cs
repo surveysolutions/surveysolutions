@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformation;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.CapiInformation;
 using WB.Core.Infrastructure.FileSystem;
 using It = Machine.Specifications.It;
 

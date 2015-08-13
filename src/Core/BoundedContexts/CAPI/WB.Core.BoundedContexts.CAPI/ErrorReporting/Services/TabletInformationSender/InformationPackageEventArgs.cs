@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender
 {
     public class InformationPackageEventArgs : EventArgs
     {

@@ -398,6 +398,7 @@
     <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -525,10 +526,6 @@
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting\WB.Core.GenericSubdomains.ErrorReporting.csproj">
-      <Project>{64ff78f2-775b-4728-9d8a-d3a7b9a7344c}</Project>
-      <Name>WB.Core.GenericSubdomains.ErrorReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Android\WB.Core.GenericSubdomains.Android.csproj">
       <Project>{1eb1ebb0-92cf-4339-9f62-4a5ae3ed93a4}</Project>

@@ -1,11 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.CapiInformationService;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformation
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.CapiInformation
 {
     internal class CapiInformationService : ICapiInformationService
     {
@@ -36,17 +36,17 @@ namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.CapiInformatio
                 var infoPackageFolderPath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath,
                     infoPackageFolderName);
 
-                ExitIfCanceled(ct);
+                this.ExitIfCanceled(ct);
                 this.fileSystemAccessor.CreateDirectory(infoPackageFolderPath);
 
                 foreach (var infoFilePath in this.infoFileSupplierRegistry.GetAll())
                 {
-                    ExitIfCanceled(ct);
-                    if (fileSystemAccessor.IsFileExists(infoFilePath))
+                    this.ExitIfCanceled(ct);
+                    if (this.fileSystemAccessor.IsFileExists(infoFilePath))
                         this.fileSystemAccessor.CopyFileOrDirectory(infoFilePath, infoPackageFolderPath);
                 }
 
-                ExitIfCanceled(ct);
+                this.ExitIfCanceled(ct);
 
                 var infoPackageFilePath = this.fileSystemAccessor.CombinePath(this.infoPackagesPath,
                     infoPackageFolderName + ".zip");
