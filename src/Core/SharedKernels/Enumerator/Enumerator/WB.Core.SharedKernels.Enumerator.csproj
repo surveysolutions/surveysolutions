@@ -90,6 +90,7 @@
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
+    <Compile Include="Services\InterviewCompletionService.cs" />
     <Compile Include="Services\IQuestionnaireModelBuilder.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
