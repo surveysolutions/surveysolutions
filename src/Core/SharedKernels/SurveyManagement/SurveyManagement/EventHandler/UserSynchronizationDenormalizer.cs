@@ -27,14 +27,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent> syncPackageWriter;
+        private readonly IReadSideRepositoryWriter<UserSyncPackageMeta> syncPackageWriter;
 
         private const string CounterId = "UserSyncPackageСounter";
 
         public UserSynchronizationDenormalizer(
             IReadSideRepositoryWriter<UserDocument> users, 
             IJsonUtils jsonUtils,
-            IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent> syncPackageWriter)
+            IReadSideRepositoryWriter<UserSyncPackageMeta> syncPackageWriter)
         {
             this.users = users;
             this.jsonUtils = jsonUtils;
@@ -122,11 +122,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.ObjectsOnly);
 
-            var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp);
-            
-            var syncPackageContent = new UserSyncPackageContent(content);
+            var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp)
+            {
+                Content = content,
+                PackageId = packageId
+            };
 
-            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, packageId, CounterId);
+            syncPackageWriter.Store(syncPackageMeta, packageId);
         }
     }
 }

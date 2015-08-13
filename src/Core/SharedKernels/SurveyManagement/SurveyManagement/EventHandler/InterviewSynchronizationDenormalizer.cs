@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -12,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
@@ -27,12 +25,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaries;
+
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter;
 
+        private readonly IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter;
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
-
-        private const string SortIndexId = "InterviewSyncPackageСounter";
 
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IMetaInfoBuilder metaBuilder;
@@ -43,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaries,
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
-            IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter,
+            IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter,
             IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory)
         {
@@ -224,18 +221,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             string packageId)
         {
             var syncPackageMeta = new InterviewSyncPackageMeta(
-                       interviewId,
-                       questionnaireId,
-                       questionnaireVersion,
-                       timestamp,
-                       userId,
-                       itemType,
-                       string.IsNullOrEmpty(content) ? 0 : content.Length,
-                       string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
+                interviewId,
+                questionnaireId,
+                questionnaireVersion,
+                timestamp,
+                userId,
+                itemType,
+                string.IsNullOrEmpty(content) ? 0 : content.Length,
+                string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length)
+            {
+                Meta = metaInfo,
+                Content = content,
+                PackageId = packageId
+            };
 
-            var syncPackageContent = new InterviewSyncPackageContent(content, metaInfo);
-
-            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, packageId, SortIndexId);
+            syncPackageWriter.Store(syncPackageMeta, packageId);
         }
     }
 }

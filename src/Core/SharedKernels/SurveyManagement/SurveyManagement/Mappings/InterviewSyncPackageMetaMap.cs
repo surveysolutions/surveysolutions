@@ -11,7 +11,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Table("InterviewSyncPackageMetas");
             Id(x => x.PackageId, id => id.Generator(Generators.Assigned));
 
-            Property(x => x.SortIndex);
             Property(x => x.InterviewId);
             Property(x => x.VersionedQuestionnaireId);
             Property(x => x.Timestamp);
@@ -19,6 +18,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.ItemType);
             Property(x => x.ContentSize);
             Property(x => x.MetaInfoSize);
+
+            Property(x => x.SortIndex, pm =>
+            {
+                pm.Generated(PropertyGeneration.Insert);
+                pm.Update(false);
+                pm.Insert(false);
+                pm.Column(cm => { cm.SqlType("SERIAL"); });
+            });
+
+            Property(x => x.Content, pm =>
+            {
+                pm.Lazy(true);
+                pm.Update(false);
+            });
+
+            Property(x => x.Meta, pm => pm.Update(false));
         }
     }
 }

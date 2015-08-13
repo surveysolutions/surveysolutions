@@ -118,7 +118,6 @@
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
-    <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
@@ -168,7 +167,6 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
     <Compile Include="Services\Export\ExportDataType.cs" />
-    <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireSynchronizationDenormalizer.cs" />

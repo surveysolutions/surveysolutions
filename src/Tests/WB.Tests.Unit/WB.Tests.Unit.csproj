@@ -704,10 +704,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_with_dependent_interview_which_throws_an_exception.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\OrderableSyncPackageWriterTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_interview_packages.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_questionnaire_packages.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\OrderableSyncPackageWriterTests\when_storing_user_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_the_same_questionnaire_simultaneously.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_not_existing_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorTeamsAndStatusesReportTests\SupervisorTeamsAndStatusesReportContext.cs" />
