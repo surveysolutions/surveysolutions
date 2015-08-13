@@ -40,6 +40,7 @@
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
+    <Compile Include="Implementation\Services\TesterInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Services\Infrastructure\IAsyncPlainStorage.cs" />
     <Compile Include="Services\Infrastructure\IPlainStorageEntity.cs" />

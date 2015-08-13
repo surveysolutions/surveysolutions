@@ -15,15 +15,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
+        private readonly IInterviewCompletionService completionService;
+        
 
         public InterviewStatusChangeViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
-            IPrincipal principal)
+            IPrincipal principal, 
+            IInterviewCompletionService completionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
+            this.completionService = completionService;
         }
 
         Guid interviewId;
@@ -62,6 +66,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 completeTime: DateTime.UtcNow);
 
             this.commandService.Execute(completeInterviewCommand);
+
+            this.completionService.CompleteInterview(this.interviewId, this.principal.CurrentUserIdentity.UserId);
 
             this.viewModelNavigationService.NavigateToDashboard();
         }
