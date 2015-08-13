@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.Feeds
 
             if (totalFeedEntriesCount%PageSize > 0)
             {
-                userChangedFeedEntries = userChangedReader.Query(_ => _.SkipFullPages(PageSize, totalFeedEntriesCount).OrderBy(x => x.Timestamp).ToList());
+                userChangedFeedEntries = userChangedReader.Query(_ => _.OrderBy(x => x.Timestamp).SkipFullPages(PageSize, totalFeedEntriesCount).ToList());
             }
 
             var feed = this.GetFeed(userChangedFeedEntries);
