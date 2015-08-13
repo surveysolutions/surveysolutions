@@ -220,6 +220,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             DateTime timestamp,
             string packageId)
         {
+            var id = packageId + (userId.HasValue ? "$" + userId.FormatGuid() : "");
             var syncPackageMeta = new InterviewSyncPackageMeta(
                 interviewId,
                 questionnaireId,
@@ -232,10 +233,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 Meta = metaInfo,
                 Content = content,
-                PackageId = packageId
+                PackageId = id
             };
 
-            syncPackageWriter.Store(syncPackageMeta, packageId);
+            syncPackageWriter.Store(syncPackageMeta, id);
         }
     }
 }

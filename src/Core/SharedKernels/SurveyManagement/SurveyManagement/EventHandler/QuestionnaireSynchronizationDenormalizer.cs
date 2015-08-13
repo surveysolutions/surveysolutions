@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 PackageId = packageId
             };
 
-            syncPackageWriter.Store( syncPackageMeta, packageId);
+            syncPackageWriter.Store(syncPackageMeta, packageId);
         }
     }
 }
