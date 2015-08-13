@@ -11,16 +11,16 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android.Helpers;
-using InterviewViewModel = WB.Core.BoundedContexts.Capi.Views.InterviewDetails.InterviewViewModel;
 
 namespace WB.UI.Capi
 {
@@ -30,6 +30,11 @@ namespace WB.UI.Capi
         private CancellationTokenSource cancellationToken;
         private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
         protected ProgressDialog progressDialog;
+
+        private static IStatefulInterviewRepository InterviewRepository
+        {
+            get { return ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>(); }
+        }
 
         protected TabletInformationReportButton btnSendTabletInfo
         {
@@ -181,8 +186,7 @@ namespace WB.UI.Capi
                     return;
                 }
 
-                InterviewViewModel interview = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                    new QuestionnaireScreenInput(interviewId));
+                IStatefulInterview interview = InterviewRepository.Get(interviewId.FormatGuid());
 
                 if (ct.IsCancellationRequested)
                 {

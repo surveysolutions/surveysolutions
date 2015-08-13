@@ -7,7 +7,6 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -75,10 +74,6 @@ namespace WB.UI.Capi.Syncronization
             var questionnaireDtoWriter = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>();
             if (questionnaireDtoWriter!=null)
                 questionnaireDtoWriter.Remove(id);
-
-            var interviewViewModelWriter = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>();
-            if (interviewViewModelWriter!=null)
-                interviewViewModelWriter.Remove(id);
 
             this.plainInterviewFileStorage.RemoveAllBinaryDataForInterview(id);
         }

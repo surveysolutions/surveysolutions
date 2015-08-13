@@ -275,11 +275,9 @@
     <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
-    <Compile Include="Controls\Bindings\BackgroundBinding.cs" />
     <Compile Include="Controls\Bindings\HtmlBinding.cs" />
     <Compile Include="Controls\Bindings\MandatoryValidationMessageBinding.cs" />
     <Compile Include="Controls\Bindings\MvvmBindingWrapper.cs" />
-    <Compile Include="Controls\Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Controls\Bindings\VisibilityBinding.cs" />
     <Compile Include="Events\AnswerSavedEventArgs.cs" />
     <Compile Include="Events\AnswerSetEventArgs.cs" />
