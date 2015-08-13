@@ -24,5 +24,8 @@ namespace WB.Core.Synchronization.SyncStorage
         public virtual DateTime Timestamp { get; protected set; }
 
         public virtual long SortIndex { get; set; }
+
+        public virtual string Content { get; set; }
+        public virtual string Meta { get; set; }
     }
 }
