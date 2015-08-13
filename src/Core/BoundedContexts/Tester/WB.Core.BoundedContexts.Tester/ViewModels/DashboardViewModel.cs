@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Cirrious.MvvmCross.ViewModels;
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
@@ -18,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -200,16 +202,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress,
                             downloadProgress);
                     },
-                    token: tokenSource.Token);
+                    token: this.tokenSource.Token);
 
                 if (questionnairePackage != null)
                 {
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                    questionnairePackage.Document.PublicKey = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                    var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
+                    var questionnaireDocument = questionnairePackage.Document;
+                    var supportingAssembly = questionnairePackage.Assembly;
 
-                    questionnaireImportService.ImportQuestionnaire(questionnairePackage.Document, questionnairePackage.Assembly, 1);
-                    
+                    questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
+
+                    this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
                     var interviewId = Guid.NewGuid();
@@ -217,8 +223,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
                         interviewId: interviewId,
                         userId: this.principal.CurrentUserIdentity.UserId,
-                        questionnaireId: questionnairePackage.Document.PublicKey,
-                        questionnaireVersion: 1,
+                        questionnaireId: questionnaireIdentity.QuestionnaireId,
+                        questionnaireVersion: questionnaireIdentity.Version,
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 

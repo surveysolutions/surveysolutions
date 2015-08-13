@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
-            this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>().InSingletonScope();
+            this.Bind<IQuestionnaireModelBuilder>().To<QuestionnaireModelBuilder>().InSingletonScope();
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
