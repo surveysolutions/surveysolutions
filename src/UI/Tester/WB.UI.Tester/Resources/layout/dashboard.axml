@@ -22,7 +22,7 @@
     </LinearLayout>
     <View style="@style/Dashboard_Filters_Divider"></View>
   </LinearLayout>
-  <Cirrious.MvvmCross.Binding.Droid.Views.MvxListView android:id="@+id/questionnairesList"
+  <MvxListView android:id="@+id/questionnairesList"
                style="@style/Dashboard_QuestionnairesList"
                local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand; BackgroundStyle PublicBackground(IsPublicShowed)"
                local:MvxItemTemplate="@layout/questionnaire_list_item" />
