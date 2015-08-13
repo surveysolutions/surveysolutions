@@ -2,28 +2,28 @@
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
+using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideCleaner : IReadSideCleaner
     {
-        private readonly ISessionFactory sessionFactory;
+        private readonly PostgreConnectionSettings connectionSettings;
         private readonly SchemaUpdate schemaUpdate;
 
-        public PostgresReadSideCleaner([Named(PostgresReadSideModule.ReadSideSessionFactoryName)] ISessionFactory sessionFactory,
-            SchemaUpdate schemaUpdate)
+        public PostgresReadSideCleaner(PostgreConnectionSettings connectionSettings, SchemaUpdate schemaUpdate)
         {
-            this.sessionFactory = sessionFactory;
+            this.connectionSettings = connectionSettings;
             this.schemaUpdate = schemaUpdate;
         }
 
         public void ReCreateViewDatabase()
         {
-            using (var openStatelessSession = sessionFactory.OpenStatelessSession())
+            using (NpgsqlConnection connection = new Npgsql.NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                IDbConnection dbConnection = openStatelessSession.Connection;
-                var dbCommand = dbConnection.CreateCommand();
+                connection.Open();
+                var dbCommand = connection.CreateCommand();
 
                 dbCommand.CommandText = "drop schema public cascade;create schema public;";
                 dbCommand.ExecuteNonQuery();
