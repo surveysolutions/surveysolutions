@@ -116,4 +116,13 @@
   <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
     <value>max number of validation errors {0} have been reached</value>
   </data>
+  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
+    <value>user preloading process with id '{0}' can't create more users then {1}</value>
+  </data>
+  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
+    <value>user preloading process with id '{0}' is in state '{1}', but must be in state '{2}'</value>
+  </data>
+  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
+    <value>user preloading process with id '{0}' is missing</value>
+  </data>
 </root>

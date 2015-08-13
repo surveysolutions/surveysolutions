@@ -97,11 +97,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; can&apos;t create more users then {1}.
+        /// </summary>
+        internal static string UserPreloadingProcessWithIdCantCreateMoreUsersFormat {
+            get {
+                return ResourceManager.GetString("UserPreloadingProcessWithIdCantCreateMoreUsersFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos;has {1} error(s)..
         /// </summary>
         internal static string UserPreloadingProcessWithIdHasErrorsFormat {
             get {
                 return ResourceManager.GetString("UserPreloadingProcessWithIdHasErrorsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; is missing.
+        /// </summary>
+        internal static string UserPreloadingProcessWithIdIisMissingFormat {
+            get {
+                return ResourceManager.GetString("UserPreloadingProcessWithIdIisMissingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to user preloading process with id &apos;{0}&apos; is in state &apos;{1}&apos;, but must be in state &apos;{2}&apos;.
+        /// </summary>
+        internal static string UserPreloadingProcessWithIdInInvalidStateFormat {
+            get {
+                return ResourceManager.GetString("UserPreloadingProcessWithIdInInvalidStateFormat", resourceCulture);
             }
         }
         
