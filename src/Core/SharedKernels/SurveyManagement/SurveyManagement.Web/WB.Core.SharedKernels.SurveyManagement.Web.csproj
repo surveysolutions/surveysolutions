@@ -100,7 +100,7 @@
       <HintPath>..\..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="StatData">
-      <HintPath>..\..\..\..\..\Externals\StatData.dll</HintPath>
+      <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
