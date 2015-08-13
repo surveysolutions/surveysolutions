@@ -108,6 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 {
                     "~/Scripts/bootstrap3-typeahead.js", 
                     "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/components/typeahead-extended.js",
                     "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/new/mapper.js",
                     "~/Scripts/viewmodels/pages/interview/new/model.js",

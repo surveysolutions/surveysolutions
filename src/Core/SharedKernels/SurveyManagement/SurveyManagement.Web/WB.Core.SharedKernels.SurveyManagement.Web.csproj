@@ -664,6 +664,7 @@
     <EmbeddedResource Include="Scripts\bootstrap3-typeahead.js" />
     <EmbeddedResource Include="Scripts\bootstrap3-typeahead.min.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.typeahead.js" />
+    <EmbeddedResource Include="Scripts\components\typeahead-extended.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ar.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.az.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.bg.min.js" />
