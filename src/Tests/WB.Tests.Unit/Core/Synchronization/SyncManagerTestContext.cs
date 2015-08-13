@@ -87,7 +87,8 @@ namespace WB.Tests.Unit.Core.Synchronization
         {
             return new InterviewSyncPackageMeta(interviewId, Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 1, DateTime.Now, userId, itemType, 10, 5)
                    {
-                       PackageId = string.Format("{0}${1}", interviewId.FormatGuid(), sortIndex)
+                       PackageId = string.Format("{0}${1}", interviewId.FormatGuid(), sortIndex),
+                       SortIndex = sortIndex
                    };
         }
     }
