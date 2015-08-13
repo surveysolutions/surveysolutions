@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Implementation.InfoFileSupplierRegistry
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.InfoFileSupplierRegistry
 {
     internal class DefaultInfoFileSupplierRegistry : IInfoFileSupplierRegistry
     {

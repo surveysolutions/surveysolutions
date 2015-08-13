@@ -2268,9 +2268,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
+    <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.CAPI.csproj">
       <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
-      <Name>WB.Core.BoundedContexts.Capi</Name>
+      <Name>WB.Core.BoundedContexts.CAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
@@ -2288,10 +2288,6 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
       <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting\WB.Core.GenericSubdomains.ErrorReporting.csproj">
-      <Project>{64FF78F2-775B-4728-9D8A-D3A7B9A7344C}</Project>
-      <Name>WB.Core.GenericSubdomains.ErrorReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj">
       <Project>{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}</Project>

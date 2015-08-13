@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Services
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Services
 {
     public interface IErrorReportingSettings
     {

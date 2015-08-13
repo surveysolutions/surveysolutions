@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WB.Core.GenericSubdomains.ErrorReporting.Services.CapiInformationService
+namespace WB.Core.BoundedContexts.Capi.ErrorReporting.Services.CapiInformationService
 {
     public interface ICapiInformationService
     {
