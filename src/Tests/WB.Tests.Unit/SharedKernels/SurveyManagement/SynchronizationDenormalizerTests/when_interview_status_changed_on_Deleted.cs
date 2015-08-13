@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         It should_create_interview_package = () =>
             interviewPackageStorageWriterMock.Verify(x => x.Store(
-                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.DeleteInterview), 
-                partialPackageId), 
+                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.DeleteInterview),
+                Moq.It.Is<string>(id => id.StartsWith(partialPackageId))), 
                 Times.Once);
 
         static InterviewSynchronizationDenormalizer denormalizer;
