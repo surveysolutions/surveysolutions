@@ -13,7 +13,7 @@ using WB.UI.Capi.Views;
 namespace WB.UI.Capi
 {
     [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoginActivity : MvxActivity
+    public class LoginActivity : MvxActivity<LoginActivityViewModel>
     {
         private IInterviewerSettings interviewerSettings
         {

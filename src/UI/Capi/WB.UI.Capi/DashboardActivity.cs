@@ -13,6 +13,8 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
+using Cirrious.MvvmCross.Droid.Views;
+using Cirrious.MvvmCross.ViewModels;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -30,9 +32,13 @@ using WB.UI.Capi.ViewModel.Dashboard;
 
 namespace WB.UI.Capi
 {
+    public class DashboardViewModel : MvxViewModel // Used for navigation only. Should be removed once rewritten
+    {
+    }
+
     [Activity(Label = "Interviewer",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class DashboardActivity : Activity
+    public class DashboardActivity : MvxActivity<DashboardViewModel>
     {
         protected DashboardModel currentDashboard;
         protected IDictionary<Guid,View> sureveyHolders;
