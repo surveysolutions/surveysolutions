@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.API.Feeds
         [HttpGet]
         public HttpResponseMessage Archive(int page)
         {
-            var changedFeedEntries = userChangedReader.Query(_ => _.GetPage(page, PageSize).OrderBy(x => x.Timestamp).ToList());
+            var changedFeedEntries = userChangedReader.Query(_ => _.OrderBy(x => x.Timestamp).GetPage(page, PageSize).ToList());
             SyndicationFeed syndicationFeed = this.GetFeed(changedFeedEntries);
 
             if (page > 1)

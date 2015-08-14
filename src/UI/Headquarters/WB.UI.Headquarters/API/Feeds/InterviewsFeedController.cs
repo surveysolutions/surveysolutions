@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.API.Feeds
         [HttpGet]
         public HttpResponseMessage Archive(int page)
         {
-            var changedFeedEntries = feedReader.Query(_ => _.GetPage(page, PageSize).OrderBy(x => x.Timestamp).ToList());
+            var changedFeedEntries = feedReader.Query(_ => _.OrderBy(x => x.Timestamp).GetPage(page, PageSize).ToList());
             if (changedFeedEntries.Count == 0)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Page is empty or not created yet");
