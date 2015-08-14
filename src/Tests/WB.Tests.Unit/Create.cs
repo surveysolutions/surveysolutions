@@ -2121,5 +2121,14 @@ namespace WB.Tests.Unit
         {
             return new QuestionnaireModelBuilder();
         }
+
+        public static InterviewSynchronizationDto InterviewSynchronizationDto()
+        {
+            return new InterviewSynchronizationDto(Guid.NewGuid(), InterviewStatus.SupervisorAssigned, "",
+                Guid.NewGuid(), Guid.NewGuid(), 1, new AnsweredQuestionSynchronizationDto[0],
+                new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
+                new HashSet<InterviewItemId>(), new Dictionary<InterviewItemId, int>(),
+                new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), false);
+        }
     }
 }
