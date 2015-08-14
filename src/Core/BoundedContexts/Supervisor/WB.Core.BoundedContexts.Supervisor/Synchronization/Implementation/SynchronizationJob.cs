@@ -15,18 +15,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Execute(IJobExecutionContext context)
         {
-            IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-            try
-            {
-                ISynchronizer synchronizer = this.synchronizerFactory.Invoke();
-                // we want synchronizer be transient but job is singleton, so we use factory in-between
+            ISynchronizer synchronizer = this.synchronizerFactory.Invoke();
+            // we want synchronizer be transient but job is singleton, so we use factory in-between
 
-                synchronizer.Pull();
-            }
-            finally
-            {
-                IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
-            }
+            synchronizer.Pull();
         }
     }
 }
