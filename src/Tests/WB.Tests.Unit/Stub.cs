@@ -46,7 +46,6 @@ namespace WB.Tests.Unit
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 Create.SubstitutionService(),
                 Create.LiteEventRegistry(),
-                Stub.MvxMainThreadDispatcher(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),
                 Mock.Of<IMvxMessenger>());
             sideBarSectionViewModel.NavigationState = Create.NavigationState();

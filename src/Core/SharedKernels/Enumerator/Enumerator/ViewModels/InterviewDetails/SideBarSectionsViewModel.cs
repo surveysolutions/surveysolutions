@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Cirrious.CrossCore.Core;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -20,17 +20,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>
+        ILiteEventHandler<GroupsDisabled>,
+        IDisposable
     {
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         readonly ILiteEventRegistry eventRegistry;
+        readonly IMvxMessenger messenger;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
         private string interviewId;
+        private MvxSubscriptionToken subsctiptionToken;
 
         protected SideBarSectionsViewModel()
         {
@@ -42,14 +44,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ILiteEventRegistry eventRegistry,
-            ISideBarSectionViewModelsFactory modelsFactory,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMessenger messenger,
+            ISideBarSectionViewModelsFactory modelsFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
+            this.messenger = messenger;
             this.modelsFactory = modelsFactory;
-            this.mainThreadDispatcher = mainThreadDispatcher;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.subsctiptionToken = this.messenger.Subscribe<SideBarShownMessage>(msg => this.UpdateStatuses());
         }
 
         public void Init(string questionnaireId,
@@ -264,6 +267,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
         {
             return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
+        }
+
+        private void UpdateStatuses()
+        {
+            this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromModel());
+        }
+
+        public void Dispose()
+        {
+            this.messenger.Unsubscribe<SideBarShownMessage>(this.subsctiptionToken);
         }
     }
 }
