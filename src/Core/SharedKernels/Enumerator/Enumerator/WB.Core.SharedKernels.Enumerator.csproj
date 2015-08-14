@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IStatefulInterview.cs" />
+    <Compile Include="DataTransferObjects\AnswerType.cs" />
+    <Compile Include="DataTransferObjects\InterviewSnapshotDto.cs" />
     <Compile Include="Entities\Interview\BaseInterviewAnswer.cs" />
     <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
     <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Entities\Interview\TextAnswer.cs" />
     <Compile Include="Entities\Interview\TextListAnswer.cs" />
     <Compile Include="Entities\QuestionnaireIdentity.cs" />
+    <Compile Include="Events\InterviewAnswersFromSnapshotRestored.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
@@ -243,6 +246,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.ru-RU.resx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.Events;
 using WB.UI.Capi.ViewModel.Synchronization;
 
 namespace WB.UI.Capi.Syncronization
@@ -100,7 +101,7 @@ namespace WB.UI.Capi.Syncronization
             
             for (int i = storedEvents.Count - 1; i >= 0; i--)
             {
-                if (storedEvents[i].Payload is InterviewSynchronized || storedEvents[i].Payload is InterviewOnClientCreated)
+                if (storedEvents[i].Payload is InterviewAnswersFromSnapshotRestored || storedEvents[i].Payload is InterviewOnClientCreated)
                 {
                     break;
                 }
