@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly Dictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly Dictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly Dictionary<string, string> notAnsweredQuestionsInterviewerComments;
+        private bool createdOnClient;
 
         public StatefulInterview()
         {
@@ -62,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.InitializeCreatedInterview(this.EventSourceId, @event.QuestionnaireId,  @event.QuestionnaireVersion);
+            this.createdOnClient = true;
         }
 
         private void InitializeCreatedInterview(Guid eventSourceId, Guid questionnaireGuid, long version)
@@ -805,6 +807,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 entityIdentity,
                 this.IsEnabledImpl,
                 this.calculated.IsEnabled);
+        }
+
+        public bool CreatedOnClient
+        {
+            get { return this.createdOnClient; }
         }
 
         private bool IsEnabledImpl(Identity entityIdentity)
