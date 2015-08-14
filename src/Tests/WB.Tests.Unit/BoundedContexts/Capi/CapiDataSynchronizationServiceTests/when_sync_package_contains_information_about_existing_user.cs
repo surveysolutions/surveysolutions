@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                                     param.PublicKey == userDocument.PublicKey && param.Email == userDocument.Email &&
                                         param.IsLockedByHQ == userDocument.IsLockedByHQ && 
                                         param.IsLockedBySupervisor == userDocument.IsLockedBySupervisor &&
-                                        param.PasswordHash == userDocument.Password), null, Moq.It.IsAny<bool>()),
+                                        param.PasswordHash == userDocument.Password), null),
                     Times.Once);
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;

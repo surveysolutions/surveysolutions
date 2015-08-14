@@ -23,11 +23,11 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
             this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
         }
 
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool isBulk = false)
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
         {
             ActionUtils.ExecuteInIndependentTryCatchBlocks(
-                () => this.liteEventBus.PublishUncommittedEvents(aggregateRoot, isBulk),
-                () => this.cqrsEventBus.PublishUncommittedEvents(aggregateRoot, isBulk));
+                () => this.liteEventBus.PublishUncommittedEvents(aggregateRoot),
+                () => this.cqrsEventBus.PublishUncommittedEvents(aggregateRoot));
         }
 
         public void Publish(IPublishableEvent eventMessage)

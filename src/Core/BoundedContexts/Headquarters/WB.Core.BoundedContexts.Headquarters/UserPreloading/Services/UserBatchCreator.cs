@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     new[] { UserRoles.Supervisor },
                     false,
                     false, null,
-                    supervisorToCreate.FullName, supervisorToCreate.PhoneNumber), handleInBatch:true);
+                    supervisorToCreate.FullName, supervisorToCreate.PhoneNumber));
                 return;
             }
 
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             commandService.Execute(new UnarchiveUserAndUpdateCommand(archivedSupervisor.PublicKey,
                 passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email, supervisorToCreate.FullName,
-                supervisorToCreate.PhoneNumber), handleInBatch:true);
+                supervisorToCreate.PhoneNumber));
         }
 
         void CreateInterviewerOrUnarchiveAndUpdate(UserPreloadingDataRecord interviewerToCreate)
@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     new[] { UserRoles.Operator },
                     false,
                     false, supervisor,
-                    interviewerToCreate.FullName, interviewerToCreate.PhoneNumber), handleInBatch:true);
+                    interviewerToCreate.FullName, interviewerToCreate.PhoneNumber));
                 return;
             }
 
@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             commandService.Execute(new UnarchiveUserAndUpdateCommand(archivedInterviewers.PublicKey,
                 passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email, interviewerToCreate.FullName,
-                interviewerToCreate.PhoneNumber), handleInBatch: true);
+                interviewerToCreate.PhoneNumber));
         }
 
         private UserLight GetSupervisorForUser(UserPreloadingDataRecord dataRecord)

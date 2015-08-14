@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
         {
             var cqrsEventBus = Mock.Of<IEventBus>();
             Mock.Get(cqrsEventBus)
-                .Setup(bus => bus.PublishUncommittedEvents(aggregateRoot, false))
+                .Setup(bus => bus.PublishUncommittedEvents(aggregateRoot))
                 .Throws<Exception>();
 
             hybridEventBus = Create.HybridEventBus(liteEventBus: liteEventBusMock.Object, cqrsEventBus: cqrsEventBus);
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
             exception.ShouldNotBeNull();
 
         It should_publish_aggregate_root_events_to_lite_event_bus = () =>
-            liteEventBusMock.Verify(bus => bus.PublishUncommittedEvents(aggregateRoot, false), Times.Once);
+            liteEventBusMock.Verify(bus => bus.PublishUncommittedEvents(aggregateRoot), Times.Once);
 
         private static Exception exception;
         private static HybridEventBus hybridEventBus;

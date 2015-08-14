@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
             new Task(() =>
             {
                 IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-
+                NoTransactionalThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
                 try
                 {
                     var sampleImportService = this.sampleImportServiceFactory.Invoke();
@@ -56,6 +56,7 @@ namespace WB.UI.Headquarters.Controllers
                 finally
                 {
                     IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                    NoTransactionalThreadMarkerManager.ReleaseCurrentThreadAsNoTransactional();
                 }
             }).Start();
         }
