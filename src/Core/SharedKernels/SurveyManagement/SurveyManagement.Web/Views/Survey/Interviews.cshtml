@@ -12,26 +12,26 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
 
     <script type="text/javascript">
-    var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
-    var $detailsUrl = '@Url.Action("Details", "Interview")';
-    var $surveysUrl = '@Url.Action("Index", "Survey")';
-    var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-    var $statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })';
-    $(function() {
-        var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-        var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
-        var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsibles, users, $commandExecutionUrl);
-        model.IsNothingSelected.subscribe(function(value) {
-            if (value) {
-                model.AssignTo(undefined);   
-            }
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
+        var $detailsUrl = '@Url.Action("Details", "Interview")';
+        var $surveysUrl = '@Url.Action("Index", "Survey")';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+        var $statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })';
+        $(function() {
+            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
+            var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
+            var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsibles, users, $commandExecutionUrl);
+            model.IsNothingSelected.subscribe(function(value) {
+                if (value) {
+                    model.AssignTo(undefined);
+                }
+            });
+            ko.applyBindings(model);
+            model.load();
         });
-        ko.applyBindings(model);
-        model.load();
-    });
     </script>
 }
 
@@ -42,12 +42,10 @@
 @section  actionbar{
     <div class="form-inline">
         <div class="btn-group">
-            <div class="input-group" data-bind="disable: IsNothingSelected">
-                <div class="input-group">
-                    <input class="form-control" placeholder="Enter interviewer name" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return _.isUndefined(item) ? '' : item.UserName}, minLength: 0, autoSelect: true, shouldOpenOnParentClick: true, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text" />
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected"><span class="caret"></span></button>
-                    </div>
+            <div class="input-group">
+                <input class="form-control" placeholder="Interviewer name" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" data-bind="click: function(){ AssignTo(undefined);}, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </div>
             </div>
             <ul class="dropdown-menu" data-bind="foreach: Users">
@@ -153,7 +151,7 @@
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        <br/>@WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ContinueConfirmMessage
+        <br />@WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ContinueConfirmMessage
     </script>
 
 }
@@ -180,9 +178,9 @@
             <h4 class="list-group-item-heading">Responsible</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}, minLength: 0, autoSelect: false, addItem: DefaultResponsible, shouldOpenOnParentClick: true}, valueupdate:'afterkeydown'" type="text" />
-                    <div class="input-group-btn">
-                        <div type="button" class="btn btn-default"><span class="caret"></span></div>
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
             </p>

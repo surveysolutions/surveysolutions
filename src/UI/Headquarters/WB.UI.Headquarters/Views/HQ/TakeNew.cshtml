@@ -87,7 +87,7 @@
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return _.isUndefined(item) ? '' : item.label()}, minLength: 0, autoSelect: true, showHintOnFocus: true}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return item.label()}}, valueupdate:'afterkeydown'" type="text" />
                     <div class="input-group-btn" data-bind="click: function(){ selectedOption(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
@@ -187,7 +187,7 @@
             <label class="col-sm-2 control-label">Responsible</label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return _.isUndefined(item) ? '' : item.name()}, minLength: 0, autoselect: true, showHintOnFocus: true, showLoadMore: true}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return item.name()}}, valueupdate:'afterkeydown'" type="text" />
                     <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>

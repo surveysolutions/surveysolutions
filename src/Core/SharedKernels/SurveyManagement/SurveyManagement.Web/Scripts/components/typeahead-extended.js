@@ -4,6 +4,8 @@
         displayItemsCount: 0,
 
         displayText: function (item) {
+            if (!item) return "";
+
             if (item.loadMore) return item.name;
 
             return this.options.extendedDisplayText(item);
@@ -21,7 +23,7 @@
                 return this.shown ? this.hide() : this;
             }
 
-            if (items.length > 0) {
+            if (items.length > 0 && this.displayItemsCount === 0) {
                 this.$element.data('active', items[0]);
             } else {
                 this.$element.data('active', null);
