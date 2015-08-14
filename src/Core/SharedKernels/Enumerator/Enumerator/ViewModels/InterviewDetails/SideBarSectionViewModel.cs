@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,11 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
         private string interviewId;
-        private readonly MvxSubscriptionToken subsctiptionToken;
         string questionnaireId;
 
         private SideBarSectionsViewModel root;
@@ -43,8 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ISubstitutionService substitutionService,
-            ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher, 
+            ILiteEventRegistry eventRegistry, 
             ISideBarSectionViewModelsFactory modelsFactory,
             IMvxMessenger messenger)
         {
@@ -52,10 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
-            this.mainThreadDispatcher = mainThreadDispatcher;
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
-            this.subsctiptionToken = this.messenger.Subscribe<SideBarShownMessage>((msg) => this.SideBarGroupState.UpdateFromModel());
             this.Children = new List<SideBarSectionViewModel>();
         }
 
@@ -276,7 +270,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.NavigationState.GroupChanged -= this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged -= this.NavigationState_OnBeforeGroupChanged;
-            this.messenger.Unsubscribe<SideBarShownMessage>(this.subsctiptionToken);
         }
 
         public void RefreshHasChildrenFlag()

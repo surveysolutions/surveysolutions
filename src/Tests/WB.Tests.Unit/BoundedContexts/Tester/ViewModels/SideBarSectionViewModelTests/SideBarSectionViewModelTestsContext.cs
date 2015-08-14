@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSe
                 questionnaireRepository.Object, 
                 Create.SubstitutionService(), 
                 Create.LiteEventRegistry(), 
-                Stub.MvxMainThreadDispatcher(), 
                 Stub.SideBarSectionViewModelsFactory(),
                 Mock.Of<IMvxMessenger>());
         }
