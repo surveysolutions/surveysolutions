@@ -44,7 +44,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             this.eventStore.Store(eventStream);
         }
 
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool asBulk)
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
         {
             this.Publish(aggregateRoot.GetUncommittedChanges());
         }

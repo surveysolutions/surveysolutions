@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             this.eventStore.Store(eventStream);
         }
 
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot, bool isBulk = false)
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
         {
             foreach (var uncommittedChange in aggregateRoot.GetUncommittedChanges())
             {

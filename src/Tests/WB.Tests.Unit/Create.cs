@@ -1627,10 +1627,12 @@ namespace WB.Tests.Unit
 
         public static TransactionManagerProvider TransactionManagerProvider(
             Func<ICqrsPostgresTransactionManager> transactionManagerFactory = null,
+            Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory = null,
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
         {
             return new TransactionManagerProvider(
                 transactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
+                noTransactionTransactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>());
         }
 

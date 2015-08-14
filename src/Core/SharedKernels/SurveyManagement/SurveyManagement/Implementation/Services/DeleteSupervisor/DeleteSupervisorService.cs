@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteS
             var deletedInterviewers = new List<Guid>();
             try
             {
-                this.commandService.Execute(new ArchiveUserCommad(supervisorId), handleInBatch: true);
+                this.commandService.Execute(new ArchiveUserCommad(supervisorId));
 
                 var interviewerIds =
                     userDocumentReader.Query(
@@ -51,16 +51,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteS
 
                 foreach (var interviewerId in interviewerIds)
                 {
-                    this.commandService.Execute(new ArchiveUserCommad(interviewerId), handleInBatch: true);
+                    this.commandService.Execute(new ArchiveUserCommad(interviewerId));
                     deletedInterviewers.Add(interviewerId);
                 }
             }
             catch (Exception)
             {
-                this.commandService.Execute(new UnarchiveUserCommand(supervisorId), handleInBatch: true);
+                this.commandService.Execute(new UnarchiveUserCommand(supervisorId));
                 foreach (var deletedInterviewer in deletedInterviewers)
                 {
-                    this.commandService.Execute(new UnarchiveUserCommand(deletedInterviewer), handleInBatch: true);
+                    this.commandService.Execute(new UnarchiveUserCommand(deletedInterviewer));
                 }
                 throw;
             }

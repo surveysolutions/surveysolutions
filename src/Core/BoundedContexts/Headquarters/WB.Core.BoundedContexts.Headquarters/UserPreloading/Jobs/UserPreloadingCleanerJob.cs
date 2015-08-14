@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         public void Execute(IJobExecutionContext context)
         {
             IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+            NoTransactionalThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
             try
             {
                 UserPreloadingCleaner.CleanUpInactiveUserPreloadingProcesses();
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             finally
             {
                 IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                NoTransactionalThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
             }
         }
     }
