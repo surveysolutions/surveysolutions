@@ -15,6 +15,7 @@ namespace WB.UI.Capi.ViewModel
 {
     public class InterviewerInterviewViewModel : EnumeratorInterviewViewModel
     {
+        readonly IStatefulInterviewRepository interviewRepository;
         readonly IViewModelNavigationService viewModelNavigationService;
 
         public InterviewerInterviewViewModel(
@@ -31,6 +32,7 @@ namespace WB.UI.Capi.ViewModel
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
         {
+            this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
@@ -58,9 +60,10 @@ namespace WB.UI.Capi.ViewModel
             this.navigationState.NavigateBackAsync(this.NavigateBack).WaitAndUnwrapException();
         }
 
-        void NavigateBack()
+        private void NavigateBack()
         {
-            if (this.PrefilledQuestions.Any())
+            var interview = this.interviewRepository.Get(this.interviewId);
+            if (this.PrefilledQuestions.Any() && interview.CreatedOnClient)
             {
                 this.viewModelNavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new {interviewId = this.interviewId});
             }
