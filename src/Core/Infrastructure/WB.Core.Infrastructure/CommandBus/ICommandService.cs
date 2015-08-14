@@ -5,7 +5,7 @@ namespace WB.Core.Infrastructure.CommandBus
 {
     public interface ICommandService
     {
-        void Execute(ICommand command, string origin = null, bool handleInBatch = false);
+        void Execute(ICommand command, string origin = null);
         Task ExecuteAsync(ICommand command, string origin = null, CancellationToken cancellationToken = default(CancellationToken));
         Task WaitPendingCommandsAsync();
     }

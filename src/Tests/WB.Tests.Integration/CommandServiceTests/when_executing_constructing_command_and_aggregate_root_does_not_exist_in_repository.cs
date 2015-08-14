@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             var eventBus = Mock.Of<IEventBus>();
             Mock.Get(eventBus)
-                .Setup(bus => bus.PublishUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), false))
+                .Setup(bus => bus.PublishUncommittedEvents(Moq.It.IsAny<IAggregateRoot>()))
                 .Callback<IAggregateRoot, bool>((aggregate, inBatch) =>
                 {
                     publishedEvents = aggregate.GetUncommittedChanges();
@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            commandService.Execute(new Initialize(), null, false);
+            commandService.Execute(new Initialize(), null);
 
         It should_publish_result_aggregate_root_event_to_event_bus = () =>
             publishedEvents.Single().Payload.ShouldBeOfExactType<Initialized>();

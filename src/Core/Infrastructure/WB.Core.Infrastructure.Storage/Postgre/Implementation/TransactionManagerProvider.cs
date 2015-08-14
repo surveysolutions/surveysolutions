@@ -8,19 +8,23 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     internal class TransactionManagerProvider : ISessionProvider, ITransactionManagerProviderManager
     {
         private readonly Func<ICqrsPostgresTransactionManager> transactionManagerFactory;
+        private readonly Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory;
         private readonly ICqrsPostgresTransactionManager rebuildReadSideTransactionManager;
         private ICqrsPostgresTransactionManager pinnedTransactionManager;
 
         public TransactionManagerProvider(
             Func<CqrsPostgresTransactionManager> transactionManagerFactory,
+            Func<NoTransactionCqrsPostgresTransactionManager> noTransactionTransactionManagerFactory,
             RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager)
-            : this((Func<ICqrsPostgresTransactionManager>)transactionManagerFactory, (ICqrsPostgresTransactionManager)rebuildReadSideCqrsTransactionManager) { }
+            : this((Func<ICqrsPostgresTransactionManager>)transactionManagerFactory, (Func<ICqrsPostgresTransactionManager>) noTransactionTransactionManagerFactory, (ICqrsPostgresTransactionManager)rebuildReadSideCqrsTransactionManager) { }
 
         internal TransactionManagerProvider(Func<ICqrsPostgresTransactionManager> transactionManagerFactory,
+            Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory,
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager)
         {
             this.transactionManagerFactory = transactionManagerFactory;
             this.rebuildReadSideTransactionManager = rebuildReadSideTransactionManager;
+            this.noTransactionTransactionManagerFactory = noTransactionTransactionManagerFactory;
         }
 
         public ITransactionManager GetTransactionManager()
@@ -45,7 +49,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         private ICqrsPostgresTransactionManager GetPostgresTransactionManager()
         {
-            return this.pinnedTransactionManager ?? this.transactionManagerFactory.Invoke();
+            return this.pinnedTransactionManager ?? 
+                (NoTransactionalThreadMarkerManager.IsMarkedAsNoTransaction() ? 
+                    this.noTransactionTransactionManagerFactory.Invoke() : 
+                    this.transactionManagerFactory.Invoke());
         }
     }
 }

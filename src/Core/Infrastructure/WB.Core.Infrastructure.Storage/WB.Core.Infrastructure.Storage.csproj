@@ -141,6 +141,7 @@
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="IsolatedThreadExtensions.cs" />
+    <Compile Include="NoTransactionalThreadMarkerManager.cs" />
     <Compile Include="IsolatedThreadManager.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Postgre\Implementation\PostgresPlainKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\PostgresPlainStorageRepository.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideKeyValueStorage.cs" />
+    <Compile Include="Postgre\Implementation\NoTransactionCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />
     <Compile Include="Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
