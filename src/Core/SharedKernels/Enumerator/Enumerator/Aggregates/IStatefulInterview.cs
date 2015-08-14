@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         
         bool HasErrors { get; }
         bool IsCompleted { get; }
+        bool CreatedOnClient { get; }
 
         InterviewRoster GetRoster(Identity identity);
 
