@@ -25,7 +25,7 @@
             if (!self.isViewModelValid())
                 return;
             if (!self.submitting) {
-               // self.submitting = true;
+                self.submitting = true;
 
                 var command = {
                     type: "CreateInterviewCommand",
