@@ -29,8 +29,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 Create.LiteEventRegistry(),
-                sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory(),
-                Stub.MvxMainThreadDispatcher());
+                Mock.Of<IMvxMessenger>(),
+                sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory());
         }
 
 
@@ -48,7 +48,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                     questionnaireRepository.Object,
                     Create.SubstitutionService(),
                     Create.LiteEventRegistry(),
-                    Stub.MvxMainThreadDispatcher(),
                     Stub.SideBarSectionViewModelsFactory(),
                     Mock.Of<IMvxMessenger>());
                 barSectionViewModel.NavigationState = Create.NavigationState(); 
