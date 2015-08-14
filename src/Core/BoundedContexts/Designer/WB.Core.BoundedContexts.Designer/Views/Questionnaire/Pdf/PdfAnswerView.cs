@@ -8,8 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string Title { get; set; }
 
-        public AnswerType AnswerType { get; set; }
-
         public string ParentValue { get; set; }
     }
 }

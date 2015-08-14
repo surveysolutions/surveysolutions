@@ -3568,7 +3568,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     EventSourceId), InterviewDomainExceptionType.StatusIsNotOneOfExpected);
         }
 
-        private void ThrowIfInterviewHardDeleted()
+        protected void ThrowIfInterviewHardDeleted()
         {
             if (this.wasHardDeleted)
                 throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId), InterviewDomainExceptionType.InterviewHardDeleted);
