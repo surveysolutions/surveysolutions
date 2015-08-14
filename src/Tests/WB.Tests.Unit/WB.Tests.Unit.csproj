@@ -605,6 +605,8 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
     <Compile Include="BoundedContexts\Tester\Aggregates\when_getting_interviewer_entities.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_which_didnt_exist_before.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_which_existed_before.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_didnt_happen.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_happened.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
