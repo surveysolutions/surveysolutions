@@ -1,6 +1,4 @@
 using System.Linq;
-using Android.Content;
-using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding.ExtensionMethods;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -11,13 +9,13 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.UI.Capi.Views;
 
 namespace WB.UI.Capi.ViewModel
 {
     public class InterviewerInterviewViewModel : EnumeratorInterviewViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
-        readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
 
         public InterviewerInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -29,20 +27,18 @@ namespace WB.UI.Capi.ViewModel
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
-            GroupStateViewModel groupState,
-            IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity)
+            GroupStateViewModel groupState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
         }
 
 
         private IMvxCommand navigateToDashboardCommand;
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(this.CreateAndStartActivity<DashboardActivity>)); }
+            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(() => this.ShowViewModel<DashboardViewModel>())); }
         }
 
         private IMvxCommand signOutCommand;
@@ -54,7 +50,7 @@ namespace WB.UI.Capi.ViewModel
         void SignOut()
         {
             CapiApplication.Membership.LogOff();
-            this.CreateAndStartActivity<LoginActivity>();
+            this.ShowViewModel<LoginActivityViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()
@@ -70,16 +66,8 @@ namespace WB.UI.Capi.ViewModel
             }
             else
             {
-                this.CreateAndStartActivity<DashboardActivity>();
+                this.ShowViewModel<DashboardViewModel>();
             }
-            
-        }
-
-        void CreateAndStartActivity<TActivity>()
-        {
-            var intent = new Intent(mvxAndroidCurrentTopActivity.Activity, typeof(TActivity));
-            intent.AddFlags(ActivityFlags.NoHistory);
-            mvxAndroidCurrentTopActivity.Activity.StartActivity(intent);
         }
     }
 }
