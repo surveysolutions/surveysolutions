@@ -17,7 +17,7 @@
     </div>
 
     <div data-bind="visible: state()==@((int)UserPrelodingState.FinishedWithError)">
-        <h3>@BatchUpload.FinishedWithError <span data-bind="text: errorMessage"></span></h3>
+        <h3>@BatchUpload.FinishedWithErrorMessage <span data-bind="text: errorMessage"></span></h3>
         <b data-bind="text: createdUsersCount"></b> @BatchUpload.OutOf <b data-bind="text: recordsCount"></b> @BatchUpload.UsersHaveBeenCreated
         @Html.ActionLink(BatchUpload.UploadNewFile, "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary" })
     </div>
