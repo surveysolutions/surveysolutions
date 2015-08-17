@@ -790,6 +790,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 GetRosterInstanceIds).Count();
         }
 
+        public int CountActiveInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
+
+            var questionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+               allQuestionsInGroup,
+               groupIdentity.RosterVector,
+               questionnaire,
+               GetRosterInstanceIds);
+
+            return questionInstances.Count(this.IsEnabled);
+        }
+
         public int CountActiveInterviewerQuestionsInGroupOnly(Identity group)
         {
             return this
@@ -817,7 +831,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
 
-            return sectionInstances.Sum(section => this.CountActiveInterviewerQuestionsInGroupOnly(section));
+            return sectionInstances.Sum(section => this.CountActiveInterviewerQuestionsInGroupRecursively(section));
         }
 
         public int CountInvalidQuestionsInInterview()
