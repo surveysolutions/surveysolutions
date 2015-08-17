@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Cirrious.MvvmCross.ViewModels;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
@@ -18,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -228,7 +226,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
-                    this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
             }
             catch (RestException ex)

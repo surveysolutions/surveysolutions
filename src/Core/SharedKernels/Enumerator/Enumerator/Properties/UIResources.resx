@@ -458,4 +458,16 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Complete</value>
   </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Interviewer</value>
+  </data>
+  <data name="Interviewer_Login_ActiveUsers_Label" xml:space="preserve">
+    <value>Active users: {0}</value>
+  </data>
+  <data name="Interviewer_DashboardTitle" xml:space="preserve">
+    <value>Assignments/Census for {0}</value>
+  </data>
+  <data name="SynchronizationText" xml:space="preserve">
+    <value>Synchronization</value>
+  </data>
 </root>

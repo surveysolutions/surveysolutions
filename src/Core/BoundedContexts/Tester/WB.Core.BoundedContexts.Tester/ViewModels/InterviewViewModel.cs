@@ -81,11 +81,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             if (this.PrefilledQuestions.Any())
             {
-                this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = this.interviewId });
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
             else
             {
-                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
 
         }
