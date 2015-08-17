@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.IsLockedBySupervisor);
             Property(x => x.IsArchived);
             Property(x => x.Password, cm => cm.Index("User_UserName_Password"));
-            Property(x => x.UserName, cm => cm.Index("User_UserName, User_UserName_Password"));
+            Property(x => x.UserName, cm => cm.Index("User_UserName_Password"));
             Property(x => x.LastChangeDate);
             Property(x => x.DeviceId);
             Property(x => x.PersonName);
