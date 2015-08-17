@@ -252,7 +252,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     this._adapter.DataSetChanged += new EventHandler<NotifyCollectionChangedEventArgs>(this.AdapterOnDataSetChanged);
                 if (this._adapter != null)
                     return;
-                MvxBindingTrace.Warning("Setting Adapter to null is not recommended - you amy lose ItemsSource binding when doing this");
+                MvxBindingTrace.Warning("Setting Adapter to null is not recommended - you might lose ItemsSource binding when doing this");
             }
         }
 

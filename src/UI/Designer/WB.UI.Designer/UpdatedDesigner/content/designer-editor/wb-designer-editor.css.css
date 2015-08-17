@@ -177,6 +177,7 @@
 }
 #designer-editor.container section#header > .header-line > .header-menu {
   float: right;
+  width: 385px;
   padding-right: 10px;
   font-family: Georgia, serif;
   font-size: 14px;
@@ -200,6 +201,7 @@
   margin-left: 3px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title {
+  margin-right: 395px;
   margin-top: 14px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title {
@@ -210,7 +212,6 @@
   padding-right: 50px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title .questionnarie-title-text {
-  max-width: 1000px;
   max-height: 25px;
   overflow: hidden;
   display: inline-block;

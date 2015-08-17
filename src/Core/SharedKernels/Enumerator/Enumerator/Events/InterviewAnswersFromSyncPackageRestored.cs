@@ -4,9 +4,9 @@ using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
 
 namespace WB.Core.SharedKernels.Enumerator.Events
 {
-    public class InterviewAnswersFromSnapshotRestored : InterviewActiveEvent
+    public class InterviewAnswersFromSyncPackageRestored : InterviewActiveEvent
     {
-        public InterviewAnswersFromSnapshotRestored(InterviewAnswerDto[] interviewData, Guid userId)
+        public InterviewAnswersFromSyncPackageRestored(InterviewAnswerDto[] interviewData, Guid userId)
             : base(userId)
         {
             this.Answers = interviewData;
