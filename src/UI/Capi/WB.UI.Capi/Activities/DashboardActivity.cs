@@ -11,9 +11,12 @@ using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+
+
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -33,6 +36,11 @@ namespace WB.UI.Capi.Activities
         protected IDictionary<Guid,View> sureveyHolders;
         protected LinearLayout llSurveyHolder;
         protected AlertDialog dialog;
+
+        public static ICommandService CommandService
+        {
+            get { return ServiceLocator.Current.GetInstance<ICommandService>(); }
+        }
 
         private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
         private IPlainInterviewFileStorage plainInterviewFileStorage = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
@@ -147,7 +155,7 @@ namespace WB.UI.Capi.Activities
             alert.Show();
         }
 
-        void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
+        private void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
         {
             var target = sender as View;
             if(target == null)
@@ -158,36 +166,36 @@ namespace WB.UI.Capi.Activities
 
             bool localyCreated = (id != null && bool.TryParse(id.ToString(), out createdOnClient) && createdOnClient);
             var publicKeyTag = target.GetTag(Resource.Id.QuestionnaireId).ToString();
-            var publicKey = Guid.Parse(target.GetTag(Resource.Id.QuestionnaireId).ToString());
+            var interviewId = Guid.Parse(target.GetTag(Resource.Id.QuestionnaireId).ToString());
 
             var interviews = this.currentDashboard.Surveys.SelectMany(x => x.ActiveItems);
-            var selectedInterview = interviews.FirstOrDefault(x => x.PublicKey == publicKey);
+            var selectedInterview = interviews.Single(x => x.PublicKey == interviewId);
 
             if (selectedInterview.Status == InterviewStatus.Completed)
             {
-                var firstConfirmationDialog = this.CreateYesNoDialog(
+                var reinitConfirmationDialog = this.CreateYesNoDialog(
                     this,
-                    yesHandler: (s, ev) =>
+                    yesHandler: async (s, ev) =>
                     {
-                        CapiApplication.CommandService.Execute(new RestartInterviewCommand(publicKey, CapiApplication.Membership.CurrentUser.Id, "", DateTime.UtcNow));
-                        this.ShowLoadingActivity(publicKeyTag, localyCreated);
+                        await CommandService.ExecuteAsync(new RestartInterviewCommand(interviewId, CapiApplication.Membership.CurrentUser.Id, "", DateTime.UtcNow));
+                        this.StartLoadingActivity(publicKeyTag, localyCreated);
                     },
                     noHandler: (s, ev) => { },
                     message: this.Resources.GetString(Resource.String.Dashboard_Reinitialize_Interview_Message));
 
-                firstConfirmationDialog.Show();
+                reinitConfirmationDialog.Show();
             }
             else
             {
-                this.ShowLoadingActivity(publicKeyTag, localyCreated);
+                this.StartLoadingActivity(publicKeyTag, localyCreated);
             }
         }
 
-        void ShowLoadingActivity(string publicKeyTag, bool localyCreated)
+        private void StartLoadingActivity(string interviewId, bool createdOnClient)
         {
             var intent = new Intent(this, typeof(LoadingActivity));
-            intent.PutExtra("publicKey", publicKeyTag);
-            intent.PutExtra("createdOnClient", localyCreated);
+            intent.PutExtra("publicKey", interviewId);
+            intent.PutExtra("createdOnClient", createdOnClient);
             this.StartActivity(intent);
         }
 
