@@ -15,7 +15,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
             });
-            Property(x => x.PublicKey, cm => cm.Index("User_PublicKey"));
+            Property(x => x.PublicKey, cm =>
+            {
+                cm.Index("User_PublicKey");
+                cm.Unique(true);
+            });
             Property(x => x.CreationDate);
             Property(x => x.Email);
             Property(x => x.IsLockedByHQ);

@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void StoreEventsToLocalStorage()
         {
-            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
+            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId).Select(x => x.EntryId).FirstOrDefault());
 
             IList<AtomFeedEntry<LocalQuestionnaireFeedEntry>> remoteEvents =
                 this.feedReader
