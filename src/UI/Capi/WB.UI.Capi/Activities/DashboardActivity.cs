@@ -5,14 +5,12 @@ using System.Linq;
 using System.Threading;
 using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-
-
+using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
