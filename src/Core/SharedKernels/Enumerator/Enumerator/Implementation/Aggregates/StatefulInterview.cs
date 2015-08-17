@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemPropagationVector));
         }
 
-        public void Apply(InterviewAnswersFromSnapshotRestored @event)
+        public void Apply(InterviewAnswersFromSyncPackageRestored @event)
         {
             foreach (var answerDto in @event.Answers)
             {
@@ -506,7 +506,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .ToArray();
 
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
-            this.ApplyEvent(new InterviewAnswersFromSnapshotRestored(answerDtos, synchronizedInterview.UserId));
+            this.ApplyEvent(new InterviewAnswersFromSyncPackageRestored(answerDtos, synchronizedInterview.UserId));
         }
 
         public bool HasGroup(Identity group)
