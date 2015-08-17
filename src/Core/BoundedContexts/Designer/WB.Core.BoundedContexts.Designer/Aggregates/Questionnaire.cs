@@ -2107,18 +2107,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            if (responsibleId == personId)
+            if (this.innerDocument.CreatedBy.HasValue && this.innerDocument.CreatedBy.Value == personId)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
-                    "You are the owner of this questionnaire. Please, input another email");
+                    string.Format("User {0} is an owner of this questionnaire. Please, input another email.", email));
             }
 
             if (this.innerDocument.SharedPersons.Contains(personId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.UserExistInShareList,
-                    string.Format("User {0} already exist in share list", email));
+                    string.Format("User {0} already exist in share list.", email));
             }
 
             this.ApplyEvent(new SharedPersonToQuestionnaireAdded()
