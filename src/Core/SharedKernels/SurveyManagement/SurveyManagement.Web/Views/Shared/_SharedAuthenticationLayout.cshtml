@@ -11,37 +11,57 @@
     @Styles.Render("~/css/main-not-loggedin")
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="content">
         @RenderSection("body")
     </div>
-    <footer class="footer">
-        <div class="container">
-            <hr/>
-            <p class="text-muted">
-                <div class="text-center">
-                    © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
-                </div>
-                <div class="text-center">
-                    @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
-                    @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@
-                    @if (AppSettings.IsDebugBuilded)
-                    {
-                        <span id="build-config">[.NET Debug]</span>
-                    }
 
-                    @if (HttpContext.Current.IsDebuggingEnabled)
-                    {
-                        <span id="compile-config" style="color: red">Web Debug</span>
-                    }
+<div class="row-fluid" id="footer-block">
+    <hr>
+    <footer>
+        <p class="text-muted">
+            <div class="text-center">
+                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
+            </div>
+            <div class="text-center">
+                @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
+                @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@
+                @if (AppSettings.IsDebugBuilded)
+                {
+                    <span id="build-config">[.NET Debug]</span>
+                }
 
-                    @RenderSection("interviewerlink", false)
-                </div>
-            </p>
-        </div>
+                @if (HttpContext.Current.IsDebuggingEnabled)
+                {
+                    <span id="compile-config" style="color: red">Web Debug</span>
+                }
+
+                @RenderSection("interviewerlink", false)
+            </div>
+        </p>
+
     </footer>
+    </div>
 
     @Html.Partial("Clickjacking")
     @Scripts.Render("~/js/main")
     @RenderSection("scripts", false)
+
+    <script type="text/javascript">
+        var setMinHeight = function () {
+            var windowHeight = $(window).height();
+            var delimeterMargin = 40;
+            var footerHeight = $('#footer-block').outerHeight();
+            var minHeight = windowHeight - footerHeight - delimeterMargin;
+            $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
+            
+        };
+        $(document).ready(function () {
+            setMinHeight();
+            $(window).resize(function () {
+                setMinHeight();
+            });
+        });
+    </script>
+
 </body>
 </html>
