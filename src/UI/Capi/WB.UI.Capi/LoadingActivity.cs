@@ -156,7 +156,7 @@ namespace WB.UI.Capi
                     return;
                 }
 
-                NavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
+                NavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
             }
             catch (Exception e)
             {
@@ -214,11 +214,11 @@ namespace WB.UI.Capi
             
             if (createdOnClient)
             {
-                NavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new { interviewId = interviewId.FormatGuid() });
+                NavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
             }
             else
             {
-                NavigationService.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = interviewId.FormatGuid() });
+                NavigationService.NavigateToInterview(interviewId.FormatGuid());
             }
         }
 

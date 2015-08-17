@@ -129,11 +129,9 @@
     <Compile Include="Services\IDataCollectionAuthentication.cs" />
     <Compile Include="Services\IDeviceChangingVerifier.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
-    <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
-    <Compile Include="ValueObjects\CapiPages.cs" />
     <Compile Include="ViewModel\InterviewAutocompleteSingleChoiceQuestion.cs" />
     <Compile Include="ViewModel\InterviewCascadingSingleChoiceQuestion.cs" />
     <Compile Include="ViewModel\InterviewDynamicOption.cs" />

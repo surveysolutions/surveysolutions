@@ -46,10 +46,10 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
+using WB.UI.Capi.Activities;
 using WB.UI.Capi.Backup;
 using WB.UI.Capi.EventHandlers;
 using WB.UI.Capi.FileStorage;
-using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.Infrastructure;
 using WB.UI.Capi.Ninject;
@@ -57,7 +57,6 @@ using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Implementation;
 using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Shared.Android;
-using WB.UI.Shared.Android.Extensions;
 using WB.UI.Shared.Enumerator.CustomServices.UserInteraction;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -320,9 +319,6 @@ namespace WB.UI.Capi
             NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
 
-            this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
-
-
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
             this.kernel.Bind<IInterviewCompletionService>().To<InterviewerInterviewCompletionService>().InSingletonScope();
@@ -378,7 +374,12 @@ namespace WB.UI.Capi
         }
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
-            this.ClearAllBackStack<SplashScreen>();
+            var splashActivity =  new Intent(this, typeof(SplashActivity));
+            splashActivity.PutExtra("finish", true); // if you are checking for this in your other Activities
+            splashActivity.AddFlags(ActivityFlags.ClearTask);
+            splashActivity.AddFlags(ActivityFlags.ClearTop);
+            splashActivity.AddFlags(ActivityFlags.NewTask);
+            this.StartActivity(splashActivity);
 
             var questionnarieDenormalizer = this.kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() 
                                                 as InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
