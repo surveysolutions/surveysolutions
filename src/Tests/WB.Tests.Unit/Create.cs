@@ -436,6 +436,11 @@ namespace WB.Tests.Unit
                     DateTime.Now, 
                     selectedRosterVectors ?? new decimal[][]{});
             }
+
+            public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
+            {
+                return new InterviewSynchronized(synchronizationDto);
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -1915,14 +1920,17 @@ namespace WB.Tests.Unit
             return new Interview();
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null)
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
-
-            return new StatefulInterview
+            var statefulInterview = new StatefulInterview
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };
+
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+
+            return statefulInterview;
         }
 
         public static CascadingOptionModel CascadingOptionModel(int value, string title, int parentValue)
@@ -2122,13 +2130,30 @@ namespace WB.Tests.Unit
             return new QuestionnaireModelBuilder();
         }
 
-        public static InterviewSynchronizationDto InterviewSynchronizationDto()
+        public static InterviewSynchronizationDto InterviewSynchronizationDto(
+            Guid? questionnaireId = null, 
+            Guid? userId = null, 
+            AnsweredQuestionSynchronizationDto[] answers = null,
+            HashSet<InterviewItemId> disabledGroups = null,
+            HashSet<InterviewItemId> disabledQuestions = null,
+            HashSet<InterviewItemId> validQuestions = null,
+            HashSet<InterviewItemId> invalidQuestions = null)
         {
-            return new InterviewSynchronizationDto(Guid.NewGuid(), InterviewStatus.SupervisorAssigned, "",
-                Guid.NewGuid(), Guid.NewGuid(), 1, new AnsweredQuestionSynchronizationDto[0],
-                new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                new HashSet<InterviewItemId>(), new Dictionary<InterviewItemId, int>(),
-                new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), false);
+            return new InterviewSynchronizationDto(
+                Guid.NewGuid(), 
+                InterviewStatus.SupervisorAssigned,
+                "",
+                userId ?? Guid.NewGuid(),
+                questionnaireId ?? Guid.NewGuid(), 
+                1, 
+                answers ?? new AnsweredQuestionSynchronizationDto[0],
+                disabledGroups ?? new HashSet<InterviewItemId>(),
+                disabledQuestions ?? new HashSet<InterviewItemId>(),
+                validQuestions ?? new HashSet<InterviewItemId>(),
+                invalidQuestions ?? new HashSet<InterviewItemId>(), 
+                new Dictionary<InterviewItemId, int>(),
+                new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
+                false);
         }
     }
 }

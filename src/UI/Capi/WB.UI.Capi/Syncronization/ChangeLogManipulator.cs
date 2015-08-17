@@ -101,7 +101,7 @@ namespace WB.UI.Capi.Syncronization
             
             for (int i = storedEvents.Count - 1; i >= 0; i--)
             {
-                if (storedEvents[i].Payload is InterviewAnswersFromSnapshotRestored || storedEvents[i].Payload is InterviewOnClientCreated)
+                if (storedEvents[i].Payload is InterviewAnswersFromSyncPackageRestored || storedEvents[i].Payload is InterviewOnClientCreated)
                 {
                     break;
                 }
