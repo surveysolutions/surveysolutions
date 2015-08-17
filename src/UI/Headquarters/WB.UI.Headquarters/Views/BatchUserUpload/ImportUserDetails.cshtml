@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess
@@ -44,12 +45,14 @@
             </tbody>
 
         </table>
-
-        @using (Html.BeginForm("VerifyUserPreloadig", "BatchUserUpload"))
+        @if (Model.State == UserPrelodingState.Uploaded)
         {
-            @Html.AntiForgeryToken()
-            @Html.Hidden("Id", Model.UserPreloadingProcessId)
-            <input type="submit" class="btn btn-default btn-primary pull-right" name="Submit" value="@BatchUpload.Verify" />
+            using (Html.BeginForm("VerifyUserPreloadig", "BatchUserUpload"))
+             {
+                 @Html.AntiForgeryToken()
+                 @Html.Hidden("Id", Model.UserPreloadingProcessId)
+                 <input type="submit" class="btn btn-default btn-primary pull-right" name="Submit" value="@BatchUpload.Verify"/>
+             }
         }
     </div>
 </div>
