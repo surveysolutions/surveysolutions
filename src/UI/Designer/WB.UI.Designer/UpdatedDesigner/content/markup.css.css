@@ -7404,6 +7404,7 @@ input#edit-group-title {
   margin-top: 5px;
 }
 .question-editor .checkbox-in-column input.wb-checkbox + label {
+  padding-left: 10px;
   font-family: "Lucida Console", Monaco, monospace;
   color: #5d5d5d;
   font-size: 14px;
