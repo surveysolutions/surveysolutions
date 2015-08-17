@@ -38,9 +38,10 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
-                var dbCommand = connection.CreateCommand();
+                NpgsqlCommand dbCommand = connection.CreateCommand();
+                dbCommand.AllResultTypesAreUnknown = true;
 
-                dbCommand.CommandText = "SELECT to_regclass('userdocuments')";
+                dbCommand.CommandText = "SELECT to_regclass('public.userdocuments')";
                 var tableExists = dbCommand.ExecuteScalar();
 
                 if (tableExists != DBNull.Value)
