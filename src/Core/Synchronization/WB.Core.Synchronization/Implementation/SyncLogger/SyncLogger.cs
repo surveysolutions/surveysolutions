@@ -25,6 +25,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
             {
                 var updatedState = new TabletSyncLog
                 {
+                    DeviceId = deviceId.FormatGuid(),
                     AndroidId = androidId,
                     RegistrationDate = DateTime.Now
                 };
