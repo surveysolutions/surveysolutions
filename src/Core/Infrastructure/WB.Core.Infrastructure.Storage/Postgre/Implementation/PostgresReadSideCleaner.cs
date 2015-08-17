@@ -34,6 +34,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void CreateIndexesAfterRebuildReadSide()
         {
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                connection.Open();
+                var dbCommand = connection.CreateCommand();
+
+                dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));";
+                dbCommand.ExecuteNonQuery();
+            }
         }
     }
 }
