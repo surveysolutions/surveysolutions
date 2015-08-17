@@ -1,5 +1,4 @@
 using System.Linq;
-using Cirrious.MvvmCross.Binding.ExtensionMethods;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
@@ -9,7 +8,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.UI.Capi.Views;
 
 namespace WB.UI.Capi.ViewModel
 {
@@ -40,7 +38,7 @@ namespace WB.UI.Capi.ViewModel
         private IMvxCommand navigateToDashboardCommand;
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(() => this.ShowViewModel<DashboardViewModel>())); }
+            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard())); }
         }
 
         private IMvxCommand signOutCommand;
@@ -52,7 +50,7 @@ namespace WB.UI.Capi.ViewModel
         void SignOut()
         {
             CapiApplication.Membership.LogOff();
-            this.ShowViewModel<LoginActivityViewModel>();
+            this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()
@@ -65,11 +63,11 @@ namespace WB.UI.Capi.ViewModel
             var interview = this.interviewRepository.Get(this.interviewId);
             if (this.PrefilledQuestions.Any() && interview.CreatedOnClient)
             {
-                this.viewModelNavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new {interviewId = this.interviewId});
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
             else
             {
-                this.ShowViewModel<DashboardViewModel>();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
         }
     }

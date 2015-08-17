@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -9,42 +11,35 @@ using Android.Text;
 using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
-using System;
-using System.Text;
-using System.Threading;
 using Flurl.Http;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
-using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Capi.Implementation.Authorization;
 using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Views.Login;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Capi.Controls;
-using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android.Extensions;
+using WB.UI.Shared.Enumerator.Activities;
+using OperationCanceledException = System.OperationCanceledException;
 using SynchronizationEventArgs = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgs;
 using SynchronizationEventArgsWithPercent = WB.Core.BoundedContexts.Capi.Implementation.Synchronization.SynchronizationEventArgsWithPercent;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace WB.UI.Capi
+namespace WB.UI.Capi.Activities
 {
-    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class SynchronizationActivity : Activity
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize, Theme = "@style/GrayAppTheme")]
+    public class SynchronizationActivity : BaseActivity<SynchronizationViewModel>
     {
         #region find for ui controls from xml
 
@@ -104,6 +99,10 @@ namespace WB.UI.Capi
             base.OnCreate(bundle);
             this.SetContentView(Resource.Layout.sync_dialog);
 
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            toolbar.Title = "";
+            this.SetSupportActionBar(toolbar);
+
             this.backupManager = CapiApplication.Kernel.Get<IBackup>();
             this.passwordHasher = CapiApplication.Kernel.Get<IPasswordHasher>();
             this.btnSync.Click += this.ButtonSyncClick;
@@ -115,55 +114,11 @@ namespace WB.UI.Capi
             this.btnSendTabletInfo.SenderCanceled += this.btnSendTabletInfo_SenderCanceled;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
-
-            string login = Intent.GetStringExtra("Login");
-            string passwordHash = Intent.GetStringExtra("PasswordHash");
-
-            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(passwordHash))
-            {
-                var syncCredentials = new SyncCredentials(login, passwordHash);
-                bool isThisFirstTimeAuthorizationRequested = true;
-                var authentificator = new RestAuthenticator();
-                authentificator.RequestCredentialsCallback += sender =>
-                {
-                    if (isThisFirstTimeAuthorizationRequested)
-                    {
-                        isThisFirstTimeAuthorizationRequested = false;
-                        return syncCredentials;
-                    }
-                    return this.RequestCredentialsCallBack(sender);
-                };
-
-                this.StartSynctionization(authentificator, (sender, args) =>
-                {
-                    var wasSynchronizationSuccessfull = this.synchronizer.WasSynchronizationSuccessfull;
-                    this.RunOnUiThread(() =>
-                    {
-                        this.DestroyDialog();
-                        this.tvSyncResult.Text = this.GetFinishSynchronizationMessageByItsStatus(wasSynchronizationSuccessfull);
-                        if (!wasSynchronizationSuccessfull)
-                        {
-                            return;
-                        }
-
-                        bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
-                        if (result)
-                        {
-                            this.ClearAllBackStack<DashboardActivity>();
-                        }
-                        else
-                        {
-                            this.ClearAllBackStack<LoginActivity>();
-                        }
-                    });
-                    this.DestroySynchronizer();
-                });
-            }
         }
 
         private void ButtonSyncClick(object sender, EventArgs e)
         {
-            this.StartSynctionization(this.CreateAuthenticator(), synchronizer_ProcessFinished);
+            this.StartSynctionization(this.CreateAuthenticator(), this.synchronizer_ProcessFinished);
         }
 
 
@@ -224,7 +179,7 @@ namespace WB.UI.Capi
             }
             catch (Exception exception)
             {
-                Logger.Fatal("Error occured during Backup. ", exception);
+                this.Logger.Fatal("Error occured during Backup. ", exception);
             }
 
             var alert = new AlertDialog.Builder(this);
@@ -251,24 +206,68 @@ namespace WB.UI.Capi
 
         void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
         {
-            this.tvSyncResult.Text = Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent);
+            this.tvSyncResult.Text = this.Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent);
         }
 
         private void btnSendTabletInfo_ProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
         {
-            this.tvSyncResult.Text = string.Format(Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
+            this.tvSyncResult.Text = string.Format(this.Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
         }
 
 
         private void btnSendTabletInfo_SenderCanceled(object sender, EventArgs e)
         {
-            this.tvSyncResult.Text = Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceling);
+            this.tvSyncResult.Text = this.Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceling);
         }
 
         protected override void OnStart()
         {
             base.OnStart();
-            this.CreateActionBar();
+
+            var login = this.ViewModel.Login;
+            var passwordHash = this.ViewModel.Password;
+
+            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(passwordHash))
+            {
+                var syncCredentials = new SyncCredentials(login, passwordHash);
+                bool isThisFirstTimeAuthorizationRequested = true;
+                var authentificator = new RestAuthenticator();
+                authentificator.RequestCredentialsCallback += sender =>
+                {
+                    if (isThisFirstTimeAuthorizationRequested)
+                    {
+                        isThisFirstTimeAuthorizationRequested = false;
+                        return syncCredentials;
+                    }
+                    return this.RequestCredentialsCallBack(sender);
+                };
+
+                this.StartSynctionization(authentificator, (sender, args) =>
+                {
+                    var wasSynchronizationSuccessfull = this.synchronizer.WasSynchronizationSuccessfull;
+                    this.RunOnUiThread(() =>
+                    {
+                        this.DestroyDialog();
+                        this.tvSyncResult.Text = this.GetFinishSynchronizationMessageByItsStatus(wasSynchronizationSuccessfull);
+                        if (!wasSynchronizationSuccessfull)
+                        {
+                            return;
+                        }
+
+                        bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
+                        if (result)
+                        {
+                            ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateToDashboard();
+                        }
+                        else
+                        {
+                            ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateTo<LoginActivityViewModel>();
+                        }
+                    });
+                    this.DestroySynchronizer();
+                });
+            }
+
             this.PrepareUI();
         }
 
@@ -312,7 +311,7 @@ namespace WB.UI.Capi
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
-            this.CreateDialog(ProgressDialogStyle.Spinner, Resources.GetString(Resource.String.Initializing), false, this.progressDialog_Cancel);
+            this.CreateDialog(ProgressDialogStyle.Spinner, this.Resources.GetString(Resource.String.Initializing), false, this.progressDialog_Cancel);
 
             await this.synchronizer.Run();
         }
@@ -368,8 +367,8 @@ namespace WB.UI.Capi
         public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
         {
             var builder = new AlertDialog.Builder(activity);
-            builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
-            builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetNegativeButton(this.Resources.GetString(Resource.String.No), noHandler);
+            builder.SetPositiveButton(this.Resources.GetString(Resource.String.Yes), yesHandler);
             builder.SetCancelable(false);
             if (!string.IsNullOrWhiteSpace(title))
             {
@@ -412,7 +411,7 @@ namespace WB.UI.Capi
                         loginDialog.Hide();
                         if (this.progressDialog != null)
                             this.progressDialog.Show();
-                        result = new SyncCredentials(teLogin.Text, passwordHasher.Hash(tePassword.Text));
+                        result = new SyncCredentials(teLogin.Text, this.passwordHasher.Hash(tePassword.Text));
                         actionCompleted = true;
                     };
 
@@ -472,9 +471,9 @@ namespace WB.UI.Capi
                     this.DestroyDialog();
                     if (evt.Exception != null)
                     {
-                        var errorMessage = GetUserFriendlyErrorMessage(evt.Exception);
+                        var errorMessage = this.GetUserFriendlyErrorMessage(evt.Exception);
 
-                        tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
+                        this.tvSyncResult.MovementMethod = LinkMovementMethod.Instance;
                         this.tvSyncResult.SetText(Html.FromHtml(errorMessage), TextView.BufferType.Spannable);
                     }
                     remoteCommandDoneEvent.Set();
@@ -487,7 +486,7 @@ namespace WB.UI.Capi
         {
             var errorMessage = Properties.Resources.SynchronizationUnhandledExceptionMessage;
 
-            var taskCancellationException = exception as System.OperationCanceledException;
+            var taskCancellationException = exception as OperationCanceledException;
             if (taskCancellationException != null)
             {
                 errorMessage = Properties.Resources.SynchronizationCanceledExceptionMessage;
@@ -533,8 +532,8 @@ namespace WB.UI.Capi
                         var settingsManager = ServiceLocator.Current.GetInstance<IInterviewerSettings>();
 
                         errorMessage = string.Format(Properties.Resources.PleaseCheckURLInSettingsFormat,
-                            settingsManager.GetSyncAddressPoint(), GetNetworkDescription(),
-                            GetNetworkStatus((int) statusCode));
+                            settingsManager.GetSyncAddressPoint(), this.GetNetworkDescription(),
+                            this.GetNetworkStatus((int) statusCode));
                         break;
                 }
             }
@@ -543,7 +542,7 @@ namespace WB.UI.Capi
 
         private string GetNetworkStatus(int status)
         {
-            return string.Format(Resources.GetString(Resource.String.NetworkStatus), status);
+            return string.Format(this.Resources.GetString(Resource.String.NetworkStatus), status);
         }
 
         private string GetNetworkDescription()
@@ -558,7 +557,7 @@ namespace WB.UI.Capi
                     var wifiManager = (WifiManager) this.GetSystemService(WifiService);
                     if (wifiManager != null && wifiManager.ConnectionInfo != null && !string.IsNullOrEmpty(wifiManager.ConnectionInfo.SSID))
                     {
-                        return string.Format(Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork),
+                        return string.Format(this.Resources.GetString(Resource.String.NowYouareConnectedToWifiNetwork),
                             wifiManager.ConnectionInfo.SSID);
                     }
                 }
@@ -566,10 +565,10 @@ namespace WB.UI.Capi
                 var mobileInfoMobile = connectivityManager.GetNetworkInfo(ConnectivityType.Mobile);
                 if (mobileInfoMobile != null && mobileInfoMobile.GetState() == NetworkInfo.State.Connected)
                 {
-                    return Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
+                    return this.Resources.GetString(Resource.String.NowYouareConnectedToMobileNetwork);
                 }
             }
-            return Resources.GetString(Resource.String.YouAreNotConnectedToAnyNetwork);
+            return this.Resources.GetString(Resource.String.YouAreNotConnectedToAnyNetwork);
         }
 
         private void DestroySynchronizer()
@@ -641,5 +640,29 @@ namespace WB.UI.Capi
         }
 
         #endregion
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(Resource.Menu.synchronization, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.menu_settings:
+                    this.ViewModel.NavigateToSettingsCommand.Execute();
+                    break;
+                case Resource.Id.menu_dashboard:
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        protected override int ViewResourceId
+        {
+            get { return Resource.Layout.sync_dialog; }
+        }
     }
 }

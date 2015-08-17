@@ -775,6 +775,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Interviewer.
+        /// </summary>
+        public static string Interviewer_ApplicationName {
+            get {
+                return ResourceManager.GetString("Interviewer_ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments/Census for {0}.
+        /// </summary>
+        public static string Interviewer_DashboardTitle {
+            get {
+                return ResourceManager.GetString("Interviewer_DashboardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active users: {0}.
+        /// </summary>
+        public static string Interviewer_Login_ActiveUsers_Label {
+            get {
+                return ResourceManager.GetString("Interviewer_Login_ActiveUsers_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Provided Survey Solutions Designer URL is invalid. Check settings..
         /// </summary>
         public static string InvalidEndpoint {
@@ -1005,6 +1032,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization.
+        /// </summary>
+        public static string SynchronizationText {
+            get {
+                return ResourceManager.GetString("SynchronizationText", resourceCulture);
             }
         }
         

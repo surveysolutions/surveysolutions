@@ -190,8 +190,8 @@
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\ObservableRangeCollection.cs" />
-    <Compile Include="ViewModels\EnumeratorPrefilledQuestionsViewModel.cs" />
-    <Compile Include="ViewModels\EnumeratorStartInterviewViewModel.cs" />
+    <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\StartInterviewViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

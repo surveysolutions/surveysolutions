@@ -8,21 +8,20 @@ using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using Android.Content.PM;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization.Update;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android.GeolocationServices;
+using WB.UI.Shared.Enumerator.Activities;
 using Xamarin.Geolocation;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace WB.UI.Capi
+namespace WB.UI.Capi.Activities
 {
-    [Activity(ConfigurationChanges = ConfigChanges.Orientation |
-                               ConfigChanges.KeyboardHidden |
-                                ConfigChanges.ScreenSize)]
-    public class SettingsActivity : Activity
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
+    public class SettingsActivity : BaseActivity<SettingsViewModel>
     {
         private ProgressDialog progress;
         private IGeoService geoservice;
@@ -53,17 +52,15 @@ namespace WB.UI.Capi
         const string ApplicationFileName = "interviewer.apk";
         const string SyncGetlatestVersion = "/api/InterviewerSync/GetLatestVersion";
 
-        protected override void OnStart()
-        {
-            base.OnStart();
-            this.CreateActionBar();
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             this.SetContentView(Resource.Layout.settings_dialog);
+
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            toolbar.Title = "";
+            this.SetSupportActionBar(toolbar);
 
             this.buttonChange.Click += this.buttonChange_Click;
             this.buttonCollect.Click += this.buttonCollect_Click;
@@ -72,10 +69,10 @@ namespace WB.UI.Capi
             this.llContainer.Click += this.llContainer_Click;
             this.btnWhereAmI.Click += this.btnWhereAmI_Click;
             this.btnVersion.Click += this.btnVersion_Click;
-            this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", interviewerSettings.GetApplicationVersionName());
+            this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", this.interviewerSettings.GetApplicationVersionName());
             
             this.geoservice = new GeoService(this);
-            this.editSettingsSync.Text = interviewerSettings.GetSyncAddressPoint();
+            this.editSettingsSync.Text = this.interviewerSettings.GetSyncAddressPoint();
             this.textMem.Text = this.GetResourceUsage();
         }
 
@@ -222,7 +219,7 @@ namespace WB.UI.Capi
             {
                 try
                 {
-                    var uri = new Uri(new Uri(interviewerSettings.GetSyncAddressPoint()), SyncGetlatestVersion);
+                    var uri = new Uri(new Uri(this.interviewerSettings.GetSyncAddressPoint()), SyncGetlatestVersion);
                     updater.GetLatestVersion(uri, ApplicationFileName);
                     updater.StartUpdate(ApplicationFileName);
                 }
@@ -337,7 +334,7 @@ namespace WB.UI.Capi
             {
                 try
                 {
-                    interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
+                    this.interviewerSettings.SetSyncAddressPoint(editSettingsSync.Text);
                     editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
                 catch(ArgumentException)
@@ -359,6 +356,30 @@ namespace WB.UI.Capi
             this.btnVersion.Click -= this.btnVersion_Click;
             
             GC.Collect();
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(Resource.Menu.settings, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.menu_synchronization:
+                    this.ViewModel.NavigateToSynchronizationCommand.Execute();
+                    break;
+                case Resource.Id.menu_dashboard:
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        protected override int ViewResourceId
+        {
+            get { return Resource.Layout.settings_dialog; }
         }
     }
 }

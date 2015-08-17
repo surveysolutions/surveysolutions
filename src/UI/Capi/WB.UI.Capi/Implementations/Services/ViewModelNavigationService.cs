@@ -1,9 +1,7 @@
-using Android.Content;
-
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Capi.ViewModel;
 
 namespace WB.UI.Capi.Implementations.Services
 {
@@ -21,10 +19,17 @@ namespace WB.UI.Capi.Implementations.Services
 
         public void NavigateToDashboard()
         {
-            var mvxAndroidCurrentTopActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
-            var intent = new Intent(mvxAndroidCurrentTopActivity.Activity, typeof(DashboardActivity));
-            intent.AddFlags(ActivityFlags.NoHistory);
-            mvxAndroidCurrentTopActivity.Activity.StartActivity(intent);
+             this.NavigateTo<DashboardViewModel>();
+        }
+
+        public void NavigateToPrefilledQuestions(string interviewId)
+        {
+            this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
+        }
+
+        public void NavigateToInterview(string interviewId)
+        {
+            this.NavigateTo<InterviewerInterviewViewModel>(new { interviewId = interviewId });
         }
     }
 }
