@@ -81,7 +81,7 @@
     <Compile Include="Entities\Interview\TextAnswer.cs" />
     <Compile Include="Entities\Interview\TextListAnswer.cs" />
     <Compile Include="Entities\QuestionnaireIdentity.cs" />
-    <Compile Include="Events\InterviewAnswersFromSnapshotRestored.cs" />
+    <Compile Include="Events\InterviewAnswersFromSyncPackageRestored.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
