@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class EnumeratorPrefilledQuestionsViewModel : BaseViewModel
+    public class PrefilledQuestionsViewModel : BaseViewModel
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected readonly IViewModelNavigationService viewModelNavigationService;
         protected string interviewId;
 
-        protected EnumeratorPrefilledQuestionsViewModel(
+        public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (questionnaire.PrefilledQuestionsIds.Count == 0)
             {
-                this.NavigateToInterview();
+                this.viewModelNavigationService.NavigateToInterview(interviewId);
                 return;
             }
 
@@ -66,10 +66,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId)
                 .ForEach(x => this.PrefilledQuestions.Add(x));
 
-            this.AfterInterviewItemsAdded();
+            var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
+            startButton.Init(interviewId, null, null);
+            this.PrefilledQuestions.Add(startButton);
         }
 
-        protected abstract void AfterInterviewItemsAdded();
-        protected abstract void NavigateToInterview();
+        public override void NavigateToPreviousViewModel()
+        {
+            this.viewModelNavigationService.NavigateToDashboard();
+        }
     }
 }

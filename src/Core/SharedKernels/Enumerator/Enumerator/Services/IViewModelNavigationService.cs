@@ -7,5 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel;
         void NavigateTo<TViewModel>(object perameters) where TViewModel : IMvxViewModel;
         void NavigateToDashboard();
+        void NavigateToInterview(string interviewId);
+        void NavigateToPrefilledQuestions(string interviewId);
     }
 }

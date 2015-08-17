@@ -19,6 +19,7 @@ using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
