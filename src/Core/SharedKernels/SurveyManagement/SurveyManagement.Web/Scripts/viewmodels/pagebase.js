@@ -43,6 +43,10 @@
         $('body').addClass('output-visible');
     };
 
+    self.HideAllAlerts = function() {
+        $("#alerts").empty();
+    }
+
     self.ShowError = function(message) {
         self.ShowErrors([message]);
     };
@@ -136,7 +140,8 @@
     };
 
     self.SendCommand = function(command, onSuccess, onDone) {
-        self.SendRequest(commandExecutionUrl, command, function(data) {
+        self.SendRequest(commandExecutionUrl, command, function (data) {
+            self.HideAllAlerts();
             if (data.IsSuccess) {
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
                   onSuccess(data);
@@ -151,7 +156,8 @@
     };
 
     self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
-        self.SendRequest(commandExecutionUrl, commands, function(data) {
+        self.SendRequest(commandExecutionUrl, commands, function (data) {
+            self.HideAllAlerts();
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
                 return !cmd.IsSuccess;
             });
