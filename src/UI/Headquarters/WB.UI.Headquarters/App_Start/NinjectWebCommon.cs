@@ -128,11 +128,11 @@ namespace WB.UI.Headquarters
 
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
-            var mappingAssemblies = new List<Assembly> { typeof (SurveyManagementSharedKernelModule).Assembly };
+            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly};
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> {typeof (HeadquartersBoundedContextModule).Assembly}
+                MappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
             };
 
             string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
