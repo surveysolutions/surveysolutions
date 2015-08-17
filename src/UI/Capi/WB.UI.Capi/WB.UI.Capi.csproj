@@ -268,7 +268,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\SettingsActivity.cs" />
+    <Compile Include="Activities\SynchronizationActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="CapiBoundedContextModule.cs" />
@@ -332,26 +337,19 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\DashboardAdapter.cs" />
-    <Compile Include="Controls\Navigation\NavigationItem.cs" />
-    <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
-    <Compile Include="Controls\Navigation\NavigationListener.cs" />
-    <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
     <Compile Include="Controls\TabletInformationReportButton.cs" />
     <Compile Include="Core\AjustableListView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="Core\ParcelableWrapper.cs" />
-    <Compile Include="DashboardActivity.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\DenormalizerStorage\DenormalizerRow.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
-    <Compile Include="Implementations\Navigation\NavigationService.cs" />
     <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStorageAccessor.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStore.cs" />
@@ -364,7 +362,6 @@
     <Compile Include="Infrastructure\Internals\Settings\InterviewerSettings.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Ninject\AndroidCoreRegistry.cs" />
-    <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -382,14 +379,10 @@
     <Compile Include="SnapshotStore\FileBasedSnapshotStore.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
-    <Compile Include="LoginActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="SettingsActivity.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="SplashScreen.cs" />
-    <Compile Include="SynchronizationActivity.cs" />
     <Compile Include="Syncronization\ChangeLogManipulator.cs" />
     <Compile Include="Syncronization\DeviceChangingVerifier.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
@@ -399,6 +392,7 @@
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
     <Compile Include="Controls\Bindings\BooleanToTextColorValueConverter.cs" />
+    <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
@@ -409,16 +403,18 @@
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
     <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
     <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
+    <Compile Include="ViewModel\FinishIntallationViewModel.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
+    <Compile Include="ViewModel\LoginActivityViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
-    <Compile Include="ViewModel\InterviewerPrefilledQuestionsViewModel.cs" />
-    <Compile Include="ViewModel\StartInterviewViewModel.cs" />
+    <Compile Include="Activities\SplashActivity.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\SplashViewModel.cs" />
+    <Compile Include="ViewModel\SynchronizationViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
-    <Compile Include="Views\LoginViewModel.cs" />
-    <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -450,9 +446,6 @@
     <AndroidResource Include="Resources\Layout\settings_dialog.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\SplashScreen.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Layout\sync_dialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -481,6 +474,10 @@
     <AndroidResource Include="Resources\Layout\Details.axml" />
     <AndroidResource Include="Resources\Layout\CascadingComboboxRowLayout.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml" />
+    <AndroidResource Include="Resources\Layout\splash.axml" />
+    <AndroidResource Include="Resources\Values\styles.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -516,7 +513,6 @@
     <AndroidResource Include="Resources\Drawable\SurveyShape.xml" />
     <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
-    <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_icon.png" />
     <AndroidResource Include="Resources\Values\Themes.xml">
@@ -541,6 +537,22 @@
     <AndroidResource Include="Resources\Drawable\questionShape.xml" />
     <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
     <AndroidResource Include="Resources\Values\Colors.xml" />
+    <AndroidResource Include="Resources\Drawable\splash.png" />
+    <AndroidResource Include="Resources\Values\dimensions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\login.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\synchronization.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">

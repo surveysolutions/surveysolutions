@@ -1,6 +1,7 @@
 using System.Linq;
 using Cirrious.MvvmCross.Binding.ExtensionMethods;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Capi.ViewModel;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -38,7 +39,7 @@ namespace WB.UI.Capi.ViewModel
         private IMvxCommand navigateToDashboardCommand;
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(() => this.ShowViewModel<DashboardViewModel>())); }
+            get { return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard())); }
         }
 
         private IMvxCommand signOutCommand;
@@ -50,7 +51,7 @@ namespace WB.UI.Capi.ViewModel
         void SignOut()
         {
             CapiApplication.Membership.LogOff();
-            this.ShowViewModel<LoginActivityViewModel>();
+            this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()
@@ -62,11 +63,11 @@ namespace WB.UI.Capi.ViewModel
         {
             if (this.PrefilledQuestions.Any())
             {
-                this.viewModelNavigationService.NavigateTo<InterviewerPrefilledQuestionsViewModel>(new {interviewId = this.interviewId});
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }
             else
             {
-                this.ShowViewModel<DashboardViewModel>();
+                this.viewModelNavigationService.NavigateToDashboard();
             }
         }
     }

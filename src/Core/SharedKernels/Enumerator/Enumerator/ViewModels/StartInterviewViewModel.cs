@@ -2,16 +2,19 @@
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class EnumeratorStartInterviewViewModel : MvxNotifyPropertyChanged
+    public class StartInterviewViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
+        readonly IViewModelNavigationService viewModelNavigationService;
 
-        protected EnumeratorStartInterviewViewModel(ICommandService commandService)
+        public StartInterviewViewModel(ICommandService commandService, IViewModelNavigationService viewModelNavigationService)
         {
             this.commandService = commandService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         protected string interviewId;
@@ -34,9 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            this.NavigateToInterview();
+            this.viewModelNavigationService.NavigateToInterview(interviewId);
         }
-
-        protected abstract void NavigateToInterview();
     }
 }
