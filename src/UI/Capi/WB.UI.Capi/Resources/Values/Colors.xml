@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
  <color name="capi_orange">#f7c942</color>
+
+  <color name="menu_hint_color">#9a9a9a</color>
 </resources>

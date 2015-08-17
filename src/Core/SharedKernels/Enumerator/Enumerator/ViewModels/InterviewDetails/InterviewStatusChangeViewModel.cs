@@ -39,12 +39,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = Guid.Parse(interviewId);
         }
 
-        private IMvxCommand startInterviewCommand;
+        private IMvxCommand completeInterviewCommand;
         public IMvxCommand CompleteInterviewCommand
         {
             get
             {
-                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
+                return this.completeInterviewCommand ?? (this.completeInterviewCommand = new MvxCommand(async () => await this.CompleteInterviewAsync()));
             }
         }
 
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set { this.completeComment = value; this.RaisePropertyChanged(); }
         }
 
-        private async Task StartInterviewAsync()
+        private async Task CompleteInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
 

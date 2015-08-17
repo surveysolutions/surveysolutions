@@ -3,42 +3,31 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Android.Content.PM;
-using Cirrious.MvvmCross.Droid.Views;
-using Cirrious.MvvmCross.ViewModels;
-using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Capi.Controls;
-using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Capi.ViewModel.Dashboard;
+using WB.UI.Shared.Enumerator.Activities;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
-namespace WB.UI.Capi
+namespace WB.UI.Capi.Activities
 {
-    public class DashboardViewModel : MvxViewModel // Used for navigation only. Should be removed once rewritten
-    {
-    }
-
-    [Activity(Label = "Interviewer",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class DashboardActivity : MvxActivity<DashboardViewModel>
+    [Activity(Theme = "@style/GrayAppTheme")]
+    public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
         protected DashboardModel currentDashboard;
         protected IDictionary<Guid,View> sureveyHolders;
@@ -51,11 +40,19 @@ namespace WB.UI.Capi
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            if (this.FinishIfNotLoggedIn())
-                return;
-            
+
             this.SetContentView(Resource.Layout.Main);
-            this.InitDashboard();
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            toolbar.Title = "";
+            this.SetSupportActionBar(toolbar);
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            if (CapiApplication.Membership.IsLoggedIn)
+                this.InitDashboard();
         }
 
         private void InitDashboard()
@@ -120,7 +117,7 @@ namespace WB.UI.Capi
             
             var llQuestionnaireHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
 
-            var adapter = new DashboardAdapter(dashboardSurveyItem.ActiveItems, this, DeleteInterview);
+            var adapter = new DashboardAdapter(dashboardSurveyItem.ActiveItems, this, this.DeleteInterview);
 
             for (int i = 0; i < adapter.Count; i++)
             {
@@ -141,7 +138,7 @@ namespace WB.UI.Capi
 
             alert.SetPositiveButton("OK", (e, s) =>
             {
-                new CapiCleanUpService(logManipulator, this.plainInterviewFileStorage, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>()).DeleteInterview(itemId);
+                new CapiCleanUpService(this.logManipulator, this.plainInterviewFileStorage, CapiApplication.Kernel.Get<ISyncPackageIdsStorage>()).DeleteInterview(itemId);
                 ((LinearLayout)view.Parent).RemoveView(view);
             });
 
@@ -176,7 +173,7 @@ namespace WB.UI.Capi
                         this.ShowLoadingActivity(publicKeyTag, localyCreated);
                     },
                     noHandler: (s, ev) => { },
-                    message: Resources.GetString(Resource.String.Dashboard_Reinitialize_Interview_Message));
+                    message: this.Resources.GetString(Resource.String.Dashboard_Reinitialize_Interview_Message));
 
                 firstConfirmationDialog.Show();
             }
@@ -197,8 +194,8 @@ namespace WB.UI.Capi
         public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
         {
             var builder = new AlertDialog.Builder(activity);
-            builder.SetNegativeButton(Resources.GetString(Resource.String.No), noHandler);
-            builder.SetPositiveButton(Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetNegativeButton(this.Resources.GetString(Resource.String.No), noHandler);
+            builder.SetPositiveButton(this.Resources.GetString(Resource.String.Yes), yesHandler);
             builder.SetCancelable(false);
             if (!string.IsNullOrWhiteSpace(title))
             {
@@ -234,12 +231,33 @@ namespace WB.UI.Capi
 
             this.RequestData(this.InitDashboard);
         }
-        
-        protected override void OnStart()
-        {
-            base.OnStart();
-            this.CreateActionBar();
 
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.menu_settings:
+                    this.ViewModel.NavigateToSettingsCommand.Execute();
+                    break;
+                case Resource.Id.menu_synchronization:
+                    this.ViewModel.NavigateToSynchronizationCommand.Execute();
+                    break;
+
+                case Resource.Id.menu_signout:
+                    this.ViewModel.SignOutCommand.Execute();
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        protected override int ViewResourceId
+        {
+            get { return Resource.Layout.Main; }
         }
     }
 }

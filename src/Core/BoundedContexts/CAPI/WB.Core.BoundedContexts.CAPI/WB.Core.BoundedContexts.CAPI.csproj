@@ -124,11 +124,9 @@
     <Compile Include="Services\IDataCollectionAuthentication.cs" />
     <Compile Include="Services\IDeviceChangingVerifier.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
-    <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
-    <Compile Include="ValueObjects\CapiPages.cs" />
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\Login\LoginView.cs" />
     <Compile Include="Views\Login\LoginViewInput.cs" />
@@ -139,7 +137,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>

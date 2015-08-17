@@ -15,10 +15,10 @@ using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Capi.Activities;
 using WB.UI.Capi.Ninject;
 using WB.UI.Capi.ViewModel;
-using WB.UI.Shared.Android;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
@@ -26,8 +26,6 @@ using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 using WB.UI.Shared.Enumerator.Ninject;
 using WB.UI.Shared.Enumerator.ValueCombiners;
-using FinishIntallationViewModel = WB.UI.Capi.Views.FinishIntallationViewModel;
-using LoginViewModel = WB.Core.BoundedContexts.Capi.Views.Login.LoginViewModel;
 
 namespace WB.UI.Capi
 {
@@ -41,9 +39,13 @@ namespace WB.UI.Capi
         {
             base.InitializeViewLookup();
             var container = Mvx.Resolve<IMvxViewsContainer>();
-            container.Add(typeof(LoginViewModel), typeof(LoginActivity));
+            container.Add(typeof(SplashViewModel), typeof(SplashActivity));
+            container.Add(typeof(LoginActivityViewModel), typeof(LoginActivity));
             container.Add(typeof(FinishIntallationViewModel), typeof(FinishInstallationActivity));
-            container.Add(typeof(InterviewerPrefilledQuestionsViewModel), typeof(PrefilledQuestionsActivity));
+            container.Add(typeof(PrefilledQuestionsViewModel), typeof(PrefilledQuestionsActivity));
+            container.Add(typeof(DashboardViewModel), typeof(DashboardActivity));
+            container.Add(typeof(SynchronizationViewModel), typeof(SynchronizationActivity));
+            container.Add(typeof(SettingsViewModel), typeof(SettingsActivity));
             container.Add(typeof(InterviewerInterviewViewModel), typeof(InterviewActivity));
         }
 
@@ -62,7 +64,7 @@ namespace WB.UI.Capi
             return new[]
             {
                 typeof(AndroidCoreRegistry).Assembly,
-                typeof(EnumeratorSharedKernelModule).Assembly,
+                typeof(EnumeratorSharedKernelModule).Assembly
             };
         }
 
