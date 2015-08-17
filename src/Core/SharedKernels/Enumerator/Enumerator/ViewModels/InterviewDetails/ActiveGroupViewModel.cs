@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            var itemsToRemove = this.Items.OfType<IInterviewEntityViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+            var itemsToRemove = this.Items.OfType<GroupViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
 
             this.Items.RemoveRange(itemsToRemove);
         }
