@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
@@ -39,8 +40,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 connection.Open();
                 var dbCommand = connection.CreateCommand();
 
-                dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));";
-                dbCommand.ExecuteNonQuery();
+                dbCommand.CommandText = "SELECT to_regclass('userdocuments')";
+                var tableExists = dbCommand.ExecuteScalar();
+
+                if (tableExists != DBNull.Value)
+                {
+                    dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));";
+                    dbCommand.ExecuteNonQuery();
+                }
             }
         }
     }
