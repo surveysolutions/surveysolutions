@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,19 +22,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>,
-        IDisposable
+        ILiteEventHandler<GroupsDisabled>
     {
         private NavigationState navigationState;
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         readonly ILiteEventRegistry eventRegistry;
-        readonly IMvxMessenger messenger;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string questionnaireId;
         private string interviewId;
-        private MvxSubscriptionToken subsctiptionToken;
 
         protected SideBarSectionsViewModel()
         {
@@ -49,10 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
-            this.messenger = messenger;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.subsctiptionToken = this.messenger.Subscribe<SideBarShownMessage>(msg => this.UpdateStatuses());
         }
 
         public void Init(string questionnaireId,
@@ -269,14 +266,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
         }
 
-        private void UpdateStatuses()
+        public ICommand UpdateStatuses
         {
-            this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromModel());
-        }
-
-        public void Dispose()
-        {
-            this.messenger.Unsubscribe<SideBarShownMessage>(this.subsctiptionToken);
+            get
+            {
+                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromModel())));
+            }
         }
     }
 }
