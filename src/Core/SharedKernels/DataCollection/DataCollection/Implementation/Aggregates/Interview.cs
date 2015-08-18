@@ -1775,8 +1775,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else
                 this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
 
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
+            this.ApplyEvent(new SupervisorAssigned(supervisorId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: interviewDto.Comments));
+
+            if (interviewDto.Status == InterviewStatus.InterviewerAssigned)
+            {
+                this.ApplyEvent(new InterviewerAssigned(supervisorId, userId, synchronizationTime));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+            }
 
             this.ApplyRostersEvents(rosters.ToArray());
             foreach (var answerDto in interviewDto.Answers.Where(x => x.Answer != null))

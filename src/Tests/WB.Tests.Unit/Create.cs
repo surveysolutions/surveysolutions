@@ -2136,11 +2136,12 @@ namespace WB.Tests.Unit
             HashSet<InterviewItemId> disabledGroups = null,
             HashSet<InterviewItemId> disabledQuestions = null,
             HashSet<InterviewItemId> validQuestions = null,
-            HashSet<InterviewItemId> invalidQuestions = null)
+            HashSet<InterviewItemId> invalidQuestions = null,
+            InterviewStatus status=InterviewStatus.SupervisorAssigned)
         {
             return new InterviewSynchronizationDto(
-                Guid.NewGuid(), 
-                InterviewStatus.SupervisorAssigned,
+                Guid.NewGuid(),
+                status,
                 "",
                 userId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(), 
