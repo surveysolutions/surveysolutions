@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using It = Machine.Specifications.It;
-using EventsIdentity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
@@ -65,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
             viewModel.Init(interviewId, id);
 
-            EventsIdentity[] changedTitleIds = { new EventsIdentity(substitutionTargetQuestionId, Empty.RosterVector) };
+            Identity[] changedTitleIds = { new Identity(substitutionTargetQuestionId, Empty.RosterVector) };
             var eventsToBePublished = new List<UncommittedEvent>
             {
                 Create.UncommittedEvent(new SubstitutionTitlesChanged(changedTitleIds))

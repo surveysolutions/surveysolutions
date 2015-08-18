@@ -139,7 +139,6 @@
     </Compile>
     <Compile Include="Events\Interview\Dtos\AddedRosterInstance.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedRosterInstanceTitleDto.cs" />
-    <Compile Include="Events\Interview\Dtos\Identity.cs" />
     <Compile Include="Events\Interview\Dtos\RosterInstance.cs" />
     <Compile Include="Events\Interview\GroupsDisabled.cs" />
     <Compile Include="Events\Interview\GroupsEnabled.cs" />

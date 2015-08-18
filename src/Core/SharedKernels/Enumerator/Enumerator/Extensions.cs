@@ -6,11 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator
 {
     internal static class Extensions
     {
-        public static Identity ToIdentityForEvents(this SharedKernels.DataCollection.Identity identity)
-        {
-            return new Identity(identity.Id, identity.RosterVector);
-        }
-
         public static TReturn RaiseAndSetIfChanged<T, TReturn>(this T source, ref TReturn backingField, TReturn newValue, [CallerMemberName] string propertyName = "")
             where T : IMvxNotifyPropertyChanged
         {

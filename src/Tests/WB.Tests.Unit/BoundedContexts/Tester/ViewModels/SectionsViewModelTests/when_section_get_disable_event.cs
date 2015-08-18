@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 
         Because of = () =>
         {
-            viewModel.Handle(new GroupsDisabled(new[] { new WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(sectionBId, new decimal[0]) }));
+            viewModel.Handle(new GroupsDisabled(new[] { new Identity(sectionBId, new decimal[0]) }));
         };
 
         It should_contains_only_one_section = () =>
