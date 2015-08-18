@@ -1,5 +1,7 @@
 ﻿using System;
 
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
+
 namespace WB.Core.SharedKernels.Enumerator.DataTransferObjects
 {
     public class InterviewAnswerDto

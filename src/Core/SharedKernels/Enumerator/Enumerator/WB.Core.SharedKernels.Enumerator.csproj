@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IStatefulInterview.cs" />
-    <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="DataTransferObjects\InterviewSnapshotDto.cs" />
     <Compile Include="Entities\Interview\BaseInterviewAnswer.cs" />
     <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
@@ -75,7 +74,6 @@
     <Compile Include="Entities\Interview\LinkedSingleOptionAnswer.cs" />
     <Compile Include="Entities\Interview\MultimediaAnswer.cs" />
     <Compile Include="Entities\Interview\MultiOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\QRBarcodeAnswer.cs" />
     <Compile Include="Entities\Interview\RealNumericAnswer.cs" />
     <Compile Include="Entities\Interview\SingleOptionAnswer.cs" />
     <Compile Include="Entities\Interview\TextAnswer.cs" />

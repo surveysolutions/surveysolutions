@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -125,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            var answer = this.GetOrCreateAnswer<QRBarcodeAnswer>(@event);
+            var answer = this.GetOrCreateAnswer<TextAnswer>(@event);
             answer.SetAnswer(@event.Answer);
         }
 
@@ -451,9 +452,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return this.GetQuestionAnswer<MultimediaAnswer>(identity);
         }
 
-        public QRBarcodeAnswer GetQRBarcodeAnswer(Identity identity)
+        public TextAnswer GetQRBarcodeAnswer(Identity identity)
         {
-            return this.GetQuestionAnswer<QRBarcodeAnswer>(identity);
+            return this.GetQuestionAnswer<TextAnswer>(identity);
         }
 
         public virtual TextListAnswer GetTextListAnswer(Identity identity)
@@ -502,7 +503,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             var answerDtos = synchronizedInterview
                 .Answers
-                .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, this.GetAnswerType(questionnaire, answerDto.Id), answerDto.Answer))
+                .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
                 .ToArray();
 
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
@@ -565,48 +566,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return answers;
         }
 
-        private AnswerType GetAnswerType(IQuestionnaire questionnaire, Guid questionId)
-        {
-            var questionType = questionnaire.GetQuestionType(questionId);
-            switch (questionType)
-            {
-                case QuestionType.SingleOption:
-                    return questionnaire.IsQuestionLinked(questionId) 
-                        ? AnswerType.RosterVector 
-                        : AnswerType.OptionCode;
-
-                case QuestionType.MultyOption:
-                    return questionnaire.IsQuestionLinked(questionId)
-                        ? AnswerType.RosterVectorArray
-                        : AnswerType.OptionCodeArray;
-
-                case QuestionType.Numeric:
-                    return questionnaire.IsQuestionInteger(questionId)
-                        ? AnswerType.Integer
-                        : AnswerType.Decimal;
-
-                case QuestionType.DateTime:
-                    return AnswerType.DateTime;
-
-                case QuestionType.GpsCoordinates:
-                    return AnswerType.GpsData;
-
-                case QuestionType.Text:
-                    return AnswerType.String;
-
-                case QuestionType.TextList:
-                    return AnswerType.DecimalAndStringArray;
-
-                case QuestionType.QRBarcode:
-                    return AnswerType.QRBarcodeAnswer;
-
-                case QuestionType.Multimedia:
-                    return AnswerType.FileName;
-            }
-
-            throw new ArgumentException(string.Format("Question of unknown type was found. Question id: {0}", questionId));
-        }
-
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
         {
             switch (answerDto.Type)
@@ -653,10 +612,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     break;
                 case AnswerType.FileName:
                     this.GetOrCreateAnswer<MultimediaAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer as string);
-                    break;
-                case AnswerType.QRBarcodeAnswer:
-                    this.GetOrCreateAnswer<QRBarcodeAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(answerDto.Answer as string);
                     break;
             }
