@@ -11,8 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string PictureFileName { get; private set; }
 
-        public PictureQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime, string pictureFileName)
-            : base(userId, questionId, propagationVector, answerTime)
+        public PictureQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string pictureFileName)
+            : base(userId, questionId, rosterVector, answerTime)
         {
             this.PictureFileName = pictureFileName;
         }

@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(TextQuestionAnswered @event)
         {
             if (@event.QuestionId == this.questionIdentity.Id &&
-                @event.PropagationVector.SequenceEqual(this.questionIdentity.RosterVector))
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
                 this.UpdateSelfFromModel();
             }

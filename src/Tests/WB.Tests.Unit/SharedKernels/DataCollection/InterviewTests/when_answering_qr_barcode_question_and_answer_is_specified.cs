@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().UserId.ShouldEqual(userId);
 
         It should_raise_QRBarcodeQuestionAnswered_event_with_PropagationVector_equal_to_propagationVector = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().PropagationVector.ShouldEqual(propagationVector);
+            eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().RosterVector.ShouldEqual(propagationVector);
 
         It should_raise_QRBarcodeQuestionAnswered_event_with_AnswerTime_equal_to_answerTime = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().AnswerTime.ShouldEqual(answerTime);

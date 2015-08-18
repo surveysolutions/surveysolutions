@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public Tuple<decimal, string>[] Answers { get; private set; }
 
-        public TextListQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime, Tuple<decimal, string>[] answers)
-            : base(userId, questionId, propagationVector, answerTime)
+        public TextListQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers)
+            : base(userId, questionId, rosterVector, answerTime)
         {
             this.Answers = answers;
         }
