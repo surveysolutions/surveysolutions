@@ -46,7 +46,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private string interviewId;
         private Identity questionIdentity;
-        private SharedKernels.DataCollection.Events.Interview.Dtos.Identity identityForEvents;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -54,7 +53,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.interviewId = interviewId;
             this.questionIdentity = entityIdentity;
-            this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
             this.liteEventRegistry.Subscribe(this, interviewId);
 
@@ -103,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersDeclaredValid @event)
         {
-            if (@event.Questions.Contains(this.identityForEvents))
+            if (@event.Questions.Contains(this.questionIdentity))
             {
                 this.UpdateValidState();
             }
@@ -111,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersDeclaredInvalid @event)
         {
-            if (@event.Questions.Contains(this.identityForEvents))
+            if (@event.Questions.Contains(this.questionIdentity))
             {
                 this.UpdateValidState();
             }

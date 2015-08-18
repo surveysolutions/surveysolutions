@@ -30,7 +30,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private string interviewId;
         private Identity entityIdentity;
-        private SharedKernels.DataCollection.Events.Interview.Dtos.Identity identityForEvents;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -39,10 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
-            this.identityForEvents = entityIdentity.ToIdentityForEvents();
 
             this.UpdateSelfFromModel();
-
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -62,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(GroupsEnabled @event)
         {
-            if (@event.Groups.Contains(this.identityForEvents))
+            if (@event.Groups.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
             }
@@ -70,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(GroupsDisabled @event)
         {
-            if (@event.Groups.Contains(this.identityForEvents))
+            if (@event.Groups.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
             }
@@ -78,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(QuestionsEnabled @event)
         {
-            if (@event.Questions.Contains(this.identityForEvents))
+            if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
             }
@@ -86,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(QuestionsDisabled @event)
         {
-            if (@event.Questions.Contains(this.identityForEvents))
+            if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
             }

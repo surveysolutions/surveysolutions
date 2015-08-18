@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class SubstitutionTitlesChanged : QuestionsPassiveEvent
     {
-        public SubstitutionTitlesChanged(Dtos.Identity[] changedTitleIds)
+        public SubstitutionTitlesChanged(Identity[] changedTitleIds)
             : base(changedTitleIds)
         {
         }

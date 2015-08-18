@@ -107,7 +107,6 @@ using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using WB.UI.Supervisor.Controllers;
-using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;

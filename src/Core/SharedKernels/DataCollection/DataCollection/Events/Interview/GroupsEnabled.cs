@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class GroupsEnabled : GroupsPassiveEvent
     {
-        public GroupsEnabled(Dtos.Identity[] groups)
+        public GroupsEnabled(Identity[] groups)
             : base(groups) {}
     }
 }

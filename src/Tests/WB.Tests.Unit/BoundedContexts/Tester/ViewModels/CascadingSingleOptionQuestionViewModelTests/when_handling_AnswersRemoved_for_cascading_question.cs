@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Tester;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -49,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.Cascading
         };
 
         Because of = () =>
-            cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity.ToIdentityForEvents()));
+            cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
 
         It should_set_ShouldClearText_in_null = () =>
             cascadingModel.ResetTextInEditor.ShouldBeNull();
