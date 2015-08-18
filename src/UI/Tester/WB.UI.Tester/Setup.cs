@@ -4,6 +4,7 @@ using System.Reflection;
 using Android.Content;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 
@@ -28,6 +29,7 @@ using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 using WB.UI.Shared.Enumerator.ValueCombiners;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
+using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Ninject;
 using Xamarin;
 
@@ -162,7 +164,11 @@ namespace WB.UI.Tester
                     Insights.PurgePendingCrashReports().Wait();
                 }
             };
-            Insights.Initialize("f4aa9cb599d509b96cb2ac2d36ca9f66caafd85f", applicationContext);
+
+            string xamarinInsightsKey = TesterSettings.IsDebug
+                ? "f4aa9cb599d509b96cb2ac2d36ca9f66caafd85f"     // Tester Dev
+                : "42692ba29c8395f41cf92fc810d365a4ec0c98d7";    // Tester Release
+            Insights.Initialize(xamarinInsightsKey, applicationContext);
         }
     }
 }
