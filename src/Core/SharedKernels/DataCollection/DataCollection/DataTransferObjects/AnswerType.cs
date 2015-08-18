@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.Enumerator.DataTransferObjects
+﻿namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects
 {
     public enum AnswerType
     {
@@ -15,7 +15,6 @@
         DecimalAndStringArray = 8,
         String = 9,
         GpsData = 10,
-        FileName = 11,
-        QRBarcodeAnswer = 12
+        FileName = 11
     }
 }
