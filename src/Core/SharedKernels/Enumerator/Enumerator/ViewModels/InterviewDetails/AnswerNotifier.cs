@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var shouldNotifyAboutSingleAnswer = this.questionId.HasValue && @event.QuestionId == this.questionId;
             var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
-                                                 this.questions.Any(x => @event.QuestionId == x.Id && @event.PropagationVector.Identical(x.RosterVector));
+                                                 this.questions.Any(x => @event.QuestionId == x.Id && @event.RosterVector.Identical(x.RosterVector));
 
             var shouldRaiseEvent = shouldNotifyAboutSingleAnswer || shouldNotifyAboutListOfAnswers;
 

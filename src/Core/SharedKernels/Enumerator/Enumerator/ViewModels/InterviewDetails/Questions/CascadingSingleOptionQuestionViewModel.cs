@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(SingleOptionQuestionAnswered @event)
         {
             if (@event.QuestionId == this.parentQuestionIdentity.Id
-                && @event.PropagationVector.SequenceEqual(this.parentQuestionIdentity.RosterVector))
+                && @event.RosterVector.SequenceEqual(this.parentQuestionIdentity.RosterVector))
             {
                 var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
                 var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);

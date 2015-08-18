@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<PictureQuestionAnswered>().UserId.ShouldEqual(userId);
 
         It should_raise_PictureQuestionAnswered_event_with_PropagationVector_equal_to_propagationVector = () =>
-            eventContext.GetSingleEvent<PictureQuestionAnswered>().PropagationVector.ShouldEqual(propagationVector);
+            eventContext.GetSingleEvent<PictureQuestionAnswered>().RosterVector.ShouldEqual(propagationVector);
 
         It should_raise_PictureQuestionAnswered_event_with_AnswerTime_equal_to_answerTime = () =>
             eventContext.GetSingleEvent<PictureQuestionAnswered>().AnswerTime.ShouldEqual(answerTime);

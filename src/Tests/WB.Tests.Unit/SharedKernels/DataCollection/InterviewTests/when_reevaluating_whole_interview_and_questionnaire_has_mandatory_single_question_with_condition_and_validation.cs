@@ -55,9 +55,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new SingleOptionQuestionAnswered(userId: userId, questionId: singleQuestion1Id,
-                propagationVector: new decimal[0], answerTime: DateTime.Now, selectedValue: 2.0m));
+                rosterVector: new decimal[0], answerTime: DateTime.Now, selectedValue: 2.0m));
             interview.Apply(new SingleOptionQuestionAnswered(userId: userId, questionId: singleQuestion2Id,
-                propagationVector: new decimal[0], answerTime: DateTime.Now, selectedValue: 1.0m));
+                rosterVector: new decimal[0], answerTime: DateTime.Now, selectedValue: 1.0m));
 
 
             eventContext = new EventContext();

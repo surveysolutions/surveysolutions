@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.PropagationVector.Identical(this.questionIdentity.RosterVector))
+            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
             }

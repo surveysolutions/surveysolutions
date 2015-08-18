@@ -226,7 +226,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
             var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
             {
@@ -1122,7 +1122,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private T GetOrCreateAnswer<T>(QuestionActiveEvent @event) where T : BaseInterviewAnswer, new()
         {
-            return this.GetOrCreateAnswer<T>(@event.QuestionId, @event.PropagationVector);
+            return this.GetOrCreateAnswer<T>(@event.QuestionId, @event.RosterVector);
         }
 
         private T GetOrCreateAnswer<T>(Guid questionId, decimal[] propagationVector) where T : BaseInterviewAnswer, new()

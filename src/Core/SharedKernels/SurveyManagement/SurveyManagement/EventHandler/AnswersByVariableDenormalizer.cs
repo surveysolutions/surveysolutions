@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var answerString = string.Format("{0};{1}", evnt.Payload.Latitude, evnt.Payload.Longitude);
 
-            this.UpdateAnswerCollection(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, answerString);
+            this.UpdateAnswerCollection(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.RosterVector, answerString);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
