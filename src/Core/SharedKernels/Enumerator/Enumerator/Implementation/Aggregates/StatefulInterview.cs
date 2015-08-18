@@ -623,11 +623,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
             {
-                answer.IsValid = false;
+                answer.IsValid = true;
             }
             else
             {
-                this.notAnsweredQuestionsValidityStatus[questionKey] = false;
+                this.notAnsweredQuestionsValidityStatus[questionKey] = true;
             }
         }
 
@@ -637,11 +637,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
             {
-                answer.IsValid = true;
+                answer.IsValid = false;
             }
             else
             {
-                this.notAnsweredQuestionsValidityStatus[questionKey] = true;
+                this.notAnsweredQuestionsValidityStatus[questionKey] = false;
             }
         }
 
