@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(TAnswerEvent @event)
         {
             if (@event.QuestionId == this.questionIdentity.Id &&
-                @event.PropagationVector.SequenceEqual(this.questionIdentity.RosterVector))
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
                 var interview = this.interviewRepository.Get(this.interviewId);
                 this.IsAnswered = interview.WasAnswered(this.questionIdentity);
