@@ -125,6 +125,14 @@
     <Reference Include="Cirrious.MvvmCross.Plugins.Color.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.DownloadCache.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.DownloadCache.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.DownloadCache.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.DownloadCache.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.File, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.File.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.File.dll</HintPath>
@@ -276,6 +284,7 @@
     <Compile Include="Activities\SynchronizationActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
+    <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="CapiBoundedContextModule.cs" />
     <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
