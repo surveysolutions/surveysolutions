@@ -2107,7 +2107,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            if (this.innerDocument.CreatedBy.HasValue && this.innerDocument.CreatedBy.Value == personId)
+            if (this.innerDocument.CreatedBy == personId)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
