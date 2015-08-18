@@ -28,8 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly string basePath;
         private readonly string syncDirectoryName;
 
-        public AndroidDataCollectionSharedKernelModule(string basePath, string syncDirectoryName = "SYNC",
-            string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
+        public AndroidDataCollectionSharedKernelModule(string basePath, string syncDirectoryName = "SYNC")
         {
             this.basePath = basePath;
             this.syncDirectoryName = syncDirectoryName;

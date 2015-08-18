@@ -211,7 +211,7 @@ namespace WB.UI.Capi
             
             const string SynchronizationFolder = "SYNC";
             const string InterviewFilesFolder = "InterviewData";
-            const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
+            const string QuestionnaireAssembliesFolder = "assemblies";
 
             this.kernel = new StandardKernel(
 
@@ -220,7 +220,7 @@ namespace WB.UI.Capi
                 new DataCollectionInfrastructureModule(basePath).AsNinject(),
 
                 new EnumeratorSharedKernelModule(),
-                new EnumeratorInfrastructureModule(),
+                new EnumeratorInfrastructureModule(QuestionnaireAssembliesFolder),
                 new InterviewerUIModule(),
 
                 new InterviewerInfrastructureModule(),
