@@ -6,10 +6,10 @@ namespace WB.Core.SharedKernels.Enumerator.Events
 {
     public class InterviewAnswersFromSyncPackageRestored : InterviewActiveEvent
     {
-        public InterviewAnswersFromSyncPackageRestored(InterviewAnswerDto[] interviewData, Guid userId)
+        public InterviewAnswersFromSyncPackageRestored(InterviewAnswerDto[] answers, Guid userId)
             : base(userId)
         {
-            this.Answers = interviewData;
+            this.Answers = answers;
         }
 
         public InterviewAnswerDto[] Answers { get; private set; }
