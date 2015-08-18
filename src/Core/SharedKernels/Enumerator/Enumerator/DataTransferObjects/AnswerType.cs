@@ -2,20 +2,20 @@
 {
     public enum AnswerType
     {
-        IntegerNumericAnswer = 1,
-        RealNumericAnswer = 2,
-        DateTimeAnswer = 3,
+        Integer = 1,
+        Decimal = 2,
+        DateTime = 3,
         
-        MultiOptionAnswer = 4,
-        LinkedMultiOptionAnswer = 5,
+        OptionCodeArray = 4,
+        RosterVectorArray = 5,
 
-        SingleOptionAnswer = 6,
-        LinkedSingleOptionAnswer = 7,
+        OptionCode = 6,
+        RosterVector = 7,
        
-        TextListAnswer = 8,
-        TextAnswer = 9,
-        GpsAnswer= 10,
-        MultimediaAnswer = 11,
+        DecimalAndStringArray = 8,
+        String = 9,
+        GpsData = 10,
+        FileName = 11,
         QRBarcodeAnswer = 12
     }
 }
