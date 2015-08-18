@@ -35,12 +35,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public Guid Id { get; private set; }
 
-        public decimal[] RosterVector { get; private set; }
+        public RosterVector RosterVector { get; private set; }
 
-        public Identity(Guid id, decimal[] rosterVector)
+        public Identity(Guid id, RosterVector rosterVector)
         {
             this.Id = id;
-            this.RosterVector = rosterVector ?? new decimal[]{};
+            this.RosterVector = rosterVector ?? new RosterVector(new decimal[]{});
         }
 
         public override string ToString()
