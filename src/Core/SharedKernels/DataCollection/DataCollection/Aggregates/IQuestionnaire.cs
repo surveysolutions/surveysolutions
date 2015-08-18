@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
+
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -25,6 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasGroup(Guid groupId);
 
         QuestionType GetQuestionType(Guid questionId);
+
+        AnswerType GetAnswerType(Guid questionId);
 
         bool IsQuestionLinked(Guid questionId);
 

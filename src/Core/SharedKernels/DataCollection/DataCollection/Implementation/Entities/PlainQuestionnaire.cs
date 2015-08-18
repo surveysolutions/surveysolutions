@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -126,7 +127,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.questionCache = questionCache;
         }
 
-
         public long Version { get { return this.getVersion(); } }
 
         public void InitializeQuestionnaireDocument()
@@ -152,6 +152,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public QuestionType GetQuestionType(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionType;
+        }
+
+        public AnswerType GetAnswerType(Guid questionId)
+        {
+            var questionType = GetQuestionType(questionId);
+            switch (questionType)
+            {
+                case QuestionType.SingleOption:
+                    return IsQuestionLinked(questionId)
+                        ? AnswerType.RosterVector
+                        : AnswerType.OptionCode;
+
+                case QuestionType.MultyOption:
+                    return IsQuestionLinked(questionId)
+                        ? AnswerType.RosterVectorArray
+                        : AnswerType.OptionCodeArray;
+
+                case QuestionType.Numeric:
+                    return IsQuestionInteger(questionId)
+                        ? AnswerType.Integer
+                        : AnswerType.Decimal;
+
+                case QuestionType.DateTime:
+                    return AnswerType.DateTime;
+
+                case QuestionType.GpsCoordinates:
+                    return AnswerType.GpsData;
+
+                case QuestionType.Text:
+                    return AnswerType.String;
+
+                case QuestionType.TextList:
+                    return AnswerType.DecimalAndStringArray;
+
+                case QuestionType.QRBarcode:
+                    return AnswerType.String;
+
+                case QuestionType.Multimedia:
+                    return AnswerType.FileName;
+            }
+
+            throw new ArgumentException(string.Format("Question of unknown type was found. Question id: {0}", questionId));
         }
 
         public bool IsQuestionLinked(Guid questionId)
