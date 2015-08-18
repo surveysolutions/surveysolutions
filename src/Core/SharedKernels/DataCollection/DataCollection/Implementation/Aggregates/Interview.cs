@@ -344,41 +344,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredValid @event)
         {
             this.interviewState.DeclareAnswersValid(@event.Questions);
-            this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions.ToIdentities());
+            this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions);
         }
 
         public virtual void Apply(AnswersDeclaredInvalid @event)
         {
             this.interviewState.DeclareAnswersInvalid(@event.Questions);
-            this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions.ToIdentities());
+            this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions);
         }
 
         public virtual void Apply(GroupsDisabled @event)
         {
             this.interviewState.DisableGroups(@event.Groups);
 
-            this.ExpressionProcessorStatePrototype.DisableGroups(@event.Groups.ToIdentities());
+            this.ExpressionProcessorStatePrototype.DisableGroups(@event.Groups);
         }
 
         public virtual void Apply(GroupsEnabled @event)
         {
             this.interviewState.EnableGroups(@event.Groups);
 
-            this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups.ToIdentities());
+            this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups);
         }
 
         public virtual void Apply(QuestionsDisabled @event)
         {
             this.interviewState.DisableQuestions(@event.Questions);
 
-            this.ExpressionProcessorStatePrototype.DisableQuestions(@event.Questions.ToIdentities());
+            this.ExpressionProcessorStatePrototype.DisableQuestions(@event.Questions);
         }
 
         public virtual void Apply(QuestionsEnabled @event)
         {
             this.interviewState.EnableQuestions(@event.Questions);
 
-            this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions.ToIdentities());
+            this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
 
         }
 
@@ -843,11 +843,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             object answer = GetEnabledQuestionAnswerSupportedInExpressions(state, linkedQuestion, questionnaire);
 
             return AnswerUtils.AnswerToString(answer);
-        }
-
-        private static Events.Interview.Dtos.Identity[] ToEventIdentities(IEnumerable<Identity> answersDeclaredValid)
-        {
-            return answersDeclaredValid.Select(Events.Interview.Dtos.Identity.ToEventIdentity).ToArray();
         }
 
         private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, Func<Identity, bool> isGroupDisabled, Func<Identity, bool> isQuestionDisabled)
@@ -1958,7 +1953,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (changedQuestionIds.Count > 0)
             {
-                this.ApplyEvent(new SubstitutionTitlesChanged(ToEventIdentities(changedQuestionIds)));
+                this.ApplyEvent(new SubstitutionTitlesChanged(changedQuestionIds.ToArray()));
             }
         }
 
@@ -2000,22 +1995,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (enablementChanges.GroupsToBeDisabled.Any())
             {
-                this.ApplyEvent(new GroupsDisabled(ToEventIdentities(enablementChanges.GroupsToBeDisabled)));
+                this.ApplyEvent(new GroupsDisabled(enablementChanges.GroupsToBeDisabled.ToArray()));
             }
 
             if (enablementChanges.GroupsToBeEnabled.Any())
             {
-                this.ApplyEvent(new GroupsEnabled(ToEventIdentities(enablementChanges.GroupsToBeEnabled)));
+                this.ApplyEvent(new GroupsEnabled(enablementChanges.GroupsToBeEnabled.ToArray()));
             }
 
             if (enablementChanges.QuestionsToBeDisabled.Any())
             {
-                this.ApplyEvent(new QuestionsDisabled(ToEventIdentities(enablementChanges.QuestionsToBeDisabled)));
+                this.ApplyEvent(new QuestionsDisabled(enablementChanges.QuestionsToBeDisabled.ToArray()));
             }
 
             if (enablementChanges.QuestionsToBeEnabled.Any())
             {
-                this.ApplyEvent(new QuestionsEnabled(ToEventIdentities(enablementChanges.QuestionsToBeEnabled)));
+                this.ApplyEvent(new QuestionsEnabled(enablementChanges.QuestionsToBeEnabled.ToArray()));
             }
         }
 
@@ -2023,12 +2018,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (validityChanges.AnswersDeclaredValid.Any())
             {
-                this.ApplyEvent(new AnswersDeclaredValid(ToEventIdentities(validityChanges.AnswersDeclaredValid)));
+                this.ApplyEvent(new AnswersDeclaredValid(validityChanges.AnswersDeclaredValid.ToArray()));
             }
 
             if (validityChanges.AnswersDeclaredInvalid.Any())
             {
-                this.ApplyEvent(new AnswersDeclaredInvalid(ToEventIdentities(validityChanges.AnswersDeclaredInvalid)));
+                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.AnswersDeclaredInvalid.ToArray()));
             }
         }
 
@@ -2036,7 +2031,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (answersToRemove.Any())
             {
-                this.ApplyEvent(new AnswersRemoved(ToEventIdentities(answersToRemove)));
+                this.ApplyEvent(new AnswersRemoved(answersToRemove.ToArray()));
             }
         }
 

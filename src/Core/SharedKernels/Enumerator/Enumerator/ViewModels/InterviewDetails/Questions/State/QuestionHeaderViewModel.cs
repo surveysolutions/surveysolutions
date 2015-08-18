@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(SubstitutionTitlesChanged @event)
         {
-            bool thisQuestionChanged = @event.Questions.Any(x => this.questionIdentity.ToIdentityForEvents().Equals(x));
+            bool thisQuestionChanged = @event.Questions.Any(x => this.questionIdentity.Equals(x));
 
             if (thisQuestionChanged)
             {

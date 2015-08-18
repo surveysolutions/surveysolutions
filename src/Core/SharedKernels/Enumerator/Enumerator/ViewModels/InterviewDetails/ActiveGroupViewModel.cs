@@ -203,22 +203,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(QuestionsEnabled @event)
         {
-            this.InvalidateViewModelsByConditions(@event.Questions.ToIdentities());
+            this.InvalidateViewModelsByConditions(@event.Questions);
         }
 
         public void Handle(QuestionsDisabled @event)
         {
-            this.InvalidateViewModelsByConditions(@event.Questions.ToIdentities());
+            this.InvalidateViewModelsByConditions(@event.Questions);
         }
 
         public void Handle(GroupsEnabled @event)
         {
-            this.InvalidateViewModelsByConditions(@event.Groups.ToIdentities());
+            this.InvalidateViewModelsByConditions(@event.Groups);
         }
 
         public void Handle(GroupsDisabled @event)
         {
-            this.InvalidateViewModelsByConditions(@event.Groups.ToIdentities());
+            this.InvalidateViewModelsByConditions(@event.Groups);
         }
 
         void InvalidateViewModelsByConditions(IEnumerable<Identity> viewModelIdentities)
