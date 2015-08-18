@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             statistics.Init(interviewId, null, null);
             result.Add(statistics);
 
-            var completionInterview = Load<InterviewStatusChangeViewModel>();
+            var completionInterview = Load<CompleteInterviewViewModel>();
             completionInterview.Init(interviewId, null, null);
             result.Add(completionInterview);
 
