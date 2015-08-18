@@ -383,7 +383,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 this.AddNewLevelsToInterview(currentState, startIndex: countOfLevelByScope,
                     count: evnt.Payload.Count - countOfLevelByScope,
-                    outerVector: evnt.Payload.OuterScopePropagationVector, sortIndex: null, scope: scopeOfCurrentGroup);
+                    outerVector: evnt.Payload.OuterScopeRosterVector, sortIndex: null, scope: scopeOfCurrentGroup);
             }
             else
             {
@@ -444,13 +444,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData currentState, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
             return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
-                    evnt.Payload.SelectedPropagationVector);
+                    evnt.Payload.SelectedRosterVector);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
             return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
-            evnt.Payload.SelectedPropagationVectors);
+            evnt.Payload.SelectedRosterVectors);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)

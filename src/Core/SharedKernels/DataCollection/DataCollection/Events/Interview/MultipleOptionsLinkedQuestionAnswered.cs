@@ -5,12 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class MultipleOptionsLinkedQuestionAnswered : QuestionAnswered
     {
-        public decimal[][] SelectedPropagationVectors { get; private set; }
+        public decimal[][] SelectedRosterVectors { get; private set; }
 
-        public MultipleOptionsLinkedQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[][] selectedPropagationVectors)
+        public MultipleOptionsLinkedQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
             : base(userId, questionId, rosterVector, answerTime)
         {
-            this.SelectedPropagationVectors = selectedPropagationVectors;
+            this.SelectedRosterVectors = selectedRosterVectors;
         }
     }
 }

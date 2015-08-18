@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
             AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
-              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedPropagationVectors),
+              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedRosterVectors),
                   evnt.Payload.RosterVector));
 
             return view;
@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
             AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTime,
-             CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedPropagationVector),
+             CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedRosterVector),
                  evnt.Payload.RosterVector));
 
             return view;
