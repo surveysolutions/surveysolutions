@@ -572,36 +572,36 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 case QuestionType.SingleOption:
                     return questionnaire.IsQuestionLinked(questionId) 
-                        ? AnswerType.LinkedSingleOptionAnswer 
-                        : AnswerType.SingleOptionAnswer;
+                        ? AnswerType.RosterVector 
+                        : AnswerType.OptionCode;
 
                 case QuestionType.MultyOption:
                     return questionnaire.IsQuestionLinked(questionId)
-                        ? AnswerType.LinkedMultiOptionAnswer
-                        : AnswerType.MultiOptionAnswer;
+                        ? AnswerType.RosterVectorArray
+                        : AnswerType.OptionCodeArray;
 
                 case QuestionType.Numeric:
                     return questionnaire.IsQuestionInteger(questionId)
-                        ? AnswerType.IntegerNumericAnswer
-                        : AnswerType.RealNumericAnswer;
+                        ? AnswerType.Integer
+                        : AnswerType.Decimal;
 
                 case QuestionType.DateTime:
-                    return AnswerType.DateTimeAnswer;
+                    return AnswerType.DateTime;
 
                 case QuestionType.GpsCoordinates:
-                    return AnswerType.GpsAnswer;
+                    return AnswerType.GpsData;
 
                 case QuestionType.Text:
-                    return AnswerType.TextAnswer;
+                    return AnswerType.String;
 
                 case QuestionType.TextList:
-                    return AnswerType.TextListAnswer;
+                    return AnswerType.DecimalAndStringArray;
 
                 case QuestionType.QRBarcode:
                     return AnswerType.QRBarcodeAnswer;
 
                 case QuestionType.Multimedia:
-                    return AnswerType.MultimediaAnswer;
+                    return AnswerType.FileName;
             }
 
             throw new ArgumentException(string.Format("Question of unknown type was found. Question id: {0}", questionId));
@@ -611,47 +611,47 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             switch (answerDto.Type)
             {
-                case AnswerType.IntegerNumericAnswer:
+                case AnswerType.Integer:
                     this.GetOrCreateAnswer<IntegerNumericAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(answerDto.Answer as int?);
                     break;
-                case AnswerType.RealNumericAnswer:
+                case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(answerDto.Answer as int?);
                     break;
-                case AnswerType.DateTimeAnswer:
+                case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer((DateTime)answerDto.Answer);
                     break;
-                case AnswerType.MultiOptionAnswer:
+                case AnswerType.OptionCodeArray:
                     this.GetOrCreateAnswer<MultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswers(answerDto.Answer as decimal[]);
                     break;
-                case AnswerType.LinkedMultiOptionAnswer:
+                case AnswerType.RosterVectorArray:
                     this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswers(answerDto.Answer as decimal[][]);
                     break;
-                case AnswerType.SingleOptionAnswer:
+                case AnswerType.OptionCode:
                     this.GetOrCreateAnswer<SingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer((decimal)answerDto.Answer);
                     break;
-                case AnswerType.LinkedSingleOptionAnswer:
+                case AnswerType.RosterVector:
                     this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(answerDto.Answer as decimal[]);
                     break;
-                case AnswerType.TextListAnswer:
+                case AnswerType.DecimalAndStringArray:
                     this.GetOrCreateAnswer<TextListAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswers(answerDto.Answer as Tuple<decimal, string>[]);
                     break;
-                case AnswerType.TextAnswer:
+                case AnswerType.String:
                     this.GetOrCreateAnswer<TextAnswer>(answerDto.Id, answerDto.RosterVector).SetAnswer(answerDto.Answer as string);
                     break;
-                case AnswerType.GpsAnswer:
+                case AnswerType.GpsData:
                     var geoAnswer = answerDto.Answer as GeoPosition;
                     this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy, geoAnswer.Altitude);
                     break;
-                case AnswerType.MultimediaAnswer:
+                case AnswerType.FileName:
                     this.GetOrCreateAnswer<MultimediaAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(answerDto.Answer as string);
                     break;

@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Aggregates
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_and_other_fields = () =>
         {
             var answerDto = eventContext.GetSingleEvent<InterviewAnswersFromSyncPackageRestored>().Answers[0];
-            answerDto.Type.ShouldEqual(AnswerType.RealNumericAnswer);
+            answerDto.Type.ShouldEqual(AnswerType.Decimal);
             answerDto.Id.ShouldEqual(questionId);
             answerDto.RosterVector.ShouldEqual(rosterVector);
             answerDto.Answer.ShouldEqual(answer);
