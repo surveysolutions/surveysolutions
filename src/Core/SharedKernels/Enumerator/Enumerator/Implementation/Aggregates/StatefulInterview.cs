@@ -572,38 +572,38 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 case AnswerType.Integer:
                     this.GetOrCreateAnswer<IntegerNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer as int?);
+                        .SetAnswer(Convert.ToInt32(answerDto.Answer));
                     break;
                 case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer as int?);
+                        .SetAnswer(Convert.ToDecimal(answerDto.Answer));
                     break;
                 case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer((DateTime)answerDto.Answer);
+                        .SetAnswer(Convert.ToDateTime(answerDto.Answer));
                     break;
                 case AnswerType.OptionCodeArray:
                     this.GetOrCreateAnswer<MultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers(answerDto.Answer as decimal[]);
+                        .SetAnswers((decimal[])answerDto.Answer);
                     break;
                 case AnswerType.RosterVectorArray:
                     this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers(answerDto.Answer as decimal[][]);
+                        .SetAnswers((decimal[][])answerDto.Answer);
                     break;
                 case AnswerType.OptionCode:
                     this.GetOrCreateAnswer<SingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer((decimal)answerDto.Answer);
+                        .SetAnswer(Convert.ToDecimal(answerDto.Answer));
                     break;
                 case AnswerType.RosterVector:
                     this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer as decimal[]);
+                        .SetAnswer((decimal[])answerDto.Answer);
                     break;
                 case AnswerType.DecimalAndStringArray:
                     this.GetOrCreateAnswer<TextListAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers(answerDto.Answer as Tuple<decimal, string>[]);
+                        .SetAnswers((Tuple<decimal, string>[])answerDto.Answer);
                     break;
                 case AnswerType.String:
-                    this.GetOrCreateAnswer<TextAnswer>(answerDto.Id, answerDto.RosterVector).SetAnswer(answerDto.Answer as string);
+                    this.GetOrCreateAnswer<TextAnswer>(answerDto.Id, answerDto.RosterVector).SetAnswer((string)answerDto.Answer);
                     break;
                 case AnswerType.GpsData:
                     var geoAnswer = answerDto.Answer as GeoPosition;
@@ -612,7 +612,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     break;
                 case AnswerType.FileName:
                     this.GetOrCreateAnswer<MultimediaAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer as string);
+                        .SetAnswer((string)answerDto.Answer);
                     break;
             }
         }
