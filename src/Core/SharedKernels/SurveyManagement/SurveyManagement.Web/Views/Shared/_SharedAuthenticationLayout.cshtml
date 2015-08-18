@@ -11,11 +11,12 @@
     @Styles.Render("~/css/main-not-loggedin")
 </head>
 <body>
-    <div class="container" id="content">
+<div class="container" id="container">
+    <div id="content">
         @RenderSection("body")
     </div>
-
-<div class="row-fluid" id="footer-block">
+</div>
+<div id="footer">
     <hr>
     <footer>
         <p class="text-muted">
@@ -46,22 +47,6 @@
     @Scripts.Render("~/js/main")
     @RenderSection("scripts", false)
 
-    <script type="text/javascript">
-        var setMinHeight = function () {
-            var windowHeight = $(window).height();
-            var delimeterMargin = 40;
-            var footerHeight = $('#footer-block').outerHeight();
-            var minHeight = windowHeight - footerHeight - delimeterMargin;
-            $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
-            
-        };
-        $(document).ready(function () {
-            setMinHeight();
-            $(window).resize(function () {
-                setMinHeight();
-            });
-        });
-    </script>
 
 </body>
 </html>
