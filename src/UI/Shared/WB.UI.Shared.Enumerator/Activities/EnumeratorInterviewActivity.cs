@@ -15,7 +15,7 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : BaseViewModel
+    public abstract class EnumeratorInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : EnumeratorInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
@@ -50,13 +50,12 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.SetDrawerListener(this.drawerToggle);
-            this.drawerLayout.DrawerOpened += async (sender, args) => {
-                var messenger = Mvx.Resolve<IMvxMessenger>();
-
+            this.drawerLayout.DrawerOpened += (sender, args) =>
+            {
                 this.RemoveFocusFromEditText();
                 this.HideKeyboard(drawerLayout.WindowToken);
-
-                await Task.Run(() => messenger.Publish(new SideBarShownMessage(drawerLayout)));
+                var viewModel = this.ViewModel;
+                viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
 
             this.layoutManager = new LinearLayoutManager(this);
