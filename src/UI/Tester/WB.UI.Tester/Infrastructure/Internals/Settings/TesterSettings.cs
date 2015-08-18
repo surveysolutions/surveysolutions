@@ -106,5 +106,17 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             get { return SharedPreferences.GetString(ApplicationNameParameterName, Application.Context.Resources.GetString(Resource.String.ApplicationName)); }
         }
+
+        public static bool IsDebug
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
     }
 }
