@@ -9,24 +9,24 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class InterviewStatusChangeViewModel : MvxViewModel, IInterviewEntityViewModel
+    public class CompleteInterviewViewModel : MvxViewModel, IInterviewEntityViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
 
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
+        private readonly IUserIdentity userIdentity;
         private readonly IInterviewCompletionService completionService;
         
 
-        public InterviewStatusChangeViewModel(
+        public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
-            IPrincipal principal, 
+             IUserIdentity userIdentity, 
             IInterviewCompletionService completionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
-            this.principal = principal;
+            this.userIdentity = userIdentity;
             this.completionService = completionService;
         }
 
@@ -61,13 +61,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var completeInterviewCommand = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
-                userId: this.principal.CurrentUserIdentity.UserId,
+                userId: this.userIdentity.UserId,
                 comment: this.CompleteComment,
                 completeTime: DateTime.UtcNow);
 
-            this.commandService.Execute(completeInterviewCommand);
+            await this.commandService.ExecuteAsync(completeInterviewCommand);
 
-            this.completionService.CompleteInterview(this.interviewId, this.principal.CurrentUserIdentity.UserId);
+            this.completionService.CompleteInterview(this.interviewId, this.userIdentity.UserId);
 
             this.viewModelNavigationService.NavigateToDashboard();
         }

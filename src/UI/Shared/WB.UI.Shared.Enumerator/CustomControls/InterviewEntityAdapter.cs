@@ -42,7 +42,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
             {typeof (InterviewCompletionStatisticsViewModel), Resource.Layout.interview_complete_statistics},
-            {typeof (InterviewStatusChangeViewModel), Resource.Layout.interview_complete_status_change},
+            {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
         };
 
         public override int GetItemViewType(int position)
