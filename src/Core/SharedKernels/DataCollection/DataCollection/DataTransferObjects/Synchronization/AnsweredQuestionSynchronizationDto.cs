@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public AnsweredQuestionSynchronizationDto(Guid id, decimal[] vector, object answer, string comments)
         {
             Id = id;
-            QuestionPropagationVector = vector;
+            this.QuestionRosterVector = vector;
 
             var interviewTextListAnswers = answer as InterviewTextListAnswers;
             if (interviewTextListAnswers != null)
@@ -33,33 +33,33 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public Guid Id { get;  set; }
 
-        public decimal[] QuestionPropagationVector {
+        public decimal[] QuestionRosterVector {
             get
             {
-                if (questionPropagationVector == null)
+                if (this.questionRosterVector == null)
                 {
-                    questionPropagationVector = RestoreFromPropagationVectorInOldIntFormat();
+                    this.questionRosterVector = this.RestoreFromRosterVectorInOldIntFormat();
                 }
-                return questionPropagationVector;
+                return this.questionRosterVector;
             }
-            set { questionPropagationVector = value; }
+            set { this.questionRosterVector = value; }
         }
 
-        private decimal[] questionPropagationVector;
+        private decimal[] questionRosterVector;
         
-        [Obsolete("please use QuestionPropagationVector instead")]
-        public int[] PropagationVector { get; set; }
+        [Obsolete("please use QuestionRosterVector instead")]
+        public int[] RosterVector { get; set; }
 
         public object Answer { get;  set; }
         public string Comments { get;  set; }
 
         public CommentSynchronizationDto[] AllComments { get; set; }
 
-        private decimal[] RestoreFromPropagationVectorInOldIntFormat()
+        private decimal[] RestoreFromRosterVectorInOldIntFormat()
         {
-            if (PropagationVector == null)
+            if (this.RosterVector == null)
                 return new decimal[0];
-            return PropagationVector.Select(Convert.ToDecimal).ToArray();
+            return this.RosterVector.Select(Convert.ToDecimal).ToArray();
         }
         public bool IsEmpty()
         {

@@ -89,18 +89,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).OrderBy(x => x.OuterScopePropagationVector.Length).ToList();
+            var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).OrderBy(x => x.OuterScopeRosterVector.Length).ToList();
             foreach (RosterSynchronizationDto roster in orderedRosterInstances)
             {
-                AddRosterInstance(new AddedRosterInstance(roster.RosterId, roster.OuterScopePropagationVector, roster.RosterInstanceId, roster.SortIndex));
-                ChangeRosterTitle(new RosterInstance(roster.RosterId, roster.OuterScopePropagationVector, roster.RosterInstanceId), roster.RosterTitle);
+                AddRosterInstance(new AddedRosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId, roster.SortIndex));
+                ChangeRosterTitle(new RosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId), roster.RosterTitle);
             }
 
-            @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemPropagationVector));
-            @event.InterviewData.InvalidAnsweredQuestions.ForEach(x => DeclareAnswerAsInvalid(x.Id, x.InterviewItemPropagationVector));
+            @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.InvalidAnsweredQuestions.ForEach(x => DeclareAnswerAsInvalid(x.Id, x.InterviewItemRosterVector));
 
-            @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemPropagationVector));
-            @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemPropagationVector));
+            @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)
@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             var answer = this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(@event);
-            answer.SetAnswer(@event.SelectedPropagationVector);
+            answer.SetAnswer(@event.SelectedRosterVector);
         }
 
         internal new void Apply(MultipleOptionsLinkedQuestionAnswered @event)
@@ -216,7 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             var answer = this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(@event);
-            answer.SetAnswers(@event.SelectedPropagationVectors);
+            answer.SetAnswers(@event.SelectedRosterVectors);
         }
 
         #endregion
@@ -502,7 +502,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             var answerDtos = synchronizedInterview
                 .Answers
-                .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionPropagationVector, this.GetAnswerType(questionnaire, answerDto.Id), answerDto.Answer))
+                .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, this.GetAnswerType(questionnaire, answerDto.Id), answerDto.Answer))
                 .ToArray();
 
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
