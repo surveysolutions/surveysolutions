@@ -275,7 +275,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var option in this.Options)
             {
-                var foundIndex = @event.SelectedPropagationVectors
+                var foundIndex = @event.SelectedRosterVectors
                                        .Select((o,i) => new { index = i, selectedVector = o})
                                        .FirstOrDefault(item => item.selectedVector.Identical(option.Value));
 
