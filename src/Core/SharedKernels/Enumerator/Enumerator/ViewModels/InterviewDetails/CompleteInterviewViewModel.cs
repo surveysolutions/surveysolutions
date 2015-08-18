@@ -14,19 +14,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelNavigationService viewModelNavigationService;
 
         private readonly ICommandService commandService;
-        private readonly IUserIdentity userIdentity;
+        private readonly IPrincipal principal;
         private readonly IInterviewCompletionService completionService;
         
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
-             IUserIdentity userIdentity, 
+            IPrincipal principal, 
             IInterviewCompletionService completionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
-            this.userIdentity = userIdentity;
+            this.principal = principal;
             this.completionService = completionService;
         }
 
@@ -61,13 +61,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var completeInterviewCommand = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
-                userId: this.userIdentity.UserId,
+                userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.CompleteComment,
                 completeTime: DateTime.UtcNow);
 
             await this.commandService.ExecuteAsync(completeInterviewCommand);
 
-            this.completionService.CompleteInterview(this.interviewId, this.userIdentity.UserId);
+            this.completionService.CompleteInterview(this.interviewId, this.principal.CurrentUserIdentity.UserId);
 
             this.viewModelNavigationService.NavigateToDashboard();
         }
