@@ -102,6 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector,x.Comments));
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)
@@ -226,17 +227,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-
-            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
-            var answer = this.GetExistingAnswerOrNull(questionKey);
-            if (answer != null)
-            {
-                answer.InterviewerComment = @event.Comment;
-            }
-            else
-            {
-                this.notAnsweredQuestionsInterviewerComments[questionKey] = @event.Comment;
-            }
+            this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment);
         }
 
         #region Group and question status and validity
@@ -649,6 +640,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             var groupOrRoster = this.GetOrCreateGroupOrRoster(id, rosterVector);
             groupOrRoster.IsDisabled = true;
+        }
+
+        private void CommentQuestion(Guid id, decimal[] rosterVector, string comment)
+        {
+            var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
+            var answer = this.GetExistingAnswerOrNull(questionKey);
+            if (answer != null)
+            {
+                answer.InterviewerComment = comment;
+            }
+            else
+            {
+                this.notAnsweredQuestionsInterviewerComments[questionKey] = comment;
+            }
         }
 
         private void DisableQuestion(Guid id, decimal[] rosterVector)
