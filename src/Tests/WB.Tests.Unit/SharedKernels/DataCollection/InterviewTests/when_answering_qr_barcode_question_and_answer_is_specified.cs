@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().RosterVector.ShouldEqual(propagationVector);
 
         It should_raise_QRBarcodeQuestionAnswered_event_with_AnswerTime_equal_to_answerTime = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().AnswerTime.ShouldEqual(answerTime);
+            eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().AnswerTimeUtc.ShouldEqual(answerTime);
 
         It should_raise_QRBarcodeQuestionAnswered_event_with_Answer_equal_to_answer = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().Answer.ShouldEqual(answer);

@@ -144,7 +144,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     return new TextQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (string)answer);
                 case QuestionType.QRBarcode:
                     return new QRBarcodeQuestionAnswered(userId: Guid.NewGuid(), questionId: questionId, rosterVector: new decimal[0],
-                        answerTime: DateTime.Now, answer: (string) answer);
+                        answerTimeUtc: DateTime.Now, answer: (string) answer);
             }
             return null;
         }
