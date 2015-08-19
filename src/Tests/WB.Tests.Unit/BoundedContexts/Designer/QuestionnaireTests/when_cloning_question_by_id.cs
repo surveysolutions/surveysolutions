@@ -23,7 +23,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionType = QuestionType.MultyOption,
                 AreAnswersOrdered = true,
                 MaxAllowedAnswers = 1,
-                Mandatory = true,
                 Featured = true,
                 QuestionScope = QuestionScope.Interviewer,
                 ConditionExpression = "Conditional",
@@ -48,7 +47,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             e.GroupPublicKey == questionnaire.EventSourceId &&
             e.QuestionText == newQuestionAdded.QuestionText &&
             e.VariableLabel == newQuestionAdded.VariableLabel &&
-            e.Mandatory &&
             e.Featured &&
             e.QuestionScope == QuestionScope.Interviewer &&
             e.ConditionExpression == newQuestionAdded.ConditionExpression &&
@@ -64,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             );
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
-        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(28);
+        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(27);
 
         static Questionnaire questionnaire;
         static Guid questionId = Guid.Parse("11111111111111111111111111111111");

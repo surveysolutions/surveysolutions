@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
-using WB.Core.BoundedContexts.Tester.Repositories;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using It = Machine.Specifications.It;
-using EventsIdentity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
-    public class when_substitution_title_changed : QuestionHeaderViewModelTestsContext
+    internal class when_substitution_title_changed : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
         {
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
             viewModel.Init(interviewId, id);
 
-            EventsIdentity[] changedTitleIds = { new EventsIdentity(substitutionTargetQuestionId, Empty.RosterVector) };
+            Identity[] changedTitleIds = { new Identity(substitutionTargetQuestionId, Empty.RosterVector) };
             var eventsToBePublished = new List<UncommittedEvent>
             {
                 Create.UncommittedEvent(new SubstitutionTitlesChanged(changedTitleIds))
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
             fakeInterview = Mock.Of<IAggregateRoot>(x => x.GetUncommittedChanges() == eventsToBePublished);
         };
 
-        Because of = () => liteEventBus.PublishUncommitedEventsFromAggregateRoot(fakeInterview, null);
+        Because of = () => liteEventBus.PublishUncommittedEvents(fakeInterview);
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");
 

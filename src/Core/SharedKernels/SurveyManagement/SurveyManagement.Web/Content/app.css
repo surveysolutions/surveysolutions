@@ -419,3 +419,8 @@ input::-ms-clear {
 .badge-orange {
     background-color: orange;
 }
+
+.form-center {
+  max-width: 650px;
+  margin: 140px auto 20px;
+}

@@ -35,14 +35,11 @@
         {#>            
             EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
             <#
-            bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations) || question.IsMandatory;                       
-
-            if(hasAnyValidation)
+                                
+            if(!string.IsNullOrWhiteSpace(question.Validations))
             {#>    
             ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {                             
-                <#if(question.IsMandatory) {#>  
-                <#= question.GeneratedMandatoryMethodName #> ,                                               
-                <# }#>
+                
                 <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
                     () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
                 <# }#>
@@ -146,14 +143,7 @@
 			var self = <#=question.VariableName#>;
             return <#=question.Validations#>;
         }  
-        <# }#>
-        <#if(question.IsMandatory)
-        {#>        
-        private bool <#=question.GeneratedMandatoryMethodName#>()
-        {
-            return !this.IsAnswerEmpty(<#=question.VariableName#>);
-        }
-        <# }#>
+        <# }#>        
         <# }#>
         //groups
         <#foreach (var @group in Model.Groups) 

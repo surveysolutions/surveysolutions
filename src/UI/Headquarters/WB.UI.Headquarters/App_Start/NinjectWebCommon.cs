@@ -19,6 +19,9 @@ using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Native.Logging;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -29,7 +32,6 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -38,6 +40,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Intervie
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
@@ -94,7 +97,7 @@ namespace WB.UI.Headquarters
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-           // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
@@ -125,13 +128,19 @@ namespace WB.UI.Headquarters
 
             string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
 
-            var mappingAssemblies = new List<Assembly> { typeof (SurveyManagementSharedKernelModule).Assembly }; 
-            var postgresPlainStorageSettings = new PostgresPlainStorageSettings();
-            postgresPlainStorageSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString;
+            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly};
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                MappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
+            };
+
             string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
 
             int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+
+          
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -140,7 +149,7 @@ namespace WB.UI.Headquarters
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
+                new SurveyManagementDataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),
@@ -148,9 +157,8 @@ namespace WB.UI.Headquarters
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
 
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
+                new PostresKeyValueModule(postgresCacheSize),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
             NcqrsEnvironment.InitDefaults();
@@ -161,6 +169,22 @@ namespace WB.UI.Headquarters
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
 
+            var userPreloadingConfigurationSection = (UserPreloadingConfigurationSection)(WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ?? new UserPreloadingConfigurationSection());
+
+            var userPreloadingSettings =
+                new UserPreloadingSettings(
+                    userPreloadingConfigurationSection.VerificationIntervalInSeconds,
+                    userPreloadingConfigurationSection.CreationIntervalInSeconds,
+                    userPreloadingConfigurationSection.CleaningIntervalInHours,
+                    userPreloadingConfigurationSection.HowOldInDaysProcessShouldBeInOrderToBeCleaned,
+                    userPreloadingConfigurationSection.MaxAllowedRecordNumber,
+                    userPreloadingConfigurationSection.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress,
+                    userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
+                    loginFormatRegex: UserModel.UserNameRegularExpression,
+                    emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
+                    passwordFormatRegex: MembershipProviderSettings.Instance.PasswordStrengthRegularExpression,
+                    phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -169,7 +193,8 @@ namespace WB.UI.Headquarters
                     new InterviewHistorySettings(basePath,
                         bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
                     LegacyOptions.SupervisorFunctionsEnabled,
-                    interviewCountLimit));
+                    interviewCountLimit),
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
@@ -197,6 +222,10 @@ namespace WB.UI.Headquarters
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserPreloadingVerificationTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserBatchCreatingTask>().Configure();
+            ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
+
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();

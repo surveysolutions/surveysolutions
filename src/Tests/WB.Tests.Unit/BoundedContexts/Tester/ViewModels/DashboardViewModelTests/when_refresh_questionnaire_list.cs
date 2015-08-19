@@ -9,10 +9,10 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
-
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             var userName = "Vasya";
 
-            var storageAccessor = new Mock<IPlainStorageAccessor<QuestionnaireListItem>>();
+            var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
             storageAccessor.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
                 .Returns(new List<QuestionnaireListItem>());
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             viewModel = CreateDashboardViewModel(
                 principal: principal,
-                questionnaireListStorageAccessor: storageAccessor.Object,
+                questionnaireListStorage: storageAccessor.Object,
                 designerApiService: designerApiService);
 
             viewModel.Init();

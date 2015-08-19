@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="AreYouSureYouWantToRemoveRowFromRosterFormat">Are you sure you want to remove {0} row(s) from dependent roster?</string>
+  <string name="AnswerIsNotPresentInFilteredComboboxOptionsList">Answer "{0}" cannot be saved, because it does not match any option</string>
+  <string name="SendingOfInformationPackageIsCanceling">Cancelling.</string>
+  <string name="drawer_open">Open</string>
+  <string name="drawer_close">Close</string>
+  <item  type="id"  name="QuestionnaireId" />
+  <item  type="id"  name="ScreenId" />
+  <item  type="id"  name="PrpagationKey" />
+  <item  type="id"  name="AnswerId" />
+  <item  type="id"  name="Index" />
+  <item  type="id"  name="ElementId" />
+  
   <string name="ApplicationName">CAPI</string>
-  <string name="ActiveUsers">Active users</string>
   <string name="ConfirmDeviceChanging">Tablet changing confirmation</string>
   <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
   <string name="MakeThisTabletWorkingDevice">Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?</string>
@@ -11,6 +22,7 @@
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="Send">Send</string>
+  <string name="Dashboard_Reinitialize_Interview_Message">This interview is completed. Do you want to restart the interview?</string>
   <string name="Cancel">Cancel</string>
   <string name="Warning">Warning</string>
   <string name="Initializing">Initializing</string>
@@ -25,6 +37,13 @@
   <string name="CreatingInformationPackage">Creating information package</string>
   <string name="InformationPackageSizeWarningFormat">Information package of size {0} will be sent via network. Are you sure you want to send it?</string>
   <string name="SendingInformationPackage">Sending information package</string>
+
+  
+  <string name="MenuItem_Title_Dashboard">Dashboard</string>
+  <string name="MenuItem_Title_SignOut">Sign out</string>
+  <string name="MenuItem_Title_Settings">Settings</string>
+  <string name="MenuItem_Title_Synchronization">Synchronization</string>
+  <string name="MenuItem_Title_SignOut">Sign out</string>
 
   <string name="NoAssignments">You have no new assignments</string>
 
@@ -43,4 +62,11 @@
   <string name="YouAreNotConnectedToAnyNetwork">You are not connected to any network.</string>
   <string name="NowYouareConnectedToWifiNetwork">Now you are connected to wi-fi network: {0}.</string>
   <string name="NewHtmlLine"> <![CDATA[<br/>]]></string>
+
+
+
+  <string name="Prefs_VersionTitle">Application version</string>
+  <string name="Prefs_VersionSummaryFormat">Version: {0}</string>
+  <string name="Prefs_EndpointTitle">Supervisor URL</string>
+  <string name="Prefs_EndpointSummary">URL that is used to communicate with supervisor application</string>
 </resources>

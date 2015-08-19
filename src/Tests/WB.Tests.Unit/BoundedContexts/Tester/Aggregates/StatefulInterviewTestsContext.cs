@@ -1,11 +1,14 @@
 using System;
-using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
+using Machine.Specifications;
+
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+
+namespace WB.Tests.Unit.BoundedContexts.Tester.Aggregates
 {
     [Subject(typeof(StatefulInterview))]
-    public class StatefulInterviewTestsContext
+    internal class StatefulInterviewTestsContext
     {
         protected static void SetupQuestionnaireWithLinkedAndReferencedQuestions(Guid questionnaireId,
             Guid linkedQuestionId, Guid[] linkedQuestionRosters, Guid referencedQuestionId, Guid[] referencedQuestionRosters)
@@ -19,6 +22,11 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
                 && _.GetRosterLevelForQuestion(referencedQuestionId) == referencedQuestionRosters.Length
                 && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
                 && _.GetRosterSizeSourcesForQuestion(referencedQuestionId) == referencedQuestionRosters);
+        }
+
+        protected static AnsweredQuestionSynchronizationDto CreateAnsweredQuestionSynchronizationDto(Guid questionId, decimal[] rosterVector, object answer, string comment = "comment")
+        {
+            return new AnsweredQuestionSynchronizationDto(questionId, rosterVector, answer, comment);
         }
 
         protected static void FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(StatefulInterview interview, Guid rosterId, Guid questionId)

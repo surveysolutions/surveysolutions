@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using System.Web.Hosting;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -177,6 +178,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public SyncItemsMetaContainer GetUserPackageIds(SyncItemsMetaContainerRequest request)
         {
+            if (!string.IsNullOrEmpty(request.LastSyncedPackageId) && Regex.IsMatch(request.LastSyncedPackageId, @"\$\d+$"))
+            {
+                throw CreateRestException(HttpStatusCode.Conflict, InterviewerSyncStrings.OldInterviewerNeedsCleanup);
+            }
             try
             {
                 return this.syncManager.GetUserPackageIdsWithOrder(this.GlobalInfo.GetCurrentUser().Id, request.ClientRegistrationId, request.LastSyncedPackageId);

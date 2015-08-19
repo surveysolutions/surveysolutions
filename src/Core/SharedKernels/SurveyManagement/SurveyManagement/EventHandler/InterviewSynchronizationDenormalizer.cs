@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -12,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
@@ -27,12 +25,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaries;
+
         private readonly IJsonUtils jsonUtils;
-        private readonly IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter;
 
+        private readonly IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter;
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
-
-        private const string CounterId = "InterviewSyncPackageСounter";
 
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IMetaInfoBuilder metaBuilder;
@@ -43,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaries,
             IJsonUtils jsonUtils,
             IMetaInfoBuilder metaBuilder,
-            IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent> syncPackageWriter,
+            IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter,
             IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory)
         {
@@ -80,12 +77,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     if (interviewSummary == null)
                         return;
 
-                    this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+                    this.MarkInterviewForClientDeleting(evnt.EventSourceId, 
+                        interviewSummary.ResponsibleId, 
+                        evnt.EventTimeStamp, interviewSummary.QuestionnaireId, 
+                        interviewSummary.QuestionnaireVersion,
+                        evnt.EventIdentifier.FormatGuid());
                     break;
 
                 case InterviewStatus.RejectedBySupervisor:
                     var interviewWithVersion = interviews.GetById(evnt.EventSourceId);
-                    this.ResendInterviewInNewStatus(interviewWithVersion, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
+                    this.ResendInterviewInNewStatus(interviewWithVersion, 
+                        newStatus, 
+                        evnt.Payload.Comment, 
+                        evnt.EventTimeStamp, 
+                        evnt.EventIdentifier.FormatGuid());
                     break;
             }
         }
@@ -99,8 +104,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var interviewResponsibleInfo = interviewResponsibleStorageWriter.GetById(evnt.EventSourceId);
             if (interviewResponsibleInfo != null && interviewResponsibleInfo.UserId != evnt.Payload.InterviewerId && interviewSummary.ResponsibleRole == UserRoles.Operator)
             {
-                this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewResponsibleInfo.UserId, evnt.EventTimeStamp,
-                    interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+                this.MarkInterviewForClientDeleting(evnt.EventSourceId, 
+                    interviewResponsibleInfo.UserId, 
+                    evnt.EventTimeStamp,
+                    interviewSummary.QuestionnaireId, 
+                    interviewSummary.QuestionnaireVersion,
+                    evnt.EventIdentifier.FormatGuid());
             }
 
             if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
@@ -109,7 +118,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 if (interviewWithVersion != null)
                 {
                     if (interviewWithVersion.Status != InterviewStatus.RejectedByHeadquarters)
-                        this.ResendInterviewForPerson(interviewWithVersion, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
+                        this.ResendInterviewForPerson(interviewWithVersion, 
+                            evnt.Payload.InterviewerId, 
+                            evnt.EventTimeStamp, 
+                            evnt.EventIdentifier.FormatGuid());
                 }
             }
 
@@ -130,24 +142,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewSummary == null)
                 return;
 
-            this.MarkInterviewForClientDeleting(evnt.EventSourceId, interviewSummary.ResponsibleId, evnt.EventTimeStamp,
-                interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+            this.MarkInterviewForClientDeleting(evnt.EventSourceId, 
+                interviewSummary.ResponsibleId, 
+                evnt.EventTimeStamp,
+                interviewSummary.QuestionnaireId, 
+                interviewSummary.QuestionnaireVersion,
+                evnt.EventIdentifier.FormatGuid());
         }
 
-        private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp)
+        private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp, string packageId)
         {
             if (interviewData == null)
                 return;
 
             var interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId, newStatus, comments);
 
-            this.SaveInterview(interviewSyncData, interviewData.ResponsibleId, timestamp, interviewData.QuestionnaireId, interviewData.QuestionnaireVersion);
+            this.SaveInterview(interviewSyncData, interviewData.ResponsibleId, timestamp, interviewData.QuestionnaireId, interviewData.QuestionnaireVersion, packageId);
         }
 
-        private void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp)
+        private void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp, string packageId)
         {
             InterviewSynchronizationDto interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
-            this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interview.QuestionnaireId, interview.QuestionnaireVersion);
+            this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interview.QuestionnaireId, interview.QuestionnaireVersion, packageId);
         }
 
         private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(InterviewSummary interviewSummary)
@@ -155,8 +171,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return !interviewSummary.WasCreatedOnClient || interviewSummary.WasRejectedBySupervisor;
         }
 
-        public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId, DateTime timestamp,
-            Guid questionnaireId, long questionnaireVersion)
+        public void SaveInterview(InterviewSynchronizationDto doc, 
+            Guid responsibleId, 
+            DateTime timestamp,
+            Guid questionnaireId, 
+            long questionnaireVersion,
+            string packageId)
         {
             this.StoreChunk(
                 doc.Id,
@@ -166,11 +186,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 SyncItemType.Interview,
                 this.jsonUtils.Serialize(doc, TypeSerializationSettings.AllTypes),
                 this.jsonUtils.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes),
-                timestamp);
+                timestamp,
+                packageId);
         }
 
-        public void MarkInterviewForClientDeleting(Guid interviewId, Guid? responsibleId, DateTime timestamp,
-            Guid questionnaireId, long questionnaireVersion)
+        public void MarkInterviewForClientDeleting(Guid interviewId, 
+            Guid? responsibleId, 
+            DateTime timestamp,
+            Guid questionnaireId, 
+            long questionnaireVersion,
+            string packageId)
         {
             this.StoreChunk(
                 interviewId,
@@ -180,7 +205,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 SyncItemType.DeleteInterview,
                 interviewId.ToString(),
                 string.Empty,
-                timestamp);
+                timestamp,
+                packageId);
         }
 
         public void StoreChunk(
@@ -191,21 +217,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             string itemType,
             string content,
             string metaInfo,
-            DateTime timestamp)
+            DateTime timestamp,
+            string packageId)
         {
+            var id = packageId + (userId.HasValue ? "$" + userId.FormatGuid() : "");
             var syncPackageMeta = new InterviewSyncPackageMeta(
-                       interviewId,
-                       questionnaireId,
-                       questionnaireVersion,
-                       timestamp,
-                       userId,
-                       itemType,
-                       string.IsNullOrEmpty(content) ? 0 : content.Length,
-                       string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length);
+                interviewId,
+                questionnaireId,
+                questionnaireVersion,
+                timestamp,
+                userId,
+                itemType,
+                string.IsNullOrEmpty(content) ? 0 : content.Length,
+                string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length)
+            {
+                Meta = metaInfo,
+                Content = content,
+                PackageId = id
+            };
 
-            var syncPackageContent = new InterviewSyncPackageContent(content, metaInfo);
-
-            syncPackageWriter.Store(syncPackageContent, syncPackageMeta, interviewId.FormatGuid(), CounterId);
+            syncPackageWriter.Store(syncPackageMeta, id);
         }
     }
 }

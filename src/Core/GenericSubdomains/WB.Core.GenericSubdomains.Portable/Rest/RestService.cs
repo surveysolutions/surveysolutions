@@ -59,8 +59,6 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
             }
             catch (RestHttpException ex)
             {
-                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", client.GetFullUrl(), queryString), ex);
-
                 if (!string.IsNullOrWhiteSpace(ex.ReasonPhrase))
                     throw new RestException(ex.ReasonPhrase, statusCode: ex.StatusCode, innerException: ex);
 
@@ -68,7 +66,6 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
             }
             catch (WebException ex)
             {
-                this.logger.Error(string.Format("Request to '{0}'. QueryParams: {1} failed. ", client.GetFullUrl(), queryString), ex);
                 throw new RestException(message: Resources.NoConnection, innerException: ex);
             }
         }

@@ -21,10 +21,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewItemIdTests
             result = InterviewItemId.Parse(interviewItemIdString);
 
         private It should_results_InterviewItemPropagationVector_be_single_dimencion = () =>
-            result.InterviewItemPropagationVector.Length.ShouldEqual(1);
+            result.InterviewItemRosterVector.Length.ShouldEqual(1);
 
         private It should_results_InterviewItemPropagationVector_first_element_be_equal_to_propagationId = () =>
-            result.InterviewItemPropagationVector[0].ShouldEqual(propagationId);
+            result.InterviewItemRosterVector[0].ShouldEqual(propagationId);
 
         private It should_results_id_be_equal_to_guid_at_passed_string = () =>
            result.Id.ShouldEqual(id);

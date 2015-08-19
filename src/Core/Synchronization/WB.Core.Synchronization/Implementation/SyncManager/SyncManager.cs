@@ -19,9 +19,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ICommandService commandService;
 
-        private readonly IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage;
-        private readonly IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore;
         private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
         private readonly IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersSyncPackagesMeta;
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackageMetaReader;
@@ -31,9 +28,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         public SyncManager(IReadSideRepositoryReader<TabletDocument> devices, 
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
             ICommandService commandService,
-            IReadSideKeyValueStorage<UserSyncPackageContent> userPackageStorage,
-            IReadSideKeyValueStorage<InterviewSyncPackageContent> interviewPackageContentStore, 
-            IReadSideKeyValueStorage<QuestionnaireSyncPackageContent> questionnaireSyncPackageContentStore,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IQueryableReadSideRepositoryReader<UserSyncPackageMeta> usersSyncPackagesMeta,
             IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackageMetaReader,
@@ -42,9 +36,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.devices = devices;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.commandService = commandService;
-            this.userPackageStorage = userPackageStorage;
-            this.interviewPackageContentStore = interviewPackageContentStore;
-            this.questionnaireSyncPackageContentStore = questionnaireSyncPackageContentStore;
             this.syncPackagesMetaReader = syncPackagesMetaReader;
             this.usersSyncPackagesMeta = usersSyncPackagesMeta;
             this.questionnaireSyncPackageMetaReader = questionnaireSyncPackageMetaReader;
@@ -159,7 +150,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var package = this.userPackageStorage.GetById(packageId);
+            var package = this.usersSyncPackagesMeta.GetById(packageId);
 
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
@@ -177,7 +168,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            var package = this.questionnaireSyncPackageContentStore.GetById(packageId);
+            QuestionnaireSyncPackageMeta package = this.questionnaireSyncPackageMetaReader.GetById(packageId);
 
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
@@ -188,7 +179,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    {
                        PackageId = package.PackageId,
                        Content = package.Content,
-                       MetaInfo = package.MetaInfo,
+                       MetaInfo = package.Meta,
                    };
         }
 
@@ -196,7 +187,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
         {
             this.MakeSureThisDeviceIsRegisteredOrThrow(deviceId);
 
-            InterviewSyncPackageContent packageMetaInformation = this.interviewPackageContentStore.GetById(packageId);
+            var packageMetaInformation = this.syncPackagesMetaReader.GetById(packageId);
             if (packageMetaInformation == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
 
@@ -206,7 +197,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    {
                        PackageId = packageMetaInformation.PackageId,
                        Content = packageMetaInformation.Content,
-                       MetaInfo = packageMetaInformation.MetaInfo
+                       MetaInfo = packageMetaInformation.Meta
                    };
         }
 

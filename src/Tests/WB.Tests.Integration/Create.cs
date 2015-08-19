@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -168,7 +169,7 @@ namespace WB.Tests.Integration
                 children: children);
         }
 
-        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
             return new TextQuestion("Question X")
             {
@@ -177,25 +178,24 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                Mandatory = isMandatory
             };
         }
 
-        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, bool isMandatory = false,
+        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
             IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null)
         {
             return new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
-                Mandatory = isMandatory,
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable
             };
         }
 
-        public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+            string validationExpression = null)
         {
             return new TextListQuestion
             {
@@ -204,11 +204,11 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                Mandatory = isMandatory
             };
         }
 
-        public static TextQuestion TextQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static TextQuestion TextQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+            string validationExpression = null)
         {
             return new TextQuestion
             {
@@ -217,11 +217,11 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                Mandatory = isMandatory
             };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+            string validationExpression = null)
         {
             return new NumericQuestion
             {
@@ -231,12 +231,11 @@ namespace WB.Tests.Integration
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                Mandatory = isMandatory
             };
         }
 
-        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false,
-            Guid? cascadeFromQuestionId = null, List<Answer> options = null)
+        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null)
         {
             return new SingleQuestion
             {
@@ -245,7 +244,6 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                Mandatory = isMandatory,
                 Answers = options ?? new List<Answer>(),
                 CascadeFromQuestionId = cascadeFromQuestionId
             };

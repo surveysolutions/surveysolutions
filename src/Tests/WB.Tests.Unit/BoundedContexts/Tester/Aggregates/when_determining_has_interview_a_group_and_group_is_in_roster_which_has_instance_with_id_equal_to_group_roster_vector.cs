@@ -1,7 +1,8 @@
 using System;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Tests.Unit.BoundedContexts.Tester.Aggregates;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
         {
             Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
                 => _.HasGroup(group.Id) == true
-                   && _.GetRostersFromTopToSpecifiedGroup(group.Id) == new [] { rosterId });
+                && _.GetRostersFromTopToSpecifiedGroup(group.Id) == new [] { rosterId });
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId);
 

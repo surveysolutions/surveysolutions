@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using BatchUploadModel = WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests

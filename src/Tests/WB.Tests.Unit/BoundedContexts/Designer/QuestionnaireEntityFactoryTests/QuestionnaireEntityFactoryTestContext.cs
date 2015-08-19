@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
         }
 
         protected static QuestionData CreateQuestionData(QuestionType questionType, Guid? questionId = null, string title = null,
-            string variable = null, string instructions = null, bool? isMandatory = null, string condition = null)
+            string variable = null, string instructions = null, string condition = null)
         {
             return new QuestionData(
                 questionId ?? Guid.NewGuid(), 
@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 "",
                 Order.AsIs,
                 false,
-                isMandatory ?? false, 
                 false,
                 instructions ?? "", null,
                 new Answer[0], 

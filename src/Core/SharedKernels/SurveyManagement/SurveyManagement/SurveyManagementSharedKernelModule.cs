@@ -10,12 +10,10 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
@@ -133,8 +131,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
-
-            this.Bind(typeof(IOrderableSyncPackageWriter<,>)).To(typeof(OrderableSyncPackageWriter<,>)).InSingletonScope();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();

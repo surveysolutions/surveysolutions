@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
-                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, new ExpressionsEngineVersionService());
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, new DesignerExpressionsEngineVersionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

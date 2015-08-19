@@ -91,14 +91,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IExpressionsEngineVersionService expressionsEngineVersionService)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerExpressionsEngineVersionService expressionsEngineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -178,7 +178,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
-                                        
+                    Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),                 
+
                     ErrorsByQuestionsAndGroupsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
@@ -664,6 +665,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return rosterLevel;
+        }
+
+        private static bool GroupHasLevelDepthMoreThan10(IGroup group)
+        {
+            int groupLevel = 0;
+            IComposite questionnaireItem = group;
+            while (questionnaireItem != null)
+            {
+                groupLevel++;
+                questionnaireItem = questionnaireItem.GetParent();
+            }
+
+            return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)

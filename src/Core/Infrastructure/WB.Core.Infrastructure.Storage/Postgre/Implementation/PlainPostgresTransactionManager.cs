@@ -65,9 +65,9 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             if (this.session == null)
             {
-                throw new InvalidOperationException("Trying to get session istance without starting a transaction first. Call BeginTransaction before getting session instance");
+                throw new InvalidOperationException("Trying to get session instance without starting a transaction first. Call BeginTransaction before getting session instance");
             }
-            return this.session; 
+            return this.session;
         }
     }
 }

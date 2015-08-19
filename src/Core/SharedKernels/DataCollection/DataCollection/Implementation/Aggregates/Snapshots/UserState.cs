@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public bool IsUserArchived { get; set; }
         public UserRoles[] UserRoles  { get; set; }
         public Guid UserSupervisorId { get; set; }
+        public string UserSupervisorName { get; set; }
         public string LoginName { get; set; }
     }
 }

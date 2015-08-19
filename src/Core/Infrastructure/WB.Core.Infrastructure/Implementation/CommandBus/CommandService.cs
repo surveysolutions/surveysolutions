@@ -44,9 +44,9 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             return Task.Run(() => this.Execute(command, origin, cancellationToken));
         }
 
-        public void Execute(ICommand command, string origin, bool handleInBatch = false)
+        public void Execute(ICommand command, string origin)
         {
-            this.ExecuteImpl(command, origin, handleInBatch, CancellationToken.None);
+            this.ExecuteImpl(command, origin, CancellationToken.None);
         }
 
         private void Execute(ICommand command, string origin, CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             try
             {
-                this.ExecuteImpl(command, origin, false, cancellationToken);
+                this.ExecuteImpl(command, origin, cancellationToken);
             }
             finally
             {
@@ -104,7 +104,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             }
         }
 
-        protected virtual void ExecuteImpl(ICommand command, string origin, bool handleInBatch, CancellationToken cancellationToken)
+        protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
             if (command == null) throw new ArgumentNullException("command");
 
@@ -124,6 +124,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();
+
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -134,6 +135,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             }
 
             cancellationToken.ThrowIfCancellationRequested();
+
             foreach (var validator in validators)
             {
                 var validatorInstance = serviceLocator.GetInstance(validator);
@@ -150,8 +152,18 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
-            this.eventBus.PublishUncommitedEventsFromAggregateRoot(aggregate, origin, handleInBatch);
-            this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
+
+            this.eventBus.CommitUncommittedEvents(aggregate, origin);
+
+            try
+            {
+                this.eventBus.PublishUncommittedEvents(aggregate);
+            }
+            finally
+            {
+                aggregate.MarkChangesAsCommitted();
+                this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
+            }
         }
     }
 }

@@ -1,34 +1,35 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using Android.Content;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
-using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
-using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-
-using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Converters;
+using WB.UI.Shared.Enumerator.CustomBindings;
+using WB.UI.Shared.Enumerator.CustomControls;
+using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
+using WB.UI.Shared.Enumerator.ValueCombiners;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
-using WB.UI.Tester.CustomBindings;
-using WB.UI.Tester.CustomControls;
-using WB.UI.Tester.CustomControls.MaskedEditTextControl;
-using WB.UI.Tester.CustomServices.Location;
-using WB.UI.Tester.CustomServices.UserInteraction;
+using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Ninject;
 using Xamarin;
 
@@ -40,6 +41,18 @@ namespace WB.UI.Tester
         public Setup(Context applicationContext) : base(applicationContext)
         {
             this.InitializeLogger(applicationContext);
+            
+            //killing app to avoid incorrect state
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => 
+                UncaughtExceptionHandler();
+            
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, args) =>
+                UncaughtExceptionHandler();
+        }
+
+        static void UncaughtExceptionHandler()
+        {
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
         }
 
         protected override IMvxApplication CreateApp()
@@ -72,9 +85,10 @@ namespace WB.UI.Tester
             base.FillValueConverters(registry);
             
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
-                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(Setup))));
+                combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
+            registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
             registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
@@ -114,18 +128,6 @@ namespace WB.UI.Tester
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
 
             base.FillTargetFactories(registry);
-
-            Mvx.RegisterType<IUserInteractionService, UserInteractionService>();
-        }
-
-        protected override IDictionary<string, string> ViewNamespaceAbbreviations
-        {
-            get
-            {
-                var namespaceAbbreviations = base.ViewNamespaceAbbreviations;
-                namespaceAbbreviations["Wb"] = "WB.UI.Tester.Controls";
-                return namespaceAbbreviations;
-            }
         }
 
         protected override IList<Assembly> AndroidViewAssemblies
@@ -146,7 +148,11 @@ namespace WB.UI.Tester
 
         protected override Assembly[] GetViewModelAssemblies()
         {
-            return new[] { typeof(BaseViewModel).Assembly };
+            return new[]
+            {
+                typeof(TesterBoundedContextModule).Assembly,
+                typeof(EnumeratorSharedKernelModule).Assembly,
+            };
         }
 
         private void InitializeLogger(Context applicationContext)
@@ -158,14 +164,11 @@ namespace WB.UI.Tester
                     Insights.PurgePendingCrashReports().Wait();
                 }
             };
-            Insights.Initialize("42692ba29c8395f41cf92fc810d365a4ec0c98d7", applicationContext);
-        }
 
-        protected override void InitializeLastChance()
-        {
-            base.InitializeLastChance();
-
-            Mvx.RegisterSingleton<IMvxLocationWatcher>(() => new PlayServicesLocationWatcher());
+            string xamarinInsightsKey = TesterSettings.IsDebug
+                ? "f4aa9cb599d509b96cb2ac2d36ca9f66caafd85f"     // Tester Dev
+                : "42692ba29c8395f41cf92fc810d365a4ec0c98d7";    // Tester Release
+            Insights.Initialize(xamarinInsightsKey, applicationContext);
         }
     }
 }

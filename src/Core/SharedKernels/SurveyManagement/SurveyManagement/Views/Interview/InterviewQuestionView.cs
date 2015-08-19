@@ -18,7 +18,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.RosterVector = rosterVector;
             this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
             this.QuestionType = question.QuestionType;
-            this.IsMandatory = question.Mandatory;
             this.IsFeatured = question.Featured;
             this.IsCapital = question.Capital;
             this.ValidationMessage = question.ValidationMessage;
@@ -205,7 +204,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public QuestionType QuestionType { get; set; }
 
-        public bool IsMandatory { get; set; }
         public bool IsFeatured { get; set; }
         public bool IsCapital { get; set; }
         public bool IsValid { get; set; }

@@ -68,8 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             };
 
             revalidateInterviewView.FeaturedQuestions.AddRange(mergedInterview.Groups.SelectMany(group => group.Entities.OfType<InterviewQuestionView>().Where(q => q.IsFeatured)));
-            revalidateInterviewView.MandatoryQuestions.AddRange(mergedInterview.Groups.SelectMany(group => group.Entities.OfType<InterviewQuestionView>().Where(q => q.IsMandatory && q.IsEnabled)));
-
+            
             return revalidateInterviewView;
         }
     }

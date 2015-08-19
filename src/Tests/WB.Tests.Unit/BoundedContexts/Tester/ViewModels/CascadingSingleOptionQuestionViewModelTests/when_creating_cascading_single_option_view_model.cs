@@ -1,5 +1,5 @@
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.CascadingSingleOptionQuestionViewModelTests

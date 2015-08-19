@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool isUserArchived;
         private UserRoles[] userRoles = new UserRoles[0];
         private Guid userSupervisorId;
+        private string userSupervisorName;
         private string loginName;
 
         private readonly UserRoles[] userRolesWhichAllowToBeDeleted = new[] {UserRoles.Operator, UserRoles.Supervisor};
@@ -124,12 +125,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Unarchive()
         {
-            if (!isUserArchived)
-                throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
+            ThrowIfUserIsNotArchived();
 
             this.ApplyEvent(new UserUnarchived());
         }
 
+        public void UnarchiveUserAndUpdate(string passwordHash, string email, string personName, string phoneNumber)
+        {
+            ThrowIfUserIsNotArchived();
+
+            this.ApplyEvent(new UserUnarchived());
+            this.ApplyEvent(
+                new NewUserCreated
+                {
+                    Name = loginName,
+                    Password = passwordHash,
+                    Email = email,
+                    IsLockedBySupervisor = false,
+                    IsLocked = false,
+                    Roles = userRoles,
+                    Supervisor = new UserLight(userSupervisorId, userSupervisorName),
+                    PersonName = personName,
+                    PhoneNumber = phoneNumber,
+                    PublicKey = EventSourceId
+                });
+        }
+
+        private void ThrowIfUserIsNotArchived()
+        {
+            if (!isUserArchived)
+                throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
+        }
         private void ThrowIfUserArchived()
         {
             if (isUserArchived)
@@ -160,6 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (e.Supervisor != null)
             {
                 this.userSupervisorId = e.Supervisor.Id;
+                this.userSupervisorName = e.Supervisor.Name;
             }
         }
 
@@ -197,7 +224,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 IsUserLockedBySupervisor = isUserLockedBySupervisor,
                 LoginName = loginName,
                 UserRoles = userRoles,
-                UserSupervisorId = userSupervisorId
+                UserSupervisorId = userSupervisorId,
+                UserSupervisorName = userSupervisorName
             };
         }
 
@@ -209,6 +237,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             loginName = snapshot.LoginName;
             userRoles = snapshot.UserRoles;
             userSupervisorId = snapshot.UserSupervisorId;
+            userSupervisorName = snapshot.UserSupervisorName;
         }
     }
 }

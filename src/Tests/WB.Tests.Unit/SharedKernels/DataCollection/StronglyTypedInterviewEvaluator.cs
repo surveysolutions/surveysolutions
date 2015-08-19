@@ -422,7 +422,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
-                this.ValidationExpressions.Add(new Identity(IdOf.name, rosterVector), new Func<bool>[] { this.name_IsMandatory });
                 this.ValidationExpressions.Add(new Identity(IdOf.age, rosterVector), new Func<bool>[] { this.age_IsValid });
                 this.ValidationExpressions.Add(new Identity(IdOf.food, rosterVector), new Func<bool>[] { this.food_IsValid });
                 this.ValidationExpressions.Add(new Identity(IdOf.role, rosterVector), new Func<bool>[] { this.role_IsValid, this.role2_IsValid });
@@ -605,11 +604,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 return !this.married_with.Any(x => x.SequenceEqual(this.me));
             }
 
-            private bool name_IsMandatory()
-            {
-                return !this.IsAnswerEmpty(this.name);
-            }
-
+            
             private bool food_IsValid()
             {
                 return this.food == null || !(this.food.Contains(38) && this.role == 3 && this.age >= 21);

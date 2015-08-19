@@ -378,4 +378,7 @@
   <data name="WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
     <value>Group has condition referencing question from deeper roster level.</value>
   </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>Sub-section can have no more than 10 parent sub-sections.</value>
+  </data>
 </root>

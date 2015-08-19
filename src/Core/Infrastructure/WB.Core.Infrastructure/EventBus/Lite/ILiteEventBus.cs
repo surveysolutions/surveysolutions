@@ -5,6 +5,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface ILiteEventBus
     {
-        void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool isBulk = false);
+        void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin);
+        void PublishUncommittedEvents(IAggregateRoot aggregateRoot);
     }
 }

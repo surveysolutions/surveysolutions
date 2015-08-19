@@ -1,9 +1,10 @@
 using Main.Core.Documents;
+using WB.Core.SharedKernels.Enumerator.Entities;
 
 namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IQuestionnaireImportService
     {
-        void ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, string supportingAssembly);
+        void ImportQuestionnaire(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, string supportingAssembly);
     }
 }

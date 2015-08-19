@@ -20,7 +20,7 @@
 
   <PreferenceCategory android:title="@string/Prefs_ConnectionSettings" 
                       android:key="dev_settings_category">
-    <EditTextPreference android:key="DesignerEndpointV8"
+    <EditTextPreference android:key="DesignerEndpointV9"
            android:title="@string/Prefs_DesignerEndPointTitle"
            android:summary="@string/Prefs_DesignerEndPointSummary"
            android:defaultValue="@string/DesignerEndpoint"/>

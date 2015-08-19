@@ -8,8 +8,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using Humanizer;
 using NHibernate;
-using NHibernate.ByteCode.Castle;
-using NHibernate.Caches.SysCache;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
@@ -58,9 +56,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                        .Named(ReadSideSessionFactoryName);
 
             this.Kernel.Bind<CqrsPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
-            this.Kernel.Bind<Func<CqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresTransactionManager>());
-            this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManager>().ToSelf();
+            this.Kernel.Bind<NoTransactionCqrsPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
 
+            this.Kernel.Bind<Func<CqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresTransactionManager>());
+            this.Kernel.Bind<Func<NoTransactionCqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<NoTransactionCqrsPostgresTransactionManager>());
+            
+            this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManager>().ToSelf();
             this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
 
             this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>()).Named(SessionProviderName);
@@ -84,11 +85,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.ConnectionString = connectionString;
                 db.Dialect<PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                db.Batcher<PostgresClientBatchingBatcherFactory>();
-                db.BatchSize = 128;
             });
-            cfg.Cache(c => c.Provider<SysCacheProvider>());
-            cfg.Proxy(proxy => proxy.ProxyFactoryFactory<ProxyFactoryFactory>());
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);

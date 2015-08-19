@@ -37,7 +37,7 @@ namespace WB.UI.Capi.Backup
 
                 this.CopyFileOrDirectory(pathToBackupedFolder, this.basePath);
             }
-            else
+            else if (Directory.Exists(fullPath))
                 Directory.Delete(fullPath, true);
         }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_QuestionWithDivider"
+    local:MvxBind="HideKeyboardOnClick .">
+
+  <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+    <LinearLayout style="@style/Interview_Question_Header">
+      <TextView
+          style="@style/Interview_Complete_Screen_Text"
+          local:MvxBind="Text Localization('Interview_Complete_Note_For_Supervisor')" />
+
+      <LinearLayout style="@style/Interview_Question_Answer">
+        <EditText
+            android:inputType="textMultiLine"
+            style="@style/Interview_Question_Answer_TextEditor"
+            local:MvxBind="Text CompleteComment; Hint Localization('TextQuestion_Hint');" />
+      </LinearLayout>
+    </LinearLayout>
+  </LinearLayout>
+
+  <View style="@style/Interview_Entity_Divider" />
+
+  <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+
+    <Button
+        style="@style/Interview_Complete_Screen_Button"
+        local:MvxBind="HideKeyboardOnClick .; Click CompleteInterviewCommand; Text Localization('Interview_Complete_Button');"/>
+    <LinearLayout style="@style/Interview_Question_Header">
+      <TextView
+          style="@style/Interview_Complete_Screen_Text"
+          local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>
