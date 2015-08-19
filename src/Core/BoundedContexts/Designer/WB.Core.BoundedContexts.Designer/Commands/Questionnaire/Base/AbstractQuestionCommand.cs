@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class AbstractQuestionCommand : QuestionCommand
     {
         protected AbstractQuestionCommand(Guid questionnaireId, Guid questionId,
-            string title, string variableName, string mask, bool isMandatory, bool isPreFilled,
+            string title, string variableName, string mask,  bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression,
             string validationMessage, string instructions, Guid responsibleId, string variableLabel, bool? isFilteredCombobox)
             : base(questionnaireId, questionId, responsibleId)
@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.VariableLabel = CommandUtils.SanitizeHtml(variableLabel, removeAllTags: true);
             this.Title = CommandUtils.SanitizeHtml(title);
             this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
-            this.IsMandatory = isMandatory;
+            
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
             this.EnablementCondition = enablementCondition;
@@ -33,8 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 
         public string VariableLabel { get; private set; }
 
-        public bool IsMandatory { get; private set; }
-
+        
         public bool IsPreFilled { get; private set; }
 
         public QuestionScope Scope { get; private set; }

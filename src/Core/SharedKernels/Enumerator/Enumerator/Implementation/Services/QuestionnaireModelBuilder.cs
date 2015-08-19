@@ -286,7 +286,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             questionModel.Id = question.PublicKey;
             questionModel.Title = question.QuestionText;
-            questionModel.IsMandatory = question.Mandatory;
             questionModel.IsPrefilled = question.Featured;
             questionModel.ValidationMessage = question.ValidationMessage;
             questionModel.Instructions = question.Instructions;

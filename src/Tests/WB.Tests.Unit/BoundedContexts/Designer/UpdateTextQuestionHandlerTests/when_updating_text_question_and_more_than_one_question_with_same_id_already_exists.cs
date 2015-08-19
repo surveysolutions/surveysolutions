@@ -22,7 +22,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -36,7 +35,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
                     title: title,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -61,7 +59,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static bool isPreFilled = false;

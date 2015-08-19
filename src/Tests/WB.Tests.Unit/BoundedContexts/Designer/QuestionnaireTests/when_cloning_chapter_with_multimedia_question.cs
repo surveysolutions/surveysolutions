@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionText = title,
                 ConditionExpression = conditionExpression,
                 Instructions = instructions,
-                Mandatory = isMandatory,
                 StataExportCaption = variableName
             });
 
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Title = title,
                 EnablementCondition = conditionExpression,
                 Instructions = instructions,
-                IsMandatory = isMandatory,
                 VariableName = variableName
             });
 
@@ -86,9 +84,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_QuestionCloned_event_QuestionText_be_equal_title = () =>
             eventContext.GetSingleEvent<QuestionCloned>().QuestionText.ShouldEqual(title);
 
-        It should_QuestionCloned_event_Mandatory_be_equal_isMandatory = () =>
-            eventContext.GetSingleEvent<QuestionCloned>().Mandatory.ShouldEqual(isMandatory);
-
         It should_QuestionCloned_event_Instructions_be_equal_instructions = () =>
             eventContext.GetSingleEvent<QuestionCloned>().Instructions.ShouldEqual(instructions);
 
@@ -107,9 +102,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_MultimediaQuestionUpdated_event_Title_be_equal_title = () =>
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>().Title.ShouldEqual(title);
 
-        It should_MultimediaQuestionUpdated_event_IsMandatory_be_equal_isMandatory = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>().IsMandatory.ShouldEqual(isMandatory);
-
         It should_MultimediaQuestionUpdated_event_Instructions_be_equal_instructions = () =>
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>().Instructions.ShouldEqual(instructions);
 
@@ -127,7 +119,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string variableName = "var_name";
         private static string conditionExpression = "condition exptession";
         private static string instructions = "instructions";
-        private static bool isMandatory = true;
 
         private static int targetIndex = 0;
         private static EventContext eventContext;

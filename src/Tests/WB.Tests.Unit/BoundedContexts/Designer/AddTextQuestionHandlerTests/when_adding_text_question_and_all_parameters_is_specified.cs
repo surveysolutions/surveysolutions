@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                 title: title,
                 variableName: variableName,
                 variableLabel: null,
-                isMandatory: isMandatory,
                 isPreFilled: isPreFilled,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: enablementCondition,
@@ -65,10 +64,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_raise_NewQuestionAdded_event_with_ismandatory_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .Mandatory.ShouldEqual(isMandatory);
-
         It should_raise_NewQuestionAdded_event_with_ifeatured_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Featured.ShouldEqual(isPreFilled);
@@ -102,7 +97,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "text_question";
-        private static bool isMandatory = true;
         private static bool isPreFilled = false;
         private static string title = "title";
         private static string instructions = "intructions";

@@ -47,7 +47,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     title: titleWithSubstitution,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
@@ -76,7 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private const string substitutionVariableName = "substitution_var";
         private static string titleWithSubstitution = string.Format("title with substitution - %{0}%", substitutionVariableName);
         private static string variableName = "text_question";
-        private static bool isMandatory = false;
         private static bool isPreFilled = false;
         private static string instructions = "intructions";
         private static string enablementCondition = "enablementCondition";

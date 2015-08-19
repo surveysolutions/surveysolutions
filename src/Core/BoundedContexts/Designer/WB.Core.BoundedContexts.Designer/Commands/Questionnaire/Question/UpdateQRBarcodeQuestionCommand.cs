@@ -7,13 +7,13 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     public class UpdateQRBarcodeQuestionCommand : AbstractUpdateQuestionCommand
     {
         public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName,
-            string variableLabel, bool isMandatory,
+            string variableLabel,
             string enablementCondition, string instructions, Guid responsibleId,
             string validationExpression,
             string validationMessage)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition,
+                variableName: variableName, enablementCondition: enablementCondition,
                 instructions: instructions, variableLabel: variableLabel)
         {
             this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);

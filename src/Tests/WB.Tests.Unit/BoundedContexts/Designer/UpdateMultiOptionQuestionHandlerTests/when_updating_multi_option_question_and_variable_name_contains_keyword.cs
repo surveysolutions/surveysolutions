@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     title: title,
                     variableName: keywordVariableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,
@@ -61,7 +59,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string keywordVariableName = "this";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;

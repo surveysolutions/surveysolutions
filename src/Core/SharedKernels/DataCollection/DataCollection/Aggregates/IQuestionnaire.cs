@@ -88,8 +88,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetRosterLevelForEntity(Guid entityId);
 
-        IEnumerable<Guid> GetAllMandatoryQuestions();
-
         bool IsRosterGroup(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
@@ -104,8 +102,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
         
-        bool IsQuestionMandatory(Guid questionId);
-
         bool IsQuestionInteger(Guid questionId);
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);

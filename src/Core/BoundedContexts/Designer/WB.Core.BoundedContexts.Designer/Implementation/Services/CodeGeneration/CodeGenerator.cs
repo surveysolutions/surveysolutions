@@ -446,8 +446,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             GeneratedIdName = "@__" + varName + "_id",
                             GeneratedConditionsMethodName = "IsEnabled_" + varName,
                             GeneratedValidationsMethodName = "IsValid_" + varName,
-                            GeneratedMandatoryMethodName = "IsManadatoryValid_" + varName,
-                            IsMandatory = childAsIQuestion.Mandatory,
                             RosterScopeName = currentScope.GeneratedRosterScopeName
                         };
 

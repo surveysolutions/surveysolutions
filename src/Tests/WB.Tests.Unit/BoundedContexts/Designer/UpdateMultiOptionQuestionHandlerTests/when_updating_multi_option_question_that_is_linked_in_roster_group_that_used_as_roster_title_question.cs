@@ -46,7 +46,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 title: title,
                 variableName: variableName,
                 variableLabel: null,
-                isMandatory: isMandatory,
                 scope: scope,
                 enablementCondition: enablementCondition,
                 validationExpression: validationExpression,
@@ -76,7 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static Guid rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid linkedToQuestionId = Guid.Parse("33333333333333333333333333333333");
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
