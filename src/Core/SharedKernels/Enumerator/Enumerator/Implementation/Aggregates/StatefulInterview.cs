@@ -246,14 +246,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            @event.Questions.ForEach(x => this.DeclareAnswerAsInvalid(x.Id, x.RosterVector));
+
+            @event.Questions.ForEach(x => this.DeclareAnswerAsValid(x.Id, x.RosterVector));
         }
 
         public new void Apply(AnswersDeclaredInvalid @event)
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-            @event.Questions.ForEach(x => this.DeclareAnswerAsValid(x.Id, x.RosterVector));
+
+            @event.Questions.ForEach(x => this.DeclareAnswerAsInvalid(x.Id, x.RosterVector));
         }
 
         public new void Apply(GroupsDisabled @event)
