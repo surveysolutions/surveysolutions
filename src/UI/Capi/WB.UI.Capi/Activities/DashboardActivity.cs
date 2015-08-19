@@ -176,6 +176,7 @@ namespace WB.UI.Capi.Activities
                     yesHandler: async (s, ev) =>
                     {
                         await CommandService.ExecuteAsync(new RestartInterviewCommand(interviewId, CapiApplication.Membership.CurrentUser.Id, "", DateTime.UtcNow));
+                        logManipulator.CreateOrReopenDraftRecord(interviewId, CapiApplication.Membership.CurrentUser.Id);
                         this.StartLoadingActivity(publicKeyTag, localyCreated);
                     },
                     noHandler: (s, ev) => { },
