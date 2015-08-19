@@ -91,16 +91,15 @@
 
 
         <div class="form-group">
-            <div class="row">
-                <div class="form-group col-xs-7 pull-right" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.type == 'GpsCoordinates' || activeQuestion.isCascade == true || activeQuestion.isLinked == true">
+                <div class="form-group pull-right" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.type == 'GpsCoordinates' || activeQuestion.isCascade == true || activeQuestion.isLinked == true">
                     <label for="Question-scope">Question scope&nbsp;</label>
-                    <div class="btn-group dropup" dropdown>
+                    <div class="btn-group dropup " dropdown>
                         <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
                             {{ activeQuestion.questionScope }}
                             <span class="dropdown-arrow"></span>
                         </button>
 
-                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
@@ -116,7 +115,6 @@
                         </ul>
                     </div>
                 </div>
-            </div>
         </div>
 
         <script type="text/ng-template" id="SingleOption-template.html">
