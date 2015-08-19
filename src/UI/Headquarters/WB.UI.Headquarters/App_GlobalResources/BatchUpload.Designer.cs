@@ -367,7 +367,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User batch uploads.
+        ///   Looks up a localized string similar to Batch User Upload.
         /// </summary>
         internal static string UserBatchUploads {
             get {

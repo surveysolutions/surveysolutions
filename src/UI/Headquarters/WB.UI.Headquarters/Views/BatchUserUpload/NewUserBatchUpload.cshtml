@@ -22,7 +22,9 @@
                 <tr>
                     @foreach (var columnName in Model.AvaliableDataColumnNames)
                     {
-                        <th><label class="control-label  @(new[] { "Login", "Password","Role" }.Contains(columnName)?"required":"")">@columnName</label></th>
+                        <th>
+                            <label class="control-label  @(new[] {"login", "password", "role"}.Any(x => x.Equals(columnName, StringComparison.InvariantCultureIgnoreCase)) ? "required" : "")">@columnName</label>
+                        </th>
                     }
                 </tr>
             </thead>
