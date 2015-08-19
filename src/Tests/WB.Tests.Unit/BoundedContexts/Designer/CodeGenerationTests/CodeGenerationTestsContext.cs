@@ -68,7 +68,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 PublicKey = pets_questionId,
                 StataExportCaption = "pets_n",
                 IsInteger = true,
-                Mandatory = true,
                 QuestionType = QuestionType.Numeric
             }, rosterId, null);
 
@@ -86,7 +85,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 StataExportCaption = "pets_text",
                 ConditionExpression = "pets_n > 0",
                 ValidationExpression = "pets_n == 0",
-                Mandatory = true,
                 QuestionType = QuestionType.Text
             }, groupId, null);
 
@@ -153,40 +151,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
             return questionnaireDocument;
         }
-
-        public static QuestionnaireDocument CreateQuestionnaireWithCategoricalMultiLinkedMandatoryQuestion()
-        {
-            var linkedToQuestionId = new Guid("11111111111111111111111111111111");
-            return new QuestionnaireDocument()
-            {
-                Children = new List<IComposite>()
-                {
-                    new Group("Chapter")
-                    {
-                        Children = new List<IComposite>()
-                        {
-                            new Group("Roster")
-                            {
-                                IsRoster = true,
-                                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                                RosterFixedTitles = new[] {"Roster row 1", "Roster row 2"},
-                                Children = new List<IComposite>()
-                                {
-                                    new TextQuestion("Text") {PublicKey = linkedToQuestionId}
-                                }
-                            },
-                            new MultyOptionsQuestion("Categrical multi linked mandatory")
-                            {
-                                QuestionType = QuestionType.MultyOption,
-                                Mandatory = true,
-                                LinkedToQuestionId = linkedToQuestionId
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
+       
         public static QuestionnaireDocument CreateQuestionnaireWithRosterAndNamedTextQuestions(string[] varNames)
         {
 
@@ -365,47 +330,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocumenteHavingMandatoryQuestions(Guid questionnaireId, Guid questionId,
-            Guid question1Id, Guid question2Id, Guid question3Id)
-        {
-            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
-
-            questionnaireDocument.Add(new NumericQuestion()
-            {
-                QuestionType = QuestionType.Numeric,
-                PublicKey = questionId,
-                StataExportCaption = "number1",
-                Mandatory = true,
-                IsInteger = true,
-            }, questionnaireId, null);
-
-            questionnaireDocument.Add(new MultyOptionsQuestion()
-            {
-                QuestionType = QuestionType.MultyOption,
-                PublicKey = question1Id,
-                StataExportCaption = "multy1",
-                Mandatory = true,
-            }, questionnaireId, null);
-
-            questionnaireDocument.Add(new SingleQuestion()
-            {
-                QuestionType = QuestionType.SingleOption,
-                PublicKey = question2Id,
-                StataExportCaption = "single1",
-                Mandatory = true,
-            }, questionnaireId, null);
-
-            questionnaireDocument.Add(new DateTimeQuestion()
-            {
-                QuestionType = QuestionType.SingleOption,
-                PublicKey = question3Id,
-                StataExportCaption = "date1",
-                Mandatory = true,
-            }, questionnaireId, null);
-
-            return questionnaireDocument;
-        }
-
+        
         public static QuestionnaireDocument CreateQuestionnairDocumenteHavingNestedRosterWithConditions(Guid questionnaireId,
             Guid questionId, Guid roster1Id,
             Guid question2Id, Guid roster2Id)

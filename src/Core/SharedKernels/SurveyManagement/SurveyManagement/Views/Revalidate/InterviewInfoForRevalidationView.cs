@@ -10,9 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
     {
         public InterviewInfoForRevalidationView()
         {
-
             this.FeaturedQuestions = new List<InterviewQuestionView>();
-            this.MandatoryQuestions = new List<InterviewQuestionView>();
         }
 
         public InterviewStatus Status { get; set; }
@@ -30,7 +28,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         public Guid InterviewId { get; set; }
 
         public List<InterviewQuestionView> FeaturedQuestions { get; set; }
-
-        public List<InterviewQuestionView> MandatoryQuestions { get; set; }
     }
 }

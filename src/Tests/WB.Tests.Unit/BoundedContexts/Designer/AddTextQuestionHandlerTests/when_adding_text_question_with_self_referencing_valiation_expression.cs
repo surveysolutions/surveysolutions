@@ -31,7 +31,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                 title: "title",
                 variableName: variableName,
                 variableLabel: null,
-                isMandatory: false,
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "",

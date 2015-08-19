@@ -22,7 +22,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionText = title,
                 ConditionExpression =  conditionExpression,
                 Instructions = instructions,
-                Mandatory =  isMandatory,
                 StataExportCaption = variableName,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 Featured = isPrefilled,
@@ -76,9 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_NumericQuestionCloned_event_QuestionText_be_equal_title = () =>
             eventContext.GetSingleEvent<NumericQuestionCloned>().QuestionText.ShouldEqual(title);
 
-        It should_NumericQuestionCloned_event_Mandatory_be_equal_isMandatory = () =>
-            eventContext.GetSingleEvent<NumericQuestionCloned>().Mandatory.ShouldEqual(isMandatory);
-
         It should_NumericQuestionCloned_event_Instructions_be_equal_instructions = () =>
             eventContext.GetSingleEvent<NumericQuestionCloned>().Instructions.ShouldEqual(instructions);
 
@@ -114,7 +110,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string variableName = "var_name";
         private static string conditionExpression = "condition exptession";
         private static string instructions = "instructions";
-        private static bool isMandatory = true;
         private static int? countOfDecimalPlaces = 5;
         private static bool isPrefilled = true;
         private static bool isInteger = true;
