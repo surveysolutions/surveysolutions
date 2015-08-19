@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Designer.MailNotifierTests
         {
             systemMailer.Setup(x => x.GetShareChangeNotificationEmail(it.IsAny<SharingNotificationModel>())).Returns(message.Object);
 
-            recipientNotifier = new MailNotifier(systemMailer.Object, new Mock<ILogger>().Object);
+            recipientNotifier = new MailNotifier(new Mock<ILogger>().Object);
         };
 
         Because of = () =>
