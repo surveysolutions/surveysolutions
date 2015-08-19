@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Mvc.Mailer;
 using WB.Core.GenericSubdomains.Portable;
@@ -19,7 +20,11 @@ namespace WB.Tests.Unit.Applications.Designer.MailNotifierTests
         {
             systemMailer.Setup(x => x.GetOwnerShareChangeNotificationEmail(it.IsAny<SharingNotificationModel>())).Returns(message.Object);
 
-            recipientNotifier = new MailNotifier(systemMailer.Object, new Mock<ILogger>().Object);
+            Mock.Get(ServiceLocator.Current)
+              .Setup(locator => locator.GetInstance<ISystemMailer>())
+              .Returns(systemMailer.Object);
+
+            recipientNotifier = new MailNotifier(new Mock<ILogger>().Object);
         };
 
         Because of = () =>
