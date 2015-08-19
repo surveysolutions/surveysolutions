@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [ValidateFile(ErrorMessage = "Please select file")]
         [Display(Name = "CSV File")]
         public HttpPostedFileBase File { get; set; }
+
         public string[] AvaliableDataColumnNames { get; set; }
     }
 }

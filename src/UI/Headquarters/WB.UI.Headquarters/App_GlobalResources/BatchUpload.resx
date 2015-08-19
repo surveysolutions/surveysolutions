@@ -220,7 +220,7 @@
     <value>Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed in the 'role' column.</value>
   </data>
   <data name="UserBatchUploads" xml:space="preserve">
-    <value>User batch uploads</value>
+    <value>Batch User Upload</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
     <value>user(s) have been created</value>
