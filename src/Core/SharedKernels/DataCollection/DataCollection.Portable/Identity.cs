@@ -14,8 +14,6 @@ namespace WB.Core.SharedKernels.DataCollection
     /// </remarks>
     public class Identity
     {
-        
-
         protected bool Equals(Identity other)
         {
             return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
@@ -38,10 +36,6 @@ namespace WB.Core.SharedKernels.DataCollection
         public Guid Id { get; private set; }
 
         public RosterVector RosterVector { get; private set; }
-
-        public Identity(Guid id, decimal[] rosterVector) : this(id, new RosterVector(rosterVector)) 
-        {
-        }
 
         public Identity(Guid id, RosterVector rosterVector)
         {
