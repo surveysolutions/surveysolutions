@@ -504,12 +504,17 @@ namespace WB.UI.Capi.Activities
                             ? flurException.Call.Response.StatusCode
                             : null as HttpStatusCode?;
 
+                string responseMessage =
+                    flurException != null && flurException.Call.Response != null && !string.IsNullOrEmpty(flurException.Call.Response.ReasonPhrase)
+                        ? flurException.Call.Response.ReasonPhrase
+                        : exception.Message;
+
                 switch (statusCode)
                 {
                     case HttpStatusCode.UpgradeRequired:
                     case HttpStatusCode.Unauthorized:
                     case HttpStatusCode.NotAcceptable:
-                        errorMessage = exception.Message;
+                        errorMessage = responseMessage;
                         break;
                     case HttpStatusCode.Conflict:
                         errorMessage = Properties.Resources.OldInterviewerNeedsCleanup;
@@ -522,9 +527,9 @@ namespace WB.UI.Capi.Activities
                         errorMessage = Properties.Resources.SynchronizationRequestTimeout;
                         break;
                     case HttpStatusCode.ServiceUnavailable:
-                        errorMessage = exception.Message.Contains("maintenance")
+                        errorMessage = responseMessage.Contains("maintenance")
                             ? Properties.Resources.SynchronizationMaintenance
-                            : exception.Message;
+                            : responseMessage;
                         break;
                     case null:
                         break;
