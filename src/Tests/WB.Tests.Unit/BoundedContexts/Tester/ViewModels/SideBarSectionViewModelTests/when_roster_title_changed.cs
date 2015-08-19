@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using NSubstitute;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSectionViewModelTests
 {
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.SideBarSe
             viewModel = CreateViewModel(questionnaire: questionnaire, interview: interview);
 
             sectionIdentity = new Identity(rosterGroupId, new[]{0m});
-            viewModel.Init("", sectionIdentity, null, null,  Create.NavigationState());
+            viewModel.Init("", sectionIdentity, Substitute.For<SideBarSectionsViewModel>(), null, Substitute.For<GroupStateViewModel>(), Create.NavigationState());
 
             viewModel.SectionIdentity = sectionIdentity;
         };

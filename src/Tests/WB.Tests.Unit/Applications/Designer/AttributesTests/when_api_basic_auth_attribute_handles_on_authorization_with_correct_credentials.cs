@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
+using System.Web.Security;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using NSubstitute;
 using WB.UI.Designer.Api.Attributes;
+using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.AttributesTests
@@ -16,6 +21,16 @@ namespace WB.Tests.Unit.Applications.Designer.AttributesTests
     {
         Establish context = () =>
         {
+            var membershipUserServiceMock = new Mock<IMembershipUserService>();
+            var membershipWebUserMock = new Mock<IMembershipWebUser>();
+            var membershipUserMock = new Mock<MembershipUser>();
+            membershipUserMock.Setup(x => x.IsApproved).Returns(true);
+            membershipUserMock.Setup(x => x.IsLockedOut).Returns(false);
+            membershipWebUserMock.Setup(x => x.MembershipUser).Returns(membershipUserMock.Object);
+            membershipUserServiceMock.Setup(_ => _.WebUser).Returns(membershipWebUserMock.Object);
+
+            Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IMembershipUserService>()).Returns(membershipUserServiceMock.Object);
+
             var context = new Mock<HttpConfiguration>();
 
             var requestMessage = new HttpRequestMessage();

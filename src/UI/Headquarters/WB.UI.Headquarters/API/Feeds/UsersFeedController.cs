@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.Feeds
 
             if (totalFeedEntriesCount%PageSize > 0)
             {
-                userChangedFeedEntries = userChangedReader.Query(_ => _.SkipFullPages(PageSize, totalFeedEntriesCount).OrderBy(x => x.Timestamp).ToList());
+                userChangedFeedEntries = userChangedReader.Query(_ => _.OrderBy(x => x.Timestamp).ThenBy(x => x.EntryId).SkipFullPages(PageSize, totalFeedEntriesCount).ToList());
             }
 
             var feed = this.GetFeed(userChangedFeedEntries);
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.API.Feeds
         [HttpGet]
         public HttpResponseMessage Archive(int page)
         {
-            var changedFeedEntries = userChangedReader.Query(_ => _.GetPage(page, PageSize).OrderBy(x => x.Timestamp).ToList());
+            var changedFeedEntries = userChangedReader.Query(_ => _.OrderBy(x => x.Timestamp).ThenBy(x => x.EntryId).GetPage(page, PageSize).ToList());
             SyndicationFeed syndicationFeed = this.GetFeed(changedFeedEntries);
 
             if (page > 1)

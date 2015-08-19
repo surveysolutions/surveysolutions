@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 .Returns(CreateQRBarcodeQuestion(
                     questionId: questionId,
                     enablementCondition: condition,
-                    isMandatory: isMandatory,
                     instructions: instructions,
                     title: title,
                     variableName: variableName));
@@ -37,7 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             {
                 QuestionId = questionId,
                 EnablementCondition = condition,
-                IsMandatory = isMandatory,
                 Instructions = instructions,
                 Title = title,
                 VariableName = variableName
@@ -52,7 +50,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                         { 
                             PublicKey = questionId, 
                             StataExportCaption = "old_var_name",
-                            Mandatory = false,
                             QuestionText = "old title",
                             ConditionExpression = "old condition",
                             Instructions = "old instructions"
@@ -97,9 +94,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
          It should_pass_ConditionExpression_equals_questionId_to_question_factory = () =>
             questionData.ConditionExpression.ShouldEqual(condition);
 
-         It should_pass_Mandatory_equals_questionId_to_question_factory = () =>
-            questionData.Mandatory.ShouldEqual(isMandatory);
-
          It should_pass_Instructions_equals_questionId_to_question_factory = () =>
             questionData.Instructions.ShouldEqual(instructions);
 
@@ -130,9 +124,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         It should_set_QRBarcode_as_default_value_for__QuestionType__field = () =>
             GetQRBarcodeQuestionById().QuestionType.ShouldEqual(QuestionType.QRBarcode);
 
-        It should_set_true_as_value_for__Mandatory__field = () =>
-            GetQRBarcodeQuestionById().Mandatory.ShouldEqual(isMandatory);
-
         It should_set_varibleName_as_value_for__StataExportCaption__field = () =>
             GetQRBarcodeQuestionById().StataExportCaption.ShouldEqual(variableName);
 
@@ -158,7 +149,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";

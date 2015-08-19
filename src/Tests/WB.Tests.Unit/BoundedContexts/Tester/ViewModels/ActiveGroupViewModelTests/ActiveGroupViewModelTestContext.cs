@@ -3,18 +3,19 @@
 using Cirrious.MvvmCross.Plugins.Messenger;
 
 using Moq;
-
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.ActiveGroupViewModelTests
 {
-    public class ActiveGroupViewModelTestContext
+    internal class ActiveGroupViewModelTestContext
     {
         public static ActiveGroupViewModel CreateActiveGroupViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,

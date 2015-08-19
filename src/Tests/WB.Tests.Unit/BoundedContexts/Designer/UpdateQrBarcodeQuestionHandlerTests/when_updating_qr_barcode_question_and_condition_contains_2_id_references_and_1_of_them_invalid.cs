@@ -22,7 +22,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -36,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
             exception = Catch.Exception(() =>
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "var",
-                variableLabel: null, isMandatory: false, enablementCondition: conditionExpression, instructions: null,
+                variableLabel: null, enablementCondition: conditionExpression, instructions: null,
                     responsibleId: responsibleId, validationExpression:null, validationMessage:null));
 
         It should_throw_QuestionnaireException = () =>

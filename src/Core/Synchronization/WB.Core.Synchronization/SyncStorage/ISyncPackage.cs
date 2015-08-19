@@ -9,6 +9,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
     public interface IOrderableSyncPackage : ISyncPackage
     {
-        long SortIndex { get; set; }
+        long SortIndex { get; }
     }
 }

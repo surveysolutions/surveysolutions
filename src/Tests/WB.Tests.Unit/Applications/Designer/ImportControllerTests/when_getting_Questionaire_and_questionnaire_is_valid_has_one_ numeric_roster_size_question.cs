@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(questionnaireDocument));
 
-            var expressionsEngineVersionService = Mock.Of<IExpressionsEngineVersionService>(
+            var expressionsEngineVersionService = Mock.Of<IDesignerExpressionsEngineVersionService>(
                 _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(

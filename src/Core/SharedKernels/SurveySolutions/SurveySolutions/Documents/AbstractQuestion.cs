@@ -48,8 +48,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string Instructions { get; set; }
 
-        public bool Mandatory { get; set; }
-
+        
         private IComposite parent;
 
         public IComposite GetParent()

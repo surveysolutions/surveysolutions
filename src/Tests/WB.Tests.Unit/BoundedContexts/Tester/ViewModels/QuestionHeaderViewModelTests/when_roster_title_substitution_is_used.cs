@@ -5,18 +5,20 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using NSubstitute;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionHeaderViewModelTests
 {
-    public class when_roster_title_substitution_is_used : QuestionHeaderViewModelTestsContext
+    internal class when_roster_title_substitution_is_used : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
         {
@@ -33,14 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.ViewModels.QuestionH
                                 Create.TextQuestion(questionId: substitutionTargetQuestionId, text: "uses %rostertitle%", variable:"subst")
                             })
                });
-            QuestionnaireModel model = null;
-
-            var modelStorage = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
-            modelStorage.Setup(x => x.Store(Moq.It.IsAny<QuestionnaireModel>(), Moq.It.IsAny<string>()))
-                .Callback<QuestionnaireModel, string>((q, id) => { model = q; });
-
-            var importService = Create.QuestionnaireImportService(modelStorage.Object);
-            importService.ImportQuestionnaire(questionnaire, null);
+            QuestionnaireModel model = Create.QuestionnaireModelBuilder().BuildQuestionnaireModel(questionnaire);
 
             var interview = Mock.Of<IStatefulInterview>();
 

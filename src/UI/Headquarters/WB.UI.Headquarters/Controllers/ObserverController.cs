@@ -16,6 +16,7 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator")]
+    [ValidateInput(false)]
     public class ObserverController : TeamController
     {
         public ObserverController(ICommandService commandService, 

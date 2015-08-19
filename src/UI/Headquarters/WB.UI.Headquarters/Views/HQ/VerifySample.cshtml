@@ -1,4 +1,6 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
+﻿@using System.Web.Optimization
+@using Newtonsoft.Json
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 @using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
 @using WB.Core.SharedKernels.SurveyManagement.Views.User
 @model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
@@ -6,6 +8,22 @@
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
+
+@section scripts
+{
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/pages/batchupload.js")
+    <script type="text/javascript">
+        $(function () {
+            var $importDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewsApi", action = Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData" })';
+            var $successUploadUrl = "@Url.Action("SampleCreationResult", "HQ", new { id = Model.Id })";
+            var responsibles = @Html.Raw(JsonConvert.SerializeObject(ViewBag.SupervisorList));
+            var model = new Supervisor.VM.BatchUpload('@Model.Id', '@Model.QuestionnaireId', '@Model.Version',  responsibles, $importDataUrl, $successUploadUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
 <div class="row-fluid">
     @if (Model.Errors.Length > 0)
     {
@@ -58,34 +76,37 @@
     }
     else
     {
-        <h3>Data is valid</h3>
-        using (Html.BeginForm(Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData", "HQ", new { id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
-        {
-            <fieldset class="form-horizontal">
-                <div class="control-group">
-                    @if (!Model.WasSupervsorProvided)
-                    {
-                    <div class="control-label">Select responsible</div>
-                    <div class="controls">
-                        <select name="responsibleSupervisor" class="input-block-level">
-                            @foreach (UserListItem item in ViewBag.SupervisorList)
+        <div class="well form-center">
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend>
+                        Data is valid
+                    </legend>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Responsible</label>
+                        <div class="col-sm-8">
+                            @if (!Model.WasSupervsorProvided)
                             {
-                                <option value="@item.UserId">@item.UserName</option>
+                                <div class="input-group">
+                                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                    <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                                    </div>
+                                </div>
                             }
-                        </select>
+                            else
+                            {
+                                <h4 class="list-group-item-heading">Responsible supervisor will be assigned automatically.</h4>
+                            }
+                        </div>
                     </div>
-                    }
-                    else
-                    {
-                    <div class="controls">
-                        Responsible supervisor will be assigned automatically.
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button class="btn btn-large btn-primary" type="submit" data-bind="enable: IsSupervisorSelected, click: uploadSample">Create sample from this data</button>
                     </div>
-                    }
                 </div>
-                <div class="form-actions">
-                    <button class="btn btn-large btn-primary pull-right" type="submit">Create sample from this data</button>
-                </div>
-            </fieldset>
-        }
+            </div>
+        </div>
     }
 </div>

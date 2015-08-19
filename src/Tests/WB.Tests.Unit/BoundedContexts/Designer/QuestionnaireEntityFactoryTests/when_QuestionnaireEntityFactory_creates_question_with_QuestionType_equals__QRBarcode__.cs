@@ -16,7 +16,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 questionId: questionId,
                 variable: variableName,
                 condition: condition,
-                isMandatory: isMandatory,
                 title: title,
                 instructions: instructions);
 
@@ -41,9 +40,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
         It should_create_question_with_StataExportCaption_field_equals_condition_ = () =>
             resultQuestion.ConditionExpression.ShouldEqual(condition);
 
-        It should_create_question_with_Mandatory_field_equals_isMandatory_ = () =>
-            resultQuestion.Mandatory.ShouldEqual(isMandatory);
-
         It should_create_question_withQuestionText_field_equals_title = () =>
             resultQuestion.QuestionText.ShouldEqual(title);
 
@@ -55,7 +51,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
         private static IQuestion resultQuestion;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";

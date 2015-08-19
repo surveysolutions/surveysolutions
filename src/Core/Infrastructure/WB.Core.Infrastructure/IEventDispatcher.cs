@@ -12,8 +12,6 @@ namespace WB.Core.Infrastructure
 
         IEventHandler[] GetAllRegistredEventHandlers();
 
-        void PublishInBatch(IEnumerable<IPublishableEvent> eventMessages);
-
         void Register(IEventHandler handler);
         void Unregister(IEventHandler handler);
     }

@@ -17,13 +17,15 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
+    <NuGetPackageImportStamp>256707ef</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
@@ -40,8 +42,6 @@
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
-    <JavaOptions />
-    <MonoDroidExtraArgs />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -51,24 +51,30 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
-    <AndroidLinkSkip>Main.Core</AndroidLinkSkip>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkSkip>System.Runtime;System.Linq;System.Collections</AndroidLinkSkip>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-    <AndroidSupportedAbis>armeabi-v7a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
-    <JavaOptions />
-    <MonoDroidExtraArgs />
+    <Debugger>Xamarin</Debugger>
+    <AotAssemblies>False</AotAssemblies>
+    <EnableLLVM>False</EnableLLVM>
+    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
+    <EnableProguard>False</EnableProguard>
+    <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Cheesebaron.MvxPlugins.Settings">
       <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid">
+    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.1\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -81,20 +87,20 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Binding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.5.0\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
@@ -127,14 +133,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.File.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.File.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Location, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Location.dll</HintPath>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Location.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Location.Droid.dll</HintPath>
-    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Messenger, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
@@ -161,6 +159,12 @@
     <Reference Include="Cirrious.MvvmCross.Plugins.Visibility.Droid">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Visibility.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="Flurl">
+      <HintPath>..\..\..\..\packages\Flurl.1.0.9\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl.Http">
+      <HintPath>..\..\..\..\packages\Flurl.Http.0.6.3\lib\portable-net45+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.Http.dll</HintPath>
+    </Reference>
     <Reference Include="GooglePlayServicesLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Xamarin.GooglePlayServices.22.0.0.2\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
@@ -174,9 +178,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -190,7 +194,10 @@
     <Reference Include="mscorlib" />
     <Reference Include="MWBarcodeScanner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\ExternalsMonodroid\MWBarcodeScanner.dll</HintPath>
+      <HintPath>..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
@@ -203,6 +210,14 @@
     </Reference>
     <Reference Include="PCLStorage.Abstractions">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Siaqodb, Version=5.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Siaqodb.5.0.0.4\lib\MonoAndroid\Siaqodb.dll</HintPath>
+    </Reference>
+    <Reference Include="SiaqodbPortable, Version=4.0.2.27, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Siaqodb.5.0.0.4\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -233,475 +248,102 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Insights, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Xamarin.Insights.1.10.4.112\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Insights.1.10.5\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
-    <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
-    <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
-    <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
-    <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
-    <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
-    <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
-    <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
-    <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
-    <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
-    <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
-    <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
-    <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
-    <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
-    <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
-    <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
-    <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
-    <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
-    <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
-    <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
-    <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
-    <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
-    <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
-    <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />
-    <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
-    <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
-    <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
-    <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
-    <Compile Include="CustomBindings\EditTextDateBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
-    <Compile Include="Converters\QuestionStateStyle.cs" />
-    <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
-    <Compile Include="CustomBindings\ButtonGroupTitleBinding.cs" />
-    <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
-    <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
-    <Compile Include="CustomBindings\TextViewHintBinding.cs" />
-    <Compile Include="CustomControls\DynamicImageView.cs" />
-    <Compile Include="CustomControls\EnterTimeView.cs" />
-    <Compile Include="CustomControls\FlowLayout.cs" />
-    <Compile Include="CustomControls\HttpImageView.cs" />
-    <Compile Include="CustomControls\IMvxRecyclerViewAdapter.cs" />
-    <Compile Include="CustomControls\IMvxRecyclerViewViewHolder.cs" />
-    <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
-    <Compile Include="CustomControls\MvxRecyclerView.cs" />
-    <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
-    <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
-    <Compile Include="CustomServices\Location\IMvxLocationReceiver.cs" />
-    <Compile Include="CustomServices\Location\IPlayConnectionCallbacksReceiver.cs" />
-    <Compile Include="CustomServices\Location\IPlayConnectionFailedReceiver.cs" />
-    <Compile Include="CustomServices\Location\MvxLocationListener.cs" />
-    <Compile Include="CustomServices\Location\PlayConnectionCallbacksListener.cs" />
-    <Compile Include="CustomServices\Location\PlayConnectionFailedListener.cs" />
-    <Compile Include="CustomServices\Location\PlayServicesLocationWatcher.cs" />
+    <Compile Include="Infrastructure\Internals\FriendlyErrorMessageService.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\ITesterNetworkService.cs" />
+    <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
+    <Compile Include="Infrastructure\Internals\Security\TesterUserIdentity.cs" />
+    <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
+    <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
+    <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
+    <Compile Include="Infrastructure\Internals\Json\NewtonJsonSerializer.cs" />
+    <Compile Include="Infrastructure\Internals\Log\XamarinInsightsLogger.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\TesterNetworkService.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\RestExtensions.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\RestMessageHandler.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\RestService.cs" />
+    <Compile Include="Infrastructure\Internals\Storage\SiaqodbPlainStorage.cs" />
+    <Compile Include="Infrastructure\ITesterSettings.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Ninject\ApplicationModule.cs" />
-    <Compile Include="Ninject\DataCollectionModule.cs" />
-    <Compile Include="Ninject\ModuleExtensions.cs" />
+    <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
+    <Compile Include="Ninject\TesterUIModule.cs" />
     <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
-    <Compile Include="Ninject\NinjectModuleAdapter.cs" />
-    <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
-    <Compile Include="Ninject\PlainStorageInfrastructureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Activities\BaseActivity.cs" />
-    <Compile Include="Activities\PrefsActivity.cs" />
-    <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Activities\BaseMvxActivity.cs" />
-    <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="ValueCombiners\NotValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\sidebar_row.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\layout\interview_question_gps.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_group_navigation.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\Attrs.xml" />
     <AndroidResource Include="Resources\values\strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel_item.axml">
+    <AndroidResource Include="Resources\drawable\loginLogo.png" />
+    <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\values-ru\strings.xml">
+    <AndroidResource Include="Resources\menu\interview.xml" />
+    <AndroidResource Include="Resources\menu\dashboard.xml" />
+    <AndroidResource Include="Resources\menu\login.xml" />
+    <AndroidResource Include="Resources\values\settings.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\sidebar_row.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
-    <AndroidResource Include="Resources\values\fonts.xml" />
-    <AndroidResource Include="Resources\values-v21\fonts.xml" />
-    <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml">
+    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values\styles-dashboard.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
-    <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
+    <AndroidResource Include="Resources\values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_input_button_answered.xml" />
-    <AndroidResource Include="Resources\drawable\question_input_button_unpressed_answered.xml" />
-    <AndroidResource Include="Resources\drawable\question_input_button_pressed_answered.xml" />
-    <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />
-    <AndroidResource Include="Resources\drawable\question_option_background_answered.xml">
+    <AndroidResource Include="Resources\values\colors.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\sidebar_button.xml" />
-    <AndroidResource Include="Resources\drawable\sidebar_button_bg_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\sidebar_button_bg.xml" />
-    <AndroidResource Include="Resources\drawable-v21\sidebar_button.xml" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <AndroidResource Include="Resources\values\MvxBindingAttributes.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\styles.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-v21\styles.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\dashboard.xml" />
-    <AndroidResource Include="Resources\values\colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_edit_text_holo_light.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\values\styles-interview.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_pressed_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_disabled_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_disabled_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_pressed_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_disabled_focused_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_disabled_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_focused_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_normal_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_pressed_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_pressed_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_disabled_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_disabled_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_focused_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_pressed_holo_light.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_activated_holo.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_focused_holo.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_longpressed_holo.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_pressed_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_selector_disabled_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progress_bg_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progress_primary_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progress_secondary_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo1.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo2.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo3.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo4.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo5.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo6.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo7.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo8.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_disabled_holo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_focused_holo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_normal_holo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_pressed_holo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_primary_holo.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_secondary_holo.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_track_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_default_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_disabled_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_focused_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_pressed_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_left.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_middle.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_right.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_activated_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_default_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_focused_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_focused_holo_light.9.png" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_item_background_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_background_transition_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_progress_horizontal_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_progress_indeterminate_horizontal_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_control_selector_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_progress_horizontal_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
-    <AndroidResource Include="Resources\drawable\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
-    <AndroidResource Include="Resources\drawable\question_option_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_option_text_color.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background_disabled.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background_enabled.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\color\question_title_text.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\styles-interview-question.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_background_invalid.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
-    <AndroidResource Include="Resources\drawable\media_question_white_border.xml" />
-    <AndroidResource Include="Resources\drawable\question_background_answered.xml" />
-    <AndroidResource Include="Resources\drawable\question_background_nonanswered.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_text_question.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\styles-interview-group.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\group_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-large\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-small\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-large\dimensions-interview.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-small\dimensions-interview.xml" />
-    <AndroidResource Include="Resources\drawable\group_button_background.xml" />
-    <AndroidResource Include="Resources\values\dimensions-interview.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\group_started.xml" />
-    <AndroidResource Include="Resources\drawable\group_started_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\group_started_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable\question_save_answer_progress_bar.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_save_answer_progress_bar_states.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate2.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate3.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate4.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate5.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate6.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate7.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate8.png" />
-    <AndroidResource Include="Resources\drawable\question_text_question_invalid.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_text_question_nonanswered.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
-    <AndroidResource Include="Resources\xml\preferences.xml" />
-    <AndroidResource Include="Resources\menu\login.xml" />
-    <AndroidResource Include="Resources\drawable\group_completed.xml" />
-    <AndroidResource Include="Resources\drawable\group_completed_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\group_completed_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable\group_with_invalid_answers.xml" />
-    <AndroidResource Include="Resources\drawable\group_with_invalid_answers_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\group_with_invalid_answers_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable-v21\group_completed.xml" />
-    <AndroidResource Include="Resources\drawable-v21\group_started.xml" />
-    <AndroidResource Include="Resources\drawable-v21\group_with_invalid_answers.xml" />
-    <AndroidResource Include="Resources\drawable\group_disabled.xml" />
-    <AndroidResource Include="Resources\drawable\question_input_button.xml" />
-    <AndroidResource Include="Resources\drawable\question_input_button_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\question_input_button_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
-    <AndroidResource Include="Resources\drawable\delete_button.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_list_item_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_list_item_editor_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_combobox_popup_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\question_input_button_disabled.xml" />
-    <AndroidResource Include="Resources\drawable\interview_section_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\interview_section_background_selected.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\default_input_button.xml" />
-    <AndroidResource Include="Resources\drawable\default_input_button_disabled.xml" />
-    <AndroidResource Include="Resources\drawable\default_input_button_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\default_input_button_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\login.axml" />
+    <AndroidResource Include="Resources\layout\splash.axml" />
     <AndroidResource Include="Resources\layout\dashboard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\questionnaire_list_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\prefilled_questions.axml" />
-    <AndroidResource Include="Resources\layout\interview_question_text.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel_item_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_prefilled_question_template.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_static_text.axml" />
-    <AndroidResource Include="Resources\layout\interview_question_single_option_item.axml" />
-    <AndroidResource Include="Resources\layout\interview_question_single_option.axml" />
-    <AndroidResource Include="Resources\layout\interview_question__title.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question__errors.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question__comments.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_multi_option.axml" />
-    <AndroidResource Include="Resources\layout\interview_question_multi_option_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_integer.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_real.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question__instructions.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_qrbarcode.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_datetime.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_group.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_breadcrumb_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_multimedia.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_text_list.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml" />
-    <AndroidResource Include="Resources\layout\prefilled_questions_start_button.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_filtered_single_option.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_filtered_single_option_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_cascading_single_option.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_left_side_panel_item_section.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_disabled_question.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_disabled_group.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -713,10 +355,6 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Android\WB.Core.Infrastructure.Android.csproj">
-      <Project>{C6B1BA38-E58E-4E3D-BA59-5289FA10CCBB}</Project>
-      <Name>WB.Core.Infrastructure.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -734,6 +372,10 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
+      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
+      <Name>WB.Core.SharedKernels.Enumerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{b73e686b-a06b-4fd5-9baf-b321a0d33dbd}</Project>
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
@@ -742,11 +384,16 @@
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Shared\Enumerator\WB.Infrastructure.Shared.Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
+      <Project>{E41DEB5C-2AD6-463F-9F76-10299FC2D9D1}</Project>
+      <Name>WB.Infrastructure.Shared.Enumerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
+      <Project>{5daa7eaf-9a68-4302-ae74-ef0daa0bd169}</Project>
+      <Name>WB.UI.Shared.Enumerator</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\drawable-hdpi\" />
-    <Folder Include="Resources\drawable-mdpi\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -755,8 +402,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\Xamarin.Insights.1.10.5\build\MonoAndroid10\Xamarin.Insights.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Xamarin.Insights.1.10.5\build\MonoAndroid10\Xamarin.Insights.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\..\packages\Xamarin.Insights.1.10.5\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\..\..\..\packages\Xamarin.Insights.1.10.5\build\MonoAndroid10\Xamarin.Insights.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

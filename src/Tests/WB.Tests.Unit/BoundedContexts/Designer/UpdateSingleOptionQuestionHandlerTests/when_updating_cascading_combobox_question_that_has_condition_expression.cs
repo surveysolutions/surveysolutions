@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 title: "title",
                 variableName: "cascade_child",
                 variableLabel: null,
-                isMandatory: true,
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "not empty condition",

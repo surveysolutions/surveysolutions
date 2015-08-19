@@ -42,7 +42,7 @@ namespace WB.UI.Designer
                         x.Inject<IMembershipWebServiceUser>()))
                 .InSingletonScope();
 
-            this.Bind<IRecipientNotifier>().To<MailNotifier>().InSingletonScope();
+            this.Bind<IRecipientNotifier>().To<MailNotifier>();
         }
     }
 }

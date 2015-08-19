@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             eventBus = Create.LiteEventBus();
         };
 
-        private Because of = () =>
-            exception = Catch.Exception(() => eventBus.PublishUncommitedEventsFromAggregateRoot(aggregateRoot, null));
+        Because of = () =>
+            exception = Catch.Exception(() => eventBus.PublishUncommittedEvents(aggregateRoot));
 
         It should_nothing_happen_including_exceptions = () =>
             exception.ShouldBeNull();

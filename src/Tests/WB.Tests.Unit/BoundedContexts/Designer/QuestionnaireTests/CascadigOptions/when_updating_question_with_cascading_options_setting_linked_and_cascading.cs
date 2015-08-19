@@ -42,7 +42,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             "var",
             null,
             false,
-            false,
             QuestionScope.Interviewer,
             null,
             null,

@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 List<LocalInterviewFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                     this.plainStorage.Query(_ => _
                         .Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed)
-                        .OrderByDescending(x => x.Timestamp)
+                        .OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId)
                         .ToList()));
 
                 this.headquartersPullContext.PushMessage(string.Format(Resources.InterviewsSynchronizer.SynchronizingInterviewsForSupervisor0EventsCount1Format, localSupervisor, events.Count()));
@@ -372,7 +372,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void StoreEventsToLocalStorage()
         {
-            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
+            var lastStoredEntry =
+                this.plainStorage.Query(
+                    _ =>
+                        _.OrderByDescending(x => x.Timestamp)
+                            .ThenBy(x => x.EntryId)
+                            .Select(x => x.EntryId)
+                            .FirstOrDefault());
 
             IEnumerable<AtomFeedEntry<LocalInterviewFeedEntry>> remoteEvents = 
                 this.feedReader
