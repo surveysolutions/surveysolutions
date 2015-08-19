@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure.Implementation.Storage
 {
-    public class InMemoryCachedSnapshotStore : ISnapshotStore
+    public class InMemoryCachedSnapshotStore : ISnapshotStore, IWriteSideCleaner
     {
         private readonly int Capacity = 200;
 
@@ -13,6 +14,10 @@ namespace WB.Core.Infrastructure.Implementation.Storage
         private readonly LinkedList<Guid> list = new LinkedList<Guid>();
         private readonly object Lock = new object();
 
+        public InMemoryCachedSnapshotStore(IWriteSideCleanerRegistry writeSideCleanerRegistry)
+        {
+            writeSideCleanerRegistry.Register(this);
+        }
 
         public void SaveShapshot(Snapshot snapshot)
         {
@@ -55,6 +60,15 @@ namespace WB.Core.Infrastructure.Implementation.Storage
             return result.Version > maxVersion 
                 ? null 
                 : result;
+        }
+
+        public void Clean(Guid aggregateId)
+        {
+            lock (Lock)
+            {
+                snapshots.Remove(aggregateId);
+                list.Remove(aggregateId);
+            }
         }
     }
 }
