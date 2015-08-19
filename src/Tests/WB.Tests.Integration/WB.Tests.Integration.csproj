@@ -172,7 +172,6 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_off_cascading.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_on_cascading.cs" />

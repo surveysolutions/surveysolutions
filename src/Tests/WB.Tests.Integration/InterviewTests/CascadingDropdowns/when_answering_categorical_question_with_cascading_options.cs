@@ -97,9 +97,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         It should_not_enable_child_question_because_it_was_already_enabled = () =>
            results.WasChildCascadingEnabled.ShouldBeFalse();
 
-        It should_invalidate_child_question = () =>
-           results.WasChildCascadingInvalid.ShouldBeTrue();
-
+        
         It should_disable_grandchild_question = () =>
            results.WasGrandChildAnswerDiasbled.ShouldBeTrue();
 
