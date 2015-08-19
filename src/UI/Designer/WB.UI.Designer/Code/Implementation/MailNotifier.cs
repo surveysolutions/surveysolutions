@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Mailers;
@@ -11,20 +12,23 @@ namespace WB.UI.Designer.Code.Implementation
 {
     public class MailNotifier : IRecipientNotifier
     {
-        public MailNotifier(ISystemMailer mailer, ILogger logger)
+        public MailNotifier(ILogger logger)
         {
-            this.mailer = mailer;
             this.logger = logger;
         }
 
-        private readonly ISystemMailer mailer;
+        private ISystemMailer Mailer
+        {
+            get { return ServiceLocator.Current.GetInstance<ISystemMailer>(); }
+        }
+
         private readonly ILogger logger;
         
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType, string email, string userName, Guid questionnaireId, 
             string questionnaireTitle, ShareType shareType, string actionPersonEmail)
         {
-            var message = this.mailer.GetShareChangeNotificationEmail(
-                                new SharingNotificationModel()
+            var message = this.Mailer.GetShareChangeNotificationEmail(
+                                new SharingNotificationModel
                                 {
                                     ShareChangeType = shareChangeType,
                                     Email = email.ToWBEmailAddress(),
@@ -40,8 +44,8 @@ namespace WB.UI.Designer.Code.Implementation
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, Guid questionnaireId, string questionnaireTitle,
             ShareType shareType, string actionPersonEmail, string sharedWithPersonEmail)
         {
-            var message = this.mailer.GetOwnerShareChangeNotificationEmail(
-                                new SharingNotificationModel()
+            var message = this.Mailer.GetOwnerShareChangeNotificationEmail(
+                                new SharingNotificationModel
                                 {
                                     ShareChangeType = shareChangeType,
                                     Email = email.ToWBEmailAddress(),
