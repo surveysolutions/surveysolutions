@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IEnumerable<LocalQuestionnaireFeedEntry> events = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                 this.plainStorage.Query(_ => _
                     .Where(x => !x.Processed)
-                    .OrderByDescending(x => x.Timestamp)
+                    .OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId)
                     .ToList()));
 
             this.headquartersPullContext.PushMessage(string.Format("Synchronizing questionnaires. Events count: {0}", events.Count()));
