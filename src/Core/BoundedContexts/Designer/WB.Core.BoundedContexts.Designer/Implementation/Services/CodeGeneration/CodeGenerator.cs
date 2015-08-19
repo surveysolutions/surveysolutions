@@ -545,9 +545,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             var expressionToDisableChildThatHasNoOptionsForChosenParent = !parentOptionsThatHaveNoChildOptions.Any()
                 ? string.Empty
-                : string.Join("", parentOptionsThatHaveNoChildOptions.Select(x => string.Format(" && {0}!={1}m", parentQuestion.StataExportCaption, x)));
+                : GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(parentOptionsThatHaveNoChildOptions, parentQuestion.StataExportCaption);
 
             return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
+        }
+
+        static string GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(IEnumerable<string> parentOptionsThatHaveNoChildOptions, string stataExportCaption)
+        {
+            var joinedParentOptions = string.Join(",", parentOptionsThatHaveNoChildOptions.Select(x => string.Format("{0}", x)));
+            return string.Format(@" && !(new List<decimal?>(){{ {0} }}.Contains({1}))", joinedParentOptions, stataExportCaption);
         }
 
         private string GenerateQuestionTypeName(IQuestion question)
