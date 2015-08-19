@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private static Version expressionsEngineVersion = new Version(8, 0, 0);
+        private static readonly Version ExpressionsEngineVersion = new Version(9, 0, 0);
         private static Func<bool> isDebugMode;
         private static Version applicationBuildVersion;
 
@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         public Version GetSupportedQuestionnaireVersion()
         {
-            return expressionsEngineVersion;
+            return ExpressionsEngineVersion;
         }
 
         public int? GetApplicationBuildNumber()

@@ -13,7 +13,7 @@ namespace WB.UI.Tester.Activities
         private static int tapTimes = 0;
         private Preference devSettingsCategory;
 
-        const string designerEndpointKey = "DesignerEndpointV8";
+        private const string designerEndpointKey = "DesignerEndpointV9";
 
         protected override void OnCreate(Bundle bundle)
         {
