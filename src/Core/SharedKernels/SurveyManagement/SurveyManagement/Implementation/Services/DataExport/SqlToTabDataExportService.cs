@@ -70,7 +70,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string targetFolder)
         {
-            var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var structure = 
+                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                 questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
             if (structure == null)
                 return;
@@ -163,7 +165,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             string currentDataInfo = string.Empty;
             try
             {
-                var structure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+                var structure = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                    questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
                 if (structure == null)
                     return new string[0];
