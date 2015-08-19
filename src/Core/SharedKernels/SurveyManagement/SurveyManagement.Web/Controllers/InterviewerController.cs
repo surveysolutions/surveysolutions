@@ -16,6 +16,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [ValidateInput(false)]
     public class InterviewerController : TeamController
     {
         public InterviewerController(ICommandService commandService, 

@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 ParentGroupId = parentGroupId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     title: "title",
                     variableName: "var",
                 variableLabel: null,
-                    isMandatory: false,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: null,
                     validationExpression: null,

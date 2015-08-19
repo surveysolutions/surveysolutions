@@ -46,7 +46,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     title: title,
                     variableName: variableName,
                     variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -77,7 +76,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static Guid linkedToQuestionId = Guid.Parse("33333333333333333333333333333333");
         private static string variableName = "single_question";
         private static bool isPreFilled = false;
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;

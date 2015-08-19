@@ -1,14 +1,27 @@
-﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsibles, users, commandExecutionUrl) {
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 
-    self.Assign = function (user) {
+    self.Users = users;
+    self.AssignTo = ko.observable();
+
+    self.CanAssignTo = ko.computed(function() {
+        return !(self.IsNothingSelected && _.isUndefined(self.AssignTo()));
+    });
+
+    self.Assign = function () {
         self.sendCommandAfterFilterAndConfirm(
             "AssignInterviewerCommand",
-            function (item) { return { InterviewerId: user.UserId, InterviewId: item.InterviewId }},
+            function (item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId }},
             function (item) { return item.CanBeReassigned(); },
             "#confirm-assign-template",
-            "#confirm-continue-message-template"
+            "#confirm-continue-message-template",
+            function() {
+                self.AssignTo(undefined);
+            },
+            function() {
+                self.AssignTo(undefined);
+            }
         );
     };
 

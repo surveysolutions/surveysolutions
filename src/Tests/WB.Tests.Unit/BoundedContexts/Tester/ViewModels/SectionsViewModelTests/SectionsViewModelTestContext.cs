@@ -4,11 +4,13 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
@@ -27,8 +29,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 Create.LiteEventRegistry(),
-                sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory(),
-                Stub.MvxMainThreadDispatcher());
+                Mock.Of<IMvxMessenger>(),
+                sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory());
         }
 
 
@@ -46,8 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
                     questionnaireRepository.Object,
                     Create.SubstitutionService(),
                     Create.LiteEventRegistry(),
-                    Stub.MvxMainThreadDispatcher(),
-                    Mock.Of<ISideBarSectionViewModelsFactory>(),
+                    Stub.SideBarSectionViewModelsFactory(),
                     Mock.Of<IMvxMessenger>());
                 barSectionViewModel.NavigationState = Create.NavigationState(); 
                 return barSectionViewModel;
@@ -56,6 +57,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
             var serviceLocatorMock = new Mock<IServiceLocator>();
             serviceLocatorMock.Setup(x => x.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
+
+            serviceLocatorMock.Setup(x => x.GetInstance<GroupStateViewModel>())
+                .Returns(Mock.Of<GroupStateViewModel>());
+
 
             var sideBarSectionViewModelsFactory =  new SideBarSectionViewModelFactory(serviceLocatorMock.Object);
            

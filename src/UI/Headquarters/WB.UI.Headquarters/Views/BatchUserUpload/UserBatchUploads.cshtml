@@ -1,0 +1,79 @@
+﻿@using System.Linq
+@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@using WB.Core.GenericSubdomains.Portable
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@model WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto.UserPreloadingProcess[]
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
+}
+
+<div class="row-fluid">
+    <h3>@BatchUpload.UserBatchUploads @Html.ActionLink(BatchUpload.UploadNewFile, "NewUserBatchUpload", null, new { @class = "btn btn-default btn-primary pull-right" })</h3>
+    <br />
+    <div>
+        <table class="table table-striped table-bordered table-condensed table-break-words">
+            <thead>
+                <tr>
+                    <th>@BatchUpload.FileName</th>
+                    <th>@BatchUpload.FileSize</th>
+                    <th>@BatchUpload.UploadDate</th>
+                    <th>@BatchUpload.LastUpdateDate</th>
+                    <th>@BatchUpload.Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var userPreloadingProcess in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                    var actionMethodName = "ImportUserDetails";
+                    switch (userPreloadingProcess.State)
+                    {
+                        case UserPrelodingState.Uploaded:
+                            actionMethodName = "ImportUserDetails";
+                            break;
+                        case UserPrelodingState.ReadyForValidation:
+                        case UserPrelodingState.Validating:
+                        case UserPrelodingState.Validated:
+                            actionMethodName = "UserPreloadigVerificationDetails";
+                            break;
+                        case UserPrelodingState.ReadyForUserCreation:
+                        case UserPrelodingState.CreatingUsers:
+                        case UserPrelodingState.Finished:
+                        case UserPrelodingState.FinishedWithError:
+                            actionMethodName = "UserCreationProcessDetails";
+                            break;
+                    }
+                            }
+                            @Html.ActionLink(userPreloadingProcess.FileName, actionMethodName, new { id = userPreloadingProcess.UserPreloadingProcessId }, null)
+                        </td>
+                        <td>@FileSizeUtils.SizeSuffix(userPreloadingProcess.FileSize)</td>
+                        <td>@TimeZoneInfo.ConvertTimeFromUtc(userPreloadingProcess.UploadDate, TimeZoneInfo.Local)</td>
+                        <td>@TimeZoneInfo.ConvertTimeFromUtc(userPreloadingProcess.LastUpdateDate, TimeZoneInfo.Local)</td>
+                        <td>@BatchUpload.ResourceManager.GetString(userPreloadingProcess.State.ToString())</td>
+                        <td>
+                            @if (!new[] { UserPrelodingState.CreatingUsers, UserPrelodingState.Validating }.Contains(userPreloadingProcess.State))
+                            {
+                                using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
+                                    <input type="submit" class="btn btn-danger pull-right" name="Submit" value="@BatchUpload.Delete" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

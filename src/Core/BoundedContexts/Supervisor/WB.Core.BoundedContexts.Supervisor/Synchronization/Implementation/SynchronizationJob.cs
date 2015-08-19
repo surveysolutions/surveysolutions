@@ -1,5 +1,6 @@
 using System;
 using Quartz;
+using WB.Core.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -14,7 +15,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Execute(IJobExecutionContext context)
         {
-            ISynchronizer synchronizer = this.synchronizerFactory.Invoke(); // we want synchronizer be transient but job is singleton, so we use factory in-between
+            ISynchronizer synchronizer = this.synchronizerFactory.Invoke();
+            // we want synchronizer be transient but job is singleton, so we use factory in-between
 
             synchronizer.Pull();
         }

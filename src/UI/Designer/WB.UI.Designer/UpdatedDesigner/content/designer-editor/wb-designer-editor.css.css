@@ -9,7 +9,7 @@
 .btn-group-lg > .btn {
   padding: 10px 16px;
   font-size: 18px;
-  line-height: 1.33;
+  line-height: 1.3333333;
   border-radius: 6px;
 }
 .btn-group-sm > .btn {
@@ -200,6 +200,7 @@
   margin-left: 3px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title {
+  margin-right: 395px;
   margin-top: 14px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title {
@@ -210,7 +211,6 @@
   padding-right: 50px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title .questionnarie-title-text {
-  max-width: 1000px;
   max-height: 25px;
   overflow: hidden;
   display: inline-block;

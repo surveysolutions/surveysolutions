@@ -35,7 +35,7 @@
                 $scope.activeQuestion.mask = question.mask;
                 $scope.activeQuestion.questionTypeOptions = question.questionTypeOptions;
                 $scope.activeQuestion.title = question.title;
-                $scope.activeQuestion.isMandatory = question.isMandatory;
+                
                 $scope.activeQuestion.enablementCondition = question.enablementCondition;
                 $scope.activeQuestion.validationExpression = question.validationExpression;
                 $scope.activeQuestion.validationMessage = question.validationMessage;

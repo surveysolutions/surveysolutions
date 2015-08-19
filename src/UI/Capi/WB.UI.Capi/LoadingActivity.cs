@@ -6,27 +6,35 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Cirrious.MvvmCross.Droid.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Capi.Controls;
-using WB.UI.Capi.Implementations.Activities;
+using WB.UI.Capi.ViewModel;
 using WB.UI.Shared.Android.Helpers;
-using Environment = System.Environment;
 
 namespace WB.UI.Capi
 {
     [Activity(Label = "Loading", NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoadingActivity : Activity
+    public class LoadingActivity : MvxActivity
     {
         private CancellationTokenSource cancellationToken;
         private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
         protected ProgressDialog progressDialog;
+
+        private static IStatefulInterviewRepository InterviewRepository
+        {
+            get { return ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>(); }
+        }
 
         protected TabletInformationReportButton btnSendTabletInfo
         {
@@ -51,6 +59,11 @@ namespace WB.UI.Capi
         private IChangeLogManipulator LogManipulator
         {
             get { return ServiceLocator.Current.GetInstance<IChangeLogManipulator>(); }
+        }
+
+        private IViewModelNavigationService NavigationService
+        {
+            get { return ServiceLocator.Current.GetInstance<IViewModelNavigationService>(); }
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -122,7 +135,7 @@ namespace WB.UI.Capi
 
                 if (!string.IsNullOrEmpty(additionalMessage))
                 {
-                    this.tvMessage.Text += Environment.NewLine +
+                    this.tvMessage.Text += System.Environment.NewLine +
                         string.Format(Resources.GetText(Resource.String.DetailsFormat), additionalMessage);
                 }
             });
@@ -148,10 +161,7 @@ namespace WB.UI.Capi
                     return;
                 }
 
-                var intent = new Intent(this, typeof(CreateInterviewActivity));
-                intent.PutExtra("publicKey", interviewId.ToString());
-                intent.AddFlags(ActivityFlags.NoHistory);
-                this.StartActivity(intent);
+                NavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
             }
             catch (Exception e)
             {
@@ -176,8 +186,7 @@ namespace WB.UI.Capi
                     return;
                 }
 
-                InterviewViewModel interview = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                    new QuestionnaireScreenInput(interviewId));
+                IStatefulInterview interview = InterviewRepository.Get(interviewId.FormatGuid());
 
                 if (ct.IsCancellationRequested)
                 {
@@ -206,18 +215,14 @@ namespace WB.UI.Capi
                 return;
             }
 
+            
             if (createdOnClient)
             {
-                var intent = new Intent(this, typeof (CreateInterviewActivity));
-                intent.PutExtra("publicKey", interviewId.ToString());
-                intent.AddFlags(ActivityFlags.NoHistory);
-                this.StartActivity(intent);
+                NavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
             }
             else
             {
-                var intent = new Intent(this, typeof (DataCollectionDetailsActivity));
-                intent.PutExtra("publicKey", interviewId.ToString());
-                this.StartActivity(intent);
+                NavigationService.NavigateToInterview(interviewId.FormatGuid());
             }
         }
 

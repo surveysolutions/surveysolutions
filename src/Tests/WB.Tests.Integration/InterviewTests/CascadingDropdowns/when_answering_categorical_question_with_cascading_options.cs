@@ -40,7 +40,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         Create.Option(text: "parent option 2", value: "2")
                     }),
                     Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
-                        isMandatory: true,
                         options: new List<Answer>
                         {
                             Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
@@ -98,9 +97,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         It should_not_enable_child_question_because_it_was_already_enabled = () =>
            results.WasChildCascadingEnabled.ShouldBeFalse();
 
-        It should_invalidate_child_question_because_it_is_mandatory = () =>
-           results.WasChildCascadingInvalid.ShouldBeTrue();
-
+        
         It should_disable_grandchild_question = () =>
            results.WasGrandChildAnswerDiasbled.ShouldBeTrue();
 

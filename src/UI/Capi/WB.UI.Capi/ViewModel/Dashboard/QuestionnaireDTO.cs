@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Capi.Implementations.DenormalizerStorage;
 
 namespace WB.UI.Capi.ViewModel.Dashboard
 {

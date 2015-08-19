@@ -36,5 +36,8 @@ namespace WB.Core.Synchronization.SyncStorage
         public virtual string ItemType { get; protected set; }
         public virtual int ContentSize { get; protected set; }
         public virtual int MetaInfoSize { get; protected set; }
+
+        public virtual string Content { get; set; }
+        public virtual string Meta { get; set; }
     }
 }

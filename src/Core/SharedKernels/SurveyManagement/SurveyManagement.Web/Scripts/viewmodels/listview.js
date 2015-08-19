@@ -61,19 +61,19 @@
     };
 
     self.filter = function () {
-        if (self.Pager().CurrentPage() == 1) {
-            self.search();
-        } else {
+        if (self.Pager().CurrentPage() !== 1) {
             self.Pager().CurrentPage(1);
         }
+        self.search();
     };
 
+    
     self.mappingOptions = {};
 
     self.search = function() {
         var params = {
             Pager: {
-                Page: 1,
+                Page: self.Pager().CurrentPage(),
                 PageSize: self.Pager().PageSize()
             },
             SortOrder: self.OrderBy(),
@@ -88,6 +88,9 @@
     };
     self.clear = function() {
         self.SearchBy("");
+        if (self.Pager().CurrentPage() !== 1) {
+            self.Pager().CurrentPage(1);
+        }
         self.search();
     };
 

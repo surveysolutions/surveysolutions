@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
+using BatchUploadModel = WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel;
 
 namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
 {

@@ -2,6 +2,7 @@
 using System.IO;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
                 fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>())).Returns(() => fileNamesInDirectory);
 
             return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object,
-                Mock.Of<IReadSideKeyValueStorage<TabletSyncLogByUsers>>(),
+                Mock.Of<IPlainStorageAccessor<TabletSyncLog>>(),
                 Mock.Of<IReadSideRepositoryReader<UserDocument>>());
         }
     }

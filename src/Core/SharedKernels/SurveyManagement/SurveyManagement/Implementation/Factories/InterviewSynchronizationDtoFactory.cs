@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             List<RosterSynchronizationDto> currentRosterInstances = propagatedGroupInstanceCounts.ContainsKey(groupKey) ? propagatedGroupInstanceCounts[groupKey].ToList() : new List<RosterSynchronizationDto>();
 
             currentRosterInstances.Add(new RosterSynchronizationDto(groupKey.Id,
-                groupKey.InterviewItemPropagationVector, rosterInstanceId, sortIndex, rosterTitle));
+                groupKey.InterviewItemRosterVector, rosterInstanceId, sortIndex, rosterTitle));
 
             propagatedGroupInstanceCounts[groupKey] = currentRosterInstances.ToArray();
         }

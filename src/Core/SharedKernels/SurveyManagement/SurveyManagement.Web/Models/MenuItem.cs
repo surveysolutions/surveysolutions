@@ -19,6 +19,7 @@
         Observers,
         NumberOfCompletedInterviews,
         DataExport,
-        SpeedOfCompletingInterviews
+        SpeedOfCompletingInterviews,
+        UserBatchUpload
     }
 }

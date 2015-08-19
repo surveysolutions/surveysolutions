@@ -168,4 +168,7 @@
   <data name="Maintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>
   </data>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>Synchronization partially failed. Completed interviews were sent to server, but you won't receive new assignments. Please navigate to android settings -&gt; Apps -&gt; Interviewer and push Clear Data button. Then synchronize from scratch.</value>
+  </data>
 </root>

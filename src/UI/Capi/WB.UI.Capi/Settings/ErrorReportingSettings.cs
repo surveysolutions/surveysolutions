@@ -1,7 +1,6 @@
 using System;
-
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.GenericSubdomains.ErrorReporting.Services;
 
 namespace WB.UI.Capi.Settings
 {

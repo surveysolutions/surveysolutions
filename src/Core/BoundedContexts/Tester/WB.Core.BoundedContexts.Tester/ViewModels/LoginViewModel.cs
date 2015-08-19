@@ -3,9 +3,13 @@ using System.Threading.Tasks;
 
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -15,16 +19,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IDesignerApiService designerApiService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IFriendlyMessageService friendlyMessageService;
+        private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public LoginViewModel(IPrincipal principal, IDesignerApiService designerApiService, IViewModelNavigationService viewModelNavigationService,
-            IUserInteractionService userInteractionService, IFriendlyMessageService friendlyMessageService)
+            IUserInteractionService userInteractionService, IFriendlyErrorMessageService friendlyErrorMessageService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.friendlyMessageService = friendlyMessageService;
+            this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         private bool isInProgress = false;
@@ -64,6 +68,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             IsInProgress = true;
 
+            string errorMessage = null;
+
             try
             {
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
@@ -74,27 +80,26 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
-                string errorMessage;
-
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
                         errorMessage = UIResources.Login_Error_NotFound;
                         break;
                     default:
-                        errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                        errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteractionService.Alert(errorMessage);
-                else 
+                if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
             finally
             {
                 IsInProgress = false;    
             }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         public override void NavigateToPreviousViewModel()

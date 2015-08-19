@@ -7,8 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public Guid Id { set; get; }
         public string VariableName { set; get; }
-        public bool IsMandatory { set; get; }
-
+        
         public string Conditions { set; get; }
         public string Validations { set; get; }
 
@@ -22,7 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string RosterScopeName { set; get; }
 
         public string GeneratedValidationsMethodName { set; get; }
-        public string GeneratedMandatoryMethodName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
     }
 }

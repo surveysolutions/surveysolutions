@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Web.WebSockets;
 using Machine.Specifications;
 using NSubstitute;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.SectionsViewModelTests
 {

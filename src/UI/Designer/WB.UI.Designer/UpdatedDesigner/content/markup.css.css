@@ -7612,6 +7612,7 @@ textarea#edit-group-description {
   margin-left: 3px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title {
+  margin-right: 395px;
   margin-top: 14px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title {
@@ -7622,7 +7623,6 @@ textarea#edit-group-description {
   padding-right: 50px;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title .questionnarie-title-text {
-  max-width: 1000px;
   max-height: 25px;
   overflow: hidden;
   display: inline-block;

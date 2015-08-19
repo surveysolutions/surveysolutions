@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
                 ""type"": ""SingleOption"",
                 ""variableLabel"": null,
                 ""mask"": null,
-                ""isMandatory"": false,
                 ""enablementCondition"":  """",
                 ""validationExpression"":  """",
                 ""validationMessage"":  """",

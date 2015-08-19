@@ -15,7 +15,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NuGetPackageImportStamp>443bd103</NuGetPackageImportStamp>
@@ -43,7 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\..\..\..\ExternalsMonodroid\Ionic.Zip.dll</HintPath>
+      <HintPath>..\..\..\..\libs\android\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
@@ -72,12 +72,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.Infrastructure.Files\FileInfrastructureModule.cs">
-      <Link>FileInfrastructureModule.cs</Link>
-    </Compile>
     <Compile Include="..\WB.Core.Infrastructure.Files\Implementation\FileSystem\ZipArchiveUtils.cs">
       <Link>Implementation\FileSystem\ZipArchiveUtils.cs</Link>
     </Compile>
+    <Compile Include="FileInfrastructureModule.cs" />
     <Compile Include="Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

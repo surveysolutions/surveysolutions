@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                         x.Execute(
                             Moq.It.Is<RegisterPlainQuestionnaire>(
                                 param =>
-                                    param.QuestionnaireId == questionnaireDocument.PublicKey && param.Version == 1 && param.AllowCensusMode == true), null, false),
+                                    param.QuestionnaireId == questionnaireDocument.PublicKey && param.Version == 1 && param.AllowCensusMode == true), null),
                     Times.Once);
 
         It should_store_questionnaire_in_plaine_storage_once =

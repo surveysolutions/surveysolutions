@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
+
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -26,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
+        AnswerType GetAnswerType(Guid questionId);
+
         bool IsQuestionLinked(Guid questionId);
 
         string GetQuestionTitle(Guid questionId);
@@ -48,6 +52,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsCustomValidationDefined(Guid questionId);
 
+        bool IsQuestion(Guid entityId);
+
+        bool IsInterviewierQuestion(Guid questionId);
+
         string GetCustomValidationExpression(Guid questionId);
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
@@ -66,6 +74,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid questionId);
+
         IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
@@ -76,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetRosterLevelForGroup(Guid groupId);
 
-        IEnumerable<Guid> GetAllMandatoryQuestions();
+        int GetRosterLevelForEntity(Guid entityId);
 
         bool IsRosterGroup(Guid groupId);
 
@@ -92,8 +102,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
         
-        bool IsQuestionMandatory(Guid questionId);
-
         bool IsQuestionInteger(Guid questionId);
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
@@ -118,6 +126,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
 
+        IEnumerable<Guid> GetAllSections();
+
         /// <summary>
         /// Gets list of question ids that use question with provided <param name="questionId">questionId</param> as a substitution
         /// </summary>
@@ -129,6 +139,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets first level child questions of a group
         /// </summary>
         ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
+
+        /// <summary>
+        /// Gets first level child entities of a group
+        /// </summary>
+        ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
     }

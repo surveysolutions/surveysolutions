@@ -1,9 +1,6 @@
 @using Main.Core.Entities.SubEntities
+@using WB.UI.Designer.Resources
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-Hello @(String.IsNullOrWhiteSpace(Model.UserName) ? Model.Email : Model.UserName), <br/>
-<br/>
-@(String.IsNullOrWhiteSpace(Model.ActionPersonEmail) ? "user" : Model.ActionPersonEmail) has revoked access for @(String.IsNullOrWhiteSpace(Model.TargetPersonEmail) ? "<user>" : Model.TargetPersonEmail) to your questionnaire: @(String.IsNullOrWhiteSpace(Model.QiestionnaireTitle) ? "unknown" : Model.QiestionnaireTitle)
 
-
-
+@Html.Raw(string.Format(NotificationResources.OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_, @Model.UserCallName, @Model.ActionPersonCallName, @Model.SharedWithPersonEmail, @Model.QuestionnaireDisplayTitle))
