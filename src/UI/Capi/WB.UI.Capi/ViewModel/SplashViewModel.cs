@@ -18,7 +18,7 @@ namespace WB.UI.Capi.ViewModel
 
         public override async void Start()
         {
-            await Task.Delay(3000);
+            await Task.Delay(3500);
 
             if (CapiApplication.Membership.IsLoggedIn)
             {
