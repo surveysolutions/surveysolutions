@@ -9,23 +9,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// New Era of c# conditions
         /// </summary>
         private readonly Version version_5 = new Version(5, 0, 0);
+
         /// <summary>
         /// New service variables which could be used in C# conditions - @rowname, @rowindex, @rowcode, @roster
         /// Custom functions from ZScore( anthropocentric ) and general shortcuts like - InRange, InList ect.
         /// </summary>
         private readonly Version version_6 = new Version(6, 0, 0);
-        /// <summary>
-        /// Functions were extended with IsAnswered function
-        /// </summary>
+
+        /// <summary>Functions were extended with IsAnswered function</summary>
         private readonly Version version_7 = new Version(7, 0, 0);
-        /// <summary>
-        /// Api for new tester, is used new RoslynCompile profile
-        /// </summary>
+
+        /// <summary>API used for first release of new Tester (used new RoslynCompile profile)</summary>
         private readonly Version version_8 = new Version(8, 0, 0);
+        
+        /// <summary>Potatoid release (introduced RosterVector)</summary>
+        private readonly Version version_9 = new Version(9, 0, 0);
 
         public Version GetLatestSupportedVersion()
         {
-            return version_8;
+            return version_9;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)

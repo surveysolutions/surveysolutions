@@ -309,6 +309,10 @@
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
+      <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
+      <Name>WB.UI.Designer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="QuestionnaireTests\" />
