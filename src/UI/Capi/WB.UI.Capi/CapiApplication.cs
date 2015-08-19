@@ -34,6 +34,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
@@ -241,7 +242,7 @@ namespace WB.UI.Capi
             this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();
 
             this.kernel.Load(new AndroidModelModule(basePath,
-                    new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder}, this.kernel.Get<SyncPackageIdsStorage>()),
+                    new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }, this.kernel.Get<IWriteSideCleanerRegistry>(), this.kernel.Get<SyncPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
                 new AndroidDataCollectionSharedKernelModule(basePath: basePath,
                     syncDirectoryName: SynchronizationFolder));

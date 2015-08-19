@@ -7,17 +7,18 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.WriteSide;
 using WB.UI.Capi.Extensions;
 
 namespace WB.UI.Capi.Implementations.Services
 {
-    public class MvvmCrossSqliteEventStore : IEventStore, IBackupable
+    public class MvvmCrossSqliteEventStore : IEventStore, IBackupable, IWriteSideCleaner
     {
         private readonly string folderName;
         private readonly ISQLiteConnectionFactory connectionFactory;
         private readonly object locker = new object();
 
-        public MvvmCrossSqliteEventStore(string folderName)
+        public MvvmCrossSqliteEventStore(string folderName, IWriteSideCleanerRegistry writeSideCleanerRegistry)
         {
             this.folderName = folderName;
 
@@ -28,6 +29,7 @@ namespace WB.UI.Capi.Implementations.Services
 
             PluginLoader.Instance.EnsureLoaded();
             this.connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
+            writeSideCleanerRegistry.Register(this);
         }
 
         private string FullPathToFolder 
@@ -71,12 +73,6 @@ namespace WB.UI.Capi.Implementations.Services
             return new CommittedEventStream(id, events);
         }
 
-        public void CleanStream(Guid id)
-        {
-            var file = Path.Combine(this.FullPathToFolder, id.ToString());
-            if (File.Exists(file)) File.Delete(file);
-        }
-
         public string GetPathToBackupFile()
         {
             return this.FullPathToFolder;
@@ -96,6 +92,12 @@ namespace WB.UI.Capi.Implementations.Services
 
             foreach (var file in Directory.GetFiles(dirWithImages))
                 File.Copy(file, Path.Combine(this.FullPathToFolder, Path.GetFileName(file)));
+        }
+
+        public void Clean(Guid aggregateId)
+        {
+            var file = Path.Combine(this.FullPathToFolder, aggregateId.ToString());
+            if (File.Exists(file)) File.Delete(file);
         }
     }
 }

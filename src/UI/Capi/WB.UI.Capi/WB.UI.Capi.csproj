@@ -382,7 +382,6 @@
     <Compile Include="Settings\RestServiceSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
-    <Compile Include="SnapshotStore\FileBasedSnapshotStore.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />

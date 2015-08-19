@@ -118,14 +118,14 @@ namespace WB.UI.Designer.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
-
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            var snapshottingPolicy = new SimpleSnapshottingPolicy(1);
+            kernel.Bind<ISnapshottingPolicy>().ToConstant(snapshottingPolicy);
+            kernel.Bind<ISnapshotStore>().To<InMemoryCachedSnapshotStore>().InSingletonScope();
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(snapshottingPolicy);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(kernel.Get<ISnapshotStore>());
             CreateAndRegisterEventBus(kernel);
         }
 
