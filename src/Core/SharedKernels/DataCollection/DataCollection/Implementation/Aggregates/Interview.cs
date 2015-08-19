@@ -1748,8 +1748,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SynchronizeInterviewFromHeadquarters(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
         {
-            if(this.Version>0)
-                throw  new InterviewException(string.Format("Interview {0} have been created before", EventSourceId));
+            if (this.Version > 0)
+            {
+                throw  new InterviewException(string.Format("Interview with id {0} already created", EventSourceId));
+            }
 
             this.SetQuestionnaireProperties(interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion);
 
