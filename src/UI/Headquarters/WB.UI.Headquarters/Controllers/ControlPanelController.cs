@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
             try
             {
                 this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-                count = this.GetApprovedInterviewIds().Count();
+                count = this.GetInterviewIdsInCertainStatuses().Count();
             }
             finally
             {
@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers
                 try
                 {
                     this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-                    interviewIds = this.GetApprovedInterviewIds().Skip(processed).Take(pageSize).ToList();
+                    interviewIds = this.GetInterviewIdsInCertainStatuses().Skip(processed).Take(pageSize).ToList();
                 }
                 finally
                 {
@@ -124,11 +124,16 @@ namespace WB.UI.Headquarters.Controllers
             lastReexportMessage += string.Join(Environment.NewLine, notExportedInterviews);
         }
 
-        private IQueryable<Guid> GetApprovedInterviewIds()
+        private IQueryable<Guid> GetInterviewIdsInCertainStatuses()
         {
             return this.interviewSummaries.Query(_ =>
-                _.Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters || x.Status == InterviewStatus.ApprovedBySupervisor)
-                .Select(x => x.InterviewId).ToList()).AsQueryable();
+                _.Where(x 
+                    => x.Status == InterviewStatus.ApprovedByHeadquarters 
+                    || x.Status == InterviewStatus.ApprovedBySupervisor
+                    || x.Status == InterviewStatus.RejectedByHeadquarters
+                    || x.Status == InterviewStatus.RejectedBySupervisor)
+                .OrderBy(x => x.SummaryId)
+                .Select(x => x.InterviewId)).AsQueryable();
         }
 
         public string GetReexportStatus()
