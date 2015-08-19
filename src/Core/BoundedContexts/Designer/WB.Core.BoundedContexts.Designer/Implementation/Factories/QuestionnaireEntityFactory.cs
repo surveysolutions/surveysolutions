@@ -31,7 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.ValidationMessage,
                 data.AnswerOrder,
                 data.Featured,
-                data.Mandatory,
                 data.Capital,
                 data.Instructions,
                 data.Mask,
@@ -130,7 +129,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             string validationMessage,
             Order answerOrder,
             bool featured,
-            bool mandatory,
             bool capital,
             string instructions,
             string mask,
@@ -153,7 +151,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.ValidationMessage = validationMessage;
             question.AnswerOrder = answerOrder;
             question.Featured = featured;
-            question.Mandatory = mandatory;
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;

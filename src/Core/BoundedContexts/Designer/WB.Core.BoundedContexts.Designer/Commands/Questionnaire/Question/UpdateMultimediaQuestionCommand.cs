@@ -6,10 +6,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [Serializable]
     public class UpdateMultimediaQuestionCommand: AbstractUpdateQuestionCommand
     {
-        public UpdateMultimediaQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName, string variableLabel, bool isMandatory,
+        public UpdateMultimediaQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName, string variableLabel, 
             string enablementCondition, string instructions, Guid responsibleId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel) {}
+                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel) {}
     }
 }

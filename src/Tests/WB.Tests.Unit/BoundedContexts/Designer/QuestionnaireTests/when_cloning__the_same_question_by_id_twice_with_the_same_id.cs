@@ -23,7 +23,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionText = "text",
                 VariableLabel = "varlabel",
                 QuestionType = QuestionType.Text,
-                Mandatory = true,
                 Featured = true,
                 QuestionScope = QuestionScope.Interviewer,
                 ConditionExpression = "Conditional",

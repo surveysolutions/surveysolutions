@@ -22,7 +22,6 @@ namespace WB.Tests.Unit
         public static void ShouldContainValues(this QuestionTemplateModel question,
             Guid id,
             string variableName,
-            bool isMandatory,
             string conditions,
             string validations,
             QuestionType questionType,
@@ -32,12 +31,10 @@ namespace WB.Tests.Unit
             string generatedStateName,
             string rosterScopeName,
             string generatedValidationsMethodName,
-            string generatedMandatoryMethodName,
             string generatedConditionsMethodName)
         {
             question.Id.ShouldEqual(id);
             question.VariableName.ShouldEqual(variableName);
-            question.IsMandatory.ShouldEqual(isMandatory);
             question.Conditions.ShouldEqual(conditions);
             question.Validations.ShouldEqual(validations);
             question.QuestionType.ShouldEqual(questionType);
@@ -47,7 +44,6 @@ namespace WB.Tests.Unit
             question.GeneratedStateName.ShouldEqual(generatedStateName);
             question.RosterScopeName.ShouldEqual(rosterScopeName);
             question.GeneratedValidationsMethodName.ShouldEqual(generatedValidationsMethodName);
-            question.GeneratedMandatoryMethodName.ShouldEqual(generatedMandatoryMethodName);
             question.GeneratedConditionsMethodName.ShouldEqual(generatedConditionsMethodName);
         }
 

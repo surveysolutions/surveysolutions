@@ -5,7 +5,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewQuestionView
 
-<tr id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("mandatory", Model.IsMandatory) @css("text-muted", !Model.IsEnabled)">
+<tr id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td class="answer-status">
         <div class="btn btn-xs @css("btn-info", Model.IsFlagged) @css("btn-default", !Model.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
             <i class="glyphicon glyphicon-flag"></i>

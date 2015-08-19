@@ -290,7 +290,6 @@
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Controls\Bindings\HtmlBinding.cs" />
-    <Compile Include="Controls\Bindings\MandatoryValidationMessageBinding.cs" />
     <Compile Include="Controls\Bindings\MvvmBindingWrapper.cs" />
     <Compile Include="Controls\Bindings\VisibilityBinding.cs" />
     <Compile Include="Events\AnswerSavedEventArgs.cs" />

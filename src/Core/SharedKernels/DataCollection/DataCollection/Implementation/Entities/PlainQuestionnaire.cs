@@ -39,7 +39,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
@@ -469,14 +468,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Count(this.IsRosterGroup);
         }
 
-        public IEnumerable<Guid> GetAllMandatoryQuestions()
-        {
-            return
-                from question in this.GetAllQuestions()
-                where question.Mandatory
-                select question.PublicKey;
-        }
-
+        
         public bool IsRosterGroup(Guid groupId)
         {
             IGroup @group = this.GetGroup(groupId);
@@ -583,14 +575,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     FormatQuestionForException(linkedQuestion)));
 
             return linkedQuestion.LinkedToQuestionId.Value;
-        }
-
-        public bool IsQuestionMandatory(Guid questionId)
-        {
-            return false;
-            //IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            //return question.Mandatory;
         }
 
         public bool IsQuestionInteger(Guid questionId)
@@ -777,14 +761,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
-        {
-            if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
-                this.cacheOfUnderlyingMandatoryQuestions[groupId] = this.GetUnderlyingMandatoryQuestionsImpl(groupId);
-
-            return this.cacheOfUnderlyingMandatoryQuestions[groupId];
-        }
-
         public IEnumerable<Guid> GetAllSections()
         {
             return SectionCache;
@@ -848,15 +824,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Where(child => child is Group).Cast<Group>()
                 .Where(group => group.IsRoster)
                 .Select(group => group.PublicKey)
-                .ToList();
-        }
-
-        private IEnumerable<Guid> GetUnderlyingMandatoryQuestionsImpl(Guid groupId)
-        {
-            return this
-                .GetGroupOrThrow(groupId)
-                .Find<IQuestion>(question => question.Mandatory)
-                .Select(question => question.PublicKey)
                 .ToList();
         }
 

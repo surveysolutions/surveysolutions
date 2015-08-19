@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -42,7 +41,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
                     title: titleWithSubstitution,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -69,7 +67,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
         private const string substitutionVariableName = "substitution_var";
         private static string titleWithSubstitution = string.Format("title with substitution to - %{0}%", substitutionVariableName);
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string instructions = "intructions";
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
