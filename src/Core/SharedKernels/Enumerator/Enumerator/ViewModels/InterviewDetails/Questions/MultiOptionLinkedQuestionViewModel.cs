@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (var answer in linkedToQuestionAnswers)
             {
                 BaseQuestionModel linkedToQuestion = questionnaire.Questions[this.linkedToQuestionId];
-                var option = this.BuildOption(interview, linkedToQuestion, answer, thisQuestionAnswers);
+                var option = this.BuildOption(interview,questionnaire, linkedToQuestion, answer, thisQuestionAnswers);
 
                 if (option != null)
                 {
@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return options;
         }
 
-        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IStatefulInterview interview,
+        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IStatefulInterview interview, QuestionnaireModel questionnaire,
             BaseQuestionModel linkedToQuestion,
             BaseInterviewAnswer linkedToAnswer,
             LinkedMultiOptionAnswer linkedMultiOptionAnswer)
@@ -237,7 +237,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return null;
             }
 
-            var title = this.BuildOptionTitle(interview, linkedToQuestion, linkedToAnswer);
+            var title = this.BuildOptionTitle(interview,questionnaire, linkedToQuestion, linkedToAnswer);
 
             var option = new MultiOptionLinkedQuestionOptionViewModel(this)
             {
@@ -255,9 +255,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return option;
         }
 
-        private string BuildOptionTitle(IStatefulInterview interview, BaseQuestionModel linkedToQuestion, BaseInterviewAnswer linkedToAnswer)
+        private string BuildOptionTitle(IStatefulInterview interview, QuestionnaireModel questionnaire, BaseQuestionModel linkedToQuestion, BaseInterviewAnswer linkedToAnswer)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestion, linkedToAnswer);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestion, linkedToAnswer, interview, questionnaire);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 

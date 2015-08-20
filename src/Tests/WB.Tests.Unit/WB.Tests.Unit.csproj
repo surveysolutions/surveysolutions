@@ -417,6 +417,7 @@
     <Compile Include="BoundedContexts\Tester\Aggregates\when_getting_question_answer.cs" />
     <Compile Include="BoundedContexts\Tester\Aggregates\when_restoring_interview_state_from_sync_package.cs" />
     <Compile Include="BoundedContexts\Tester\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
+    <Compile Include="BoundedContexts\Tester\Services\AnswerToStringServiceTests\when_passing_linked_single_option_question.cs" />
     <Compile Include="BoundedContexts\Tester\Services\AnswerToStringServiceTests\when_passing_single_option_question.cs" />
     <Compile Include="BoundedContexts\Tester\Services\AnswerToStringServiceTests\when_passing_filtered_single_option_question.cs" />
     <Compile Include="BoundedContexts\Tester\Services\MaskTextTests\MaskTextTestsContext.cs" />

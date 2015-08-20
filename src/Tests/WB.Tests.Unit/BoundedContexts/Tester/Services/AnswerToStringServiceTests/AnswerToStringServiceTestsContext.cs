@@ -37,5 +37,19 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
             model.Options = options.ToList();
             return model;
         }
+
+        public static LinkedSingleOptionQuestionModel CreateLinkedSingleOptionQuestionModel(Guid sourceOfLinkId)
+        {
+            var model = new LinkedSingleOptionQuestionModel();
+            model.LinkedToQuestionId = sourceOfLinkId;
+            return model;
+        }
+
+        public static LinkedSingleOptionAnswer CreateLinkedSingleOptionAnswer(decimal[] answer)
+        {
+            var model= new LinkedSingleOptionAnswer(Guid.NewGuid(),new decimal[0]);
+            model.SetAnswer(answer);
+            return model;
+        }
     }
 }
