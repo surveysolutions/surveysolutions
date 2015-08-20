@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 BaseQuestionModel substitutedQuestionModel = questionnaire.QuestionsByVariableNames[variable];
 
                 var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionModel.Id, this.questionIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer) : null;
+                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer, interview, questionnaire) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
                     questionTitle, variable, answerString ?? this.substitutionService.DefaultSubstitutionText);

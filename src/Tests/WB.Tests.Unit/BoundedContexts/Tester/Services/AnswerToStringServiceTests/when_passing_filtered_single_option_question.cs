@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
         };
 
         Because of = () =>
-            result = answerToStringService.AnswerToUIString(filteredSingleOptionQuestionModel, singleOptionAnswer);
+            result = answerToStringService.AnswerToUIString(filteredSingleOptionQuestionModel, singleOptionAnswer,null,null);
 
         It should_return_3 = () =>
             result.ShouldEqual("3");
