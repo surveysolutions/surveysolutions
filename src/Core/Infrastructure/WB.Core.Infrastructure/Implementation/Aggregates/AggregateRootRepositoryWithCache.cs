@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,16 +8,20 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal class AggregateRootRepositoryWithCache : AggregateRootRepository
+    internal class AggregateRootRepositoryWithCache : AggregateRootRepository, IWriteSideCleaner
     {
         static readonly ConcurrentDictionary<Type, IAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IAggregateRoot>();
 
         public AggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore,
-            IDomainRepository repository)
-            : base(eventStore, snapshotStore, repository){}
+            IDomainRepository repository, IWriteSideCleanerRegistry writeSideCleanerRegistry)
+            : base(eventStore, snapshotStore, repository)
+        {
+            writeSideCleanerRegistry.Register(this);
+        }
 
 
         public override IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
@@ -35,6 +40,16 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             }
 
             return aggregateRoot;
+        }
+
+        public void Clean(Guid aggregateId)
+        {
+            var aggregatesToDeleteFromCache = memoryCache.Where(a => a.Value.EventSourceId == aggregateId).Select(a => a.Key);
+            foreach (var type in aggregatesToDeleteFromCache)
+            {
+                IAggregateRoot root;
+                memoryCache.TryRemove(type, out root);
+            }
         }
     }
 }
