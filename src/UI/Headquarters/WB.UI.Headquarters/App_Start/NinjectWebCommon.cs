@@ -126,8 +126,6 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
-
             var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly};
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
@@ -135,12 +133,7 @@ namespace WB.UI.Headquarters
                 MappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
             };
 
-            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
-
-            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-
-          
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
