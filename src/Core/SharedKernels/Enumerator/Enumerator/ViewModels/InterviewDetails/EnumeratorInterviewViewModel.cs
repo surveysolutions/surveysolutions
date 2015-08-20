@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
             var questionModel = questionnaire.Questions[referenceToQuestion.Id];
-            return this.answerToStringService.AnswerToUIString(questionModel, interviewAnswer);
+            return this.answerToStringService.AnswerToUIString(questionModel, interviewAnswer, interview, questionnaire);
         }
 
         private GroupStatus status;

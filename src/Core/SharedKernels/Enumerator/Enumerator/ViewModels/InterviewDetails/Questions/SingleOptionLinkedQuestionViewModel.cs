@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var referencedQuestion = questionnaire.Questions[this.referencedQuestionId];
 
             var options = referencedQuestionAnswers
-                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, referencedQuestion, linkedAnswerModel, interview))
+                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, referencedQuestion, linkedAnswerModel, interview, questionnaire))
                 .Where(optionOrNull => optionOrNull != null)
                 .ToList();
 
@@ -231,12 +231,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(
             BaseInterviewAnswer referencedAnswer, BaseQuestionModel referencedQuestion,
-            LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview)
+            LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview, QuestionnaireModel questionnaire)
         {
             if (referencedAnswer == null)
                 return null;
 
-            var title = this.GenerateOptionTitle(referencedQuestion, referencedAnswer, interview);
+            var title = this.GenerateOptionTitle(referencedQuestion, referencedAnswer, interview, questionnaire);
 
             var isSelected =
                 linkedAnswerModel != null &&
@@ -261,9 +261,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        private string GenerateOptionTitle(BaseQuestionModel referencedQuestion, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview)
+        private string GenerateOptionTitle(BaseQuestionModel referencedQuestion, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview, QuestionnaireModel questionnaire)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestion, referencedAnswer);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestion, referencedAnswer, interview, questionnaire);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
