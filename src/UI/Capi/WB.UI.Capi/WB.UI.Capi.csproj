@@ -558,6 +558,7 @@
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\Drawable\icon.png" />
+    <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Drawable\splash_00.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_01.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_02.jpg" />
