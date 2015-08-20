@@ -20,9 +20,11 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -34,7 +36,6 @@ using WB.UI.Capi.Implementations.PlainStorage;
 using WB.UI.Capi.Implementations.Services;
 using WB.UI.Capi.ReadSideStore;
 using WB.UI.Capi.SharedPreferences;
-using WB.UI.Capi.SnapshotStore;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.ViewModel.Dashboard;
 using WB.UI.Capi.ViewModel.InterviewMetaInfo;
@@ -50,18 +51,20 @@ namespace WB.UI.Capi.Ninject
         private readonly string basePath;
         private readonly string[] foldersToBackup;
         private readonly IBackupable[] globalBackupables;
+        private readonly IWriteSideCleanerRegistry writeSideCleanerRegistry;
 
-        public AndroidModelModule(string basePath, string[] foldersToBackup, params IBackupable[] globalBackupables)
+        public AndroidModelModule(string basePath, string[] foldersToBackup, IWriteSideCleanerRegistry writeSideCleanerRegistry, params IBackupable[] globalBackupables)
         {
             this.basePath = basePath;
             this.foldersToBackup = foldersToBackup;
+            this.writeSideCleanerRegistry = writeSideCleanerRegistry;
             this.globalBackupables = globalBackupables;
         }
 
         public override void Load()
         {
-            var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
-            var snapshotStore = new FileBasedSnapshotStore(this.Kernel.Get<IJsonUtils>());
+            var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName, writeSideCleanerRegistry);
+            var snapshotStore = new InMemoryCachedSnapshotStore(writeSideCleanerRegistry);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var plainStore = new SqlitePlainStore(PlainStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
