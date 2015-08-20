@@ -479,7 +479,9 @@
     <AndroidResource Include="Resources\Layout\Details.axml" />
     <AndroidResource Include="Resources\Layout\CascadingComboboxRowLayout.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml" />
-    <AndroidResource Include="Resources\Layout\splash.axml" />
+    <AndroidResource Include="Resources\Layout\splash.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Values\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -558,7 +560,6 @@
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\Drawable\icon.png" />
-    <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Drawable\splash_00.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_01.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_02.jpg" />
