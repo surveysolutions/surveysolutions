@@ -478,7 +478,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to complete&lt;br /&gt;this questionnaire.
+        ///   Looks up a localized string similar to You are about to complete&lt;br /&gt;this interview.
         /// </summary>
         public static string Interview_Complete_Screen_Description {
             get {
