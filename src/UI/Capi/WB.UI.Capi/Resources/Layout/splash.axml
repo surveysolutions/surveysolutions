@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation='vertical'>
-  <ImageView
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:paddingLeft="@dimen/Splash_Logo_padding"
-     android:paddingRight="@dimen/Splash_Logo_padding"
-     android:paddingBottom="@dimen/Splash_Logo_padding"
-     android:layout_gravity="center"
-     android:src="@drawable/splash_image" />
-
-  <ImageView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:src="@drawable/splash_animation" />
-</LinearLayout>-->
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -38,13 +16,13 @@
      android:layout_height="@dimen/Splash_Logo_size"
      android:layout_above="@+id/anchorInCenter"
      android:layout_centerHorizontal="true"
-     android:src="@drawable/splash_image" />
+     android:src="@drawable/splash_image"/>
 
   <ImageView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/anchorInCenter"
-      android:src="@drawable/splash_animation" />
+      android:src="@drawable/splash_animation"/>
   
 
 </RelativeLayout>
