@@ -453,7 +453,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Unanswered</value>
   </data>
   <data name="Interview_Complete_Screen_Description" xml:space="preserve">
-    <value>You are about to complete&lt;br /&gt;this questionnaire</value>
+    <value>You are about to complete&lt;br /&gt;this interview</value>
   </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Complete</value>
