@@ -538,7 +538,6 @@
     <AndroidResource Include="Resources\Drawable\questionShape.xml" />
     <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
     <AndroidResource Include="Resources\Values\Colors.xml" />
-    <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -559,6 +558,7 @@
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\Drawable\icon.png" />
+    <AndroidResource Include="Resources\Drawable\splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
