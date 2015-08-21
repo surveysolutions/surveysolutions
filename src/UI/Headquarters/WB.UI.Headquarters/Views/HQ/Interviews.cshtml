@@ -13,19 +13,17 @@
 {
     @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/hq.interviews.js")
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new { area="" }, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {area = ""}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
-        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-        var statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
+        var statistics = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
         $(function() {
-            var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model.Responsibles));
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsibles, commandExecutionUrl);
+            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
-
-
     </script>
 }
 
