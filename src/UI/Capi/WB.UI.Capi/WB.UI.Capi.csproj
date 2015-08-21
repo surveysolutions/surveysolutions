@@ -415,7 +415,6 @@
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="ViewModel\SplashViewModel.cs" />
     <Compile Include="ViewModel\SynchronizationViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />

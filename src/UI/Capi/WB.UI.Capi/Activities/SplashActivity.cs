@@ -1,16 +1,37 @@
 using Android.App;
 using Android.Content.PM;
+using Cirrious.CrossCore;
+using Cirrious.MvvmCross.Droid.Views;
+using WB.Core.BoundedContexts.Capi.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Capi.ViewModel;
-using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Capi.Activities
 {
     [Activity(NoHistory = true, MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, Theme = "@style/AppTheme")]
-    public class SplashActivity : BaseActivity<SplashViewModel>
+    public class SplashActivity : MvxSplashScreenActivity
     {
-        protected override int ViewResourceId
+        public SplashActivity() : base(Resource.Layout.splash)
         {
-            get { return Resource.Layout.splash; }
+        }
+
+        protected override void TriggerFirstNavigate()
+        {
+            IInterviewerSettings interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
+            IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
+
+            if (Mvx.Resolve<IDataCollectionAuthentication>().IsLoggedIn)
+            {
+                viewModelNavigationService.NavigateToDashboard();
+            }
+            else if (interviewerSettings.GetClientRegistrationId() == null)
+            {
+                viewModelNavigationService.NavigateTo<FinishIntallationViewModel>();
+            }
+            else
+            {
+                viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
+            }
         }
     }
 }
