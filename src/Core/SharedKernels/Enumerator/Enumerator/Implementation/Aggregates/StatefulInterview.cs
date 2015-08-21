@@ -835,7 +835,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 groupIdentity.RosterVector,
                 questionnaire,
                 GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
-            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered && !x.Value.IsValid);
+
+            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(
+                x => x.Value != null 
+                && x.Value.IsEnabled 
+                && x.Value.IsAnswered 
+                && !x.Value.IsValid);
         }
 
         public int CountInvalidInterviewerQuestionsInGroupOnly(Identity group)
