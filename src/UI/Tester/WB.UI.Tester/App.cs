@@ -7,7 +7,7 @@ namespace WB.UI.Tester
     {
         public override void Initialize()
         {
-            RegisterAppStart<SplashViewModel>();
+            RegisterAppStart<DashboardViewModel>();
         }
     }
 }

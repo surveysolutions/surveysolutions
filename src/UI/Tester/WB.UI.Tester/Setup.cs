@@ -69,7 +69,6 @@ namespace WB.UI.Tester
         {
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof (SplashViewModel), typeof (SplashActivity)},
                 {typeof (LoginViewModel), typeof (LoginActivity)},
                 {typeof (InterviewViewModel), typeof (InterviewActivity)},
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
