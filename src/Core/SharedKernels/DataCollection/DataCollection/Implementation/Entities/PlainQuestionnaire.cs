@@ -491,7 +491,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
                 this.cacheOfUnderlyingInterviewerQuestions[groupId] = this
                     .GetGroupOrThrow(groupId)
-                    .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Interviewer)
+                    .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Interviewer && !question.Featured)
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection();
 
