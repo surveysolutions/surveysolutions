@@ -82,41 +82,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var linkedSingleOptionQuestion = question as LinkedSingleOptionQuestionModel;
                 if (linkedSingleOptionQuestion != null)
                 {
-                    var referencedAnswer =
-                        interview.FindAnswersOfReferencedQuestionForLinkedQuestion(
-                            linkedSingleOptionQuestion.LinkedToQuestionId,
-                            new Identity(singleOptionLinkedAnswer.Id, singleOptionLinkedAnswer.RosterVector))
+                    var referencedQuestionIdentity = new Identity(singleOptionLinkedAnswer.Id, singleOptionLinkedAnswer.RosterVector);
+                    var referencedAnswer = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedSingleOptionQuestion.LinkedToQuestionId, referencedQuestionIdentity)
                             .FirstOrDefault(a => a.RosterVector.SequenceEqual(singleOptionLinkedAnswer.Answer));
 
                     if (referencedAnswer != null)
                     {
                         var referencedQuestion = questionnaire.Questions[linkedSingleOptionQuestion.LinkedToQuestionId];
-                        return AnswerToUIString(referencedQuestion, referencedAnswer, interview, questionnaire);
+                        return this.AnswerToUIString(referencedQuestion, referencedAnswer, interview, questionnaire);
                     }
                 }
             }
-
-          /*  var linkedMultiOptionAnswer = answer as LinkedMultiOptionAnswer;
-            if (linkedMultiOptionAnswer != null)
-            {
-                var linkedMultiOptionQuestion = question as LinkedMultiOptionQuestionModel;
-                if (linkedMultiOptionQuestion != null)
-                {
-                    var referencedAnswers =
-                        interview.FindAnswersOfReferencedQuestionForLinkedQuestion(
-                            linkedMultiOptionQuestion.LinkedToQuestionId,
-                            new Identity(linkedMultiOptionAnswer.Id, linkedMultiOptionAnswer.RosterVector))
-                            .Where(
-                                a =>
-                                    linkedMultiOptionAnswer.Answers.Any(
-                                        selectedAnswer => selectedAnswer.SequenceEqual(a.RosterVector)));
-
-                    var referencedQuestion = questionnaire.Questions[linkedMultiOptionQuestion.LinkedToQuestionId];
-
-                    return string.Join(", ", referencedAnswers.Select(a => AnswerToUIString(referencedQuestion, a, interview, questionnaire)));
-                }
-            }
-            */
+        
             return answer.ToString();
         }
     }
