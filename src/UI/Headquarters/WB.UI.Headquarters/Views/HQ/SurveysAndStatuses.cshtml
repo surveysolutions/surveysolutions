@@ -1,6 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
-@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.UsersViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
@@ -10,14 +8,14 @@
     @Html.Partial("_ListViewStatusesScript")
     @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/surveysandstatuses.js")
     <script type="text/javascript">
-        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
-        $(function () {
-            var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })';
-            var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model));
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsibles);
-            ko.applyBindings(model);
-            model.load();
-        });
+    var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
+    $(function() {
+        var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
+        var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 

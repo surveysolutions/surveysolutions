@@ -442,12 +442,15 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\User\ITeamViewFactory.cs" />
     <Compile Include="Views\User\IUserListViewFactory.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
+    <Compile Include="Views\User\UsersView.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />
     <Compile Include="Views\User\UserListViewInputModel.cs" />
     <Compile Include="Views\User\UserView.cs" />
+    <Compile Include="Views\User\TeamViewFactory.cs" />
     <Compile Include="Views\User\UserViewFactory.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />
     <Compile Include="Views\ViewerStatus.cs" />
@@ -510,7 +513,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" /> 
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

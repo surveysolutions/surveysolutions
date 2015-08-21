@@ -1,6 +1,6 @@
-﻿Supervisor.VM.NewInterview = function (commandExecutionUrl, questionnaire, interviewListUrl) {
+﻿Supervisor.VM.NewInterview = function (commandExecutionUrl, questionnaire, interviewListUrl, supervisorsUrl) {
     Supervisor.VM.NewInterview.superclass.constructor.apply(this, [commandExecutionUrl]);
-    //console.log(questionnaire);
+
     var self = this;
     
     var datacontext = new DataContext(new Mapper(new Model()));
@@ -12,7 +12,11 @@
     self.questionnaire = ko.observable();
     self.responsible = ko.observable().extend({ required: true });
     self.questions = ko.observableArray();
-    self.supervisors = ko.observableArray();
+    self.supervisors = function (query, sync, pageSize) {
+        self.SendRequest(supervisorsUrl, { query: query, pageSize: pageSize }, function (response) {
+            sync(response.Users, response.TotalCountByQuery);
+        }, true, true);
+    }
 
     self.isSaveEnable = ko.computed(function() {
         var answersAreInvalid = ko.utils.arrayFilter(self.questions(), function (question) {
@@ -31,7 +35,7 @@
                     type: "CreateInterviewCommand",
                     command: ko.toJSON({
                         interviewId: self.questionnaire().id,
-                        supervisorId: self.responsible().id(),
+                        supervisorId: self.responsible().UserId,
                         questionnaireId: self.questionnaire().templateId,
                         questionnaireVersion: self.questionnaire().templateVersion,
                         answersToFeaturedQuestions: datacontext.prepareQuestion()
@@ -50,7 +54,6 @@
         self.IsAjaxComplete(false);
         self.questionnaire(datacontext.questionnaire);
         self.questions(datacontext.questions.getAllLocal());
-        self.supervisors(datacontext.supervisors.getAllLocal());
         self.IsAjaxComplete(true);
         self.IsPageLoaded(true);
 

@@ -1,11 +1,17 @@
-﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsibles, users, commandExecutionUrl) {
+﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
     
     self.Url = new Url(interviewDetailsUrl);
 
-    self.Responsibles = responsibles;
+    self.ResponsiblesUrl = responsiblesUrl;
+
+    self.Responsibles = function(query, sync, pageSize) {
+        self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
+            sync(response.Users, response.TotalCountByQuery);
+        }, true, true);
+    }
 
     self.SelectedTemplate = ko.observable('');
 
@@ -50,11 +56,12 @@
     };
 
     self.load = function () {
+
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
         self.SelectedStatus(self.QueryString['status']);
 
-        var selectedResponsible = _.find(self.Responsibles, function(responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
-        self.SelectedResponsible(selectedResponsible);
+        //var selectedResponsible = _.find(self.Responsibles, function(responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
+        //self.SelectedResponsible(selectedResponsible);
 
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 

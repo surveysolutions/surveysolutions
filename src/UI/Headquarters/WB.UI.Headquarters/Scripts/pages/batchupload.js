@@ -1,9 +1,14 @@
-﻿Supervisor.VM.BatchUpload = function (interviewId, questionnaireId, questionnaireVersion, responsibles, importDataUrl, successUploadUrl) {
+﻿Supervisor.VM.BatchUpload = function (interviewId, questionnaireId, questionnaireVersion, responsiblesUrl, importDataUrl, successUploadUrl) {
     Supervisor.VM.BatchUpload.superclass.constructor.apply(this, arguments);
 
     var self = this;
 
-    self.Responsibles = responsibles;
+    self.ResponsiblesUrl = responsiblesUrl;
+    self.Responsibles = function (query, sync, pageSize) {
+        self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
+            sync(response.Users, response.TotalCountByQuery);
+        }, true, true);
+    }
     self.SelectedResponsible = ko.observable();
 
     self.IsSupervisorSelected = ko.computed(function() {
