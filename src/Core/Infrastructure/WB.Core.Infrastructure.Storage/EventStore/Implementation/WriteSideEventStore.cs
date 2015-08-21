@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -26,6 +27,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
     {
         private const string CountProjectionName = "AllEventsCount";
         private readonly ILogger logger;
+        private readonly IEventTypeResolver eventTypeResolver;
         private readonly EventStoreSettings settings;
         private static readonly Encoding Encoding = Encoding.UTF8;
         private const string EventsPrefix = EventsCategory + "-";
@@ -46,10 +48,11 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider, 
             ILogger logger,
-            EventStoreSettings settings)
+            EventStoreSettings settings, IEventTypeResolver eventTypeResolver)
         {
             this.logger = logger;
             this.settings = settings;
+            this.eventTypeResolver = eventTypeResolver;
             ConfigureEventStore();
             this.connection = connectionProvider.Open();
 
@@ -165,7 +168,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
                 var eventData = JsonConvert.DeserializeObject(value,
-                                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()),
+                                    eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase()),
                                     JsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),

@@ -17,7 +17,6 @@ namespace Ncqrs.Tests.Domain
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-            NcqrsEnvironment.InitDefaults();
         }
 
         public class FooEvent : Event

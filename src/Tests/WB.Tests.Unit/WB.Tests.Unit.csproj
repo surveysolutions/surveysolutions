@@ -1661,13 +1661,11 @@
     <Compile Include="Infrastructure\Ncqrs\EventContext.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\CommittedEventStreamTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBusSpecs.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\AttributeEventTypeResolverTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\InMemoryEventStoreSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\UncommittedEventStreamTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\InternalExtensionsTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
-    <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Prepare.cs" />
     <Compile Include="Infrastructure\ReadSideRepositoryReaderExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_getting_view_by_guid_id.cs" />
@@ -1680,7 +1678,6 @@
     <Compile Include="Infrastructure\ReadSideServiceTests\when_rebuild_selected_views_by_selected_event_sources.cs" />
     <Compile Include="Infrastructure\View.cs" />
     <Compile Include="MockExtensions.cs" />
-    <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="QuestionnaireExtensions.cs" />

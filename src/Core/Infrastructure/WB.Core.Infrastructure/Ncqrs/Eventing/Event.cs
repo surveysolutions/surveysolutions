@@ -32,10 +32,8 @@ namespace Ncqrs.Eventing
         /// </summary>
         public Event()
         {
-            var clock = NcqrsEnvironment.Get<IClock>();
-
             EventIdentifier = Guid.NewGuid();
-            EventTimeStamp = clock.UtcNow();
+            EventTimeStamp = default(DateTime);
             EventVersion = DefaultVersion;
         }
 

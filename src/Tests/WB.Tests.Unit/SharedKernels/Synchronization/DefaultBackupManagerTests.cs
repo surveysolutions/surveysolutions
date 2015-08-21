@@ -24,22 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
         }
 
         [Test]
-        public void Backup_When_eventstore_is_null_Then_InstanceNotFoundInEnvironmentConfigurationException()
-        {
-            // arrange
-            NcqrsEnvironment.RemoveDefault<IEventStore>();
-
-            // act and assert
-            Assert.Throws<InstanceNotFoundInEnvironmentConfigurationException>(() => CreateDefaultBackupManager());
-        }
-
-        [Test]
         public void Backup_When_eventstore_is_not_streamable_Then_null_is_returned()
         {
             // arrange
             var eventStore = new Mock<IEventStore>();
-            NcqrsEnvironment.SetDefault(eventStore.Object);
-            DefaultBackupManager target = CreateDefaultBackupManager();
+            DefaultBackupManager target = CreateDefaultBackupManager(eventStore.Object);
 
             // act
             var result = target.Backup();
@@ -69,9 +58,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             }
 
             eventStore.Setup(x => x.GetAllEvents()).Returns(eventList);
-            NcqrsEnvironment.SetDefault(eventStore.Object as IEventStore);
 
-            DefaultBackupManager target = CreateDefaultBackupManager();
+            DefaultBackupManager target = CreateDefaultBackupManager(eventStore.Object);
 
             // act
             var result = target.Backup();
@@ -85,8 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
         {
             // arrange
             var eventStore = new Mock<IStreamableEventStore>();
-            NcqrsEnvironment.SetDefault(eventStore.Object as IEventStore);
-            DefaultBackupManager target = CreateDefaultBackupManager();
+            DefaultBackupManager target = CreateDefaultBackupManager(eventStore.Object);
 
             // act
             var result = target.Backup();
@@ -95,9 +82,9 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             Assert.That(result.Events.Count(), Is.EqualTo(0));
         }
 
-        private DefaultBackupManager CreateDefaultBackupManager()
+        private DefaultBackupManager CreateDefaultBackupManager(IEventStore eventStore)
         {
-            return new DefaultBackupManager();
+            return new DefaultBackupManager(eventStore);
         }
     }
 }

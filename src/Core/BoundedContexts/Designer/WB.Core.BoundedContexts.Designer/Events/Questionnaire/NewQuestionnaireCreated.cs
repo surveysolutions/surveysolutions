@@ -3,7 +3,6 @@ using Ncqrs.Eventing.Storage;
 
 namespace Main.Core.Events.Questionnaire
 {
-    [EventName("RavenQuestionnaire.Core:Events:NewQuestionnaireCreated")]
     public class NewQuestionnaireCreated
     {
         public DateTime CreationDate { get; set; }

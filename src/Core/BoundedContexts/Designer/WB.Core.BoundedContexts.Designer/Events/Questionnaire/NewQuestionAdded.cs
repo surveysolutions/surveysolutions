@@ -6,7 +6,6 @@
     /// <summary>
     /// The new question added.
     /// </summary>
-    [EventName("RavenQuestionnaire.Core:Events:NewQuestionAdded")]
     public class NewQuestionAdded : FullQuestionDataEvent
     {
     }

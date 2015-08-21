@@ -744,7 +744,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static IClock Clock
         {
-            get { return NcqrsEnvironment.Get<IClock>(); /*ServiceLocator.Current.GetInstance<IClock>(); */}
+            get { return ServiceLocator.Current.GetInstance<IClock>(); }
         }
 
         private static IExpressionProcessor ExpressionProcessor
@@ -833,8 +833,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
-            var clock = NcqrsEnvironment.Get<IClock>();
-
             var document = source as QuestionnaireDocument;
             if (document == null)
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
@@ -842,7 +840,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var clonedDocument = (QuestionnaireDocument)document.Clone();
             clonedDocument.PublicKey = this.EventSourceId;
             clonedDocument.CreatedBy = createdBy;
-            clonedDocument.CreationDate = clock.UtcNow();
+            clonedDocument.CreationDate = Clock.UtcNow();
             clonedDocument.Title = title;
             clonedDocument.IsPublic = isPublic;
             if (clonedDocument.SharedPersons != null)
