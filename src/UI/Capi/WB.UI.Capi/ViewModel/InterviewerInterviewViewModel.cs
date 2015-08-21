@@ -1,5 +1,7 @@
 using System.Linq;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -49,7 +51,7 @@ namespace WB.UI.Capi.ViewModel
 
         void SignOut()
         {
-            CapiApplication.Membership.LogOff();
+            Mvx.Resolve<IDataCollectionAuthentication>().LogOff();
             this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
         }
 
