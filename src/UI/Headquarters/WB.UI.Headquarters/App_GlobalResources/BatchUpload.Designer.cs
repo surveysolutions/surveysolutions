@@ -376,6 +376,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User preloading process is missing.
+        /// </summary>
+        internal static string UserPreloadingProcessIsMissing {
+            get {
+                return ResourceManager.GetString("UserPreloadingProcessIsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to user(s) have been created.
         /// </summary>
         internal static string UsersHaveBeenCreated {
