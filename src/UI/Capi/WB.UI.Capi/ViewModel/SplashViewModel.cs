@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -20,7 +21,7 @@ namespace WB.UI.Capi.ViewModel
         {
             await Task.Delay(3500);
 
-            if (CapiApplication.Membership.IsLoggedIn)
+            if (Mvx.Resolve<IDataCollectionAuthentication>().IsLoggedIn)
             {
                 this.viewModelNavigationService.NavigateToDashboard();
             }

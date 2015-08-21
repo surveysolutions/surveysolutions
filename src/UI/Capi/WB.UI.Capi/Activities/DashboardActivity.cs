@@ -10,11 +10,13 @@ using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -57,15 +59,15 @@ namespace WB.UI.Capi.Activities
         {
             base.OnStart();
 
-            if (CapiApplication.Membership.IsLoggedIn)
+            if (Mvx.Resolve<IDataCollectionAuthentication>().IsLoggedIn)
                 this.InitDashboard();
         }
 
         private void InitDashboard()
         {
-            this.currentDashboard =
-                CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                    new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
+            var factory = CapiApplication.Kernel.TryGet<IViewFactory<DashboardInput, DashboardModel>>();
+
+            this.currentDashboard = factory == null ? default(DashboardModel) : factory.Load(new DashboardInput(Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Id));
 
             this.llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
 
@@ -175,8 +177,8 @@ namespace WB.UI.Capi.Activities
                     this,
                     yesHandler: async (s, ev) =>
                     {
-                        await CommandService.ExecuteAsync(new RestartInterviewCommand(interviewId, CapiApplication.Membership.CurrentUser.Id, "", DateTime.UtcNow));
-                        logManipulator.CreateOrReopenDraftRecord(interviewId, CapiApplication.Membership.CurrentUser.Id);
+                        await CommandService.ExecuteAsync(new RestartInterviewCommand(interviewId, Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Id, "", DateTime.UtcNow));
+                        this.logManipulator.CreateOrReopenDraftRecord(interviewId, Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Id);
                         this.StartLoadingActivity(publicKeyTag, localyCreated);
                     },
                     noHandler: (s, ev) => { },

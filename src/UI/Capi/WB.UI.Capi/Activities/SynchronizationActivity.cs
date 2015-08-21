@@ -11,6 +11,7 @@ using Android.Text;
 using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Flurl.Http;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
@@ -254,7 +255,7 @@ namespace WB.UI.Capi.Activities
                             return;
                         }
 
-                        bool result = CapiApplication.Membership.LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
+                        bool result = Mvx.Resolve<IDataCollectionAuthentication>().LogOnAsync(login, passwordHash, wasPasswordHashed: true).Result;
                         if (result)
                         {
                             ServiceLocator.Current.GetInstance<IViewModelNavigationService>().NavigateToDashboard();
@@ -383,9 +384,9 @@ namespace WB.UI.Capi.Activities
 
         protected SyncCredentials? RequestCredentialsCallBack(object sender)
         {
-            if (CapiApplication.Membership.IsLoggedIn)
+            if (Mvx.Resolve<IDataCollectionAuthentication>().IsLoggedIn)
             {
-                return CapiApplication.Membership.RequestSyncCredentials();
+                return Mvx.Resolve<IDataCollectionAuthentication>().RequestSyncCredentials();
             }
 
             SyncCredentials? result = null;
