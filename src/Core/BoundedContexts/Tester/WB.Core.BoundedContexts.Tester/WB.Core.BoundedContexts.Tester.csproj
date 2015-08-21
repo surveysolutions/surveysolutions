@@ -54,7 +54,6 @@
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\SearchQuestionnairesViewModel.cs" />
-    <Compile Include="ViewModels\SplashViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
   </ItemGroup>
