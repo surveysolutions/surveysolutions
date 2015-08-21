@@ -10,6 +10,7 @@ Supervisor.VM.Preloading.UserPreloading = function (updateVerificationStatusApiU
     self.verificationProgressInPercents = ko.observable(0);
     self.errorMessage = ko.observable(0);
     self.fileName = ko.observable('');
+    self.isDeleted = ko.observable(false);
     self.verificationErrors = ko.observableArray([]);
     self.updateVerificationStatusApiUrl = updateVerificationStatusApiUrl;
 
@@ -17,6 +18,10 @@ Supervisor.VM.Preloading.UserPreloading = function (updateVerificationStatusApiU
 
         self.SendRequest(self.updateVerificationStatusApiUrl, {}, function (processDetails) {
             ko.mapping.fromJS(processDetails, {}, self);
+            if (processDetails == null) {
+                self.isDeleted(true);
+                return;
+            }
             self.state(processDetails.State);
             self.fileName(processDetails.FileName);
             self.verificationProgressInPercents(processDetails.VerificationProgressInPercents);
