@@ -39,7 +39,6 @@ namespace WB.UI.Capi
         {
             base.InitializeViewLookup();
             var container = Mvx.Resolve<IMvxViewsContainer>();
-            container.Add(typeof(SplashViewModel), typeof(SplashActivity));
             container.Add(typeof(LoginActivityViewModel), typeof(LoginActivity));
             container.Add(typeof(FinishIntallationViewModel), typeof(FinishInstallationActivity));
             container.Add(typeof(PrefilledQuestionsViewModel), typeof(PrefilledQuestionsActivity));

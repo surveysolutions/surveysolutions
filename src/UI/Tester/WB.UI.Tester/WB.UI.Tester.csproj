@@ -298,7 +298,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -331,6 +330,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\loginLogo.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\loginLogo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\loginLogo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\loginLogo.png" />
+    <AndroidResource Include="Resources\drawable\loginLogo.png" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">

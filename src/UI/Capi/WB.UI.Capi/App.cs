@@ -7,7 +7,7 @@ namespace WB.UI.Capi
     {
         public override void Initialize()
         {
-            RegisterAppStart<SplashViewModel>();
+            RegisterAppStart<DashboardViewModel>();
         }
     }
 }
