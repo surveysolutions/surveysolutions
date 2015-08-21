@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -85,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             try
             {
-                var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+                var bus = ServiceLocator.Current.GetInstance<IEventBus>() as IEventDispatcher;
                 if (bus == null)
                 {
                     UpdateStatusMessage("Environments setup problems.");

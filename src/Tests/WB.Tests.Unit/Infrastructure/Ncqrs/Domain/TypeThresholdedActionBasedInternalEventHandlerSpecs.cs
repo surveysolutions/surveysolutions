@@ -20,7 +20,6 @@ namespace Ncqrs.Tests.Domain
         [SetUp]
         public void SetUp()
         {
-            NcqrsEnvironment.Deconfigure();
         }
         
         [Test]

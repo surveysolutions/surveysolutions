@@ -16,9 +16,9 @@ namespace WB.Core.Synchronization.SyncProvider
         /// </summary>
         private readonly IEventStore eventStore;
 
-        public SyncEventHandler()
+        public SyncEventHandler(IEventStore eventStore)
         {
-            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
+            this.eventStore = eventStore;
             this.IncomeEvents = new List<UncommittedEventStream>();
         }
 

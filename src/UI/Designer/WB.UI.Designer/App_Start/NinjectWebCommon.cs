@@ -100,9 +100,6 @@ namespace WB.UI.Designer.App_Start
 
 
             kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
-
-            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
-            NcqrsEnvironment.InitDefaults();
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
@@ -111,28 +108,13 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
 
-            PrepareNcqrsInfrastucture(kernel);
+            CreateAndRegisterEventBus(kernel);
             
             return kernel;
         }
 
-        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
-        {
-            var snapshottingPolicy = new SimpleSnapshottingPolicy(1);
-            kernel.Bind<ISnapshottingPolicy>().ToConstant(snapshottingPolicy);
-            kernel.Bind<ISnapshotStore>().To<InMemoryCachedSnapshotStore>().InSingletonScope();
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(snapshottingPolicy);
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(kernel.Get<ISnapshotStore>());
-            CreateAndRegisterEventBus(kernel);
-        }
-
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            NcqrsEnvironment.SetGetter<IEventBus>(() => GetEventBus(kernel));
-            NcqrsEnvironment.SetGetter<ILiteEventBus>(() => GetEventBus(kernel));
             kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
             kernel.Bind<ILiteEventBus>().ToMethod(_ => GetEventBus(kernel));
             kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));

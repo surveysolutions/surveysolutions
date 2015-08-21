@@ -19,12 +19,15 @@ namespace WB.Core.Infrastructure
     {
         public void Load(IIocRegistry registry)
         {
+            registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>();
+            registry.Bind<IClock, DateTimeBasedClock>();
+
             registry.BindAsSingleton<IAggregateRootRepository, AggregateRootRepositoryWithCache>();
             registry.BindAsSingleton<IWriteSideCleanerRegistry, WriteSideCleanerRegistry>();
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
-            registry.Bind<ISnapshottingPolicy, NoSnapshottingPolicy>();
+            registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);
             registry.Bind<IAggregateRootCreationStrategy, SimpleAggregateRootCreationStrategy>();
             registry.Bind<IAggregateSupportsSnapshotValidator,AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();

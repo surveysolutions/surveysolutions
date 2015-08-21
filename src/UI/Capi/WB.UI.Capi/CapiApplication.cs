@@ -180,8 +180,6 @@ namespace WB.UI.Capi
 
             this.RestoreAppState();
 
-            NcqrsEnvironment.InitDefaults();
-
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                 : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
@@ -228,11 +226,6 @@ namespace WB.UI.Capi
          
             this.kernel.Bind<Context>().ToConstant(this);
 
-            NcqrsEnvironment.SetDefault(ServiceLocator.Current.GetInstance<ILogger>());
-
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-
-
             var liteEventBus = this.kernel.Get<ILiteEventBus>();
             kernel.Unbind<ILiteEventBus>();
 
@@ -240,13 +233,8 @@ namespace WB.UI.Capi
 
             var hybridEventBus = new HybridEventBus(liteEventBus, cqrsEventBus);
 
-            NcqrsEnvironment.SetDefault<IEventBus>(hybridEventBus);
-
             kernel.Bind<IEventBus>().ToConstant(hybridEventBus);
             kernel.Bind<ILiteEventBus>().ToConstant(hybridEventBus);
-
-            NcqrsEnvironment.SetDefault(Kernel.Get<ISnapshotStore>());
-            NcqrsEnvironment.SetDefault(Kernel.Get<IEventStore>());
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();

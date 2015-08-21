@@ -153,10 +153,6 @@ namespace WB.UI.Headquarters
                 new PostresKeyValueModule(postgresCacheSize),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies));
 
-            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
-            NcqrsEnvironment.InitDefaults();
-
-
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
@@ -197,8 +193,8 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
-            PrepareNcqrsInfrastucture(kernel);
+
+            CreateAndRegisterEventBus(kernel);
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
@@ -226,21 +222,6 @@ namespace WB.UI.Headquarters
             return kernel;
         }
 
-       
-        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
-        {
-            var snapshottingPolicy = new SimpleSnapshottingPolicy(1);
-            kernel.Bind<ISnapshottingPolicy>().ToConstant(snapshottingPolicy);
-            kernel.Bind<ISnapshotStore>().To<InMemoryCachedSnapshotStore>().InSingletonScope();
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(snapshottingPolicy);
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(kernel.Get<ISnapshotStore>());
-
-            CreateAndRegisterEventBus(kernel);
-        }
-
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             var ignoredDenormalizersConfigSection =
@@ -248,8 +229,6 @@ namespace WB.UI.Headquarters
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
