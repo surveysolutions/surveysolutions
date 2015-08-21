@@ -34,8 +34,8 @@ namespace WB.Tests.Unit
             Setup.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
             Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
 
-            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
-            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
+            Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
+            Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
         }
     }
 }

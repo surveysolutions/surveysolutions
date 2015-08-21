@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public static class RegisterAllHandlersInAssemblyExtension
     {
-        private static ILogger _log = LogManager.GetLogger(typeof(RegisterAllHandlersInAssemblyExtension));
+        private static IEventTypeResolver EventTypeResolver
+        {
+            get { return ServiceLocator.Current.GetInstance<IEventTypeResolver>(); }
+        }
 
         public static void RegisterAllHandlersInAssembly(this InProcessEventBus target, Assembly asm)
         {
@@ -35,7 +40,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public static void RegisterHandler(this InProcessEventBus target,object handler, Type eventDataType)
         {
-            NcqrsEnvironment.RegisterEventDataType(eventDataType);
+            EventTypeResolver.RegisterEventDataType(eventDataType);
 
             var registerHandlerMethod = target.GetType().GetMethods().Single
             (

@@ -3,8 +3,6 @@
     using System;
 
     using Ncqrs.Eventing.Storage;
-
-    [EventName("RavenQuestionnaire.Core:Events:QuestionnaireItemMoved")]
     public class QuestionnaireItemMoved : QuestionnaireActiveEvent
     {
         [Obsolete]
