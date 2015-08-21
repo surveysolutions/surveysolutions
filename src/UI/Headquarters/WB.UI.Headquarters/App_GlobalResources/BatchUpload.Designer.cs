@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete file {0} from the list?.
+        /// </summary>
+        internal static string AreYouSureYouWantToDeleteFormat {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeleteFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse teams.
         /// </summary>
         internal static string BrowseTeams {
