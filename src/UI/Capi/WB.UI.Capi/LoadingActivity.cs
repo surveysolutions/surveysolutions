@@ -6,6 +6,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
@@ -145,8 +146,8 @@ namespace WB.UI.Capi
         {
             var interviewId = Guid.NewGuid();
 
-            Guid interviewUserId = CapiApplication.Membership.CurrentUser.Id;
-            Guid supervisorId = CapiApplication.Membership.SupervisorId;
+            Guid interviewUserId = Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Id;
+            Guid supervisorId = Mvx.Resolve<IDataCollectionAuthentication>().SupervisorId;
 
             try
             {

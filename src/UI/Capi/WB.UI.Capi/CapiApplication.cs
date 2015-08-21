@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.Runtime;
 using CAPI.Android.Core.Model.ViewModel.Login;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core.Events.File;
@@ -71,29 +72,6 @@ namespace WB.UI.Capi
     [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {
-        #region static properties
-
-        public static TOutput LoadView<TInput, TOutput>(TInput input)
-        {
-            var factory = Kernel.TryGet<IViewFactory<TInput, TOutput>>();
-
-            return factory == null ? default(TOutput) : factory.Load(input);
-        }
-
-        public static ICommandService CommandService
-        {
-            get { return Kernel.Get<ICommandService>(); }
-        }
-
-        public static IDataCollectionAuthentication Membership
-        {
-            get { return Kernel.Get<IDataCollectionAuthentication>(); }
-        }
-        public static IFileStorageService FileStorageService
-        {
-            get { return Kernel.Get<IFileStorageService>(); }
-        }
-
         public static IKernel Kernel
         {
             get
@@ -106,8 +84,6 @@ namespace WB.UI.Capi
                 return capiApp.kernel;
             }
         }
-
-        #endregion
 
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)

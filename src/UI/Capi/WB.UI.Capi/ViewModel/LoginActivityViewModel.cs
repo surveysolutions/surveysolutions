@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -89,7 +90,7 @@ namespace WB.UI.Capi.ViewModel
 
         private async void StartLogin()
         {
-            var result = await CapiApplication.Membership.LogOnAsync(this.Login, this.Password);
+            var result = await Mvx.Resolve<IDataCollectionAuthentication>().LogOnAsync(this.Login, this.Password);
             if (result)
             {
                 this.viewModelNavigationService.NavigateToDashboard();

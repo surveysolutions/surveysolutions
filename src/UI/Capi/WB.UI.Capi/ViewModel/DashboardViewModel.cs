@@ -1,4 +1,6 @@
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -15,13 +17,13 @@ namespace WB.UI.Capi.ViewModel
 
         public void Init()
         {
-            if (!CapiApplication.Membership.IsLoggedIn)
+            if (!Mvx.Resolve<IDataCollectionAuthentication>().IsLoggedIn)
             {
                 this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
                 return;
             }
 
-            this.LoggedInUserName = CapiApplication.Membership.CurrentUser.Name;
+            this.LoggedInUserName = Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Name;
         }
 
         private string loggedInUserName;
@@ -48,7 +50,7 @@ namespace WB.UI.Capi.ViewModel
 
         void SignOut()
         {
-            CapiApplication.Membership.LogOff();
+            Mvx.Resolve<IDataCollectionAuthentication>().LogOff();
             this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
         }
 
