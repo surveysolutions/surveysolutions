@@ -2,6 +2,7 @@
     "use strict";
     var ExtendedTypeahead = {
         displayItemsCount: 0,
+        loadMoreTemplate: "<div><strong><i>load more (+$moreItemsCount)</i></strong><div>",
 
         displayText: function (item) {
             if (!item) return "";
@@ -10,7 +11,7 @@
 
             return this.options.extendedDisplayText(item);
         },
-        process: function (items) {
+        process: function (items, totalItemsCount) {
             var that = this;
 
             items = $.grep(items, function (item) {
@@ -29,6 +30,8 @@
                 this.$element.data('active', null);
             }
 
+            var itemsCount = _.isUndefined(totalItemsCount) ? items.length : totalItemsCount;
+
             this.displayItemsCount = this.displayItemsCount === 0 ? this.options.items : this.displayItemsCount;
 
             var itemsToRender = items.slice(0, this.displayItemsCount);
@@ -42,10 +45,10 @@
             } else {
 
                 if (this.options.showLoadMore) {
-                    if (items.length > this.displayItemsCount) {
-                        var hiddenItemsCount = items.length - this.displayItemsCount;
+                    if (itemsCount > this.displayItemsCount) {
+                        var hiddenItemsCount = itemsCount - this.displayItemsCount;
                         var moreItemsCount = hiddenItemsCount > this.options.items ? this.options.items : hiddenItemsCount;
-                        itemsToRender.push({ loadMore: true, name: "[load more (+" + moreItemsCount + ")]" });
+                        itemsToRender.push({ loadMore: true, name: this.loadMoreTemplate.replace("$moreItemsCount", moreItemsCount) });
                     } else {
                         this.displayItemsCount = this.options.items;
                     }
@@ -53,6 +56,52 @@
 
                 return this.render(itemsToRender).show();
             }
+        },
+        lookup: function (query) {
+            var items;
+            if (typeof (query) != 'undefined' && query !== null) {
+                this.query = query;
+            } else {
+                this.query = this.$element.val() || '';
+            }
+
+            if (this.query.length < this.options.minLength) {
+                return this.shown ? this.hide() : this;
+            }
+
+            var worker = $.proxy(function () {
+
+                if ($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this), this.displayItemsCount === 0 ? this.options.items : this.displayItemsCount);
+                else if (this.source) {
+                    this.process(this.source);
+                }
+            }, this);
+
+            clearTimeout(this.lookupWorker);
+            this.lookupWorker = setTimeout(worker, this.delay);
+        },
+        render: function (items) {
+            var that = this;
+            var self = this;
+            var activeFound = false;
+            items = $(items).map(function (i, item) {
+                var text = self.displayText(item);
+                i = $(that.options.item).data('value', item);
+                i.find('a').html(_.isUndefined(item.loadMore) ? that.highlighter(text) : item.name);
+                if (text == self.$element.val()) {
+                    i.addClass('active');
+                    self.$element.data('active', item);
+                    activeFound = true;
+                }
+                return i[0];
+            });
+
+            if (this.autoSelect && !activeFound) {
+                items.first().addClass('active');
+                this.$element.data('active', items.first().data('value'));
+            }
+            this.$menu.html(items);
+            return this;
         },
         focus: function (e) {
             this.focused = true;

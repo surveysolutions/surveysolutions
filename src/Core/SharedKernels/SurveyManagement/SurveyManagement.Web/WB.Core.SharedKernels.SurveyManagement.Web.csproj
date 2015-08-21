@@ -196,6 +196,7 @@
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Filters\LimitsFilterAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
@@ -519,6 +520,9 @@
     <EmbeddedResource Include="Views\Account\Manage.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
     <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
+    <None Include="Scripts\bootstrap3-typeahead.min.js.map">
+      <DependentUpon>bootstrap3-typeahead.min.js</DependentUpon>
+    </None>
     <None Include="Scripts\moment.min.js.map">
       <DependentUpon>moment.min.js</DependentUpon>
     </None>

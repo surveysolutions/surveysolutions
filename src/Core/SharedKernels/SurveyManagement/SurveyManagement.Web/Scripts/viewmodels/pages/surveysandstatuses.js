@@ -1,10 +1,14 @@
-﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsibles) {
+﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsiblesUrl) {
     Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = new Url(window.location.href);
-
-    self.Responsibles = responsibles;
+    self.ResponsiblesUrl = responsiblesUrl;
+    self.Responsibles = function (query, sync, pageSize) {
+        self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
+            sync(response.Users, response.TotalCountByQuery);
+        }, true, true);
+    }
     self.SelectedResponsible = ko.observable();
 
     self.GetFilterMethod = function() {
@@ -16,8 +20,8 @@
         return { UserId: self.Url.query['interviewerId'] };
     };
     self.load = function() {
-        var selectedResponsible = _.find(self.Responsibles, function (responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
-        self.SelectedResponsible(selectedResponsible);
+        //var selectedResponsible = _.find(self.Responsibles, function (responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
+        //self.SelectedResponsible(selectedResponsible);
         self.SelectedResponsible.subscribe(self.filter);
         self.search();
     };
