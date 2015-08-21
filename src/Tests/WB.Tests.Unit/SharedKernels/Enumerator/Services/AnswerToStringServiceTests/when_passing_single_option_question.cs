@@ -1,10 +1,9 @@
 ﻿using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceTests
 {
     internal class when_passing_single_option_question : AnswerToStringServiceTestsContext
     {
