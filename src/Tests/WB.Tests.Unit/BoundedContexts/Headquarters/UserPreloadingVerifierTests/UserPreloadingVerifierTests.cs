@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
 
             userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0001", 1, "Login", userName));
-            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, 8));
+            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, 9));
         }
 
         [Test]
