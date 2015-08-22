@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD7E0C01-7CD9-46FD-9DD7-3BC8A5C10ECF}"
 	ProjectSection(SolutionItems) = preProject
@@ -59,13 +59,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Supervisor", "Supervisor", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Supervisor", "Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj", "{755CA607-6B50-487F-98A0-34A98973593D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Capi", "Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj", "{C6ED30A9-4D14-48D1-8311-C2267DFD424F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Interviewer", "Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj", "{C6ED30A9-4D14-48D1-8311-C2267DFD424F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Capi", "Capi", "{B5AB2695-742E-47BC-881C-2DC932CB6307}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interviewer", "Interviewer", "{B5AB2695-742E-47BC-881C-2DC932CB6307}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Capi", "Capi", "{1A83E353-7CA5-4220-8880-F204B28E6D71}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interviewer", "Interviewer", "{1A83E353-7CA5-4220-8880-F204B28E6D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Capi", "UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj", "{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Interviewer", "UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj", "{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tester", "Tester", "{53C6176D-C1EA-4D37-B282-A862AC874779}"
 EndProject

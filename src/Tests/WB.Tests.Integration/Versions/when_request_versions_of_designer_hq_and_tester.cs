@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
