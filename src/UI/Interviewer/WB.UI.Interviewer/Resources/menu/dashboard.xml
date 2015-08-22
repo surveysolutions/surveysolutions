@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto">
+  <item
+      android:id="@+id/menu_settings"
+      local:showAsAction="never"
+      android:title="@string/MenuItem_Title_Settings" />
+  <item
+      android:id="@+id/menu_synchronization"
+      local:showAsAction="never"
+      android:title="@string/MenuItem_Title_Synchronization" />
+  <item
+      android:id="@+id/menu_signout"
+      local:showAsAction="never"
+      android:title="@string/MenuItem_Title_SignOut" />
+</menu>

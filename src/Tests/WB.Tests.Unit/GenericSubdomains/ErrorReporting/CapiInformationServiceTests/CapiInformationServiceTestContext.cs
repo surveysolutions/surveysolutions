@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using WB.Core.BoundedContexts.Capi.ErrorReporting;
-using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.CapiInformation;
+using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.CapiInformation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 
