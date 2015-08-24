@@ -411,9 +411,9 @@
     <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
     <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
     <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
-    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationFactory.cs" />
-    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationInputModel.cs" />
-    <Compile Include="Views\Revalidate\InterviewInfoForRevalidationView.cs" />
+    <Compile Include="Views\Revalidate\InterviewTroubleshootFactory.cs" />
+    <Compile Include="Views\Revalidate\InterviewTroubleshootInputModel.cs" />
+    <Compile Include="Views\Revalidate\InterviewTroubleshootView.cs" />
     <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
     <Compile Include="Views\SampleImport\TempFileImportData.cs" />
