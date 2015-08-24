@@ -298,13 +298,6 @@
     <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
-    <Compile Include="Controls\Bindings\HtmlBinding.cs" />
-    <Compile Include="Controls\Bindings\MvvmBindingWrapper.cs" />
-    <Compile Include="Controls\Bindings\VisibilityBinding.cs" />
-    <Compile Include="Events\AnswerSavedEventArgs.cs" />
-    <Compile Include="Events\AnswerSetEventArgs.cs" />
-    <Compile Include="Events\ScreenChangedEventArgs.cs" />
-    <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Implementations\Services\AndroidNetworkService.cs" />
     <Compile Include="Implementations\Services\GeoService.cs" />
@@ -353,10 +346,6 @@
     <Compile Include="InterviewerApplication.cs" />
     <Compile Include="Controls\DashboardAdapter.cs" />
     <Compile Include="Controls\TabletInformationReportButton.cs" />
-    <Compile Include="Core\AjustableListView.cs" />
-    <Compile Include="Core\CAPIParcelableCreator.cs" />
-    <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
-    <Compile Include="Core\ParcelableWrapper.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
@@ -392,7 +381,7 @@
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
-    <Compile Include="LoadingActivity.cs" />
+    <Compile Include="Activities\LoadingActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -405,7 +394,6 @@
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
-    <Compile Include="Controls\Bindings\BooleanToTextColorValueConverter.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
@@ -709,9 +697,7 @@
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementations\Fragments\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

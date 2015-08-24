@@ -72,24 +72,6 @@ namespace WB.UI.Interviewer.Utils
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent));
             return progressBar;
         }
-
-        public static void AttachCheckAndClearFocusForPanel(this ListView view, Activity activity)
-        {
-            view.ScrollStateChanged += (sender, args) =>
-            {
-                if (args.ScrollState == ScrollState.TouchScroll)
-                {
-                    var currentFocus = activity.CurrentFocus;
-                    if (currentFocus != null)
-                    {
-                        currentFocus.ClearFocus();
-
-                        InputMethodManager imm = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
-                        imm.HideSoftInputFromWindow(view.WindowToken, 0);
-                    }
-                }
-            };
-        }
-
+        
     }
 }

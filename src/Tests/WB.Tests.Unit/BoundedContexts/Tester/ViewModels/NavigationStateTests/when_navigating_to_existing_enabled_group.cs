@@ -2,6 +2,7 @@ using System;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests
         };
 
         Because of = () =>
-            navigationState.NavigateToAsync(existingEnabledGroup);
+            navigationState.NavigateToAsync(existingEnabledGroup).WaitAndUnwrapException();
 
         It should_navigate_to_that_group = () =>
             navigatedTo.ShouldEqual(existingEnabledGroup);
