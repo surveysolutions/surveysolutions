@@ -221,7 +221,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             foreach (var viewModelIdentity in viewModelIdentities)
             {
-                var interviewEntity = this.Items.OfType<IInterviewEntityViewModel>().FirstOrDefault(x => x.Identity.Equals(viewModelIdentity));
+                var interviewEntity =
+                    this.Items.OfType<IInterviewEntityViewModel>()
+                        .FirstOrDefault(x => x.Identity != null && x.Identity.Equals(viewModelIdentity));
 
                 if (interviewEntity != null)
                     this.Items[this.Items.IndexOf(interviewEntity)] = interviewEntity;
