@@ -40,32 +40,6 @@
             </div>
 
         </div>
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Mandatory questions</div>
-                <table class="table table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Answer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var question in Model.MandatoryQuestions)
-                        {
-                            <tr class="@(question.IsValid ? "" : "error")">
-                                <td>
-                                    @question.Title
-                                </td>
-                                <td>
-                                    @question.Answer
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
     <div class="jumbotron">
         <h1>Warning</h1>

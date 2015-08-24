@@ -62,8 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            RecordAction(InterviewExportedAction.ApprovedByHeadquarter, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.ApproveByHeadquarter);
+            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.ApprovedByHeadquarter);
         }
 
         private void UpdateInterviewData(Guid interviewId, Guid userId, DateTime timeStamp, InterviewExportedAction action)
