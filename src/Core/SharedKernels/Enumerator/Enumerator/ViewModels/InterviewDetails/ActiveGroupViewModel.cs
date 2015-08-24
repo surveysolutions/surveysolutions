@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
         }
 
-        private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        private void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                await this.CreateRegularGroupScreen(navigationParams, @group);
+                this.CreateRegularGroupScreen(navigationParams, @group);
             }
         }
 
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
 
-        private async Task CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
+        private void CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
         {
             if (@group is RosterModel)
             {
@@ -129,12 +129,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = @group.Title;
             }
 
-            await Task.Run(
-                () =>
-                {
-                    this.LoadFromModel(navigationParams.TargetGroup);
-                    this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
-                });
+            this.LoadFromModel(navigationParams.TargetGroup);
+            this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
         }
 
         private void SendScrollToMessage(Identity scrollTo)

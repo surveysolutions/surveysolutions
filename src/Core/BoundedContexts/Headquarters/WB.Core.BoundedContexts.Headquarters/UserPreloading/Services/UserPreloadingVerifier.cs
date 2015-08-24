@@ -128,7 +128,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
                 new PreloadedDataValidator(PasswordFormatVerification, "PLU0006", u => u.Password),
                 new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
-                new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
                 new PreloadedDataValidator(PhoneNumberFormatVerification, "PLU0008", u => u.PhoneNumber),
                 new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
                 new PreloadedDataValidator(row =>SupervisorVerification(data, activeSupervisorNames, row), "PLU0010",u => u.Supervisor),

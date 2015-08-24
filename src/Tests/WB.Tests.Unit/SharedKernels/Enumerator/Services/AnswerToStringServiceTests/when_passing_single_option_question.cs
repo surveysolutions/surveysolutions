@@ -1,18 +1,17 @@
 ﻿using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceTests
 {
-    internal class when_passing_filtered_single_option_question : AnswerToStringServiceTestsContext
+    internal class when_passing_single_option_question : AnswerToStringServiceTestsContext
     {
         Establish context = () =>
         {
             answerToStringService = CreateAnswerToStringService();
             singleOptionAnswer = CreateSingleOptionAnswer(3);
-            filteredSingleOptionQuestionModel = CreateFilteredSingleOptionQuestionModel(
+            singleOptionQuestionModel = CreateSingleOptionQuestionModel(
                 new[]
                 {
                     new OptionModel() { Title = "1", Value = 1 },
@@ -23,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
         };
 
         Because of = () =>
-            result = answerToStringService.AnswerToUIString(filteredSingleOptionQuestionModel, singleOptionAnswer);
+            result = answerToStringService.AnswerToUIString(singleOptionQuestionModel, singleOptionAnswer, null, null);
 
         It should_return_3 = () =>
             result.ShouldEqual("3");
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
 
         static string result;
         static SingleOptionAnswer singleOptionAnswer;
-        static FilteredSingleOptionQuestionModel filteredSingleOptionQuestionModel;
+        static SingleOptionQuestionModel singleOptionQuestionModel;
         static IAnswerToStringService answerToStringService;
     }
 }

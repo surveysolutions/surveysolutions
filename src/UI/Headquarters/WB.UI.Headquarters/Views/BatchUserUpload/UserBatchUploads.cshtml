@@ -62,7 +62,7 @@
                         <td>
                             @if (!new[] { UserPrelodingState.CreatingUsers, UserPrelodingState.Validating }.Contains(userPreloadingProcess.State))
                             {
-                                using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload"))
+                                using (Html.BeginForm("DeleteUserPreloadingProcess", "BatchUserUpload", null, FormMethod.Post, new { onsubmit = "return confirm('" + String.Format(BatchUpload.AreYouSureYouWantToDeleteFormat, userPreloadingProcess.FileName) + "');" }))
                                 {
                                     @Html.AntiForgeryToken()
                                     @Html.Hidden("Id", userPreloadingProcess.UserPreloadingProcessId)
@@ -76,4 +76,3 @@
         </table>
     </div>
 </div>
-
