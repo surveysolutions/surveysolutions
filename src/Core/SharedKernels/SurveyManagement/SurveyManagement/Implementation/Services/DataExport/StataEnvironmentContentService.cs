@@ -27,8 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             this.BuildLabelsForLevel(headerStructureForLevel, doContent);
 
-            doContent.AppendLine("list");
-
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
                 GetEnvironmentContentFileName(headerStructureForLevel.LevelName));
 
@@ -98,11 +96,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void AppendLabel(StringBuilder doContent, string labelName, IEnumerable<LabelItem> labels)
         {
-            doContent.AppendFormat("label define {0} ", labelName);
+            //stata allows only int values less 2,147,483,620 to be labeled
+            //stata doesn't allow to declare empty dictionaries
+            int limitValue = 2147483620;
+            var localBuilder = new StringBuilder();
+            bool hasValidValue = false;
+
             foreach (var label in labels)
             {
-                doContent.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNotAllowedChars(label.Title));
+                int value;
+                if (int.TryParse(label.Caption, out value) && value < limitValue)
+                {
+                    localBuilder.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNotAllowedChars(label.Title));
+                    hasValidValue = true;
+                }
+                else
+                    localBuilder.AppendFormat("/*{0} `\"{1}\"'*/ ", label.Caption, this.RemoveNotAllowedChars(label.Title));
             }
+
+            doContent.AppendFormat(hasValidValue ? "label define {0} " : "/*label define {0}*/ ", labelName);
+
+            doContent.Append(localBuilder);
 
             doContent.AppendLine();
         }
