@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStringServiceTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceTests
 {
     internal class AnswerToStringServiceTestsContext
     {
@@ -35,6 +33,20 @@ namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.AnswerToStr
         {
             var model = new SingleOptionQuestionModel();
             model.Options = options.ToList();
+            return model;
+        }
+
+        public static LinkedSingleOptionQuestionModel CreateLinkedSingleOptionQuestionModel(Guid sourceOfLinkId)
+        {
+            var model = new LinkedSingleOptionQuestionModel();
+            model.LinkedToQuestionId = sourceOfLinkId;
+            return model;
+        }
+
+        public static LinkedSingleOptionAnswer CreateLinkedSingleOptionAnswer(decimal[] answer)
+        {
+            var model= new LinkedSingleOptionAnswer(Guid.NewGuid(),new decimal[0]);
+            model.SetAnswer(answer);
             return model;
         }
     }

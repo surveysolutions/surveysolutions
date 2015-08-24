@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.Enumerator.Services.MaskText;
 using It = Machine.Specifications.It;
 
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
 {
     internal class when_adding_new_text_to_empty_mask : MaskTextTestsContext
     {
