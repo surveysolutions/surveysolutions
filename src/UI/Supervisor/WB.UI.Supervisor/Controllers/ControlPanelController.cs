@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.Filters;
@@ -12,7 +13,8 @@ namespace WB.UI.Supervisor.Controllers
     public class ControlPanelController : Core.SharedKernels.SurveyManagement.Web.Controllers.ControlPanelController
     {
         public ControlPanelController(IServiceLocator serviceLocator, IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, ISettingsProvider settingsProvider)
-            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider) { }
+            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, ISettingsProvider settingsProvider,
+             ITransactionManagerProvider transactionManagerProvider)
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider) { }
     }
 }
