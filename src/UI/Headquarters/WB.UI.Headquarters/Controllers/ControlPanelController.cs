@@ -224,7 +224,6 @@ namespace WB.UI.Headquarters.Controllers
                         email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
                         isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
                         passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
-                        roles: userToCheck.Roles.ToArray(),
                         personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
 
                     this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
