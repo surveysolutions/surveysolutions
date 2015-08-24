@@ -6,6 +6,8 @@ using System.Linq;
 
 using Main.Core.Entities.SubEntities;
 
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -15,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
 using WB.Core.SharedKernels.Enumerator.Entities;
@@ -25,7 +28,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
-    internal class StatefulInterview : Interview, IStatefulInterview
+    internal class StatefulInterview : Interview, IStatefulInterview, ISnapshotable<InterviewState>
     {
         private class CalculatedState
         {
@@ -60,6 +63,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.calculated = new CalculatedState();
         }
 
+        public new void RestoreFromSnapshot(InterviewState snapshot)
+        {
+            base.RestoreFromSnapshot(snapshot);
+            this.InitializeCreatedInterview(this.EventSourceId, snapshot.QuestionnaireId, snapshot.QuestionnaireVersion);
+        }
 
         protected new void Apply(SynchronizationMetadataApplied @event)
         {
