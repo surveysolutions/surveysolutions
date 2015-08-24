@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         Establish context = () =>
         {
             oneQuestionHeaderStructureForLevel =
-                CreateHeaderStructureForLevel(CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("c1", "t1`\""), CreateLabelItem("c2", "t2\"'")));
+                CreateHeaderStructureForLevel(CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("1", "t1`\""), CreateLabelItem("2", "t2\"'")));
             stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
         };
 
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
            stataGeneratedContent.ShouldContain(string.Format("label values {0} l{0}", questionsVariableName));
 
         It should_contain_label_definition = () =>
-            stataGeneratedContent.ShouldContain(string.Format("label define l{0} c1 `\"t1\"' c2 `\"t2\"'", questionsVariableName));
+            stataGeneratedContent.ShouldContain(string.Format("label define l{0} 1 `\"t1\"' 2 `\"t2\"'", questionsVariableName));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel oneQuestionHeaderStructureForLevel;
