@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -11,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class AnswerToStringService : IAnswerToStringService
     {
-        public string AnswerToUIString(BaseQuestionModel question, BaseInterviewAnswer answer)
+        public string AnswerToUIString(BaseQuestionModel question, BaseInterviewAnswer answer, IStatefulInterview interview, QuestionnaireModel questionnaire)
         {
             if (answer == null || !answer.IsAnswered)
                 return string.Empty;
@@ -73,6 +76,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 return string.Join(", ", ((TextListAnswer)answer).Answers.Select(x => x.Item2));
             }
 
+            var singleOptionLinkedAnswer = answer as LinkedSingleOptionAnswer;
+            if (singleOptionLinkedAnswer != null)
+            {
+                var linkedSingleOptionQuestion = question as LinkedSingleOptionQuestionModel;
+                if (linkedSingleOptionQuestion != null)
+                {
+                    var referencedQuestionIdentity = new Identity(singleOptionLinkedAnswer.Id, singleOptionLinkedAnswer.RosterVector);
+                    var referencedAnswer = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedSingleOptionQuestion.LinkedToQuestionId, referencedQuestionIdentity)
+                            .FirstOrDefault(a => a.RosterVector.SequenceEqual(singleOptionLinkedAnswer.Answer));
+
+                    if (referencedAnswer != null)
+                    {
+                        var referencedQuestion = questionnaire.Questions[linkedSingleOptionQuestion.LinkedToQuestionId];
+                        return this.AnswerToUIString(referencedQuestion, referencedAnswer, interview, questionnaire);
+                    }
+                }
+            }
+        
             return answer.ToString();
         }
     }

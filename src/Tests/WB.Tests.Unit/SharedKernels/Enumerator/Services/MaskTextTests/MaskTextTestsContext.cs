@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.Enumerator.Services.MaskText;
 
-namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Services.MaskTextTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
 {
     internal class MaskTextTestsContext
     {
