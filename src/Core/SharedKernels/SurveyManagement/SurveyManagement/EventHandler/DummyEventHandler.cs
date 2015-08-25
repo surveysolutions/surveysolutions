@@ -31,8 +31,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewDeclaredInvalid>,
         IEventHandler<QuestionnaireAssemblyImported>,
-        IEventHandler<TabletRegistered>, 
-        IEventHandler<TabletDocument>
+        IEventHandler<TabletRegistered>,
+        IEventHandler<TabletDocument>,
+        IEventHandler<SubstitutionTitlesChanged>
     {
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
@@ -94,5 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<TabletDocument> evnt)
         {
         }
+
+        public void Handle(IPublishedEvent<SubstitutionTitlesChanged> evnt){}
     }
 }
