@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 input.QuestionnaireId = data.Request.TemplateId;
                 input.QuestionnaireVersion = data.Request.TemplateVersion;
-                input.TeamLeadId = data.Request.ResponsibleId;
+                input.TeamLeadName = data.Request.ResponsibleName;
                 input.Status = data.Request.Status;
                 input.SearchBy = data.Request.SearchBy;
             }
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 input.QuestionnaireId = data.Request.TemplateId;
                 input.QuestionnaireVersion = data.Request.TemplateVersion;
-                input.ResponsibleId = data.Request.ResponsibleId;
+                input.ResponsibleName = data.Request.ResponsibleName;
                 input.Status = data.Request.Status;
                 input.SearchBy = data.Request.SearchBy;
             }

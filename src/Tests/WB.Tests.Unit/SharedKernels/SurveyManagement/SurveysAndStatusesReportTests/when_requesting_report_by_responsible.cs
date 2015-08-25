@@ -33,12 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
         };
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { ResponsibleId = userId });
+        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { ResponsibleName = userName });
 
         It should_count_only_interviews_by_responsible = () => 
             report.Items.First().CompletedCount.ShouldEqual(2);
 
         static Guid userId;
+        static string userName = "userName";
         static SurveysAndStatusesReport reportFactory;
         static SurveysAndStatusesReportView report;
     }
