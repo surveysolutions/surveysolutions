@@ -653,6 +653,8 @@ namespace WB.Tests.Unit
             InterviewStatus? status = null,
             Guid? responsibleId = null,
             Guid? teamLeadId = null,
+            string responsibleName = null,
+            string teamLeadName = null,
             UserRoles role = UserRoles.Operator)
         {
             return new InterviewSummary()
@@ -661,9 +663,9 @@ namespace WB.Tests.Unit
                 QuestionnaireVersion = questionnaireVersion ?? 1,
                 Status = status.GetValueOrDefault(),
                 ResponsibleId = responsibleId.GetValueOrDefault(),
-                ResponsibleName = responsibleId.FormatGuid(),
+                ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
                 TeamLeadId = teamLeadId.GetValueOrDefault(),
-                TeamLeadName = teamLeadId.FormatGuid(),
+                TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role
             };
         }
