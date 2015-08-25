@@ -106,13 +106,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         {
             var filetredInterviews = _.Where(x => !x.IsDeleted);
 
-            if (input.ResponsibleId.HasValue)
+            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleId == input.ResponsibleId);
+                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleName == input.ResponsibleName);
             }
-            if (input.TeamLeadId.HasValue)
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadId == input.TeamLeadId);
+                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadName == input.TeamLeadName);
             }
 
             return filetredInterviews;
