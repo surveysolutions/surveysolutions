@@ -78,9 +78,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 items = items.Where(x => x.Status == input.Status);
             }
 
-            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
+            if (input.TeamLeadId.HasValue)
             {
-                items = items.Where(x => x.TeamLeadName == input.TeamLeadName);
+                items = items.Where(x => x.TeamLeadId == input.TeamLeadId.Value);
             }
 
             if (input.QuestionnaireId.HasValue)
