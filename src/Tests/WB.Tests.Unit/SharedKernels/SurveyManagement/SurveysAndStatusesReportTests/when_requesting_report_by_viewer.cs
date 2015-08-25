@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, teamLeadId: userId),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, teamLeadId: userId),
+                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, teamLeadId: userId, teamLeadName: teamLeadName),
+                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, teamLeadId: userId, teamLeadName: teamLeadName),
                 Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, teamLeadId: Guid.NewGuid()),
             };
 
@@ -31,13 +31,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
         };
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { TeamLeadName = userName });
+        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { TeamLeadName = teamLeadName });
 
         It should_count_only_interviews_by_teamlead = () =>
             report.Items.First().CompletedCount.ShouldEqual(2);
 
         static Guid userId;
-        static string userName = "userName";
+        static string teamLeadName = "userName";
         static SurveysAndStatusesReport reportFactory;
         static SurveysAndStatusesReportView report;     
     }
