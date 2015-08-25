@@ -20,12 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public void Configure()
         {
             IJobDetail job = JobBuilder.Create<UserPreloadingVerificationJob>()
-                .WithIdentity("user preloading verification", "Verification")
+                .WithIdentity("user preloading verification", "Batch user creation")
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("user preloading verification", "Verification")
+                .WithIdentity("user preloading verification trigger", "Batch user creation")
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(userPreloadingSettings.VerificationIntervalInSeconds)
