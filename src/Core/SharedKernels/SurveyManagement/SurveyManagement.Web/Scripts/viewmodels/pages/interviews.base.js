@@ -39,7 +39,7 @@
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
         self.Url.query['status'] = self.SelectedStatus() || "";
-        self.Url.query['interviewerId'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId;
+        self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         self.Url.query['searchBy'] = self.SearchBy() || "";
         
         if (Modernizr.history) {
@@ -49,7 +49,7 @@
         return {
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
-            ResponsibleId: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId,
+            ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy
         };
@@ -60,15 +60,16 @@
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
         self.SelectedStatus(self.QueryString['status']);
 
-        //var selectedResponsible = _.find(self.Responsibles, function(responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
-        //self.SelectedResponsible(selectedResponsible);
+        if (self.QueryString['responsible']) {
+            self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
+        }
 
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
         self.Url.query['status'] = self.QueryString['status'] || "";
-        self.Url.query['interviewerId'] = self.QueryString['interviewerId'] || "";
+        self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
 
         self.SelectedTemplate.subscribe(self.filter);

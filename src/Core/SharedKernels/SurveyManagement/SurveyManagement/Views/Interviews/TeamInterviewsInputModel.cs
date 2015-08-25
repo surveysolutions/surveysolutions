@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 
         public long? QuestionnaireVersion { get; set; }
 
-        public Guid? ResponsibleId { get; set; }
+        public string ResponsibleName { get; set; }
 
         public Guid? InterviewId { get; set; }
 

@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public Guid? QuestionnaireId { get; set; }
 
-        public Guid? TeamLeadId { get; set; }
+        public string TeamLeadName { get; set; }
 
         public Guid? InterviewId { get; set; }
 

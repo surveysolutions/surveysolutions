@@ -78,8 +78,6 @@ namespace WB.UI.Headquarters.Controllers
                         this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(this.Filters());
         }
 
