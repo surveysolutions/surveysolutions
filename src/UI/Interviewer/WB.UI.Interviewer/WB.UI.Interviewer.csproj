@@ -440,10 +440,6 @@
     <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ScreenGroupView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Layout\settings_dialog.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -453,28 +449,12 @@
     <AndroidResource Include="Resources\Layout\SyncLogin.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\CreateInterview.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Layout\InterviewActionBar.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\FinishInstallation.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\ListItem_UserLogin.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\StatisticsContent.axml" />
-    <AndroidResource Include="Resources\Layout\StaticTextView.axml" />
-    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
-    <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
-    <AndroidResource Include="Resources\Layout\list_navigation_item.axml" />
-    <AndroidResource Include="Resources\Layout\GroupView.axml" />
-    <AndroidResource Include="Resources\Layout\FilteredComboboxRowLayout.axml" />
-    <AndroidResource Include="Resources\Layout\Details.axml" />
-    <AndroidResource Include="Resources\Layout\CascadingComboboxRowLayout.axml" />
-    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml" />
     <AndroidResource Include="Resources\Layout\splash.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
