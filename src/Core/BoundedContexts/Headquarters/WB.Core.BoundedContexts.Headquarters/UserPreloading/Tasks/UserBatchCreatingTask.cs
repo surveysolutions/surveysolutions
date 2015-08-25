@@ -20,12 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public void Configure()
         {
             IJobDetail job = JobBuilder.Create<UserBatchCreatingJob>()
-                .WithIdentity("user creation", "Creation")
+                .WithIdentity("user creation", "Batch user creation")
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("user creation", "Creation")
+                .WithIdentity("user creation trigger", "Batch user creation")
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(userPreloadingSettings.CreationIntervalInSeconds)
