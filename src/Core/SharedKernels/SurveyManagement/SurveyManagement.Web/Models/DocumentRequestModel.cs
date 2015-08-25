@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public Guid? TemplateId { get; set; }
         public long? TemplateVersion { get; set; }
-        public string ResponsibleName { get; set; }
+        public Guid? ResponsibleId { get; set; }
         public InterviewStatus? Status { get; set; }
         public string SearchBy { get; set; }
     }

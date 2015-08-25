@@ -1,7 +1,9 @@
-﻿namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿using System;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class SurveyRequestModel
     {
-        public string ResponsibleName { get; set; }
+        public Guid? UserId { get; set; }
     }
 }
