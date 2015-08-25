@@ -41,7 +41,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ObservableRangeCollection<dynamic> Items
         {
             get { return this.items; }
-            set { this.items = value; this.RaisePropertyChanged(); }
+            set
+            {
+                this.items = value;
+                this.RaisePropertyChanged();
+            }
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
@@ -109,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var completeScreenItems = this.interviewViewModelFactory
                 .GetCompleteScreenEntities(this.navigationState.InterviewId);
-            
+
             completeScreenItems.ForEach(x => this.Items.Add(x)); ;
             this.Name = UIResources.Interview_Complete_Screen_Title;
         }
@@ -193,8 +197,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(RosterInstancesRemoved @event)
         {
             var itemsToRemove = this.Items.OfType<GroupViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
-
-            this.Items.RemoveRange(itemsToRemove);
+            InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
         }
 
         public void Handle(QuestionsEnabled @event)
