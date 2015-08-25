@@ -88,8 +88,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                 items = items.Where(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
             }
 
-            items = input.ResponsibleId.HasValue
-                ? items.Where(x => x.ResponsibleId == input.ResponsibleId)
+            items = !string.IsNullOrWhiteSpace(input.ResponsibleName)
+                ? items.Where(x => x.ResponsibleName == input.ResponsibleName)
                 : items.Where(x => x.TeamLeadId == input.ViewerId);
             return items;
         }

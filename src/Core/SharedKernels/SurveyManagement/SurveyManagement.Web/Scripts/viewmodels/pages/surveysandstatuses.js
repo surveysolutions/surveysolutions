@@ -12,16 +12,17 @@
     self.SelectedResponsible = ko.observable();
 
     self.GetFilterMethod = function() {
-        self.Url.query['interviewerId'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId;
+        self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         if (Modernizr.history) {
-            window.history.pushState({}, "interviewerId", self.Url.toString());
+            window.history.pushState({}, "responsible", self.Url.toString());
         }
 
-        return { UserId: self.Url.query['interviewerId'] };
+        return { ResponsibleName: self.Url.query['responsible'] };
     };
     self.load = function() {
-        //var selectedResponsible = _.find(self.Responsibles, function (responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
-        //self.SelectedResponsible(selectedResponsible);
+        if (self.QueryString['responsible']) {
+            self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
+        }
         self.SelectedResponsible.subscribe(self.filter);
         self.search();
     };
