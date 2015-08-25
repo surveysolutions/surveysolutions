@@ -55,8 +55,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set { this.completeComment = value; this.RaisePropertyChanged(); }
         }
 
+        private bool wasThisInterviewCompleted = false;
+
         private async Task CompleteInterviewAsync()
         {
+            if (this.wasThisInterviewCompleted) return;
+
+            this.wasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
             var completeInterviewCommand = new CompleteInterviewCommand(
