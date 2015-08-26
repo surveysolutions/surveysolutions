@@ -1,18 +1,17 @@
-using Machine.Specifications;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Machine.Specifications;
+using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
     internal class when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty_but_no_more_packages : SyncManagerTestContext
     {

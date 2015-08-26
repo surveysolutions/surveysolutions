@@ -1,19 +1,15 @@
 using System;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
-    internal class when_getting_questionnaire_sync_package_and_device_is_not_registered : SyncManagerTestContext
+    internal class when_getting_user_sync_package_and_device_is_not_registered : SyncManagerTestContext
     {
         Establish context = () =>
         {
@@ -23,7 +19,7 @@ namespace WB.Tests.Unit.Core.Synchronization
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                syncManager.ReceiveQuestionnaireSyncPackage(deviceId, "packageId", Guid.NewGuid()));
+                syncManager.ReceiveUserSyncPackage(deviceId, "packageId", userId));
 
         It should_throw_ArgumentException_exception = () =>
             exception.ShouldBeOfExactType<ArgumentException>();
@@ -36,5 +32,6 @@ namespace WB.Tests.Unit.Core.Synchronization
         private static Exception exception;
         private static Guid deviceId = "Android".ToGuid();
         private static IReadSideRepositoryReader<TabletDocument> devices;
+        private static readonly Guid userId = Guid.Parse("11111111111111111111111111111111");
     }
 }
