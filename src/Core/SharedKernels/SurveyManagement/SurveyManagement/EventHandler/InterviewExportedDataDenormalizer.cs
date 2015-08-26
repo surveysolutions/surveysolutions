@@ -93,19 +93,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewStatusHistory == null)
                 return;
 
-            var recordedStatusesForInterview = interviewStatusHistory.InterviewCommentedStatuses.ToList();
+            var recordedStatusesForInterview =
+                interviewStatusHistory.InterviewCommentedStatuses.TakeWhile(
+                    x => x.Id != evnt.EventIdentifier).ToList();
 
             while (recordedStatusesForInterview.Any())
             {
-                var lastStatusRecors = recordedStatusesForInterview.Last();
-                if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(lastStatusRecors.Status))
+                var lastStatusRecord = recordedStatusesForInterview.Last();
+                if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(lastStatusRecord.Status))
                     break;
 
-                if (lastStatusRecors.Status == InterviewExportedAction.FirstAnswerSet)
-                    this.dataExportWriter.AddInterviewAction(lastStatusRecors.Status, evnt.EventSourceId,
-                        lastStatusRecors.StatusChangeOriginatorId, lastStatusRecors.Timestamp);
-                
-                recordedStatusesForInterview.Remove(lastStatusRecors);
+                if (lastStatusRecord.Status == InterviewExportedAction.FirstAnswerSet)
+                    this.dataExportWriter.AddInterviewAction(lastStatusRecord.Status, evnt.EventSourceId,
+                        lastStatusRecord.StatusChangeOriginatorId, lastStatusRecord.Timestamp);
+
+                recordedStatusesForInterview.Remove(lastStatusRecord);
             }
 
             UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId,

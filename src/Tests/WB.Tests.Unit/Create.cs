@@ -124,10 +124,11 @@ namespace WB.Tests.Unit
             where T : class
         {
             var mock = new Mock<IPublishedEvent<T>>();
+            var eventIdentifier = eventId ?? Guid.NewGuid();
             mock.Setup(x => x.Payload).Returns(@event);
             mock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
             mock.Setup(x => x.Origin).Returns(origin);
-            mock.Setup(x => x.EventIdentifier).Returns(eventId ?? Guid.NewGuid());
+            mock.Setup(x => x.EventIdentifier).Returns(eventIdentifier);
             mock.Setup(x => x.EventTimeStamp).Returns((eventTimeStamp ?? DateTime.Now));
             var publishableEventMock =mock.As<IPublishableEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
@@ -1485,9 +1486,9 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new InterviewRestarted(userId: GetGuidIdByStringId(userId), restartTime: DateTime.Now, comment: comment), eventSourceId: interviewId);
         }
 
-        public static IPublishedEvent<InterviewCompleted> InterviewCompletedEvent(Guid? interviewId = null, string userId = null, string comment = null)
+        public static IPublishedEvent<InterviewCompleted> InterviewCompletedEvent(Guid? interviewId = null, string userId = null, string comment = null, Guid? eventId = null)
         {
-            return ToPublishedEvent(new InterviewCompleted(userId: GetGuidIdByStringId(userId), completeTime: DateTime.Now, comment: comment), eventSourceId: interviewId);
+            return ToPublishedEvent(new InterviewCompleted(userId: GetGuidIdByStringId(userId), completeTime: DateTime.Now, comment: comment), eventSourceId: interviewId, eventId: eventId);
         }
 
         public static IPublishedEvent<InterviewRejected> InterviewRejectedEvent(Guid? interviewId = null, string userId = null, string comment = null)
@@ -1759,10 +1760,17 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static InterviewCommentedStatus InterviewCommentedStatus(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null, InterviewExportedAction status = InterviewExportedAction.Completed)
+        public static InterviewCommentedStatus InterviewCommentedStatus(
+            Guid? statusId = null, 
+            Guid? interviewerId = null, 
+            Guid? supervisorId = null,
+            DateTime? timestamp = null, 
+            TimeSpan? timeSpanWithPreviousStatus = null, 
+            InterviewExportedAction status = InterviewExportedAction.Completed)
         {
             return new InterviewCommentedStatus()
             {
+                Id = statusId ?? Guid.NewGuid(),
                 Status = status,
                 Timestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId??Guid.NewGuid(),
