@@ -61,14 +61,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
             return Task.Factory.StartNew(() =>
             {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                 try
                 {
                     this.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
                 }
                 finally
                 {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                 }
             });
         }
