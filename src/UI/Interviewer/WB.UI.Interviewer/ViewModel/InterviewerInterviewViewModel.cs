@@ -17,6 +17,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         readonly IStatefulInterviewRepository interviewRepository;
         readonly IViewModelNavigationService viewModelNavigationService;
+        readonly IDataCollectionAuthentication authenticationService;
 
         public InterviewerInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -28,12 +29,14 @@ namespace WB.UI.Interviewer.ViewModel
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
+            IDataCollectionAuthentication authenticationService,
             GroupStateViewModel groupState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.authenticationService = authenticationService;
         }
 
 
@@ -51,7 +54,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         void SignOut()
         {
-            Mvx.Resolve<IDataCollectionAuthentication>().LogOff();
+            authenticationService.LogOff();
             this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
         }
 
