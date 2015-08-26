@@ -36,6 +36,12 @@ or configure whitespace globally
       config.append = '\n\n';
     }])
 
+the directive also emits an `elastic:resize` event which you can listen for
+
+    $scope.$on('elastic:resize', function(event, element, oldHeight, newHeight) {
+      // do stuff
+    });
+
 Install
 -------
 
@@ -43,7 +49,16 @@ Install
 
     npm install angular-elastic
 
-Include the `elastic.js` script provided by this component in your app, and add `monospaced.elastic` to your app’s dependencies.
+Include the `elastic.js` script provided by this component in your app.
+
+Make sure to add `monospaced.elastic` to your app’s module dependencies.
+
+```
+angular
+  .module('yourApp', [
+    'monospaced.elastic'
+  ]);
+````
 
 Support
 -------
