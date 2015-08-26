@@ -9,12 +9,11 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
-    internal class when_getting_user_ids_and_device_is_registered_and_last_package_id_is_empty : SyncManagerTestContext
+    internal class when_getting_user_ids_and_device_is_registered_and_last_package_id_is_not_empty : SyncManagerTestContext
     {
         Establish context = () =>
         {
@@ -27,6 +26,8 @@ namespace WB.Tests.Unit.Core.Synchronization
                                    CreateUserSyncPackage(userId, sortIndex:2),
                                    CreateUserSyncPackage(userId, sortIndex:3)
                                };
+
+            lastSyncedPackageId = userSyncPackages[0].PackageId;
 
             var writer = Stub.ReadSideRepository<UserSyncPackageMeta>();
             foreach (var package in userSyncPackages)

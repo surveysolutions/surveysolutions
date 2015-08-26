@@ -1,51 +1,47 @@
 using System;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
-    internal class when_getting_user_sync_package_and_device_is_registered_and_package_is_absent : SyncManagerTestContext
+    internal class when_getting_questionnaire_ids_and_device_is_registered_and_last_package_id_is_not_empty_but_package_is_absent : SyncManagerTestContext
     {
         Establish context = () =>
         {
             tabletDocument = CreateTabletDocument(deviceId, androidId);
             devices = Mock.Of<IReadSideRepositoryReader<TabletDocument>>(x => x.GetById(deviceId.FormatGuid()) == tabletDocument);
 
-            userPackageStorage = Mock.Of<IQueryableReadSideRepositoryReader<UserSyncPackageMeta>>();
+            lastSyncedPackageId = "22222222222222222222222222222222_1$2";
 
-            syncManager = CreateSyncManager(devices: devices, usersReader: userPackageStorage);
+            syncManager = CreateSyncManager(devices: devices);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                syncManager.ReceiveUserSyncPackage(deviceId, syncedPackageId, userId: Guid.NewGuid()));
+                syncManager.GetQuestionnairePackageIdsWithOrder(userId, deviceId, lastSyncedPackageId));
 
-        It should_throw_ArgumentException_exception = () =>
-            exception.ShouldBeOfExactType<ArgumentException>();
+        It should_throw_SyncPackageNotFoundException_exception = () =>
+            exception.ShouldBeOfExactType<SyncPackageNotFoundException>();
 
-        It should_throw_exception_with_message_containting__package_is_absent__ = () =>
-            new[] { "package", syncedPackageId, "with user is absent" }.ShouldEachConformTo(
+        It should_throw_exception_with_message_containting__package_not_found_on_server__ = () =>
+            new[] { "sync package with id", lastSyncedPackageId, "was not found on server" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static SyncManager syncManager;
         private static Exception exception;
 
-        private const string androidId = "Android";
+        private static string androidId = "Android";
         private static Guid deviceId = androidId.ToGuid();
         private static TabletDocument tabletDocument;
         private static IReadSideRepositoryReader<TabletDocument> devices;
 
-        private const string syncedPackageId = "some_sync_package_id";
-        private static IQueryableReadSideRepositoryReader<UserSyncPackageMeta> userPackageStorage;
+        private static Guid userId = Guid.Parse("11111111111111111111111111111111");
+        private static string lastSyncedPackageId = "sync package id";
     }
 }

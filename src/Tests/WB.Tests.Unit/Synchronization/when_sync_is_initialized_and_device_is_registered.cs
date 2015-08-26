@@ -1,9 +1,6 @@
 using System;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -12,10 +9,9 @@ using WB.Core.Synchronization;
 using WB.Core.Synchronization.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
     internal class when_sync_is_initialized_and_device_is_registered : SyncManagerTestContext
     {
