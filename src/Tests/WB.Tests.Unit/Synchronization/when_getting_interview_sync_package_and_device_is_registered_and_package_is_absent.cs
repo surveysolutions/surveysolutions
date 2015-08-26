@@ -1,6 +1,4 @@
 using System;
-using System.Web.UI.WebControls;
-
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
@@ -8,10 +6,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
     internal class when_getting_interview_sync_package_and_device_is_registered_and_package_is_absent : SyncManagerTestContext
     {

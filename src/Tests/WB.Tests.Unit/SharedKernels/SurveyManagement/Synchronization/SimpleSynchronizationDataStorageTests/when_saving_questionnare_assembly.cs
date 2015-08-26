@@ -4,13 +4,11 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormalizerTests;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataStorageTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Synchronization.SimpleSynchronizationDataStorageTests
 {
     internal class when_saving_questionnare_assembly : QuestionnaireSynchronizationDenormalizerTestsContext
     {

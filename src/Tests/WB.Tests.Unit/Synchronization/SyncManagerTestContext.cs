@@ -1,20 +1,16 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.DenormalizerStorage;
 using Moq;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncStorage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
-namespace WB.Tests.Unit.Core.Synchronization
+namespace WB.Tests.Unit.Synchronization
 {
     [Subject(typeof (SyncManager))]
     internal class SyncManagerTestContext

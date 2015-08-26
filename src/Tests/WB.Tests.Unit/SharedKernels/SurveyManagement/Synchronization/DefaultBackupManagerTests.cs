@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
-using Ncqrs;
-using Ncqrs.Config;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using NUnit.Framework;
 using WB.Core.Synchronization.Implementation.ImportManager;
 
-namespace WB.Tests.Unit.SharedKernels.Synchronization
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Synchronization
 {
     [TestFixture]
     public class DefaultBackupManagerTests
@@ -28,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
         {
             // arrange
             var eventStore = new Mock<IEventStore>();
-            DefaultBackupManager target = CreateDefaultBackupManager(eventStore.Object);
+            DefaultBackupManager target = this.CreateDefaultBackupManager(eventStore.Object);
 
             // act
             var result = target.Backup();
@@ -59,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
 
             eventStore.Setup(x => x.GetAllEvents()).Returns(eventList);
 
-            DefaultBackupManager target = CreateDefaultBackupManager(eventStore.Object);
+            DefaultBackupManager target = this.CreateDefaultBackupManager(eventStore.Object);
 
             // act
             var result = target.Backup();
@@ -73,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
         {
             // arrange
             var eventStore = new Mock<IStreamableEventStore>();
-            DefaultBackupManager target = CreateDefaultBackupManager(eventStore.Object);
+            DefaultBackupManager target = this.CreateDefaultBackupManager(eventStore.Object);
 
             // act
             var result = target.Backup();
