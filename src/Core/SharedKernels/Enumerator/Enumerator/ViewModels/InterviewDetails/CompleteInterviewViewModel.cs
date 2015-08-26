@@ -41,7 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return this.completeInterviewCommand ?? (this.completeInterviewCommand = new MvxCommand(async () => await this.CompleteInterviewAsync()));
+                return this.completeInterviewCommand ?? 
+                    (this.completeInterviewCommand = new MvxCommand(async () => await this.CompleteInterviewAsync(), () => !wasThisInterviewCompleted));
             }
         }
 
@@ -56,8 +57,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async Task CompleteInterviewAsync()
         {
-            if (this.wasThisInterviewCompleted) return;
-
             this.wasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
