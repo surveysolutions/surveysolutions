@@ -2172,7 +2172,6 @@
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
     <Folder Include="GenericSubdomains\Logging\" />
-    <Folder Include="Infrastructure\Ncqrs\Config\" />
     <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
   </ItemGroup>
