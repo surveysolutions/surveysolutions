@@ -145,6 +145,7 @@
     <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
+    <Compile Include="Converters\ToSpannableGroupTitleConverter.cs" />
     <Compile Include="Converters\GroupStateToColorConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
     <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
@@ -155,7 +156,6 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\ButtonGroupTitleBinding.cs" />
     <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
