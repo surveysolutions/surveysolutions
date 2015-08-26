@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -23,10 +26,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public EnablementViewModel Enablement { get; private set; }
         public string Title { get; private set; }
-        public string RosterTitle { get; private set; }
         public bool IsRoster { get; private set; }
 
+        private string rosterTitle;
+        public string RosterTitle
+        {
+            get { return rosterTitle; }
+            set
+            {
+                this.rosterTitle = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
         private readonly GroupStateViewModel groupState;
+        readonly ILiteEventRegistry eventRegistry;
+
         public GroupStateViewModel GroupState
         {
             get { return this.groupState; }
@@ -53,13 +68,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
-            GroupStateViewModel groupState)
+            GroupStateViewModel groupState,
+            ILiteEventRegistry eventRegistry)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
+            this.eventRegistry = eventRegistry;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -79,6 +96,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.navigationState = navigationState;
             this.groupIdentity = entityIdentity;
+
+            this.eventRegistry.Subscribe(this, interviewId);
 
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
             this.GroupState.Init(interviewId, entityIdentity);
@@ -105,6 +124,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private async Task NavigateToGroupAsync()
         {
             await this.navigationState.NavigateToAsync(this.groupIdentity);
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            if (!this.IsRoster) return;
+
+            foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.Identity.Equals(changedInstance.RosterInstance.GetIdentity())))
+            {
+                this.RosterTitle = changedInstance.Title;
+            }
         }
     }
 }
