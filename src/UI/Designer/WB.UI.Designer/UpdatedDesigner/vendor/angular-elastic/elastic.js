@@ -1,8 +1,14 @@
 /*
- * angular-elastic v2.3.6
+ * angular-elastic v2.5.0
  * (c) 2014 Monospaced http://monospaced.com
  * License: MIT
  */
+
+if (typeof module !== 'undefined' &&
+    typeof exports !== 'undefined' &&
+    module.exports === exports){
+  module.exports = 'monospaced.elastic';
+}
 
 angular.module('monospaced.elastic', [])
 
@@ -43,13 +49,13 @@ angular.module('monospaced.elastic', [])
 
           var append = attrs.msdElastic ? attrs.msdElastic.replace(/\\n/g, '\n') : config.append,
               $win = angular.element($window),
-              mirrorStyle = 'position: absolute; top: -999px; right: auto; bottom: auto;' +
-                            'left: 0; overflow: hidden; -webkit-box-sizing: content-box;' +
-                            '-moz-box-sizing: content-box; box-sizing: content-box;' +
-                            'min-height: 0 !important; height: 0 !important; padding: 0;' +
-                            'word-wrap: break-word; border: 0;',
-              $mirror = angular.element('<textarea tabindex="-1" ' +
-                                        'style="' + mirrorStyle + '"/>').data('elastic', true),
+              mirrorInitStyle = 'position: absolute; top: -999px; right: auto; bottom: auto;' +
+                                'left: 0; overflow: hidden; -webkit-box-sizing: content-box;' +
+                                '-moz-box-sizing: content-box; box-sizing: content-box;' +
+                                'min-height: 0 !important; height: 0 !important; padding: 0;' +
+                                'word-wrap: break-word; border: 0;',
+              $mirror = angular.element('<textarea aria-hidden="true" tabindex="-1" ' +
+                                        'style="' + mirrorInitStyle + '"/>').data('elastic', true),
               mirror = $mirror[0],
               taStyle = getComputedStyle(ta),
               resize = taStyle.getPropertyValue('resize'),
@@ -105,6 +111,8 @@ angular.module('monospaced.elastic', [])
            */
 
           function initMirror() {
+            var mirrorStyle = mirrorInitStyle;
+
             mirrored = ta;
             // copy the essential styles from the textarea to the mirror
             taStyle = getComputedStyle(ta);
@@ -152,12 +160,11 @@ angular.module('monospaced.elastic', [])
                 mirrorHeight = minHeight;
               }
               mirrorHeight += boxOuter.height;
-
               ta.style.overflowY = overflow || 'hidden';
 
               if (taHeight !== mirrorHeight) {
+                scope.$emit('elastic:resize', $ta, taHeight, mirrorHeight);
                 ta.style.height = mirrorHeight + 'px';
-                scope.$emit('elastic:resize', $ta);
               }
 
               // small delay to prevent an infinite loop
@@ -194,6 +201,7 @@ angular.module('monospaced.elastic', [])
           });
 
           scope.$on('elastic:adjust', function() {
+            initMirror();
             forceAdjust();
           });
 
