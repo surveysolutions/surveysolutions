@@ -9,21 +9,24 @@ namespace WB.UI.Interviewer.ViewModel
     public class DashboardViewModel : BaseViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
+        readonly IDataCollectionAuthentication authenticationService;
 
-        public DashboardViewModel(IViewModelNavigationService viewModelNavigationService)
+        public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
+            IDataCollectionAuthentication authenticationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.authenticationService = authenticationService;
         }
 
         public void Init()
         {
-            if (!Mvx.Resolve<IDataCollectionAuthentication>().IsLoggedIn)
+            if (!authenticationService.IsLoggedIn)
             {
                 this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
                 return;
             }
 
-            this.LoggedInUserName = Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Name;
+            this.LoggedInUserName = authenticationService.CurrentUser.Name;
         }
 
         private string loggedInUserName;
