@@ -1666,8 +1666,6 @@
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\InMemoryEventStoreSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\Storage\PropertyBagTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\UncommittedEventStreamTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\InternalExtensionsTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Prepare.cs" />
     <Compile Include="Infrastructure\ReadSideRepositoryReaderExtensionsTests\when_getting_view_by_guid_id.cs" />
     <Compile Include="Infrastructure\ReadSideStorageExtensionsTests\when_getting_view_by_guid_id.cs" />

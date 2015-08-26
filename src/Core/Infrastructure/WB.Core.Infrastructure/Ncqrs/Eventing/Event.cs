@@ -33,7 +33,7 @@ namespace Ncqrs.Eventing
         public Event()
         {
             EventIdentifier = Guid.NewGuid();
-            EventTimeStamp = default(DateTime);
+            EventTimeStamp = DateTime.UtcNow;
             EventVersion = DefaultVersion;
         }
 
