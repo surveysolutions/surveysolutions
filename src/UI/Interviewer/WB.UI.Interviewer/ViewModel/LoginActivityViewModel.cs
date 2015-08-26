@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,18 +10,20 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class LoginActivityViewModel : BaseViewModel
     {
-        
         private readonly IDataCollectionAuthentication dataCollectionAuthentication;
         private readonly IPasswordHasher passwordHasher;
+        readonly IDataCollectionAuthentication authenticationService;
         readonly IViewModelNavigationService viewModelNavigationService;
 
         public LoginActivityViewModel(
             IDataCollectionAuthentication dataCollectionAuthentication, 
             IPasswordHasher passwordHasher,
+            IDataCollectionAuthentication authenticationService,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.dataCollectionAuthentication = dataCollectionAuthentication;
             this.passwordHasher = passwordHasher;
+            this.authenticationService = authenticationService;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
@@ -90,7 +91,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         private async void StartLogin()
         {
-            var result = await Mvx.Resolve<IDataCollectionAuthentication>().LogOnAsync(this.Login, this.Password);
+            var result = await authenticationService.LogOnAsync(this.Login, this.Password);
             if (result)
             {
                 this.viewModelNavigationService.NavigateToDashboard();
