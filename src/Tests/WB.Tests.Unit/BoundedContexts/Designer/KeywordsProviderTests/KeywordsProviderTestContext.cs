@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
-namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
+namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
 {
     internal class KeywordsProviderTestContext
     {
