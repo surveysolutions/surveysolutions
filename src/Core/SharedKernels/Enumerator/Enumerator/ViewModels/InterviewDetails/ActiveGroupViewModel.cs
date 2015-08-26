@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (navigationParams.TargetGroup.Id == this.questionnaire.FinishGroupId)
             {
-                this.CreateCompleteScreen(navigationParams);
+                this.CreateCompleteScreen();
             }
             else
             {
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void CreateCompleteScreen(GroupChangedEventArgs navigationParams)
+        private void CreateCompleteScreen()
         {
             this.Items = new ObservableRangeCollection<dynamic>();
 
