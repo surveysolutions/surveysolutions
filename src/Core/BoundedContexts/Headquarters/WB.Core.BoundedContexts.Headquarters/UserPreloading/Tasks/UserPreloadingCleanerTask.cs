@@ -20,12 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public void Configure()
         {
             IJobDetail job = JobBuilder.Create<UserPreloadingCleanerJob>()
-                .WithIdentity("user preloading cleaning", "Cleaning")
+                .WithIdentity("user preloading cleaner", "Batch user creation")
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("user preloading cleaning", "Cleaning")
+                .WithIdentity("user preloading cleaner trigger", "Batch user creation")
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInHours(userPreloadingSettings.CleaningIntervalInHours)
