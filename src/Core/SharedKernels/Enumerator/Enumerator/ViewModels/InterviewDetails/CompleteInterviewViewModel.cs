@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CompleteInterviewViewModel : MvxViewModel, IInterviewEntityViewModel
+    public class CompleteInterviewViewModel : MvxNotifyPropertyChanged
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
 
@@ -32,9 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         Guid interviewId;
 
-        public Identity Identity { get { return null; } }
-
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId)
         {
             this.interviewId = Guid.Parse(interviewId);
         }
