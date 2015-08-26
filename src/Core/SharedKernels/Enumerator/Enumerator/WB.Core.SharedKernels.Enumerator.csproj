@@ -130,6 +130,7 @@
     <Compile Include="Services\IAnswerToStringService.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
+    <Compile Include="Services\IUserInterfaceStateService.cs" />
     <Compile Include="Services\IViewModelNavigationService.cs" />
     <Compile Include="EnumeratorSharedKernelModule.cs" />
     <Compile Include="Services\MaskText\MaskedText.cs" />

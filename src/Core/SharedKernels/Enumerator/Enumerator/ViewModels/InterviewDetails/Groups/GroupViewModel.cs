@@ -99,10 +99,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.eventRegistry.Subscribe(this, interviewId);
 
+            GroupModel groupModel;
+            if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(entityIdentity.Id, out groupModel))
+                return;
+
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
             this.GroupState.Init(interviewId, entityIdentity);
 
-            var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id];
             this.Title = groupModel.Title;
             this.RosterTitle = interview.GetRosterTitle(entityIdentity);
             this.IsRoster = groupModel is RosterModel;

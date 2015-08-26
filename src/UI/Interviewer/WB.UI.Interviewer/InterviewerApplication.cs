@@ -205,6 +205,7 @@ namespace WB.UI.Interviewer
             MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
 
             this.kernel.Bind<IUserInteractionService>().To<UserInteractionService>();
+            this.kernel.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
             this.kernel.Bind<SyncPackageIdsStorage>().ToSelf().InSingletonScope();
             this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();

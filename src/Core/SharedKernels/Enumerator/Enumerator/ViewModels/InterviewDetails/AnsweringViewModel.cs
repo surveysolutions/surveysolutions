@@ -4,20 +4,23 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class AnsweringViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
+        readonly IUserInterfaceStateService userInterfaceStateService;
 
         private int inProgressDepth = 0;
 
         protected AnsweringViewModel() { }
 
-        public AnsweringViewModel(ICommandService commandService)
+        public AnsweringViewModel(ICommandService commandService, IUserInterfaceStateService userInterfaceStateService)
         {
             this.commandService = commandService;
+            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         private bool inProgress;
@@ -44,6 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 this.StartInProgressIndicator();
+
+                await userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
 
                 lock (this.cancellationLockObject)
                 {
