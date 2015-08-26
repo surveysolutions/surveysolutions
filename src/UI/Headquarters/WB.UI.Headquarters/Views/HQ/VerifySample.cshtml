@@ -103,7 +103,7 @@
                 </fieldset>
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-8">
-                        <button class="btn btn-large btn-primary" type="submit" data-bind="enable: IsSupervisorSelected, click: uploadSample">Create sample from this data</button>
+                        <button class="btn btn-large btn-primary" type="submit" data-bind="click: uploadSample, @if (!Model.WasSupervsorProvided){<text>enable: IsSupervisorSelected</text>}">Create sample from this data</button>
                     </div>
                 </div>
             </div>
