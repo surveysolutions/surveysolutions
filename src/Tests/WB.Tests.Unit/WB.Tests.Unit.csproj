@@ -1653,7 +1653,6 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\whent_publish_10_events_on_bus_with_ncqrs_style_denormalizer_registred.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_registering_event_handler_from_ignore_list.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\DateTimeBasedClockSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\AggregateRootTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\EventNotHandledExceptionTests.cs" />
@@ -2173,6 +2172,7 @@
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
     <Folder Include="GenericSubdomains\Logging\" />
+    <Folder Include="Infrastructure\Ncqrs\Config\" />
     <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
   </ItemGroup>
