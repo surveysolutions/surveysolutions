@@ -25,6 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>32fa6b60</NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1179,7 +1180,6 @@
     <Content Include="UpdatedDesigner\content\designer-start\inputs.less" />
     <Content Include="UpdatedDesigner\content\designer-start\wb-variables.less" />
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
-    <Content Include="UpdatedDesigner\vendor\ace-builds\bower.json" />
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
