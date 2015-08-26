@@ -1855,8 +1855,8 @@
     <Compile Include="SharedKernels\DataCollection\VersionedReadSideRepositoryWriterExtensionsTests\when_removing_view_by_guid_id.cs" />
     <Compile Include="SharedKernels\DataCollection\VersionedReadSideRepositoryWriterExtensionsTests\when_storing_view_by_guid_id.cs" />
     <Compile Include="SharedKernels\DataCollection\Views\View.cs" />
-    <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
-    <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProviderTests\when_getting_all_reserved_keywords.cs" />
+    <Compile Include="BoundedContexts\Designer\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
+    <Compile Include="BoundedContexts\Designer\KeywordsProviderTests\when_getting_all_reserved_keywords.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status.cs" />

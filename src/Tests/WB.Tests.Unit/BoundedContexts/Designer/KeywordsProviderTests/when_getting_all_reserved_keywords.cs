@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Services;
 
-namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
+namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
 {
     internal class when_getting_all_reserved_keywords : KeywordsProviderTestContext
     {
