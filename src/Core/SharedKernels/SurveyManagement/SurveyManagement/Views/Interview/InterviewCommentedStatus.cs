@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         }
 
         public InterviewCommentedStatus(
+            Guid id,
             Guid statusChangeOriginatorId, 
             Guid? supervisorId,
             Guid? interviewerId,
@@ -22,6 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             string supervisorName,
             string interviewerName)
         {
+            Id = id;
             StatusChangeOriginatorId = statusChangeOriginatorId;
             SupervisorId = supervisorId;
             InterviewerId = interviewerId;
@@ -33,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             SupervisorName = supervisorName;
             InterviewerName = interviewerName;
         }
-        public virtual int Id { get; set; }
+        public virtual Guid Id { get; set; }
         public virtual Guid? SupervisorId { get; set; }
         public virtual string SupervisorName { get; set; }
         public virtual Guid? InterviewerId { get; set; }
