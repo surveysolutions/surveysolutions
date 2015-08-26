@@ -140,8 +140,7 @@
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="IsolatedThreadExtensions.cs" />
-    <Compile Include="NoTransactionalThreadMarkerManager.cs" />
-    <Compile Include="IsolatedThreadManager.cs" />
+    <Compile Include="ThreadMarkerManager.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
