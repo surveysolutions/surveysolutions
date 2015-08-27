@@ -26,7 +26,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly QuestionnaireDocument questionnaireDocument;
         private readonly IQuestionDataParser dataParser;
         private readonly IUserViewFactory userViewFactory;
-        
+        readonly ITransactionManagerProvider transactionManagerProvider;
+
 
         private const string IdColumnName = "Id";
         private const string ParentIdColumnName = "ParentId";
@@ -59,13 +60,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             QuestionnaireRosterStructure questionnaireRosterStructure,
             QuestionnaireDocument questionnaireDocument, 
             IQuestionDataParser dataParser,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            ITransactionManagerProvider transactionManagerProvider)
         {
             this.exportStructure = exportStructure;
             this.questionnaireRosterStructure = questionnaireRosterStructure;
             this.questionnaireDocument = questionnaireDocument;
             this.dataParser = dataParser;
             this.userViewFactory = userViewFactory;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
         
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
@@ -434,15 +437,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         protected UserView GetUserByName(string userName)
         {
-            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-
-            return cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            try
             {
                 var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
                 if (user == null || user.IsArchived)
                     return null;
                 return user;
-            });
+            }
+            finally
+            {
+                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+            }
+            
         }
 
         private Guid? GetSupervisorIdAndUpdateCache(Dictionary<string, Guid> cache, string name)
@@ -454,7 +461,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return cache[name];
 
             var user = GetUserByName(name);//assuming that user exists
-            if (!user.IsSupervisor()) throw new Exception("User is not supervisor.");
+            if (user == null || !user.IsSupervisor()) throw new Exception(string.Format("Supervisor with name '{0}' does not exists", name));
 
             cache.Add(name, user.PublicKey);
             return user.PublicKey;
