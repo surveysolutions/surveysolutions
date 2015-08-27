@@ -1,14 +1,12 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain.Storage;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
-namespace WB.Core.Infrastructure.Implementation.CommandBus
+namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
     internal class SequentialCommandService : CommandService
     {
