@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
               .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
               .Returns(questionnaireRepository);
             interviewSynchronizationDto = Create.InterviewSynchronizationDto(status: InterviewStatus.InterviewerAssigned);
-            interview = new Interview();
+            interview = Create.Interview();
 
             eventContext = new EventContext();
         };
