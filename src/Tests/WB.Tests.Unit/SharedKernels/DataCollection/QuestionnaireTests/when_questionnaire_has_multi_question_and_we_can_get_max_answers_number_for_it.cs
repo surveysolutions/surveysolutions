@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 }
             });
 
-            questionnaire = CreateQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+            questionnaire = CreateImportedQuestionnaire(Guid.NewGuid(), questionnaireDocument);
         };
 
         Because of = () =>

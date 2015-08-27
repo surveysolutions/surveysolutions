@@ -22,13 +22,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
             Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null)
         {
-            return new Interview(
-                interviewId ?? new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
-                userId ?? new Guid("F000F000F000F000F000F000F000F000"),
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),1,
+            var interview = new Interview();
+
+            interview.CreateInterview(
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                1,
+                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"),
                 answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
                 answersTime ?? new DateTime(2012, 12, 20),
-                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
+                userId ?? new Guid("F000F000F000F000F000F000F000F000"));
+
+            return interview;
         }
 
         protected static InterviewSynchronizationDto CreateInterviewSynchronizationDto(

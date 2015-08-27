@@ -34,7 +34,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire(Guid responsibleId)
         {
-            return new Questionnaire(publicKey: Guid.NewGuid(), title: "title", createdBy: responsibleId);
+            var questionnaire = new Questionnaire();
+
+            questionnaire.CreateQuestionnaire(publicKey: Guid.NewGuid(), title: "title", createdBy: responsibleId, isPublic: false);
+            
+            return questionnaire;
         }
 
         public static Questionnaire CreateQuestionnaireWithOneQuestion(Guid? questionId = null, Guid? responsibleId = null)
@@ -57,7 +61,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire")
         {
-            return new Questionnaire(publicKey: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId);
+            var questionnaire = new Questionnaire();
+
+            questionnaire.CreateQuestionnaire(publicKey: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId, isPublic: false);
+
+            return questionnaire;
         }
 
         public static Questionnaire CreateQuestionnaireWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey, Guid responsibleId)
