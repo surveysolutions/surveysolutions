@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete file {0} from the list?.
+        ///   Looks up a localized string similar to Are you sure you want to delete file &apos;{0}&apos; from the list?.
         /// </summary>
         internal static string AreYouSureYouWantToDeleteFormat {
             get {
