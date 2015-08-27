@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
@@ -43,11 +44,19 @@ namespace WB.UI.Tester
             this.InitializeLogger(applicationContext);
             
             //killing app to avoid incorrect state
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => 
-                UncaughtExceptionHandler();
+            AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainOnUnhandledException;
             
-            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, args) =>
-                UncaughtExceptionHandler();
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += OnTaskSchedulerOnUnobservedTaskException;
+        }
+
+        void OnTaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs args)
+        {
+            UncaughtExceptionHandler();
+        }
+
+        void OnCurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            UncaughtExceptionHandler();
         }
 
         static void UncaughtExceptionHandler()

@@ -19,7 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
             IStatefulInterviewRepository interviewRepository = null,
             ISubstitutionService substitutionService = null,
             ILiteEventRegistry eventRegistry = null,
-            IMvxMessenger messenger = null)
+            IMvxMessenger messenger = null,
+            IUserInterfaceStateService userInterfaceStateService = null)
         {
             return new ActiveGroupViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
@@ -27,7 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                messenger ?? Mock.Of<IMvxMessenger>());
+                messenger ?? Mock.Of<IMvxMessenger>(),
+                userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>());
         }
 
         public static QuestionnaireReferenceModel CreateQuestionnaireReferenceModel(string id, Type modelType)

@@ -1,7 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -14,6 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
+            interviewCompletedEvent = Create.InterviewCompletedEvent(interviewId: interviewId);
             var interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             var interviewStatuses = Create.InterviewStatuses(interviewid: interviewId);
             interviewStatuses.InterviewCommentedStatuses.Add(Create.InterviewCommentedStatus(status: InterviewExportedAction.InterviewerAssigned));
@@ -24,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewExportedDataDenormalizer = CreateInterviewExportedDataDenormalizer(statuses: interviewStatusesStorage, dataExportWriter: dataExportWriter.Object);
         };
 
-        Because of = () => interviewExportedDataDenormalizer.Handle(Create.InterviewCompletedEvent(interviewId: interviewId));
+        Because of = () => interviewExportedDataDenormalizer.Handle(interviewCompletedEvent);
 
         It should_not_record_first_answer_status =
             () => dataExportWriter.Verify(
@@ -41,5 +44,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static Mock<IDataExportRepositoryWriter> dataExportWriter;
+        private static IPublishedEvent<InterviewCompleted> interviewCompletedEvent;
     }
 }

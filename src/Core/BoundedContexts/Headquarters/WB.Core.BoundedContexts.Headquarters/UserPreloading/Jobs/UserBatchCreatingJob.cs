@@ -15,14 +15,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
         public void Execute(IJobExecutionContext context)
         {
-            NoTransactionalThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
+            ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
             try
             {
                 UserBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
             }
             finally
             {
-                NoTransactionalThreadMarkerManager.ReleaseCurrentThreadAsNoTransactional();
+                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
             }
         }
     }

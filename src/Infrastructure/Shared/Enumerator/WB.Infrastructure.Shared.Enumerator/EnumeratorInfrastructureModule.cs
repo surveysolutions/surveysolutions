@@ -1,4 +1,5 @@
 using Cirrious.MvvmCross.Plugins.Location;
+using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Modules;
@@ -27,6 +28,8 @@ namespace WB.Infrastructure.Shared.Enumerator
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
+            VFS.SetCurrent(new AndroidFileSystem());
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
 
