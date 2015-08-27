@@ -121,10 +121,10 @@
     <value>Questionnaire must contain at least one question.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Validation condition has syntax error (only few first questions are shown).</value>
+    <value>Validation condition has syntax error.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Enabling condition has syntax error (only few first questions/sub-sections/rosters are shown).</value>
+    <value>Enabling condition has syntax error.</value>
   </data>
   <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Validation condition references nonexistent question.</value>
