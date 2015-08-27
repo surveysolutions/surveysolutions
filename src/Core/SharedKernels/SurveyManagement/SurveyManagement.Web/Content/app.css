@@ -424,3 +424,8 @@ input::-ms-clear {
   max-width: 650px;
   margin: 140px auto 20px;
 }
+
+.typeahead.dropdown-menu {
+    max-height: 350px;
+    overflow-y: auto;
+}
