@@ -8,12 +8,12 @@ using Ninject.Activation;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Login;
-using WB.Core.GenericSubdomains.Android;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.Views.Login;
 

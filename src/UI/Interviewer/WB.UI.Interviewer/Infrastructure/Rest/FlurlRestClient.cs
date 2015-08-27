@@ -1,11 +1,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-
 using Flurl.Http;
-
 using WB.Core.GenericSubdomains.Portable.Rest;
 
-namespace WB.Core.GenericSubdomains.Android.Rest
+namespace WB.UI.Interviewer.Infrastructure.Rest
 {
     public class FlurlRestClient : IRestClient
     {

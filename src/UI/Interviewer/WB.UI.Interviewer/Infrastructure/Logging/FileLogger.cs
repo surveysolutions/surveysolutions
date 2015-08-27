@@ -1,15 +1,12 @@
 using System;
 using System.IO;
 using System.Threading;
-
 using Java.Lang;
-
 using WB.Core.GenericSubdomains.Portable.Services;
-
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 
-namespace WB.Core.GenericSubdomains.Android.Logging
+namespace WB.UI.Interviewer.Infrastructure.Logging
 {
     public class FileLogger : ILogger
     {
