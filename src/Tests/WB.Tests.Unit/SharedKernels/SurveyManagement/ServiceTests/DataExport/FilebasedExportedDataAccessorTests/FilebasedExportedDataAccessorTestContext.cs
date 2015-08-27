@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         protected static FilebasedExportedDataAccessor CreateFilebasedExportedDataAccessor(
             string[] dataFiles=null, 
             string[] environmentFiles=null, 
-            Action<IEnumerable<string>,IEnumerable<string>> zipCallback=null,
+            Action<IEnumerable<string>> zipCallback=null,
             IFileSystemAccessor fileSystemAccessor=null)
         {
             if (fileSystemAccessor == null)
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             var archiveUtilsMock = new Mock<IArchiveUtils>();
             if (zipCallback != null)
                 archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
-                    .Callback<IEnumerable<string>, IEnumerable<string>, string>((f, d, n) => zipCallback(f, d));
+                    .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
             return new FilebasedExportedDataAccessor(fileSystemAccessor, "",
                 Mock.Of<IDataExportService>(_ => _.GetDataFilesForQuestionnaire(
