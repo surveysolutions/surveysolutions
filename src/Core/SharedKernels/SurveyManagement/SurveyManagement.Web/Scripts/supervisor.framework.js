@@ -58,6 +58,14 @@ Supervisor.Framework.Classes.inherit = function (child, parent) {
     child.superclass = parent.prototype;
 };
 
+Supervisor.Framework.Browser = function () { };
+Supervisor.Framework.Browser.prototype = {};
+Supervisor.Framework.Browser.isMsie = function() {
+    // from https://github.com/ded/bowser/blob/master/bowser.js
+    return (/(msie|trident)/i).test(navigator.userAgent) ?
+      navigator.userAgent.match(/(msie |rv:)(\d+(.\d+)?)/i)[2] : false;
+};
+
 
 //------ helpers------
 Array.prototype.joinArrayOfObjects = function (key, value) {
