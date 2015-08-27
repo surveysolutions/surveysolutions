@@ -72,6 +72,7 @@ namespace WB.UI.Interviewer.Backup
                 throw new ArgumentException("Restore archive is absent");
 
             var firstFile = files[0];
+
             var unziperFolder = this.fileSystemAccessor.CombinePath(this.restorePath, this.GetArchiveName(firstFile));
             this.archiveUtils.Unzip(firstFile, this.restorePath);
             foreach (var backupable in this.backupables)

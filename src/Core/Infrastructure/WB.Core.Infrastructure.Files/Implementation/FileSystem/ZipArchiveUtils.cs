@@ -34,18 +34,13 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
-        public void ZipFiles(IEnumerable<string> files, IEnumerable<string> directories, string archiveFilePath)
+        public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
                 zip.AddFiles(files, "");
-
-                foreach (var directory in directories)
-                {
-                    zip.AddDirectory(directory, "");
-                }
 
                 zip.Save(archiveFilePath);
             }
