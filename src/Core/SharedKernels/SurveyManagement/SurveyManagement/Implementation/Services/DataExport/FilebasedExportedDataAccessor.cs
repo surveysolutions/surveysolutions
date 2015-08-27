@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 }
             }
 
-            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
+            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
 
             return archiveFilePath;
         }
@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (fileSystemAccessor.IsDirectoryExists(dataDirectoryPath))
                 filesToArchive.AddRange(fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath));
 
-            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
+            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
 
             return archiveFilePath;
         }
@@ -231,7 +231,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     }
             }
 
-            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
+            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
           
             return archiveFilePath;
         }
@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
-            archiveUtils.ZipFiles(new string[0], new[] { fileDirectoryPath }, archiveFilePath);
+            archiveUtils.ZipDirectory(fileDirectoryPath, archiveFilePath);
 
             return archiveFilePath;
         }
