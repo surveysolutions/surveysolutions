@@ -253,6 +253,16 @@ namespace WB.Tests.Unit
                 return new GroupsEnabled(identities);
             }
 
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
+            {
+                var identities = new[]
+                {
+                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
+                };
+                return new AnswersDeclaredInvalid(identities);
+            }
+
+
             public static QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
@@ -554,7 +564,7 @@ namespace WB.Tests.Unit
         }
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null)
+            string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false)
         {
             return new NumericQuestion
             {
@@ -563,7 +573,9 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                QuestionScope = scope,
+                Featured = isPrefilled
             };
         }
 
