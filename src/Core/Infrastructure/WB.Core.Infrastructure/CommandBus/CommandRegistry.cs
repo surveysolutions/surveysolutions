@@ -20,14 +20,12 @@ namespace WB.Core.Infrastructure.CommandBus
             public HandlerDescriptor(Type aggregateType, 
                 bool isInitializer, 
                 Func<ICommand, Guid> idResolver, 
-                Func<IAggregateRoot> constructor, 
                 Action<ICommand, IAggregateRoot> handler,
                 IEnumerable<Type> validators)
             {
                 this.AggregateType = aggregateType;
                 this.IsInitializer = isInitializer;
                 this.IdResolver = idResolver;
-                this.Constructor = constructor;
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();                
             }
@@ -35,7 +33,6 @@ namespace WB.Core.Infrastructure.CommandBus
             public Type AggregateType { get; private set; }
             public bool IsInitializer { get; private set; }
             public Func<ICommand, Guid> IdResolver { get; private set; }
-            public Func<IAggregateRoot> Constructor { get; private set; }
             public Action<ICommand, IAggregateRoot> Handler { get; private set; }
             public List<Type> Validators { get; private set; }
 
@@ -50,7 +47,7 @@ namespace WB.Core.Infrastructure.CommandBus
         #region Fluent setup
 
         public class AggregateSetup<TAggregate>
-            where TAggregate : IAggregateRoot, new()
+            where TAggregate : IAggregateRoot
         {
             public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
                 where TCommand : ICommand
@@ -97,7 +94,7 @@ namespace WB.Core.Infrastructure.CommandBus
         }
 
         public class AggregateWithCommandSetup<TAggregate, TAggregateCommand>
-            where TAggregate : IAggregateRoot, new()
+            where TAggregate : IAggregateRoot
             where TAggregateCommand : ICommand
         {
             private readonly Func<TAggregateCommand, Guid> aggregateRootIdResolver;
@@ -135,7 +132,7 @@ namespace WB.Core.Infrastructure.CommandBus
         }
 
         public static AggregateSetup<TAggregate> Setup<TAggregate>()
-            where TAggregate : IAggregateRoot, new()
+            where TAggregate : IAggregateRoot
         {
             return new AggregateSetup<TAggregate>();
         }
@@ -147,7 +144,7 @@ namespace WB.Core.Infrastructure.CommandBus
             bool isInitializer,
             Action<CommandHandlerConfiguration<TAggregate>> commandHandlerConfiguration)
             where TCommand : ICommand
-            where TAggregate : IAggregateRoot, new()
+            where TAggregate : IAggregateRoot
         {
             string commandName = typeof (TCommand).Name;
 
@@ -164,7 +161,6 @@ namespace WB.Core.Infrastructure.CommandBus
                 typeof (TAggregate),
                 isInitializer,
                 command => aggregateRootIdResolver.Invoke((TCommand) command),
-                () => new TAggregate(),
                 (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
                 configuration.GetValidators()));
         }
@@ -192,11 +188,6 @@ namespace WB.Core.Infrastructure.CommandBus
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
         {
             return GetHandlerDescriptor(command).IdResolver;
-        }
-
-        internal static Func<IAggregateRoot> GetAggregateRootConstructor(ICommand command)
-        {
-            return GetHandlerDescriptor(command).Constructor;
         }
 
         internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
