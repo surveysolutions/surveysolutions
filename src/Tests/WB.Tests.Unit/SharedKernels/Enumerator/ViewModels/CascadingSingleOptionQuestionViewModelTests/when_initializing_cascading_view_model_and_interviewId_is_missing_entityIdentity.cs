@@ -5,7 +5,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_initializing_cascading_view_model_and_interviewId_is_missing_entityIdentity : CascadingSingleOptionQuestionViewModelTestContext
+    internal class when_initializing_cascading_view_model_and_interviewId_is_missing_entityIdentity : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {

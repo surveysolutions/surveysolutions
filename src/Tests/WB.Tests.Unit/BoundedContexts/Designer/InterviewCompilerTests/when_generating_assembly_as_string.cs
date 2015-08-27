@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
             @"using System.Collections.Generic;
                 using System.Linq;
                 using WB.Core.SharedKernels.DataCollection;
-                public class InterviewEvaluator : IInterviewEvaluator
+                internal class InterviewEvaluator : IInterviewEvaluator
             {
                 public static object Evaluate()
                 {

@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer : CascadingSingleOptionQuestionViewModelTestContext
+    internal class when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {

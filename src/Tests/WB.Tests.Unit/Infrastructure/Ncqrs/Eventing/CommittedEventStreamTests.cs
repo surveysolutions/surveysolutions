@@ -12,7 +12,7 @@ using WB.Tests.Unit;
 namespace Ncqrs.Tests.Eventing
 {
     [TestFixture]
-    public class CommittedEventStreamTests
+    internal class CommittedEventStreamTests
     {
         [SetUp]
         public void SetUp()

@@ -15,7 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
     [Subject(typeof(Questionnaire))]
-    public class QuestionnaireTestsContext
+    internal class QuestionnaireTestsContext
     {
         public static T GetSingleEvent<T>(EventContext eventContext)
         {

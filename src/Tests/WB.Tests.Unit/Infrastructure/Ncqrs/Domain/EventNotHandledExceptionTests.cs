@@ -10,7 +10,7 @@ using WB.Tests.Unit;
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class EventNotHandledExceptionTests
+    internal class EventNotHandledExceptionTests
     {
         [SetUp]
         public void SetUp()
@@ -18,7 +18,7 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class FooEvent : Event
+        internal class FooEvent : Event
         {}
 
         [Test]

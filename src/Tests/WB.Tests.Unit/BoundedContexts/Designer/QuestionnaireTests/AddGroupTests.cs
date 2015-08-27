@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
     [TestFixture]
-    public class AddGroupTests : QuestionnaireTestsContext
+    internal class AddGroupTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()

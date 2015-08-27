@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    public class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
+    internal class IntegerQuestionViewModelTestContext : MvxIoCSupportingTest
     {
         public IntegerQuestionViewModelTestContext()
         {

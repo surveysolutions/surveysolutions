@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Views;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
 {
     [TestFixture]
-    public class UserPreloadingVerifierTests
+    internal class UserPreloadingVerifierTests
     {
         [Test]
         public void

@@ -135,7 +135,7 @@ namespace WB.Tests.Unit
             return mock.Object;
         }
 
-        public static class Command
+        internal static class Command
         {
             public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
             {
@@ -148,9 +148,9 @@ namespace WB.Tests.Unit
             }
         }
 
-        public static class Event
+        internal static class Event
         {
-            public static class Designer
+            internal static class Designer
             {
                 public static designer::Main.Core.Events.Questionnaire.TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
                 {

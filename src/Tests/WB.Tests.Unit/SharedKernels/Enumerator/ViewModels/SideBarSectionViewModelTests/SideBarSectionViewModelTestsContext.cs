@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewModelTests
 {
-    public class SideBarSectionViewModelTestsContext
+    internal class SideBarSectionViewModelTestsContext
     {
         protected static SideBarSectionViewModel CreateViewModel(QuestionnaireModel questionnaire = null,
             IStatefulInterview interview = null)

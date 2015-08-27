@@ -22,7 +22,7 @@ using it = Moq.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Pull
 {
     [Subject(typeof (InterviewsSynchronizer))]
-    public class when_interview_is_unassigned_after_assignment
+    internal class when_interview_is_unassigned_after_assignment
     {
         Establish context = () =>
         {

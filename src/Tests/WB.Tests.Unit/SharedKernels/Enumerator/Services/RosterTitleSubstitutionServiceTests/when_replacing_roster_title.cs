@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutionServiceTests
 {
-    public class when_replacing_roster_title : RosterTitleSubstitutionServiceTestsContext
+    internal class when_replacing_roster_title : RosterTitleSubstitutionServiceTestsContext
     {
         Establish context = () =>
         {

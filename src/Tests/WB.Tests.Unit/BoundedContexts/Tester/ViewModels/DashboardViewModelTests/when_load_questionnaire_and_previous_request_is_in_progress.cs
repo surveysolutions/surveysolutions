@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class when_load_questionnaire_and_previous_request_is_in_progress : DashboardViewModelTestContext
+    internal class when_load_questionnaire_and_previous_request_is_in_progress : DashboardViewModelTestContext
     {
         Establish context = () =>
         {

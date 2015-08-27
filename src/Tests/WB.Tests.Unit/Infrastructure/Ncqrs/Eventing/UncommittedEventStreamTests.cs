@@ -8,7 +8,7 @@ using WB.Tests.Unit;
 namespace Ncqrs.Tests.Eventing
 {
     [TestFixture]
-    public class UncommittedEventStreamTests
+    internal class UncommittedEventStreamTests
     {
         [SetUp]
         public void SetUp()

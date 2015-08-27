@@ -13,7 +13,7 @@ using MockRepository = Rhino.Mocks.MockRepository;
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class AggregateRootTests
+    internal class AggregateRootTests
     {
         [SetUp]
         public void SetUp()
@@ -21,14 +21,14 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class HandledEvent
+        internal class HandledEvent
         {
         }
 
-        public class UnhandledEvent
+        internal class UnhandledEvent
         {}
 
-        public class MyAggregateRoot : AggregateRoot
+        internal class MyAggregateRoot : AggregateRoot
         {
             private readonly List<UncommittedEvent> _uncomittedEvents = new List<UncommittedEvent>();
             public int FooEventHandlerInvokeCount = 0;

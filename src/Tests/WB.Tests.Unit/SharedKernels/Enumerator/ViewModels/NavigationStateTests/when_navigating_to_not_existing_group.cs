@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
-    public class when_navigating_to_not_existing_group
+    internal class when_navigating_to_not_existing_group
     {
         Establish context = () =>
         {

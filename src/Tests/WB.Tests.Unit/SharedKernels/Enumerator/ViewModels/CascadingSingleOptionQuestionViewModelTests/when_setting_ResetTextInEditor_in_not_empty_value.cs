@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_setting_ResetTextInEditor_in_not_empty_value: CascadingSingleOptionQuestionViewModelTestContext
+    internal class when_setting_ResetTextInEditor_in_not_empty_value: CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {

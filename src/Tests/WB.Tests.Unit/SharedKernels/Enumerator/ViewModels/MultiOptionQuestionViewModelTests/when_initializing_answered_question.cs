@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
-    public class when_initializing_answered_question : MultiOptionQuestionViewModelTestsContext
+    internal class when_initializing_answered_question : MultiOptionQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

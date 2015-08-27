@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizerTests
 {
     [Subject(typeof(QuestionnaireDenormalizer))]
-    public class QuestionnaireDenormalizerTestsContext
+    internal class QuestionnaireDenormalizerTestsContext
     {
         protected static QuestionnaireDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviews = null,
             IQuestionnaireAssemblyFileAccessor assemblyFileAccessor = null,

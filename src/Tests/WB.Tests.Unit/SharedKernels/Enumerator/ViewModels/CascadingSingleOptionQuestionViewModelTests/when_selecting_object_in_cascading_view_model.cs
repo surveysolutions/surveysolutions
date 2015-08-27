@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_selecting_object_in_cascading_view_model : CascadingSingleOptionQuestionViewModelTestContext
+    internal class when_selecting_object_in_cascading_view_model : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {

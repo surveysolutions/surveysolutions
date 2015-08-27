@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class when_signed_out : DashboardViewModelTestContext
+    internal class when_signed_out : DashboardViewModelTestContext
     {
         Establish context = () =>
         {

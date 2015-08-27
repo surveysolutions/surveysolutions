@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Tests.Unit.BoundedContexts.Designer.AccountTests
 {
     [Subject(typeof(AccountAR))]
-    public class AccountTestsContext
+    internal class AccountTestsContext
     {
         public static AccountAR CreateAccount(Guid accountId, bool isConfirmed = false)
         {

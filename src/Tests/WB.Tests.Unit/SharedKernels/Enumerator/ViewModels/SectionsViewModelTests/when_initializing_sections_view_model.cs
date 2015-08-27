@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
-    public class when_initializing_sections_view_model : SectionsViewModelTestContext
+    internal class when_initializing_sections_view_model : SectionsViewModelTestContext
     {
         Establish context = () =>
         {

@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class CascadingSingleOptionQuestionViewModelTestContext : MvxIoCSupportingTest
+    internal class CascadingSingleOptionQuestionViewModelTestContext : MvxIoCSupportingTest
     {
         public CascadingSingleOptionQuestionViewModelTestContext()
         {

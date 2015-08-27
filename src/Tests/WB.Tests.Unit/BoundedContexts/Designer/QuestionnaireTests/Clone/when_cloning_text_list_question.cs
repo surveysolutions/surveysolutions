@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
 {
-    public class when_cloning_text_list_question : QuestionnaireTestsContext
+    internal class when_cloning_text_list_question : QuestionnaireTestsContext
     {
         Establish context = () =>
         {

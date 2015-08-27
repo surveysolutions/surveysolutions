@@ -5,9 +5,9 @@ using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Spec
 {
-    public static class Prepare
+    internal static class Prepare
     {
-        public class PrepareTheseEvents
+        internal class PrepareTheseEvents
         {
             private readonly IEnumerable<object> _events;
 
