@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
 using Newtonsoft.Json;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Android
+namespace WB.UI.Interviewer.Infrastructure
 {
     public class NewtonJsonUtils : IJsonUtils
     {
