@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -8,13 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
-namespace WB.Core.Infrastructure.Implementation.CommandBus
+namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
     internal class CommandService : ICommandService
     {
