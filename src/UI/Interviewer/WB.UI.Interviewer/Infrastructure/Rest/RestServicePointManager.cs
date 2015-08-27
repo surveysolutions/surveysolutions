@@ -1,8 +1,7 @@
 using System.Net;
-
 using WB.Core.GenericSubdomains.Portable.Rest;
 
-namespace WB.Core.GenericSubdomains.Android.Rest
+namespace WB.UI.Interviewer.Infrastructure.Rest
 {
     public class RestServicePointManager : IRestServicePointManager
     {

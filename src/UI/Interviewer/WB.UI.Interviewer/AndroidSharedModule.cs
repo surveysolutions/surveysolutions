@@ -1,8 +1,8 @@
 ﻿using Ninject.Modules;
-using WB.Core.GenericSubdomains.Android.Rest;
 using WB.Core.GenericSubdomains.Portable.Rest;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Interviewer.Implementations.Services;
+using WB.UI.Interviewer.Infrastructure.Rest;
 
 namespace WB.UI.Interviewer
 {
