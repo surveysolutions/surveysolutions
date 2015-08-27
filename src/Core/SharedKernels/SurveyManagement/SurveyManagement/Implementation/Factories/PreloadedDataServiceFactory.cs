@@ -1,4 +1,5 @@
 ﻿using Main.Core.Documents;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -12,16 +13,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     {
         private readonly IQuestionDataParser dataParser;
         private readonly IUserViewFactory userViewFactory;
-        public PreloadedDataServiceFactory(IQuestionDataParser dataParser, IUserViewFactory userViewFactory)
+        readonly ITransactionManagerProvider transactionManagerProvider;
+
+        public PreloadedDataServiceFactory(IQuestionDataParser dataParser, IUserViewFactory userViewFactory, ITransactionManagerProvider transactionManagerProvider)
         {
             this.dataParser = dataParser;
             this.userViewFactory = userViewFactory;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public IPreloadedDataService CreatePreloadedDataService(QuestionnaireExportStructure exportStructure,
             QuestionnaireRosterStructure questionnaireRosterStructure, QuestionnaireDocument questionnaireDocument)
         {
-            return new PreloadedDataService(exportStructure, questionnaireRosterStructure, questionnaireDocument, dataParser, userViewFactory);
+            return new PreloadedDataService(exportStructure, questionnaireRosterStructure, questionnaireDocument, dataParser, userViewFactory, transactionManagerProvider);
         }
     }
 }
