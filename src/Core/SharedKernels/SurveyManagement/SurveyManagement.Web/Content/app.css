@@ -426,6 +426,6 @@ input::-ms-clear {
 }
 
 .typeahead.dropdown-menu {
-    max-height: 400px;
+    max-height: 340px;
     overflow-y: auto;
 }
