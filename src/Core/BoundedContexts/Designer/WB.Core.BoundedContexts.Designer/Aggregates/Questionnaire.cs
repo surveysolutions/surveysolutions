@@ -1,6 +1,5 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -27,7 +26,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
+    internal class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
         private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 400;
@@ -728,41 +727,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Dependencies
 
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
-
-        private static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
-
-        private static IClock Clock
-        {
-            get { return ServiceLocator.Current.GetInstance<IClock>(); }
-        }
-
-        private static IExpressionProcessor ExpressionProcessor
-        {
-            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
-        }
-
-        protected ISubstitutionService SubstitutionService
-        {
-            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
-        }
-
-        protected IKeywordsProvider VariableNameValidator
-        {
-            get { return ServiceLocator.Current.GetInstance<IKeywordsProvider>(); }
-        }
+        private readonly ILogger logger;
+        private readonly IClock clock;
+        private readonly IExpressionProcessor expressionProcessor;
+        private readonly ISubstitutionService substitutionService;
+        private readonly IKeywordsProvider variableNameValidator;
 
         #endregion
 
-        #region Questionnaire command handlers
-
-        public Questionnaire()
-            : base()
+        public Questionnaire(IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IClock clock, IExpressionProcessor expressionProcessor, ISubstitutionService substitutionService, IKeywordsProvider variableNameValidator)
         {
-            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
+            this.logger = logger;
+            this.clock = clock;
+            this.expressionProcessor = expressionProcessor;
+            this.substitutionService = substitutionService;
+            this.variableNameValidator = variableNameValidator;
         }
+
+        #region Questionnaire command handlers
 
         public void CreateQuestionnaire(Guid publicKey, string title, Guid? createdBy, bool isPublic)
         {
@@ -774,7 +757,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     IsPublic = isPublic,
                     PublicKey = publicKey,
                     Title = title,
-                    CreationDate = Clock.UtcNow(),
+                    CreationDate = this.clock.UtcNow(),
                     CreatedBy = createdBy
                 });
 
@@ -801,7 +784,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var clonedDocument = (QuestionnaireDocument)document.Clone();
             clonedDocument.PublicKey = this.EventSourceId;
             clonedDocument.CreatedBy = createdBy;
-            clonedDocument.CreationDate = Clock.UtcNow();
+            clonedDocument.CreationDate = this.clock.UtcNow();
             clonedDocument.Title = title;
             clonedDocument.IsPublic = isPublic;
             if (clonedDocument.SharedPersons != null)
@@ -2416,7 +2399,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
             
-            var keywords = VariableNameValidator.GetAllReservedKeywords();
+            var keywords = this.variableNameValidator.GetAllReservedKeywords();
 
             foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
                 throw new QuestionnaireException(
@@ -2804,7 +2787,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias,
             Guid questionPublicKey, bool isFeatured, IGroup group)
         {
-            string[] substitutionReferences = SubstitutionService.GetAllSubstitutionVariableNames(questionTitle);
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
             if (substitutionReferences.Length == 0)
                 return;
 
@@ -2849,7 +2832,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
                 condition:
-                    x => IsGroupAndHaveQuestionIdInCondition(x, question) || IsQuestionAndHaveQuestionIdInConditionOrValidation(x, question),
+                    x => this.IsGroupAndHasQuestionIdInCondition(x, question) || this.IsQuestionAndHasQuestionIdInConditionOrValidation(x, question),
                 expectedCount: 0,
                 exceptionType: DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
                 getExceptionDescription:
@@ -3113,13 +3096,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     .Where(x => wasRosterAndBecomeAGroup || GetFirstRosterParentGroupOrNull(x, group) == null)
                     .Any(
                         question =>
-                            SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
-                                .Contains(SubstitutionService.RosterTitleSubstitutionReference));
+                            this.substitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
+                                .Contains(this.substitutionService.RosterTitleSubstitutionReference));
 
             if (!hasAnyQuestionsWithRosterTitleInSubstitutions) return;
 
-            var questionVariables = GetFilteredQuestionForException(@group, question => SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
-                                .Contains(SubstitutionService.RosterTitleSubstitutionReference));
+            var questionVariables = GetFilteredQuestionForException(@group, question => this.substitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
+                                .Contains(this.substitutionService.RosterTitleSubstitutionReference));
 
             throw new QuestionnaireException(
                 string.Format(
@@ -3230,7 +3213,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var substitutionReference in substitutionReferences)
             {
-                if (substitutionReference == SubstitutionService.RosterTitleSubstitutionReference)
+                if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
                 {
                     if (propagationQuestionsVector.Length > 0)
                         continue;
@@ -3556,7 +3539,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return "<untitled>";
         }
 
-        private static bool IsQuestionAndHaveQuestionIdInConditionOrValidation(IComposite composite, IQuestion sourceQuestion)
+        private bool IsQuestionAndHasQuestionIdInConditionOrValidation(IComposite composite, IQuestion sourceQuestion)
         {
             var question = composite as IQuestion;
             bool isSelfReferenceIsChecking = composite.PublicKey == sourceQuestion.PublicKey;
@@ -3575,13 +3558,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IEnumerable<string> conditionIds = new List<string>();
                 if (IsExpressionDefined(question.ConditionExpression))
                 {
-                    conditionIds = ExpressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression);
+                    conditionIds = this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression);
                 }
 
                 IEnumerable<string> validationIds = new List<string>();
                 if (IsExpressionDefined(question.ValidationExpression))
                 {
-                    validationIds = ExpressionProcessor.GetIdentifiersUsedInExpression(question.ValidationExpression);
+                    validationIds = this.expressionProcessor.GetIdentifiersUsedInExpression(question.ValidationExpression);
                 }
 
                 return validationIds.Contains(questionId) || validationIds.Contains(alias) ||
@@ -3590,14 +3573,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return false;
         }
 
-        private static bool IsGroupAndHaveQuestionIdInCondition(IComposite composite, IQuestion question)
+        private bool IsGroupAndHasQuestionIdInCondition(IComposite composite, IQuestion question)
         {
             var group = composite as IGroup;
             if (group != null && IsExpressionDefined(group.ConditionExpression))
             {
                 string alias = question.StataExportCaption;
 
-                IEnumerable<string> conditionIds = ExpressionProcessor.GetIdentifiersUsedInExpression(group.ConditionExpression).ToList();
+                IEnumerable<string> conditionIds = this.expressionProcessor.GetIdentifiersUsedInExpression(group.ConditionExpression).ToList();
                
                 return conditionIds.Contains(alias);
             }
