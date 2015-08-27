@@ -1,8 +1,7 @@
 ﻿using Ninject.Modules;
-
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Android.Logging
+namespace WB.UI.Interviewer.Infrastructure.Logging
 {
     public class AndroidLoggingModule : NinjectModule
     {

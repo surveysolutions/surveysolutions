@@ -1,11 +1,10 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Flurl.Http;
 using Flurl.Http.Configuration;
 
-namespace WB.Core.GenericSubdomains.Android.Rest
+namespace WB.UI.Interviewer.Infrastructure.Rest
 {
     internal class RestMessageHandler : FlurlMessageHandler
     {
