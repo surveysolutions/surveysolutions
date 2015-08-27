@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
+using System.Text;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Services;
-using Newtonsoft.Json;
-using System.Text;
-using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -614,13 +613,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsRosterByFixedTitles(group))
                 return false;
 
-            return group.FixedRosterTitles.Length > SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount;
+            return group.FixedRosterTitles.Length > Constants.MaxRosterRowCount;
         }
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore40Options(IQuestion question)
         {
             var multyOptionQuestion = question as IMultyOptionsQuestion;
-            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount)
+            if (multyOptionQuestion != null && multyOptionQuestion.Answers.Count > Constants.MaxRosterRowCount)
                 return multyOptionQuestion.MaxAllowedAnswers;
             return null;
         }
@@ -642,7 +641,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var rosterSizeQuestionMaxValue = getRosterSizeQuestionMaxValue(question);
             if (!rosterSizeQuestionMaxValue.HasValue)
                 return false;
-            return !Enumerable.Range(1, SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
+            return !Enumerable.Range(1, Constants.MaxRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
         }
 
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
