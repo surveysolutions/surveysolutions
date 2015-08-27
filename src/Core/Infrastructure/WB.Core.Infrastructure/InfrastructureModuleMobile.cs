@@ -28,7 +28,6 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);
-            registry.Bind<IAggregateRootCreationStrategy, SimpleAggregateRootCreationStrategy>();
             registry.Bind<IAggregateSupportsSnapshotValidator,AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
         }
