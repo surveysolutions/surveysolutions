@@ -117,7 +117,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             Func<IAggregateRoot> constructor = CommandRegistry.GetAggregateRootConstructor(command);
-            IEnumerable<Type> validators = CommandRegistry.GetValidators(command);
+            IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
@@ -136,18 +136,9 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            foreach (var validator in validators)
+            foreach (Action<IAggregateRoot, ICommand> validator in validators)
             {
-                var validatorInstance = serviceLocator.GetInstance(validator);
-                var validateMethod = validator.GetMethod("Validate", new[] {aggregateType, command.GetType()});
-                try
-                {
-                    validateMethod.Invoke(validatorInstance, new object[] { aggregate, command });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                }
+                validator.Invoke(aggregate, command);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -164,6 +155,23 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
                 aggregate.MarkChangesAsCommitted();
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
+        }
+
+        private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, IServiceLocator serviceLocator)
+        {
+            return (aggregate, command) =>
+            {
+                var validatorInstance = serviceLocator.GetInstance(validatorType);
+                var validateMethod = validatorType.GetMethod("Validate", new[] { aggregateType, command.GetType() });
+                try
+                {
+                    validateMethod.Invoke(validatorInstance, new object[] { aggregate, command });
+                }
+                catch (TargetInvocationException ex)
+                {
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                }
+            };
         }
     }
 }
