@@ -113,7 +113,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
-            Func<IAggregateRoot> constructor = CommandRegistry.GetAggregateRootConstructor(command);
             IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
@@ -127,7 +126,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 if (!CommandRegistry.IsInitializer(command))
                     throw new CommandServiceException(string.Format("Unable to execute not-constructing command {0} because aggregate {1} does not exist.", command.GetType().Name, aggregateId.FormatGuid()));
 
-                aggregate = constructor.Invoke();
+                aggregate = (IAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
             }
 
