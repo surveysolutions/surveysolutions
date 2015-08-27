@@ -32,8 +32,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
         {
-            
-
             using (FileStream fsOut = File.Create(archiveFilePath))
             {
                 using (ZipOutputStream zipStream = new ZipOutputStream(fsOut)) 
